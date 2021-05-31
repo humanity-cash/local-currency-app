@@ -11,7 +11,7 @@ import { ModalHeader } from "../../uielements/header/ModalHeader";
 import { CancelBtn } from "../../uielements/header/CancelBtn";
 import { MODAL_SCREEN_OFFSET } from "../../uielements/Modal";
 
-const EMAIL_VALIDATION = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+const EMAIL_VALIDATION = /^\w+([\\.-]?\w+)*@\w+([\\.-]?\w+)*(\.\w{2,3})+$/;
 
 interface ChangeEmailState {
 	email: string
@@ -46,7 +46,6 @@ const ChangeEmail = (props: ChangeEmailProps) => {
 	const [goNext, setGoNext] = useState(false);
 
 	useEffect(() => {
-		// @ts-ignore
 		setGoNext(emailValid && Object.keys(state).every((key) => state[key] !== ''));
 	}, [state, emailValid]);
 

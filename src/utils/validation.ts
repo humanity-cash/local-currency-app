@@ -73,7 +73,6 @@ export const validateDetailsForm = (personalDetails: PersonalDetails) => {
 	}
 
 	const currentDate = new Date();
-	// @ts-ignore
 	const minDate = new Date(currentDate.getYear()+1900-18, parseInt(month), parseInt(day));
 
 	if (date.toDate().getTime() > minDate.getTime()) {
