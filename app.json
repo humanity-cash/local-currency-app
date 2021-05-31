@@ -16,8 +16,8 @@
       "**/*"
     ],
     "ios": {
-      "bundleIdentifier": "com.keyko.lienhardt-app",
-      "buildNumber": "1.0.13"
+      "bundleIdentifier": "com.keyko.berkshares-app",
+      "buildNumber": "1.0.0"
     },
     "packagerOpts": {
       "config": "metro.config.js",
