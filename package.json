@@ -5,8 +5,8 @@
     "ios": "expo start --ios",
     "web": "expo start --web",
     "ios:build": "expo build:ios",
-    "start": "react-native start",
-    "test": "jest"
+    "web:build": "expo build:web",
+    "start": "react-native start"
   },
   "dependencies": {
     "@expo/vector-icons": "^10.0.0",
