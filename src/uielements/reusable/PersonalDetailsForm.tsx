@@ -44,7 +44,6 @@ export const PersonalDetailsForm = (props: PersonalDetailsProps) => {
 	}, [personalDetails]);
 
 	useEffect(() => {
-		// @ts-ignore
 		props.isValid(Object.keys(state).every((key) => state[key] !== ''));
 	}, [state]);
 
