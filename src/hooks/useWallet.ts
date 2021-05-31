@@ -136,6 +136,7 @@ export const useWallet = () => {
 				store.setState(newState);
 				await storeInMemory(newState);
 			} catch (error) {
+				// todo handle error
 			}
 		}, []);
 
@@ -150,6 +151,7 @@ export const useWallet = () => {
 				store.setState(newState);
 				await storeInMemory(newState);
 			} catch (error) {
+				// todo handle error
 			}
 		}, []);
 
@@ -167,6 +169,7 @@ export const useWallet = () => {
 				store.setState(newState);
 				await storeInMemory(newState);
 			} catch (error) {
+				// todo handle error
 			}
 		}, []);
 
@@ -184,6 +187,7 @@ export const useWallet = () => {
 				store.setState(newState);
 				await storeInMemory(newState);
 			} catch (error) {
+				// todo handle error
 			}
 		}, []);
 
@@ -198,6 +202,7 @@ export const useWallet = () => {
 				store.setState(newState);
 				await storeInMemory(newState);
 			} catch (error) {
+				// todo handle error
 			}
 		}, []);
 
@@ -212,6 +217,7 @@ export const useWallet = () => {
 				store.setState(newState);
 				await storeInMemory(newState);
 			} catch (error) {
+				// todo handle error
 			}
 		}, []);
 
@@ -221,6 +227,7 @@ export const useWallet = () => {
 				store.setState(defaultState);
 				await storeInMemory(defaultState);
 			} catch (error) {
+				// todo handle error
 			}
 		}, []);
 

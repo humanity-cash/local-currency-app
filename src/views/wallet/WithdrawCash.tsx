@@ -51,7 +51,6 @@ const WithdrawCashView = (props: WithdrawCashProps) => {
 	}, []);
 
 	useEffect(() => {
-		// @ts-ignore
 		setGoNext(Object.keys(state).every((key) => state[key] !== '' && parseInt(state[key]) > '0'));
 	}, [state]);
 

@@ -68,7 +68,6 @@ const WalletMinimumAmount = (props: WalletMinimumAmountProps) => {
 	}, [wallet]);
 
 	useEffect(() => {
-		// @ts-ignore
 		setGoNext(Object.keys(state).every((key) => state[key] !== '' && state[key] !== '0'));
 	}, [state]);
 
