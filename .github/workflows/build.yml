@@ -15,6 +15,7 @@ jobs:
       - name: Pre-install
         run: |
           yarn
+          yarn global add expo-cli
       - name: Run Build
         run: |
           yarn web:build
