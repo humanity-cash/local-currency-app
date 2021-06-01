@@ -1,4 +1,5 @@
 import {getRequest, postRequest, deleteRequest} from './base'
+
 type UserId = string
 
 interface NewUser {
@@ -17,7 +18,7 @@ interface SettlementRequest {
   settlementAmount: number;
 }
 
-export const Requests = {
+export default {
   get: {
     user:(request: UserId) => getRequest(`/user?userId=${request}`),
     health: () => getRequest('/health'),
