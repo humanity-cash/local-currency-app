@@ -43,9 +43,9 @@ const _getRequest = (query: Query) => () => httpRequest.get(query)
 const _postRequest = (path: Path, body: Body) => () => httpRequest.post(path, {data: body})
 const _deleteRequest = (path: Path, body: Body) => () => httpRequest.post(path, {data: body})
 
-const getRequest = (query: Query) => ErrorHandler(_getRequest(query))
-const postRequest = (path: Path, body: Body) => ErrorHandler(_postRequest(path, body))
-const deleteRequest = (path: Path, body: Body) => ErrorHandler(_deleteRequest(path, body))
+export const getRequest = (query: Query) => ErrorHandler(_getRequest(query))
+export const postRequest = (path: Path, body: Body) => ErrorHandler(_postRequest(path, body))
+export const deleteRequest = (path: Path, body: Body) => ErrorHandler(_deleteRequest(path, body))
 
 const ErrorHandler = async (requestHandler: Function) => {
   try {
@@ -53,20 +53,5 @@ const ErrorHandler = async (requestHandler: Function) => {
     return response
   } catch (err) {
     console.log('err in request', (err.toJSON()))  
-  }
-}
-
-export const Requests = {
-  get: {
-    user:(request: UserId) => getRequest(`/user?userId=${request}`),
-    health: () => getRequest('/health'),
-    authorize: (request: UserId) => getRequest(`/authorize?userId=${request}`),
-    settle: (request: UserId) => getRequest(`/settle?userId=${request}`),
-  },
-  post: {
-    user:(request: NewUser) => postRequest('/user', request),
-    authorize:(request: AuthorizationRequest)=> postRequest('/authorize', request),
-    settle:(request: SettlementRequest) => postRequest('/settle', request),
-    reconcile: () =>  postRequest('/reconcile', {})
   }
 }
