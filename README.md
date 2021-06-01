@@ -1,5 +1,5 @@
-# Lienhardt-app
-Lienhardt frontend application
+# Berkshares-app
+berkshares frontend application
 
 ## Dev setup
 

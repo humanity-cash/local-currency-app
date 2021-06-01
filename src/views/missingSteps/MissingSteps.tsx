@@ -40,7 +40,6 @@ const MissingStepsView = (props: MissingStepsProps) => {
 
 	useEffect(() => {
 		setMissingSteps(Object.keys(statuses).reduce((sum, status) => {
-			// @ts-ignore
 			if (!statuses[status]) {
 				sum += 1;
 			}

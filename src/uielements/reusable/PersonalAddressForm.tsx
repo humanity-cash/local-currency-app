@@ -42,7 +42,6 @@ export const PersonalAddressForm = (props: PersonalAddressProps) => {
 	}, [personalDetails]);
 
 	useEffect(() => {
-		// @ts-ignore
 		props.isValid(Object.keys(state).every((key) => state[key] !== '' || key === 'addressLine2'));
 	}, [state]);
 

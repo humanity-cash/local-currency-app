@@ -121,7 +121,6 @@ export const SettingsTermsAndConditions = () => {
 	const onShow = (type: string) => {
 		setUseHeader(true);
 		setVisible(true);
-		// @ts-ignore
 		setViewType(views[type]);
 	};
 

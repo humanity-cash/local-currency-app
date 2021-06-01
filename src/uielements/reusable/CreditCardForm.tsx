@@ -69,7 +69,6 @@ export const CreditCardForm = (props: CreditCardFormProps) => {
 				cvc: details.selected.cvc
 			});
 		}
-		// @ts-ignore
 		isValid(Object.keys(state).every((key) => state[key] !== ''));
 	}, [details]);
 
@@ -79,7 +78,6 @@ export const CreditCardForm = (props: CreditCardFormProps) => {
 			[name]: change
 		} as any)
 		editSelectedCard({ [name]: change });
-		// @ts-ignore
 		isValid(Object.keys(state).every((key) => state[key] !== ''));
 	}
 
