@@ -93,7 +93,6 @@ const WalletMinimumCreditCard = (props: WalletMinimumCreditCardProps) => {
 	}, [wallet]);
 
 	useEffect(() => {
-		// @ts-ignore
 		setGoNext(Object.keys(state).every((key) => state[key] !== ''));
 	}, [state]);
 
@@ -113,7 +112,6 @@ const WalletMinimumCreditCard = (props: WalletMinimumCreditCardProps) => {
 			...state,
 			[name]: change
 		} as any)
-		// @ts-ignore
 		setGoNext(Object.keys(state).every((key) => state[key] !== ''));
 	}
 

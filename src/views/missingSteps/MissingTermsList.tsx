@@ -103,7 +103,6 @@ const MissingTermsListView = (props: TermsProps) => {
 	const [goNext, setGoNext] = useState(false);
 
 	useEffect(() => {
-		// @ts-ignore
 		setGoNext(Object.keys(termsState).every((key) => termsState[key] === true));
 	}, [termsState]);
 

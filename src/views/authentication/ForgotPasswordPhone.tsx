@@ -74,7 +74,6 @@ const ForgotPasswordPhoneView = (props: ForgotPasswordPhoneProps) => {
 	const [goNext, setGoNext] = useState(false);
 
 	useEffect(() => {
-		// @ts-ignore
 		setGoNext(Object.keys(state).every((key) => state[key] !== ''));
 	}, [state]);
 

@@ -58,10 +58,8 @@ const LoginView = (props: LoginProps) => {
 					disableDeviceFallback: true,
 					cancelLabel: 'Close'
 				});
-				if (true) {
-					setAutoFocus(false);
-					props.navigation.navigate('Tabs');
-				}
+				setAutoFocus(false);
+				props.navigation.navigate('Tabs');
 			}
 		}
 		askFingerprint();

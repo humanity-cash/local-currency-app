@@ -49,7 +49,6 @@ const AddCashView = (props: AddCashProps) => {
 	}, []);
 
 	useEffect(() => {
-		// @ts-ignore
 		setGoNext(Object.keys(state).every((key) => state[key] !== ''));
 	}, [state]);
 

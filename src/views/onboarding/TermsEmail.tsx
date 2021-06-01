@@ -11,7 +11,7 @@ import { BackBtn } from "../../uielements/header/BackBtn";
 import { NextBtn } from "../../uielements/header/NextBtn";
 import { colors } from "../../theme/colors";
 
-const EMAIL_VALIDATION = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+const EMAIL_VALIDATION = /^\w+([\\.-]?\w+)*@\w+([\\.-]?\w+)*(\.\w{2,3})+$/;
 
 interface TermsEmailState {
 	email: string
@@ -31,7 +31,6 @@ const TermsEmailView = (props: TermsEmailProps) => {
 	const [goNext, setGoNext] = useState(false);
 
 	useEffect(() => {
-		// @ts-ignore
 		setGoNext(emailValid && Object.keys(state).every((key) => state[key] !== ''));
 	}, [state, emailValid]);
 
