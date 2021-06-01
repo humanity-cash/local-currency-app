@@ -47,7 +47,7 @@ export const getRequest = (query: Query) => ErrorHandler(_getRequest(query))
 export const postRequest = (path: Path, body: Body) => ErrorHandler(_postRequest(path, body))
 export const deleteRequest = (path: Path, body: Body) => ErrorHandler(_deleteRequest(path, body))
 
-const ErrorHandler = async (requestHandler: Function) => {
+const ErrorHandler = async (requestHandler: () => Promise<any>) => {
   try {
     const response = requestHandler()
     return response
