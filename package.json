@@ -7,7 +7,7 @@
     "ios:build": "expo build:ios",
     "web:build": "expo build:web",
     "start": "react-native start",
-    "lint": "npx eslint src/**/*.ts src/**/**/*.tsx"
+    "lint": "eslint src/**/*.ts src/**/**/*.tsx"
   },
   "dependencies": {
     "@expo/vector-icons": "^10.0.0",
