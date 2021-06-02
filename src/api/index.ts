@@ -1,10 +1,6 @@
-import {getRequest, postRequest, deleteRequest} from './base'
+import {getRequest, postRequest} from './base'
 
 type UserId = string
-
-interface NewUser {
-  userId: string;
-}
 
 interface AuthorizationRequest {
   userId: string;
@@ -26,7 +22,7 @@ export default {
     settle: (request: UserId) => getRequest(`/settle?userId=${request}`),
   },
   post: {
-    user:(request: NewUser) => postRequest('/user', request),
+    user:(request: UserId) => postRequest('/user', {userId: request}),
     authorize:(request: AuthorizationRequest)=> postRequest('/authorize', request),
     settle:(request: SettlementRequest) => postRequest('/settle', request),
     reconcile: () =>  postRequest('/reconcile', {})
