@@ -3,7 +3,7 @@ import faker from 'faker'
 
 jest.setTimeout(30000);
 
-test.only("Success: GET: health()", async () => {
+test("Success: GET: health()", async () => {
 		const response = await Requests.get.health()
 		expect(response.status).toBe(200)
 })
