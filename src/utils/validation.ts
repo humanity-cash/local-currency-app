@@ -73,7 +73,7 @@ export const validateDetailsForm = (personalDetails: PersonalDetails) => {
 	}
 
 	const currentDate = new Date();
-	const minDate = new Date(currentDate.getYear()+1900-18, parseInt(month), parseInt(day));
+	const minDate = new Date(currentDate.getFullYear()+1900-18, parseInt(month), parseInt(day));
 
 	if (date.toDate().getTime() > minDate.getTime()) {
 		errors.dateOfBirth = 'You need to be over 18 years old to use this app';
