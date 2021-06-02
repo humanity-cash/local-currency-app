@@ -4,13 +4,16 @@
     parser: '@typescript-eslint/parser',
     plugins: [
       '@typescript-eslint',
+       'jest'
     ],
     extends: [
       'eslint:recommended',
       'plugin:@typescript-eslint/recommended',
       'prettier',
       'prettier/@typescript-eslint',
-      'eslint-plugin-jest'
     ],
+    env: {
+      "jest/globals": true
+    }
   };
 
