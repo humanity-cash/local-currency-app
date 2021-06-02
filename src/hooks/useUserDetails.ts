@@ -1,7 +1,7 @@
 import { createStore, useStore } from "react-hookstore";
 import { useCallback, useEffect } from "react";
 import { AsyncStorage } from "react-native";
-import { AuthorizationDetails, OnboardingState, PersonalDetails, Status, Terms } from "../utils/types";
+import { AuthorizationDetails, IMap, OnboardingState, PersonalDetails, Status, Terms } from "../utils/types";
 
 const storeId = "ONBOARDING_DETAILS";
 
@@ -173,7 +173,7 @@ export const useUserDetails = () => {
 	return {
 		personalDetails,
 		authorization,
-		statuses,
+		statuses: statuses as IMap,
 		terms,
 		loggedIn,
 		update,
