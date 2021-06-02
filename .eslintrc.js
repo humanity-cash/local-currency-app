@@ -9,7 +9,8 @@
       'eslint:recommended',
       'plugin:@typescript-eslint/recommended',
       'prettier',
-      'prettier/@typescript-eslint'
+      'prettier/@typescript-eslint',
+      'eslint-plugin-jest'
     ],
   };
 
