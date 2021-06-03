@@ -39,7 +39,7 @@ import api from "../api";
 const PrimaryStack = createStackNavigator();
 
 function PrimaryStackScreen() {
-  api.get.health().then(console.log);
+  api.get.health().then((response) => console.log(response.data));
   // api.post.user({ userId: "asdasd1" }).then(console.log);
   return (
     <PrimaryStack.Navigator

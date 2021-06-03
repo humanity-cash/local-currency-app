@@ -1,19 +1,13 @@
-  // eslint-disable-next-line no-undef
-  module.exports = {
-    root: true,
-    parser: '@typescript-eslint/parser',
-    plugins: [
-      '@typescript-eslint',
-       'jest'
-    ],
-    extends: [
-      'eslint:recommended',
-      'plugin:@typescript-eslint/recommended',
-      'prettier',
-      'prettier/@typescript-eslint',
-    ],
-    env: {
-      "jest/globals": true
-    }
-  };
-
+// eslint-disable-next-line no-undef
+module.exports = {
+  root: true,
+  parser: "@typescript-eslint/parser",
+  plugins: ["@typescript-eslint"],
+  extends: [
+    "plugin:jest/recommended",
+    "eslint:recommended",
+    "plugin:@typescript-eslint/recommended",
+    "prettier",
+    "prettier/@typescript-eslint",
+  ],
+};

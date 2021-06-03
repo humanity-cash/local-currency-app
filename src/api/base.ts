@@ -23,7 +23,7 @@ export interface SettlementRequest {
   settlementAmount: number;
 }
 
-type HttpResponse = Promise<AxiosResponse<any>>;
+type HttpResponse = Promise<AxiosResponse>;
 
 const _getRequest = (query: Query) => (): HttpResponse =>
   httpRequest.get(query);
@@ -32,27 +32,27 @@ const _postRequest = (path: Path, body: Body) => (): HttpResponse =>
 const _deleteRequest = (path: Path, body: Body) => (): HttpResponse =>
   httpRequest.delete(path, body);
 
-export const getRequest = (query: Query): Promise<any> =>
+export const getRequest = (query: Query): Promise<AxiosResponse> =>
   ErrorHandler(_getRequest(query));
-export const postRequest = (path: Path, body: Body): Promise<any> =>
+export const postRequest = (path: Path, body: Body): Promise<AxiosResponse> =>
   ErrorHandler(_postRequest(path, body));
-export const deleteRequest = (path: Path, body: Body): Promise<any> =>
+export const deleteRequest = (path: Path, body: Body): Promise<AxiosResponse> =>
   ErrorHandler(_deleteRequest(path, body));
 
 const ErrorHandler = async (
   requestHandler: () => HttpResponse
-): Promise<AxiosResponse<any> | undefined> => {
+): Promise<AxiosResponse> => {
   try {
-    const response: AxiosResponse<any> = await requestHandler();
+    const response: AxiosResponse = await requestHandler();
     return response;
   } catch (err) {
     console.error(
       `API request failed: '${err.message}'`,
-      `internal error: '${err.response.data.message}'`,
-      `method: '${err.config.method.toUpperCase()}'`,
+      `internal error: '${err.response?.data?.message}'`,
+      `method: '${err.config?.method?.toUpperCase()}'`,
       `endpoint: '${err.config.baseURL + err.config.url}'`,
       "request:",
-      JSON.parse(err.config.data)
+      err.config?.data ? JSON.parse(err.config.data) : ""
     );
 
     return err.toJSON().message;
