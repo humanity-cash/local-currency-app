@@ -5,29 +5,11 @@ const CORE_API_URL = "https://baklava.berkshares-api.keyko.rocks";
 // const CORE_API_URL = "http://localhost:3000";
 const httpRequest = axios.create({
   baseURL: CORE_API_URL,
-  // url?: string;
-  // method?: Method;
-  // transformRequest?: AxiosTransformer | AxiosTransformer[];
-  // transformResponse?: AxiosTransformer | AxiosTransformer[];
-  // headers?: any;
-  // params?: any;
-  // paramsSerializer?: (params: any) => string;
-  // data?: any;
-  // timeout?: number;
-  // timeoutErrorMessage?: string;
-  // withCredentials?: boolean;
-  // auth?: AxiosBasicCredentials;
-  // responseType?: ResponseType;
 });
 
 type Body = IMap;
 type Query = string;
 type Path = string;
-type UserId = string;
-
-interface NewUser {
-  userId: string;
-}
 
 export interface AuthorizationRequest {
   userId: string;
@@ -41,22 +23,28 @@ export interface SettlementRequest {
   settlementAmount: number;
 }
 
-const _getRequest = (query: Query) => () => httpRequest.get(query);
-const _postRequest = (path: Path, body: Body) => () =>
-  httpRequest.post(path, body);
-const _deleteRequest = (path: Path, body: Body) => () =>
-  httpRequest.post(path, body);
+type HttpResponse = Promise<AxiosResponse<any>>;
 
-export const getRequest = (query: Query) => ErrorHandler(_getRequest(query));
-export const postRequest = (path: Path, body: Body) =>
+const _getRequest = (query: Query) => (): HttpResponse =>
+  httpRequest.get(query);
+const _postRequest = (path: Path, body: Body) => (): HttpResponse =>
+  httpRequest.post(path, body);
+const _deleteRequest = (path: Path, body: Body) => (): HttpResponse =>
+  httpRequest.delete(path, body);
+
+export const getRequest = (query: Query): Promise<any> =>
+  ErrorHandler(_getRequest(query));
+export const postRequest = (path: Path, body: Body): Promise<any> =>
   ErrorHandler(_postRequest(path, body));
-export const deleteRequest = (path: Path, body: Body) =>
+export const deleteRequest = (path: Path, body: Body): Promise<any> =>
   ErrorHandler(_deleteRequest(path, body));
 
-const ErrorHandler = async (requestHandler: () => Promise<AxiosResponse>) => {
+const ErrorHandler = async (
+  requestHandler: () => HttpResponse
+): Promise<AxiosResponse<any> | undefined> => {
   try {
-    const response = await requestHandler();
-    return response.data;
+    const response: AxiosResponse<any> = await requestHandler();
+    return response;
   } catch (err) {
     console.error(
       `API request failed: '${err.message}'`,
@@ -66,5 +54,7 @@ const ErrorHandler = async (requestHandler: () => Promise<AxiosResponse>) => {
       "request:",
       JSON.parse(err.config.data)
     );
+
+    return err.toJSON().message;
   }
 };
