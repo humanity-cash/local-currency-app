@@ -1,8 +1,8 @@
-import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
-import WithdrawCash from "../views/wallet/WithdrawCash";
-import WithdrawAccount from "../views/wallet/WithdrawAccount";
-import ModalConfirmPin from "../views/authentication/ModalConfirmPin";
+import React from "react";
+import ModalConfirmPin from "src/screens/authentication/ModalConfirmPin";
+import WithdrawAccount from "src/screens/wallet/WithdrawAccount";
+import WithdrawCash from "src/screens/wallet/WithdrawCash";
 
 type WithdrawTransactionProps = {
 	onClose: () => void

@@ -1,6 +1,6 @@
-import { colors } from "../theme/colors";
 import { createStore, useStore } from "react-hookstore";
-import { ModalStatusBar } from "../utils/types";
+import { colors } from "src/theme/colors";
+import { ModalStatusBar } from "src/utils/types";
 
 const storeId = 'MODAL_STATUSBAR';
 
@@ -15,7 +15,7 @@ const store = createStore<ModalStatusBarState>(storeId, {
 	styles: {}
 });
 
-export const useModalStatusBar = () => {
+const useModalStatusBar = () => {
 	const [details] = useStore<ModalStatusBarState>(storeId);
 
 	const setUseHeader = (value: boolean) => {
@@ -40,3 +40,5 @@ export const useModalStatusBar = () => {
 		setUseHeader
 	}
 };
+
+export default  useModalStatusBar;

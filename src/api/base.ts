@@ -1,8 +1,10 @@
 import axios, { AxiosResponse } from "axios";
 import { IMap } from "../utils/types";
 
+/** CORE_API_URL should be stored as ENV variable
+https://docs.expo.io/guides/environment-variables/ */
 const CORE_API_URL = "https://baklava.berkshares-api.keyko.rocks";
-// const CORE_API_URL = "http://localhost:3000";
+
 const httpRequest = axios.create({
   baseURL: CORE_API_URL,
 });
@@ -46,13 +48,16 @@ const ErrorHandler = async (
     const response: AxiosResponse = await requestHandler();
     return response;
   } catch (err) {
+    const config = err?.config;
+    const message = err?.message;
+    const response = err?.response;
     console.error(
-      `API request failed: '${err.message}'`,
-      `internal error: '${err.response?.data?.message}'`,
-      `method: '${err.config?.method?.toUpperCase()}'`,
-      `endpoint: '${err.config.baseURL + err.config.url}'`,
+      `API request failed: '${message}'`,
+      `internal error: '${response?.data?.message}'`,
+      `method: '${config?.method?.toUpperCase()}'`,
+      `endpoint: '${config?.baseURL + config?.url}'`,
       "request:",
-      err.config?.data ? JSON.parse(err.config.data) : ""
+      config?.data ? JSON.parse(config?.data) : ""
     );
 
     return err.toJSON().message;

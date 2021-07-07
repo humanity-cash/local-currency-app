@@ -1,8 +1,8 @@
-import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
-import EditOrderForm from "../views/editOrder/EditOrderForm";
-import { Order } from "../utils/types";
-import ModalConfirmPin from "../views/authentication/ModalConfirmPin";
+import React from "react";
+import ModalConfirmPin from "src/screens/authentication/ModalConfirmPin";
+import EditOrderForm from "src/screens/editOrder/EditOrderForm";
+import { Order } from "src/utils/types";
 
 type EditOrderStackProps = {
 	onClose: () => void

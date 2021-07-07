@@ -1,8 +1,8 @@
-import { createStore, useStore } from "react-hookstore";
-import { useCallback, useEffect } from "react";
-import { AsyncStorage } from "react-native";
-import { Notification } from "../utils/types";
 import _ from "lodash";
+import { useCallback, useEffect } from "react";
+import { createStore, useStore } from "react-hookstore";
+import { AsyncStorage } from "react-native";
+import { Notification } from "src/utils/types";
 
 const storeId = "NOTIFICATION_RECORD";
 
@@ -16,7 +16,7 @@ const store = createStore<NotificationsState>(storeId, {
 let loaded = false;
 
 
-export const useNotifications = () => {
+const useNotifications = () => {
 	const [details] = useStore<NotificationsState>(storeId);
 
 	useEffect(() => {
@@ -81,3 +81,5 @@ export const useNotifications = () => {
 		getFirst
 	}
 };
+
+export default useNotifications;

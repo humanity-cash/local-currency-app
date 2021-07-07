@@ -1,12 +1,10 @@
-import React from "react";
-import { DefaultTheme, NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
-import ForgotPasswordPhone from "../views/authentication/ForgotPasswordPhone";
-import ForgotPasswordVerification from "../views/authentication/ForgotPasswordVerification";
-import ForgotPasswordNewCode from "../views/authentication/ForgotPasswordNewCode";
-import ForgotPasswordNewCodeConfirm from "../views/authentication/ForgotPasswordNewCodeConfirm";
-import ForgotPasswordSuccess from "../views/authentication/ForgotPasswordSuccess";
-import { View } from "react-native";
+import React from "react";
+import ForgotPasswordNewCode from "src/screens/authentication/ForgotPasswordNewCode";
+import ForgotPasswordNewCodeConfirm from "src/screens/authentication/ForgotPasswordNewCodeConfirm";
+import ForgotPasswordPhone from "src/screens/authentication/ForgotPasswordPhone";
+import ForgotPasswordSuccess from "src/screens/authentication/ForgotPasswordSuccess";
+import ForgotPasswordVerification from "src/screens/authentication/ForgotPasswordVerification";
 
 const ForgotPasswordStack = createStackNavigator()
 function ForgotPasswordStackScreen(props: ForgotPasswordStackProps) {

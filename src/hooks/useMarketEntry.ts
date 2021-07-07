@@ -1,9 +1,9 @@
-import { createStore, useStore } from "react-hookstore";
-import { useCallback, useEffect } from "react";
-import { AsyncStorage } from "react-native";
-import { MarketEntry, OnboardingState, OrderType, ShareEntry } from "../utils/types";
-import listOfMarketEntries from '../mocks/marketEntries';
 import _ from "lodash";
+import { useCallback, useEffect } from "react";
+import { createStore, useStore } from "react-hookstore";
+import { AsyncStorage } from "react-native";
+import listOfMarketEntries from 'src/mocks/marketEntries';
+import { MarketEntry, OrderType, ShareEntry } from "src/utils/types";
 
 const storeId = "MARKET_ENTRIES_RECORD";
 
@@ -16,7 +16,7 @@ const store = createStore<MarketEntryState>(storeId, {
 });
 let loaded = false;
 
-export const useMarketEntry = () => {
+const useMarketEntry = () => {
 	const [details] = useStore<MarketEntryState>(storeId);
 
 	useEffect(() => {
@@ -80,3 +80,5 @@ export const useMarketEntry = () => {
 		addOrderToEntry
 	}
 };
+
+export default useMarketEntry;
