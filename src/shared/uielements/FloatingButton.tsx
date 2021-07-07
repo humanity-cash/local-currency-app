@@ -6,38 +6,27 @@ import { useMarketEntry, useShares } from "src/hooks";
 import { colors } from "src/theme/colors";
 
 // FIXING ERROR OF USENATIVEDRIVER warning
-// @ts-ignore
 ActionButton.prototype.animateButton = function(animate = true) {
-	// @ts-ignore
 	if (this.state.active) return this.reset();
-
 	if (animate) {
-		// @ts-ignore
 		Animated.spring(this.anim, { toValue: 1, useNativeDriver: false }).start();
 	} else {
-		// @ts-ignore
 		this.anim.setValue(1);
 	}
-	// @ts-ignore
+	
 	this.setState({ active: true, resetToken: this.state.resetToken });
 }
-// @ts-ignore
-ActionButton.prototype.reset = function (animate = true) {
-	// @ts-ignore
-	if (this.props.onReset) this.props.onReset();
 
+ActionButton.prototype.reset = function (animate = true) {
+	if (this.props.onReset) this.props.onReset();
 	if (animate) {
-		// @ts-ignore
 		Animated.spring(this.anim, { toValue: 0, useNativeDriver: false }).start();
 	} else {
-		// @ts-ignore
 		this.anim.setValue(0);
 	}
 
 	setTimeout(() => {
-		// @ts-ignore
 		if (this.mounted) {
-			// @ts-ignore
 			this.setState({ active: false, resetToken: this.state.resetToken });
 		}
 	}, 250);
@@ -81,7 +70,7 @@ const FloatingButton = (props: FloatingButtonProps) => {
 					if (props.onSellAction) {
 						props.onSellAction();
 					}
-					// @ts-ignore
+					
 					floatingAction?.current?.reset();
 				}}
 				shadowStyle={styles.actionButtonItem}
@@ -93,7 +82,7 @@ const FloatingButton = (props: FloatingButtonProps) => {
 					if (props.onBuyAction) {
 						props.onBuyAction();
 					}
-					// @ts-ignore
+					
 					floatingAction?.current?.reset()
 				}}
 				shadowStyle={styles.actionButtonItem}
