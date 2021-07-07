@@ -1,9 +1,9 @@
-import { createStore, useStore } from "react-hookstore";
-import { useCallback, useEffect } from "react";
-import { AsyncStorage } from "react-native";
-import { Order } from "../utils/types";
-import listOfOrders from '../mocks/orders';
 import _ from 'lodash';
+import { useCallback, useEffect } from "react";
+import { createStore, useStore } from "react-hookstore";
+import { AsyncStorage } from "react-native";
+import listOfOrders from 'src/mocks/orders';
+import { Order } from "src/utils/types";
 
 const storeId = "ORDERS_RECORD";
 
@@ -17,7 +17,7 @@ const store = createStore<OrdersState>(storeId, {
 let loaded = false;
 
 
-export const useOrders = () => {
+const useOrders = () => {
 	const [details] = useStore<OrdersState>(storeId);
 
 	useEffect(() => {
@@ -100,3 +100,5 @@ export const useOrders = () => {
 		update
 	}
 };
+
+export default useOrders;

@@ -1,8 +1,8 @@
-import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
+import React from "react";
+import PickCompany from "src/screens/createOrder/PickCompany";
+import { OrderType, ShareEntry } from "src/utils/types";
 import { SellTransactionNavigator } from "./SellTransactionStack";
-import { ShareEntry, OrderType } from "../utils/types";
-import PickCompany from "../views/createOrder/PickCompany";
 
 type CreateSellOrderStackProps = {
 	onClose: () => void,

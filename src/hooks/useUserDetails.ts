@@ -1,7 +1,7 @@
-import { createStore, useStore } from "react-hookstore";
 import { useCallback, useEffect } from "react";
+import { createStore, useStore } from "react-hookstore";
 import { AsyncStorage } from "react-native";
-import { AuthorizationDetails, IMap, OnboardingState, PersonalDetails, Status, Terms } from "../utils/types";
+import { AuthorizationDetails, IMap, OnboardingState, PersonalDetails, Status, Terms } from "src/utils/types";
 
 const storeId = "ONBOARDING_DETAILS";
 
@@ -48,7 +48,7 @@ const defaultState: OnboardingState = {
 const store = createStore<OnboardingState>(storeId, defaultState);
 let loaded = false;
 
-export const useUserDetails = () => {
+const useUserDetails = () => {
 	const [details] = useStore<OnboardingState>(storeId);
 	const { personalDetails, authorization, statuses, terms, loggedIn } = details;
 
@@ -185,3 +185,5 @@ export const useUserDetails = () => {
 		setLoggedIn
 	}
 };
+
+export default useUserDetails;

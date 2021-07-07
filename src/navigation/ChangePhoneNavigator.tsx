@@ -1,8 +1,8 @@
-import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
-import ModalConfirmPin from "../views/authentication/ModalConfirmPin";
-import ChangePhone from "../views/settings/ChangePhone";
-import ChangePhoneVerification from "../views/settings/ChangePhoneVerification";
+import React from "react";
+import ModalConfirmPin from "src/screens/authentication/ModalConfirmPin";
+import ChangePhone from "src/screens/settings/ChangePhone";
+import ChangePhoneVerification from "src/screens/settings/ChangePhoneVerification";
 
 type ChangePhoneStackProps = {
 	onClose: () => void,

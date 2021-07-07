@@ -1,10 +1,9 @@
-import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
-import ModalConfirmPin from "../views/authentication/ModalConfirmPin";
-import ChangePasscodeNew from "../views/settings/ChangePasscodeNew";
-import ChangePasscodeNewConfirm from "../views/settings/ChangePasscoreNewConfirm";
-import ChangePasscodeCurrent from "../views/settings/ChangePasscodeCurrent";
-import ChangePasscodeSuccess from "../views/settings/ChangePasscodeSuccess";
+import React from "react";
+import ChangePasscodeCurrent from "src/screens/settings/ChangePasscodeCurrent";
+import ChangePasscodeNew from "src/screens/settings/ChangePasscodeNew";
+import ChangePasscodeSuccess from "src/screens/settings/ChangePasscodeSuccess";
+import ChangePasscodeNewConfirm from "src/screens/settings/ChangePasscoreNewConfirm";
 
 type ChangePasscodeStackProps = {
 	onClose: () => void,

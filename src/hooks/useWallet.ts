@@ -1,8 +1,8 @@
-import { createStore, useStore } from "react-hookstore";
 import { useCallback, useEffect } from "react";
+import { createStore, useStore } from "react-hookstore";
 import { AsyncStorage } from "react-native";
-import { Transaction, TransactionType, Wallet, WalletMinimum } from "../utils/types";
-import { makeId } from "../utils/common";
+import { makeId } from "src/utils/common";
+import { Transaction, TransactionType, Wallet, WalletMinimum } from "src/utils/types";
 
 const storeId = "WALLET_RECORD";
 
@@ -94,7 +94,7 @@ const defaultState: WalletState = {
 const store = createStore<WalletState>(storeId, defaultState);
 let loaded = false;
 
-export const useWallet = () => {
+const useWallet = () => {
 	const [ wallet ] = useStore<WalletState>(storeId);
 	useEffect(() => {
 		async function readStorage() {
@@ -241,3 +241,5 @@ export const useWallet = () => {
 		resetWallet
 	}
 };
+
+export default useWallet;
