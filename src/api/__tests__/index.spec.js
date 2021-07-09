@@ -1,15 +1,16 @@
-import Requests from '../index';
+/* eslint-disable jest/no-commented-out-tests */
+import { UserAPI } from '../index';
 
 jest.setTimeout(30000);
 
-test("Success: GET: health()", async () => {
-		const response = await Requests.get.health()
+test.skip("Success: GET: all users", async () => {
+		const response = await UserAPI.getAll()
 		expect(response.status).toBe(200)
 })
 
-test("Fail404: GET: user(user_id)", async () => {
-		const response = await Requests.get.user("userId")
-		expect(response).toBe("Request failed with status code 404")
+test.skip("Fail404: GET: user(user_id)", async () => {
+		const response = await UserAPI.getSingle("userId");
+		expect(response).toBe("Request failed with status code 404");
 })
 
 /** Not Stable
