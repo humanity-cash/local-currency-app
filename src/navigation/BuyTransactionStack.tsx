@@ -1,15 +1,15 @@
-import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
-import { ShareEntry } from "../utils/types";
-import TransactionForm from "../views/transactions/TransactionForm";
-import ModalConfirmPin from "../views/authentication/ModalConfirmPin";
-import TransactionExpireDate from "../views/transactions/TransactionExpireDate";
-import TransactionComplete from "../views/transactions/TransactionComplete";
-import TransactionAddCash from "../views/transactions/TransactionAddCash";
-import TransactionSelectPayment from "../views/transactions/TransactionSelectPayment";
-import TransactionCreditCard from "../views/transactions/TransactionCreditCard";
-import TransactionDeposit from "../views/transactions/TransactionDeposit";
-import TransactionPickCard from "../views/transactions/TransactionPickCard";
+import React from "react";
+import ModalConfirmPin from "src/screens/authentication/ModalConfirmPin";
+import TransactionAddCash from "src/screens/transactions/TransactionAddCash";
+import TransactionComplete from "src/screens/transactions/TransactionComplete";
+import TransactionCreditCard from "src/screens/transactions/TransactionCreditCard";
+import TransactionDeposit from "src/screens/transactions/TransactionDeposit";
+import TransactionExpireDate from "src/screens/transactions/TransactionExpireDate";
+import TransactionForm from "src/screens/transactions/TransactionForm";
+import TransactionPickCard from "src/screens/transactions/TransactionPickCard";
+import TransactionSelectPayment from "src/screens/transactions/TransactionSelectPayment";
+import { ShareEntry } from "src/utils/types";
 
 type BuyTransactionStackProps = {
 	route?: any,

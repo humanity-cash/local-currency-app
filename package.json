@@ -1,5 +1,6 @@
 {
   "main": "./src/index.js",
+  "name": "humcash-app",
   "scripts": {
     "android": "expo start --android",
     "ios": "expo start --ios",

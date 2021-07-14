@@ -1,10 +1,10 @@
-import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
-import ModalConfirmPin from "../views/authentication/ModalConfirmPin";
-import ChangeEmail from "../views/settings/ChangeEmail";
-import ChangeEmailConfirm from "../views/settings/ChangeEmailConfirm";
-import ChangeEmailConfirmed from "../views/settings/ChangeEmailConfirmed";
-import VerificationHelp from "../views/settings/VerificationHelp";
+import React from "react";
+import ModalConfirmPin from "src/screens/authentication/ModalConfirmPin";
+import ChangeEmail from "src/screens/settings/ChangeEmail";
+import ChangeEmailConfirm from "src/screens/settings/ChangeEmailConfirm";
+import ChangeEmailConfirmed from "src/screens/settings/ChangeEmailConfirmed";
+import VerificationHelp from "src/screens/settings/VerificationHelp";
 
 type ChangeEmailStackProps = {
 	onClose: () => void,

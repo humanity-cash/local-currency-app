@@ -1,18 +1,19 @@
-import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
-import WalletSelectPayment from "../views/wallet/WalletSelectPayment";
-import WalletAddCash from "../views/wallet/WalletAddCash";
-import ModalConfirmPin from "../views/authentication/ModalConfirmPin";
-import WalletCreditCard from "../views/wallet/WalletCreditCard";
-import WalletDeposit from "../views/wallet/WalletDeposit";
-import WalletPickCard from "../views/wallet/WalletPickCard";
+import React from "react";
+import ModalConfirmPin from "src/screens/authentication/ModalConfirmPin";
+import WalletAddCash from "src/screens/wallet/WalletAddCash";
+import WalletCreditCard from "src/screens/wallet/WalletCreditCard";
+import WalletDeposit from "src/screens/wallet/WalletDeposit";
+import WalletPickCard from "src/screens/wallet/WalletPickCard";
+import WalletSelectPayment from "src/screens/wallet/WalletSelectPayment";
 
 type AddCashTransactionProps = {
 	onClose: () => void
 	style?: any,
 }
 
-const AddCashTransactionStack = createStackNavigator()
+const AddCashTransactionStack = createStackNavigator();
+
 function AddCashTransactionStackScreen(props: AddCashTransactionProps) {
 	return (
 		<AddCashTransactionStack.Navigator
