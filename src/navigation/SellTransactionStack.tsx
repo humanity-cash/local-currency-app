@@ -1,11 +1,11 @@
-import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
-import { ShareEntry } from "../utils/types";
-import ModalConfirmPin from "../views/authentication/ModalConfirmPin";
-import TransactionTwoFactor from "../views/transactions/TransactionTwoFactor";
-import TransactionExpireDate from "../views/transactions/TransactionExpireDate";
-import TransactionForm from "../views/transactions/TransactionForm";
-import TransactionComplete from "../views/transactions/TransactionComplete";
+import React from "react";
+import ModalConfirmPin from "src/screens/authentication/ModalConfirmPin";
+import TransactionComplete from "src/screens/transactions/TransactionComplete";
+import TransactionExpireDate from "src/screens/transactions/TransactionExpireDate";
+import TransactionForm from "src/screens/transactions/TransactionForm";
+import TransactionTwoFactor from "src/screens/transactions/TransactionTwoFactor";
+import { ShareEntry } from "src/utils/types";
 
 type SellTransactionStackProps = {
 	route?: any,

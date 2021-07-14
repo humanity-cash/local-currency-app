@@ -1,18 +1,10 @@
-import { SelectionProps } from "../uielements/SelectModal";
+import { SelectionProps } from "src/shared/uielements/SelectModal";
 
 const list: SelectionProps[] = [
   {
-    "value": "swiss",
-    "name": "Switzerland",
+    "value": "us",
+    "name": "US",
     "icon": require("../../assets/images/flags/swiss.png")
-  },
-  {
-    "value": "de",
-    "name": "Germany"
-  },
-  {
-    "value": "pl",
-    "name": "Poland"
   }
 ]
 

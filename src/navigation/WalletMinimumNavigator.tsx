@@ -1,9 +1,9 @@
-import React from "react";
 import { createStackNavigator } from "@react-navigation/stack";
-import ModalConfirmPin from "../views/authentication/ModalConfirmPin";
-import WalletMinimumAmount from "../views/settings/WalletMinimumAmount";
-import WalletMinimumSelectPayment from "../views/settings/WalletMinimumSelectPayment";
-import WalletMinimumCreditCard from "../views/settings/WalletMinimumCreditCard";
+import React from "react";
+import ModalConfirmPin from "src/screens/authentication/ModalConfirmPin";
+import WalletMinimumAmount from "src/screens/settings/WalletMinimumAmount";
+import WalletMinimumCreditCard from "src/screens/settings/WalletMinimumCreditCard";
+import WalletMinimumSelectPayment from "src/screens/settings/WalletMinimumSelectPayment";
 
 type WalletMinimumStackProps = {
 	onClose: () => void,
