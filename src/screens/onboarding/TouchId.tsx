@@ -3,11 +3,11 @@ import React, { useEffect, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { Text } from 'react-native-elements';
 import { useUserDetails } from "src/hooks";
-import { BackBtn, Header, PinCode } from "src/shared/uielements";
+import { BackBtn, Header } from "src/shared/uielements";
 import { baseHeader, viewBase, wrappingContainerBase } from "src/theme/elements";
 
 
-type PasscodeProps = {
+type TouchIdProps = {
 	navigation?: any
 	route?: any
 }
@@ -26,16 +26,9 @@ const styles = StyleSheet.create({
 	}
 });
 
-const PasscodeView = (props: PasscodeProps) => {
+const TouchIdView = (props: TouchIdProps) => {
 	const { updateAuthorization } = useUserDetails();
-	const [pinValue, setPinValue] = useState('');
-	const [autoFocus, setAutoFocus] = useState(true);
-	const isFocused = useIsFocused();
-
-	useEffect(() => {
-		setAutoFocus(isFocused);
-		setPinValue(isFocused ? pinValue : '');
-	},[isFocused]);
+	const [touchId, setTouchId] = useState('');
 
 	return (
 		<View style={viewBase}>
@@ -45,28 +38,18 @@ const PasscodeView = (props: PasscodeProps) => {
 
 			<View style={{ ...wrappingContainerBase, flex: 1 }}>
 				<View style={ { ...baseHeader} }>
-					<Text h1>Whoops! Password didn't match. Please try again.</Text>
+					<Text h1>No Matching codes... please try again.</Text>
 				</View>
 				<View style={styles.codeView}>
-					<PinCode
-						value={pinValue}
-						onChange={setPinValue}
-						autoFocus={autoFocus}
-						length={6}
-						onComplete={(pinInput) => {
-							updateAuthorization({ pinInput });
-							props.navigation.navigate('TouchId')
-							setAutoFocus(false)
-						}}
-					/>
+					
 				</View>
 			</View>
 		</View>
 	);
 }
 
-const Passcode = (props:PasscodeProps) => {
+const TouchId = (props:TouchIdProps) => {
 	const navigation = useNavigation();
-	return <PasscodeView {...props} navigation={navigation} />;
+	return <TouchIdView {...props} navigation={navigation} />;
 }
-export default Passcode
+export default TouchId

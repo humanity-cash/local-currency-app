@@ -14,10 +14,10 @@ const MAIN_COUNTRY = "swiss";
 interface PersonalDetailsState extends IMap {
   firstname: string;
   lastname: string;
-  nationality: string;
-  birthDay: string;
-  birthMonth: string;
-  birthYear: string;
+  // nationality: string;
+  // birthDay: string;
+  // birthMonth: string;
+  // birthYear: string;
 }
 
 interface PersonalDetailsProps {
@@ -34,10 +34,10 @@ const PersonalDetailsForm = (props: PersonalDetailsProps) => {
   const [state, setState] = useState<PersonalDetailsState>({
     firstname: "",
     lastname: "",
-    nationality: "",
-    birthDay: "",
-    birthMonth: "",
-    birthYear: "",
+    // nationality: "",
+    // birthDay: "",
+    // birthMonth: "",
+    // birthYear: "",
   });
   const { showValidation } = props;
 
@@ -54,10 +54,10 @@ const PersonalDetailsForm = (props: PersonalDetailsProps) => {
     setState({
       firstname: personalDetails.firstname,
       lastname: personalDetails.lastname,
-      nationality: personalDetails.nationality,
-      birthDay: personalDetails.dateOfBirth.day,
-      birthMonth: personalDetails.dateOfBirth.month,
-      birthYear: personalDetails.dateOfBirth.year,
+      // nationality: personalDetails.nationality,
+      // birthDay: personalDetails.dateOfBirth.day,
+      // birthMonth: personalDetails.dateOfBirth.month,
+      // birthYear: personalDetails.dateOfBirth.year,
     });
   }, [personalDetails]);
 
@@ -77,7 +77,15 @@ const PersonalDetailsForm = (props: PersonalDetailsProps) => {
 
   return (
     <View>
-      <Text h3>first name as in passport</Text>
+      <View
+        style={{
+        borderTopColor: colors.darkRed,
+        borderTopWidth: 1,
+        marginBottom: 20
+        }}>
+          <Text style={{color: colors.darkRed}}>We use your personal details to set up your BerkShares Wallet. Don't worry. This information is not shared publicly!</Text>
+      </View>
+      <Text h3>FIRST NAME</Text>
       {showValidation && validationErrors.firstname && (
         <Text h3 style={{ marginTop: 5, color: colors.textError }}>
           {validationErrors.firstname}
@@ -85,11 +93,12 @@ const PersonalDetailsForm = (props: PersonalDetailsProps) => {
       )}
       <BlockInput
         name="firstname"
-        placeholder="First name (as in passport)"
+        placeholder="First name"
         value={state.firstname}
         onChange={onValueChange}
+        style={{backgroundColor: colors.azure}}
       />
-      <Text h3>last name as in passport</Text>
+      <Text h3>LAST NAME</Text>
       {showValidation && validationErrors.lastname && (
         <Text h3 style={{ marginTop: 5, color: colors.textError }}>
           {validationErrors.lastname}
@@ -97,69 +106,11 @@ const PersonalDetailsForm = (props: PersonalDetailsProps) => {
       )}
       <BlockInput
         name="lastname"
-        placeholder="Last name (as in passport)"
+        placeholder="Last name"
         value={state.lastname}
         onChange={onValueChange}
+        style={{backgroundColor: colors.azure}}
       />
-      <Text h3>nationality</Text>
-      {showValidation && validationErrors.nationality && (
-        <Text h3 style={{ marginTop: 5, color: colors.textError }}>
-          {validationErrors.nationality}
-        </Text>
-      )}
-      <SelectModal
-        name="nationality"
-        value={state.nationality}
-        onChange={onValueChange}
-        modalHeader="Select your nationality"
-        modalMainOption={countries.find(
-          (country: SelectionProps) => country.value === MAIN_COUNTRY
-        )}
-        modalList={countries.filter(
-          (country: SelectionProps) => country.value !== MAIN_COUNTRY
-        )}
-        modalListLabel="other"
-      />
-      <Text h3>Date of birth</Text>
-      {showValidation && validationErrors.dateOfBirth && (
-        <Text h3 style={{ marginTop: 5, color: colors.textError }}>
-          {validationErrors.dateOfBirth}
-        </Text>
-      )}
-      <View
-        style={{
-          flexDirection: "row",
-          width: "60%",
-        }}
-      >
-        <BlockInput
-          style={{ flex: 1, textAlign: "center" }}
-          placeholder="DD"
-          keyboardType="number-pad"
-          name="day"
-          maxLength={2}
-          value={state.birthDay}
-          onChange={onValueChange}
-        />
-        <BlockInput
-          style={{ marginLeft: 5, flex: 1, textAlign: "center" }}
-          placeholder="MM"
-          keyboardType="number-pad"
-          name="month"
-          maxLength={2}
-          value={state.birthMonth}
-          onChange={onValueChange}
-        />
-        <BlockInput
-          style={{ marginLeft: 5, flex: 2, textAlign: "center" }}
-          placeholder="YYYY"
-          keyboardType="number-pad"
-          name="year"
-          maxLength={4}
-          value={state.birthYear}
-          onChange={onValueChange}
-        />
-      </View>
     </View>
   );
 };

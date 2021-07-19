@@ -1,10 +1,11 @@
 import { useNavigation } from '@react-navigation/native';
 import React from 'react';
-import { StyleSheet, TouchableOpacity, View } from 'react-native';
-import { Image, Text } from 'react-native-elements';
+import { StyleSheet, ImageBackground, View } from 'react-native';
+import { Text } from 'react-native-elements';
 import { useUserDetails } from "src/hooks";
 import { Button, Header } from 'src/shared/uielements';
 import { viewBase } from "src/theme/elements";
+import { colors } from "src/theme/colors";
 
 type TeaserProps = {
 	navigation?: any
@@ -12,65 +13,61 @@ type TeaserProps = {
 }
 
 const styles = StyleSheet.create({
-	loginText: {
-		fontFamily: 'IBMPlexSansSemiBold',
-		fontSize: 20
-	},
 	headerText: {
-		lineHeight: 36,
-		padding: 25,
-		width: '90%'
+		fontSize: 12,
+		fontWeight: "bold",
 	},
-	bottomText: {
-		padding: 20,
-		width: '90%',
-		marginBottom: 20
-	},
-	image: {
-		alignSelf: "center",
-		width: 250,
-		height: 250
-	},
-	imageView: {
+	content: {
 		justifyContent: "center",
 		textAlignVertical: "center",
-		flex: 1
-	}
+		height: '80%'
+	},
+	image: {
+		flex: 1,
+		padding: 20,
+	},
+	bottomView: {
+		position: "absolute",
+		left: 0,
+		bottom: 0,
+		width: '100%',
+		height: '20%',
+		padding: 20,
+		backgroundColor: '#fff',
+	},
 });
 
 const TeaserView = (props: TeaserProps) => {
 	const { loggedIn } = useUserDetails();
 	return (
 		<View style={ viewBase }>
-			<Header
-				rightComponent={
-					<TouchableOpacity
-						onPress={() => props.navigation.navigate('Login')}
-						style={{ paddingEnd: 10 }}
-					>
-						<Text style={styles.loginText}>Log In</Text>
-					</TouchableOpacity>
-				}
-			/>
-			<Text h1 style={styles.headerText}>
-				Get the most out of unlisted shares anytime, anywhere
-			</Text>
-			<View style={styles.imageView}>
-				<Image
-					source={require('../../../assets/images/teaser.png')}
-					containerStyle={styles.image}
-				/>
+			<View style={styles.content}>
+				<ImageBackground
+					source={require('../../../assets/images/splash1.png')}
+					resizeMode="cover" 
+					style={styles.image}>
+
+					<Text style={styles.headerText}>B$ BERKSHARES</Text>
+				</ImageBackground>
 			</View>
-			<Text style={styles.bottomText}>
-				Welcome to DATE, the first app worldwide that enables you to trade unlisted shares digitally.
-			</Text>
-			{!loggedIn && (
-				<Button
-					type="fluidDark"
-					title="CREATE YOUR ACCOUNT"
-					onPress={() => props.navigation.navigate('CreateAccount')}
-				/>
-			)}
+			<View style={styles.bottomView}>
+				{!loggedIn && (
+					<Button
+						type="darkRed"
+						title="Log In"
+						onPress={() => props.navigation.navigate('Login')}
+					/>
+				)}
+				{!loggedIn && (
+					<Button
+						type="darkRed"
+						title="CREATE YOUR ACCOUNT"
+						onPress={() => props.navigation.navigate('CreateAccount')}
+						style={{backgroundColor: 'transparent'}}
+						textStyle={{color: colors.darkRed}}
+					/>
+				)}
+			</View>
 		</View>
 	);
 }

@@ -47,32 +47,32 @@ const Dashboard = () => {
 			<Notifications />
 			<Header
 				placement="left"
-				style={{ backgroundColor: colors.text }}
-				barStyle="light-content"
-				centerComponent={<Text style={styles.headerText}>Dashboard</Text>}
-				leftComponent={
-					<TouchableWithoutFeedback onPress={() => setShowSettings(!showSettings)}>
-						<View>
-							{!showSettings && (
-								<Entypo
-									style={{ paddingTop: 2 }}
-									name='menu'
-									size={25}
-									color={colors.white}
-								/>
-							)}
-							{showSettings && (
-								<AntDesign
-									style={{ paddingTop: 2 }}
-									name="arrowleft"
-									size={25}
-									color={colors.white}
-								/>
-							)}
-						</View>
-					</TouchableWithoutFeedback>
-				}
-				rightComponent={<WalletBtn />}
+				style={{ backgroundColor: colors.white }}
+				// barStyle="light-content"
+				// centerComponent={<Text style={styles.headerText}>Dashboard</Text>}
+				// leftComponent={
+				// 	<TouchableWithoutFeedback onPress={() => setShowSettings(!showSettings)}>
+				// 		<View>
+				// 			{!showSettings && (
+				// 				<Entypo
+				// 					style={{ paddingTop: 2 }}
+				// 					name='menu'
+				// 					size={25}
+				// 					color={colors.white}
+				// 				/>
+				// 			)}
+				// 			{showSettings && (
+				// 				<AntDesign
+				// 					style={{ paddingTop: 2 }}
+				// 					name="arrowleft"
+				// 					size={25}
+				// 					color={colors.white}
+				// 				/>
+				// 			)}
+				// 		</View>
+				// 	</TouchableWithoutFeedback>
+				// }
+				// rightComponent={<WalletBtn />}
 			/>
 			<TabStackScreen />
 			<SettingsOverlay visible={showSettings} />

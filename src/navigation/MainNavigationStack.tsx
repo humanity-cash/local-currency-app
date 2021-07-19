@@ -15,10 +15,13 @@ import CreditCard from "src/screens/onboarding/CreditCard";
 import Deposit from "src/screens/onboarding/Deposit";
 import EmailConfirmed from "src/screens/onboarding/EmailConfirmed";
 import OnboardingSteps from "src/screens/onboarding/OnboardingSteps";
+import Password from "src/screens/onboarding/Password";
+import PasswordConfirm from "src/screens/onboarding/PasswordConfirm";
 import Passcode from "src/screens/onboarding/Passcode";
-import PasscodeConfirm from "src/screens/onboarding/PasscodeConfirm";
+import TouchId from "src/screens/onboarding/TouchId";
 import PersonalAddress from "src/screens/onboarding/PersonalAddress";
 import PersonalDetails from "src/screens/onboarding/PersonalDetails";
+import PersonalProfile from "src/screens/onboarding/PersonalProfile";
 import SelectPayment from "src/screens/onboarding/SelectPayment";
 import Teaser from "src/screens/onboarding/Teaser";
 import Terms from "src/screens/onboarding/Terms";
@@ -48,13 +51,13 @@ function PrimaryStackScreen() {
       <PrimaryStack.Screen name="Login" component={Login} />
       <PrimaryStack.Screen name="CreateAccount" component={CreateAccount} />
       <PrimaryStack.Screen name="Verification" component={Verification} />
-      <PrimaryStack.Screen
-        name="VerificationHelp"
-        component={VerificationHelp}
-      />
+      <PrimaryStack.Screen name="VerificationHelp" component={VerificationHelp} />
+      <PrimaryStack.Screen name="Password" component={Password} />
+      <PrimaryStack.Screen name="ConfirmPassword" component={PasswordConfirm} />
       <PrimaryStack.Screen name="Passcode" component={Passcode} />
-      <PrimaryStack.Screen name="ConfirmPasscode" component={PasscodeConfirm} />
+      <PrimaryStack.Screen name="TouchId" component={TouchId} />
       <PrimaryStack.Screen name="OnboardingSteps" component={OnboardingSteps} />
+      <PrimaryStack.Screen name="PersonalProfile" component={PersonalProfile} />
       <PrimaryStack.Screen name="PersonalDetails" component={PersonalDetails} />
       <PrimaryStack.Screen name="PersonalAddress" component={PersonalAddress} />
       <PrimaryStack.Screen name="TermsEmail" component={TermsEmail} />

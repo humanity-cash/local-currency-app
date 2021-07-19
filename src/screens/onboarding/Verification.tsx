@@ -4,7 +4,8 @@ import { Keyboard, KeyboardAvoidingView, Platform, StyleSheet, TouchableOpacity,
 import { Text } from 'react-native-elements';
 import { useUserDetails } from "src/hooks";
 import { BackBtn, ConfirmationCode, Header } from "src/shared/uielements";
-import { baseHeader, viewBase, wrappingContainerBase } from "src/theme/elements";
+import { baseHeader, viewBaseWhite, wrappingContainerBase } from "src/theme/elements";
+import { colors } from "src/theme/colors";
 
 type VerificationProps = {
     navigation?: any
@@ -12,11 +13,18 @@ type VerificationProps = {
 }
 
 const styles = StyleSheet.create({
+    headerText: {
+		fontSize: 32,
+        color: colors.darkGreen,
+        lineHeight: 30
+	},
     codeView: {
         flex: 1
     },
     bottomNavigation: {
-        justifyContent: "center"
+        justifyContent: "center",
+        color: colors.darkGreen,
+        fontWeight: 'bold'
     },
     bottomView: {
         height: 60,
@@ -33,24 +41,25 @@ const VerificationView = (props: VerificationProps) => {
 
     const onComplete = (text: string) => {
         if (text === VALID_CODE) {
-            props.navigation.navigate('Passcode')
+            props.navigation.navigate('Password')
             return;
         }
     }
 
     return (
-        <View style={viewBase}>
+        <View style={viewBaseWhite}>
             <Header
-                leftComponent={<BackBtn onClick={() => props.navigation.goBack()} />}
+                leftComponent={<BackBtn onClick={() => props.navigation.goBack()} color={colors.darkGreen} />}
             />
 
             <View style={{ ...wrappingContainerBase, flex: 1 }}>
                 <View style={ { ...baseHeader} }>
-                    <Text h1>Enter verification code</Text>
+                    {!noCodeReceived && <Text style={styles.headerText}>Verify your mail address</Text>}
+                    {noCodeReceived && <Text style={styles.headerText}>Enter verification code</Text>}
                 </View>
                 <View style={styles.codeView}>
-                    {!noCodeReceived && (<Text>We have sent a message with a verification code to {phoneCountry} {phoneNumber}.</Text>)}
-                    {noCodeReceived && (<Text>We have sent another message with a new verification code to {phoneCountry} {phoneNumber}. Click back if you need to change your phone number.</Text>)}
+                    {!noCodeReceived && (<Text style={{color: colors.darkGreen}}>We have sent an email with a verification code to myname@mail.com</Text>)}
+                    {noCodeReceived && (<Text style={{color: colors.darkGreen}}>We have sent another message with a new verification code to myname@mail.com</Text>)}
                     <ConfirmationCode onComplete={onComplete} />
                 </View>
             </View>
@@ -63,7 +72,7 @@ const VerificationView = (props: VerificationProps) => {
                             setNoCodeReceived(true);
                             Keyboard.dismiss();
                         }}>
-                            <Text style={styles.bottomNavigation}>No code received?</Text>
+                            <Text style={styles.bottomNavigation}>Send code again</Text>
                         </TouchableOpacity>
                     </View>
                 </KeyboardAvoidingView>
