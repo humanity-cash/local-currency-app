@@ -1,17 +1,23 @@
 import { useNavigation } from '@react-navigation/native';
 import React, { useState } from 'react';
-import { KeyboardAvoidingView, Platform, ScrollView, View } from 'react-native';
+import { KeyboardAvoidingView, Platform, ScrollView, View, StyleSheet } from 'react-native';
 import { Text } from 'react-native-elements';
 import { useUserDetails } from "src/hooks";
 import { BackBtn, Button, Header, NextBtn, PersonalDetailsForm } from 'src/shared/uielements';
-import { baseHeader, viewBase, wrappingContainerBase } from "src/theme/elements";
+import { baseHeader, viewBaseWhite, wrappingContainerBase } from "src/theme/elements";
 import { validateDetailsForm } from "src/utils/validation";
-
+import { colors } from "src/theme/colors";
 
 type PersonalDetailsProps = {
 	navigation?: any
 	route?: any
 }
+
+const styles = StyleSheet.create({
+  	bottomView: {
+		padding: 20,
+	},
+});
 
 const PersonalDetailsView = (props: PersonalDetailsProps) => {
 	const { personalDetails } = useUserDetails();
@@ -27,7 +33,7 @@ const PersonalDetailsView = (props: PersonalDetailsProps) => {
 	}
 
 	return (
-		<View style={viewBase}>
+		<View style={viewBaseWhite}>
 			<Header
 				leftComponent={<BackBtn onClick={() => props.navigation.goBack()} />}
 				rightComponent={<NextBtn text="Skip" onClick={() => props.navigation.navigate('OnboardingSteps', { step: 2 })} />}
@@ -36,7 +42,7 @@ const PersonalDetailsView = (props: PersonalDetailsProps) => {
 			<ScrollView style={{ ...wrappingContainerBase }}>
 				<View style={{ paddingBottom: 40 }}>
 					<View style={ baseHeader }>
-						<Text h1>Enter your personal details</Text>
+						<Text h1>Personal details</Text>
 					</View>
 					<PersonalDetailsForm
 						isValid={setGoNext}
@@ -47,12 +53,14 @@ const PersonalDetailsView = (props: PersonalDetailsProps) => {
 			<KeyboardAvoidingView
 				behavior={Platform.OS == "ios" ? "padding" : "height"}
 			>
-				<Button
-					type="fluidDark"
-					title="NEXT"
-					disabled={!goNext}
-					onPress={onNextPress}
-				/>
+				<View style={styles.bottomView}>
+					<Button
+						type="darkRed"
+						title="NEXT"
+						disabled={!goNext}
+						onPress={onNextPress}
+					/>
+				</View>
 			</KeyboardAvoidingView>
 		</View>
 	);

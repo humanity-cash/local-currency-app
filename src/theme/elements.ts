@@ -6,6 +6,11 @@ export const viewBase: any = {
 	backgroundColor: colors.lightBg
 }
 
+export const viewBaseWhite: any = {
+	...viewBase,
+	backgroundColor: colors.white
+}
+
 export const modalViewBase: any = {
 	...viewBase,
 	borderTopStartRadius: 20,

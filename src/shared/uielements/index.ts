@@ -36,7 +36,8 @@ import {
 	CreditCardForm, 
 	DepositView, 
 	PersonalAddressForm, 
-	PersonalDetailsForm } from "./reusable";
+	PersonalDetailsForm, 
+	PersonalProfileForm, } from "./reusable";
 
 export {
 	BorderedInput,
@@ -71,5 +72,5 @@ export {
 	ModalHeader,
 	NextBtn,
 	WalletBtn,
-	CreditCardForm, DepositView, PersonalAddressForm, PersonalDetailsForm,
+	CreditCardForm, DepositView, PersonalAddressForm, PersonalDetailsForm, PersonalProfileForm,
 }

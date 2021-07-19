@@ -10,8 +10,10 @@ import CreditCard from "./onboarding/CreditCard";
 import Deposit from "./onboarding/Deposit";
 import EmailConfirmed from "./onboarding/EmailConfirmed";
 import OnboardingSteps from "./onboarding/OnboardingSteps";
+import Password from "./onboarding/Password";
+import PasswordConfirm from "./onboarding/PasswordConfirm";
 import Passcode from "./onboarding/Passcode";
-import PasscodeConfirm from "./onboarding/PasscodeConfirm";
+import TouchId from "./onboarding/TouchId";
 import PersonalAddress from "./onboarding/PersonalAddress";
 import PersonalDetails from "./onboarding/PersonalDetails";
 import SelectPayment from "./onboarding/SelectPayment";
@@ -22,7 +24,7 @@ import Verification from "./onboarding/Verification";
 import VerificationHelp from "./onboarding/VerificationHelp";
 
 export {
-	Teaser, CreateAccount, Verification, VerificationHelp, Passcode, PasscodeConfirm, OnboardingSteps,
+	Teaser, CreateAccount, Verification, VerificationHelp, Password, PasswordConfirm, Passcode, TouchId, OnboardingSteps,
 	PersonalDetails, PersonalAddress, TermsEmail, ConfirmEmail, EmailConfirmed, Terms, AddCash, SelectPayment,
 	Deposit, CreditCard, ConfirmPin, AddCashResult, Login, Dashboard, MarketEntryDetails
 };
