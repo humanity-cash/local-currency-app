@@ -66,12 +66,6 @@ const PersonalDetailsForm = (props: PersonalDetailsProps) => {
       ...state,
       [name]: change,
     } as any);
-    if (name === "day" || name === "month" || name === "year") {
-      updatePersonalDetails({
-        dateOfBirth: { ...personalDetails.dateOfBirth, [name]: change },
-      });
-      return;
-    }
     updatePersonalDetails({ [name]: change });
   };
 

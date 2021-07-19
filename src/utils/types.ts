@@ -22,6 +22,7 @@ export type PersonalDetails = {
   countryOfResidence: string;
   avatar: string;
   username: string;
+  phoneCountry: string;
   story: string;
   password: string;
   firstname: string;
