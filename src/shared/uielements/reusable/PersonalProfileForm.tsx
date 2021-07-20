@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { View } from "react-native";
+import { View, Image, TouchableOpacity, Platform } from "react-native";
 import { Text } from "react-native-elements";
 import { TextInput, StyleSheet } from 'react-native';
+import * as ImagePicker from 'expo-image-picker';
 import { useUserDetails } from "src/hooks";
 import { colors } from "src/theme/colors";
 import { IMap, PersonalDetailsErrors } from "src/utils/types";
@@ -32,6 +33,12 @@ const styles = StyleSheet.create({
     borderWidth: 0,
     color: colors.text,
   },
+  imageView: {
+    width: 80, 
+    height: 80, 
+    backgroundColor: colors.darkRed,
+    borderRadius: 40
+  }
 });
 
 const PersonalProfileForm = (props: PersonalProfileProps) => {
@@ -46,6 +53,17 @@ const PersonalProfileForm = (props: PersonalProfileProps) => {
     story: "",
   });
   const { showValidation } = props;
+
+  useEffect(() => {
+		(async () => {
+		  if (Platform.OS !== 'web') {
+			const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+			if (status !== 'granted') {
+			  alert('Sorry, we need camera roll permissions to make this work!');
+			}
+		  }
+		})();
+	}, []);
 
   useEffect(() => {
     const validation = validateDetailsForm(personalDetails);
@@ -72,6 +90,21 @@ const PersonalProfileForm = (props: PersonalProfileProps) => {
     updatePersonalDetails({ [name]: change });
   };
 
+  const pickImage = async () => {
+		let result = await ImagePicker.launchImageLibraryAsync({
+			mediaTypes: ImagePicker.MediaTypeOptions.All,
+			allowsEditing: true,
+			aspect: [4, 3],
+			quality: 1,
+		});
+	
+		console.log(result);
+	
+		if (!result.cancelled) {
+		  	onValueChange('avatar', result.uri);
+		}
+	};
+
   return (
     <View>
       <View
@@ -82,6 +115,14 @@ const PersonalProfileForm = (props: PersonalProfileProps) => {
         }}>
           <Text h3 style={{color: colors.darkRed}}>*REQUIRED FIELDS</Text>
       </View>
+      <View style={{alignSelf: "center"}}>
+        <TouchableOpacity onPress={pickImage}>
+          {state.avatar != '' && <View style={styles.imageView} />}
+          {state.avatar == '' && <Image source={{ uri: state.avatar }} style={styles.imageView} />}
+        </TouchableOpacity>
+      </View>
+      <Text h3 style={{color: colors.darkRed, textAlign: "center", marginTop: 10}}>UPLOAD PROFILE PICTURE</Text>
+      <Text h3 style={{color: colors.darkRed, textAlign: "center", marginBottom: 10}}>(JPG, JPEG, PNG)</Text>
       <Text h3>USER HANDLE*</Text>
       {showValidation && validationErrors.username && (
         <Text h3 style={{ marginTop: 5, color: colors.textError }}>

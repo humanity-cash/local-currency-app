@@ -5,8 +5,7 @@ import { Text } from 'react-native-elements';
 import { useUserDetails } from "src/hooks";
 import { BackBtn, Button, Header, NextBtn, PersonalProfileForm } from 'src/shared/uielements';
 import { baseHeader, viewBaseWhite, wrappingContainerBase } from "src/theme/elements";
-import { validateDetailsForm } from "src/utils/validation";
-import { colors } from "src/theme/colors";
+import { validateProfileForm } from "src/utils/validation";
 
 type PersonalProfileProps = {
 	navigation?: any
@@ -25,7 +24,7 @@ const PersonalProfileView = (props: PersonalProfileProps) => {
 	const [showValidation, setShowValidation] = useState(false);
 
 	const onNextPress = () => {
-		const validation = validateDetailsForm(personalDetails);
+		const validation = validateProfileForm(personalDetails);
 		setShowValidation(true);
 		if (validation.valid) {
 			props.navigation.navigate('PersonalDetails');
