@@ -2,22 +2,14 @@ import React, { useEffect, useState } from "react";
 import { View } from "react-native";
 import { Text } from "react-native-elements";
 import { useUserDetails } from "src/hooks";
-import countries from "src/mocks/countries";
 import { colors } from "src/theme/colors";
 import { IMap, PersonalDetailsErrors } from "src/utils/types";
 import { validateDetailsForm } from "src/utils/validation";
 import BlockInput from "../BlockInput";
-import SelectModal, { SelectionProps } from "../SelectModal";
-
-const MAIN_COUNTRY = "swiss";
 
 interface PersonalDetailsState extends IMap {
   firstname: string;
   lastname: string;
-  // nationality: string;
-  // birthDay: string;
-  // birthMonth: string;
-  // birthYear: string;
 }
 
 interface PersonalDetailsProps {
@@ -34,10 +26,6 @@ const PersonalDetailsForm = (props: PersonalDetailsProps) => {
   const [state, setState] = useState<PersonalDetailsState>({
     firstname: "",
     lastname: "",
-    // nationality: "",
-    // birthDay: "",
-    // birthMonth: "",
-    // birthYear: "",
   });
   const { showValidation } = props;
 
@@ -54,10 +42,6 @@ const PersonalDetailsForm = (props: PersonalDetailsProps) => {
     setState({
       firstname: personalDetails.firstname,
       lastname: personalDetails.lastname,
-      // nationality: personalDetails.nationality,
-      // birthDay: personalDetails.dateOfBirth.day,
-      // birthMonth: personalDetails.dateOfBirth.month,
-      // birthYear: personalDetails.dateOfBirth.year,
     });
   }, [personalDetails]);
 

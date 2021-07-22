@@ -3,7 +3,7 @@ import { StyleSheet, View } from "react-native";
 import { Text } from "react-native-elements";
 import WebView from "react-native-webview";
 import { DocumentFile } from "src/utils/types";
-import { Button } from "./Button";
+import Button from "./Button";
 import { CancelBtn, ModalHeader } from "./header";
 import Modal from "./Modal";
 
