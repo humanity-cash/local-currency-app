@@ -9,8 +9,6 @@ import { IMap, PersonalDetailsErrors } from "src/utils/types";
 import { validateDetailsForm } from "src/utils/validation";
 import BlockInput from "../BlockInput";
 
-const MAIN_COUNTRY = "swiss";
-
 interface PersonalProfileState extends IMap {
   avatar: string;
   username: string;
@@ -57,7 +55,7 @@ const PersonalProfileForm = (props: PersonalProfileProps) => {
   useEffect(() => {
 		(async () => {
 		  if (Platform.OS !== 'web') {
-			const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+			const { status } = await ImagePicker.requestCameraRollPermissionsAsync();
 			if (status !== 'granted') {
 			  alert('Sorry, we need camera roll permissions to make this work!');
 			}
@@ -97,8 +95,6 @@ const PersonalProfileForm = (props: PersonalProfileProps) => {
 			aspect: [4, 3],
 			quality: 1,
 		});
-	
-		console.log(result);
 	
 		if (!result.cancelled) {
 		  	onValueChange('avatar', result.uri);
