@@ -54,9 +54,6 @@ const styles = StyleSheet.create({
 });
 
 const PortfolioView = (props: PortfolioProps) => {
-	const { shares } = useShares();
-	const [createSell, setCreateSell] = useState(false);
-	const [createBuy, setCreateBuy] = useState(false);
 	return (
 		<View style={viewBaseWhite}>
 			<ScrollView style={{ ...wrappingContainerBase }}>

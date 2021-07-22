@@ -37,6 +37,12 @@ import SettingsHelpAndContact from "src/screens/settings/SettingsHelpAndContact"
 import SettingsPersonalDetails from "src/screens/settings/SettingsPersonalDetails";
 import SettingsTermsAndConditions from "src/screens/settings/SettingsTermsAndConditions";
 import Wallet from "src/screens/wallet/Wallet";
+import SelectAccountType from "src/screens/onboarding/SelectAccountType";
+import LinkBankAccount from "src/screens/onboarding/LinkBankAccount";
+import SelectBank from "src/screens/onboarding/SelectBank";
+import LoginToBank from "src/screens/onboarding/LoginToBank";
+import SelectBankAccount from "src/screens/onboarding/SelectBankAccount";
+import Congratulations from "src/screens/onboarding/Congratulations";
 
 const PrimaryStack = createStackNavigator();
 
@@ -96,6 +102,12 @@ function PrimaryStackScreen() {
         component={SettingsAccountDetails}
       />
       <PrimaryStack.Screen name="SettingsCards" component={SettingsCards} />
+      <PrimaryStack.Screen name="SelectAccountType" component={SelectAccountType} />
+      <PrimaryStack.Screen name="LinkBankAccount" component={LinkBankAccount} />
+      <PrimaryStack.Screen name="SelectBank" component={SelectBank} />
+      <PrimaryStack.Screen name="LoginToBank" component={LoginToBank} />
+      <PrimaryStack.Screen name="SelectBankAccount" component={SelectBankAccount} />
+      <PrimaryStack.Screen name="Congratulations" component={Congratulations} />
     </PrimaryStack.Navigator>
   );
 }

@@ -1,3 +1,4 @@
+import { AntDesign, Entypo } from "@expo/vector-icons";
 import { useNavigation } from '@react-navigation/native';
 import React from "react";
 import { StyleSheet, TouchableWithoutFeedback, View } from "react-native";
@@ -15,7 +16,7 @@ const styles = StyleSheet.create({
 		paddingHorizontal: 15,
 		paddingVertical: 5,
 		flexDirection: 'row',
-		backgroundColor: colors.brown,
+		// backgroundColor: colors.brown,
 	},
 	arrow: {
 		paddingLeft: 10
@@ -35,7 +36,13 @@ const WalletBtn = (props: WalletBtnProps) => {
 			onPress={() => navigation.navigate('Wallet')}
 		>
 			<View style={styles.container}>
-				<Text style={styles.text}>CHF {wallet && formatValue(wallet.amount)}</Text>
+				{/* <Text style={styles.text}>CHF {wallet && formatValue(wallet.amount)}</Text> */}
+				<AntDesign
+					style={{ paddingTop: 2 }}
+					name='user'
+					size={25}
+					color={colors.darkRed}
+				/>
 			</View>
 		</TouchableWithoutFeedback>
 	);

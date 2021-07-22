@@ -1,134 +1,81 @@
 import { useNavigation } from "@react-navigation/native";
-import React, { useEffect, useState } from "react";
-import { KeyboardAvoidingView, Platform, ScrollView, View, StyleSheet } from "react-native";
-import { Text, CheckBox } from "react-native-elements";
+import React, { useState } from "react";
+import { ScrollView, View, StyleSheet } from "react-native";
+import { Text } from "react-native-elements";
 import { useUserDetails } from "src/hooks";
-import countries from "src/mocks/countries";
-import phoneCountries from "src/mocks/phoneCountries";
-import BlockInput from "src/shared/uielements/BlockInput";
 import Button from "src/shared/uielements/Button";
-import BackBtn from "src/shared/uielements/header/BackBtn";
+import { BackBtn, CancelBtn } from "src/shared/uielements/header";
 import Header from "src/shared/uielements/header/Header";
-import SelectModal, { SelectionProps } from "src/shared/uielements/SelectModal";
 import {
-    baseHeader,
     viewBaseWhite,
     wrappingContainerBase
 } from "src/theme/elements";
-import { IMap } from "src/utils/types";
 import { colors } from "src/theme/colors";
 
-const MAIN_COUNTRY = "swiss";
-const MAIN_PHONE_COUNTRY = "+41";
-
-interface CreateAccountState extends IMap {
-  email: string;
-}
-
-type CreateAccountProps = {
+type SelectAccountTypeProps = {
   navigation?: any;
   route?: any;
 };
 
 const styles = StyleSheet.create({
-	headerText: {
-		fontSize: 32,
-    color: colors.darkRed,
-    lineHeight: 30
+	headerView: {
+		fontFamily: 'IBMPlexSansSemiBold',
+		fontSize: 20,
+		color: colors.darkRed
 	},
-  bottomView: {
-		padding: 20,
-	},
-  checkbox: {
-    alignSelf: "center",
-    color: colors.darkRed,
-    marginLeft: 10,
-    marginRight: 10
-  },
+	accountType: {
+		backgroundColor: colors.white,
+		textAlign: "center",
+		flex: 1,
+		width: '100%',
+		padding: 20
+	}
 });
 
-const CreateAccountView = (props: CreateAccountProps) => {
+const SelectAccountTypeView = (props: SelectAccountTypeProps) => {
   const { personalDetails, updatePersonalDetails } = useUserDetails();
   const [isSelected, setSelection] = useState(false);
-  const [state, setState] = useState<CreateAccountState>({
-    email: "",
-  });
-  const [goNext, setGoNext] = useState(false);
-
-  useEffect(() => {
-    setGoNext(Object.keys(state).every((key) => state[key] !== "") && isSelected);
-  }, [state, isSelected]);
-
-  // useEffect(() => {
-  //   setState({
-  //     email: personalDetails.username,
-  //   });
-  // }, [personalDetails]);
-
-  const onValueChange = (name: any, change: any) => {
-    setState({
-      ...state,
-      [name]: change,
-    } as any);
-    updatePersonalDetails({ [name]: change });
-  };
-
+  
   return (
     <View style={viewBaseWhite}>
       <Header
         leftComponent={<BackBtn onClick={() => props.navigation.goBack()} color={colors.darkRed} />}
+        rightComponent={<CancelBtn text="Close" onClick={() => props.navigation.navigate('Tabs')} />}
       />
 
-      <ScrollView style={wrappingContainerBase}>
-        <View style={{ paddingBottom: 40 }}>
-          <View style={baseHeader}>
-            <Text style={styles.headerText}>Create account</Text>
-          </View>
-          <View
-            style={{
-              borderBottomColor: colors.darkRed,
-              borderBottomWidth: 1,
-            }}
-          />
-          <View>
-            <Text style={{color: colors.darkRed}}>Hello! Tell us how to reach you. We will send a Verification code to your email.</Text>
-            <Text style={{color: colors.darkRed, fontSize: 14, fontWeight: '400', marginTop: 40}}>Email Address</Text>
-            <BlockInput
-              name="email"
-              placeholder="myname@mail.com"
-              value={state.email}
-              onChange={onValueChange}
-              style={{backgroundColor: colors.azure}}
-              placeholderTextColor={colors.darkRed}
-            />
-          </View>
-        </View>
-      </ScrollView>
-      <KeyboardAvoidingView
-        behavior={Platform.OS == "ios" ? "padding" : "height"}
-      >
-        <View style={styles.bottomView}>
-          <CheckBox
-            checked={isSelected}
-            title="I'VE READ AND ACCEPT THE TERMS & CONDITIONS AND PRIVACY POLICY"
-            textStyle={{color: colors.darkRed, fontSize: 14, fontWeight: '400'}}
-            containerStyle={{borderWidth: 0, backgroundColor: 'none'}}
-            onPress={()=>setSelection(!isSelected)}
-          />
-          <Button
-            type="darkRed"
-            title="NEXT"
-            disabled={!goNext}
-            onPress={() => props.navigation.navigate("Verification")}
-          />
-        </View>
-      </KeyboardAvoidingView>
+      <ScrollView style={{ ...wrappingContainerBase }}>
+				<View style={ {marginBottom: 0 } }>
+					<Text h1 style={styles.headerView}>Welcome,</Text>
+				</View>
+				<View
+					style={{
+					borderTopColor: colors.darkRed,
+					borderTopWidth: 1,
+					marginTop: 30
+					}}>
+						<Text style={{color: colors.darkRed}}>Select the portfolio you'd like to create. If you're business owner, you can automatically set up a personal profile.</Text>
+				</View>
+				<View style={styles.accountType}>
+					<Button 
+						type="darkRed" 
+						onPress={() => props.navigation.navigate("PersonalProfile")} 
+						title="Personal" 
+						style={{backgroundColor: colors.azure}}
+						textStyle={{color: colors.darkRed}}/>
+					<Button 
+						type="darkRed" 
+						onPress={() => props.navigation.navigate("PersonalProfile")} 
+						title="Business and personal" 
+						style={{backgroundColor: colors.azure, marginTop: 20}}
+						textStyle={{color: colors.darkRed}}/>
+				</View>
+			</ScrollView>
     </View>
   );
 };
 
-const CreateAccount = (props: CreateAccountProps) => {
+const SelectAccountType = (props: SelectAccountTypeProps) => {
   const navigation = useNavigation();
-  return <CreateAccountView {...props} navigation={navigation} />;
+  return <SelectAccountTypeView {...props} navigation={navigation} />;
 };
-export default CreateAccount;
+export default SelectAccountType;

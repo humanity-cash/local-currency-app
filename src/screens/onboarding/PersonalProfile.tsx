@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { KeyboardAvoidingView, Platform, ScrollView, View, StyleSheet } from 'react-native';
 import { Text } from 'react-native-elements';
 import { useUserDetails } from "src/hooks";
-import { BackBtn, Button, Header, NextBtn, PersonalProfileForm } from 'src/shared/uielements';
+import { BackBtn, Button, Header, CancelBtn, PersonalProfileForm } from 'src/shared/uielements';
 import { baseHeader, viewBaseWhite, wrappingContainerBase } from "src/theme/elements";
 import { validateProfileForm } from "src/utils/validation";
 
@@ -35,7 +35,7 @@ const PersonalProfileView = (props: PersonalProfileProps) => {
 		<View style={viewBaseWhite}>
 			<Header
 				leftComponent={<BackBtn onClick={() => props.navigation.goBack()} />}
-				rightComponent={<NextBtn text="Skip" onClick={() => props.navigation.navigate('OnboardingSteps', { step: 2 })} />}
+				rightComponent={<CancelBtn text="Close" onClick={() => props.navigation.navigate('Tabs')} />}
 			/>
 
 			<ScrollView style={{ ...wrappingContainerBase }}>
