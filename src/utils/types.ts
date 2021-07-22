@@ -251,3 +251,9 @@ export type ModalStatusBar = {
 export interface IMap {
   [key: string]: any;
 }
+
+export interface Bank {
+  id: string;
+  name: string;
+  icon: string;
+}

@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { KeyboardAvoidingView, Platform, ScrollView, View, StyleSheet } from 'react-native';
 import { Text } from 'react-native-elements';
 import { useUserDetails } from "src/hooks";
-import { BackBtn, Button, Header, NextBtn, PersonalDetailsForm } from 'src/shared/uielements';
+import { BackBtn, Button, Header, CancelBtn, PersonalDetailsForm } from 'src/shared/uielements';
 import { baseHeader, viewBaseWhite, wrappingContainerBase } from "src/theme/elements";
 import { validateDetailsForm } from "src/utils/validation";
 import { colors } from "src/theme/colors";
@@ -36,7 +36,7 @@ const PersonalDetailsView = (props: PersonalDetailsProps) => {
 		<View style={viewBaseWhite}>
 			<Header
 				leftComponent={<BackBtn onClick={() => props.navigation.goBack()} />}
-				rightComponent={<NextBtn text="Skip" onClick={() => props.navigation.navigate('OnboardingSteps', { step: 2 })} />}
+				rightComponent={<CancelBtn text="Close" onClick={() => props.navigation.navigate('Tabs')} />}
 			/>
 
 			<ScrollView style={{ ...wrappingContainerBase }}>

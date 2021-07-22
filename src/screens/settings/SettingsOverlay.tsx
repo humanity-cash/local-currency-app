@@ -154,13 +154,17 @@ export const SettingsOverlay = (props: WalletProps) => {
 						<ScrollView style={{ flex: 1, padding: 10 }}>
 							<View style={styles.headerView}>
 								<Text h1 style={{ color: colors.white, marginBottom: 0 }}>Hi {personalDetails.firstname}</Text>
-									<View style={{ flex: 1 }}>
-										<TouchableWithoutFeedback onPress={() => setSignOut(true)}>
-											<Text style={styles.signOutButton}>Sign out</Text>
-										</TouchableWithoutFeedback>
-									</View>
+								<View style={{ flex: 1 }}>
+									<TouchableWithoutFeedback onPress={() => setSignOut(true)}>
+										<Text style={styles.signOutButton}>Sign out</Text>
+									</TouchableWithoutFeedback>
+								</View>
 							</View>
 							<View>
+								<SettingsListItem
+									name="Personal Profile"
+									onPress={() => navigation.navigate('SelectAccountType')}
+								/>
 								<SettingsListItem
 									name="Settings"
 									onPress={() => navigation.navigate('Settings')}

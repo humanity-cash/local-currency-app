@@ -18,4 +18,5 @@ export const colors: any = {
 	transparent: 'transparent',
 	azure: '#f0eef5',
 	blue: '#2F80ED',
+	lightBlue: '#CFE4FF',
 }

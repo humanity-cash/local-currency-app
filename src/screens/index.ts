@@ -22,9 +22,16 @@ import Terms from "./onboarding/Terms";
 import TermsEmail from "./onboarding/TermsEmail";
 import Verification from "./onboarding/Verification";
 import VerificationHelp from "./onboarding/VerificationHelp";
+import LinkBankAccount from './onboarding/LinkBankAccount';
+import SelectBank from "./onboarding/SelectBank";
+import LoginToBank from "./onboarding/LoginToBank";
+import SelectBankAccount from "./onboarding/SelectBankAccount";
+import Congratulations from "./onboarding/Congratulations";
+import SelectAccountType from "./onboarding/SelectAccountType";
 
 export {
 	Teaser, CreateAccount, Verification, VerificationHelp, Password, PasswordConfirm, Passcode, TouchId, OnboardingSteps,
 	PersonalDetails, PersonalAddress, TermsEmail, ConfirmEmail, EmailConfirmed, Terms, AddCash, SelectPayment,
-	Deposit, CreditCard, ConfirmPin, AddCashResult, Login, Dashboard, MarketEntryDetails
+	Deposit, CreditCard, ConfirmPin, AddCashResult, Login, Dashboard, MarketEntryDetails, LinkBankAccount, SelectBank, LoginToBank, 
+	SelectBankAccount, Congratulations, SelectAccountType
 };

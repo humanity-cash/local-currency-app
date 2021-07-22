@@ -3,10 +3,9 @@ import React, { useState } from 'react';
 import { KeyboardAvoidingView, Platform, ScrollView, View, StyleSheet } from 'react-native';
 import { Text } from 'react-native-elements';
 import { useUserDetails } from "src/hooks";
-import { BackBtn, Button, Header, NextBtn, PersonalAddressForm } from 'src/shared/uielements';
+import { BackBtn, Button, Header, CancelBtn, PersonalAddressForm } from 'src/shared/uielements';
 import { baseHeader, viewBaseWhite, wrappingContainerBase } from "src/theme/elements";
 import { validateAddressForm } from "src/utils/validation";
-import { colors } from "src/theme/colors";
 
 type PersonalAddressProps = {
 	navigation?: any
@@ -16,7 +15,7 @@ type PersonalAddressProps = {
 const styles = StyleSheet.create({
 	bottomView: {
 	  padding: 20,
-  },
+  	},
 });
 
 const PersonalAddressView = (props: PersonalAddressProps) => {
@@ -29,7 +28,7 @@ const PersonalAddressView = (props: PersonalAddressProps) => {
 		setShowValidation(true);
 		if (validation.valid) {
 			updateStatus({ personalDetails: true });
-			props.navigation.navigate('OnboardingSteps', { step: 2 });
+			props.navigation.navigate('LinkBankAccount')
 		}
 	}
 
@@ -37,7 +36,7 @@ const PersonalAddressView = (props: PersonalAddressProps) => {
 		<View style={viewBaseWhite}>
 			<Header
 				leftComponent={<BackBtn onClick={() => props.navigation.goBack()} />}
-				rightComponent={<NextBtn text="Skip" onClick={() => props.navigation.navigate('OnboardingSteps', { step: 2 })} />}
+				rightComponent={<CancelBtn text="Close" onClick={() => props.navigation.navigate('Tabs')} />}
 			/>
 
 			<ScrollView style={wrappingContainerBase}>
