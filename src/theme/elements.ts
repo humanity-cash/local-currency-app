@@ -40,6 +40,14 @@ export const baseHeader: any = {
 	marginBottom: 10
 }
 
+export const underlineHeader: any = {
+	marginTop: 0,
+	paddingTop: 10,
+	marginBottom: 10,
+	borderBottomWidth: 1,
+	borderBottomColor: colors.darkGreen,
+}
+
 export const modalBaseHeader: any = {
 	fontFamily: 'IBMPlexSansBold',
 	fontSize: 20,

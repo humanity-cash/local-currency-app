@@ -2,7 +2,8 @@ import ConfirmPin from "./authentication/ConfirmPin";
 import Login from "./authentication/Login";
 import Dashboard from "./dashboard/Dashboard";
 import MarketEntryDetails from "./dashboard/MarketEntryDetails";
-import AddCash from "./onboarding/AddCash";
+import TopUp from "./onboarding/TopUp";
+import TopUpSuccess from "./onboarding/TopUpSuccess";
 import AddCashResult from "./onboarding/AddCashResult";
 import ConfirmEmail from "./onboarding/ConfirmEmail";
 import CreateAccount from "./onboarding/CreateAccount";
@@ -28,10 +29,11 @@ import LoginToBank from "./onboarding/LoginToBank";
 import SelectBankAccount from "./onboarding/SelectBankAccount";
 import Congratulations from "./onboarding/Congratulations";
 import SelectAccountType from "./onboarding/SelectAccountType";
+import Tabs from "./dashboard/Tabs";
 
 export {
 	Teaser, CreateAccount, Verification, VerificationHelp, Password, PasswordConfirm, Passcode, TouchId, OnboardingSteps,
-	PersonalDetails, PersonalAddress, TermsEmail, ConfirmEmail, EmailConfirmed, Terms, AddCash, SelectPayment,
+	PersonalDetails, PersonalAddress, TermsEmail, ConfirmEmail, EmailConfirmed, Terms, TopUp, TopUpSuccess, SelectPayment,
 	Deposit, CreditCard, ConfirmPin, AddCashResult, Login, Dashboard, MarketEntryDetails, LinkBankAccount, SelectBank, LoginToBank, 
-	SelectBankAccount, Congratulations, SelectAccountType
+	SelectBankAccount, Congratulations, SelectAccountType, Tabs
 };

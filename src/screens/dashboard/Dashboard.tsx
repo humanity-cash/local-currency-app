@@ -1,174 +1,152 @@
 import { AntDesign, Entypo } from "@expo/vector-icons";
-import React, { useState } from 'react';
+import { useNavigation } from "@react-navigation/native";
+import React, { useEffect, useState } from 'react';
 import { StyleSheet, TouchableWithoutFeedback, View, ScrollView } from 'react-native';
 import { Text, Image } from "react-native-elements";
 import { TouchableOpacity } from "react-native-gesture-handler";
-import { Header, Notifications, WalletBtn } from "src/shared/uielements";
+import { Header } from "src/shared/uielements";
 import { colors } from "src/theme/colors";
-import { viewBaseWhite, wrappingContainerBase, baseHeader } from "src/theme/elements";
+import { viewBase, wrappingContainerBase, baseHeader } from "src/theme/elements";
 import { SettingsOverlay } from "../settings/SettingsOverlay";
 import Button from "src/shared/uielements/Button";
 
+type DashboardProps = {
+	navigation?: any;
+	route?: any;
+};
+
 const styles = StyleSheet.create({
 	headerText: {
-		color: colors.darkRed,
-		fontFamily: 'IBMPlexSansSemiBold',
-		fontSize: 16
+		fontSize: 40,
+		fontWeight: '400',
+		lineHeight: 40
 	},
 	text: {
-		color: colors.darkRed,
+		// color: colors.darkGreen,
+		fontSize: 18,
 		fontWeight: 'bold',
 		paddingLeft: 5,
 		paddingRight: 5
 	},
 	alertView: {
-		backgroundColor: colors.brown,
+		borderLeftWidth: 5,
+		borderRadius: 4,
+		borderLeftColor: colors.darkGreen,
+		backgroundColor: colors.lightGreen,
 		padding: 10,
 		flexDirection: 'row',
 		justifyContent: 'space-between',
 		alignItems: 'center',
-		borderRadius: 10,
-		marginTop: 10,
-		marginBottom: 20
-	},
-	communityChestView: {
-		backgroundColor: colors.lightBlue,
-		padding: 10,
-		flexDirection: 'row',
-		justifyContent: 'space-between',
-		// alignItems: 'center',
-		marginTop: 10,
 		marginBottom: 10
 	},
 	feedView: {
-		backgroundColor: colors.lightBlue,
+		backgroundColor: colors.lightGreen1,
 		padding: 10,
-		marginTop: 10,
-		marginBottom: 10
 	},
 	image: {
-		alignSelf: "center",
-		width: 60,
-		height: 60,
-		marginRight: 20
+		alignItems: "center",
+		width: '100%',
+		height: 300,
+		marginRight: 20,
+		borderRadius: 5
 	},
 	scanButton: {
 		width: '90%',
 		position: 'absolute',
 		bottom: 30,
 		left: '5%'
+	},
+	topupButton: {
+		paddingLeft: 10,
+		paddingRight: 10,
+		borderRadius: 10,
+		backgroundColor: colors.darkGreen,
 	}
 });
 
-const Dashboard = () => {
+const DashboardView = (props: DashboardProps) => {
 	const [showSettings, setShowSettings] = useState(false);
+	const [alert, setAlert] = useState(false);
+	const [amount, setAmount] = useState("");
+
+	useEffect(() => {
+		setAlert(amount === "");
+	}, [amount]);
+
 	return (
-		<View style={viewBaseWhite}>
-			<Notifications />
+		<View style={viewBase}>
 			<Header
-				placement="left"
-				style={{ backgroundColor: colors.white }}
-				barStyle="light-content"
-				centerComponent={<Text style={styles.headerText}>Dashboard</Text>}
 				leftComponent={
-					<TouchableWithoutFeedback onPress={() => setShowSettings(!showSettings)}>
-						<View>
-							{!showSettings && (
-								<Entypo
-									style={{ paddingTop: 2 }}
-									name='menu'
-									size={25}
-									color={colors.darkRed}
-								/>
-							)}
-							{showSettings && (
-								<AntDesign
-									style={{ paddingTop: 2 }}
-									name="arrowleft"
-									size={25}
-									color={colors.darkRed}
-								/>
-							)}
+					<TouchableWithoutFeedback onPress={() => props.navigation.toggleDrawer()}>
+						<View style={{flexDirection: 'row'}}>
+							<Entypo
+								style={{ marginRight: 5 }}
+								name='menu'
+								size={25}
+								color={colors.darkGreen}
+							/>
+							<Text>Menu</Text>
 						</View>
 					</TouchableWithoutFeedback>
 				}
-				rightComponent={<WalletBtn />}
 			/>
 			<ScrollView style={wrappingContainerBase}>
 				<View style={{ paddingBottom: 40 }}>
 					<View style={baseHeader}>
-						<Text h1 style={styles.headerText}>BerkShares</Text>
+						<Text style={styles.headerText}>BerkShares</Text>
 					</View>
 					<View
 						style={{
-							borderBottomColor: colors.darkRed,
+							borderBottomColor: colors.darkGreen,
 							borderBottomWidth: 1,
 							flexDirection: 'row',
 							justifyContent: 'space-between',
-							paddingBottom: 10
+							paddingBottom: 2,
+							marginBottom: 10
 						}}>
-						<Text style={styles.text}>B$0.00</Text>
-						<TouchableOpacity style={{flexDirection: 'row'}}>
-							<Entypo name="arrow-with-circle-up" size={18} color={colors.darkRed} style={{ paddingTop: 3 }} />
-							<Text style={styles.text}>Top Up</Text>
+						<Text style={styles.text}>B$ -</Text>
+						<TouchableOpacity style={styles.topupButton} onPress={()=>props.navigation.navigate("TopUp")}>
+							<Text style={{color: colors.white, fontSize: 14}}>Top up B$</Text>
 						</TouchableOpacity>	
 					</View>
-					<View style={styles.alertView}>
-						<Text style={{color: colors.white, width: '90%'}}>Welcome in the community! your BerkShares to start spending BerkShares</Text>
-						<TouchableOpacity>
-							<Entypo name="cross" size={30} color={colors.white} />
-						</TouchableOpacity>	
-					</View>
-
-					<Text style={styles.text}>Community Chest Balance</Text>
-					<View style={styles.communityChestView}>
-						<View>
-							<Text h3 style={{color: colors.green, marginBottom: 10}}>COMMUNITY CHEST</Text>
-							<Text h2 style={{color: colors.green}}>8,7%</Text>
+					{alert && 
+						<View style={styles.alertView}>
+							<AntDesign name="exclamationcircleo" size={18} />
+							<Text style={{color: colors.white, width: '75%'}}>Welcome in the community! your BerkShares to start spending BerkShares</Text>
+							<TouchableOpacity>
+								<Entypo name="cross" size={30} color={colors.white} onPress={()=>setAlert(false)} />
+							</TouchableOpacity>	
 						</View>
-						<TouchableOpacity>
-							<Image
-								source={require('../../../assets/images/berksharecurrency.png')}
-								containerStyle={styles.image}
-							/>
-						</TouchableOpacity>	
-					</View>
-
-					<Text style={styles.text}>Feed</Text>
-					<View style={styles.feedView}>
-						<View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-							<Text h3 style={{color: colors.darkRed}}>COMMUNITY CHEST TOP UP</Text>
-							<Text h3 style={{color: colors.darkRed}}>7 MIN AGO</Text>
-						</View>
-						<View style={{flexDirection: 'row', padding: 10}}>
-							<Image
-								source={require('../../../assets/images/berksharecurrency.png')}
-								containerStyle={styles.image}
-							/>
-							<Text style={{color: colors.blue, flex: 1}}>Someone just topped up the community chest with B$0.34</Text>
-						</View>	
-					</View>
+					}
 
 					<View style={styles.feedView}>
-						<View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-							<Text h3 style={{color: colors.darkRed}}>BERKSHIRE FACT</Text>
-							<Text h3 style={{color: colors.darkRed}}>23 MIN AGO</Text>
+						<View style={{flexDirection: 'row', justifyContent: 'space-between', marginBottom: 20, marginTop: 10}}>
+							<Text h3 style={{color: colors.lightGreen}}>Merchant of the month</Text>
+							<Text h3 style={{color: colors.lightGreen}}>SeptemebEr</Text>
 						</View>
-						<View style={{flexDirection: 'row', padding: 10}}>
-							<Text style={{color: colors.blue, flex: 1}}>The Mahican (Muh-he-ka-new) Native American clan lived in the territory that presently makes up Berkshire Country.</Text>
-						</View>	
+						<Text h2>Dory & Ginger</Text>
+						<Text style={{paddingTop: 10, paddingBottom: 10	}}>
+							Our motto is Live and Give. We have treasures for your home and lifestyle, along with the perfect gift for that special someone or that occasion that begs for something unique.
+						</Text>
+						<Image
+							source={require('../../../assets/images/feed1.png')}
+							containerStyle={styles.image}
+						/>
 					</View>
 				</View>
 			</ScrollView>
 			<Button
-				type="darkRed"
+				type="darkGreen"
 				title="Scan to Pay or Request"
 				style={styles.scanButton}
 				onPress={()=>setShowSettings(!showSettings)}
 			/>
-			<SettingsOverlay visible={showSettings} />
 		</View>
 	);
 }
 
+const Dashboard = (props: DashboardProps) => {
+	const navigation = useNavigation();
+	return <DashboardView {...props} navigation={navigation} />;
+};
 export default Dashboard
