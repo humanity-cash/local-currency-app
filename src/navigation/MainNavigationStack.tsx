@@ -7,7 +7,8 @@ import ConfirmPin from "src/screens/authentication/ConfirmPin";
 import Login from "src/screens/authentication/Login";
 import Dashboard from "src/screens/dashboard/Dashboard";
 import MarketEntryDetails from "src/screens/dashboard/MarketEntryDetails";
-import AddCash from "src/screens/onboarding/AddCash";
+import TopUp from "src/screens/onboarding/TopUp";
+import TopUpSuccess from "src/screens/onboarding/TopUpSuccess";
 import AddCashResult from "src/screens/onboarding/AddCashResult";
 import ConfirmEmail from "src/screens/onboarding/ConfirmEmail";
 import CreateAccount from "src/screens/onboarding/CreateAccount";
@@ -43,6 +44,7 @@ import SelectBank from "src/screens/onboarding/SelectBank";
 import LoginToBank from "src/screens/onboarding/LoginToBank";
 import SelectBankAccount from "src/screens/onboarding/SelectBankAccount";
 import Congratulations from "src/screens/onboarding/Congratulations";
+import Tabs from "src/screens/dashboard/Tabs";
 
 const PrimaryStack = createStackNavigator();
 
@@ -70,13 +72,14 @@ function PrimaryStackScreen() {
       <PrimaryStack.Screen name="ConfirmEmail" component={ConfirmEmail} />
       <PrimaryStack.Screen name="EmailConfirmed" component={EmailConfirmed} />
       <PrimaryStack.Screen name="Terms" component={Terms} />
-      <PrimaryStack.Screen name="AddCash" component={AddCash} />
+      <PrimaryStack.Screen name="TopUp" component={TopUp} />
+      <PrimaryStack.Screen name="TopUpSuccess" component={TopUpSuccess} />
       <PrimaryStack.Screen name="SelectPayment" component={SelectPayment} />
       <PrimaryStack.Screen name="Deposit" component={Deposit} />
       <PrimaryStack.Screen name="CreditCard" component={CreditCard} />
       <PrimaryStack.Screen name="ConfirmPin" component={ConfirmPin} />
       <PrimaryStack.Screen name="AddCashResult" component={AddCashResult} />
-      <PrimaryStack.Screen name="Tabs" component={Dashboard} />
+      <PrimaryStack.Screen name="Dashboard" component={Dashboard} />
       <PrimaryStack.Screen
         name="MarketEntryDetails"
         component={MarketEntryDetails}
@@ -108,6 +111,7 @@ function PrimaryStackScreen() {
       <PrimaryStack.Screen name="LoginToBank" component={LoginToBank} />
       <PrimaryStack.Screen name="SelectBankAccount" component={SelectBankAccount} />
       <PrimaryStack.Screen name="Congratulations" component={Congratulations} />
+      <PrimaryStack.Screen name="Tabs" component={Tabs} />
     </PrimaryStack.Navigator>
   );
 }
