@@ -7,7 +7,6 @@ import { TouchableOpacity } from "react-native-gesture-handler";
 import { Header } from "src/shared/uielements";
 import { colors } from "src/theme/colors";
 import { viewBase, wrappingContainerBase, baseHeader } from "src/theme/elements";
-import { SettingsOverlay } from "../settings/SettingsOverlay";
 import Button from "src/shared/uielements/Button";
 
 type DashboardProps = {
@@ -22,7 +21,6 @@ const styles = StyleSheet.create({
 		lineHeight: 40
 	},
 	text: {
-		// color: colors.darkGreen,
 		fontSize: 18,
 		fontWeight: 'bold',
 		paddingLeft: 5,
@@ -53,7 +51,7 @@ const styles = StyleSheet.create({
 	scanButton: {
 		width: '90%',
 		position: 'absolute',
-		bottom: 30,
+		bottom: 45,
 		left: '5%'
 	},
 	topupButton: {
@@ -65,13 +63,17 @@ const styles = StyleSheet.create({
 });
 
 const DashboardView = (props: DashboardProps) => {
-	const [showSettings, setShowSettings] = useState(false);
+	const [showQRScan, setShowQRScan] = useState(false);
 	const [alert, setAlert] = useState(false);
 	const [amount, setAmount] = useState("");
 
 	useEffect(() => {
 		setAlert(amount === "");
 	}, [amount]);
+
+	const onScanClose = () => {
+		setShowQRScan(false);
+	}
 
 	return (
 		<View style={viewBase}>
@@ -139,8 +141,10 @@ const DashboardView = (props: DashboardProps) => {
 				type="darkGreen"
 				title="Scan to Pay or Request"
 				style={styles.scanButton}
-				onPress={()=>setShowSettings(!showSettings)}
+				onPress={()=>props.navigation.navigate("QRCodeScan")}
 			/>
+
+			{/* <MakePayment visible={showQRScan} onClose={onScanClose} /> */}
 		</View>
 	);
 }
