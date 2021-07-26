@@ -45,6 +45,9 @@ import LoginToBank from "src/screens/onboarding/LoginToBank";
 import SelectBankAccount from "src/screens/onboarding/SelectBankAccount";
 import Congratulations from "src/screens/onboarding/Congratulations";
 import Tabs from "src/screens/dashboard/Tabs";
+import QRCodeScan from "src/screens/Payment/QRCodeScan";
+import PaymentPending from "src/screens/Payment/PaymentPending";
+import PaymentSuccess from "src/screens/Payment/PaymentSuccess";
 
 const PrimaryStack = createStackNavigator();
 
@@ -112,6 +115,9 @@ function PrimaryStackScreen() {
       <PrimaryStack.Screen name="SelectBankAccount" component={SelectBankAccount} />
       <PrimaryStack.Screen name="Congratulations" component={Congratulations} />
       <PrimaryStack.Screen name="Tabs" component={Tabs} />
+      <PrimaryStack.Screen name="QRCodeScan" component={QRCodeScan} />
+      <PrimaryStack.Screen name="PaymentPending" component={PaymentPending} />
+      <PrimaryStack.Screen name="PaymentSuccess" component={PaymentSuccess} />
     </PrimaryStack.Navigator>
   );
 }

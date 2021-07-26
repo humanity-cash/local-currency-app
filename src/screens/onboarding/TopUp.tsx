@@ -78,6 +78,7 @@ const styles = StyleSheet.create({
   },
   bottomView: {
 		padding: 20,
+    paddingBottom: 45
 	},
 });
 
