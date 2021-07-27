@@ -37,7 +37,6 @@ const PaymentPending = (props: PaymentPendingProps) => {
 					<Text style={styles.headerText}>Pending...</Text>
 					<Text>This usually takes 5-6 seconds</Text>
 				</View>
-					<Text>The BerkShares will soon be available in your wallet!</Text>
 			</ScrollView>
 			<KeyboardAvoidingView
 				behavior={Platform.OS == "ios" ? "padding" : "height"} >
