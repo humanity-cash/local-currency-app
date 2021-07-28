@@ -1,4 +1,7 @@
 import { colors } from "./colors";
+import { Dimensions } from 'react-native';
+
+const modalWidth = Dimensions.get('screen').width * 0.9;
 
 export const viewBase: any = {
 	flex: 1,
@@ -12,7 +15,8 @@ export const viewBaseWhite: any = {
 }
 
 export const modalViewBase: any = {
-	...viewBase,
+	...viewBaseWhite,
+	width: modalWidth,
 	borderTopStartRadius: 20,
 	borderTopEndRadius: 20,
 }

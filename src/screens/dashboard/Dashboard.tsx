@@ -7,7 +7,6 @@ import { TouchableOpacity } from "react-native-gesture-handler";
 import { Header } from "src/shared/uielements";
 import { colors } from "src/theme/colors";
 import { viewBase, wrappingContainerBase, baseHeader } from "src/theme/elements";
-import { SettingsOverlay } from "../settings/SettingsOverlay";
 import Button from "src/shared/uielements/Button";
 
 type DashboardProps = {
@@ -21,8 +20,15 @@ const styles = StyleSheet.create({
 		fontWeight: '400',
 		lineHeight: 40
 	},
+	amountView: {
+		borderBottomColor: colors.darkGreen,
+		borderBottomWidth: 1,
+		flexDirection: 'row',
+		justifyContent: 'space-between',
+		paddingBottom: 2,
+		marginBottom: 10
+	},
 	text: {
-		// color: colors.darkGreen,
 		fontSize: 18,
 		fontWeight: 'bold',
 		paddingLeft: 5,
@@ -39,9 +45,19 @@ const styles = StyleSheet.create({
 		alignItems: 'center',
 		marginBottom: 10
 	},
+	alertText: {
+		color: colors.white, 
+		width: '75%'
+	},
 	feedView: {
 		backgroundColor: colors.lightGreen1,
 		padding: 10,
+	},
+	feedHeader: {
+		flexDirection: 'row', 
+		justifyContent: 'space-between', 
+		marginBottom: 20, 
+		marginTop: 10
 	},
 	image: {
 		alignItems: "center",
@@ -53,7 +69,7 @@ const styles = StyleSheet.create({
 	scanButton: {
 		width: '90%',
 		position: 'absolute',
-		bottom: 30,
+		bottom: 45,
 		left: '5%'
 	},
 	topupButton: {
@@ -65,13 +81,17 @@ const styles = StyleSheet.create({
 });
 
 const DashboardView = (props: DashboardProps) => {
-	const [showSettings, setShowSettings] = useState(false);
+	const [showQRScan, setShowQRScan] = useState(false);
 	const [alert, setAlert] = useState(false);
 	const [amount, setAmount] = useState("");
 
 	useEffect(() => {
 		setAlert(amount === "");
 	}, [amount]);
+
+	const onScanClose = () => {
+		setShowQRScan(false);
+	}
 
 	return (
 		<View style={viewBase}>
@@ -95,15 +115,7 @@ const DashboardView = (props: DashboardProps) => {
 					<View style={baseHeader}>
 						<Text style={styles.headerText}>BerkShares</Text>
 					</View>
-					<View
-						style={{
-							borderBottomColor: colors.darkGreen,
-							borderBottomWidth: 1,
-							flexDirection: 'row',
-							justifyContent: 'space-between',
-							paddingBottom: 2,
-							marginBottom: 10
-						}}>
+					<View style={styles.amountView}>
 						<Text style={styles.text}>B$ -</Text>
 						<TouchableOpacity style={styles.topupButton} onPress={()=>props.navigation.navigate("TopUp")}>
 							<Text style={{color: colors.white, fontSize: 14}}>Top up B$</Text>
@@ -112,7 +124,7 @@ const DashboardView = (props: DashboardProps) => {
 					{alert && 
 						<View style={styles.alertView}>
 							<AntDesign name="exclamationcircleo" size={18} />
-							<Text style={{color: colors.white, width: '75%'}}>Welcome in the community! your BerkShares to start spending BerkShares</Text>
+							<Text style={styles.alertText}>Welcome in the community! your BerkShares to start spending BerkShares</Text>
 							<TouchableOpacity>
 								<Entypo name="cross" size={30} color={colors.white} onPress={()=>setAlert(false)} />
 							</TouchableOpacity>	
@@ -120,7 +132,7 @@ const DashboardView = (props: DashboardProps) => {
 					}
 
 					<View style={styles.feedView}>
-						<View style={{flexDirection: 'row', justifyContent: 'space-between', marginBottom: 20, marginTop: 10}}>
+						<View style={styles.feedHeader}>
 							<Text h3 style={{color: colors.lightGreen}}>Merchant of the month</Text>
 							<Text h3 style={{color: colors.lightGreen}}>SeptemebEr</Text>
 						</View>
@@ -139,8 +151,10 @@ const DashboardView = (props: DashboardProps) => {
 				type="darkGreen"
 				title="Scan to Pay or Request"
 				style={styles.scanButton}
-				onPress={()=>setShowSettings(!showSettings)}
+				onPress={()=>props.navigation.navigate("QRCodeScan")}
 			/>
+
+			{/* <MakePayment visible={showQRScan} onClose={onScanClose} /> */}
 		</View>
 	);
 }
