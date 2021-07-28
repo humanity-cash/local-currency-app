@@ -20,16 +20,15 @@ export type AuthorizationDetails = {
 
 export type PersonalDetails = {
   countryOfResidence: string;
+  avatar: string;
   username: string;
   phoneCountry: string;
-  phoneNumber: string;
+  story: string;
   password: string;
   firstname: string;
   lastname: string;
   email: string;
   emailVerified: boolean;
-  nationality: string;
-  dateOfBirth: BirthDate;
   addressLine: string;
   addressLine2: string;
   zipCode: string;
@@ -40,6 +39,7 @@ export type PersonalDetails = {
 export type PersonalDetailsErrors = {
   firstname?: string;
   lastname?: string;
+  username?: string;
   nationality?: string;
   dateOfBirth?: string;
 };
@@ -250,4 +250,10 @@ export type ModalStatusBar = {
 
 export interface IMap {
   [key: string]: any;
+}
+
+export interface Bank {
+  id: string;
+  name: string;
+  icon: string;
 }

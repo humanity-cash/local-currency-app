@@ -5,7 +5,8 @@ import { colors } from "src/theme/colors";
 type BlockInputProps = {
 	onChange: any
 	name?: string
-	placeholder?: string
+	placeholder?: string,
+	placeholderTextColor?: any,
 	value: any,
 	style?: any
 	keyboardType?: any
@@ -29,7 +30,7 @@ class BlockInput extends React.Component<BlockInputProps>{
 					color: colors.text,
 					...this.props.style,
 				}}
-				placeholderTextColor={colors.grey1}
+				placeholderTextColor={this.props.placeholderTextColor || colors.grey1}
 				keyboardType={this.props.keyboardType || 'default' }
 				placeholder={this.props.placeholder ? this.props.placeholder : ''}
 				onChangeText={newValue => this.props.onChange(this.props.name, newValue)}

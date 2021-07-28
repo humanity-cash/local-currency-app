@@ -37,6 +37,40 @@ const styles: any = {
 			justifyContent: "center",
 			alignItems: "center"
 		}
+	}, darkRed: {
+		button: {
+			height: 55,
+			backgroundColor: colors.darkRed,
+			paddingTop: 10,
+			paddingBottom: 10,
+			alignItems: 'center',
+			borderRadius: 30
+		},
+		buttonText: {
+			color: colors.white
+		},
+		view: {
+			flex: 1,
+			justifyContent: "center",
+			alignItems: "center"
+		}
+	}, darkGreen: {
+		button: {
+			height: 55,
+			backgroundColor: colors.darkGreen,
+			paddingTop: 10,
+			paddingBottom: 10,
+			alignItems: 'center',
+			borderRadius: 30
+		},
+		buttonText: {
+			color: colors.white
+		},
+		view: {
+			flex: 1,
+			justifyContent: "center",
+			alignItems: "center"
+		}
 	}
 }
 

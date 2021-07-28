@@ -55,7 +55,7 @@ export const validateAddressForm = (personalDetails: PersonalDetails) => {
 }
 
 export const validateDetailsForm = (personalDetails: PersonalDetails) => {
-	const { firstname, lastname, nationality, dateOfBirth: { day, month, year } } = personalDetails;
+	const { firstname, lastname } = personalDetails;
 	const errors: PersonalDetailsErrors = {};
 	if (firstname === '') {
 		errors.firstname = 'Firstname needs to be specified';
@@ -63,20 +63,14 @@ export const validateDetailsForm = (personalDetails: PersonalDetails) => {
 	if (lastname === '') {
 		errors.lastname = 'Lastname needs to be specified';
 	}
-	if (nationality === '') {
-		errors.nationality = 'Nationality needs to be specified';
-	}
+	return { errors, valid: Object.keys(errors).length === 0 };
+}
 
-	const date = moment(`${year}${month}${year}`, "YYYYMMDD");
-	if (!date.isValid()) {
-		errors.dateOfBirth = 'Date of birth is incorrect';
-	}
-
-	const currentDate = new Date();
-	const minDate = new Date(currentDate.getFullYear()+1900-18, parseInt(month), parseInt(day));
-
-	if (date.toDate().getTime() > minDate.getTime()) {
-		errors.dateOfBirth = 'You need to be over 18 years old to use this app';
+export const validateProfileForm = (personalDetails: PersonalDetails) => {
+	const { username } = personalDetails;
+	const errors: PersonalDetailsErrors = {};
+	if (username === '') {
+		errors.username = 'SORRY, THAT NAME IS ALREADY TAKEN';
 	}
 	return { errors, valid: Object.keys(errors).length === 0 };
 }

@@ -1,7 +1,7 @@
 import { useNavigation } from "@react-navigation/native";
 import React, { useEffect, useState } from "react";
-import { KeyboardAvoidingView, Platform, ScrollView, View } from "react-native";
-import { Text } from "react-native-elements";
+import { KeyboardAvoidingView, Platform, ScrollView, View, StyleSheet } from "react-native";
+import { Text, CheckBox } from "react-native-elements";
 import { useUserDetails } from "src/hooks";
 import countries from "src/mocks/countries";
 import phoneCountries from "src/mocks/phoneCountries";
@@ -12,19 +12,17 @@ import Header from "src/shared/uielements/header/Header";
 import SelectModal, { SelectionProps } from "src/shared/uielements/SelectModal";
 import {
     baseHeader,
-    viewBase,
+    viewBaseWhite,
     wrappingContainerBase
 } from "src/theme/elements";
 import { IMap } from "src/utils/types";
+import { colors } from "src/theme/colors";
 
 const MAIN_COUNTRY = "swiss";
 const MAIN_PHONE_COUNTRY = "+41";
 
 interface CreateAccountState extends IMap {
-  countryOfResidence: string;
-  username: string;
-  phoneCountry: string;
-  phoneNumber: string;
+  email: string;
 }
 
 type CreateAccountProps = {
@@ -32,28 +30,40 @@ type CreateAccountProps = {
   route?: any;
 };
 
+const styles = StyleSheet.create({
+	headerText: {
+		fontSize: 32,
+    color: colors.darkRed,
+    lineHeight: 30
+	},
+  bottomView: {
+		padding: 20,
+	},
+  checkbox: {
+    alignSelf: "center",
+    color: colors.darkRed,
+    marginLeft: 10,
+    marginRight: 10
+  },
+});
+
 const CreateAccountView = (props: CreateAccountProps) => {
   const { personalDetails, updatePersonalDetails } = useUserDetails();
+  const [isSelected, setSelection] = useState(false);
   const [state, setState] = useState<CreateAccountState>({
-    countryOfResidence: "swiss",
-    username: "",
-    phoneCountry: "+41",
-    phoneNumber: "",
+    email: "",
   });
   const [goNext, setGoNext] = useState(false);
 
   useEffect(() => {
-    setGoNext(Object.keys(state).every((key) => state[key] !== ""));
-  }, [state]);
+    setGoNext(Object.keys(state).every((key) => state[key] !== "") && isSelected);
+  }, [state, isSelected]);
 
-  useEffect(() => {
-    setState({
-      countryOfResidence: personalDetails.countryOfResidence,
-      username: personalDetails.username,
-      phoneNumber: personalDetails.phoneNumber,
-      phoneCountry: personalDetails.phoneCountry,
-    });
-  }, [personalDetails]);
+  // useEffect(() => {
+  //   setState({
+  //     email: personalDetails.username,
+  //   });
+  // }, [personalDetails]);
 
   const onValueChange = (name: any, change: any) => {
     setState({
@@ -64,82 +74,54 @@ const CreateAccountView = (props: CreateAccountProps) => {
   };
 
   return (
-    <View style={viewBase}>
+    <View style={viewBaseWhite}>
       <Header
-        leftComponent={<BackBtn onClick={() => props.navigation.goBack()} />}
+        leftComponent={<BackBtn onClick={() => props.navigation.goBack()} color={colors.darkRed} />}
       />
 
       <ScrollView style={wrappingContainerBase}>
         <View style={{ paddingBottom: 40 }}>
           <View style={baseHeader}>
-            <Text h1>Create account</Text>
+            <Text style={styles.headerText}>Create account</Text>
           </View>
+          <View
+            style={{
+              borderBottomColor: colors.darkRed,
+              borderBottomWidth: 1,
+            }}
+          />
           <View>
-            <Text h3>Your COUNTRY OF RESIDENCE</Text>
-            <SelectModal
-              name="countryOfResidence"
-              value={state.countryOfResidence}
-              onChange={onValueChange}
-              modalHeader="Select your country of residence"
-              modalDescription="Sorry, your country is not supported yet if it is not listed here."
-              modalMainOption={countries.find(
-                (country: SelectionProps) => country.value === MAIN_COUNTRY
-              )}
-              modalList={countries.filter(
-                (country: SelectionProps) => country.value !== MAIN_COUNTRY
-              )}
-              modalListLabel="other"
-            />
-            <Text h3>how you would like to be addressed</Text>
+            <Text style={{color: colors.darkRed}}>Hello! Tell us how to reach you. We will send a Verification code to your email.</Text>
+            <Text style={{color: colors.darkRed, fontSize: 14, fontWeight: '400', marginTop: 40}}>Email Address</Text>
             <BlockInput
-              name="username"
-              placeholder="Your name (or username)"
-              value={state.username}
+              name="email"
+              placeholder="myname@mail.com"
+              value={state.email}
               onChange={onValueChange}
+              style={{backgroundColor: colors.azure}}
+              placeholderTextColor={colors.darkRed}
             />
-            <Text h3>Phone number</Text>
-            <View
-              style={{
-                flexDirection: "row",
-              }}
-            >
-              <SelectModal
-                name="phoneCountry"
-                value={state.phoneCountry}
-                style={{ width: 126 }}
-                onChange={onValueChange}
-                modalHeader="Select your phone directive"
-                modalMainOption={phoneCountries.find(
-                  (country: SelectionProps) =>
-                    country.value === MAIN_PHONE_COUNTRY
-                )}
-                modalList={phoneCountries.filter(
-                  (country: SelectionProps) =>
-                    country.value !== MAIN_PHONE_COUNTRY
-                )}
-                modalListLabel="other"
-              />
-              <BlockInput
-                style={{ marginLeft: 5, flex: 1 }}
-                placeholder="12345678"
-                keyboardType="number-pad"
-                name="phoneNumber"
-                value={state.phoneNumber}
-                onChange={onValueChange}
-              />
-            </View>
           </View>
         </View>
       </ScrollView>
       <KeyboardAvoidingView
         behavior={Platform.OS == "ios" ? "padding" : "height"}
       >
-        <Button
-          type="fluidDark"
-          title="NEXT"
-          disabled={!goNext}
-          onPress={() => props.navigation.navigate("Verification")}
-        />
+        <View style={styles.bottomView}>
+          <CheckBox
+            checked={isSelected}
+            title="I'VE READ AND ACCEPT THE TERMS & CONDITIONS AND PRIVACY POLICY"
+            textStyle={{color: colors.darkRed, fontSize: 14, fontWeight: '400'}}
+            containerStyle={{borderWidth: 0, backgroundColor: 'none'}}
+            onPress={()=>setSelection(!isSelected)}
+          />
+          <Button
+            type="darkRed"
+            title="NEXT"
+            disabled={!goNext}
+            onPress={() => props.navigation.navigate("Verification")}
+          />
+        </View>
       </KeyboardAvoidingView>
     </View>
   );

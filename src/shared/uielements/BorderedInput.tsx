@@ -27,17 +27,10 @@ class BorderedInput extends React.Component<BorderedInputProps> {
 					flexDirection: "row",
 					justifyContent: "center",
 					alignItems: "center",
-					backgroundColor: colors.white,
+					backgroundColor: colors.inputBg,
 					marginVertical: 8,
 					paddingHorizontal: 15
 				}}>
-					<Text style={{
-						textAlignVertical: "center",
-						opacity: 0.6,
-						flex: 1,
-					}}>
-						{this.props.label}
-					</Text>
 					{this.props.prefix && (
 						<View style={{ alignItems: "center" }}>
 							<Text style={{
@@ -46,7 +39,7 @@ class BorderedInput extends React.Component<BorderedInputProps> {
 								height: 60,
 								lineHeight: 60,
 								fontFamily: 'IBMPlexSansSemiBold',
-								textAlign: 'right',
+								textAlign: 'left',
 							}}>
 								{this.props.prefix}
 							</Text>
@@ -55,15 +48,16 @@ class BorderedInput extends React.Component<BorderedInputProps> {
 					<TextInput
 						ref={component => this.input = component}
 						style={{
-							textAlign: 'right',
+							textAlign: 'left',
 							fontSize: 20,
 							fontFamily: 'IBMPlexSansSemiBold',
-							paddingLeft: 5,
+							paddingLeft: 15,
 							borderWidth: 0,
 							color: colors.text,
+							flex: 1,
 							...this.props.style,
 						}}
-						placeholderTextColor={colors.grey1}
+						placeholderTextColor={colors.lightGreen}
 						keyboardType={this.props.keyboardType || 'default' }
 						placeholder={this.props.placeholder ? this.props.placeholder : ''}
 						onChangeText={newValue => this.props.onChange(this.props.name, newValue)}

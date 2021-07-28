@@ -6,6 +6,11 @@ export const viewBase: any = {
 	backgroundColor: colors.lightBg
 }
 
+export const viewBaseWhite: any = {
+	...viewBase,
+	backgroundColor: colors.white
+}
+
 export const modalViewBase: any = {
 	...viewBase,
 	borderTopStartRadius: 20,
@@ -33,6 +38,14 @@ export const baseHeader: any = {
 	marginTop: 0,
 	paddingTop: 10,
 	marginBottom: 10
+}
+
+export const underlineHeader: any = {
+	marginTop: 0,
+	paddingTop: 10,
+	marginBottom: 10,
+	borderBottomWidth: 1,
+	borderBottomColor: colors.darkGreen,
 }
 
 export const modalBaseHeader: any = {

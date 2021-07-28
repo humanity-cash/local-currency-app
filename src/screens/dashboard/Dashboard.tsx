@@ -1,83 +1,152 @@
 import { AntDesign, Entypo } from "@expo/vector-icons";
-import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
-import React, { useState } from 'react';
-import { StyleSheet, TouchableWithoutFeedback, View } from 'react-native';
-import { Text } from "react-native-elements";
-import { Header, Notifications, WalletBtn } from "src/shared/uielements";
+import { useNavigation } from "@react-navigation/native";
+import React, { useEffect, useState } from 'react';
+import { StyleSheet, TouchableWithoutFeedback, View, ScrollView } from 'react-native';
+import { Text, Image } from "react-native-elements";
+import { TouchableOpacity } from "react-native-gesture-handler";
+import { Header } from "src/shared/uielements";
 import { colors } from "src/theme/colors";
-import { viewBase } from "src/theme/elements";
+import { viewBase, wrappingContainerBase, baseHeader } from "src/theme/elements";
 import { SettingsOverlay } from "../settings/SettingsOverlay";
-import Market from "./Market";
-import OrderStatus from "./OrderStatus";
-import Portfolio from "./Portfolio";
+import Button from "src/shared/uielements/Button";
+
+type DashboardProps = {
+	navigation?: any;
+	route?: any;
+};
 
 const styles = StyleSheet.create({
 	headerText: {
-		color: colors.white,
-		fontFamily: 'IBMPlexSansSemiBold',
-		fontSize: 16
+		fontSize: 40,
+		fontWeight: '400',
+		lineHeight: 40
+	},
+	text: {
+		// color: colors.darkGreen,
+		fontSize: 18,
+		fontWeight: 'bold',
+		paddingLeft: 5,
+		paddingRight: 5
+	},
+	alertView: {
+		borderLeftWidth: 5,
+		borderRadius: 4,
+		borderLeftColor: colors.darkGreen,
+		backgroundColor: colors.lightGreen,
+		padding: 10,
+		flexDirection: 'row',
+		justifyContent: 'space-between',
+		alignItems: 'center',
+		marginBottom: 10
+	},
+	feedView: {
+		backgroundColor: colors.lightGreen1,
+		padding: 10,
+	},
+	image: {
+		alignItems: "center",
+		width: '100%',
+		height: 300,
+		marginRight: 20,
+		borderRadius: 5
+	},
+	scanButton: {
+		width: '90%',
+		position: 'absolute',
+		bottom: 30,
+		left: '5%'
+	},
+	topupButton: {
+		paddingLeft: 10,
+		paddingRight: 10,
+		borderRadius: 10,
+		backgroundColor: colors.darkGreen,
 	}
 });
 
-const TabStack = createMaterialTopTabNavigator()
-function TabStackScreen() {
-	return (
-		<TabStack.Navigator
-			style={{ flex: 1 }}
-			tabBarOptions={{
-				showLabel: false,
-				style: {
-					opacity: 0,
-					borderTopWidth: 0
-				}
-			}}
-			tabBar={() => <></>}
-		>
-			<TabStack.Screen name="Portfolio" component={Portfolio}/>
-			<TabStack.Screen name="OrderStatus" component={OrderStatus}/>
-			<TabStack.Screen name="Market" component={Market}/>
-		</TabStack.Navigator>
-	);
-}
-
-const Dashboard = () => {
+const DashboardView = (props: DashboardProps) => {
 	const [showSettings, setShowSettings] = useState(false);
+	const [alert, setAlert] = useState(false);
+	const [amount, setAmount] = useState("");
+
+	useEffect(() => {
+		setAlert(amount === "");
+	}, [amount]);
+
 	return (
 		<View style={viewBase}>
-			<Notifications />
 			<Header
-				placement="left"
-				style={{ backgroundColor: colors.text }}
-				barStyle="light-content"
-				centerComponent={<Text style={styles.headerText}>Dashboard</Text>}
 				leftComponent={
-					<TouchableWithoutFeedback onPress={() => setShowSettings(!showSettings)}>
-						<View>
-							{!showSettings && (
-								<Entypo
-									style={{ paddingTop: 2 }}
-									name='menu'
-									size={25}
-									color={colors.white}
-								/>
-							)}
-							{showSettings && (
-								<AntDesign
-									style={{ paddingTop: 2 }}
-									name="arrowleft"
-									size={25}
-									color={colors.white}
-								/>
-							)}
+					<TouchableWithoutFeedback onPress={() => props.navigation.toggleDrawer()}>
+						<View style={{flexDirection: 'row'}}>
+							<Entypo
+								style={{ marginRight: 5 }}
+								name='menu'
+								size={25}
+								color={colors.darkGreen}
+							/>
+							<Text>Menu</Text>
 						</View>
 					</TouchableWithoutFeedback>
 				}
-				rightComponent={<WalletBtn />}
 			/>
-			<TabStackScreen />
-			<SettingsOverlay visible={showSettings} />
+			<ScrollView style={wrappingContainerBase}>
+				<View style={{ paddingBottom: 40 }}>
+					<View style={baseHeader}>
+						<Text style={styles.headerText}>BerkShares</Text>
+					</View>
+					<View
+						style={{
+							borderBottomColor: colors.darkGreen,
+							borderBottomWidth: 1,
+							flexDirection: 'row',
+							justifyContent: 'space-between',
+							paddingBottom: 2,
+							marginBottom: 10
+						}}>
+						<Text style={styles.text}>B$ -</Text>
+						<TouchableOpacity style={styles.topupButton} onPress={()=>props.navigation.navigate("TopUp")}>
+							<Text style={{color: colors.white, fontSize: 14}}>Top up B$</Text>
+						</TouchableOpacity>	
+					</View>
+					{alert && 
+						<View style={styles.alertView}>
+							<AntDesign name="exclamationcircleo" size={18} />
+							<Text style={{color: colors.white, width: '75%'}}>Welcome in the community! your BerkShares to start spending BerkShares</Text>
+							<TouchableOpacity>
+								<Entypo name="cross" size={30} color={colors.white} onPress={()=>setAlert(false)} />
+							</TouchableOpacity>	
+						</View>
+					}
+
+					<View style={styles.feedView}>
+						<View style={{flexDirection: 'row', justifyContent: 'space-between', marginBottom: 20, marginTop: 10}}>
+							<Text h3 style={{color: colors.lightGreen}}>Merchant of the month</Text>
+							<Text h3 style={{color: colors.lightGreen}}>SeptemebEr</Text>
+						</View>
+						<Text h2>Dory & Ginger</Text>
+						<Text style={{paddingTop: 10, paddingBottom: 10	}}>
+							Our motto is Live and Give. We have treasures for your home and lifestyle, along with the perfect gift for that special someone or that occasion that begs for something unique.
+						</Text>
+						<Image
+							source={require('../../../assets/images/feed1.png')}
+							containerStyle={styles.image}
+						/>
+					</View>
+				</View>
+			</ScrollView>
+			<Button
+				type="darkGreen"
+				title="Scan to Pay or Request"
+				style={styles.scanButton}
+				onPress={()=>setShowSettings(!showSettings)}
+			/>
 		</View>
 	);
 }
 
+const Dashboard = (props: DashboardProps) => {
+	const navigation = useNavigation();
+	return <DashboardView {...props} navigation={navigation} />;
+};
 export default Dashboard

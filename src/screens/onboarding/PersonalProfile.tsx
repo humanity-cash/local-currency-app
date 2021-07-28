@@ -3,32 +3,31 @@ import React, { useState } from 'react';
 import { KeyboardAvoidingView, Platform, ScrollView, View, StyleSheet } from 'react-native';
 import { Text } from 'react-native-elements';
 import { useUserDetails } from "src/hooks";
-import { BackBtn, Button, Header, CancelBtn, PersonalAddressForm } from 'src/shared/uielements';
+import { BackBtn, Button, Header, CancelBtn, PersonalProfileForm } from 'src/shared/uielements';
 import { baseHeader, viewBaseWhite, wrappingContainerBase } from "src/theme/elements";
-import { validateAddressForm } from "src/utils/validation";
+import { validateProfileForm } from "src/utils/validation";
 
-type PersonalAddressProps = {
+type PersonalProfileProps = {
 	navigation?: any
 	route?: any
 }
 
 const styles = StyleSheet.create({
-	bottomView: {
-	  padding: 20,
-  	},
+  	bottomView: {
+		padding: 20,
+	},
 });
 
-const PersonalAddressView = (props: PersonalAddressProps) => {
-	const { personalDetails, updateStatus } = useUserDetails();
+const PersonalProfileView = (props: PersonalProfileProps) => {
+	const { personalDetails } = useUserDetails();
 	const [goNext, setGoNext] = useState(false);
 	const [showValidation, setShowValidation] = useState(false);
 
 	const onNextPress = () => {
-		const validation = validateAddressForm(personalDetails);
+		const validation = validateProfileForm(personalDetails);
 		setShowValidation(true);
 		if (validation.valid) {
-			updateStatus({ personalDetails: true });
-			props.navigation.navigate('LinkBankAccount')
+			props.navigation.navigate('PersonalDetails');
 		}
 	}
 
@@ -39,12 +38,12 @@ const PersonalAddressView = (props: PersonalAddressProps) => {
 				rightComponent={<CancelBtn text="Close" onClick={() => props.navigation.navigate('Tabs')} />}
 			/>
 
-			<ScrollView style={wrappingContainerBase}>
+			<ScrollView style={{ ...wrappingContainerBase }}>
 				<View style={{ paddingBottom: 40 }}>
 					<View style={ baseHeader }>
-						<Text h1>Personal address</Text>
+						<Text h1>Set up your profile</Text>
 					</View>
-					<PersonalAddressForm
+					<PersonalProfileForm
 						isValid={setGoNext}
 						showValidation={showValidation}
 					/>
@@ -66,8 +65,8 @@ const PersonalAddressView = (props: PersonalAddressProps) => {
 	);
 }
 
-const PersonalAddress = (props: PersonalAddressProps) => {
+const PersonalProfile = (props: PersonalProfileProps) => {
 	const navigation = useNavigation();
-	return <PersonalAddressView {...props} navigation={navigation} />;
+	return <PersonalProfileView {...props} navigation={navigation} />;
 }
-export default PersonalAddress
+export default PersonalProfile
