@@ -49,8 +49,23 @@ const styles = StyleSheet.create({
 	view: {
 		padding: 10,
 	},
+	detailView: {
+		flexDirection: 'row', 
+		justifyContent: 'space-between'
+	},
 	detailText: {
 		fontSize: 14,
+	},
+	separator: {
+		borderTopWidth: 1, 
+		borderTopColor: colors.darkGreen, 
+		marginBottom: 10, 
+		marginTop: 10
+	},
+	switchView: {
+		flex: 1, 
+		justifyContent: 'center', 
+		alignItems: 'center'
 	}
 });
 
@@ -70,15 +85,15 @@ function PaymentConfirm(props: PaymentConfirmProps) {
 						<Text h1 style={styles.headerText}> B$ { props.amount } </Text>
 					</View>
 					<View style={styles.view}>
-						<View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+						<View style={styles.detailView}>
 							<Text style={styles.detailText}>TRANSACTION ID</Text>
 							<Text style={{...styles.detailText, fontWeight: 'bold'}}>05636826HDI934</Text>
 						</View>
-						<View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+						<View style={styles.detailView}>
 							<Text style={styles.detailText}>TYPE</Text>
 							<Text style={{...styles.detailText, fontWeight: 'bold'}}>PURCHASE</Text>
 						</View>
-						<View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+						<View style={styles.detailView}>
 							<Text style={styles.detailText}>DATE</Text>
 							<Text style={{...styles.detailText, fontWeight: 'bold'}}>4:22, JUN 17, 2021</Text>
 						</View>
@@ -113,16 +128,16 @@ function FeeConfirm(props: FeeConfirmProps) {
 						<Text h1> B$ { props.amount } </Text>
 					</View>
 					<View style={styles.view}>
-						<View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+						<View style={styles.detailView}>
 							<Text style={styles.detailText}>COMMUNITY CHEST</Text>
 							<Text style={{...styles.detailText, fontWeight: 'bold'}}>B$ 0.66</Text>
 						</View>
-						<View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+						<View style={styles.detailView}>
 							<Text style={styles.detailText}>DORY & GINGER</Text>
 							<Text style={{...styles.detailText, fontWeight: 'bold'}}>B$ 14.34</Text>
 						</View>
-						<View style={{borderTopWidth: 1, borderTopColor: colors.darkGreen, marginBottom: 10, marginTop: 10}}></View>
-						<View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+						<View style={styles.separator}></View>
+						<View style={styles.detailView}>
 							<Text style={styles.detailText}>TOTAL</Text>
 							<Text style={{...styles.detailText, fontWeight: 'bold'}}>B$ 15.00</Text>
 						</View>
@@ -212,7 +227,7 @@ const QRCodeScan = (props: QRCodeScanProps) => {
 				<Header
 					rightComponent={<CancelBtn text="Close" color={colors.white} onClick={() => props.navigation.navigate('Dashboard')} />}
 				/>
-				<View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+				<View style={styles.switchView}>
 					<Switch
 						ios_backgroundColor="#3e3e3e"
 						onValueChange={toggleSwitch}
