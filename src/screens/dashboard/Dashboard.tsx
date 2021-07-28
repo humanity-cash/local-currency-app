@@ -20,6 +20,14 @@ const styles = StyleSheet.create({
 		fontWeight: '400',
 		lineHeight: 40
 	},
+	amountView: {
+		borderBottomColor: colors.darkGreen,
+		borderBottomWidth: 1,
+		flexDirection: 'row',
+		justifyContent: 'space-between',
+		paddingBottom: 2,
+		marginBottom: 10
+	},
 	text: {
 		fontSize: 18,
 		fontWeight: 'bold',
@@ -37,9 +45,19 @@ const styles = StyleSheet.create({
 		alignItems: 'center',
 		marginBottom: 10
 	},
+	alertText: {
+		color: colors.white, 
+		width: '75%'
+	},
 	feedView: {
 		backgroundColor: colors.lightGreen1,
 		padding: 10,
+	},
+	feedHeader: {
+		flexDirection: 'row', 
+		justifyContent: 'space-between', 
+		marginBottom: 20, 
+		marginTop: 10
 	},
 	image: {
 		alignItems: "center",
@@ -97,15 +115,7 @@ const DashboardView = (props: DashboardProps) => {
 					<View style={baseHeader}>
 						<Text style={styles.headerText}>BerkShares</Text>
 					</View>
-					<View
-						style={{
-							borderBottomColor: colors.darkGreen,
-							borderBottomWidth: 1,
-							flexDirection: 'row',
-							justifyContent: 'space-between',
-							paddingBottom: 2,
-							marginBottom: 10
-						}}>
+					<View style={styles.amountView}>
 						<Text style={styles.text}>B$ -</Text>
 						<TouchableOpacity style={styles.topupButton} onPress={()=>props.navigation.navigate("TopUp")}>
 							<Text style={{color: colors.white, fontSize: 14}}>Top up B$</Text>
@@ -114,7 +124,7 @@ const DashboardView = (props: DashboardProps) => {
 					{alert && 
 						<View style={styles.alertView}>
 							<AntDesign name="exclamationcircleo" size={18} />
-							<Text style={{color: colors.white, width: '75%'}}>Welcome in the community! your BerkShares to start spending BerkShares</Text>
+							<Text style={styles.alertText}>Welcome in the community! your BerkShares to start spending BerkShares</Text>
 							<TouchableOpacity>
 								<Entypo name="cross" size={30} color={colors.white} onPress={()=>setAlert(false)} />
 							</TouchableOpacity>	
@@ -122,7 +132,7 @@ const DashboardView = (props: DashboardProps) => {
 					}
 
 					<View style={styles.feedView}>
-						<View style={{flexDirection: 'row', justifyContent: 'space-between', marginBottom: 20, marginTop: 10}}>
+						<View style={styles.feedHeader}>
 							<Text h3 style={{color: colors.lightGreen}}>Merchant of the month</Text>
 							<Text h3 style={{color: colors.lightGreen}}>SeptemebEr</Text>
 						</View>
