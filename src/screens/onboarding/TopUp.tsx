@@ -36,10 +36,8 @@ const styles = StyleSheet.create({
     marginTop: 10,
   },
   text: {
-    fontSize: 20,
-    lineHeight: 60,
-    marginRight: 10,
-    fontFamily: "IBMPlexSansSemiBold",
+    color: colors.text, 
+    fontSize: 12
   },
   defaultAmountView: {
     flexDirection: 'row',
@@ -68,7 +66,7 @@ const styles = StyleSheet.create({
   maxBView: {
     flexDirection: 'row', 
     justifyContent: 'space-between',
-    marginTop: 10
+    marginTop: 15
   },
   totalView: {
     flexDirection: 'row',
@@ -78,6 +76,7 @@ const styles = StyleSheet.create({
   },
   bottomView: {
 		padding: 20,
+    paddingBottom: 45
 	},
 });
 
@@ -130,7 +129,7 @@ const TopUpView = (props: TopUpProps) => {
             <Text>Specify the amount of BerkShares </Text>
             <Text>(B$1 = USD$1) you would like to top up.</Text>
 
-            <Text style={{ marginTop: 30, color: colors.text, fontSize: 12 }}>AMOUNT</Text>
+            <Text style={{ ...styles.text, marginTop: 30 }}>AMOUNT</Text>
             <View style={styles.defaultAmountView}>
               <TouchableOpacity 
                 style={state.amount=='50' ? styles.selectedAmountItem : styles.defaultAmountItem} 
@@ -153,8 +152,8 @@ const TopUpView = (props: TopUpProps) => {
             </View>
             
             <View style={styles.maxBView}>
-              <Text style={{ marginTop: 5, color: colors.text, fontSize: 12 }}>AMOUNT</Text>
-              <Text style={{ marginTop: 5, color: colors.text, fontSize: 12 }}>MAX. B$ 2.000</Text>
+              <Text style={styles.text}>AMOUNT</Text>
+              <Text style={styles.text}>MAX. B$ 2.000</Text>
             </View>
             <BorderedInput
               label="Amount"

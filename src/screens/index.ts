@@ -30,10 +30,14 @@ import SelectBankAccount from "./onboarding/SelectBankAccount";
 import Congratulations from "./onboarding/Congratulations";
 import SelectAccountType from "./onboarding/SelectAccountType";
 import Tabs from "./dashboard/Tabs";
+import QRCodeScan from "./payment/QRCodeScan";
+import PaymentPending from "./payment/PaymentPending";
+import PaymentSuccess from "./payment/PaymentPending";
+import Request from "./payment/Request";
 
 export {
 	Teaser, CreateAccount, Verification, VerificationHelp, Password, PasswordConfirm, Passcode, TouchId, OnboardingSteps,
 	PersonalDetails, PersonalAddress, TermsEmail, ConfirmEmail, EmailConfirmed, Terms, TopUp, TopUpSuccess, SelectPayment,
 	Deposit, CreditCard, ConfirmPin, AddCashResult, Login, Dashboard, MarketEntryDetails, LinkBankAccount, SelectBank, LoginToBank, 
-	SelectBankAccount, Congratulations, SelectAccountType, Tabs
+	SelectBankAccount, Congratulations, SelectAccountType, Tabs, QRCodeScan, PaymentPending, PaymentSuccess, Request
 };
