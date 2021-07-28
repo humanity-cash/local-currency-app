@@ -150,7 +150,7 @@ const styles = StyleSheet.create({
 		width: 44,
 		height: 60,
 		fontSize: 40,
-		backgroundColor: colors.white,
+		backgroundColor: colors.azure,
 		borderWidth: 0,
 		color: colors.text,
 		margin: 2

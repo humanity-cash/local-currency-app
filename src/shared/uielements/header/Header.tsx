@@ -16,7 +16,7 @@ type HeaderProps = {
 	children?: ReactElement
 }
 
-export const HEADER_HEIGHT = Dimensions.get("window").height * 0.12;
+export const HEADER_HEIGHT = Dimensions.get("window").height * 0.1;
 
 const Header = (props: HeaderProps) => {
 	const { properties } = useModalStatusBar();

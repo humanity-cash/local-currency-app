@@ -44,7 +44,9 @@ const VerificationHelpView = (props: VerificationHelpProps) => {
 					<Text h1>Need help?</Text>
 				</View>
 				<View style={styles.codeView}>
-					<Text>If you need help, have questions, complaints, remarks, or just like to chat, please send an email to sven@date.com or call +41 12 34 56 78.</Text>
+					<Text>If you need help, have questions,</Text>
+					<Text>complaints, remarks, or just like to chat, Please send an email to sven@date.com or </Text>
+					<Text>call +41 12 34 56 78.</Text>
 				</View>
 				<View style={styles.imageView}>
 					<Image

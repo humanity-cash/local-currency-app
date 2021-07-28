@@ -72,7 +72,15 @@ const PersonalAddressForm = (props: PersonalAddressProps) => {
 
   return (
     <View>
-      <Text h3>Address line 1</Text>
+      <View
+        style={{
+        borderTopColor: colors.darkRed,
+        borderTopWidth: 1,
+        marginBottom: 20
+        }}>
+          <Text style={{color: colors.darkRed}}>We use your personal details to set up your BerkShares Wallet. Don't worry. This information is not shared publicly!</Text>
+      </View>
+      <Text h3>ADDRESS 1</Text>
       {showValidation && validationErrors.addressLine && (
         <Text h3 style={{ marginTop: 5, color: colors.textError }}>
           {validationErrors.addressLine}
@@ -80,11 +88,12 @@ const PersonalAddressForm = (props: PersonalAddressProps) => {
       )}
       <BlockInput
         name="addressLine"
-        placeholder="Address line 1"
+        placeholder="Street number, street name"
         value={state.addressLine}
         onChange={onValueChange}
+        style={{backgroundColor: colors.azure}}
       />
-      <Text h3>Address line 2</Text>
+      <Text h3>ADDRESS 2</Text>
       {showValidation && validationErrors.addressLine2 && (
         <Text h3 style={{ marginTop: 5, color: colors.textError }}>
           {validationErrors.addressLine2}
@@ -92,24 +101,13 @@ const PersonalAddressForm = (props: PersonalAddressProps) => {
       )}
       <BlockInput
         name="addressLine2"
-        placeholder="Address line 2"
+        placeholder="Apt."
         value={state.addressLine2}
         onChange={onValueChange}
+        style={{backgroundColor: colors.azure}}
       />
-      <Text h3>Zip code</Text>
-      {showValidation && validationErrors.zipCode && (
-        <Text h3 style={{ marginTop: 5, color: colors.textError }}>
-          {validationErrors.zipCode}
-        </Text>
-      )}
-      <BlockInput
-        name="zipCode"
-        placeholder="Zip code"
-        keyboardType="number-pad"
-        value={state.zipCode}
-        onChange={onValueChange}
-      />
-      <Text h3>City</Text>
+      
+      <Text h3>CITY</Text>
       {showValidation && validationErrors.city && (
         <Text h3 style={{ marginTop: 5, color: colors.textError }}>
           {validationErrors.city}
@@ -120,8 +118,9 @@ const PersonalAddressForm = (props: PersonalAddressProps) => {
         placeholder="City"
         value={state.city}
         onChange={onValueChange}
+        style={{backgroundColor: colors.azure}}
       />
-      <Text h3>Country</Text>
+      <Text h3>STATE</Text>
       {showValidation && validationErrors.country && (
         <Text h3 style={{ marginTop: 5, color: colors.textError }}>
           {validationErrors.country}
@@ -140,6 +139,21 @@ const PersonalAddressForm = (props: PersonalAddressProps) => {
           (country: SelectionProps) => country.value !== MAIN_COUNTRY
         )}
         modalListLabel="other"
+        style={{backgroundColor: colors.azure}}
+      />
+      <Text h3>POSTAL CODE</Text>
+      {showValidation && validationErrors.zipCode && (
+        <Text h3 style={{ marginTop: 5, color: colors.textError }}>
+          {validationErrors.zipCode}
+        </Text>
+      )}
+      <BlockInput
+        name="zipCode"
+        placeholder="00000"
+        keyboardType="number-pad"
+        value={state.zipCode}
+        onChange={onValueChange}
+        style={{backgroundColor: colors.azure}}
       />
     </View>
   );
