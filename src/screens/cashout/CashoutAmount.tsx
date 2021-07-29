@@ -1,14 +1,21 @@
 import React, {useState, useEffect} from 'react';
 import { StyleSheet, View, KeyboardAvoidingView, ScrollView, Platform } from 'react-native';
 import { Text } from 'react-native-elements';
+import { useDialogStatus } from "src/hooks";
 import { Header, Button, CancelBtn, BackBtn, BorderedInput, Dialog } from "src/shared/uielements";
-import { underlineHeader, viewBase, modalViewBase, wrappingContainerBase } from "src/theme/elements";
+import { underlineHeader, viewBase, dialogViewBase, wrappingContainerBase } from "src/theme/elements";
 import { colors } from "src/theme/colors";
 import Cashout from "./Cashout";
+import { IMap } from "src/utils/types";
 
 type CashoutAmountProps = {
 	navigation?: any,
 	route?: any,
+}
+
+interface CashoutState extends IMap {
+	amount: string;
+	costs: string;
 }
 
 const styles = StyleSheet.create({
@@ -19,7 +26,8 @@ const styles = StyleSheet.create({
 	},
 	formLabel: {
 		flexDirection: 'row',
-		justifyContent: 'space-between'
+		justifyContent: 'space-between',
+		marginTop: 20
 	},
 	labelText: {
 		marginTop: 5, 
@@ -57,35 +65,40 @@ const styles = StyleSheet.create({
 
 const CashoutAmount = (props: CashoutAmountProps) => {
 
-	const [state, setState] = useState({
+	const [state, setState] = useState<CashoutState>({
 		amount: "1",
 		costs: "1"
 	});
 	const [goNext, setGoNext] = useState(false);
-	const [confirmView, setConfirmView] = useState(false);
 	const [cashout, setCashout] = useState(false);
+	const [visible, setVisible] = useState(false);
+	const { setDialogStatus } = useDialogStatus();
 
 	useEffect(() => {
 		setGoNext(state.costs !== "");
 	}, [state]);
 
-	const onValueChange = (name: any, change: any) => {
+	const onValueChange = (name: string, change: string) => {
 		const costs = change;
 		setState({
-		  ...state,
-		  [name]: change,
+		  amount: change,
 		  costs: costs,
-		} as any);
-		// update({ [name]: change });
+		} as CashoutState);
 	};
+
+	const viewConfirm = () => {
+		setVisible(true);
+		setDialogStatus(true);
+	}
+
+	const doCashout = () => {
+		setVisible(false);
+		setDialogStatus(false);
+		setCashout(true);
+	}
 
 	const onCashoutClose = () => {
 		setCashout(false);
-	}
-
-	const viewCashout = () => {
-		setConfirmView(false);
-		setCashout(true);
 	}
 
 	return (
@@ -100,7 +113,7 @@ const CashoutAmount = (props: CashoutAmountProps) => {
 				</View>
 				<View>
 					<Text>Select the amount of BerkShares you would like to redeem to USD Dollar. Please note that the maximum amount is $ 2,000.00 and you can not exceed your account balance.</Text>
-					<View style={{ ...styles.formLabel, marginTop: 20 }}>
+					<View style={ styles.formLabel }>
 						<Text style={styles.labelText}>AMOUNT</Text>
 						<Text style={styles.labelText}>Max. B$ 2,000.00</Text>
 					</View>
@@ -130,14 +143,14 @@ const CashoutAmount = (props: CashoutAmountProps) => {
 						type="darkGreen"
 						disabled={!goNext}
 						title="Confirm"
-						onPress={() => setConfirmView(true)}
+						onPress={viewConfirm}
 					/>
 				</View>
 			</KeyboardAvoidingView>
 
-			{ confirmView && (
-				<Dialog visible={confirmView}>
-					<View style={{ ...modalViewBase, height: "100%", padding: 20 }}>
+			{ visible && (
+				<Dialog>
+					<View style={dialogViewBase}>
 						<View style={styles.modalWrap}>
 							<Text style={styles.modalHeader}>Are you sure you want to cash out?</Text>
 							<Text>You will redeem 100 BerkShares for USD$ 98,50 after a 1,5% fee.</Text>
@@ -145,7 +158,7 @@ const CashoutAmount = (props: CashoutAmountProps) => {
 						<Button
 							type="darkGreen"
 							title="Cash out to USD$"
-							onPress={viewCashout}
+							onPress={doCashout}
 						/>
 					</View>
 				</Dialog>

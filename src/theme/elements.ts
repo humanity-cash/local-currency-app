@@ -16,12 +16,14 @@ export const viewBaseWhite: any = {
 
 export const modalViewBase: any = {
 	...viewBase,
-	backgroundColor: colors.background
+	backgroundColor: colors.lightBg
 }
 
 export const dialogViewBase: any = {
 	...viewBase,
 	width: dialogWidth,
+	padding: 20,
+	backgroundColor: colors.background,
 	borderTopStartRadius: 20,
 	borderTopEndRadius: 20,
 }
