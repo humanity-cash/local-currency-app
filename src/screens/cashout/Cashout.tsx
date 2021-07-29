@@ -1,12 +1,11 @@
-import { useNavigation } from '@react-navigation/native';
 import React from 'react';
 import { View } from 'react-native';
 import { useModalStatusBar } from "src/hooks";
-import { EditOrderNavigator } from "src/navigation/EditOrderStack";
+import { CashoutNavigator } from "src/navigation/CashoutNavigator";
 import { Modal } from "src/shared/uielements";
 import { Order } from "src/utils/types";
 
-type EditOrderProps = {
+type CashoutProps = {
 	navigation?: any,
 	route?: any,
 	order?: Order | null,
@@ -14,8 +13,7 @@ type EditOrderProps = {
 	onClose: () => void
 }
 
-const EditOrder = (props: EditOrderProps) => {
-	const navigation = useNavigation();
+const Cashout = (props: CashoutProps) => {
 	const { setUseHeader } = useModalStatusBar();
 
 	const onClose = () => {
@@ -24,13 +22,16 @@ const EditOrder = (props: EditOrderProps) => {
 	}
 	return (
 		<View>
-			{props.visible && props.order && (
+			{props.visible && (
 				<Modal visible={props.visible} onShow={() => setUseHeader(true)}>
-					<EditOrderNavigator order={props.order} onClose={onClose} style={{ backgroundColor: 'transparent' }} />
+					<CashoutNavigator
+						onClose={onClose}
+						style={{ backgroundColor: 'transparent' }}
+					/>
 				</Modal>
 			)}
 		</View>
 	);
 }
 
-export default EditOrder
+export default Cashout

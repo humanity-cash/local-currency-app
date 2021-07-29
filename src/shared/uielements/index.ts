@@ -8,6 +8,7 @@ import DocumentModal from "./DocumentModal";
 import Dots from "./Dots";
 import FloatingButton from "./FloatingButton";
 import Modal from "./Modal";
+import Dialog from "./Dialog";
 import Notifications from "./Notifications";
 import PinCode from "./PinCode";
 import SelectModal from "./SelectModal";
@@ -50,6 +51,7 @@ export {
 	Dots,
 	FloatingButton,
 	Modal,
+	Dialog,
 	Notifications,
 	PinCode,
 	SelectModal,

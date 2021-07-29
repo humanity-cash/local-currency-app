@@ -1,10 +1,9 @@
-import { useNavigation } from '@react-navigation/native';
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, View, Switch, ScrollView } from 'react-native';
 import { Text } from 'react-native-elements';
-import { Header, CancelBtn, Modal, ModalHeader, Button } from "src/shared/uielements";
+import { Header, CancelBtn, Dialog, Button } from "src/shared/uielements";
 import { colors } from "src/theme/colors";
-import { baseHeader, wrappingContainerBase, viewBase, modalViewBase } from "src/theme/elements";
+import { baseHeader, wrappingContainerBase, viewBase, dialogViewBase } from "src/theme/elements";
 import { BarCodeScanner } from 'expo-barcode-scanner';
 
 type QRCodeScanProps = {
@@ -39,7 +38,7 @@ const styles = StyleSheet.create({
 		height: 200,
 		backgroundColor: 'rgba(0,0,0,0.8)'
 	},
-	modalFooter: {
+	dialogFooter: {
 		padding: 20,
 	},
 	headerText: {
@@ -78,8 +77,8 @@ type PaymentConfirmProps = {
 function PaymentConfirm(props: PaymentConfirmProps) {
 
 	return (
-		<Modal visible={props.visible}>
-			<View style={modalViewBase}>
+		<Dialog visible={props.visible}>
+			<View style={dialogViewBase}>
 				<ScrollView style={wrappingContainerBase}>
 					<View style={ baseHeader }>
 						<Text h1 style={styles.headerText}> B$ { props.amount } </Text>
@@ -99,7 +98,7 @@ function PaymentConfirm(props: PaymentConfirmProps) {
 						</View>
 					</View>
 				</ScrollView>
-				<View style={styles.modalFooter}>
+				<View style={styles.dialogFooter}>
 					<Button
 						type="darkGreen"
 						title="Confirm"
@@ -107,7 +106,7 @@ function PaymentConfirm(props: PaymentConfirmProps) {
 					/>
 				</View>
 			</View>
-		</Modal>
+		</Dialog>
 	)
 }
 
@@ -121,8 +120,8 @@ type FeeConfirmProps = {
 function FeeConfirm(props: FeeConfirmProps) {
 
 	return (
-		<Modal visible={props.visible}>
-			<View style={modalViewBase }>
+		<Dialog visible={props.visible}>
+			<View style={dialogViewBase }>
 				<ScrollView style={wrappingContainerBase}>
 					<View style={ baseHeader }>
 						<Text h1> B$ { props.amount } </Text>
@@ -144,7 +143,7 @@ function FeeConfirm(props: FeeConfirmProps) {
 					</View>
 				</ScrollView>
 
-				<View style={{...styles.modalFooter, flexDirection: 'row'}}>
+				<View style={{...styles.dialogFooter, flexDirection: 'row'}}>
 					<Button
 						type="darkGreen"
 						style={{backgroundColor: colors.white, borderWidth: 1, flex: 1, marginRight: 10}}
@@ -160,7 +159,7 @@ function FeeConfirm(props: FeeConfirmProps) {
 					/>
 				</View>
 			</View>
-		</Modal>
+		</Dialog>
 	)
 }
 
@@ -168,8 +167,8 @@ const QRCodeScan = (props: QRCodeScanProps) => {
 	const [hasPermission, setHasPermission] = useState(null || false);
 	const [scanned, setScanned] = useState(false);
 	const [isEnabled, setIsEnabled] = useState(false);
-	const [paymentModal, setPaymentModal] = useState(false);
-	const [feeModal, setFeeModal] = useState(false);
+	const [paymentDialog, setPaymentDialog] = useState(false);
+	const [feeDialog, setFeeDialog] = useState(false);
   	const toggleSwitch = () => {
 		setIsEnabled(previousState => !previousState);
 		if (!isEnabled) {
@@ -184,7 +183,7 @@ const QRCodeScan = (props: QRCodeScanProps) => {
 		})();
 
 		setTimeout(() => {
-			setPaymentModal(true);
+			setPaymentDialog(true);
 		}, 2000);
 	}, []);
 	
@@ -201,17 +200,17 @@ const QRCodeScan = (props: QRCodeScanProps) => {
 	}
 
 	const onPayConfirm = () => {
-		setPaymentModal(false);
-		setFeeModal(true);
+		setPaymentDialog(false);
+		setFeeDialog(true);
 	}
 
 	const onFeeConfirm = () => {
-		setFeeModal(false);
+		setFeeDialog(false);
 		props.navigation.navigate("PaymentPending");
 	}
 
 	const onCancle = () => {
-		setFeeModal(false);
+		setFeeDialog(false);
 		props.navigation.navigate("Dashboard");
 	}
 
@@ -236,8 +235,8 @@ const QRCodeScan = (props: QRCodeScanProps) => {
 				</View>
 			</View>
 			<View style={styles.bottomView}></View>
-			{ paymentModal && <PaymentConfirm visible={paymentModal} amount={14.34} onConfirm={onPayConfirm} /> }
-			{ feeModal && <FeeConfirm visible={feeModal} amount={0.66} onConfirm={onFeeConfirm} onCancel={onCancle} /> }
+			{ paymentDialog && <PaymentConfirm visible={paymentDialog} amount={14.34} onConfirm={onPayConfirm} /> }
+			{ feeDialog && <FeeConfirm visible={feeDialog} amount={0.66} onConfirm={onFeeConfirm} onCancel={onCancle} /> }
 		</View>
 	);
 }

@@ -3,34 +3,34 @@ import { Dimensions, View } from "react-native";
 import { Overlay } from 'react-native-elements';
 import { colors } from "src/theme/colors";
 
-type ModalProps = {
+type DialogProps = {
 	visible?: boolean,
 	children: ReactElement,
 	style?: any,
 	onShow?: () => void
 }
 
-export const MODAL_SCREEN_OFFSET = Dimensions.get('screen').height * 0.06;
+export const DIALOG_SCREEN_OFFSET = Dimensions.get('screen').height * 0.06;
 
-const Modal = ({ visible = false, style = {}, children, onShow }: ModalProps) => {
+const Dialog = ({ visible = false, style = {}, children, onShow }: DialogProps) => {
 	return (
 		<Overlay
 			isVisible={visible}
 			overlayStyle={{
 				position: "absolute",
-				bottom: 0,
-				width: '100%',
-				height: '100%',
-				// borderTopStartRadius: 20,
-				// borderTopEndRadius: 20,
-				backgroundColor: colors.lightBg,
-				// shadowColor: colors.black,
-				// borderColor: colors.black,
+				width: '90%',
+				minHeight: 400,
+				borderRadius: 20,
+				backgroundColor: colors.white,
+				shadowColor: colors.black,
+				borderColor: colors.black,
 				borderWidth: 0,
-				// shadowOffset: { width: 2, height: 2 },
-				// shadowRadius: 5,
-				// shadowOpacity: 0.5,
+				shadowOffset: { width: 2, height: 2 },
+				shadowRadius: 5,
+				shadowOpacity: 0.5,
 				padding: 0,
+				justifyContent: 'center',
+				alignItems: 'center',
 				...style
 			}}
 			backdropStyle={{
@@ -42,8 +42,7 @@ const Modal = ({ visible = false, style = {}, children, onShow }: ModalProps) =>
 			<View style={{
 				flex: 1,
 				overflow: "hidden",
-				// borderTopStartRadius: 20,
-				// borderTopEndRadius: 20
+				borderRadius: 20,
 			}}>
 				{children}
 			</View>
@@ -51,4 +50,4 @@ const Modal = ({ visible = false, style = {}, children, onShow }: ModalProps) =>
 	);
 }
 
-export default Modal;
+export default Dialog;
