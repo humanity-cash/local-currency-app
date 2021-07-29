@@ -248,6 +248,10 @@ export type ModalStatusBar = {
   bar?: "light-content";
 };
 
+export type DialogStatus = {
+  visible: boolean;
+};
+
 export interface IMap {
   [key: string]: any;
 }
