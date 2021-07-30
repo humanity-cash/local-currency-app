@@ -18,19 +18,12 @@ const Modal = ({ visible = false, style = {}, children, onShow }: ModalProps) =>
 			isVisible={visible}
 			overlayStyle={{
 				position: "absolute",
-				width: '90%',
-				minHeight: 400,
-				borderRadius: 20,
-				backgroundColor: colors.white,
-				shadowColor: colors.black,
-				borderColor: colors.black,
+				bottom: 0,
+				width: '100%',
+				height: '100%',
+				backgroundColor: colors.lightBg,
 				borderWidth: 0,
-				shadowOffset: { width: 2, height: 2 },
-				shadowRadius: 5,
-				shadowOpacity: 0.5,
 				padding: 0,
-				justifyContent: 'center',
-				alignItems: 'center',
 				...style
 			}}
 			backdropStyle={{
@@ -42,7 +35,6 @@ const Modal = ({ visible = false, style = {}, children, onShow }: ModalProps) =>
 			<View style={{
 				flex: 1,
 				overflow: "hidden",
-				borderRadius: 20,
 			}}>
 				{children}
 			</View>

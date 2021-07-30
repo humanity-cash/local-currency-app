@@ -6,7 +6,6 @@ import { useRouteTracking } from "src/hooks";
 import ConfirmPin from "src/screens/authentication/ConfirmPin";
 import Login from "src/screens/authentication/Login";
 import Dashboard from "src/screens/dashboard/Dashboard";
-import MarketEntryDetails from "src/screens/dashboard/MarketEntryDetails";
 import TopUp from "src/screens/onboarding/TopUp";
 import TopUpSuccess from "src/screens/onboarding/TopUpSuccess";
 import AddCashResult from "src/screens/onboarding/AddCashResult";
@@ -49,6 +48,7 @@ import QRCodeScan from "src/screens/payment/QRCodeScan";
 import PaymentPending from "src/screens/payment/PaymentPending";
 import PaymentSuccess from "src/screens/payment/PaymentSuccess";
 import Request from "src/screens/payment/Request";
+// import CashoutAmount from "src/screens/cashout/CashoutAmount";
 
 const PrimaryStack = createStackNavigator();
 
@@ -84,10 +84,6 @@ function PrimaryStackScreen() {
       <PrimaryStack.Screen name="ConfirmPin" component={ConfirmPin} />
       <PrimaryStack.Screen name="AddCashResult" component={AddCashResult} />
       <PrimaryStack.Screen name="Dashboard" component={Dashboard} />
-      <PrimaryStack.Screen
-        name="MarketEntryDetails"
-        component={MarketEntryDetails}
-      />
       <PrimaryStack.Screen name="Wallet" component={Wallet} />
       <PrimaryStack.Screen
         name="SettingsTermsAndConditions"
@@ -120,6 +116,7 @@ function PrimaryStackScreen() {
       <PrimaryStack.Screen name="PaymentPending" component={PaymentPending} />
       <PrimaryStack.Screen name="PaymentSuccess" component={PaymentSuccess} />
       <PrimaryStack.Screen name="PaymentRequest" component={Request} />
+      {/* <PrimaryStack.Screen name="CashoutAmount" component={CashoutAmount} /> */}
     </PrimaryStack.Navigator>
   );
 }
