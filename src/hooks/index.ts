@@ -2,6 +2,7 @@ import useCachedResources from "./useCachedResources";
 import useMarketEntry from "./useMarketEntry";
 import useMessages from "./useMessages";
 import useModalStatusBar from "./useModalStatusBar";
+import useDialogStatus from "./useDialogStatus";
 import useNotifications from "./useNotifications";
 import useOrders from "./useOrders";
 import usePaymentDetails from "./usePaymentDetails";
@@ -16,6 +17,7 @@ export {
 	useMarketEntry,
 	useMessages,
 	useModalStatusBar,
+	useDialogStatus,
 	useNotifications,
 	useOrders,
 	usePaymentDetails,
