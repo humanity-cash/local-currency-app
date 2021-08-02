@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, View, Switch, ScrollView } from 'react-native';
 import { Text } from 'react-native-elements';
-import { useDialogStatus } from "src/hooks";
 import { Header, CancelBtn, Dialog, Button } from "src/shared/uielements";
 import { colors } from "src/theme/colors";
 import { baseHeader, wrappingContainerBase, viewBase, dialogViewBase } from "src/theme/elements";
@@ -70,14 +69,15 @@ const styles = StyleSheet.create({
 });
 
 type PaymentConfirmProps = {
+	visible: boolean,
 	onConfirm: ()=>void,
 	amount: number,
 }
 
-function PaymentConfirm(props: PaymentConfirmProps) {
+const PaymentConfirm = (props: PaymentConfirmProps) => {
 
 	return (
-		<Dialog>
+		<Dialog visible={props.visible}>
 			<View style={dialogViewBase}>
 				<ScrollView style={wrappingContainerBase}>
 					<View style={ baseHeader }>
@@ -111,15 +111,16 @@ function PaymentConfirm(props: PaymentConfirmProps) {
 }
 
 type FeeConfirmProps = {
+	visible: boolean,
 	onConfirm: () => void,
 	onCancel: () => void,
 	amount: number,
 }
 
-function FeeConfirm(props: FeeConfirmProps) {
+const FeeConfirm = (props: FeeConfirmProps) => {
 
 	return (
-		<Dialog>
+		<Dialog visible={props.visible}>
 			<View style={dialogViewBase }>
 				<ScrollView style={wrappingContainerBase}>
 					<View style={ baseHeader }>
@@ -168,7 +169,6 @@ const QRCodeScan = (props: QRCodeScanProps) => {
 	const [isEnabled, setIsEnabled] = useState(false);
 	const [paymentDialog, setPaymentDialog] = useState(false);
 	const [feeDialog, setFeeDialog] = useState(false);
-	const { setDialogStatus } = useDialogStatus();
 
   	const toggleSwitch = () => {
 		setIsEnabled(previousState => !previousState);
@@ -185,7 +185,6 @@ const QRCodeScan = (props: QRCodeScanProps) => {
 
 		setTimeout(() => {
 			setPaymentDialog(true);
-			setDialogStatus(true);
 		}, 2000);
 	}, []);
 	
@@ -208,13 +207,11 @@ const QRCodeScan = (props: QRCodeScanProps) => {
 
 	const onFeeConfirm = () => {
 		setFeeDialog(false);
-		setDialogStatus(false);
 		props.navigation.navigate("PaymentPending");
 	}
 
 	const onCancle = () => {
 		setFeeDialog(false);
-		setDialogStatus(false);
 		props.navigation.navigate("Dashboard");
 	}
 
@@ -239,8 +236,8 @@ const QRCodeScan = (props: QRCodeScanProps) => {
 				</View>
 			</View>
 			<View style={styles.bottomView}></View>
-			{ paymentDialog && <PaymentConfirm amount={14.34} onConfirm={onPayConfirm} /> }
-			{ feeDialog && <FeeConfirm amount={0.66} onConfirm={onFeeConfirm} onCancel={onCancle} /> }
+			{ paymentDialog && <PaymentConfirm visible={paymentDialog} amount={14.34} onConfirm={onPayConfirm} /> }
+			{ feeDialog && <FeeConfirm visible={feeDialog} amount={0.66} onConfirm={onFeeConfirm} onCancel={onCancle} /> }
 		</View>
 	);
 }

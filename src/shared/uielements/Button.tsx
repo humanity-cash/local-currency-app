@@ -71,6 +71,23 @@ const styles: any = {
 			justifyContent: "center",
 			alignItems: "center"
 		}
+	}, transparent: {
+		button: {
+			height: 55,
+			backgroundColor: colors.transparent,
+			paddingTop: 10,
+			paddingBottom: 10,
+			alignItems: 'center',
+			borderRadius: 30
+		},
+		buttonText: {
+			color: colors.darkRed
+		},
+		view: {
+			flex: 1,
+			justifyContent: "center",
+			alignItems: "center"
+		}
 	}
 }
 

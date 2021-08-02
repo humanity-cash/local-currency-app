@@ -1,8 +1,6 @@
 import { colors } from "./colors";
 import { Dimensions } from 'react-native';
 
-const dialogWidth = Dimensions.get('screen').width * 0.9;
-
 export const viewBase: any = {
 	flex: 1,
 	justifyContent: 'space-between',
@@ -21,7 +19,6 @@ export const modalViewBase: any = {
 
 export const dialogViewBase: any = {
 	...viewBase,
-	width: dialogWidth,
 	padding: 20,
 	backgroundColor: colors.background,
 	borderTopStartRadius: 20,
