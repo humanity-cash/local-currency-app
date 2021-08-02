@@ -22,12 +22,7 @@ const Modal = ({ visible = false, style = {}, children, onShow }: ModalProps) =>
 				width: '100%',
 				height: '100%',
 				backgroundColor: colors.lightBg,
-				shadowColor: colors.black,
-				borderColor: colors.black,
 				borderWidth: 0,
-				shadowOffset: { width: 2, height: 2 },
-				shadowRadius: 5,
-				shadowOpacity: 0.5,
 				padding: 0,
 				...style
 			}}
@@ -39,7 +34,7 @@ const Modal = ({ visible = false, style = {}, children, onShow }: ModalProps) =>
 		>
 			<View style={{
 				flex: 1,
-				overflow: "hidden"
+				overflow: "hidden",
 			}}>
 				{children}
 			</View>
