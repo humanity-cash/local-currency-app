@@ -20,8 +20,8 @@ export const colors: any = {
 	lightBlue: '#CFE4FF',
 
 	background: '#F8FAF6',
-	lightBg: '#E5E5E5',
-	inputBg: '#CBD7D5',
+	lightBg: '#F9FBF7',
+	inputBg: '#D9E2DF',
 	darkGreen: '#395344',
 	lightGreen: '#B2C1B8',
 	lightGreen1: '#DCE3DD',

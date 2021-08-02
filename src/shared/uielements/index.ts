@@ -1,5 +1,6 @@
 import BlockInput from "./BlockInput";
 import BorderedInput from "./BorderedInput";
+import SearchInput from "./SearchInput";
 import BottomSheet from "./BottomSheet";
 import Button from "./Button";
 import ChartView from "./ChartView";
@@ -43,6 +44,7 @@ import {
 export {
 	BorderedInput,
 	BlockInput,
+	SearchInput,
 	BottomSheet,
 	Button,
 	ChartView,
