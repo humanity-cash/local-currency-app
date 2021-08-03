@@ -1,5 +1,5 @@
 import { AntDesign } from "@expo/vector-icons";
-import React from 'react';
+import React, { useRef, useLayoutEffect } from 'react';
 import { TextInput, TouchableWithoutFeedback, View, StyleSheet } from 'react-native';
 import { colors } from "src/theme/colors";
 
@@ -40,38 +40,40 @@ const styles = StyleSheet.create({
 	}
 });
 
-class SearchInput extends React.Component<SearchInputProps> {
-	input: any
+const SearchInput = (props: SearchInputProps) => {
+	const inputRef = useRef<TextInput | null>(null);
 
-	render() {
-		return (
-			<TouchableWithoutFeedback onPress={() => this.input.focus()}>
-				<View style={styles.container}>
-					<View style={styles.iconView}>
-						<AntDesign
-							name="search1"
-							size={20}
-							color={colors.text}
-						/>
-					</View>
-					<TextInput
-						ref={component => this.input = component}
-						style={{
-							...styles.inputText,
-							...this.props.style,
-						}}
-						placeholderTextColor={colors.lightGreen}
-						keyboardType={this.props.keyboardType || 'default' }
-						placeholder={this.props.placeholder ? this.props.placeholder : ''}
-						onChangeText={newValue => this.props.onChange(this.props.name, newValue)}
-						value={this.props.value}
-						onKeyPress={this.props.onKeyPress}
-						maxLength={this.props.maxLength}
+	useLayoutEffect(() => {
+		inputRef.current?.focus();
+	});
+	
+	return (
+		<TouchableWithoutFeedback onPress={() => inputRef.current?.focus()}>
+			<View style={styles.container}>
+				<View style={styles.iconView}>
+					<AntDesign
+						name="search1"
+						size={20}
+						color={colors.text}
 					/>
 				</View>
-			</TouchableWithoutFeedback>
-		)
-	}
+				<TextInput
+					ref={inputRef}
+					style={{
+						...styles.inputText,
+						...props.style,
+					}}
+					placeholderTextColor={colors.lightGreen}
+					keyboardType={props.keyboardType || 'default' }
+					placeholder={props.placeholder ? props.placeholder : ''}
+					onChangeText={newValue => props.onChange(props.name, newValue)}
+					value={props.value}
+					onKeyPress={props.onKeyPress}
+					maxLength={props.maxLength}
+				/>
+			</View>
+		</TouchableWithoutFeedback>
+	)
 }
 
 export default SearchInput;
