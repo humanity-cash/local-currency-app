@@ -120,8 +120,8 @@ const TransactionDetail = (props: TransactionDetailProps) => {
 
 const MyTransactionsView = (props: MyTransactionsProps) => {
 
-	const [searchText, setSearchText] = useState("");
-	const [selectedItem, setSelectedItem] = useState({
+	const [searchText, setSearchText] = useState<string>("");
+	const [selectedItem, setSelectedItem] = useState<MyTransactionItem>({
 		transactionId: 0,
 		avatar: "",
 		name: "",
@@ -129,8 +129,8 @@ const MyTransactionsView = (props: MyTransactionsProps) => {
 		amount: "",
 		date: ""
 	});
-	const [detailView, setDetailView] = useState(false);
-	const [returnView, setReturnView] = useState(false);
+	const [isDetailViewOpen, setIsDetailViewOpen] = useState<boolean>(false);
+	const [isReturnViewOpen, setIsReturnViewOpen] = useState<boolean>(false);
 
 	const onSearchChange = (name: any, change: any) => {
 		setSearchText(change);
@@ -138,17 +138,17 @@ const MyTransactionsView = (props: MyTransactionsProps) => {
 
 	const viewDetail = (item: MyTransactionItem) => {
 		setSelectedItem(item);
-		setDetailView(true);
+		setIsDetailViewOpen(true);
 	}
 
 	const onReturn = () => {
-		setDetailView(false);
-		setReturnView(true);
+		setIsDetailViewOpen(false);
+		setIsReturnViewOpen(true);
 	}
 
 	const onConfirm = () => {
-		setDetailView(false);
-		setReturnView(false);
+		setIsDetailViewOpen(false);
+		setIsReturnViewOpen(false);
 	}
 
 	return (
@@ -195,7 +195,7 @@ const MyTransactionsView = (props: MyTransactionsProps) => {
 					/>
 				</View>
 			</KeyboardAvoidingView>
-			{detailView && <TransactionDetail visible={detailView} data={selectedItem} onReturn={onReturn} onConfirm={onConfirm} />}
+			{isDetailViewOpen && <TransactionDetail visible={isDetailViewOpen} data={selectedItem} onReturn={onReturn} onConfirm={onConfirm} />}
 		</View>
 	);
 }

@@ -70,12 +70,12 @@ const TransactionItem = (props: MyTransactionItemProps) => {
 
 const MyTransactionList = (props: MyTransactionListProps) => {
 
-	const {data} = props;
-
-	const [list, setList] = useState(data);
-	const [selected, setSelected] = useState(0);
+	const [list, setList] = useState<MyTransactionItem[]>([]);
+	const [selected, setSelected] = useState<number>(0);
 
 	useEffect(() => {
+		const data: MyTransactionItem[] = props.data;
+
 		if (!data) {
 			return;
 		}
@@ -87,7 +87,7 @@ const MyTransactionList = (props: MyTransactionListProps) => {
 		});
 
 		setList(data);
-	}, [data]);
+	}, [props.data]);
 
 	const handleSelect = (item: MyTransactionItem) => {
 		setSelected(item.transactionId);
