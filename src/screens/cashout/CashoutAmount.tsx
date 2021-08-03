@@ -61,6 +61,9 @@ const styles = StyleSheet.create({
 		marginTop: 20,
 		marginBottom: 10,
 	},
+	modalBottom: {
+		marginTop: 20,
+	}
 });
 
 const CashoutAmount = (props: CashoutAmountProps) => {
@@ -88,16 +91,16 @@ const CashoutAmount = (props: CashoutAmountProps) => {
 
 	const viewConfirm = () => {
 		setVisible(true);
-		setDialogStatus(true);
+		setCashout(false);
 	}
 
 	const doCashout = () => {
 		setVisible(false);
-		setDialogStatus(false);
 		setCashout(true);
 	}
 
 	const onCashoutClose = () => {
+		setVisible(false);
 		setCashout(false);
 	}
 
@@ -149,22 +152,24 @@ const CashoutAmount = (props: CashoutAmountProps) => {
 			</KeyboardAvoidingView>
 
 			{ visible && (
-				<Dialog>
+				<Dialog visible={visible}>
 					<View style={dialogViewBase}>
 						<View style={styles.modalWrap}>
 							<Text style={styles.modalHeader}>Are you sure you want to cash out?</Text>
 							<Text>You will redeem 100 BerkShares for USD$ 98,50 after a 1,5% fee.</Text>
 						</View>
-						<Button
-							type="darkGreen"
-							title="Cash out to USD$"
-							onPress={doCashout}
-						/>
+						<View style={styles.modalBottom}>
+							<Button
+								type="darkGreen"
+								title="Cash out to USD$"
+								onPress={doCashout}
+							/>
+						</View>
 					</View>
 				</Dialog>
 			)}
 
-			<Cashout onClose={onCashoutClose} visible={cashout} />
+			{cashout && <Cashout onClose={onCashoutClose} visible={cashout} />}
 		</View>
 	);
 }

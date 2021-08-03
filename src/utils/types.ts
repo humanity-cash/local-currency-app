@@ -261,3 +261,12 @@ export interface Bank {
   name: string;
   icon: string;
 }
+
+export type MyTransactionItem = {
+  transactionId: number,
+	avatar: string,
+	name: string,
+  type: string,
+	amount: string,
+	date: string
+}
