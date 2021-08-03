@@ -1,24 +1,40 @@
 import React, { ReactElement } from 'react';
 import { Dimensions, View, StyleSheet } from "react-native";
 import { Overlay } from 'react-native-elements';
+import { CancelBtn } from "src/shared/uielements";
 import { colors } from "src/theme/colors";
-import { useDialogStatus } from "src/hooks";
 
 type DialogProps = {
+	visible: boolean,
 	children: ReactElement,
 	style?: any,
-	onShow?: () => void
+	onShow?: () => void,
+	onClose?: () => void
 }
 
 export const DIALOG_SCREEN_OFFSET = Dimensions.get('screen').height * 0.06;
 
 const styles = StyleSheet.create({
+	dialogBg: {
+		position: 'absolute',
+		top: 0,
+		left: 0,
+		width: '100%',
+		height: '100%',
+		backgroundColor: 'rgba(57, 83, 68, 0.9)'
+	},
+	closeBtn: {
+		position: 'absolute',
+		top: 60,
+		right: 20,
+		zIndex: 999
+	},
 	dialogWrap: {
 		position: "absolute",
-		width: '90%',
+		width: '85%',
 		minHeight: 300,
 		borderRadius: 20,
-		backgroundColor: colors.white,
+		backgroundColor: colors.background,
 		shadowColor: colors.black,
 		borderColor: colors.black,
 		borderWidth: 0,
@@ -36,27 +52,30 @@ const styles = StyleSheet.create({
 	},
 });
 
-const Dialog = ({style = {}, children, onShow }: DialogProps) => {
-
-	const { properties } = useDialogStatus();
+const Dialog = ({visible = false, style = {}, children, onShow, onClose }: DialogProps) => {
 
 	return (
-		<Overlay
-			isVisible={properties.visible}
-			overlayStyle={{
-				...styles.dialogWrap,
-				...style
-			}}
-			backdropStyle={{
-				backgroundColor: 'transparent'
-			}}
-			animationType="slide"
-			onShow={() => onShow && onShow()}
-		>
-			<View style={styles.dialogView}>
-				{children}
+		<View style={styles.dialogBg}>
+			<View style={styles.closeBtn}>
+				<CancelBtn text="Close" color={colors.white} onClick={() => onClose && onClose()} />
 			</View>
-		</Overlay>
+			<Overlay
+				isVisible={visible}
+				overlayStyle={{
+					...styles.dialogWrap,
+					...style
+				}}
+				backdropStyle={{
+					backgroundColor: 'transparent'
+				}}
+				animationType="slide"
+				onShow={() => onShow && onShow()}
+			>
+				<View style={styles.dialogView}>
+					{children}
+				</View>
+			</Overlay>
+		</View>
 	);
 }
 
