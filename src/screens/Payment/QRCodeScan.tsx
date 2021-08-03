@@ -164,11 +164,11 @@ const FeeConfirm = (props: FeeConfirmProps) => {
 }
 
 const QRCodeScan = (props: QRCodeScanProps) => {
-	const [hasPermission, setHasPermission] = useState(null || false);
-	const [scanned, setScanned] = useState(false);
-	const [isEnabled, setIsEnabled] = useState(false);
-	const [paymentDialog, setPaymentDialog] = useState(false);
-	const [feeDialog, setFeeDialog] = useState(false);
+	const [hasPermission, setHasPermission] = useState<boolean>(null || false);
+	const [isScanned, setIsScanned] = useState<boolean>(false);
+	const [isEnabled, setIsEnabled] = useState<boolean>(false);
+	const [isPaymentDialogOpen, setIsPaymentDialogOpen] = useState<boolean>(false);
+	const [isFeeDialogOpen, setIsFeeDialogOpen] = useState<boolean>(false);
 
   	const toggleSwitch = () => {
 		setIsEnabled(previousState => !previousState);
@@ -184,12 +184,12 @@ const QRCodeScan = (props: QRCodeScanProps) => {
 		})();
 
 		setTimeout(() => {
-			setPaymentDialog(true);
+			setIsPaymentDialogOpen(true);
 		}, 2000);
 	}, []);
 	
 	const handleBarCodeScanned = (data: HandleScaned) => {
-		setScanned(true);
+		setIsScanned(true);
 	}
 
 	if (hasPermission === null) {
@@ -201,17 +201,17 @@ const QRCodeScan = (props: QRCodeScanProps) => {
 	}
 
 	const onPayConfirm = () => {
-		setPaymentDialog(false);
-		setFeeDialog(true);
+		setIsPaymentDialogOpen(false);
+		setIsFeeDialogOpen(true);
 	}
 
 	const onFeeConfirm = () => {
-		setFeeDialog(false);
+		setIsFeeDialogOpen(false);
 		props.navigation.navigate("PaymentPending");
 	}
 
 	const onCancle = () => {
-		setFeeDialog(false);
+		setIsFeeDialogOpen(false);
 		props.navigation.navigate("Dashboard");
 	}
 
@@ -219,7 +219,7 @@ const QRCodeScan = (props: QRCodeScanProps) => {
 		<View style={viewBase}>
 			<View style={styles.container}>
 				<BarCodeScanner
-					onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
+					onBarCodeScanned={isScanned ? undefined : handleBarCodeScanned}
 					style={StyleSheet.absoluteFillObject}
 				/>
 			</View>
@@ -236,8 +236,8 @@ const QRCodeScan = (props: QRCodeScanProps) => {
 				</View>
 			</View>
 			<View style={styles.bottomView}></View>
-			{ paymentDialog && <PaymentConfirm visible={paymentDialog} amount={14.34} onConfirm={onPayConfirm} /> }
-			{ feeDialog && <FeeConfirm visible={feeDialog} amount={0.66} onConfirm={onFeeConfirm} onCancel={onCancle} /> }
+			{ isPaymentDialogOpen && <PaymentConfirm visible={isPaymentDialogOpen} amount={14.34} onConfirm={onPayConfirm} /> }
+			{ isFeeDialogOpen && <FeeConfirm visible={isFeeDialogOpen} amount={0.66} onConfirm={onFeeConfirm} onCancel={onCancle} /> }
 		</View>
 	);
 }

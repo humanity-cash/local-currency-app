@@ -1,7 +1,6 @@
-import { AntDesign, Entypo } from "@expo/vector-icons";
+import { AntDesign } from "@expo/vector-icons";
 import React from 'react';
-import { TextInput, TouchableWithoutFeedback, View } from 'react-native';
-import { Text, Image } from 'react-native-elements';
+import { TextInput, TouchableWithoutFeedback, View, StyleSheet } from 'react-native';
 import { colors } from "src/theme/colors";
 
 type SearchInputProps = {
@@ -16,23 +15,39 @@ type SearchInputProps = {
 	maxLength?: number
 }
 
+const styles = StyleSheet.create({
+	container: {
+		height: 55,
+		flexDirection: "row",
+		justifyContent: "center",
+		borderRadius: 3,
+		alignItems: "center",
+		backgroundColor: colors.inputBg,
+		marginVertical: 8,
+		paddingHorizontal: 15
+	},
+	iconView: {
+		alignItems: "center"
+	},
+	inputText: {
+		textAlign: 'left',
+		fontSize: 20,
+		fontFamily: 'IBMPlexSansSemiBold',
+		paddingLeft: 15,
+		borderWidth: 0,
+		color: colors.text,
+		flex: 1
+	}
+});
+
 class SearchInput extends React.Component<SearchInputProps> {
 	input: any
 
 	render() {
 		return (
 			<TouchableWithoutFeedback onPress={() => this.input.focus()}>
-				<View style={{
-					height: 55,
-					flexDirection: "row",
-					justifyContent: "center",
-					borderRadius: 3,
-					alignItems: "center",
-					backgroundColor: colors.inputBg,
-					marginVertical: 8,
-					paddingHorizontal: 15
-				}}>
-					<View style={{ alignItems: "center" }}>
+				<View style={styles.container}>
+					<View style={styles.iconView}>
 						<AntDesign
 							name="search1"
 							size={20}
@@ -42,13 +57,7 @@ class SearchInput extends React.Component<SearchInputProps> {
 					<TextInput
 						ref={component => this.input = component}
 						style={{
-							textAlign: 'left',
-							fontSize: 20,
-							fontFamily: 'IBMPlexSansSemiBold',
-							paddingLeft: 15,
-							borderWidth: 0,
-							color: colors.text,
-							flex: 1,
+							...styles.inputText,
 							...this.props.style,
 						}}
 						placeholderTextColor={colors.lightGreen}
