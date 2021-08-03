@@ -261,3 +261,18 @@ export interface Bank {
   name: string;
   icon: string;
 }
+
+export type MerchantCategory = {
+  id: string;
+  name: string;
+  merchants: MerchantEntry[];
+}
+
+export type MerchantEntry = {
+  title: string;
+  description: string;
+  image: string;
+  addressLine1: string;
+  addressLine2: string;
+  phone: string;
+}

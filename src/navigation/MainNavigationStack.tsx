@@ -48,7 +48,6 @@ import QRCodeScan from "src/screens/payment/QRCodeScan";
 import PaymentPending from "src/screens/payment/PaymentPending";
 import PaymentSuccess from "src/screens/payment/PaymentSuccess";
 import Request from "src/screens/payment/Request";
-// import CashoutAmount from "src/screens/cashout/CashoutAmount";
 
 const PrimaryStack = createStackNavigator();
 
@@ -116,7 +115,6 @@ function PrimaryStackScreen() {
       <PrimaryStack.Screen name="PaymentPending" component={PaymentPending} />
       <PrimaryStack.Screen name="PaymentSuccess" component={PaymentSuccess} />
       <PrimaryStack.Screen name="PaymentRequest" component={Request} />
-      {/* <PrimaryStack.Screen name="CashoutAmount" component={CashoutAmount} /> */}
     </PrimaryStack.Navigator>
   );
 }

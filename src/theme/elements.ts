@@ -6,7 +6,7 @@ const dialogWidth = Dimensions.get('screen').width * 0.9;
 export const viewBase: any = {
 	flex: 1,
 	justifyContent: 'space-between',
-	backgroundColor: colors.lightBg
+	backgroundColor: colors.background
 }
 
 export const viewBaseWhite: any = {
