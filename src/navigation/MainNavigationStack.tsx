@@ -33,7 +33,6 @@ import ContactPhone from "src/screens/settings/ContactPhone";
 import { Settings } from "src/screens/settings/Settings";
 import SettingsAccountDetails from "src/screens/settings/SettingsAccountDetails";
 import SettingsCards from "src/screens/settings/SettingsCards";
-import SettingsHelpAndContact from "src/screens/settings/SettingsHelpAndContact";
 import SettingsPersonalDetails from "src/screens/settings/SettingsPersonalDetails";
 import SettingsTermsAndConditions from "src/screens/settings/SettingsTermsAndConditions";
 import Wallet from "src/screens/wallet/Wallet";
@@ -87,10 +86,6 @@ function PrimaryStackScreen() {
       <PrimaryStack.Screen
         name="SettingsTermsAndConditions"
         component={SettingsTermsAndConditions}
-      />
-      <PrimaryStack.Screen
-        name="SettingsHelpAndContact"
-        component={SettingsHelpAndContact}
       />
       <PrimaryStack.Screen name="ContactPhone" component={ContactPhone} />
       <PrimaryStack.Screen name="ContactEmail" component={ContactEmail} />

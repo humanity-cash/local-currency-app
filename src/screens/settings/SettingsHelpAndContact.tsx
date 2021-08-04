@@ -1,115 +1,114 @@
-import { AntDesign } from "@expo/vector-icons";
 import { useNavigation } from '@react-navigation/native';
-import React from 'react';
-import { ScrollView, StyleSheet, TouchableWithoutFeedback, View } from "react-native";
-import { Text } from "react-native-elements";
+import React, { useState, useEffect } from 'react';
+import { ScrollView, StyleSheet, View } from "react-native";
+import { Text } from 'react-native-elements';
+import { Header, Modal, ModalHeader, BackBtn, Button, FAQCard, SearchInput } from "src/shared/uielements";
+import { underlineHeader, viewBase, modalViewBase } from "src/theme/elements";
 import faqList from "src/mocks/faq";
-import { FAQCard, Header, SettingsListItem } from "src/shared/uielements";
 import { colors } from "src/theme/colors";
-import { viewDashboardBase } from "src/theme/elements";
+import { FAQCardProps } from "src/utils/types";
 
 const styles = StyleSheet.create({
 	headerText: {
-		color: colors.white,
-		fontFamily: 'IBMPlexSansSemiBold',
-		fontSize: 16
+		fontSize: 32,
+		fontWeight: '400',
+		lineHeight: 40
 	},
 	container: {
-		position: 'absolute',
-		bottom: 0,
-		width: '100%',
-		backgroundColor: colors.text,
-		zIndex: 100,
-		elevation: 10
-	},
-	headerView: {
-		flexDirection: "row",
-		marginTop: 30,
-		marginBottom: 10
-	},
-	signOutView: {
-		fontSize: 20,
-		position: 'absolute',
-		bottom: 0,
-		right: 0,
-		marginBottom: 10,
-		color: colors.white
-	},
-	signOutButton: {
-		fontSize: 20,
-		fontFamily: 'IBMPlexSansSemiBold',
-		position: 'absolute',
-		bottom: 0,
-		right: 0,
-		marginBottom: 10,
-		color: colors.white
+		flex: 1, 
+		padding: 10
 	},
 	section: {
-		fontFamily: 'IBMPlexSansBold',
-		fontSize: 20,
-		color: colors.white,
+		fontSize: 16,
 		marginVertical: 10
 	},
-	header: {
-		fontFamily: 'IBMPlexSansBold',
-		fontSize: 20,
+	sectionHeader: {
+		fontSize: 10
+	},
+	faqView: {
+		paddingBottom: 30, 
+		paddingTop: 10
+	},
+	contactBtn: {
+		width: '90%',
+		position: 'absolute',
+		bottom: 45,
+		left: '5%'
 	},
 	modalWrap: {
 		paddingHorizontal: 10,
-		height: '100%',
-		flex: 1
+		marginBottom: 10
 	},
 	modalHeader: {
-		fontFamily: 'IBMPlexSansSemiBold',
-		fontSize: 20,
-		marginBottom: 10
-	}
+		fontFamily: "IBMPlexSansSemiBold",
+		fontSize: 26,
+		lineHeight: 45,
+		paddingBottom: 10,
+		borderBottomWidth: 1,
+		borderBottomColor: colors.darkGreen
+	},
 });
 
 export const SettingsHelpAndContact = () => {
+
+	const [searchText, setSearchText] = useState<string>("");
+	const [isContacted, setIsContacted] = useState<boolean>(false);
+	const [faqData, setFaqData] = useState<FAQCardProps[]>([]);
 	const navigation = useNavigation();
+
+	useEffect(() => {
+		const filtered: FAQCardProps[] = faqList.filter((item: FAQCardProps) => item.question.toLowerCase().includes(searchText.toLowerCase()));
+		setFaqData(filtered);
+	}, [searchText]);
+
+	const onSearchChange = (name: any, change: any) => {
+		setSearchText(change);
+	}
+
 	return (
-		<View style={viewDashboardBase}>
+		<View style={viewBase}>
 			<Header
-				placement="left"
-				style={{ backgroundColor: colors.text }}
-				barStyle="light-content"
-				centerComponent={<Text style={styles.headerText}>Dashboard</Text>}
-				leftComponent={
-					<TouchableWithoutFeedback onPress={() => navigation.goBack()}>
-						<View>
-							<AntDesign
-								style={{ paddingTop: 2 }}
-								name="arrowleft"
-								size={25}
-								color={colors.white}
-							/>
-						</View>
-					</TouchableWithoutFeedback>
-				}
+				leftComponent={<BackBtn onClick={() => navigation.goBack()} />}
 			/>
-			<ScrollView style={{ flex: 1, padding: 10 }}>
-				<View style={styles.headerView}>
-					<Text h1 style={{ color: colors.white, marginBottom: 0 }}>Help and contact</Text>
+			<ScrollView style={styles.container}>
+				<View style={ underlineHeader }>
+					<Text style={styles.headerText}>Help & Contact</Text>
 				</View>
-				<Text style={styles.section}>Contact</Text>
-				<View>
-					<SettingsListItem
-						name="Contact via email"
-						onPress={() => navigation.navigate('ContactEmail')}
-					/>
-					<SettingsListItem
-						name="Contact via phone"
-						onPress={() => navigation.navigate('ContactPhone')}
-					/>
-				</View>
-				<View style={{ paddingBottom: 30, paddingTop: 10 }}>
-					<Text style={styles.section}>FAQ</Text>
-					{faqList.map((faq, index) => (
-						<FAQCard key={`faq-card-${index}`} {...faq} />
+				<Text style={styles.section}>We are here to help you with anything and everything on the BerkShares app.</Text>
+				<SearchInput
+					label="Search"
+					name="searchText"
+					keyboardType="default"
+					placeholder="Search help"
+					value={searchText}
+					onChange={onSearchChange}
+				/>
+				<View style={styles.faqView}>
+					<Text style={styles.sectionHeader}>FREQUENTLY ASKED QUESTIONS</Text>
+					{faqData.map((faq: FAQCardProps, index: number) => (
+						<FAQCard key={`faq-card-${index}`} question={faq.question} answer={faq.answer} />
 					))}
 				</View>
 			</ScrollView>
+			<Button
+				type="darkGreen"
+				title="Contact"
+				style={styles.contactBtn}
+				onPress={()=>setIsContacted(true)}
+			/>
+			{isContacted && (
+				<Modal visible={isContacted}>
+					<View style={ modalViewBase }>
+						<ModalHeader
+							leftComponent={<BackBtn onClick={()=>setIsContacted(false)} />}
+						/>
+						<ScrollView style={styles.modalWrap}>
+							<Text style={styles.modalHeader}>Contact</Text>
+							<Text style={styles.section}>If you have questions, complaints, remarks, or just like to chat, please send an email to fennie@humanity.cash or contact the Schumacher Center by calling 010 - 125 087 66.</Text>
+						</ScrollView>
+					</View>
+				</Modal>
+			)}
 		</View>
 	);
 }
