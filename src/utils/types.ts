@@ -262,11 +262,17 @@ export interface Bank {
   icon: string;
 }
 
-export type MyTransactionItem = {
-  transactionId: number,
-	avatar: string,
-	name: string,
-  type: string,
-	amount: string,
-	date: string
+export type MerchantCategory = {
+  id: string;
+  name: string;
+  merchants: MerchantEntry[];
+}
+
+export type MerchantEntry = {
+  title: string;
+  description: string;
+  image: string;
+  addressLine1: string;
+  addressLine2: string;
+  phone: string;
 }
