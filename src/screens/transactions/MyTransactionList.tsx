@@ -1,9 +1,6 @@
 import React, {useState, useEffect} from 'react';
-import { StyleSheet, View, KeyboardAvoidingView, ScrollView, Platform, ImageRequireSource } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import { Text, Image } from 'react-native-elements';
-import moment from 'moment';
-import { Header, Button, BackBtn, SearchInput, Dialog } from "src/shared/uielements";
-import { baseHeader, viewBase, dialogViewBase, wrappingContainerBase } from "src/theme/elements";
 import { colors } from "src/theme/colors";
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { MyTransactionItem } from "src/utils/types";

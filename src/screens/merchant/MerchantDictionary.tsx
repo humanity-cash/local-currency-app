@@ -2,7 +2,7 @@ import React, {useState} from 'react';
 import { StyleSheet, View, ScrollView } from 'react-native';
 import { Text, Image } from 'react-native-elements';
 import { Modal, ModalHeader, Header, CancelBtn, BackBtn } from "src/shared/uielements";
-import { underlineHeader, viewBase, wrappingContainerBase } from "src/theme/elements";
+import { underlineHeader, viewBase, wrappingContainerBase, modalViewBase } from "src/theme/elements";
 import { colors } from "src/theme/colors";
 import list from "src/mocks/merchants";
 import { MerchantCategory, MerchantEntry } from "src/utils/types";
@@ -82,8 +82,7 @@ const styles = StyleSheet.create({
 	},
 	modalWrap: {
 		paddingHorizontal: 10,
-		height: "100%",
-		flex: 1,
+		marginBottom: 10
 	},
 	modalHeader: {
 		fontFamily: "IBMPlexSansSemiBold",
@@ -200,11 +199,11 @@ const MerchantDictionary = (props: MerchantDictionaryProps) => {
 			</ScrollView>
 			{isVisible && (
 				<Modal visible={isVisible}>
-					<View style={{ height: "100%" }}>
+					<View style={ modalViewBase }>
 						<ModalHeader
 							rightComponent={<CancelBtn text="Close" onClick={handleDeSelect} />}
 						/>
-						<View style={styles.modalWrap}>
+						<ScrollView style={styles.modalWrap}>
 							<Text style={styles.modalHeader}>{selected.title}</Text>
 							<View style={styles.feedView}>
 								<Text h2>Dory & Ginger</Text>
@@ -219,7 +218,7 @@ const MerchantDictionary = (props: MerchantDictionaryProps) => {
 								<Text style={styles.rightText}>{selected.addressLine2}</Text>
 								<Text style={styles.rightText}>{selected.phone}</Text>
 							</View>
-						</View>
+						</ScrollView>
 					</View>
 				</Modal>
 			)}
