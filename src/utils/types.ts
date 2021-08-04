@@ -262,6 +262,15 @@ export interface Bank {
   icon: string;
 }
 
+export type MyTransactionItem = {
+  transactionId: number,
+	avatar: string,
+	name: string,
+  type: string,
+	amount: string,
+	date: string
+}
+
 export type MerchantCategory = {
   id: string;
   name: string;
@@ -275,4 +284,9 @@ export type MerchantEntry = {
   addressLine1: string;
   addressLine2: string;
   phone: string;
+}
+
+export type FAQCardProps = {
+	question: string,
+	answer: string
 }
