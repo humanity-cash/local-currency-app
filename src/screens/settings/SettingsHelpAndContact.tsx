@@ -52,7 +52,7 @@ const styles = StyleSheet.create({
 export const SettingsHelpAndContact = () => {
 
 	const [searchText, setSearchText] = useState<string>("");
-	const [isContact, setIsContact] = useState<boolean>(false);
+	const [isContacted, setIsContacted] = useState<boolean>(false);
 	const [faqData, setFaqData] = useState<FAQCardProps[]>([]);
 	const navigation = useNavigation();
 
@@ -94,13 +94,13 @@ export const SettingsHelpAndContact = () => {
 				type="darkGreen"
 				title="Contact"
 				style={styles.contactBtn}
-				onPress={()=>setIsContact(true)}
+				onPress={()=>setIsContacted(true)}
 			/>
-			{isContact && (
-				<Modal visible={isContact}>
+			{isContacted && (
+				<Modal visible={isContacted}>
 					<View style={ modalViewBase }>
 						<ModalHeader
-							leftComponent={<BackBtn onClick={()=>setIsContact(false)} />}
+							leftComponent={<BackBtn onClick={()=>setIsContacted(false)} />}
 						/>
 						<ScrollView style={styles.modalWrap}>
 							<Text style={styles.modalHeader}>Contact</Text>
