@@ -1,23 +1,19 @@
-import { AntDesign } from "@expo/vector-icons";
+import { Entypo } from '@expo/vector-icons';
 import React, { useState } from 'react';
 import { StyleSheet, TouchableWithoutFeedback, View } from "react-native";
 import { Text } from "react-native-elements";
 import { colors } from "src/theme/colors";
-
-interface FAQCardProps {
-	question: string,
-	answer: string
-}
+import { FAQCardProps } from "src/utils/types";
 
 const styles = StyleSheet.create({
 	container: {
-		backgroundColor: colors.white,
+		backgroundColor: colors.inputBg,
 		padding: 20,
 		marginBottom: 5
 	},
 	header: {
 		flexDirection: "row",
-		backgroundColor: colors.white,
+		backgroundColor: colors.inputBg,
 	},
 	headerText: {
 		flex: 1,
@@ -33,29 +29,33 @@ const styles = StyleSheet.create({
 	},
 	textContainer: {
 		marginTop: 10
+	},
+	contentText: {
+		fontSize: 10,
+		lineHeight: 14
 	}
 });
 
 const FAQCard = (props: FAQCardProps) => {
-	const [expanded, setExpanded] = useState(false);
+	const [isExpanded, setIsExpanded] = useState<boolean>(false);
 	return (
 		<View style={styles.container}>
-			<TouchableWithoutFeedback onPress={() => setExpanded(!expanded)}>
+			<TouchableWithoutFeedback onPress={() => setIsExpanded(!isExpanded)}>
 				<View style={styles.header}>
 					<Text style={styles.headerText}>{props.question}</Text>
 					<View style={styles.headerIcon}>
-						<AntDesign
-							style={expanded ? styles.headerActive : {}}
-							name='caretdown'
-							size={10}
-							color={colors.text}
+						<Entypo 
+							style={isExpanded ? styles.headerActive : {}}
+							name="chevron-down" 
+							size={16} 
+							color={colors.text} 
 						/>
 					</View>
 				</View>
 			</TouchableWithoutFeedback>
-			{expanded && (
+			{isExpanded && (
 				<View style={styles.textContainer}>
-					<Text>{props.answer}</Text>
+					<Text style={styles.contentText}>{props.answer}</Text>
 				</View>
 			)}
 		</View>

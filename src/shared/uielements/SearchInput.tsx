@@ -42,10 +42,6 @@ const styles = StyleSheet.create({
 
 const SearchInput = (props: SearchInputProps) => {
 	const inputRef = useRef<TextInput | null>(null);
-
-	useLayoutEffect(() => {
-		inputRef.current?.focus();
-	});
 	
 	return (
 		<TouchableWithoutFeedback onPress={() => inputRef.current?.focus()}>
