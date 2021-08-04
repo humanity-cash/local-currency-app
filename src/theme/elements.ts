@@ -4,7 +4,7 @@ import { Dimensions } from 'react-native';
 export const viewBase: any = {
 	flex: 1,
 	justifyContent: 'space-between',
-	backgroundColor: colors.lightBg
+	backgroundColor: colors.background
 }
 
 export const viewBaseWhite: any = {
