@@ -3,7 +3,7 @@ import React, { useState } from 'react';
 import { StyleSheet, TouchableWithoutFeedback, View } from "react-native";
 import { Text } from "react-native-elements";
 import { colors } from "src/theme/colors";
-import { FAQCardProps } from "src/utils/types";
+import { AccordionEntry } from "src/utils/types";
 
 const styles = StyleSheet.create({
 	container: {
@@ -32,17 +32,18 @@ const styles = StyleSheet.create({
 	},
 	contentText: {
 		fontSize: 10,
-		lineHeight: 14
+		lineHeight: 14,
+		color: colors.bodyText
 	}
 });
 
-const FAQCard = (props: FAQCardProps) => {
+const AccordionCard = (props: AccordionEntry) => {
 	const [isExpanded, setIsExpanded] = useState<boolean>(false);
 	return (
 		<View style={styles.container}>
 			<TouchableWithoutFeedback onPress={() => setIsExpanded(!isExpanded)}>
 				<View style={styles.header}>
-					<Text style={styles.headerText}>{props.question}</Text>
+					<Text style={styles.headerText}>{props.title}</Text>
 					<View style={styles.headerIcon}>
 						<Entypo 
 							style={isExpanded ? styles.headerActive : {}}
@@ -55,11 +56,11 @@ const FAQCard = (props: FAQCardProps) => {
 			</TouchableWithoutFeedback>
 			{isExpanded && (
 				<View style={styles.textContainer}>
-					<Text style={styles.contentText}>{props.answer}</Text>
+					<Text style={styles.contentText}>{props.content}</Text>
 				</View>
 			)}
 		</View>
 	)
 }
 
-export default FAQCard;
+export default AccordionCard;

@@ -2,11 +2,11 @@ import { useNavigation } from '@react-navigation/native';
 import React, { useState, useEffect } from 'react';
 import { ScrollView, StyleSheet, View } from "react-native";
 import { Text } from 'react-native-elements';
-import { Header, Modal, ModalHeader, BackBtn, Button, FAQCard, SearchInput } from "src/shared/uielements";
+import { Header, Modal, ModalHeader, BackBtn, Button, AccordionCard, SearchInput } from "src/shared/uielements";
 import { underlineHeader, viewBase, modalViewBase } from "src/theme/elements";
 import faqList from "src/mocks/faq";
 import { colors } from "src/theme/colors";
-import { FAQCardProps } from "src/utils/types";
+import { AccordionEntry } from "src/utils/types";
 
 const styles = StyleSheet.create({
 	headerText: {
@@ -53,11 +53,11 @@ export const SettingsHelpAndContact = () => {
 
 	const [searchText, setSearchText] = useState<string>("");
 	const [isContacted, setIsContacted] = useState<boolean>(false);
-	const [faqData, setFaqData] = useState<FAQCardProps[]>([]);
+	const [faqData, setFaqData] = useState<AccordionEntry[]>([]);
 	const navigation = useNavigation();
 
 	useEffect(() => {
-		const filtered: FAQCardProps[] = faqList.filter((item: FAQCardProps) => item.question.toLowerCase().includes(searchText.toLowerCase()));
+		const filtered: AccordionEntry[] = faqList.filter((item: AccordionEntry) => item.title.toLowerCase().includes(searchText.toLowerCase()));
 		setFaqData(filtered);
 	}, [searchText]);
 
@@ -85,8 +85,8 @@ export const SettingsHelpAndContact = () => {
 				/>
 				<View style={styles.faqView}>
 					<Text style={styles.sectionHeader}>FREQUENTLY ASKED QUESTIONS</Text>
-					{faqData.map((faq: FAQCardProps, index: number) => (
-						<FAQCard key={`faq-card-${index}`} question={faq.question} answer={faq.answer} />
+					{faqData.map((faq: AccordionEntry, index: number) => (
+						<AccordionCard key={`faq-card-${index}`} title={faq.title} content={faq.content} />
 					))}
 				</View>
 			</ScrollView>

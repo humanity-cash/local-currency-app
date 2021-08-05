@@ -1,5 +1,5 @@
 import CreditCardCard from "./CreditCardCard";
-import FAQCard from "./FAQCard";
+import AccordionCard from "./AccordionCard";
 import FileCard from "./FileCard";
 import FilterCard from "./FilterCard";
 import MarketCardView from "./MarketCard";
@@ -20,6 +20,6 @@ export {
 	MarketCardView,
 	FilterCard,
 	FileCard,
-	FAQCard,
+	AccordionCard,
 	CreditCardCard,
 }

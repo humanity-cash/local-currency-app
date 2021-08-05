@@ -25,7 +25,7 @@ import {
 	MarketCardView,
 	FilterCard,
 	FileCard,
-	FAQCard,
+	AccordionCard,
 	CreditCardCard } from "./cards";
 import {
 	CancelBtn,
@@ -68,7 +68,7 @@ export {
 	MarketCardView,
 	FilterCard,
 	FileCard,
-	FAQCard,
+	AccordionCard,
 	CreditCardCard,
 	CancelBtn,
 	BackBtn,

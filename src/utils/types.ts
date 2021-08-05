@@ -286,7 +286,7 @@ export type MerchantEntry = {
   phone: string;
 }
 
-export type FAQCardProps = {
-	question: string,
-	answer: string
+export type AccordionEntry = {
+	title: string,
+	content: string
 }
