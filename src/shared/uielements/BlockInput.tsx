@@ -1,5 +1,5 @@
 import React from 'react';
-import { TextInput } from 'react-native';
+import { TextInput, StyleSheet } from 'react-native';
 import { colors } from "src/theme/colors";
 
 type BlockInputProps = {
@@ -9,27 +9,35 @@ type BlockInputProps = {
 	placeholderTextColor?: any,
 	value: any,
 	style?: any
+	secureTextEntry?: boolean
 	keyboardType?: any
 	onKeyPress?: any
 	maxLength?: number
 }
+
+const styles = StyleSheet.create({
+	container: {
+		height: 60,
+		fontSize: 16,
+		backgroundColor: colors.inputBg,
+		borderRadius: 2,
+		paddingHorizontal: 15,
+		paddingVertical: 8,
+		marginVertical: 8,
+		borderWidth: 0,
+		color: colors.text
+	}
+});
 
 class BlockInput extends React.Component<BlockInputProps>{
 	render() {
 		return (
 			<TextInput
 				style={{
-					height: 60,
-					fontSize: 16,
-					backgroundColor: colors.white,
-					borderRadius: 2,
-					paddingHorizontal: 15,
-					paddingVertical: 8,
-					marginVertical: 8,
-					borderWidth: 0,
-					color: colors.text,
+					...styles.container,
 					...this.props.style,
 				}}
+				secureTextEntry={this.props.secureTextEntry || false}
 				placeholderTextColor={this.props.placeholderTextColor || colors.grey1}
 				keyboardType={this.props.keyboardType || 'default' }
 				placeholder={this.props.placeholder ? this.props.placeholder : ''}
