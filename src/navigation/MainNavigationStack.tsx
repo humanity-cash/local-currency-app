@@ -28,12 +28,9 @@ import Terms from "src/screens/onboarding/Terms";
 import TermsEmail from "src/screens/onboarding/TermsEmail";
 import Verification from "src/screens/onboarding/Verification";
 import VerificationHelp from "src/screens/onboarding/VerificationHelp";
-import ContactEmail from "src/screens/settings/ContactEmail";
-import ContactPhone from "src/screens/settings/ContactPhone";
 import { Settings } from "src/screens/settings/Settings";
 import SettingsAccountDetails from "src/screens/settings/SettingsAccountDetails";
-import SettingsCards from "src/screens/settings/SettingsCards";
-import SettingsPersonalDetails from "src/screens/settings/SettingsPersonalDetails";
+import SettingsPersonalProfile from "src/screens/settings/SettingsPersonalProfile";
 import SettingsTermsAndConditions from "src/screens/settings/SettingsTermsAndConditions";
 import Wallet from "src/screens/wallet/Wallet";
 import SelectAccountType from "src/screens/onboarding/SelectAccountType";
@@ -87,18 +84,15 @@ function PrimaryStackScreen() {
         name="SettingsTermsAndConditions"
         component={SettingsTermsAndConditions}
       />
-      <PrimaryStack.Screen name="ContactPhone" component={ContactPhone} />
-      <PrimaryStack.Screen name="ContactEmail" component={ContactEmail} />
       <PrimaryStack.Screen name="Settings" component={Settings} />
       <PrimaryStack.Screen
-        name="SettingsPersonalDetails"
-        component={SettingsPersonalDetails}
+        name="SettingsPersonalProfile"
+        component={SettingsPersonalProfile}
       />
       <PrimaryStack.Screen
         name="SettingsAccountDetails"
         component={SettingsAccountDetails}
       />
-      <PrimaryStack.Screen name="SettingsCards" component={SettingsCards} />
       <PrimaryStack.Screen name="SelectAccountType" component={SelectAccountType} />
       <PrimaryStack.Screen name="LinkBankAccount" component={LinkBankAccount} />
       <PrimaryStack.Screen name="SelectBank" component={SelectBank} />

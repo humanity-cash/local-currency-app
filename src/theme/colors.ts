@@ -25,4 +25,5 @@ export const colors: any = {
 	darkGreen: '#395344',
 	lightGreen: '#B2C1B8',
 	lightGreen1: '#DCE3DD',
+	bodyText: "#2E2E2E",
 }

@@ -7,6 +7,7 @@ import CashoutAmount from "../cashout/CashoutAmount";
 import MyTransactions from "../transactions/MyTransactions";
 import MerchantDictionary from "../merchant/MerchantDictionary";
 import SettingsHelpAndContact from "../settings/SettingsHelpAndContact";
+import Settings from "../settings/Settings";
 
 const styles = StyleSheet.create({
 	headerText: {
@@ -27,7 +28,7 @@ const Tabs = () => {
 			<Drawer.Screen name="My Transactions" component={MyTransactions} />
 			<Drawer.Screen name="Where to spend" component={MerchantDictionary} />
 			<Drawer.Screen name="Sign up your business" component={TopUp} />
-			<Drawer.Screen name="Settings" component={TopUp} />
+			<Drawer.Screen name="Settings" component={Settings} />
 			<Drawer.Screen name="Help and Contact" component={SettingsHelpAndContact} />
 		</Drawer.Navigator>
 	);

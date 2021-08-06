@@ -1,17 +1,17 @@
-import { FAQCardProps } from "src/utils/types";
+import { AccordionEntry } from "src/utils/types";
 
-const list: FAQCardProps[] = [
+const list: AccordionEntry[] = [
 	{
-		question: 'How to pay with digital BerkShares?',
-		answer: 'First you click on "SCAN TO PAY OR RECEIVE" on the home screen. Then you can scan the QR code shown the merchant. You confirm the amount and the berkshares will be transferred. '
+		title: 'How to pay with digital BerkShares?',
+		content: 'First you click on "SCAN TO PAY OR RECEIVE" on the home screen. Then you can scan the QR code shown the merchant. You confirm the amount and the berkshares will be transferred. '
 	},
 	{
-		question: 'How to make a return?',
-		answer: 'First you click on "SCAN TO PAY OR RECEIVE" on the home screen. Then you can scan the QR code shown the merchant. You confirm the amount and the berkshares will be transferred. '
+		title: 'How to make a return?',
+		content: 'First you click on "SCAN TO PAY OR RECEIVE" on the home screen. Then you can scan the QR code shown the merchant. You confirm the amount and the berkshares will be transferred. '
 	},
 	{
-		question: 'How to partially return a transaction?',
-		answer: 'First you click on "SCAN TO PAY OR RECEIVE" on the home screen. Then you can scan the QR code shown the merchant. You confirm the amount and the berkshares will be transferred. '
+		title: 'How to partially return a transaction?',
+		content: 'First you click on "SCAN TO PAY OR RECEIVE" on the home screen. Then you can scan the QR code shown the merchant. You confirm the amount and the berkshares will be transferred. '
 	}
 ];
 
