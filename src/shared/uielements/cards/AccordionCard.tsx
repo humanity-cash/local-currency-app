@@ -28,7 +28,8 @@ const styles = StyleSheet.create({
 		transform: [{ rotate: '180deg' }]
 	},
 	textContainer: {
-		marginTop: 10
+		marginTop: 15,
+		paddingHorizontal: 10
 	},
 	contentText: {
 		fontSize: 10,
