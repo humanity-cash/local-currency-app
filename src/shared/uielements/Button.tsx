@@ -81,7 +81,7 @@ const styles: any = {
 			borderRadius: 30
 		},
 		buttonText: {
-			color: colors.darkRed
+			color: colors.darkGreen
 		},
 		view: {
 			flex: 1,

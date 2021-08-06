@@ -51,6 +51,7 @@ export const baseHeader: any = {
 export const underlineHeader: any = {
 	marginTop: 0,
 	paddingTop: 10,
+	paddingBottom: 10,
 	marginBottom: 10,
 	borderBottomWidth: 1,
 	borderBottomColor: colors.darkGreen,
