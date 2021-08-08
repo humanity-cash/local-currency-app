@@ -5,7 +5,6 @@ import "react-native-gesture-handler";
 import { useRouteTracking } from "src/hooks";
 import ConfirmPin from "src/screens/authentication/ConfirmPin";
 import Login from "src/screens/authentication/Login";
-import Dashboard from "src/screens/dashboard/Dashboard";
 import TopUp from "src/screens/onboarding/TopUp";
 import TopUpSuccess from "src/screens/onboarding/TopUpSuccess";
 import AddCashResult from "src/screens/onboarding/AddCashResult";
@@ -78,7 +77,6 @@ function PrimaryStackScreen() {
       <PrimaryStack.Screen name="CreditCard" component={CreditCard} />
       <PrimaryStack.Screen name="ConfirmPin" component={ConfirmPin} />
       <PrimaryStack.Screen name="AddCashResult" component={AddCashResult} />
-      <PrimaryStack.Screen name="Dashboard" component={Dashboard} />
       <PrimaryStack.Screen name="Wallet" component={Wallet} />
       <PrimaryStack.Screen
         name="SettingsTermsAndConditions"

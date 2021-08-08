@@ -1,10 +1,10 @@
 import { useNavigation } from '@react-navigation/native';
 import React, { useState } from 'react';
-import { Keyboard, KeyboardAvoidingView, Platform, StyleSheet, TouchableOpacity, View } from 'react-native';
+import { Keyboard, ScrollView, KeyboardAvoidingView, Platform, StyleSheet, TouchableOpacity, View } from 'react-native';
 import { Text } from 'react-native-elements';
 import { useUserDetails } from "src/hooks";
-import { BackBtn, ConfirmationCode, Header } from "src/shared/uielements";
-import { baseHeader, viewBaseWhite, wrappingContainerBase } from "src/theme/elements";
+import { BackBtn, ConfirmationCode, Header, Button } from "src/shared/uielements";
+import { baseHeader, viewBase, wrappingContainerBase } from "src/theme/elements";
 import { colors } from "src/theme/colors";
 
 type VerificationProps = {
@@ -13,81 +13,89 @@ type VerificationProps = {
 }
 
 const styles = StyleSheet.create({
+    container: {
+        paddingBottom: 40
+    },
     headerText: {
 		fontSize: 32,
         color: colors.darkGreen,
-        lineHeight: 30
+        lineHeight: 32
+	},
+    bodyText: {
+		color: colors.bodyText
 	},
     codeView: {
-        flex: 1
+        flex: 1,
+        marginTop: 25
     },
     bottomNavigation: {
-        justifyContent: "center",
+        alignSelf: "center",
         color: colors.darkGreen,
-        fontWeight: 'bold'
+        fontWeight: 'bold',
+        paddingVertical: 30
     },
     bottomView: {
-        height: 60,
-        justifyContent: "center",
-        alignItems: 'center'
-    }
+		paddingHorizontal: 20,
+        paddingBottom: 50
+	},
 });
 
 const VALID_CODE = '123456';
 
 const VerificationView = (props: VerificationProps) => {
-    const [noCodeReceived, setNoCodeReceived] = useState(false);
-    const { personalDetails: { phoneCountry, phoneNumber } } = useUserDetails();
+    const [noCodeReceived, setNoCodeReceived] = useState<boolean>(false);
+    const [goNext, setGoNext] = useState<boolean>(false);
+    const { personalDetails } = useUserDetails();
 
     const onComplete = (text: string) => {
-        if (text === VALID_CODE) {
-            props.navigation.navigate('Password')
-            return;
-        }
+        setGoNext(true);
     }
 
     return (
-        <View style={viewBaseWhite}>
+        <View style={viewBase}>
             <Header
-                leftComponent={<BackBtn onClick={() => props.navigation.goBack()} color={colors.darkGreen} />}
+                leftComponent={<BackBtn onClick={() => props.navigation.goBack()} />}
             />
 
-            <View style={{ ...wrappingContainerBase, flex: 1 }}>
-                <View style={ { ...baseHeader} }>
-                    {!noCodeReceived && <Text style={styles.headerText}>Verify your mail address</Text>}
-                    {noCodeReceived && <Text style={styles.headerText}>Enter verification code</Text>}
+            <ScrollView style={wrappingContainerBase}>
+                <View style={styles.container}>
+                    <View style={baseHeader}>
+                        {!noCodeReceived && <Text style={styles.headerText}>Verify your mail address</Text>}
+                        {noCodeReceived && <Text style={styles.headerText}>Enter verification code</Text>}
+                    </View>
+                    {!noCodeReceived && (<Text style={styles.bodyText}>We have sent an email with a verification code to {personalDetails.email}</Text>)}
+                    {noCodeReceived && (<Text style={styles.bodyText}>We have sent another message with a new verification code to {personalDetails.email}</Text>)}
+                    <View style={styles.codeView}>
+                        <ConfirmationCode onComplete={onComplete} />
+                    </View>
                 </View>
-                <View style={styles.codeView}>
-                    {!noCodeReceived && (<Text style={{color: colors.darkGreen}}>We have sent an email with a verification code to myname@mail.com</Text>)}
-                    {noCodeReceived && (<Text style={{color: colors.darkGreen}}>We have sent another message with a new verification code to myname@mail.com</Text>)}
-                    <ConfirmationCode onComplete={onComplete} />
-                </View>
-            </View>
-            {!noCodeReceived && (
-                <KeyboardAvoidingView
-                    behavior={Platform.OS == "ios" ? "padding" : "height"}
-                >
-                    <View style={styles.bottomView}>
+            </ScrollView>
+
+            <KeyboardAvoidingView
+                behavior={Platform.OS == "ios" ? "padding" : "height"}
+            >
+                <View style={styles.bottomView}>
+                    {!noCodeReceived && (
                         <TouchableOpacity onPress={() => {
                             setNoCodeReceived(true);
                             Keyboard.dismiss();
                         }}>
                             <Text style={styles.bottomNavigation}>Send code again</Text>
                         </TouchableOpacity>
-                    </View>
-                </KeyboardAvoidingView>
-            )}
-            {noCodeReceived && (
-                <KeyboardAvoidingView
-                    behavior={Platform.OS == "ios" ? "padding" : "height"}
-                >
-                    <View style={styles.bottomView}>
+                    )}
+                    {noCodeReceived && (
                         <TouchableOpacity onPress={() => props.navigation.navigate('VerificationHelp')}>
                             <Text style={styles.bottomNavigation}>Need help?</Text>
                         </TouchableOpacity>
-                    </View>
-                </KeyboardAvoidingView>
-            )}
+                    )}
+                    <Button
+                        type="darkGreen"
+                        title="NEXT"
+                        disabled={!goNext}
+                        onPress={() => props.navigation.navigate("EmailConfirmed")}
+                    />
+                </View>
+            </KeyboardAvoidingView>
         </View>
     );
 }

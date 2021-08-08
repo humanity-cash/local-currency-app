@@ -1,54 +1,64 @@
 import { useIsFocused, useNavigation } from '@react-navigation/native';
 import * as LocalAuthentication from "expo-local-authentication";
 import React, { useEffect, useState } from 'react';
-import { KeyboardAvoidingView, Platform, StyleSheet, View } from 'react-native';
-import { Image, Text } from 'react-native-elements';
+import { ScrollView, KeyboardAvoidingView, Platform, StyleSheet, View } from 'react-native';
+import { Text } from 'react-native-elements';
 import { useUserDetails } from "src/hooks";
-import { Header, PinCode } from "src/shared/uielements";
+import { Header, BackBtn, BlockInput, Button } from "src/shared/uielements";
 import { baseHeader, viewBase, wrappingContainerBase } from "src/theme/elements";
 import ForgotPassword from "./ForgotPassword";
-
+import { colors } from "src/theme/colors";
+import { IMap } from "src/utils/types";
 
 type LoginProps = {
 	navigation?: any,
 	route: any
 }
 
+interface LoginForm extends IMap {
+	password: string
+	email: string
+}
+
 const styles = StyleSheet.create({
-	headerView: {
-		fontFamily: 'IBMPlexSansSemiBold',
-		fontSize: 20,
-		textAlign: "center"
+	headerText: {
+		fontSize: 32,
+		color: colors.darkGreen,
+		lineHeight: 35
 	},
-	codeView: {
-		flex: 1
+	bodyText: {
+		color: colors.bodyText
 	},
-	bottomNavigation: {
-		justifyContent: "center"
+	form: {
+		marginVertical: 30
+	},
+	label: {
+		fontSize: 12,
+		lineHeight: 14,
+		color: colors.bodyText
 	},
 	bottomView: {
-		height: 60,
-		justifyContent: "center",
-		alignItems: 'center'
+		paddingHorizontal: 20,
+    	paddingBottom: 50
 	},
-	image: {
-		alignSelf: "center",
-		width: 180,
-		height: 180,
-	},
-	imageView: {
-		justifyContent: "center",
-		textAlignVertical: "center",
-		flex: 1
-	}
 });
 
+//eslint-disable-next-line
+const strongRegex = new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#\$%\^&\*])(?=.{8,})");
+
 const LoginView = (props: LoginProps) => {
-	const { personalDetails: { firstname }, authorization: { pin, touchID } } = useUserDetails();
-	const [autoFocus, setAutoFocus] = useState<boolean>(true);
-	const [pinMatch, setPinMatch] = useState(true);
-	const [pinValue, setPinValue] = useState("");
+	const { authorization: { touchID } } = useUserDetails();
 	const isFocused = useIsFocused();
+	const [autoFocus, setAutoFocus] = useState<boolean>(true);
+	const [goNext, setGoNext] = useState<boolean>(true);
+	const [state, setState] = useState<LoginForm>({
+		email: "",
+		password: ""
+	})
+	
+	useEffect(() => {
+		setGoNext(Object.keys(state).every((key) => state[key] !== "") && strongRegex.test(state.password));
+	},[state]);
 
 	useEffect(() => {
 		async function askFingerprint() {
@@ -58,54 +68,62 @@ const LoginView = (props: LoginProps) => {
 					cancelLabel: 'Close'
 				});
 				setAutoFocus(false);
-				props.navigation.navigate('Tabs');
 			}
 		}
 		askFingerprint();
 
 		setAutoFocus(isFocused);
-		setPinValue(isFocused ? pinValue : '');
 	}, [isFocused, touchID]);
+
+	const onValueChange = (name: any, change: any) => {
+		setState({
+			...state,
+			[name]: change
+		});
+	};
 
 	return (
 		<View style={viewBase}>
-			<Header />
+			<Header
+				leftComponent={<BackBtn onClick={() => props.navigation.goBack()} />}
+			/>
 
-			<View style={{ ...wrappingContainerBase, flex: 1 }}>
-				<View style={ { ...baseHeader, marginBottom: 0 } }>
-					{pinMatch && (<Text style={styles.headerView}>Hi {firstname}, enter your passcode</Text>)}
-					{!pinMatch && (<Text style={styles.headerView}>Hmm wrong passcode... try again</Text>)}
+			<ScrollView style={wrappingContainerBase}>
+				<View style={baseHeader}>
+					<Text style={styles.headerText}>Log in</Text>
 				</View>
-				<View style={styles.codeView}>
-					<PinCode
-						value={pinValue}
-						onChange={setPinValue}
-						autoFocus={autoFocus}
-						length={6}
-						onComplete={(receivedPin) => {
-							setPinValue('');
-							if (pin === receivedPin) {
-								setAutoFocus(false);
-								props.navigation.navigate('Tabs');
-								setPinMatch(true);
-								return;
-							}
-							setPinMatch(false);
-						}}
+				<Text style={styles.bodyText}>Welcome back</Text>
+				<View style={styles.form}>
+					<Text style={styles.label}>Email address or user name</Text>
+					<BlockInput
+						name="email"
+						placeholder="Email"
+						value={state.email}
+						onChange={onValueChange}
+					/>
+					<Text style={styles.label}>Password</Text>
+					<BlockInput
+						name="password"
+						placeholder="Password"
+						value={state.password}
+						secureTextEntry={true}
+						onChange={onValueChange}
 					/>
 				</View>
-				<View style={styles.imageView}>
-					<Image
-						source={require('../../../assets/images/teaser.png')}
-						containerStyle={styles.image}
-					/>
-				</View>
-			</View>
+			</ScrollView>
 
 			<KeyboardAvoidingView
 				behavior={Platform.OS == "ios" ? "padding" : "height"}
 			>
-				<ForgotPassword />
+				<View style={styles.bottomView}>
+					<ForgotPassword />
+					<Button
+						type="darkGreen"
+						title="Log in"
+						disabled={!goNext}
+						onPress={() => props.navigation.navigate("SelectAccountType")}
+					/>
+				</View>
 			</KeyboardAvoidingView>
 		</View>
 	);

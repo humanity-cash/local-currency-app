@@ -10,7 +10,6 @@ const defaultState: OnboardingState = {
 		countryOfResidence: 'swiss',
 		username: '',
 		avatar: '',
-		story: '',
 		phoneCountry: '+41',
 		password: '',
 		firstname: '',

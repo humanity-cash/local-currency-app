@@ -2,14 +2,10 @@ import { useNavigation } from "@react-navigation/native";
 import React, { useState } from "react";
 import { ScrollView, View, StyleSheet } from "react-native";
 import { Text } from "react-native-elements";
-import { useUserDetails } from "src/hooks";
 import Button from "src/shared/uielements/Button";
 import { BackBtn, CancelBtn } from "src/shared/uielements/header";
 import Header from "src/shared/uielements/header/Header";
-import {
-    viewBaseWhite,
-    wrappingContainerBase
-} from "src/theme/elements";
+import { underlineHeader, viewBaseWhite, wrappingContainerBase } from "src/theme/elements";
 import { colors } from "src/theme/colors";
 
 type SelectAccountTypeProps = {
@@ -18,10 +14,13 @@ type SelectAccountTypeProps = {
 };
 
 const styles = StyleSheet.create({
-	headerView: {
-		fontFamily: 'IBMPlexSansSemiBold',
-		fontSize: 20,
-		color: colors.darkRed
+	headerText: {
+		fontSize: 32,
+		color: colors.darkGreen,
+		lineHeight: 35
+	},
+	bodyText: {
+		color: colors.bodyText
 	},
 	accountType: {
 		backgroundColor: colors.white,
@@ -29,47 +28,39 @@ const styles = StyleSheet.create({
 		flex: 1,
 		width: '100%',
 		padding: 20
+	},
+	button: {
+		borderWidth: 1,
+		marginTop: 20
 	}
 });
 
 const SelectAccountTypeView = (props: SelectAccountTypeProps) => {
-  const { personalDetails, updatePersonalDetails } = useUserDetails();
-  const [isSelected, setSelection] = useState(false);
   
   return (
     <View style={viewBaseWhite}>
-      <Header
-        leftComponent={<BackBtn onClick={() => props.navigation.goBack()} color={colors.darkRed} />}
-        rightComponent={<CancelBtn text="Close" onClick={() => props.navigation.navigate('Tabs')} />}
-      />
+		<Header
+			rightComponent={<CancelBtn text="Close" onClick={() => props.navigation.navigate('Teaser')} />}
+		/>
 
-      <ScrollView style={{ ...wrappingContainerBase }}>
-				<View style={ {marginBottom: 0 } }>
-					<Text h1 style={styles.headerView}>Welcome,</Text>
-				</View>
-				<View
-					style={{
-					borderTopColor: colors.darkRed,
-					borderTopWidth: 1,
-					marginTop: 30
-					}}>
-						<Text style={{color: colors.darkRed}}>Select the portfolio you'd like to create. If you're business owner, you can automatically set up a personal profile.</Text>
-				</View>
-				<View style={styles.accountType}>
-					<Button 
-						type="darkRed" 
-						onPress={() => props.navigation.navigate("PersonalProfile")} 
-						title="Personal" 
-						style={{backgroundColor: colors.azure}}
-						textStyle={{color: colors.darkRed}}/>
-					<Button 
-						type="darkRed" 
-						onPress={() => props.navigation.navigate("PersonalProfile")} 
-						title="Business and personal" 
-						style={{backgroundColor: colors.azure, marginTop: 20}}
-						textStyle={{color: colors.darkRed}}/>
-				</View>
-			</ScrollView>
+      	<ScrollView style={wrappingContainerBase}>
+		  	<View style={underlineHeader}>
+				<Text h1 style={styles.headerText}>Hi</Text>
+			</View>
+			<Text style={styles.bodyText}>Select the profile you’d like to create. If you’re a business owner, you can automatically set up a personal profile.</Text>
+			<View style={styles.accountType}>
+				<Button 
+					type="transparent" 
+					onPress={() => props.navigation.navigate("PersonalProfile")} 
+					title="Personal"
+					style={styles.button} />
+				<Button 
+					type="transparent" 
+					onPress={() => props.navigation.navigate("PersonalProfile")} 
+					title="Business and personal" 
+					style={styles.button}/>
+			</View>
+		</ScrollView>
     </View>
   );
 };
