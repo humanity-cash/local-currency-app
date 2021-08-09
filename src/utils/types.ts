@@ -23,7 +23,6 @@ export type PersonalDetails = {
   avatar: string;
   username: string;
   phoneCountry: string;
-  story: string;
   password: string;
   firstname: string;
   lastname: string;

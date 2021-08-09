@@ -1,16 +1,23 @@
 import { useNavigation } from '@react-navigation/native';
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
-import { Image, Text } from 'react-native-elements';
+import { Text } from 'react-native-elements';
 import { BackBtn, Header } from "src/shared/uielements";
 import { baseHeader, viewBase, wrappingContainerBase } from "src/theme/elements";
+import { colors } from "src/theme/colors";
 
 type VerificationHelpProps = {
 	navigation?: any
 }
 
 const styles = StyleSheet.create({
-	codeView: {
+	headerText: {
+		fontSize: 32,
+		color: colors.darkGreen,
+		lineHeight: 35
+	},
+	bodyText: {
+		color: colors.bodyText
 	},
 	bottomNavigation: {
 		justifyContent: "center"
@@ -41,18 +48,10 @@ const VerificationHelpView = (props: VerificationHelpProps) => {
 
 			<View style={wrappingContainerBase}>
 				<View style={ baseHeader }>
-					<Text h1>Need help?</Text>
+					<Text style={styles.headerText}>Need help?</Text>
 				</View>
-				<View style={styles.codeView}>
-					<Text>If you need help, have questions,</Text>
-					<Text>complaints, remarks, or just like to chat, Please send an email to sven@date.com or </Text>
-					<Text>call +41 12 34 56 78.</Text>
-				</View>
-				<View style={styles.imageView}>
-					<Image
-						source={require('../../../assets/images/needhelp.png')}
-						containerStyle={styles.image}
-					/>
+				<View>
+					<Text style={styles.bodyText}>If you need help, have questions, complaints, remarks, or just like to chat, please send an email to berkshares@humanitycash.com </Text>
 				</View>
 			</View>
 		</View>
