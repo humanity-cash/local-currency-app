@@ -15,6 +15,37 @@ type ConfirmationCodeState = {
 
 const CODE_LENGTH = 6;
 
+const styles = StyleSheet.create({
+	container: {
+		width: '100%',
+		flexDirection: 'row',
+		marginTop: 20,
+		justifyContent: "center",
+		alignItems: "center"
+	},
+	codeInput: {
+		textAlign: 'center',
+		padding: 0,
+		width: 50,
+		height: 55,
+		fontSize: 32,
+		backgroundColor: colors.inputBg,
+		borderWidth: 0,
+		borderRadius: 3,
+		color: colors.darkGreen,
+		margin: 2
+	},
+	dividingLine: {
+		textAlign: 'center',
+		height: 60,
+		lineHeight: 60,
+		fontSize: 40,
+		justifyContent: "center",
+		alignItems: "center",
+		paddingHorizontal: 10
+	}
+});
+
 class ConfirmationCode extends React.Component<ConfirmationCodeProps, ConfirmationCodeState> {
 	inputRefs: any[];
 
@@ -135,34 +166,5 @@ class ConfirmationCode extends React.Component<ConfirmationCodeProps, Confirmati
 		)
 	}
 };
-
-const styles = StyleSheet.create({
-	container: {
-		width: '100%',
-		flexDirection: 'row',
-		marginTop: 20,
-		justifyContent: "center",
-		alignItems: "center"
-	},
-	codeInput: {
-		textAlign: 'center',
-		padding: 0,
-		width: 44,
-		height: 60,
-		fontSize: 40,
-		backgroundColor: colors.azure,
-		borderWidth: 0,
-		color: colors.text,
-		margin: 2
-	},
-	dividingLine: {
-		textAlign: 'center',
-		height: 60,
-		lineHeight: 60,
-		fontSize: 40,
-		justifyContent: "center",
-		alignItems: "center"
-	}
-});
 
 export default ConfirmationCode;

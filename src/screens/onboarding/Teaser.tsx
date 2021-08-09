@@ -13,61 +13,53 @@ type TeaserProps = {
 }
 
 const styles = StyleSheet.create({
-	headerText: {
-		fontSize: 12,
-		fontWeight: "bold",
-	},
 	content: {
-		justifyContent: "center",
-		textAlignVertical: "center",
-		height: '80%'
+		flex: 1,
+		flexDirection: 'column'
 	},
 	image: {
 		flex: 1,
-		padding: 20,
+		resizeMode: 'cover',
+		justifyContent: 'center'
 	},
 	bottomView: {
 		position: "absolute",
 		left: 0,
 		bottom: 0,
 		width: '100%',
-		height: '20%',
-		padding: 20,
-		backgroundColor: '#fff',
+		height: 170,
+		padding: 20
 	},
+	createAccountBtn: {
+		marginTop: 10,
+		backgroundColor: '#fff'
+	}
 });
 
 const TeaserView = (props: TeaserProps) => {
 	const { loggedIn } = useUserDetails();
 	return (
 		<View style={ viewBase }>
-			<View style={styles.content}>
-				<ImageBackground
-					source={require('../../../assets/images/splash1.png')}
-					resizeMode="cover" 
-					style={styles.image}>
+			<ImageBackground
+				source={require('../../../assets/images/splash1.png')}
+				resizeMode="cover" 
+				style={styles.image}>
 
-					<Text style={styles.headerText}>B$ BERKSHARES</Text>
-				</ImageBackground>
-			</View>
-			<View style={styles.bottomView}>
-				{!loggedIn && (
+				<View style={styles.bottomView}>
 					<Button
-						type="darkRed"
+						type="darkGreen"
 						title="Log In"
 						onPress={() => props.navigation.navigate('Login')}
 					/>
-				)}
-				{!loggedIn && (
 					<Button
 						type="darkRed"
-						title="CREATE YOUR ACCOUNT"
+						title="Create an account"
 						onPress={() => props.navigation.navigate('CreateAccount')}
-						style={{backgroundColor: 'transparent'}}
-						textStyle={{color: colors.darkRed}}
+						style={styles.createAccountBtn}
+						textStyle={{color: colors.darkGreen}}
 					/>
-				)}
-			</View>
+				</View>
+			</ImageBackground>
 		</View>
 	);
 }
