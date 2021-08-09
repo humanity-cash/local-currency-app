@@ -5,7 +5,6 @@ import { colors } from "src/theme/colors";
 type BlockInputProps = {
 	onChange: any
 	name?: string
-	secureTextEntry?: boolean,
 	placeholder?: string,
 	placeholderTextColor?: any,
 	value: any,
