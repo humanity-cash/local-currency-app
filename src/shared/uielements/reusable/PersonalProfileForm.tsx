@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { View, Image, TouchableOpacity, Platform } from "react-native";
-import { Text } from "react-native-elements";
-import { TextInput, StyleSheet } from 'react-native';
+import { View, TouchableOpacity, Platform, StyleSheet } from "react-native";
+import { Text, Image } from "react-native-elements";
 import * as ImagePicker from 'expo-image-picker';
 import { useUserDetails } from "src/hooks";
 import { colors } from "src/theme/colors";
@@ -12,7 +11,6 @@ import BlockInput from "../BlockInput";
 interface PersonalProfileState extends IMap {
   avatar: string;
   username: string;
-  story: string;
 }
 
 interface PersonalProfileProps {
@@ -21,6 +19,25 @@ interface PersonalProfileProps {
 }
 
 const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    paddingBottom: 40
+  },
+  bodyText: {
+		color: colors.bodyText
+	},
+  pickImageView: {
+    paddingTop: 50,
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  label: {
+    color: colors.bodyText
+  },
+  smallLabel: {
+    color: colors.bodyText,
+    fontSize: 10
+  },
   storyText: {
     fontSize: 16,
     backgroundColor: colors.azure,
@@ -33,22 +50,23 @@ const styles = StyleSheet.create({
   },
   imageView: {
     width: 80, 
-    height: 80, 
-    backgroundColor: colors.darkRed,
-    borderRadius: 40
+    height: 80,
+    borderRadius: 40,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  image: {
+    width: 25,
+    height: 20
   }
 });
 
 const PersonalProfileForm = (props: PersonalProfileProps) => {
   const { personalDetails, updatePersonalDetails } = useUserDetails();
-  const [
-    validationErrors,
-    setValidationErrors,
-  ] = useState<PersonalDetailsErrors>({});
+  const [validationErrors, setValidationErrors] = useState<PersonalDetailsErrors>({});
   const [state, setState] = useState<PersonalProfileState>({
     avatar: "",
-    username: "",
-    story: "",
+    username: ""
   });
   const { showValidation } = props;
 
@@ -75,8 +93,7 @@ const PersonalProfileForm = (props: PersonalProfileProps) => {
   useEffect(() => {
     setState({
       avatar: personalDetails.avatar,
-      username: personalDetails.username,
-      story: personalDetails.story,
+      username: personalDetails.username
     });
   }, [personalDetails]);
 
@@ -102,44 +119,29 @@ const PersonalProfileForm = (props: PersonalProfileProps) => {
 	};
 
   return (
-    <View>
-      <View
-        style={{
-        borderTopColor: colors.darkRed,
-        borderTopWidth: 1,
-        marginBottom: 20
-        }}>
-          <Text h3 style={{color: colors.darkRed}}>*REQUIRED FIELDS</Text>
-      </View>
-      <View style={{alignSelf: "center"}}>
+    <View style={styles.container}>
+      <Text style={styles.bodyText}>*Required fields</Text>
+      <View style={styles.pickImageView}>
         <TouchableOpacity onPress={pickImage}>
-          {state.avatar != '' && <View style={styles.imageView} />}
-          {state.avatar == '' && <Image source={{ uri: state.avatar }} style={styles.imageView} />}
+          {state.avatar === '' && 
+            <View style={styles.imageView}>
+              <Image 
+                source={require('../../../../assets/images/camera.png')}
+                containerStyle={styles.image} 
+              />
+            </View>
+          }
+          {state.avatar !== '' && <Image source={{ uri: state.avatar }} style={styles.imageView} />}
         </TouchableOpacity>
+        <Text style={styles.label}>UPLOAD PROFILE PICTURE</Text>
+        <Text style={styles.smallLabel}>(Max 200 MB / .jpeg, .jpg, .png)</Text>
       </View>
-      <Text h3 style={{color: colors.darkRed, textAlign: "center", marginTop: 10}}>UPLOAD PROFILE PICTURE</Text>
-      <Text h3 style={{color: colors.darkRed, textAlign: "center", marginBottom: 10}}>(JPG, JPEG, PNG)</Text>
-      <Text h3>USER HANDLE*</Text>
-      {showValidation && validationErrors.username && (
-        <Text h3 style={{ marginTop: 5, color: colors.textError }}>
-          {validationErrors.username}
-        </Text>
-      )}
+      <Text style={styles.smallLabel}>USER NAME*</Text>
       <BlockInput
         name="username"
         placeholder="@username"
         value={state.username}
         onChange={onValueChange}
-        style={{backgroundColor: colors.azure}}
-      />
-      <Text h3>TELL US YOUR STORY (50 WORDS MAX)</Text>
-      <TextInput
-        multiline={true}
-        numberOfLines={5}
-        placeholder=":)"
-        value={state.story}
-        onChangeText={newValue => onValueChange("story", newValue)}
-        style={styles.storyText}
       />
     </View>
   );
