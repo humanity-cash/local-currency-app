@@ -17,10 +17,10 @@ type BlockInputProps = {
 
 const styles = StyleSheet.create({
 	container: {
-		height: 60,
+		height: 55,
 		fontSize: 16,
 		backgroundColor: colors.inputBg,
-		borderRadius: 2,
+		borderRadius: 3,
 		paddingHorizontal: 15,
 		paddingVertical: 8,
 		marginVertical: 8,

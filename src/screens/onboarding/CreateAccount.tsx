@@ -3,23 +3,13 @@ import React, { useEffect, useState } from "react";
 import { KeyboardAvoidingView, Platform, ScrollView, View, StyleSheet } from "react-native";
 import { Text, CheckBox } from "react-native-elements";
 import { useUserDetails } from "src/hooks";
-import countries from "src/mocks/countries";
-import phoneCountries from "src/mocks/phoneCountries";
 import BlockInput from "src/shared/uielements/BlockInput";
 import Button from "src/shared/uielements/Button";
 import BackBtn from "src/shared/uielements/header/BackBtn";
 import Header from "src/shared/uielements/header/Header";
-import SelectModal, { SelectionProps } from "src/shared/uielements/SelectModal";
-import {
-    baseHeader,
-    viewBaseWhite,
-    wrappingContainerBase
-} from "src/theme/elements";
+import { baseHeader, viewBase, wrappingContainerBase } from "src/theme/elements";
 import { IMap } from "src/utils/types";
 import { colors } from "src/theme/colors";
-
-const MAIN_COUNTRY = "swiss";
-const MAIN_PHONE_COUNTRY = "+41";
 
 interface CreateAccountState extends IMap {
   email: string;
@@ -31,20 +21,36 @@ type CreateAccountProps = {
 };
 
 const styles = StyleSheet.create({
+  container: {
+    paddingBottom: 40
+  },
 	headerText: {
 		fontSize: 32,
-    color: colors.darkRed,
-    lineHeight: 30
+    color: colors.darkGreen,
+    lineHeight: 35
 	},
-  bottomView: {
-		padding: 20,
-	},
-  checkbox: {
-    alignSelf: "center",
-    color: colors.darkRed,
-    marginLeft: 10,
-    marginRight: 10
+  bodyText: {
+    color: colors.bodyText
   },
+  form: {
+    marginTop: 30
+  },
+  label: {
+    fontSize: 10
+  },
+  bottomView: {
+		paddingHorizontal: 20,
+    paddingBottom: 50
+	},
+  checkboxView: {
+    fontWeight: '400',
+    color: colors.darkGreen, 
+    fontSize: 14
+  },
+  checkboxContainer: {
+    borderWidth: 0, 
+    backgroundColor: 'transparent'
+  }
 });
 
 const CreateAccountView = (props: CreateAccountProps) => {
@@ -59,12 +65,6 @@ const CreateAccountView = (props: CreateAccountProps) => {
     setGoNext(Object.keys(state).every((key) => state[key] !== "") && isSelected);
   }, [state, isSelected]);
 
-  // useEffect(() => {
-  //   setState({
-  //     email: personalDetails.username,
-  //   });
-  // }, [personalDetails]);
-
   const onValueChange = (name: any, change: any) => {
     setState({
       ...state,
@@ -74,32 +74,25 @@ const CreateAccountView = (props: CreateAccountProps) => {
   };
 
   return (
-    <View style={viewBaseWhite}>
+    <View style={viewBase}>
       <Header
-        leftComponent={<BackBtn onClick={() => props.navigation.goBack()} color={colors.darkRed} />}
+        leftComponent={<BackBtn onClick={() => props.navigation.goBack()} />}
       />
 
       <ScrollView style={wrappingContainerBase}>
-        <View style={{ paddingBottom: 40 }}>
+        <View style={ styles.container }>
           <View style={baseHeader}>
             <Text style={styles.headerText}>Create account</Text>
           </View>
-          <View
-            style={{
-              borderBottomColor: colors.darkRed,
-              borderBottomWidth: 1,
-            }}
-          />
-          <View>
-            <Text style={{color: colors.darkRed}}>Hello! Tell us how to reach you. We will send a Verification code to your email.</Text>
-            <Text style={{color: colors.darkRed, fontSize: 14, fontWeight: '400', marginTop: 40}}>Email Address</Text>
+          <Text style={styles.bodyText}>Hello! Tell us how to reach you. We will send a Verification code to your email.</Text>
+          <View style={styles.form}>
+            <Text style={styles.label}>Email Address</Text>
             <BlockInput
               name="email"
               placeholder="myname@mail.com"
               value={state.email}
               onChange={onValueChange}
-              style={{backgroundColor: colors.azure}}
-              placeholderTextColor={colors.darkRed}
+              placeholderTextColor={colors.lightGreen}
             />
           </View>
         </View>
@@ -110,13 +103,13 @@ const CreateAccountView = (props: CreateAccountProps) => {
         <View style={styles.bottomView}>
           <CheckBox
             checked={isSelected}
-            title="I'VE READ AND ACCEPT THE TERMS & CONDITIONS AND PRIVACY POLICY"
-            textStyle={{color: colors.darkRed, fontSize: 14, fontWeight: '400'}}
-            containerStyle={{borderWidth: 0, backgroundColor: 'none'}}
+            title="I've read and accept the Terms & Conditions and Privacy Policy"
+            textStyle={styles.checkboxView}
+            containerStyle={styles.checkboxContainer}
             onPress={()=>setSelection(!isSelected)}
           />
           <Button
-            type="darkRed"
+            type="darkGreen"
             title="NEXT"
             disabled={!goNext}
             onPress={() => props.navigation.navigate("Verification")}
