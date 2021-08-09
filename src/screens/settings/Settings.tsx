@@ -1,10 +1,10 @@
 import { useNavigation } from '@react-navigation/native';
-import React from 'react';
+import React, { useState } from 'react';
 import { ScrollView, StyleSheet, View } from "react-native";
 import { Text } from "react-native-elements";
-import { Button, Header, BackBtn } from "src/shared/uielements";
+import { Button, Header, BackBtn, Dialog } from "src/shared/uielements";
 import { colors } from "src/theme/colors";
-import { underlineHeader, viewBase } from "src/theme/elements";
+import { underlineHeader, viewBase, dialogViewBase } from "src/theme/elements";
 
 const styles = StyleSheet.create({
 	headerText: {
@@ -33,11 +33,32 @@ const styles = StyleSheet.create({
 	signOutButton: {
 		fontFamily: 'IBMPlexSansSemiBold',
 		color: colors.darkRed
+	},
+	dialogWrap: {
+		paddingHorizontal: 10,
+		height: "100%",
+		flex: 1,
+	},
+	dialogHeader: {
+		fontSize: 30,
+		lineHeight: 35,
+		marginTop: 20,
+		marginBottom: 10,
+	},
+	dialogBottom: {
+		marginTop: 20,
 	}
 });
 
 export const Settings = () => {
 	const navigation = useNavigation();
+
+	const [isVisible, setIsVisible] = useState<boolean>(false);
+
+	const handleDelete = () => {
+		setIsVisible(false);
+		navigation.navigate("SettingsDeleteAccount");
+	}
 	
 	return (
 		<View style={viewBase}>
@@ -59,13 +80,13 @@ export const Settings = () => {
 						type="transparent"
 						title="Bank account"
 						style={styles.settingItem}
-						onPress={()=>navigation.navigate("SettingsPersonalProfile")}
+						onPress={()=>navigation.navigate("SettingsBankAccount")}
 					/>
 					<Button
 						type="transparent"
 						title="Security"
 						style={styles.settingItem}
-						onPress={()=>navigation.navigate("SettingsPersonalProfile")}
+						onPress={()=>navigation.navigate("SettingsSecurity")}
 					/>
 					<Button
 						type="transparent"
@@ -80,9 +101,25 @@ export const Settings = () => {
 					type="transparent"
 					title="Delete account"
 					textStyle={styles.signOutButton}
-					onPress={()=>navigation.navigate("SettingsPersonalProfile")}
+					onPress={()=>setIsVisible(true)}
 				/>
 			</View>
+			{isVisible && (
+				<Dialog visible={isVisible} onClose={()=>setIsVisible(false)}>
+					<View style={dialogViewBase}>
+						<View style={styles.dialogWrap}>
+							<Text style={styles.dialogHeader}>Are you sure you want to delete your account?</Text>
+						</View>
+						<View style={styles.dialogBottom}>
+							<Button
+								type="darkGreen"
+								title="Delete account"
+								onPress={handleDelete}
+							/>
+						</View>
+					</View>
+				</Dialog>
+			)}
 		</View>
 	);
 }

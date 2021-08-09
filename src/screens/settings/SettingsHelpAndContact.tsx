@@ -16,7 +16,8 @@ const styles = StyleSheet.create({
 	},
 	container: {
 		flex: 1, 
-		padding: 10
+		paddingHorizontal: 10,
+		marginBottom: 80
 	},
 	section: {
 		fontSize: 16,

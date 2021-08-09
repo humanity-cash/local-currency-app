@@ -26,4 +26,5 @@ export const colors: any = {
 	lightGreen: '#B2C1B8',
 	lightGreen1: '#DCE3DD',
 	bodyText: "#2E2E2E",
+	card: "#E6EBE5"
 }

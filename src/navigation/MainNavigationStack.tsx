@@ -29,9 +29,11 @@ import TermsEmail from "src/screens/onboarding/TermsEmail";
 import Verification from "src/screens/onboarding/Verification";
 import VerificationHelp from "src/screens/onboarding/VerificationHelp";
 import { Settings } from "src/screens/settings/Settings";
-import SettingsAccountDetails from "src/screens/settings/SettingsAccountDetails";
+import SettingsSecurity from "src/screens/settings/SettingsSecurity";
 import SettingsPersonalProfile from "src/screens/settings/SettingsPersonalProfile";
 import SettingsTermsAndConditions from "src/screens/settings/SettingsTermsAndConditions";
+import SettingsBankAccount from "src/screens/settings/SettingsBankAccount";
+import SettingsDeleteAccount from "src/screens/settings/SettingsDeleteAccount";
 import Wallet from "src/screens/wallet/Wallet";
 import SelectAccountType from "src/screens/onboarding/SelectAccountType";
 import LinkBankAccount from "src/screens/onboarding/LinkBankAccount";
@@ -80,19 +82,12 @@ function PrimaryStackScreen() {
       <PrimaryStack.Screen name="AddCashResult" component={AddCashResult} />
       <PrimaryStack.Screen name="Dashboard" component={Dashboard} />
       <PrimaryStack.Screen name="Wallet" component={Wallet} />
-      <PrimaryStack.Screen
-        name="SettingsTermsAndConditions"
-        component={SettingsTermsAndConditions}
-      />
+      <PrimaryStack.Screen name="SettingsTermsAndConditions" component={SettingsTermsAndConditions} />
       <PrimaryStack.Screen name="Settings" component={Settings} />
-      <PrimaryStack.Screen
-        name="SettingsPersonalProfile"
-        component={SettingsPersonalProfile}
-      />
-      <PrimaryStack.Screen
-        name="SettingsAccountDetails"
-        component={SettingsAccountDetails}
-      />
+      <PrimaryStack.Screen name="SettingsPersonalProfile" component={SettingsPersonalProfile} />
+      <PrimaryStack.Screen name="SettingsSecurity" component={SettingsSecurity} />
+      <PrimaryStack.Screen name="SettingsBankAccount" component={SettingsBankAccount} />
+      <PrimaryStack.Screen name="SettingsDeleteAccount" component={SettingsDeleteAccount} />
       <PrimaryStack.Screen name="SelectAccountType" component={SelectAccountType} />
       <PrimaryStack.Screen name="LinkBankAccount" component={LinkBankAccount} />
       <PrimaryStack.Screen name="SelectBank" component={SelectBank} />

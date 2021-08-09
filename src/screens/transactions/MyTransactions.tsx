@@ -85,7 +85,7 @@ const TransactionDetail = (props: TransactionDetailProps) => {
 	const {data, visible, onConfirm, onReturn} = props;
 
 	return (
-		<Dialog visible={visible}>
+		<Dialog visible={visible} onClose={onReturn}>
 			<View style={dialogViewBase}>
 				<ScrollView style={wrappingContainerBase}>
 					<View style={ baseHeader }>
