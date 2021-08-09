@@ -49,20 +49,19 @@ const styles = StyleSheet.create({
 		padding: 20,
 		paddingBottom: 45
 	},
-	modalWrap: {
+	dialogWrap: {
 		paddingHorizontal: 10,
 		height: "100%",
 		flex: 1,
 	},
-	modalHeader: {
-		fontFamily: "IBMPlexSansSemiBold",
+	dialogHeader: {
 		fontSize: 30,
-		lineHeight: 35,
+		lineHeight: 32,
 		marginTop: 20,
 		marginBottom: 10,
 	},
-	modalBottom: {
-		marginTop: 20,
+	dialogBottom: {
+		paddingTop: 20,
 	}
 });
 
@@ -74,7 +73,7 @@ const CashoutAmount = (props: CashoutAmountProps) => {
 	});
 	const [goNext, setGoNext] = useState(false);
 	const [cashout, setCashout] = useState(false);
-	const [visible, setVisible] = useState(false);
+	const [isVisible, setIsVisible] = useState(false);
 	const { setDialogStatus } = useDialogStatus();
 
 	useEffect(() => {
@@ -90,17 +89,17 @@ const CashoutAmount = (props: CashoutAmountProps) => {
 	};
 
 	const viewConfirm = () => {
-		setVisible(true);
+		setIsVisible(true);
 		setCashout(false);
 	}
 
 	const doCashout = () => {
-		setVisible(false);
+		setIsVisible(false);
 		setCashout(true);
 	}
 
 	const onCashoutClose = () => {
-		setVisible(false);
+		setIsVisible(false);
 		setCashout(false);
 	}
 
@@ -151,14 +150,14 @@ const CashoutAmount = (props: CashoutAmountProps) => {
 				</View>
 			</KeyboardAvoidingView>
 
-			{ visible && (
-				<Dialog visible={visible}>
+			{ isVisible && (
+				<Dialog visible={isVisible} onClose={()=>setIsVisible(false)}>
 					<View style={dialogViewBase}>
-						<View style={styles.modalWrap}>
-							<Text style={styles.modalHeader}>Are you sure you want to cash out?</Text>
+						<View style={styles.dialogWrap}>
+							<Text style={styles.dialogHeader}>Are you sure you want to cash out?</Text>
 							<Text>You will redeem 100 BerkShares for USD$ 98,50 after a 1,5% fee.</Text>
 						</View>
-						<View style={styles.modalBottom}>
+						<View style={styles.dialogBottom}>
 							<Button
 								type="darkGreen"
 								title="Cash out to USD$"

@@ -25,14 +25,18 @@ const styles = StyleSheet.create({
 	},
 	closeBtn: {
 		position: 'absolute',
-		top: 60,
-		right: 20,
-		zIndex: 999
+		top: 10,
+		right: 20
+	},
+	container: {
+		flex: 1,
+		justifyContent: 'center',
+		alignItems: 'center'
 	},
 	dialogWrap: {
-		position: "absolute",
 		width: '85%',
 		minHeight: 300,
+		alignSelf: 'center',
 		borderRadius: 20,
 		backgroundColor: colors.background,
 		shadowColor: colors.black,
@@ -46,36 +50,40 @@ const styles = StyleSheet.create({
 		alignItems: 'center',
 	},
 	dialogView: {
+		width: '100%',
+		height: '100%',
 		flex: 1,
 		overflow: "hidden",
 		borderRadius: 20,
 	},
 });
 
-const Dialog = ({visible = false, style = {}, children, onShow, onClose }: DialogProps) => {
+const Dialog = ({visible = false, onClose, style = {}, children, onShow }: DialogProps) => {
 
 	return (
-		<View style={styles.dialogBg}>
-			<View style={styles.closeBtn}>
-				<CancelBtn text="Close" color={colors.white} onClick={() => onClose && onClose()} />
-			</View>
-			<Overlay
-				isVisible={visible}
-				overlayStyle={{
+		<Overlay
+			isVisible={visible}
+			overlayStyle={styles.dialogBg}
+			backdropStyle={{
+				backgroundColor: 'transparent'
+			}}
+			animationType="slide"
+			onShow={() => onShow && onShow()}
+		>
+			<View style={styles.container}>
+				<View style={styles.closeBtn}>
+					<CancelBtn text="Close" color={colors.white} onClick={() => onClose && onClose()} />
+				</View>
+				<View style={{
 					...styles.dialogWrap,
 					...style
-				}}
-				backdropStyle={{
-					backgroundColor: 'transparent'
-				}}
-				animationType="slide"
-				onShow={() => onShow && onShow()}
-			>
-				<View style={styles.dialogView}>
-					{children}
+				}}>
+					<View style={styles.dialogView}>
+						{children}
+					</View>
 				</View>
-			</Overlay>
-		</View>
+			</View>
+		</Overlay>
 	);
 }
 

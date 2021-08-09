@@ -77,9 +77,9 @@ type PaymentConfirmProps = {
 const PaymentConfirm = (props: PaymentConfirmProps) => {
 
 	return (
-		<Dialog visible={props.visible}>
+		<Dialog visible={props.visible} onClose={()=>props.onConfirm()}>
 			<View style={dialogViewBase}>
-				<ScrollView style={wrappingContainerBase}>
+				<View style={wrappingContainerBase}>
 					<View style={ baseHeader }>
 						<Text h1 style={styles.headerText}> B$ { props.amount } </Text>
 					</View>
@@ -97,7 +97,7 @@ const PaymentConfirm = (props: PaymentConfirmProps) => {
 							<Text style={{...styles.detailText, fontWeight: 'bold'}}>4:22, JUN 17, 2021</Text>
 						</View>
 					</View>
-				</ScrollView>
+				</View>
 				<View style={styles.dialogFooter}>
 					<Button
 						type="darkGreen"
@@ -120,7 +120,7 @@ type FeeConfirmProps = {
 const FeeConfirm = (props: FeeConfirmProps) => {
 
 	return (
-		<Dialog visible={props.visible}>
+		<Dialog visible={props.visible} onClose={() => props.onCancel()}>
 			<View style={dialogViewBase }>
 				<ScrollView style={wrappingContainerBase}>
 					<View style={ baseHeader }>
@@ -235,7 +235,6 @@ const QRCodeScan = (props: QRCodeScanProps) => {
 					/>
 				</View>
 			</View>
-			<View style={styles.bottomView}></View>
 			{ isPaymentDialogOpen && <PaymentConfirm visible={isPaymentDialogOpen} amount={14.34} onConfirm={onPayConfirm} /> }
 			{ isFeeDialogOpen && <FeeConfirm visible={isFeeDialogOpen} amount={0.66} onConfirm={onFeeConfirm} onCancel={onCancle} /> }
 		</View>
