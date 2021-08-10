@@ -45,6 +45,9 @@ import QRCodeScan from "src/screens/payment/QRCodeScan";
 import PaymentPending from "src/screens/payment/PaymentPending";
 import PaymentSuccess from "src/screens/payment/PaymentSuccess";
 import Request from "src/screens/payment/Request";
+// import BusinessProfile from "src/screens/signupBusiness/BusinessProfile";
+
+import { SignupBusinessNavigator } from 'src/navigation/SignupBusinessNavigator';
 
 const PrimaryStack = createStackNavigator();
 
@@ -97,6 +100,7 @@ function PrimaryStackScreen() {
       <PrimaryStack.Screen name="PaymentPending" component={PaymentPending} />
       <PrimaryStack.Screen name="PaymentSuccess" component={PaymentSuccess} />
       <PrimaryStack.Screen name="PaymentRequest" component={Request} />
+      <PrimaryStack.Screen name="SignupBusiness" component={SignupBusinessNavigator} />
     </PrimaryStack.Navigator>
   );
 }

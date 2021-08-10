@@ -8,6 +8,7 @@ export type OnboardingState = {
   authorization: AuthorizationDetails;
   statuses: Status;
   personalDetails: PersonalDetails;
+  businessDetails: BusinessDetails;
   terms: Terms;
   loggedIn: boolean;
 };
@@ -58,6 +59,56 @@ export type Status = {
   verifyId: boolean;
   notifications: boolean;
   serverVerified: boolean;
+};
+
+export enum BusinessType {
+  SOLE_PROPRIETORSHIP = "Sole Proprietorship",
+  CORPORATION = "Corporation",
+  LLC = "LLC",
+  PARTNERSHIP = "Partnership",
+  NON_PROFIT = "Non-profit"
+}
+
+export enum Industry {
+  ARTS_ENTERTAINMENT = "Arts & entertainment",
+  COMMUNICATION_EDUCATION = "Communication & education",
+  FOOD_DRINK = "Food & drink",
+  HEALTH_WELLNESS = "Health & wellness",
+  LODGING = "Lodging",
+  SHOPPING = "Shopping",
+  SERVICES = "Services"
+}
+
+export type BusinessDetails = {
+  avatar: string;
+  businessname: string;
+  businessStory: string;
+  businessType: BusinessType;
+  registeredBusinessname: string;
+  industry: Industry;
+  ein: string;
+  phoneNumber: string;
+  password: string;
+  email: string;
+  addressLine: string;
+  addressLine2: string;
+  zipCode: string;
+  city: string;
+  country: string;
+};
+
+export type BusinessDetailsErrors = {
+  businessname?: string;
+  businessType?: string;
+  ein?: string;
+};
+
+export type BusinessAddressErrors = {
+  addressLine?: string;
+  addressLine2?: string;
+  zipCode?: string;
+  city?: string;
+  country?: string;
 };
 
 export type Terms = {

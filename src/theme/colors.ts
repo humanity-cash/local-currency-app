@@ -1,5 +1,4 @@
 export const colors: any = {
-	// lightBg: '#F1ECE6',
 	text: '#395344',
 	textSuccess: '#8E9665',
 	textWarning: '#C68D7A',
@@ -27,5 +26,10 @@ export const colors: any = {
 	lightGreen: '#B2C1B8',
 	lightGreen1: '#DCE3DD',
 	bodyText: "#2E2E2E",
-	card: "#E6EBE5"
+	card: "#E6EBE5",
+
+	purple: '#442E88',
+	overlayPurple: 'rgba(68,46,136,0.9)',
+	greyedPurple: 'rgba(68,46,136,0.4)',
+	highlightPurple: '#F0EEF5'
 }
