@@ -2,11 +2,11 @@ import {
 	CreditCardDetails, CreditCardDetailsErrors,
 	PersonalAddressErrors,
 	PersonalDetails,
-	PersonalDetailsErrors
+	PersonalDetailsErrors,
+	BusinessAddressErrors,
+	BusinessDetails,
+	BusinessDetailsErrors
 } from "./types";
-import moment from 'moment';
-import { err } from "react-native-svg/lib/typescript/xml";
-
 
 const creditCardNumberValidation = (number: string) => {
 	const aeCardNo = /^(?:3[47][0-9]{13})$/; // american express
@@ -47,6 +47,15 @@ export const validateCreditCard = (creditCardDetails: CreditCardDetails) => {
 
 }
 
+export const validateProfileForm = (personalDetails: PersonalDetails) => {
+	const { username } = personalDetails;
+	const errors: PersonalDetailsErrors = {};
+	if (username === '') {
+		errors.username = 'SORRY, THAT NAME IS ALREADY TAKEN';
+	}
+	return { errors, valid: Object.keys(errors).length === 0 };
+}
+
 export const validateAddressForm = (personalDetails: PersonalDetails) => {
 	const { addressLine, addressLine2, zipCode, city, country } = personalDetails;
 	const errors: PersonalAddressErrors = {};
@@ -66,11 +75,30 @@ export const validateDetailsForm = (personalDetails: PersonalDetails) => {
 	return { errors, valid: Object.keys(errors).length === 0 };
 }
 
-export const validateProfileForm = (personalDetails: PersonalDetails) => {
-	const { username } = personalDetails;
-	const errors: PersonalDetailsErrors = {};
-	if (username === '') {
-		errors.username = 'SORRY, THAT NAME IS ALREADY TAKEN';
+export const validateBusinessProfileForm = (businessDetails: BusinessDetails) => {
+	const { businessname } = businessDetails;
+	const errors: BusinessDetailsErrors = {};
+	if (businessname === '') {
+		errors.businessname = 'SORRY, THAT NAME IS ALREADY TAKEN';
+	}
+	return { errors, valid: Object.keys(errors).length === 0 };
+}
+
+export const validateBusinessAddressForm = (businessDetails: BusinessDetails) => {
+	const { addressLine, addressLine2, zipCode, city, country } = businessDetails;
+	const errors: BusinessAddressErrors = {};
+	// TODO: add eventual validation of address form
+	return { errors, valid: Object.keys(errors).length === 0 };
+}
+
+export const validateBusinessDetailsForm = (businessDetails: BusinessDetails) => {
+	const { registeredBusinessname, industry, businessType, ein } = businessDetails;
+	const errors: BusinessDetailsErrors = {};
+	if (registeredBusinessname === '') {
+		errors.businessname = 'Registered businessname needs to be specified';
+	}
+	if (ein === '') {
+		errors.ein = 'EIN needs to be specified';
 	}
 	return { errors, valid: Object.keys(errors).length === 0 };
 }
