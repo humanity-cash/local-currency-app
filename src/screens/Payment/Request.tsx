@@ -4,10 +4,16 @@ import { Text } from 'react-native-elements';
 import { Header, Button, CancelBtn, BackBtn, BorderedInput } from "src/shared/uielements";
 import { baseHeader, viewBase, wrappingContainerBase } from "src/theme/elements";
 import { colors } from "src/theme/colors";
+import QRCodeGen from "./QRCodeGen";
 
 type RequestProps = {
 	navigation?: any,
 	route?: any,
+}
+
+type AmountState = {
+	amount: string,
+	cost: string
 }
 
 const styles = StyleSheet.create({
@@ -20,8 +26,8 @@ const styles = StyleSheet.create({
 		flexDirection: 'row',
 		flexWrap: 'wrap',
 		paddingTop: 5,
-	  },
-	  defaultAmountItem: {
+	},
+	defaultAmountItem: {
 		width: 100,
 		height: 40,
 		borderRadius: 20,
@@ -30,8 +36,8 @@ const styles = StyleSheet.create({
 		alignItems: 'center',
 		justifyContent: 'center',
 		marginRight: 8,
-	  },
-	  selectedAmountItem: {
+	},
+		selectedAmountItem: {
 		width: 100,
 		height: 40,
 		backgroundColor: colors.lightGreen,
@@ -39,11 +45,14 @@ const styles = StyleSheet.create({
 		alignItems: 'center',
 		justifyContent: 'center',
 		marginRight: 8,
-	  },
+	},
 	bottomView: {
 		padding: 20,
 		paddingBottom: 45
 	},
+	openBtn: {
+		marginBottom: 10
+	}
 });
 
 const Request = (props: RequestProps) => {
@@ -52,8 +61,10 @@ const Request = (props: RequestProps) => {
 		amount: "1",
 		costs: "1"
 	});
-	const [goNext, setGoNext] = useState(false);
-	const [isEnabled, setIsEnabled] = useState(true);
+	const [goNext, setGoNext] = useState<boolean>(false);
+	const [isEnabled, setIsEnabled] = useState<boolean>(true);
+	const [isVisible, setIsVisible] = useState<boolean>(false);
+	const [isOpenAmount, setIsOpenAmount] = useState<boolean>(false);
 
 	useEffect(() => {
 		setGoNext(state.costs !== "");
@@ -66,8 +77,28 @@ const Request = (props: RequestProps) => {
 		  [name]: change,
 		  costs: costs,
 		} as any);
-		// update({ [name]: change });
 	};
+
+	const toggleSwitch = () => {
+		setIsEnabled(previousState => !previousState);
+		if (isEnabled) {
+			props.navigation.navigate("QRCodeScan");
+		}
+	}
+
+	const openAmount = () => {
+		setIsOpenAmount(true);
+		setIsVisible(true);
+	}
+
+	const requestAmount = () => {
+		setIsOpenAmount(false);
+		setIsVisible(true);
+	}
+
+	const onClose = () => {
+		setIsVisible(false);
+	}
 
 	return (
 		<View style={viewBase}>
@@ -80,7 +111,7 @@ const Request = (props: RequestProps) => {
 					<View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
 						<Switch
 							ios_backgroundColor="#3e3e3e"
-							// onValueChange={toggleSwitch}
+							onValueChange={toggleSwitch}
 							value={isEnabled}
 						/>
 					</View>
@@ -125,13 +156,21 @@ const Request = (props: RequestProps) => {
 				behavior={Platform.OS == "ios" ? "padding" : "height"} >
 				<View style={styles.bottomView}>
 					<Button
+						type="transparent"
+						disabled={!goNext}
+						title="Open amount"
+						style={styles.openBtn}
+						onPress={openAmount}
+					/>
+					<Button
 						type="darkGreen"
 						disabled={!goNext}
-						title="Share QR for Request"
-						onPress={() => props.navigation.navigate("PaymentPending")}
+						title="Next"
+						onPress={requestAmount}
 					/>
 				</View>
 			</KeyboardAvoidingView>
+			{ isVisible && <QRCodeGen visible={isVisible} onClose={onClose} isOpenAmount={isOpenAmount} amount={state.amount} /> }
 		</View>
 	);
 }

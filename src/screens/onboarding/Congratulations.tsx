@@ -46,7 +46,7 @@ const CongratulationsView = (props: CongratulationsProps) => {
 					<Button
 						type="darkRed"
 						style={{backgroundColor: colors.blue}}
-						title="Top Up BerkShares"
+						title="Load up BerkShares"
 						textStyle={{color: colors.white}}
 						onPress={() => props.navigation.navigate("Tabs")}
 					/>
