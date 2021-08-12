@@ -42,7 +42,7 @@ const ForgotPasswordView = (props: ForgotPasswordProps) => {
 		<View>
 			<View style={styles.bottomView}>
 				<TouchableOpacity onPress={() => setVisible(true)}>
-					<Text style={styles.bottomNavigation}>Forgot your passcode?</Text>
+					<Text style={styles.bottomNavigation}>Forgot password</Text>
 				</TouchableOpacity>
 			</View>
 			{visible && (

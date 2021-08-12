@@ -4,11 +4,11 @@ import { Text } from "react-native-elements";
 import { useUserDetails } from "src/hooks";
 import countries from "src/mocks/countries";
 import { colors } from "src/theme/colors";
-import { IMap, PersonalAddressErrors } from "src/utils/types";
-import { validateAddressForm } from "src/utils/validation";
+import { IMap, BusinessAddressErrors } from "src/utils/types";
+import { validateBusinessAddressForm } from "src/utils/validation";
 import BlockInput from "../BlockInput";
 
-interface PersonalAddressState extends IMap {
+interface BusinessAddressState extends IMap {
   addressLine: string;
   addressLine2: string;
   zipCode: string;
@@ -16,7 +16,7 @@ interface PersonalAddressState extends IMap {
   country: string;
 }
 
-interface PersonalAddressProps {
+interface BusinessAddressProps {
   isValid: (valid: boolean) => void;
   showValidation?: boolean;
   style?: any;
@@ -58,56 +58,58 @@ const styles = StyleSheet.create({
 	}
 });
 
-const PersonalAddressForm = (props: PersonalAddressProps) => {
-  const { personalDetails, updatePersonalDetails } = useUserDetails();
+const BusinessAddressForm = (props: BusinessAddressProps) => {
+  const { businessDetails, updateBusinessDetails } = useUserDetails();
   const [
     validationErrors,
     setValidationErrors,
-  ] = useState<PersonalAddressErrors>({});
-  const [state, setState] = useState<PersonalAddressState>({
+  ] = useState<BusinessAddressErrors>({});
+  const [state, setState] = useState<BusinessAddressState>({
     addressLine: "",
     addressLine2: "",
     zipCode: "",
     city: "",
     country: "",
+    phoneNumber: "",
   });
   const { showValidation } = props;
 
   useEffect(() => {
-    const validation = validateAddressForm(personalDetails);
+    const validation = validateBusinessAddressForm(businessDetails);
     setValidationErrors(validation.errors);
-  }, [personalDetails]);
+  }, [businessDetails]);
 
   useEffect(() => {
     props.isValid(
       Object.keys(state).every(
-        (key) => state[key] !== "" || key === "addressLine2"
+        (key) => state[key] !== "" || key === "addressLine2" || key === "phoneNumber"
       )
     );
   }, [state]);
 
   useEffect(() => {
     setState({
-      addressLine: personalDetails.addressLine,
-      addressLine2: personalDetails.addressLine2,
-      zipCode: personalDetails.zipCode,
-      city: personalDetails.city,
-      country: personalDetails.country,
+      addressLine: businessDetails.addressLine,
+      addressLine2: businessDetails.addressLine2,
+      zipCode: businessDetails.zipCode,
+      city: businessDetails.city,
+      country: businessDetails.country,
+      phoneNumber: businessDetails.phoneNumber
     });
-  }, [personalDetails]);
+  }, [businessDetails]);
 
   const onValueChange = (name: any, change: any) => {
     setState({
       ...state,
       [name]: change,
     } as any);
-    updatePersonalDetails({ [name]: change });
+    updateBusinessDetails({ [name]: change });
   };
 
   return (
     <View>
       <View style={styles.container}>
-          <Text style={styles.bodyText}>We use your personal details to set up your BerkShares Wallet. Don't worry. This information is not shared publicly!</Text>
+          <Text style={styles.bodyText}>Where can customers find you?</Text>
       </View>
       <Text style={styles.label}>ADDRESS 1</Text>
       {showValidation && validationErrors.addressLine && (
@@ -185,8 +187,17 @@ const PersonalAddressForm = (props: PersonalAddressProps) => {
         onChange={onValueChange}
         style={props.style}
       />
+
+      <Text style={styles.label}>PHONE NUMBER - OPTIONAL</Text>
+      <BlockInput
+        name="phoneNumber"
+        placeholder="+00 0987 6543 21"
+        value={state.phoneNumber}
+        onChange={onValueChange}
+        style={props.style}
+      />
     </View>
   );
 };
 
-export default PersonalAddressForm;
+export default BusinessAddressForm;
