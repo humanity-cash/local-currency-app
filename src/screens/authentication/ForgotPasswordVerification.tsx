@@ -3,9 +3,8 @@ import React, { useState } from 'react';
 import { Keyboard, KeyboardAvoidingView, Platform, StyleSheet, TouchableOpacity, View } from 'react-native';
 import { Text } from 'react-native-elements';
 import { useUserDetails } from "src/hooks";
-import { BackBtn, CancelBtn, ConfirmationCode, ModalHeader } from "src/shared/uielements";
-import { MODAL_SCREEN_OFFSET } from "src/shared/uielements/Modal";
-import { modalViewBase, wrappingContainerBase } from "src/theme/elements";
+import { BackBtn, CancelBtn, ConfirmationCode, ModalHeader, Button } from "src/shared/uielements";
+import { modalBaseHeader, viewBase, wrappingContainerBase } from "src/theme/elements";
 
 type ForgotPasswordVerificationProps = {
 	navigation?: any,
@@ -14,20 +13,22 @@ type ForgotPasswordVerificationProps = {
 
 const styles = StyleSheet.create({
 	modalHeader: {
-		fontFamily: 'IBMPlexSansSemiBold',
-		fontSize: 20,
-		paddingBottom: 10
+		fontSize: 32,
+		fontWeight: '400',
+		lineHeight: 40
 	},
-	codeView: {
-		flex: 1
-	},
-	bottomNavigation: {
-		justifyContent: "center"
+	modalDescription: {
+		paddingBottom: 30,
 	},
 	bottomView: {
-		height: 60,
-		justifyContent: "center",
-		alignItems: 'center'
+		padding: 20,
+		paddingBottom: 45
+	},
+	bottomNavigation: {
+		alignSelf: "center"
+	},
+	sendCodeBtn: {
+		marginBottom: 30
 	}
 });
 
@@ -35,7 +36,7 @@ const VALID_CODE = '123456';
 
 const ForgotPasswordVerificationView = (props: ForgotPasswordVerificationProps) => {
 	const [noCodeReceived, setNoCodeReceived] = useState(false);
-	const { personalDetails: { phoneCountry, phoneNumber } } = useUserDetails();
+	const { personalDetails: { email } } = useUserDetails();
 
 	const onComplete = (text: string) => {
 		if (text === VALID_CODE) {
@@ -45,46 +46,37 @@ const ForgotPasswordVerificationView = (props: ForgotPasswordVerificationProps) 
 	}
 
 	return (
-		<View style={modalViewBase}>
+		<View style={viewBase}>
 			<ModalHeader
 				rightComponent={<CancelBtn onClick={props.route.params.onClose} />}
 				leftComponent={<BackBtn onClick={() => props.navigation.goBack()} />}
 			/>
-			<View style={{ ...wrappingContainerBase, flex: 1 }}>
-				<Text style={styles.modalHeader}>Enter verification code</Text>
-				<View style={styles.codeView}>
-					{!noCodeReceived && (<Text>We have sent a message with a verification code to {phoneCountry} {phoneNumber}.</Text>)}
-					{noCodeReceived && (<Text>We have sent another message with a new verification code to {phoneCountry} {phoneNumber}. Click back if you need to change your phone number.</Text>)}
+			<View style={wrappingContainerBase}>
+				<View style={ modalBaseHeader }>
+					<Text style={styles.modalHeader}>Verify your mail address</Text>
+				</View>
+				<View style={styles.modalDescription}>
+					<Text>We have sent an email with a verification code to {email}.</Text>
 					<ConfirmationCode onComplete={onComplete} />
 				</View>
 			</View>
-			{!noCodeReceived && (
-				<KeyboardAvoidingView
-					behavior={Platform.OS == "ios" ? "padding" : "height"}
-					keyboardVerticalOffset={MODAL_SCREEN_OFFSET}
-				>
-					<View style={styles.bottomView}>
-						<TouchableOpacity onPress={() => {
-							setNoCodeReceived(true);
-							Keyboard.dismiss();
-						}}>
-							<Text style={styles.bottomNavigation}>No code received?</Text>
-						</TouchableOpacity>
-					</View>
-				</KeyboardAvoidingView>
-			)}
-			{noCodeReceived && (
-				<KeyboardAvoidingView
-					behavior={Platform.OS == "ios" ? "padding" : "height"}
-					keyboardVerticalOffset={MODAL_SCREEN_OFFSET}
-				>
-					<View style={styles.bottomView}>
-						<TouchableOpacity onPress={() => props.navigation.navigate('VerificationHelp')}>
-							<Text style={styles.bottomNavigation}>Need help?</Text>
-						</TouchableOpacity>
-					</View>
-				</KeyboardAvoidingView>
-			)}
+			<KeyboardAvoidingView
+				behavior={Platform.OS == "ios" ? "padding" : "height"}
+			>
+				<View style={styles.bottomView}>
+					<TouchableOpacity style={styles.sendCodeBtn} onPress={() => {
+						setNoCodeReceived(true);
+						Keyboard.dismiss();
+					}}>
+						<Text style={styles.bottomNavigation}>Send code again</Text>
+					</TouchableOpacity>
+					{/* <Button
+						type="darkGreen"
+						title="Next"
+						onPress={onComplete}
+					/> */}
+				</View>
+			</KeyboardAvoidingView>
 		</View>
 	);
 }

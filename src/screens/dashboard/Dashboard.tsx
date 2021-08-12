@@ -8,6 +8,7 @@ import { Header } from "src/shared/uielements";
 import { colors } from "src/theme/colors";
 import { viewBase, wrappingContainerBase, baseHeader } from "src/theme/elements";
 import Button from "src/shared/uielements/Button";
+import DwollaDialog from "./DwollaDialog";
 
 type DashboardProps = {
 	navigation?: any;
@@ -15,6 +16,8 @@ type DashboardProps = {
 };
 
 const styles = StyleSheet.create({
+	content: { paddingBottom: 40 },
+	inlineView: {flexDirection: 'row'},
 	headerText: {
 		fontSize: 40,
 		fontWeight: '400',
@@ -37,20 +40,24 @@ const styles = StyleSheet.create({
 	alertView: {
 		borderLeftWidth: 5,
 		borderRadius: 4,
-		borderLeftColor: colors.darkGreen,
-		backgroundColor: colors.lightGreen,
+		borderLeftColor: colors.alert,
+		backgroundColor: colors.white,
 		padding: 10,
 		flexDirection: 'row',
 		justifyContent: 'space-between',
 		alignItems: 'center',
 		marginBottom: 10
 	},
+	alertIcon: {
+		color: colors.alert,
+		fontWeight: 'bold'
+	},
 	alertText: {
-		color: colors.white, 
-		width: '75%'
+		color: colors.black, 
+		width: '90%'
 	},
 	feedView: {
-		backgroundColor: colors.lightGreen1,
+		backgroundColor: colors.card,
 		padding: 10,
 	},
 	feedHeader: {
@@ -58,6 +65,9 @@ const styles = StyleSheet.create({
 		justifyContent: 'space-between', 
 		marginBottom: 20, 
 		marginTop: 10
+	},
+	bodyText: {
+		paddingVertical: 10
 	},
 	image: {
 		alignItems: "center",
@@ -77,13 +87,15 @@ const styles = StyleSheet.create({
 		paddingRight: 10,
 		borderRadius: 10,
 		backgroundColor: colors.darkGreen,
-	}
+	},
+	topupText: {color: colors.white, fontSize: 16}
 });
 
 const DashboardView = (props: DashboardProps) => {
 	const [showQRScan, setShowQRScan] = useState(false);
 	const [alert, setAlert] = useState(false);
 	const [amount, setAmount] = useState("");
+	const [isVisible, setIsVisible] = useState<boolean>(false);
 
 	useEffect(() => {
 		setAlert(amount === "");
@@ -93,14 +105,17 @@ const DashboardView = (props: DashboardProps) => {
 		setShowQRScan(false);
 	}
 
+	const onClose = () => {
+		setIsVisible(false);
+	}
+
 	return (
 		<View style={viewBase}>
 			<Header
 				leftComponent={
 					<TouchableWithoutFeedback onPress={() => props.navigation.toggleDrawer()}>
-						<View style={{flexDirection: 'row'}}>
+						<View style={styles.inlineView}>
 							<Entypo
-								style={{ marginRight: 5 }}
 								name='menu'
 								size={25}
 								color={colors.darkGreen}
@@ -111,33 +126,32 @@ const DashboardView = (props: DashboardProps) => {
 				}
 			/>
 			<ScrollView style={wrappingContainerBase}>
-				<View style={{ paddingBottom: 40 }}>
+				<View style={styles.content}>
 					<View style={baseHeader}>
 						<Text style={styles.headerText}>BerkShares</Text>
 					</View>
 					<View style={styles.amountView}>
 						<Text style={styles.text}>B$ -</Text>
 						<TouchableOpacity style={styles.topupButton} onPress={()=>props.navigation.navigate("TopUp")}>
-							<Text style={{color: colors.white, fontSize: 14}}>Top up B$</Text>
+							<Text style={styles.topupText}>Load up B$</Text>
 						</TouchableOpacity>	
 					</View>
 					{alert && 
 						<View style={styles.alertView}>
-							<AntDesign name="exclamationcircleo" size={18} />
-							<Text style={styles.alertText}>Welcome in the community! your BerkShares to start spending BerkShares</Text>
-							<TouchableOpacity>
-								<Entypo name="cross" size={30} color={colors.white} onPress={()=>setAlert(false)} />
-							</TouchableOpacity>	
+							<AntDesign name="exclamationcircleo" size={18} style={styles.alertIcon} />
+							<Text style={styles.alertText}>Link your bank account to start using the app. &nbsp;
+								<Text style={styles.alertIcon} onPress={()=>setIsVisible(true)}>Link bank account &gt;</Text>
+							</Text>
 						</View>
 					}
 
 					<View style={styles.feedView}>
 						<View style={styles.feedHeader}>
-							<Text h3 style={{color: colors.lightGreen}}>Merchant of the month</Text>
-							<Text h3 style={{color: colors.lightGreen}}>SeptemebEr</Text>
+							<Text h3 >Merchant of the month</Text>
+							<Text h3 >SeptemebEr</Text>
 						</View>
 						<Text h2>Dory & Ginger</Text>
-						<Text style={{paddingTop: 10, paddingBottom: 10	}}>
+						<Text style={styles.bodyText}>
 							Our motto is Live and Give. We have treasures for your home and lifestyle, along with the perfect gift for that special someone or that occasion that begs for something unique.
 						</Text>
 						<Image
@@ -154,7 +168,7 @@ const DashboardView = (props: DashboardProps) => {
 				onPress={()=>props.navigation.navigate("QRCodeScan")}
 			/>
 
-			{/* <MakePayment visible={showQRScan} onClose={onScanClose} /> */}
+			{ isVisible && <DwollaDialog visible={isVisible} onClose={onClose} /> }
 		</View>
 	);
 }
