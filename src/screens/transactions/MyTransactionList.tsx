@@ -40,7 +40,8 @@ const styles = StyleSheet.create({
 	},
 	amountText: {
 		fontWeight: 'bold',
-		fontSize: 18
+		fontSize: 18,
+		color: colors.darkRed
 	},
 });
 
@@ -55,12 +56,12 @@ const TransactionItem = (props: MyTransactionItemProps) => {
 		<View style={ selected===item.transactionId? styles.selectedItem : styles.item }>
 			<View style={styles.imageContainer}>
 				<Image
-					source={{ uri: item.avatar }}
+					source={require("../../../assets/images/placeholder2.png")}
 					containerStyle={styles.image}
 				/>
 				<Text>{item.name}</Text>
 			</View>
-			<Text style={styles.amountText}>+B$ {item.amount}</Text>
+			<Text style={styles.amountText}>-B$ {item.amount}</Text>
 		</View>
 	);
 }

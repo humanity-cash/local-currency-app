@@ -10,6 +10,7 @@ import { colors } from "src/theme/colors";
 import MyTransactionList from './MyTransactionList';
 import { MyTransactionItem } from "src/utils/types";
 import transactionList from "src/mocks/transactions";
+import QRCodeGen from "src/screens/payment/QRCodeGen";
 
 type MyTransactionsProps = {
 	navigation?: any,
@@ -66,7 +67,6 @@ const styles = StyleSheet.create({
 		fontSize: 10,
 	},
 	returnText: {
-		fontSize: 16,
 		color: colors.darkRed
 	},
 	dialogFooter: {
@@ -85,11 +85,11 @@ const TransactionDetail = (props: TransactionDetailProps) => {
 	const {data, visible, onConfirm, onReturn} = props;
 
 	return (
-		<Dialog visible={visible} onClose={onReturn}>
+		<Dialog visible={visible} onClose={onConfirm}>
 			<View style={dialogViewBase}>
 				<ScrollView style={wrappingContainerBase}>
 					<View style={ baseHeader }>
-						<Text h1 style={styles.headerText}> B$ { data.amount } </Text>
+						<Text h1 style={styles.returnText}> - B$ { data.amount } </Text>
 					</View>
 					<View style={styles.view}>
 						<View style={styles.detailView}>
@@ -110,6 +110,7 @@ const TransactionDetail = (props: TransactionDetailProps) => {
 					<Button
 						type="transparent"
 						title="I want to make a return"
+						textStyle={styles.returnText}
 						onPress={onReturn}
 					/>
 				</View>
@@ -196,6 +197,7 @@ const MyTransactionsView = (props: MyTransactionsProps) => {
 				</View>
 			</KeyboardAvoidingView>
 			{isDetailViewOpen && <TransactionDetail visible={isDetailViewOpen} data={selectedItem} onReturn={onReturn} onConfirm={onConfirm} />}
+			{isReturnViewOpen && <QRCodeGen visible={isReturnViewOpen} onClose={onConfirm} isOpenAmount={true} amount={"10"} /> }
 		</View>
 	);
 }
