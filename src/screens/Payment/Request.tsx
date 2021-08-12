@@ -22,6 +22,15 @@ const styles = StyleSheet.create({
 		fontWeight: '400',
 		lineHeight: 40
 	},
+	switchView: {flex: 1, justifyContent: 'center', alignItems: 'center'},
+	contentView: { 
+		marginTop: 5
+	},
+	label: { 
+		marginTop: 20, 
+		color: colors.text, 
+		fontSize: 12 
+	},
 	defaultAmountView: {
 		flexDirection: 'row',
 		flexWrap: 'wrap',
@@ -37,7 +46,7 @@ const styles = StyleSheet.create({
 		justifyContent: 'center',
 		marginRight: 8,
 	},
-		selectedAmountItem: {
+	selectedAmountItem: {
 		width: 100,
 		height: 40,
 		backgroundColor: colors.lightGreen,
@@ -108,7 +117,7 @@ const Request = (props: RequestProps) => {
 			/>
 			<ScrollView style={wrappingContainerBase}>
 				<View style={ baseHeader }>
-					<View style={{flex: 1, justifyContent: 'center', alignItems: 'center'}}>
+					<View style={styles.switchView}>
 						<Switch
 							ios_backgroundColor="#3e3e3e"
 							onValueChange={toggleSwitch}
@@ -116,8 +125,8 @@ const Request = (props: RequestProps) => {
 						/>
 					</View>
 				</View>
-				<View>
-					<Text style={{ marginTop: 30, color: colors.text, fontSize: 12 }}>MOST FREQUENTLY USED</Text>
+				<View style={styles.contentView}>
+					<Text style={styles.label}>MOST FREQUENTLY USED</Text>
 					<View style={styles.defaultAmountView}>
 						<TouchableOpacity 
 							style={state.amount=='5' ? styles.selectedAmountItem : styles.defaultAmountItem} 
@@ -138,9 +147,7 @@ const Request = (props: RequestProps) => {
 							<Text>B$ 0.2</Text>
 						</TouchableOpacity>
 					</View>
-					<View>
-						<Text style={{ marginTop: 5, color: colors.text, fontSize: 12 }}>REQUEST AMOUNT</Text>
-					</View>
+					<Text style={styles.label}>REQUEST AMOUNT</Text>
 					<BorderedInput
 						label="Amount"
 						name="amount"

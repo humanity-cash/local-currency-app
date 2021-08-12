@@ -17,6 +17,9 @@ type ForgotPasswordEmailProps = {
 };
 
 const styles = StyleSheet.create({
+  container: { 
+    padding: 10 
+  },
   modalHeader: {
     fontSize: 32,
 		fontWeight: '400',
@@ -55,7 +58,7 @@ const ForgotPasswordEmailView = (props: ForgotPasswordEmailProps) => {
         rightComponent={<CancelBtn onClick={props.route.params.onClose} />}
       />
 
-      <ScrollView style={{ padding: 10 }}>
+      <ScrollView style={styles.container}>
         <View style={ modalBaseHeader }>
 					<Text style={styles.modalHeader}>Forgot password</Text>
 				</View>

@@ -86,7 +86,7 @@ const ForgotPasswordNewPasswordView = (props: ForgotPasswordNewPasswordProps) =>
 				rightComponent={<CancelBtn onClick={props.route.params.onClose} />}
 				leftComponent={<BackBtn onClick={() => props.navigation.goBack()} />}
 			/>
-			<View style={{ ...wrappingContainerBase, flex: 1 }}>
+			<View style={wrappingContainerBase}>
 				<View style={ modalBaseHeader }>
 					<Text style={styles.modalHeader}>Create a new password</Text>
 				</View>
