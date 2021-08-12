@@ -6,6 +6,7 @@ import { useUserDetails } from "src/hooks";
 import { BackBtn, Button, Header, CancelBtn, PersonalDetailsForm } from 'src/shared/uielements';
 import { underlineHeader, viewBase, wrappingContainerBase } from "src/theme/elements";
 import { validateDetailsForm } from "src/utils/validation";
+import { colors } from "src/theme/colors";
 
 type PersonalDetailsProps = {
 	navigation?: any
