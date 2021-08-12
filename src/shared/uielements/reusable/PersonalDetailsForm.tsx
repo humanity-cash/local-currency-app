@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { View } from "react-native";
+import { View, StyleSheet } from "react-native";
 import { Text } from "react-native-elements";
 import { useUserDetails } from "src/hooks";
 import { colors } from "src/theme/colors";
@@ -15,7 +15,21 @@ interface PersonalDetailsState extends IMap {
 interface PersonalDetailsProps {
   isValid: (valid: boolean) => void;
   showValidation?: boolean;
+  style?: any;
 }
+
+const styles = StyleSheet.create({
+  container: {
+    marginBottom: 20
+  },
+  bodyText: {
+    color: colors.bodyText
+  },
+  label: {
+    color: colors.bodyText,
+    fontSize: 10
+  }
+});
 
 const PersonalDetailsForm = (props: PersonalDetailsProps) => {
   const { personalDetails, updatePersonalDetails } = useUserDetails();
@@ -56,14 +70,10 @@ const PersonalDetailsForm = (props: PersonalDetailsProps) => {
   return (
     <View>
       <View
-        style={{
-        borderTopColor: colors.darkRed,
-        borderTopWidth: 1,
-        marginBottom: 20
-        }}>
-          <Text style={{color: colors.darkRed}}>We use your personal details to set up your BerkShares Wallet. Don't worry. This information is not shared publicly!</Text>
+        style={styles.container}>
+          <Text style={styles.bodyText}>We use your personal details to set up your BerkShares Wallet. Don't worry. This information is not shared publicly!</Text>
       </View>
-      <Text h3>FIRST NAME</Text>
+      <Text style={styles.label}>FIRST NAME</Text>
       {showValidation && validationErrors.firstname && (
         <Text h3 style={{ marginTop: 5, color: colors.textError }}>
           {validationErrors.firstname}
@@ -74,9 +84,9 @@ const PersonalDetailsForm = (props: PersonalDetailsProps) => {
         placeholder="First name"
         value={state.firstname}
         onChange={onValueChange}
-        style={{backgroundColor: colors.azure}}
+        style={props.style}
       />
-      <Text h3>LAST NAME</Text>
+      <Text style={styles.label}>LAST NAME</Text>
       {showValidation && validationErrors.lastname && (
         <Text h3 style={{ marginTop: 5, color: colors.textError }}>
           {validationErrors.lastname}
@@ -87,7 +97,7 @@ const PersonalDetailsForm = (props: PersonalDetailsProps) => {
         placeholder="Last name"
         value={state.lastname}
         onChange={onValueChange}
-        style={{backgroundColor: colors.azure}}
+        style={props.style}
       />
     </View>
   );

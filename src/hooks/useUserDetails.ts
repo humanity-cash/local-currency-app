@@ -1,7 +1,17 @@
 import { useCallback, useEffect } from "react";
 import { createStore, useStore } from "react-hookstore";
 import { AsyncStorage } from "react-native";
-import { AuthorizationDetails, IMap, OnboardingState, PersonalDetails, Status, Terms } from "src/utils/types";
+import { 
+	AuthorizationDetails, 
+	IMap, 
+	OnboardingState, 
+	PersonalDetails, 
+	BusinessDetails,
+	BusinessType, 
+	Industry, 
+	Status, 
+	Terms 
+} from "src/utils/types";
 
 const storeId = "ONBOARDING_DETAILS";
 
@@ -16,6 +26,23 @@ const defaultState: OnboardingState = {
 		lastname: '',
 		email: '',
 		emailVerified: false,
+		addressLine: '',
+		addressLine2: '',
+		zipCode: '',
+		city: '',
+		country: 'MA'
+	},
+	businessDetails: {
+		businessname: '',
+		avatar: '',
+		businessStory: '',
+		businessType: BusinessType.SOLE_PROPRIETORSHIP,
+		registeredBusinessname: '',
+		industry: Industry.ARTS_ENTERTAINMENT,
+		ein: '',
+		phoneNumber: '',
+		password: '',
+		email: '',
 		addressLine: '',
 		addressLine2: '',
 		zipCode: '',
@@ -48,7 +75,7 @@ let loaded = false;
 
 const useUserDetails = () => {
 	const [details] = useStore<OnboardingState>(storeId);
-	const { personalDetails, authorization, statuses, terms, loggedIn } = details;
+	const { personalDetails, businessDetails, authorization, statuses, terms, loggedIn } = details;
 
 	useEffect(() => {
 		async function readStorage() {
@@ -107,6 +134,19 @@ const useUserDetails = () => {
 			await storeInMemory(newState);
 		}, []);
 
+	const updateBusinessDetails = useCallback(
+		async (data: Partial<BusinessDetails>) => {
+			const currentState: OnboardingState = store.getState();
+			const newState: OnboardingState = {
+				...currentState,
+				businessDetails: {
+					...currentState.businessDetails,
+					...data
+				}
+			};
+			store.setState(newState);
+			await storeInMemory(newState);
+		}, []);
 	const updateAuthorization = useCallback(
 		async (data: Partial<AuthorizationDetails>) => {
 			const currentState: OnboardingState = store.getState();
@@ -170,12 +210,14 @@ const useUserDetails = () => {
 
 	return {
 		personalDetails,
+		businessDetails,
 		authorization,
 		statuses: statuses as IMap,
 		terms,
 		loggedIn,
 		update,
 		updatePersonalDetails,
+		updateBusinessDetails,
 		updateAuthorization,
 		updateStatus,
 		updateTerms,

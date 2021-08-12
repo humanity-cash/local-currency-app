@@ -45,7 +45,7 @@ const SelectAccountTypeView = (props: SelectAccountTypeProps) => {
 
       	<ScrollView style={wrappingContainerBase}>
 		  	<View style={underlineHeader}>
-				<Text h1 style={styles.headerText}>Hi</Text>
+				<Text style={styles.headerText}>Hi</Text>
 			</View>
 			<Text style={styles.bodyText}>Select the profile you’d like to create. If you’re a business owner, you can automatically set up a personal profile.</Text>
 			<View style={styles.accountType}>
@@ -56,7 +56,7 @@ const SelectAccountTypeView = (props: SelectAccountTypeProps) => {
 					style={styles.button} />
 				<Button 
 					type="transparent" 
-					onPress={() => props.navigation.navigate("PersonalProfile")} 
+					onPress={() => props.navigation.navigate("SignupBusiness")} 
 					title="Business and personal" 
 					style={styles.button}/>
 			</View>

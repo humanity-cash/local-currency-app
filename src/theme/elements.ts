@@ -12,6 +12,11 @@ export const viewBaseWhite: any = {
 	backgroundColor: colors.white
 }
 
+export const viewBaseB: any = {
+	...viewBase,
+	backgroundColor: colors.highlightPurple
+}
+
 export const modalViewBase: any = {
 	...viewBase,
 	backgroundColor: colors.lightBg
@@ -55,6 +60,15 @@ export const underlineHeader: any = {
 	marginBottom: 10,
 	borderBottomWidth: 1,
 	borderBottomColor: colors.darkGreen,
+}
+
+export const underlineHeaderB: any = {
+	marginTop: 0,
+	paddingTop: 10,
+	paddingBottom: 10,
+	marginBottom: 10,
+	borderBottomWidth: 1,
+	borderBottomColor: colors.purple,
 }
 
 export const modalBaseHeader: any = {
