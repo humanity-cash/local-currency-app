@@ -173,6 +173,7 @@ const QRCodeScan = (props: QRCodeScanProps) => {
   	const toggleSwitch = () => {
 		setIsEnabled(previousState => !previousState);
 		if (!isEnabled) {
+			setIsEnabled(previousState => !previousState);
 			props.navigation.navigate("PaymentRequest");
 		}
 	}
@@ -182,10 +183,6 @@ const QRCodeScan = (props: QRCodeScanProps) => {
 			const {status} = await BarCodeScanner.requestPermissionsAsync();
 			setHasPermission(status === 'granted');
 		})();
-
-		setTimeout(() => {
-			setIsPaymentDialogOpen(true);
-		}, 2000);
 	}, []);
 	
 	const handleBarCodeScanned = (data: HandleScaned) => {

@@ -54,10 +54,12 @@ const styles = StyleSheet.create({
     borderRadius: 40,
     justifyContent: 'center',
     alignItems: 'center',
+    backgroundColor: colors.inputBg
   },
   image: {
-    width: 25,
-    height: 20
+    width: 80,
+    height: 80,
+    borderRadius: 40
   }
 });
 
@@ -123,15 +125,13 @@ const PersonalProfileForm = (props: PersonalProfileProps) => {
       <Text style={styles.bodyText}>*Required fields</Text>
       <View style={styles.pickImageView}>
         <TouchableOpacity onPress={pickImage}>
-          {state.avatar === '' && 
-            <View style={styles.imageView}>
-              <Image 
-                source={require('../../../../assets/images/camera.png')}
-                containerStyle={styles.image} 
-              />
-            </View>
-          }
-          {state.avatar !== '' && <Image source={{ uri: state.avatar }} style={styles.imageView} />}
+          <View style={styles.imageView}>
+            {state.avatar === '' && <Image 
+              source={require('../../../../assets/images/placeholder5.png')}
+              containerStyle={styles.image} 
+            />}
+            {state.avatar !== '' && <Image source={{ uri: state.avatar }} style={styles.image} />}
+          </View>
         </TouchableOpacity>
         <Text style={styles.label}>UPLOAD PROFILE PICTURE</Text>
         <Text style={styles.smallLabel}>(Max 200 MB / .jpeg, .jpg, .png)</Text>

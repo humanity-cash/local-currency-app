@@ -4,8 +4,9 @@ import { KeyboardAvoidingView, Platform, ScrollView, View, StyleSheet } from 're
 import { Text } from 'react-native-elements';
 import { useUserDetails } from "src/hooks";
 import { BackBtn, Button, Header, CancelBtn, PersonalAddressForm } from 'src/shared/uielements';
-import { baseHeader, viewBaseWhite, wrappingContainerBase } from "src/theme/elements";
+import { underlineHeader, viewBase, wrappingContainerBase } from "src/theme/elements";
 import { validateAddressForm } from "src/utils/validation";
+import { colors } from "src/theme/colors";
 
 type PersonalAddressProps = {
 	navigation?: any
@@ -13,9 +14,18 @@ type PersonalAddressProps = {
 }
 
 const styles = StyleSheet.create({
-	bottomView: {
-	  padding: 20,
-  	},
+	content: { 
+		paddingBottom: 40 
+	},
+	headerText: {
+		fontSize: 32,
+		color: colors.darkGreen,
+		lineHeight: 35
+	},
+  	bottomView: {
+		paddingHorizontal: 20,
+		paddingBottom: 50
+	},
 });
 
 const PersonalAddressView = (props: PersonalAddressProps) => {
@@ -33,16 +43,16 @@ const PersonalAddressView = (props: PersonalAddressProps) => {
 	}
 
 	return (
-		<View style={viewBaseWhite}>
+		<View style={viewBase}>
 			<Header
 				leftComponent={<BackBtn onClick={() => props.navigation.goBack()} />}
-				rightComponent={<CancelBtn text="Close" onClick={() => props.navigation.navigate('Tabs')} />}
+				rightComponent={<CancelBtn text="Log out" onClick={() => props.navigation.navigate('Teaser')} />}
 			/>
 
-			<ScrollView style={wrappingContainerBase}>
-				<View style={{ paddingBottom: 40 }}>
-					<View style={ baseHeader }>
-						<Text h1>Personal address</Text>
+			<ScrollView style={ wrappingContainerBase }>
+				<View style={styles.content}>
+					<View style={underlineHeader}>
+						<Text style={styles.headerText}>Personal address</Text>
 					</View>
 					<PersonalAddressForm
 						isValid={setGoNext}
@@ -55,7 +65,7 @@ const PersonalAddressView = (props: PersonalAddressProps) => {
 			>
 				<View style={styles.bottomView}>
 					<Button
-						type="darkRed"
+						type="darkGreen"
 						title="NEXT"
 						disabled={!goNext}
 						onPress={onNextPress}
