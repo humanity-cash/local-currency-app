@@ -70,11 +70,6 @@ const ForgotPasswordVerificationView = (props: ForgotPasswordVerificationProps) 
 					}}>
 						<Text style={styles.bottomNavigation}>Send code again</Text>
 					</TouchableOpacity>
-					{/* <Button
-						type="darkGreen"
-						title="Next"
-						onPress={onComplete}
-					/> */}
 				</View>
 			</KeyboardAvoidingView>
 		</View>

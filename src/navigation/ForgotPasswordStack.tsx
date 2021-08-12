@@ -13,7 +13,7 @@ function ForgotPasswordStackScreen(props: ForgotPasswordStackProps) {
 				headerShown: false
 			})}
 		>
-			<ForgotPasswordStack.Screen name="ForgotPasswordPhone" initialParams={props} component={ForgotPasswordEmail} />
+			<ForgotPasswordStack.Screen name="ForgotPasswordEmail" initialParams={props} component={ForgotPasswordEmail} />
 			<ForgotPasswordStack.Screen name="ForgotPasswordVerification" initialParams={props} component={ForgotPasswordVerification} />
 			<ForgotPasswordStack.Screen name="ForgotPasswordNewCode" initialParams={props} component={ForgotPasswordNewPassword} />
 			<ForgotPasswordStack.Screen name="ForgotPasswordSuccess" initialParams={props} component={ForgotPasswordSuccess} />

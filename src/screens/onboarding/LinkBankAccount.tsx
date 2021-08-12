@@ -58,7 +58,7 @@ const LinkBankAccountView = (props: LinkBankAccountProps) => {
 				<Button
 					type="darkGreen"
 					title="Link my bank account"
-					onPress={() => setIsVisible(true)}
+					onPress={() => props.navigation.navigate("SelectBank")}
 				/>
 			</View>
 		</View>
