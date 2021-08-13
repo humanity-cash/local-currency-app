@@ -5,9 +5,9 @@ import {
 } from "react-native";
 import { Text } from "react-native-elements";
 import { useUserDetails } from "src/hooks";
-import { BlockInput, Button, CancelBtn, ModalHeader, SelectModal } from "src/shared/uielements";
-import { MODAL_SCREEN_OFFSET } from "src/shared/uielements/Modal";
-import { viewBase, modalBaseHeader } from "src/theme/elements";
+import { BlockInput, Button, CancelBtn, Header, BackBtn } from "src/shared/uielements";
+import { viewBase, baseHeader } from "src/theme/elements";
+import { colors } from "src/theme/colors";
 
 const MAIN_PHONE_COUNTRY = "+41";
 
@@ -54,12 +54,13 @@ const ForgotPasswordEmailView = (props: ForgotPasswordEmailProps) => {
 
   return (
     <View style={viewBase}>
-      <ModalHeader
-        rightComponent={<CancelBtn onClick={props.route.params.onClose} />}
-      />
+      <Header
+				leftComponent={<BackBtn onClick={() => props.navigation.goBack()} />}
+				rightComponent={<CancelBtn text="Close" onClick={() => props.navigation.navigate('Login')} />}
+			/>
 
       <ScrollView style={styles.container}>
-        <View style={ modalBaseHeader }>
+        <View style={ baseHeader }>
 					<Text style={styles.modalHeader}>Forgot password</Text>
 				</View>
         <Text style={styles.modalDescription}>

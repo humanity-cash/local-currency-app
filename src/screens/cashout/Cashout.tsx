@@ -24,10 +24,7 @@ const Cashout = (props: CashoutProps) => {
 		<View>
 			{props.visible && (
 				<Modal visible={props.visible} onShow={() => setUseHeader(true)}>
-					<CashoutNavigator
-						onClose={onClose}
-						style={{ backgroundColor: 'transparent' }}
-					/>
+					<CashoutNavigator onClose={onClose} />
 				</Modal>
 			)}
 		</View>

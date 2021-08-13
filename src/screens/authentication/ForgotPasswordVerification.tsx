@@ -3,8 +3,8 @@ import React, { useState } from 'react';
 import { Keyboard, KeyboardAvoidingView, Platform, StyleSheet, TouchableOpacity, View } from 'react-native';
 import { Text } from 'react-native-elements';
 import { useUserDetails } from "src/hooks";
-import { BackBtn, CancelBtn, ConfirmationCode, ModalHeader, Button } from "src/shared/uielements";
-import { modalBaseHeader, viewBase, wrappingContainerBase } from "src/theme/elements";
+import { BackBtn, CancelBtn, ConfirmationCode, Header } from "src/shared/uielements";
+import { baseHeader, viewBase, wrappingContainerBase } from "src/theme/elements";
 
 type ForgotPasswordVerificationProps = {
 	navigation?: any,
@@ -47,12 +47,12 @@ const ForgotPasswordVerificationView = (props: ForgotPasswordVerificationProps) 
 
 	return (
 		<View style={viewBase}>
-			<ModalHeader
-				rightComponent={<CancelBtn onClick={props.route.params.onClose} />}
+			<Header
 				leftComponent={<BackBtn onClick={() => props.navigation.goBack()} />}
+				rightComponent={<CancelBtn text="Close" onClick={() => props.navigation.navigate('Login')} />}
 			/>
 			<View style={wrappingContainerBase}>
-				<View style={ modalBaseHeader }>
+				<View style={ baseHeader }>
 					<Text style={styles.modalHeader}>Verify your mail address</Text>
 				</View>
 				<View style={styles.modalDescription}>
