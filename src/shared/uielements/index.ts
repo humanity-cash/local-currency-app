@@ -7,7 +7,6 @@ import ChartView from "./ChartView";
 import ConfirmationCode from "./ConfirmationCode";
 import DocumentModal from "./DocumentModal";
 import Dots from "./Dots";
-import FloatingButton from "./FloatingButton";
 import Modal from "./Modal";
 import Dialog from "./Dialog";
 import Notifications from "./Notifications";
@@ -53,7 +52,6 @@ export {
 	ConfirmationCode,
 	DocumentModal,
 	Dots,
-	FloatingButton,
 	Modal,
 	Dialog,
 	Notifications,
