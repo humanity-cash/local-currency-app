@@ -22,6 +22,18 @@ const styles = StyleSheet.create({
 		resizeMode: 'cover',
 		justifyContent: 'center'
 	},
+	titleView: {
+		paddingLeft: 35
+	},
+	titleText: {
+		fontSize: 50,
+		lineHeight: 50,
+		color: colors.black
+	},
+	description: {
+		fontSize: 18,
+		color: colors.white
+	},
 	bottomView: {
 		position: "absolute",
 		left: 0,
@@ -44,6 +56,11 @@ const TeaserView = (props: TeaserProps) => {
 				source={require('../../../assets/images/splash1.png')}
 				resizeMode="cover" 
 				style={styles.image}>
+
+				<View style={styles.titleView}>
+					<Text style={styles.titleText}>BerkShares</Text>
+					<Text style={styles.description}>for the Berkshire Region</Text>
+				</View>
 
 				<View style={styles.bottomView}>
 					<Button

@@ -70,7 +70,7 @@ export const SettingsPersonalDetails = () => {
 	useEffect(() => {
 		(async () => {
 		  if (Platform.OS !== 'web') {
-			const { status } = await ImagePicker.requestCameraRollPermissionsAsync();
+			const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
 			if (status !== 'granted') {
 			  alert('Sorry, we need camera roll permissions to make this work!');
 			}
