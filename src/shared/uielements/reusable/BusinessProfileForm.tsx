@@ -60,8 +60,9 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   image: {
-    width: 25,
-    height: 20
+    width: 80,
+    height: 80,
+    borderRadius: 40
   }
 });
 
@@ -78,7 +79,7 @@ const BusinessProfileForm = (props: BusinessProfileProps) => {
   useEffect(() => {
 		(async () => {
 		  if (Platform.OS !== 'web') {
-			const { status } = await ImagePicker.requestCameraRollPermissionsAsync();
+			const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
 			if (status !== 'granted') {
 			  alert('Sorry, we need camera roll permissions to make this work!');
 			}
@@ -132,7 +133,7 @@ const BusinessProfileForm = (props: BusinessProfileProps) => {
           {state.avatar === '' && 
             <View style={styles.imageView}>
               <Image 
-                source={require('../../../../assets/images/camera.png')}
+                source={require('../../../../assets/images/placeholder4.png')}
                 containerStyle={styles.image} 
               />
             </View>

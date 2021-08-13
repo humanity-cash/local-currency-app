@@ -17,7 +17,6 @@ function SignupBusinessScreen() {
 				headerShown: false,
 			})}
 		>
-			{/* <SignupBusinessStack.Screen name="BusinessAccount" component={BusinessAccount} /> */}
 			<SignupBusinessStack.Screen name="BusinessProfile" component={BusinessProfile} />
 			<SignupBusinessStack.Screen name="BusinessDetail" component={BusinessDetail} />
 			<SignupBusinessStack.Screen name="BusinessOwnerDetail" component={BusinessOwnerDetail} />

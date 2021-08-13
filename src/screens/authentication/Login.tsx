@@ -46,6 +46,9 @@ const styles = StyleSheet.create({
 //eslint-disable-next-line
 const strongRegex = new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#\$%\^&\*])(?=.{8,})");
 
+//eslint-disable-next-line
+const emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w\w+)+$/;
+
 const LoginView = (props: LoginProps) => {
 	const { authorization: { touchID } } = useUserDetails();
 	const isFocused = useIsFocused();
@@ -57,7 +60,7 @@ const LoginView = (props: LoginProps) => {
 	})
 	
 	useEffect(() => {
-		setGoNext(Object.keys(state).every((key) => state[key] !== "") && strongRegex.test(state.password));
+		setGoNext(Object.keys(state).every((key) => state[key] !== "") && strongRegex.test(state.password) && emailRegex.test(state.email));
 	},[state]);
 
 	useEffect(() => {
@@ -116,7 +119,11 @@ const LoginView = (props: LoginProps) => {
 				behavior={Platform.OS == "ios" ? "padding" : "height"}
 			>
 				<View style={styles.bottomView}>
-					<ForgotPassword />
+					<Button
+						type="transparent"
+						title="Forgot Passowrd?"
+						onPress={() => props.navigation.navigate("ForgotPassword")}
+					/>
 					<Button
 						type="darkGreen"
 						title="Log in"

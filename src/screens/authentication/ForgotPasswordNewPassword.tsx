@@ -3,8 +3,8 @@ import React, { useEffect, useState } from 'react';
 import { StyleSheet, View, KeyboardAvoidingView, Platform } from 'react-native';
 import { Text } from 'react-native-elements';
 import { useUserDetails } from "src/hooks";
-import { BackBtn, CancelBtn, ModalHeader, BlockInput, Button } from "src/shared/uielements";
-import { modalBaseHeader, viewBase, wrappingContainerBase } from "src/theme/elements";
+import { BackBtn, CancelBtn, Header, BlockInput, Button } from "src/shared/uielements";
+import { baseHeader, viewBase, wrappingContainerBase } from "src/theme/elements";
 import { IMap } from "src/utils/types";
 import { colors } from "src/theme/colors";
 
@@ -82,12 +82,12 @@ const ForgotPasswordNewPasswordView = (props: ForgotPasswordNewPasswordProps) =>
 
 	return (
 		<View style={viewBase}>
-			<ModalHeader
-				rightComponent={<CancelBtn onClick={props.route.params.onClose} />}
+			<Header
 				leftComponent={<BackBtn onClick={() => props.navigation.goBack()} />}
+				rightComponent={<CancelBtn text="Close" onClick={() => props.navigation.navigate('Login')} />}
 			/>
 			<View style={wrappingContainerBase}>
-				<View style={ modalBaseHeader }>
+				<View style={ baseHeader }>
 					<Text style={styles.modalHeader}>Create a new password</Text>
 				</View>
 				<View>
