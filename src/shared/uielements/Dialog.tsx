@@ -1,7 +1,7 @@
 import React, { ReactElement } from 'react';
 import { Dimensions, View, StyleSheet } from "react-native";
 import { Overlay } from 'react-native-elements';
-import { CancelBtn } from "src/shared/uielements";
+import { CancelBtn } from "src/shared/uielements/header";
 import { colors } from "src/theme/colors";
 
 type DialogProps = {
