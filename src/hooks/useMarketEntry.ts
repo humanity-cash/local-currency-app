@@ -1,7 +1,7 @@
 import _ from "lodash";
 import { useCallback, useEffect } from "react";
 import { createStore, useStore } from "react-hookstore";
-import { AsyncStorage } from "react-native";
+import AsyncStorage  from "@react-native-async-storage/async-storage";
 import listOfMarketEntries from 'src/mocks/marketEntries';
 import { MarketEntry, OrderType, ShareEntry } from "src/utils/types";
 
