@@ -5,7 +5,7 @@ import { Text, Image } from 'react-native-elements';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { BackBtn, Header, CancelBtn, Button } from "src/shared/uielements";
 import { colors } from "src/theme/colors";
-import { baseHeader, viewBaseWhite, wrappingContainerBase } from "src/theme/elements";
+import { underlineHeader, viewBase, wrappingContainerBase } from "src/theme/elements";
 
 type SelectBankAccountProps = {
 	navigation?: any
@@ -13,28 +13,29 @@ type SelectBankAccountProps = {
 }
 
 const styles = StyleSheet.create({
+	headerText: {
+		fontSize: 32,
+        lineHeight: 32
+	},
+	bodyText: {
+        color: colors.bodyText
+    },
+	form: {
+		marginTop: 40,
+		paddingHorizontal: 20
+	},
 	accountView: {
+		flex: 1,
 		flexDirection: 'row',
 		justifyContent: 'space-between',
 		alignItems: 'center',
-		backgroundColor: colors.azure,
-		padding: 15,
-		margin: 5
-	},
-	selectedAccountView: {
-		flexDirection: 'row',
-		justifyContent: 'space-between',
-		alignItems: 'center',
-		backgroundColor: colors.lightBlue,
-		padding: 15,
-		margin: 5
-	},
-	text: {
-		color: colors.blue,
-	},
-	bottomView: {
-		padding: 20,
-	},
+		paddingHorizontal: 20,
+		height: 55,
+		borderWidth: 1,
+		borderRadius: 30,
+		borderColor: colors.darkGreen,
+		marginVertical: 10
+	}
 });
 
 const SelectBankAccountView = (props: SelectBankAccountProps) => {
@@ -47,52 +48,32 @@ const SelectBankAccountView = (props: SelectBankAccountProps) => {
 
 	const onValueChange = (value: string) => {
 		setAccount(value);
+		props.navigation.navigate("Congratulations");
 	}
 
 	return (
-		<View style={viewBaseWhite}>
+		<View style={viewBase}>
 			<Header
 				leftComponent={<BackBtn onClick={() => props.navigation.goBack()} />}
 				rightComponent={<CancelBtn text="Close" onClick={() => props.navigation.navigate('Tabs')} />}
 			/>
 
 			<ScrollView style={wrappingContainerBase}>
-				<View style={ baseHeader }>
-					<Text h1 style={{color: colors.blue}}>Select account</Text>
-					<Text>Which account would you like to link to BerkShares?</Text>
+				<View style={underlineHeader}>
+					<Text style={styles.headerText}>Select account</Text>
 				</View>
-				<TouchableOpacity style={(account==="1") ? styles.selectedAccountView : styles.accountView} onPress={() => onValueChange("1")}>
-					<View>
-						<Text style={styles.text}>Checking</Text>
-						<Text style={styles.text}>US-08-CHAS-0686-5892</Text>
-					</View>
-					<View>
-						<Text style={styles.text}>$12</Text>
-					</View>
-				</TouchableOpacity>
-				<TouchableOpacity style={(account==="2") ? styles.selectedAccountView : styles.accountView} onPress={()=>onValueChange("2")}>
-					<View>
-						<Text style={styles.text}>Checking</Text>
-						<Text style={styles.text}>US-08-CHAS-0686-5892</Text>
-					</View>
-					<View>
-						<Text style={styles.text}>$12</Text>
-					</View>
-				</TouchableOpacity>
+				<Text style={styles.bodyText}>Which account would you like to link to BerkShares?</Text>
+				<View style={styles.form}>
+					<TouchableOpacity style={styles.accountView} onPress={() => onValueChange("1")}>
+						<Text >Checking</Text>
+						<Text >$1,000.76</Text>
+					</TouchableOpacity>
+					<TouchableOpacity style={styles.accountView} onPress={() => onValueChange("2")}>
+						<Text >Saving</Text>
+						<Text >$100,000.76</Text>
+					</TouchableOpacity>
+				</View>
 			</ScrollView>
-			<KeyboardAvoidingView
-				behavior={Platform.OS == "ios" ? "padding" : "height"} >
-				<View style={styles.bottomView}>
-					<Button
-						type="darkRed"
-						style={{backgroundColor: colors.blue}}
-						title="Select"
-						textStyle={{color: colors.white}}
-						disabled={!goNext}
-						onPress={() => props.navigation.navigate("Congratulations")}
-					/>
-				</View>
-			</KeyboardAvoidingView>
 		</View>
 	);
 }

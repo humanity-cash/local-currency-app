@@ -96,7 +96,7 @@ export const SettingsBankAccount = () => {
 					hasBankAccount && (
 						<View style={styles.section}>
 							<Image
-								source={require('../../../assets/images/salisbury_bank.png')}
+								source={require('../../../assets/images/bank1.png')}
 								containerStyle={styles.image}
 							/>
 							<View style={styles.inlineView}>

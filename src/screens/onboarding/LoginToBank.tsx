@@ -1,12 +1,10 @@
-import { AntDesign } from "@expo/vector-icons";
 import { useNavigation } from '@react-navigation/native';
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, ScrollView, View, KeyboardAvoidingView, Platform } from 'react-native';
 import { Text, Image } from 'react-native-elements';
 import { BackBtn, Header, CancelBtn, BlockInput, Button } from "src/shared/uielements";
 import { colors } from "src/theme/colors";
-import { baseHeader, viewBaseWhite, wrappingContainerBase } from "src/theme/elements";
-import listOfBanks from "src/mocks/banks";
+import { baseHeader, viewBaseWhite, wrappingContainerBase, underlineHeader } from "src/theme/elements";
 
 type LoginToBankProps = {
 	navigation?: any
@@ -14,17 +12,35 @@ type LoginToBankProps = {
 }
 
 const styles = StyleSheet.create({
+	headerText: {
+		fontSize: 32,
+        lineHeight: 32
+	},
+	bodyText: {
+        color: colors.bodyText
+    },
 	imageView: {
+		marginTop: 30,
+		marginBottom: 20,
 		justifyContent: 'space-between',
 		alignItems: 'center'
 	},
 	image: {
 		alignSelf: "center",
-		width: '45%',
-		height: 100
+		width: '40%',
+		height: 90
+	},
+	form: {
+		paddingBottom: 40
+	},
+	label: {
+		fontSize: 12,
+		lineHeight: 14,
+		color: colors.bodyText
 	},
 	bottomView: {
-		padding: 20,
+		paddingHorizontal: 20,
+		paddingBottom: 50
 	},
 });
 
@@ -53,29 +69,30 @@ const LoginToBankView = (props: LoginToBankProps) => {
 			/>
 
 			<ScrollView style={wrappingContainerBase}>
-				<View style={ baseHeader }>
-					<Text h1 style={{color: colors.blue}}>Log in to your bank</Text>
-					<Text>By providing your Chase bank credencials to Dwolla, you're enabling Dwolla to retrieve your financial data.</Text>
+				<View style={underlineHeader}>
+					<Text style={styles.headerText}>Log in to your bank</Text>
 				</View>
+				<Text style={styles.bodyText}>By providing your Chase bank credencials to Dwolla, you're enabling Dwolla to retrieve your financial data.</Text>
 				<View style={styles.imageView}>
 					<Image
-						source={require('../../../assets/images/bank.png')}
+						source={require('../../../assets/images/bank1.png')}
 						containerStyle={styles.image}
 					/>
 				</View>
-				<View>
+				<View style={styles.form}>
+					<Text style={styles.label}>ACCOUNT NAME</Text>
 					<BlockInput
-						placeholder="Account name"
 						name="accountName"
+						placeholder="Account name"
 						value={accountName}
-						style={{backgroundColor: colors.azure}}
 						onChange={onValueChange}
 					/>
+
+					<Text style={styles.label}>PASSWORD</Text>
 					<BlockInput
-						placeholder="Password"
 						name="password"
+						placeholder="Password"
 						value={password}
-						style={{backgroundColor: colors.azure}}
 						onChange={onValueChange}
 					/>
 				</View>
@@ -84,10 +101,8 @@ const LoginToBankView = (props: LoginToBankProps) => {
 				behavior={Platform.OS == "ios" ? "padding" : "height"} >
 				<View style={styles.bottomView}>
 					<Button
-						type="darkRed"
-						style={{backgroundColor: colors.blue}}
+						type="darkGreen"
 						title="Submit"
-						textStyle={{color: colors.white}}
 						disabled={!goNext}
 						onPress={() => props.navigation.navigate("SelectBankAccount")}
 					/>
