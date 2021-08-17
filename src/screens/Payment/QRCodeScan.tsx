@@ -187,6 +187,7 @@ const QRCodeScan = (props: QRCodeScanProps) => {
 	
 	const handleBarCodeScanned = (data: HandleScaned) => {
 		setIsScanned(true);
+		setIsPaymentDialogOpen(true);
 	}
 
 	if (hasPermission === null) {

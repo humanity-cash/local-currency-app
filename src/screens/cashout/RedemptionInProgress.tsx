@@ -2,7 +2,7 @@ import { useNavigation } from '@react-navigation/native';
 import React from 'react';
 import { StyleSheet, View, KeyboardAvoidingView, ScrollView, Platform, TouchableOpacity, Switch } from 'react-native';
 import { Text } from 'react-native-elements';
-import { ModalHeader, Button, CancelBtn } from "src/shared/uielements";
+import { Header, Button, CancelBtn } from "src/shared/uielements";
 import { baseHeader, modalViewBase, wrappingContainerBase } from "src/theme/elements";
 
 type RedemptionInProgressProps = {
@@ -24,15 +24,10 @@ const styles = StyleSheet.create({
 
 const RedemptionInProgressView = (props: RedemptionInProgressProps) => {
 
-	const close = () => {
-		props.navigation.navigate("Dashboard");
-		props.route.params.onClose();
-	}
-
 	return (
 		<View style={modalViewBase}>
-			<ModalHeader
-				rightComponent={<CancelBtn onClick={close} />}
+			<Header
+				rightComponent={<CancelBtn text={"Close"} onClick={() => props.navigation.navigate("Dashboard")} />}
 			/>
 			<ScrollView style={wrappingContainerBase}>
 				<View style={ baseHeader }>
@@ -48,7 +43,7 @@ const RedemptionInProgressView = (props: RedemptionInProgressProps) => {
 					<Button
 						type="darkGreen"
 						title="Go back to home"
-						onPress={close}
+						onPress={() => props.navigation.navigate("Dashboard")}
 					/>
 				</View>
 			</KeyboardAvoidingView>

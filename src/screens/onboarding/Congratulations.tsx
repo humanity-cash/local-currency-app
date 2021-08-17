@@ -12,43 +12,41 @@ type CongratulationsProps = {
 }
 
 const styles = StyleSheet.create({
-	accountView: {
-		backgroundColor: colors.azure,
-		padding: 10
+	headerText: {
+		fontSize: 32,
+        lineHeight: 32
 	},
+	bodyText: {
+        color: colors.bodyText
+    },
 	bottomView: {
-		padding: 20,
+		paddingHorizontal: 20,
+		paddingBottom: 45
 	},
 });
 
 const CongratulationsView = (props: CongratulationsProps) => {
 	return (
 		<View style={viewBaseWhite}>
-			<Header
-				leftComponent={<BackBtn onClick={() => props.navigation.goBack()} />}
-				rightComponent={<CancelBtn text="Close" onClick={() => props.navigation.navigate('Tabs')} />}
-			/>
+			<Header />
 			<ScrollView style={wrappingContainerBase}>
 				<View style={ baseHeader }>
-					<Text h1 style={{color: colors.blue}}>Congratulations!</Text>
-					<Text>You have linked your bank account! You are ready to top up your BerkShares and start supporting your community!</Text>
+					<Text style={styles.headerText}>Select account</Text>
 				</View>
-				<View style={styles.accountView}>
-					<Text style={{fontWeight: 'bold'}}>Bank account</Text>
-					<Text>*My account name*</Text>
-					<Text>***XXXX</Text>
-					<Text>USD$</Text>
-				</View>
+				<Text style={styles.bodyText}>You have linked your Salisbury Checking (US-08-CHAS-0686-5892) bank account! You are ready to load up your BerkShares and start supporting your community!</Text>
 			</ScrollView>
 			<KeyboardAvoidingView
 				behavior={Platform.OS == "ios" ? "padding" : "height"} >
 				<View style={styles.bottomView}>
 					<Button
-						type="darkRed"
-						style={{backgroundColor: colors.blue}}
-						title="Load up BerkShares"
-						textStyle={{color: colors.white}}
+						type="transparent"
+						title="Skip for now"
 						onPress={() => props.navigation.navigate("Tabs")}
+					/>
+					<Button
+						type="darkGreen"
+						title="Load up BerkShares"
+						onPress={() => props.navigation.navigate("TopUp")}
 					/>
 				</View>
 			</KeyboardAvoidingView>
