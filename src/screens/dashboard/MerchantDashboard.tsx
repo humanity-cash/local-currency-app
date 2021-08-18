@@ -183,7 +183,7 @@ const MerchantDashboardView = (props: MerchantDashboardProps) => {
 				type="purple"
 				title="Receive or Scan to Pay"
 				style={styles.scanButton}
-				onPress={()=>props.navigation.navigate("QRCodeScan")}
+				onPress={()=>props.navigation.navigate("MerchantQRCodeScan")}
 			/>
 		</View>
 	);
