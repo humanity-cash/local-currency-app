@@ -8,8 +8,9 @@ type SearchInputProps = {
 	label: string
 	name?: string
 	placeholder?: string
-	value: any,
+	value: any
 	style?: any
+	textColor?: any
 	keyboardType?: any
 	onKeyPress?: any
 	maxLength?: number
@@ -45,21 +46,21 @@ const SearchInput = (props: SearchInputProps) => {
 	
 	return (
 		<TouchableWithoutFeedback onPress={() => inputRef.current?.focus()}>
-			<View style={styles.container}>
+			<View style={{ ...styles.container, ...props.style }}>
 				<View style={styles.iconView}>
 					<AntDesign
 						name="search1"
 						size={20}
-						color={colors.text}
+						color={props.textColor? props.textColor : colors.text}
 					/>
 				</View>
 				<TextInput
 					ref={inputRef}
 					style={{
 						...styles.inputText,
-						...props.style,
+						...props.style
 					}}
-					placeholderTextColor={colors.lightGreen}
+					placeholderTextColor={props.textColor? props.textColor : colors.lightGreen}
 					keyboardType={props.keyboardType || 'default' }
 					placeholder={props.placeholder ? props.placeholder : ''}
 					onChangeText={newValue => props.onChange(props.name, newValue)}
