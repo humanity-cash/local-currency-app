@@ -1,17 +1,12 @@
 import { EvilIcons } from '@expo/vector-icons';
+import { Octicons } from '@expo/vector-icons';
 import { createDrawerNavigator, DrawerContentComponentProps, DrawerContentScrollView, DrawerItem } from '@react-navigation/drawer';
 import React, { useState } from 'react';
 import { StyleSheet, View, Text, Image, TouchableWithoutFeedback } from 'react-native';
 import { Drawer } from 'react-native-paper';
 import MerchantDashboard from "./MerchantDashboard";
-import { Octicons } from '@expo/vector-icons';
-import { TopUp, QRCodeScan, Request } from "../index";
-import CashoutAmount from "../cashout/CashoutAmount";
-import MyTransactions from "../transactions/MyTransactions";
-import MerchantDictionary from "../merchant/MerchantDictionary";
-import SettingsHelpAndContact from "../settings/SettingsHelpAndContact";
-import Settings from "../settings/Settings";
-import BusinessAccount from '../signupBusiness/BusinessAccount';
+import MerchantQRCodeScan from "../merchantPayment/MerchantQRCodeScan";
+import MerchantRequest from "../merchantPayment/MerchantRequest";
 import { colors } from "src/theme/colors";
 
 const styles = StyleSheet.create({
@@ -129,8 +124,8 @@ const DrawerContent = (props: DrawerContentComponentProps) => {
 					</View>
 					<Text style={styles.berkAmount}>B$ 50.00</Text>
 					<Drawer.Section>
-						<DrawerItem label="Receive payment"  onPress={() => {props.navigation.navigate('ReceivePayment')}} />
-						<DrawerItem label="Scan to pay" onPress={() => {props.navigation.navigate('ScanToPay')}} />
+						<DrawerItem label="Receive payment"  onPress={() => {props.navigation.navigate('MerchantRequest')}} />
+						<DrawerItem label="Scan to pay" onPress={() => {props.navigation.navigate('MerchantQRCodeScan')}} />
 						<DrawerItem label="Make a return"  onPress={() => {props.navigation.navigate('LoadUp')}} />
 						<DrawerItem label="Load up B$"  onPress={() => {props.navigation.navigate('CashOut')}} />
 						<DrawerItem label="Send B$ to someone"  onPress={() => {props.navigation.navigate('CashOut')}} />
@@ -165,8 +160,8 @@ const MerchantTabs = () => {
 	return (
 		<DrawerNav.Navigator initialRouteName="MerchantDashboard" drawerContent={ props => <DrawerContent {...props} />}>
 			<DrawerNav.Screen name="MerchantDashboard" component={MerchantDashboard} />
-			<DrawerNav.Screen name="ScanToPay" component={MerchantDashboard} />
-			<DrawerNav.Screen name="ReceivePayment" component={MerchantDashboard} />
+			<DrawerNav.Screen name="MerchantRequest" component={MerchantRequest} />
+			<DrawerNav.Screen name="MerchantQRCodeScan" component={MerchantQRCodeScan} />
 		  	<DrawerNav.Screen name="LoadUp" component={MerchantDashboard} />
 			<DrawerNav.Screen name="CashOut" component={MerchantDashboard} />
 			<DrawerNav.Screen name="MyTransactions" component={MerchantDashboard} />
