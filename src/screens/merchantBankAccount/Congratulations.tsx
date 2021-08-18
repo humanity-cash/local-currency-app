@@ -2,7 +2,7 @@ import { useNavigation } from '@react-navigation/native';
 import React from 'react';
 import { StyleSheet, View, KeyboardAvoidingView, Platform, ScrollView } from 'react-native';
 import { Text } from 'react-native-elements';
-import { BackBtn, Header, CancelBtn, Button } from "src/shared/uielements";
+import { Header, Button } from "src/shared/uielements";
 import { colors } from "src/theme/colors";
 import { baseHeader, viewBaseWhite, wrappingContainerBase } from "src/theme/elements";
 
@@ -14,11 +14,19 @@ type CongratulationsProps = {
 const styles = StyleSheet.create({
 	headerText: {
 		fontSize: 32,
-        lineHeight: 32
+        lineHeight: 32,
+		color: colors.purple
+	},
+	bodyView: {
+		flexDirection: 'row',
+		flexWrap: 'wrap'
 	},
 	bodyText: {
         color: colors.bodyText
     },
+	text: {
+		color: colors.purple
+	},
 	bottomView: {
 		paddingHorizontal: 20,
 		paddingBottom: 45
@@ -33,7 +41,11 @@ const CongratulationsView = (props: CongratulationsProps) => {
 				<View style={ baseHeader }>
 					<Text style={styles.headerText}>Congratulations!</Text>
 				</View>
-				<Text style={styles.bodyText}>You have linked your Salisbury Checking (US-08-CHAS-0686-5892) bank account! You are ready to load up your BerkShares and start supporting your community!</Text>
+				<View style={styles.bodyView}>
+					<Text style={styles.bodyText}>You have linked your </Text>
+					<Text style={styles.text}>Salisbury Checking (US-08-CHAS-0686-5892) </Text>
+					<Text style={styles.bodyText}>bank account! You are ready to load up your BerkShares and start supporting your community!</Text>
+				</View>				
 			</ScrollView>
 			<KeyboardAvoidingView
 				behavior={Platform.OS == "ios" ? "padding" : "height"} >
@@ -41,10 +53,11 @@ const CongratulationsView = (props: CongratulationsProps) => {
 					<Button
 						type="transparent"
 						title="Skip for now"
-						onPress={() => props.navigation.navigate("Tabs")}
+						textStyle={styles.text}
+						onPress={() => props.navigation.navigate("MerchantTabs")}
 					/>
 					<Button
-						type="darkGreen"
+						type="purple"
 						title="Load up BerkShares"
 						onPress={() => props.navigation.navigate("TopUp")}
 					/>
