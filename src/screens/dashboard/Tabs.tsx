@@ -1,6 +1,7 @@
+import { EvilIcons } from '@expo/vector-icons';
 import { createDrawerNavigator, DrawerContentComponentProps, DrawerContentScrollView, DrawerItem } from '@react-navigation/drawer';
-import React from 'react';
-import { StyleSheet, View, Text, Image } from 'react-native';
+import React, { useState } from 'react';
+import { StyleSheet, View, Text, Image, TouchableWithoutFeedback } from 'react-native';
 import { Drawer } from 'react-native-paper';
 import Dashboard from "./Dashboard";
 import { Octicons } from '@expo/vector-icons';
@@ -24,12 +25,24 @@ const styles = StyleSheet.create({
 		backgroundColor: colors.lightGreen,
 		paddingVertical: 30
 	},
-	image: {
+	imageView: {
+		justifyContent: 'center',
+		alignItems: 'center',
 		width: 50,
 		height: 50,
-		borderRadius: 25
+		borderRadius: 25,
+		backgroundColor: colors.white
 	},
-	userInfoView: {
+	image: {
+		width: '70%',
+		height: '70%',
+		borderRadius: 20
+	},
+	infoView: {
+		paddingVertical: 10,
+		backgroundColor: colors.lightGreen1
+	},
+	userInfo: {
 		flexDirection: 'row',
 		alignItems: 'center',
 		paddingVertical: 5,
@@ -50,10 +63,15 @@ const styles = StyleSheet.create({
 	},
 	bottomSection: {
 		paddingBottom: 10
+	},
+	inlineView: {
+		flexDirection: 'row'
 	}
 });
 
 const DrawerContent = (props: DrawerContentComponentProps) => {
+	const [isExpanded, setIsExpanded] = useState<boolean>(false);
+	
 	const signOut = () => {
 		props.navigation.navigate('Teaser');
 	}
@@ -62,19 +80,52 @@ const DrawerContent = (props: DrawerContentComponentProps) => {
 		<View style={styles.drawerWrap}>
 			<DrawerContentScrollView {...props}>
 				<View>
-					<View>
-						<View style={styles.userInfoView}>
-							<Image
-								source={require("../../../assets/images/placeholder1.png")}
-								style={styles.image} 
-							/>
-							<View style={styles.usernameView}>
-								<Text>Dagmar van Eijk</Text>
-								<Text style={styles.fadeText}>Switch account</Text>
+					<View style={styles.infoView}>
+						<TouchableWithoutFeedback onPress={() => setIsExpanded(!isExpanded)}>
+							<View style={styles.userInfo}>
+								<View style={styles.imageView}>
+									<Image
+										source={require("../../../assets/images/placeholder5.png")}
+										style={styles.image} 
+									/>
+								</View>
+								<View style={styles.usernameView}>
+									<Text>Dagmar van Eijk</Text>
+									<View style={styles.inlineView}>
+										<Text style={styles.fadeText}>Switch account</Text>
+										<EvilIcons name="chevron-down" size={26} color={colors.darkGreen} />
+									</View>
+								</View>
 							</View>
-						</View>
-						<Text style={styles.berkAmount}>B$ 50.00</Text>
+						</TouchableWithoutFeedback>
+						{isExpanded && (
+							<View>
+								<View style={styles.userInfo}>
+									<View style={styles.imageView}>
+										<Image
+											source={require("../../../assets/images/placeholder5.png")}
+											style={styles.image} 
+										/>
+									</View>
+									<View style={styles.usernameView}>
+										<Text>Magic Fluke</Text>
+									</View>
+								</View>
+								<View style={styles.userInfo}>
+									<View style={styles.imageView}>
+									<Image
+										source={require("../../../assets/images/placeholder5.png")}
+										style={styles.image} 
+									/>
+									</View>
+									<View style={styles.usernameView}>
+										<Text>Cashier Magic Fluke</Text>
+									</View>
+								</View>
+							</View>
+						)}
 					</View>
+					<Text style={styles.berkAmount}>B$ 50.00</Text>
 					<Drawer.Section>
 						<DrawerItem label="Scan to pay" onPress={() => {props.navigation.navigate('ScanToPay')}} />
 						<DrawerItem label="Receive payment"  onPress={() => {props.navigation.navigate('ReceivePayment')}} />

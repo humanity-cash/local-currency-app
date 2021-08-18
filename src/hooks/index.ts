@@ -1,5 +1,4 @@
 import useCachedResources from "./useCachedResources";
-import useMarketEntry from "./useMarketEntry";
 import useMessages from "./useMessages";
 import useModalStatusBar from "./useModalStatusBar";
 import useDialogStatus from "./useDialogStatus";
@@ -14,7 +13,6 @@ import useWallet from "./useWallet";
 
 export {
 	useCachedResources,
-	useMarketEntry,
 	useMessages,
 	useModalStatusBar,
 	useDialogStatus,
