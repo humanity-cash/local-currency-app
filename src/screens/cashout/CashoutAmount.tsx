@@ -5,7 +5,6 @@ import { useDialogStatus } from "src/hooks";
 import { Header, Button, CancelBtn, BackBtn, BorderedInput, Dialog } from "src/shared/uielements";
 import { underlineHeader, viewBase, dialogViewBase, wrappingContainerBase } from "src/theme/elements";
 import { colors } from "src/theme/colors";
-import Cashout from "./Cashout";
 import { IMap } from "src/utils/types";
 
 type CashoutAmountProps = {
@@ -95,7 +94,7 @@ const CashoutAmount = (props: CashoutAmountProps) => {
 
 	const doCashout = () => {
 		setIsVisible(false);
-		setCashout(true);
+		props.navigation.navigate("Cashout");
 	}
 
 	const onCashoutClose = () => {
@@ -167,8 +166,6 @@ const CashoutAmount = (props: CashoutAmountProps) => {
 					</View>
 				</Dialog>
 			)}
-
-			{cashout && <Cashout onClose={onCashoutClose} visible={cashout} />}
 		</View>
 	);
 }

@@ -1,11 +1,10 @@
-import { AntDesign } from "@expo/vector-icons";
 import { useNavigation } from '@react-navigation/native';
 import React, { useState, useEffect } from 'react';
 import { StyleSheet, TouchableWithoutFeedback, View, KeyboardAvoidingView, Platform, ScrollView } from 'react-native';
 import { Text, Image } from 'react-native-elements';
-import { BackBtn, Header, CancelBtn, BlockInput, Button } from "src/shared/uielements";
+import { BackBtn, Header, CancelBtn, SearchInput, Button } from "src/shared/uielements";
 import { colors } from "src/theme/colors";
-import { baseHeader, viewBaseWhite, wrappingContainerBase } from "src/theme/elements";
+import { baseHeader, viewBase, wrappingContainerBase, underlineHeader } from "src/theme/elements";
 import listOfBanks from "src/mocks/banks";
 
 type SelectBankProps = {
@@ -14,29 +13,23 @@ type SelectBankProps = {
 }
 
 const styles = StyleSheet.create({
-	view: {
-		marginTop: 5,
-		backgroundColor: colors.white,
-		padding: 0,
-		flexDirection: 'row',
-		paddingHorizontal: 10
+	headerText: {
+		fontSize: 32,
+        lineHeight: 32
 	},
-	search: {
-		width: '100%',
-		height: 40,
-		backgroundColor: colors.lightBlue,
-		borderRadius: 13,
+    bodyView: {
+        paddingTop: 50,
+        paddingHorizontal: 17
+    },
+	bankItem: {
+		width: '48%',
+		height: 100,
+		marginBottom: 10,
+		backgroundColor: colors.card,
+		justifyContent: 'center',
+		alignItems: 'center'
 	},
-	text: {
-		fontSize: 20,
-		lineHeight: 60,
-		flex: 1,
-		fontFamily: 'IBMPlexSansSemiBold',
-	},
-	arrow: {
-		marginVertical: 15
-	},
-	imageView: {
+	bankView: {
 		flex: 1,
 		display: 'flex',
 		flexDirection: 'row',
@@ -44,34 +37,23 @@ const styles = StyleSheet.create({
 		justifyContent: 'space-between',
 	},
 	image: {
-		// alignSelf: "center",
-		width: '48%',
-		height: 100
-	},
-	bottomView: {
-		padding: 20,
+		width: '50%',
+		height: 80
 	},
 });
 
 const SelectBankView = (props: SelectBankProps) => {
 	const [searchPhrase, setSearchPhrase] = useState('');
-	const [goNext, setGoNext] = useState(false);
 	const [bank, setBank] = useState('');
 
 	useEffect(() => {
-		setGoNext(bank !== "");
+		if (bank !== '') {
+			props.navigation.navigate("LoginToBank")
+		}
 	},[bank]);
 
 	const onValueChange = (name: any, change: any) => {
 		setSearchPhrase(change);
-	}
-
-	const getBgColor = (bankId: string) => {
-		if (bankId == bank) {
-			return colors.blue;
-		} else {
-			return '#fff';
-		}
 	}
 
 	const renderBanks = () => {
@@ -85,17 +67,20 @@ const SelectBankView = (props: SelectBankProps) => {
 		}
 
 		return found.map((entry, i) => (
-			<TouchableWithoutFeedback key={i} onPress={() => setBank(entry.id)} style={{backgroundColor: getBgColor(entry.id)}}>
-				<Image
-					source={require('../../../assets/images/bank.png')}
-					containerStyle={styles.image}
-				/>
-			</TouchableWithoutFeedback>
+			<View style={styles.bankItem} key={i}>
+				<TouchableWithoutFeedback onPress={() => setBank(entry.id)} >
+					<Image
+						source={require('../../../assets/images/bank2.png')}
+						containerStyle={styles.image}
+					/>
+				</TouchableWithoutFeedback>
+			</View>
+			
 		))
 	}
 
 	return (
-		<View style={viewBaseWhite}>
+		<View style={viewBase}>
 			<Header
 				leftComponent={<BackBtn onClick={() => props.navigation.goBack()} />}
 				rightComponent={<CancelBtn text="Close" onClick={() => props.navigation.navigate('Tabs')} />}
@@ -103,32 +88,22 @@ const SelectBankView = (props: SelectBankProps) => {
 
 			<ScrollView style={wrappingContainerBase}>
 				<View style={ baseHeader }>
-					<Text h1 style={{color: colors.blue}}>Select your bank</Text>
-					<BlockInput
-						style={styles.search}
-						placeholder="Search"
-						name="name"
+					<View style={underlineHeader}>
+						<Text style={styles.headerText}>Select your bank</Text>
+					</View>
+					<SearchInput
+						label="Search"
+						name="searchText"
+						keyboardType="default"
+						placeholder="Search help"
 						value={searchPhrase}
 						onChange={onValueChange}
 					/>
 				</View>
-				<View style={styles.imageView}>
+				<View style={styles.bankView}>
 					{renderBanks()}
 				</View>
 			</ScrollView>
-			<KeyboardAvoidingView
-				behavior={Platform.OS == "ios" ? "padding" : "height"} >
-				<View style={styles.bottomView}>
-					<Button
-						type="darkRed"
-						style={{backgroundColor: colors.blue}}
-						title="Continue"
-						textStyle={{color: colors.white}}
-						disabled={!goNext}
-						onPress={() => props.navigation.navigate("LoginToBank")}
-					/>
-				</View>
-			</KeyboardAvoidingView>
 		</View>
 	);
 }
