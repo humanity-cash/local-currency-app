@@ -70,7 +70,7 @@ const MerchantRequest = (props: MerchantRequestProps) => {
 	const toggleSwitch = () => {
 		setIsEnabled(previousState => !previousState);
 		if (isEnabled) {
-			props.navigation.navigate("QRCodeScan");
+			props.navigation.navigate("MerchantQRCodeScan");
 		}
 	}
 
