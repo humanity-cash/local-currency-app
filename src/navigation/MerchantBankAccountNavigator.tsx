@@ -5,23 +5,18 @@ import LoginToMerchantBank from "src/screens/merchantBankAccount/LoginToMerchant
 import SelectMerchantBankAccount from "src/screens/merchantBankAccount/SelectMerchantBankAccount";
 import Congratulations from "src/screens/merchantBankAccount/Congratulations";
 
-type MerchantBankAccountNavigatorProps = {
-	route?: any
-}
-
 const MerchantBankAccountStack = createStackNavigator()
-function MerchantBankAccountScreen(props: MerchantBankAccountNavigatorProps) {
-	const params = props?.route?.params || props;
+function MerchantBankAccountScreen() {
 	return (
 		<MerchantBankAccountStack.Navigator
 			screenOptions={({ route, navigation }) => ({
 				headerShown: false
 			})}
 		>
-			<MerchantBankAccountStack.Screen name="SelectMerchantBank" initialParams={params} component={SelectMerchantBank} />
-			<MerchantBankAccountStack.Screen name="LoginToMerchantBank" initialParams={params} component={LoginToMerchantBank} />
-			<MerchantBankAccountStack.Screen name="SelectMerchantBankAccount" initialParams={params} component={SelectMerchantBankAccount} />
-			<MerchantBankAccountStack.Screen name="Congratulations" initialParams={params} component={Congratulations} />
+			<MerchantBankAccountStack.Screen name="SelectMerchantBank" component={SelectMerchantBank} />
+			<MerchantBankAccountStack.Screen name="LoginToMerchantBank" component={LoginToMerchantBank} />
+			<MerchantBankAccountStack.Screen name="SelectMerchantBankAccount" component={SelectMerchantBankAccount} />
+			<MerchantBankAccountStack.Screen name="Congratulations" component={Congratulations} />
 		</MerchantBankAccountStack.Navigator>
 	);
 }

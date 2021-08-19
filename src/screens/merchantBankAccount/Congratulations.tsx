@@ -38,7 +38,7 @@ const CongratulationsView = (props: CongratulationsProps) => {
 		<View style={viewBaseWhite}>
 			<Header />
 			<ScrollView style={wrappingContainerBase}>
-				<View style={ baseHeader }>
+				<View style={baseHeader}>
 					<Text style={styles.headerText}>Congratulations!</Text>
 				</View>
 				<View style={styles.bodyView}>

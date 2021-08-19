@@ -13,7 +13,7 @@ type MerchantRequestProps = {
 
 type AmountState = {
 	amount: string,
-	cost: string
+	costs: string
 }
 
 const styles = StyleSheet.create({
@@ -46,7 +46,7 @@ const styles = StyleSheet.create({
 
 const MerchantRequest = (props: MerchantRequestProps) => {
 
-	const [state, setState] = useState({
+	const [state, setState] = useState<AmountState>({
 		amount: "1",
 		costs: "1"
 	});

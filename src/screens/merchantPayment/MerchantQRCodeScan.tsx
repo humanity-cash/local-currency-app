@@ -118,7 +118,8 @@ const PaymentConfirm = (props: PaymentConfirmProps) => {
 }
 
 const MerchantQRCodeScan = (props: MerchantQRCodeScanProps) => {
-	const [hasPermission, setHasPermission] = useState<boolean>(null || false);
+	const [isPermissionSelected, setIsPermissionSelected] = useState<boolean>(false);
+	const [hasPermission, setHasPermission] = useState<boolean>(false);
 	const [isScanned, setIsScanned] = useState<boolean>(false);
 	const [isEnabled, setIsEnabled] = useState<boolean>(false);
 	const [isPaymentDialogOpen, setIsPaymentDialogOpen] = useState<boolean>(false);
@@ -140,6 +141,7 @@ const MerchantQRCodeScan = (props: MerchantQRCodeScanProps) => {
 	useEffect(() => {
 		(async () => {
 			const {status} = await BarCodeScanner.requestPermissionsAsync();
+			setIsPermissionSelected(true);
 			setHasPermission(status === 'granted');
 		})();
 	}, []);
@@ -149,7 +151,7 @@ const MerchantQRCodeScan = (props: MerchantQRCodeScanProps) => {
 		setIsPaymentDialogOpen(true);
 	}
 
-	if (hasPermission === null) {
+	if (isPermissionSelected === false) {
 		return <Text>Requesting for camera permission</Text>;
 	}
 
