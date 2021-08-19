@@ -127,7 +127,7 @@ const MerchantQRCodeScan = (props: MerchantQRCodeScanProps) => {
 		setIsEnabled(previousState => !previousState);
 		if (!isEnabled) {
 			setIsEnabled(previousState => !previousState);
-			props.navigation.navigate("MerchantPaymentRequest");
+			props.navigation.navigate("MerchantRequest");
 		}
 	}
 
