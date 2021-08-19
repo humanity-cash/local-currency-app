@@ -5,9 +5,8 @@ import { Image, Text } from 'react-native-elements';
 import { useModalStatusBar } from "src/hooks";
 import { useUserDetails } from "src/hooks";
 import { Button, Header } from "src/shared/uielements";
-import { baseHeader, viewBase, wrappingContainerBase, modalViewBase } from "src/theme/elements";
+import { baseHeader, viewBase, wrappingContainerBase } from "src/theme/elements";
 import { colors } from "src/theme/colors";
-import { CancelBtn, Modal, ModalHeader } from "src/shared/uielements";
 
 type LinkBankAccountProps = {
 	navigation?: any
@@ -32,7 +31,6 @@ const styles = StyleSheet.create({
 const LinkBankAccountView = (props: LinkBankAccountProps) => {
 	const [isVisible, setIsVisible] = useState(false);
 	const { personalDetails: { email }} = useUserDetails();
-	const { setUseHeader } = useModalStatusBar();
 
 	const selectBank = () => {
 		setIsVisible(false);

@@ -42,12 +42,12 @@ const BusinessWelcome = (props: BusinessWelcomeProps) => {
 						title="Skip for now"
 						style={styles.skipBtn}
 						textStyle={styles.skipBtn}
-						onPress={()=>props.navigation.navigate("Tabs")}
+						onPress={()=>props.navigation.navigate("MerchantTabs")}
 					/>
 					<Button
 						type="purple"
 						title="Link my business bank account"
-						onPress={()=>props.navigation.navigate("Tabs")}
+						onPress={()=>props.navigation.navigate("MerchantBankAccount")}
 					/>
 				</View>
 			</KeyboardAvoidingView>

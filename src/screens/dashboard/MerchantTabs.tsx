@@ -1,17 +1,12 @@
 import { EvilIcons } from '@expo/vector-icons';
+import { Octicons } from '@expo/vector-icons';
 import { createDrawerNavigator, DrawerContentComponentProps, DrawerContentScrollView, DrawerItem } from '@react-navigation/drawer';
 import React, { useState } from 'react';
 import { StyleSheet, View, Text, Image, TouchableWithoutFeedback } from 'react-native';
 import { Drawer } from 'react-native-paper';
-import Dashboard from "./Dashboard";
-import { Octicons } from '@expo/vector-icons';
-import { TopUp, QRCodeScan, Request } from "../index";
-import CashoutAmount from "../cashout/CashoutAmount";
-import MyTransactions from "../transactions/MyTransactions";
-import MerchantDictionary from "../merchant/MerchantDictionary";
-import SettingsHelpAndContact from "../settings/SettingsHelpAndContact";
-import Settings from "../settings/Settings";
-import BusinessAccount from '../signupBusiness/BusinessAccount';
+import MerchantDashboard from "./MerchantDashboard";
+import MerchantQRCodeScan from "../merchantPayment/MerchantQRCodeScan";
+import MerchantRequest from "../merchantPayment/MerchantRequest";
 import { colors } from "src/theme/colors";
 
 const styles = StyleSheet.create({
@@ -22,7 +17,7 @@ const styles = StyleSheet.create({
 	},
 	drawerWrap: {
 		flex: 1,
-		backgroundColor: colors.lightGreen,
+		backgroundColor: colors.greyedPurple,
 		paddingVertical: 30
 	},
 	imageView: {
@@ -39,21 +34,19 @@ const styles = StyleSheet.create({
 		borderRadius: 20
 	},
 	infoView: {
-		paddingVertical: 10,
-		backgroundColor: colors.lightGreen1
+		paddingVertical: 10
 	},
 	userInfo: {
 		flexDirection: 'row',
 		alignItems: 'center',
 		paddingVertical: 5,
-		paddingHorizontal: 10,
-		backgroundColor: colors.lightGreen1
+		paddingHorizontal: 10
 	},
 	usernameView: {
 		paddingHorizontal: 10
 	},
 	fadeText: {
-		color: colors.darkGreen
+		color: colors.purple
 	},
 	berkAmount: {
 		fontSize: 32,
@@ -90,17 +83,17 @@ const DrawerContent = (props: DrawerContentComponentProps) => {
 									/>
 								</View>
 								<View style={styles.usernameView}>
-									<Text>Dagmar van Eijk</Text>
+									<Text>Magic Fluke</Text>
 									<View style={styles.inlineView}>
 										<Text style={styles.fadeText}>Switch account</Text>
-										<EvilIcons name="chevron-down" size={26} color={colors.darkGreen} />
+										<EvilIcons name="chevron-down" size={26} color={colors.purple} />
 									</View>
 								</View>
 							</View>
 						</TouchableWithoutFeedback>
 						{isExpanded && (
 							<View>
-								<TouchableWithoutFeedback onPress={() => props.navigation.navigate("MerchantTabs")}>
+								<TouchableWithoutFeedback onPress={() => props.navigation.navigate("Tabs")}>
 									<View style={styles.userInfo}>
 										<View style={styles.imageView}>
 											<Image
@@ -109,11 +102,11 @@ const DrawerContent = (props: DrawerContentComponentProps) => {
 											/>
 										</View>
 										<View style={styles.usernameView}>
-											<Text>Magic Fluke</Text>
+											<Text>Dagmar van Eijk</Text>
 										</View>
 									</View>
 								</TouchableWithoutFeedback>
-								<TouchableWithoutFeedback onPress={() => props.navigation.navigate("MerchantTabs")}>
+								<TouchableWithoutFeedback onPress={() => props.navigation.navigate("Tabs")}>
 									<View style={styles.userInfo}>
 										<View style={styles.imageView}>
 										<Image
@@ -131,17 +124,17 @@ const DrawerContent = (props: DrawerContentComponentProps) => {
 					</View>
 					<Text style={styles.berkAmount}>B$ 50.00</Text>
 					<Drawer.Section>
-						<DrawerItem label="Scan to pay" onPress={() => {props.navigation.navigate('ScanToPay')}} />
-						<DrawerItem label="Receive payment"  onPress={() => {props.navigation.navigate('ReceivePayment')}} />
-						<DrawerItem label="Load up B$"  onPress={() => {props.navigation.navigate('LoadUp')}} />
-						<DrawerItem label="Cash out"  onPress={() => {props.navigation.navigate('CashOut')}} />
-						<DrawerItem label="My Transactions"  onPress={() => {props.navigation.navigate('MyTransactions')}} />
+						<DrawerItem label="Receive payment"  onPress={() => {props.navigation.navigate('MerchantRequest')}} />
+						<DrawerItem label="Scan to pay" onPress={() => {props.navigation.navigate('MerchantQRCodeScan')}} />
+						<DrawerItem label="Make a return"  onPress={() => {props.navigation.navigate('LoadUp')}} />
+						<DrawerItem label="Load up B$"  onPress={() => {props.navigation.navigate('CashOut')}} />
+						<DrawerItem label="Send B$ to someone"  onPress={() => {props.navigation.navigate('CashOut')}} />
+						<DrawerItem label="Cash out to USD"  onPress={() => {props.navigation.navigate('CashOut')}} />
 					</Drawer.Section>
 					<Drawer.Section>
-						<DrawerItem label="Where to spend"  onPress={() => {props.navigation.navigate('WhereToSpend')}} />
-						<DrawerItem label="Sign up your business"  onPress={() => {props.navigation.navigate('SignUpYourBusiness')}} />
+						<DrawerItem label="Report"  onPress={() => {props.navigation.navigate('SignUpYourBusiness')}} />
 						<DrawerItem label="Settings"  onPress={() => {props.navigation.navigate('Settings')}} />
-						<DrawerItem label="Scan to pay"  onPress={() => {props.navigation.navigate('HelpAndContact')}} />
+						<DrawerItem label="Help and Contact"  onPress={() => {props.navigation.navigate('HelpAndContact')}} />
 					</Drawer.Section>
 				</View>
 			</DrawerContentScrollView>
@@ -151,7 +144,7 @@ const DrawerContent = (props: DrawerContentComponentProps) => {
 						<Octicons 
 							name="sign-out"
 							size={24}
-							color={colors.text}
+							color={colors.bodyText}
 						/>}
 						label="Sign out" 
 						onPress={signOut} 
@@ -163,21 +156,21 @@ const DrawerContent = (props: DrawerContentComponentProps) => {
 
 const DrawerNav = createDrawerNavigator();
 
-const Tabs = () => {
+const MerchantTabs = () => {
 	return (
-		<DrawerNav.Navigator initialRouteName="Dashboard" drawerContent={ props => <DrawerContent {...props} />}>
-			<DrawerNav.Screen name="Dashboard" component={Dashboard} />
-			<DrawerNav.Screen name="ScanToPay" component={QRCodeScan} />
-			<DrawerNav.Screen name="ReceivePayment" component={Request} />
-		  	<DrawerNav.Screen name="LoadUp" component={TopUp} />
-			<DrawerNav.Screen name="CashOut" component={CashoutAmount} />
-			<DrawerNav.Screen name="MyTransactions" component={MyTransactions} />
-			<DrawerNav.Screen name="WhereToSpend" component={MerchantDictionary} />
-			<DrawerNav.Screen name="SignUpYourBusiness" component={BusinessAccount} />
-			<DrawerNav.Screen name="Settings" component={Settings} />
-			<DrawerNav.Screen name="HelpAndContact" component={SettingsHelpAndContact} />
+		<DrawerNav.Navigator initialRouteName="MerchantDashboard" drawerContent={ props => <DrawerContent {...props} />}>
+			<DrawerNav.Screen name="MerchantDashboard" component={MerchantDashboard} />
+			<DrawerNav.Screen name="MerchantRequest" component={MerchantRequest} />
+			<DrawerNav.Screen name="MerchantQRCodeScan" component={MerchantQRCodeScan} />
+		  	<DrawerNav.Screen name="LoadUp" component={MerchantDashboard} />
+			<DrawerNav.Screen name="CashOut" component={MerchantDashboard} />
+			<DrawerNav.Screen name="MyTransactions" component={MerchantDashboard} />
+			<DrawerNav.Screen name="WhereToSpend" component={MerchantDashboard} />
+			<DrawerNav.Screen name="SignUpYourBusiness" component={MerchantDashboard} />
+			<DrawerNav.Screen name="Settings" component={MerchantDashboard} />
+			<DrawerNav.Screen name="HelpAndContact" component={MerchantDashboard} />
 		</DrawerNav.Navigator>
 	);
 }
 
-export default Tabs
+export default MerchantTabs

@@ -1,6 +1,5 @@
 import { createStackNavigator } from "@react-navigation/stack";
 import React from "react";
-// import BusinessAccount from "src/screens/signupBusiness/BusinessAccount";
 import BusinessProfile from "src/screens/signupBusiness/BusinessProfile";
 import BusinessDetail from "src/screens/signupBusiness/BusinessDetail";
 import BusinessOwnerDetail from "src/screens/signupBusiness/BusinessOwnerDetail";
