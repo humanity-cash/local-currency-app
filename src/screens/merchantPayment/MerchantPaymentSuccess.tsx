@@ -31,7 +31,7 @@ const MerchantPaymentSuccess = (props: MerchantPaymentSuccessProps) => {
 	return (
 		<View style={viewBase}>
 			<Header
-				rightComponent={<CancelBtn text="Close" onClick={() => props.navigation.navigate('MerchantDashboard')} />}
+				rightComponent={<CancelBtn text="Close" color={colors.purple} onClick={() => props.navigation.navigate('MerchantDashboard')} />}
 			/>
 			<ScrollView style={wrappingContainerBase}>
 				<View style={ baseHeader }>
