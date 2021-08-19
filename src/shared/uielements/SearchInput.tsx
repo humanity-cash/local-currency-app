@@ -51,7 +51,7 @@ const SearchInput = (props: SearchInputProps) => {
 					<AntDesign
 						name="search1"
 						size={20}
-						color={props.textColor? props.textColor : colors.text}
+						color={props.textColor ? props.textColor : colors.text}
 					/>
 				</View>
 				<TextInput
@@ -60,7 +60,7 @@ const SearchInput = (props: SearchInputProps) => {
 						...styles.inputText,
 						...props.style
 					}}
-					placeholderTextColor={props.textColor? props.textColor : colors.lightGreen}
+					placeholderTextColor={props.textColor ? props.textColor : colors.lightGreen}
 					keyboardType={props.keyboardType || 'default' }
 					placeholder={props.placeholder ? props.placeholder : ''}
 					onChangeText={newValue => props.onChange(props.name, newValue)}
