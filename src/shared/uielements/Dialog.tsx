@@ -7,6 +7,7 @@ import { colors } from "src/theme/colors";
 type DialogProps = {
 	visible: boolean,
 	children: ReactElement,
+	backgroundStyle?: any,
 	style?: any,
 	onShow?: () => void,
 	onClose?: () => void
@@ -58,12 +59,12 @@ const styles = StyleSheet.create({
 	},
 });
 
-const Dialog = ({visible = false, onClose, style = {}, children, onShow }: DialogProps) => {
+const Dialog = ({visible = false, onClose, backgroundStyle={}, style = {}, children, onShow }: DialogProps) => {
 
 	return (
 		<Overlay
 			isVisible={visible}
-			overlayStyle={styles.dialogBg}
+			overlayStyle={{...styles.dialogBg, ...backgroundStyle}}
 			backdropStyle={{
 				backgroundColor: 'transparent'
 			}}
