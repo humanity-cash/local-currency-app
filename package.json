@@ -8,8 +8,8 @@
     "ios:build": "expo build:ios",
     "web:build": "expo build:web",
     "start": "react-native start",
-    "test": "./node_modules/.bin/jest",
-    "test:watch": "./node_modules/.bin/jest --watchAll",
+    "test": "./node_modules/.bin/jest --passWithNoTests --forceExit --detectOpenHandles",
+    "test:watch": "./node_modules/.bin/jest --passWithNoTests --runInBand --detectOpenHandles --forceExit --watchAll",
     "lint": "./node_modules/.bin/eslint src/**/*.ts src/**/**/*.tsx",
     "prepare": "husky install"
   },
