@@ -5,7 +5,7 @@ import { Header } from "src/shared/uielements";
 import { colors } from "src/theme/colors";
 import { baseHeader, viewBase, wrappingContainerBase } from "src/theme/elements";
 
-type MerchantPaymentPendingProps = {
+type MerchantPayoutPendingProps = {
 	navigation?: any,
 	route?: any,
 }
@@ -25,11 +25,11 @@ const styles = StyleSheet.create({
 	},
 });
 
-const MerchantPaymentPending = (props: MerchantPaymentPendingProps) => {
+const MerchantPayoutPending = (props: MerchantPayoutPendingProps) => {
 
 	useEffect(() => {
 		setTimeout(() => {
-			props.navigation.navigate("MerchantPaymentSuccess");
+			props.navigation.navigate("MerchantPayoutSuccess");
 		}, 2000);
 	});
 
@@ -52,4 +52,4 @@ const MerchantPaymentPending = (props: MerchantPaymentPendingProps) => {
 	);
 }
 
-export default MerchantPaymentPending
+export default MerchantPayoutPending

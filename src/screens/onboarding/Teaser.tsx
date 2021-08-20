@@ -53,7 +53,7 @@ const TeaserView = (props: TeaserProps) => {
 	return (
 		<View style={ viewBase }>
 			<ImageBackground
-				source={require('../../../assets/images/splash1.png')}
+				source={require('../../../assets/images/mainscreen.jpg')}
 				resizeMode="cover" 
 				style={styles.image}>
 

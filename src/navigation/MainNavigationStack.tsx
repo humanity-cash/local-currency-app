@@ -51,6 +51,15 @@ import MerchantTabs from "src/screens/dashboard/MerchantTabs";
 import MerchantPaymentPending from "src/screens/merchantPayment/MerchantPaymentPending";
 import MerchantPaymentSuccess from "src/screens/merchantPayment/MerchantPaymentSuccess";
 import MerchantReturn from "src/screens/merchantPayment/MerchantReturn";
+import MerchantCashoutPassword from "src/screens/merchantCashout/MerchantCashoutPassword";
+import MerchantRedemptionInProgress from "src/screens/merchantCashout/MerchantRedemptionInProgress";
+import MerchantLoadupPending from "src/screens/merchantLoadup/MerchantLoadupPending";
+import MerchantLoadupSuccess from "src/screens/merchantLoadup/MerchantLoadupSuccess";
+import MerchantPayoutToPersonal from "src/screens/merchantPayout/MerchantPayoutToPersonal";
+import MerchantPayoutToSomeone from "src/screens/merchantPayout/MerchantPayoutToSomeone";
+import MerchantPayoutPending from "src/screens/merchantPayout/MerchantPayoutPending";
+import MerchantPayoutSuccess from "src/screens/merchantPayout/MerchantPayoutSuccess";
+import MerchantPayoutQRCodeScan from "src/screens/merchantPayout/MerchantPayoutQRCodeScan";
 
 const PrimaryStack = createStackNavigator();
 
@@ -106,6 +115,15 @@ function PrimaryStackScreen() {
       <PrimaryStack.Screen name="MerchantPaymentPending" component={MerchantPaymentPending} />
       <PrimaryStack.Screen name="MerchantPaymentSuccess" component={MerchantPaymentSuccess} />
       <PrimaryStack.Screen name="MerchantReturn" component={MerchantReturn} />
+      <PrimaryStack.Screen name="MerchantCashoutPassword" component={MerchantCashoutPassword} />
+      <PrimaryStack.Screen name="MerchantRedemptionInProgress" component={MerchantRedemptionInProgress} />
+      <PrimaryStack.Screen name="MerchantLoadupPending" component={MerchantLoadupPending} />
+      <PrimaryStack.Screen name="MerchantLoadupSuccess" component={MerchantLoadupSuccess} />
+      <PrimaryStack.Screen name="MerchantPayoutToPersonal" component={MerchantPayoutToPersonal} />
+      <PrimaryStack.Screen name="MerchantPayoutToSomeone" component={MerchantPayoutToSomeone} />
+      <PrimaryStack.Screen name="MerchantPayoutPending" component={MerchantPayoutPending} />
+      <PrimaryStack.Screen name="MerchantPayoutSuccess" component={MerchantPayoutSuccess} />
+      <PrimaryStack.Screen name="MerchantPayoutQRCodeScan" component={MerchantPayoutQRCodeScan} />
 
       <PrimaryStack.Screen name="SignupBusiness" component={SignupBusinessNavigator} />
       <PrimaryStack.Screen name="MerchantBankAccount" component={MerchantBankAccountNavigator} />
