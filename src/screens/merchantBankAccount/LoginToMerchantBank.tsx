@@ -4,9 +4,9 @@ import { StyleSheet, ScrollView, View, KeyboardAvoidingView, Platform } from 're
 import { Text, Image } from 'react-native-elements';
 import { BackBtn, Header, CancelBtn, BlockInput, Button } from "src/shared/uielements";
 import { colors } from "src/theme/colors";
-import { baseHeader, viewBaseWhite, wrappingContainerBase, underlineHeader } from "src/theme/elements";
+import { viewBaseB, wrappingContainerBase, underlineHeaderB } from "src/theme/elements";
 
-type LoginToBankProps = {
+type LoginToMerchantBankProps = {
 	navigation?: any
 	route?: any
 }
@@ -14,7 +14,8 @@ type LoginToBankProps = {
 const styles = StyleSheet.create({
 	headerText: {
 		fontSize: 32,
-        lineHeight: 32
+        lineHeight: 32,
+		color: colors.purple
 	},
 	bodyText: {
         color: colors.bodyText
@@ -38,13 +39,17 @@ const styles = StyleSheet.create({
 		lineHeight: 14,
 		color: colors.bodyText
 	},
+	input: {
+		backgroundColor: colors.white,
+		color: colors.purple
+	},
 	bottomView: {
 		paddingHorizontal: 20,
 		paddingBottom: 50
 	},
 });
 
-const LoginToBankView = (props: LoginToBankProps) => {
+const LoginToMerchantBankView = (props: LoginToMerchantBankProps) => {
 	const [accountName, setAccountName] = useState('');
 	const [password, setPassword] = useState('');
 	const [goNext, setGoNext] = useState(false);
@@ -62,14 +67,14 @@ const LoginToBankView = (props: LoginToBankProps) => {
 	}
 
 	return (
-		<View style={viewBaseWhite}>
+		<View style={viewBaseB}>
 			<Header
-				leftComponent={<BackBtn onClick={() => props.navigation.goBack()} />}
-				rightComponent={<CancelBtn text="Close" onClick={() => props.navigation.navigate('Tabs')} />}
+				leftComponent={<BackBtn color={colors.purple} onClick={() => props.navigation.goBack()} />}
+				rightComponent={<CancelBtn text="Close" color={colors.purple} onClick={() => props.navigation.navigate('Tabs')} />}
 			/>
 
 			<ScrollView style={wrappingContainerBase}>
-				<View style={underlineHeader}>
+				<View style={underlineHeaderB}>
 					<Text style={styles.headerText}>Log in to your bank</Text>
 				</View>
 				<Text style={styles.bodyText}>By providing your Chase bank credencials to Dwolla, you're enabling Dwolla to retrieve your financial data.</Text>
@@ -84,6 +89,7 @@ const LoginToBankView = (props: LoginToBankProps) => {
 					<BlockInput
 						name="accountName"
 						placeholder="Account name"
+						style={styles.input}
 						value={accountName}
 						onChange={onValueChange}
 					/>
@@ -92,6 +98,7 @@ const LoginToBankView = (props: LoginToBankProps) => {
 					<BlockInput
 						name="password"
 						placeholder="Password"
+						style={styles.input}
 						value={password}
 						onChange={onValueChange}
 					/>
@@ -101,10 +108,10 @@ const LoginToBankView = (props: LoginToBankProps) => {
 				behavior={Platform.OS == "ios" ? "padding" : "height"} >
 				<View style={styles.bottomView}>
 					<Button
-						type="darkGreen"
+						type="purple"
 						title="Submit"
 						disabled={!goNext}
-						onPress={() => props.navigation.navigate("SelectBankAccount")}
+						onPress={() => props.navigation.navigate("SelectMerchantBankAccount")}
 					/>
 				</View>
 			</KeyboardAvoidingView>
@@ -112,8 +119,8 @@ const LoginToBankView = (props: LoginToBankProps) => {
 	);
 }
 
-const LoginToBank = (props: LoginToBankProps) => {
+const LoginToMerchantBank = (props: LoginToMerchantBankProps) => {
 	const navigation = useNavigation();
-	return <LoginToBankView {...props} navigation={navigation} />;
+	return <LoginToMerchantBankView {...props} navigation={navigation} />;
 }
-export default LoginToBank
+export default LoginToMerchantBank

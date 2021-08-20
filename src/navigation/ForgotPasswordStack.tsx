@@ -6,23 +6,19 @@ import ForgotPasswordSuccess from "src/screens/authentication/ForgotPasswordSucc
 import ForgotPasswordVerification from "src/screens/authentication/ForgotPasswordVerification";
 
 const ForgotPasswordStack = createStackNavigator()
-function ForgotPasswordStackScreen(props: ForgotPasswordStackProps) {
+function ForgotPasswordStackScreen() {
 	return (
 		<ForgotPasswordStack.Navigator
 			screenOptions={({ route, navigation }) => ({
 				headerShown: false
 			})}
 		>
-			<ForgotPasswordStack.Screen name="ForgotPasswordEmail" initialParams={props} component={ForgotPasswordEmail} />
-			<ForgotPasswordStack.Screen name="ForgotPasswordVerification" initialParams={props} component={ForgotPasswordVerification} />
-			<ForgotPasswordStack.Screen name="ForgotPasswordNewCode" initialParams={props} component={ForgotPasswordNewPassword} />
-			<ForgotPasswordStack.Screen name="ForgotPasswordSuccess" initialParams={props} component={ForgotPasswordSuccess} />
+			<ForgotPasswordStack.Screen name="ForgotPasswordEmail" component={ForgotPasswordEmail} />
+			<ForgotPasswordStack.Screen name="ForgotPasswordVerification" component={ForgotPasswordVerification} />
+			<ForgotPasswordStack.Screen name="ForgotPasswordNewCode" component={ForgotPasswordNewPassword} />
+			<ForgotPasswordStack.Screen name="ForgotPasswordSuccess" component={ForgotPasswordSuccess} />
 		</ForgotPasswordStack.Navigator>
 	);
-}
-
-type ForgotPasswordStackProps = {
-	onClose: () => void
 }
 
 export const ForgotPasswordNavigator = ForgotPasswordStackScreen

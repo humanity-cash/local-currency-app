@@ -7,13 +7,11 @@ import ConfirmPin from "src/screens/authentication/ConfirmPin";
 import Login from "src/screens/authentication/Login";
 import TopUp from "src/screens/onboarding/TopUp";
 import TopUpSuccess from "src/screens/onboarding/TopUpSuccess";
-import AddCashResult from "src/screens/onboarding/AddCashResult";
 import ConfirmEmail from "src/screens/onboarding/ConfirmEmail";
 import CreateAccount from "src/screens/onboarding/CreateAccount";
 import CreditCard from "src/screens/onboarding/CreditCard";
 import Deposit from "src/screens/onboarding/Deposit";
 import EmailConfirmed from "src/screens/onboarding/EmailConfirmed";
-import OnboardingSteps from "src/screens/onboarding/OnboardingSteps";
 import Password from "src/screens/onboarding/Password";
 import PasswordConfirm from "src/screens/onboarding/PasswordConfirm";
 import Passcode from "src/screens/onboarding/Passcode";
@@ -23,7 +21,6 @@ import PersonalDetails from "src/screens/onboarding/PersonalDetails";
 import PersonalProfile from "src/screens/onboarding/PersonalProfile";
 import SelectPayment from "src/screens/onboarding/SelectPayment";
 import Teaser from "src/screens/onboarding/Teaser";
-import Terms from "src/screens/onboarding/Terms";
 import TermsEmail from "src/screens/onboarding/TermsEmail";
 import Verification from "src/screens/onboarding/Verification";
 import VerificationHelp from "src/screens/onboarding/VerificationHelp";
@@ -33,7 +30,6 @@ import SettingsPersonalProfile from "src/screens/settings/SettingsPersonalProfil
 import SettingsTermsAndConditions from "src/screens/settings/SettingsTermsAndConditions";
 import SettingsBankAccount from "src/screens/settings/SettingsBankAccount";
 import SettingsDeleteAccount from "src/screens/settings/SettingsDeleteAccount";
-import Wallet from "src/screens/wallet/Wallet";
 import SelectAccountType from "src/screens/onboarding/SelectAccountType";
 import LinkBankAccount from "src/screens/onboarding/LinkBankAccount";
 import SelectBank from "src/screens/onboarding/SelectBank";
@@ -45,9 +41,16 @@ import QRCodeScan from "src/screens/payment/QRCodeScan";
 import PaymentPending from "src/screens/payment/PaymentPending";
 import PaymentSuccess from "src/screens/payment/PaymentSuccess";
 import Request from "src/screens/payment/Request";
+import { ForgotPasswordNavigator } from "src/navigation/ForgotPasswordStack";
+import { CashoutNavigator } from "src/navigation/CashoutNavigator";
 
 import { SignupBusinessNavigator } from 'src/navigation/SignupBusinessNavigator';
-import { ForgotPasswordNavigator } from "src/navigation/ForgotPasswordStack";
+import { MerchantBankAccountNavigator } from 'src/navigation/MerchantBankAccountNavigator';
+
+import MerchantTabs from "src/screens/dashboard/MerchantTabs";
+import MerchantQRCodeScan from "src/screens/merchantPayment/MerchantQRCodeScan";
+import MerchantPaymentPending from "src/screens/merchantPayment/MerchantPaymentPending";
+import MerchantPaymentSuccess from "src/screens/merchantPayment/MerchantPaymentSuccess";
 
 const PrimaryStack = createStackNavigator();
 
@@ -67,22 +70,18 @@ function PrimaryStackScreen() {
       <PrimaryStack.Screen name="ConfirmPassword" component={PasswordConfirm} />
       <PrimaryStack.Screen name="Passcode" component={Passcode} />
       <PrimaryStack.Screen name="TouchId" component={TouchId} />
-      <PrimaryStack.Screen name="OnboardingSteps" component={OnboardingSteps} />
       <PrimaryStack.Screen name="PersonalProfile" component={PersonalProfile} />
       <PrimaryStack.Screen name="PersonalDetails" component={PersonalDetails} />
       <PrimaryStack.Screen name="PersonalAddress" component={PersonalAddress} />
       <PrimaryStack.Screen name="TermsEmail" component={TermsEmail} />
       <PrimaryStack.Screen name="ConfirmEmail" component={ConfirmEmail} />
       <PrimaryStack.Screen name="EmailConfirmed" component={EmailConfirmed} />
-      <PrimaryStack.Screen name="Terms" component={Terms} />
       <PrimaryStack.Screen name="TopUp" component={TopUp} />
       <PrimaryStack.Screen name="TopUpSuccess" component={TopUpSuccess} />
       <PrimaryStack.Screen name="SelectPayment" component={SelectPayment} />
       <PrimaryStack.Screen name="Deposit" component={Deposit} />
       <PrimaryStack.Screen name="CreditCard" component={CreditCard} />
       <PrimaryStack.Screen name="ConfirmPin" component={ConfirmPin} />
-      <PrimaryStack.Screen name="AddCashResult" component={AddCashResult} />
-      <PrimaryStack.Screen name="Wallet" component={Wallet} />
       <PrimaryStack.Screen name="SettingsTermsAndConditions" component={SettingsTermsAndConditions} />
       <PrimaryStack.Screen name="Settings" component={Settings} />
       <PrimaryStack.Screen name="SettingsPersonalProfile" component={SettingsPersonalProfile} />
@@ -100,8 +99,18 @@ function PrimaryStackScreen() {
       <PrimaryStack.Screen name="PaymentPending" component={PaymentPending} />
       <PrimaryStack.Screen name="PaymentSuccess" component={PaymentSuccess} />
       <PrimaryStack.Screen name="PaymentRequest" component={Request} />
-      <PrimaryStack.Screen name="SignupBusiness" component={SignupBusinessNavigator} />
       <PrimaryStack.Screen name="ForgotPassword" component={ForgotPasswordNavigator} />
+      <PrimaryStack.Screen name="Cashout" component={CashoutNavigator} />
+
+      <PrimaryStack.Screen name="MerchantTabs" component={MerchantTabs} />      
+      <PrimaryStack.Screen name="MerchantQRCodeScan" component={MerchantQRCodeScan} />
+      <PrimaryStack.Screen name="MerchantRequest" component={MerchantQRCodeScan} />
+      <PrimaryStack.Screen name="MerchantPaymentPending" component={MerchantPaymentPending} />
+      <PrimaryStack.Screen name="MerchantPaymentSuccess" component={MerchantPaymentSuccess} />
+
+      <PrimaryStack.Screen name="SignupBusiness" component={SignupBusinessNavigator} />
+      <PrimaryStack.Screen name="MerchantBankAccount" component={MerchantBankAccountNavigator} />
+      
     </PrimaryStack.Navigator>
   );
 }
