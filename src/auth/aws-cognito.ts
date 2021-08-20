@@ -1,11 +1,16 @@
-import { AuthenticationDetails, CognitoUser, CognitoUserPool } from 'amazon-cognito-identity-js';
+/* eslint-disable @typescript-eslint/ban-ts-comment */
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
+import { AuthenticationDetails, CognitoUser, CognitoUserAttribute, CognitoUserPool, CognitoUserSession, ISignUpResult } from 'amazon-cognito-identity-js';
+import { CognitoResponse, ConfirmEmailVerificationCodeInput, SignInInput, SignUpInput, UpdateUserAttributesInput } from './types';
 
 /**AWS COGNITO ERRORS */
+export const COGNITO_USERNAME_EXISTS_EXCEPTION_CODE = 'UsernameExistsException'
 export const NEW_PASSWORD_REQUIRED_ERROR = 'newPasswordRequiredError'
 export const WRONG_CREDS_ERROR = 'Incorrect username or password.'
 
-const USERPOOL_ID = 'eu-west-1_Mynki1a6j'
-const CLIENT_ID= '72vn0vds8fibjrh19se81g0aot'
+const USERPOOL_ID = 'eu-west-1_Bwp861D2I'
+const CLIENT_ID = '3arqlv58bqfepqg262fcdep3cq'
 
 const poolData = {
 	UserPoolId: USERPOOL_ID,
@@ -14,114 +19,144 @@ const poolData = {
 
 const userPool: CognitoUserPool = new CognitoUserPool(poolData)
 
-let currentUser: any = userPool.getCurrentUser()
+let currentUser: CognitoUser | null = userPool.getCurrentUser()
 
-export function getCurrentUser() {
-  return currentUser
-}
+export const getCurrentUser = (): CognitoUser | null => currentUser
 
-const getCognitoUser = (username: string) => {
-	const userData = {
-		Username: username,
-		Pool: userPool,
-	}
-	const cognitoUser = new CognitoUser(userData)
+const getCognitoUser = (email: string): CognitoUser => new CognitoUser({
+	Username: email,
+	Pool: userPool,
+})
 
-	return cognitoUser
-}
+export const getSession = async (): CognitoResponse<CognitoUserSession | null> => {
 
-export async function getSession() {
-	const currentUser = userPool.getCurrentUser()
-
-	return new Promise(function (resolve, reject) {
-		if(!currentUser) reject('No User')
-		currentUser?.getSession(function (err: any, session: any) {
-			if (err) {
-				reject(err)
-			} else {
-				resolve(session)
-			}
+	return new Promise(function (resolve) {
+		currentUser?.getSession(function (err: any, session: CognitoUserSession | null) {
+			if (err) resolve({ success: false, data: { error: err.code } })
+			else resolve({ success: true, data: session })
 		})
-	}).catch((err) => {
-		throw err
 	})
 }
 
-export async function signInWithEmail(username: string, password: string) {
-	return new Promise(function (resolve, reject) {
+export const signUp = async ({ email, password }: SignUpInput)
+	: Promise<{ success: boolean, data: { error: string } | ISignUpResult | undefined }> => {
+	const attributeList: CognitoUserAttribute[] = [];
+	const dataEmail = { Name: 'email', Value: email.trim() };
+	const attributeEmail = new CognitoUserAttribute(dataEmail);
+	attributeList.push(attributeEmail);
+
+	return new Promise((resolve) => {
+		userPool.signUp(email, password, attributeList, attributeList,
+			(err: any, result: ISignUpResult | undefined) => {
+				if (err) {
+					resolve({ success: false, data: { error: err.code } })
+				}
+				else resolve({ success: true, data: result })
+			})
+	})
+};
+
+export const signIn = async ({ email, password }: SignInInput): CognitoResponse<CognitoUserSession> => {
+	return new Promise(function (resolve) {
 		const authenticationData = {
-			Username: username,
+			Username: email,
 			Password: password,
 		}
 		const authenticationDetails = new AuthenticationDetails(authenticationData)
-    currentUser = getCognitoUser(username)
-
+		currentUser = getCognitoUser(email)
+		if (!currentUser) resolve({ success: false, data: { error: 'Email not registered!' } })
 		return currentUser.authenticateUser(authenticationDetails, {
-			onSuccess: function (res: any) {
-				console.log("🚀 ~ file: aws.tsx ~ line 66 ~ res", res)
-				resolve ({ success: true, data: res });
+			onSuccess: async function (response: CognitoUserSession) {
+				resolve({ success: true, data: response });
 			},
 			onFailure: function (error: any) {
-				resolve ({ success: false, data: {error: { message: error.message}} });
+				resolve({ success: false, data: { error: error.code } });
 			},
-			newPasswordRequired: function (userAttributes:any, requiredAttributes:any) {
-				resolve({ success: false, data: { error: { message: NEW_PASSWORD_REQUIRED_ERROR }, attributes: requiredAttributes}});
-			}
 		})
-	}).catch((err) => {
-		throw err
 	})
 }
 
-export function signOut(): void {
+export const signOut = (): void => {
 	const currentUser = userPool.getCurrentUser()
 	if (currentUser) {
 		return currentUser.signOut()
 	}
 }
 
-export async function forgotPassword(username: string, code: string, password: string) {
-	return new Promise(function (resolve, reject) {
-		const currentUser = getCognitoUser(username)
-
-		if (!currentUser) {
-			reject(`could not find ${username}`)
-			return
-		}
-
-		currentUser.confirmPassword(code, password, {
-			onSuccess: function () {
-				resolve('password updated')
-			},
-			onFailure: function (err: any) {
-				reject(err)
-			},
-		})
-	})
-}
-
-export function changePassword(username: string, oldPassword: string, newPassword: string) {
-	return new Promise(function (resolve, reject) {
-		const currentUser = getCognitoUser(username)
-		currentUser.changePassword(oldPassword, newPassword, function (err: any, res: any) {
+export const confirmEmailVerificationCode = ({ email, code }: ConfirmEmailVerificationCodeInput)
+	: Promise<{ success: boolean, data: any }> => {
+	const cognitoUser = getCognitoUser(email);
+	return new Promise((resolve) => {
+		cognitoUser.confirmRegistration(code, true, function (err: any, result) {
 			if (err) {
-				reject(err)
-			} else {
-				resolve(res)
-			}
-		})
+				resolve({ success: false, data: { error: err.code } });
+			} else resolve({ success: true, data: result })
+			console.log('call result: ' + result);
+		});
 	})
 }
 
-export function completeNewPasswordChallenge(userAttr: any, newPassword: string) {
-	return new Promise(function (resolve, reject) {
-		currentUser.completeNewPasswordChallenge(newPassword, userAttr, {
-			onFailure: (error: any) => {
-				resolve({success: false, data: {error}})
-			},
-			onSuccess: () => {
-				resolve({success: true})
-			},
-		})
+interface ResendEmailVerificationCodeInput {
+	email: string
+}
+
+export const resendEmailVerificationCode = ({ email }: ResendEmailVerificationCodeInput): void => {
+	const cognitoUser = getCognitoUser(email);
+	cognitoUser.resendConfirmationCode(function (err, result) {
+		if (err) {
+			console.log("🚀 ~ file: aws-cognito.ts ~ line 130 ~ err", err)
+			return;
+		}
+		console.log('call result: ' + result);
+	});
+}
+
+export const updateUserAttributes = ({ update }: UpdateUserAttributesInput)
+	: CognitoResponse<string | undefined> => {
+	const updateNames = Object.keys(update)
+	const attributes = updateNames.map((name: any) => {
+		//@ts-ignore
+		const attribute = { Name: name, Value: update[name] };
+		return new CognitoUserAttribute(attribute);
+	})
+	return new Promise((resolve) => {
+		if (!currentUser) resolve({ success: false, data: { error: 'userNotAuthed' } })
+		else {
+			currentUser.updateAttributes(attributes, function (err: any, result) {
+				if (err) resolve({ success: false, data: { error: err.code } })
+				else resolve({ success: true, data: result })
+			});
+		}
+	})
+}
+
+export const getUserAttributes = () => {
+	if (!currentUser) return
+	currentUser.getUserAttributes(function (err, result) {
+		if (err) {
+			console.log("🚀 ~ file: aws-cognito.ts ~ line 186 ~ err", err)
+			return;
+		}
+		if (!result) return
+		console.log("🚀 ~ file: aws-cognito.ts ~ line 186 ~ result", result)
+		for (let i = 0; i < result.length; i++) {
+			console.log(
+				'attribute ' + result[i].getName() + ' has value ' + result[i].getValue()
+			);
+		}
+	});
+}
+
+export const deleteUser = async (): Promise<{ success: boolean, data: any }> => {
+	return new Promise((resolve) => {
+		if (!currentUser) return resolve({ success: false, data: { error: 'userNotAuthed' } })
+		currentUser.deleteUser(function (err: any, result: any) {
+			if (err) {
+				console.log("🚀 ~ file: aws-cognito.ts ~ line 199 ~ err", err)
+				resolve({ success: false, data: { error: err.code } })
+			} else {
+				resolve({ success: true, data: result })
+			}
+		});
 	})
 }
