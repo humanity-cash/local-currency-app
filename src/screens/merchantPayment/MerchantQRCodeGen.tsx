@@ -9,6 +9,9 @@ import { dialogViewBase } from "src/theme/elements";
 import { colors } from "src/theme/colors";
 
 const styles = StyleSheet.create({
+    dialogBg: {
+        backgroundColor: colors.overlayPurple
+    },
 	dialogWrap: {
 		paddingHorizontal: 10,
 		height: "100%",
@@ -33,7 +36,7 @@ const MerchantQRCodeGen = (props: MerchantQRCodeGenProps) => {
     const navigation = useNavigation();
 
     return (
-        <Dialog visible={props.visible} onClose={()=>props.onClose()}>
+        <Dialog visible={props.visible} onClose={()=>props.onClose()} backgroundStyle={styles.dialogBg}>
             <View style={dialogViewBase}>
                 <View style={styles.dialogWrap}>
                     <QRCode

@@ -29,7 +29,7 @@ const MerchantPaymentPending = (props: MerchantPaymentPendingProps) => {
 
 	useEffect(() => {
 		setTimeout(() => {
-			props.navigation.navigate("MerchantPaymentSuccess");
+			props.navigation.navigate("MerchantLoadupSuccess");
 		}, 2000);
 	});
 

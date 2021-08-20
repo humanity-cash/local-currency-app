@@ -5,7 +5,7 @@ import { Header, Button, CancelBtn } from "src/shared/uielements";
 import { baseHeader, viewBase, wrappingContainerBase } from "src/theme/elements";
 import { colors } from "src/theme/colors";
 
-type MerchantPaymentSuccessProps = {
+type MerchantPayoutSuccessProps = {
 	navigation?: any,
 	route?: any,
 }
@@ -26,7 +26,7 @@ const styles = StyleSheet.create({
 	},
 });
 
-const MerchantPaymentSuccess = (props: MerchantPaymentSuccessProps) => {
+const MerchantPayoutSuccess = (props: MerchantPayoutSuccessProps) => {
 
 	return (
 		<View style={viewBase}>
@@ -36,9 +36,8 @@ const MerchantPaymentSuccess = (props: MerchantPaymentSuccessProps) => {
 			<ScrollView style={wrappingContainerBase}>
 				<View style={ baseHeader }>
 					<Text style={styles.headerText}>Succeeded!</Text>
-					<Text style={styles.headerText}>Thank you</Text>
 				</View>
-				<Text style={styles.text}>Your receipt can be found in your transaction overview.</Text>
+				<Text style={styles.text}>The BerkShares are now available in your personal account.</Text>
 			</ScrollView>
 			<KeyboardAvoidingView
 				behavior={Platform.OS == "ios" ? "padding" : "height"} >
@@ -54,4 +53,4 @@ const MerchantPaymentSuccess = (props: MerchantPaymentSuccessProps) => {
 	);
 }
 
-export default MerchantPaymentSuccess
+export default MerchantPayoutSuccess

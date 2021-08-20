@@ -12,6 +12,9 @@ import MerchantDashboard from "./MerchantDashboard";
 import MerchantQRCodeScan from "../merchantPayment/MerchantQRCodeScan";
 import MerchantRequest from "../merchantPayment/MerchantRequest";
 import MerchantReturnQRCodeScan from "../merchantPayment/MerchantReturnQRCodeScan";
+import MerchantCashoutAmount from "src/screens/merchantCashout/MerchantCashoutAmount";
+import MerchantLoadup from "src/screens/merchantLoadup/MerchantLoadup";
+import MerchantPayoutSelection from 'src/screens/merchantPayout/MerchantPayoutSelection';
 
 const styles = StyleSheet.create({
 	headerText: {
@@ -176,9 +179,9 @@ const DrawerContent = (props: DrawerContentComponentProps) => {
 						<DrawerItem label="Receive payment"  onPress={() => {props.navigation.navigate('MerchantRequest')}} />
 						<DrawerItem label="Scan to pay" onPress={() => {props.navigation.navigate('MerchantQRCodeScan')}} />
 						<DrawerItem label="Make a return"  onPress={() => {setIsVisible(true)}} />
-						<DrawerItem label="Load up B$"  onPress={() => {props.navigation.navigate('CashOut')}} />
-						<DrawerItem label="Send B$ to someone"  onPress={() => {props.navigation.navigate('CashOut')}} />
-						<DrawerItem label="Cash out to USD"  onPress={() => {props.navigation.navigate('CashOut')}} />
+						<DrawerItem label="Load up B$"  onPress={() => {props.navigation.navigate('MerchantLoadup')}} />
+						<DrawerItem label="Send B$ to someone"  onPress={() => {props.navigation.navigate('MerchantPayoutSelection')}} />
+						<DrawerItem label="Cash out to USD"  onPress={() => {props.navigation.navigate('MerchantCashoutAmount')}} />
 					</Drawer.Section>
 					<Drawer.Section>
 						<DrawerItem label="Report"  onPress={() => {props.navigation.navigate('SignUpYourBusiness')}} />
@@ -213,9 +216,9 @@ const MerchantTabs = () => {
 			<DrawerNav.Screen name="MerchantRequest" component={MerchantRequest} />
 			<DrawerNav.Screen name="MerchantQRCodeScan" component={MerchantQRCodeScan} />
 			<DrawerNav.Screen name="MerchantReturnQRCodeScan" component={MerchantReturnQRCodeScan} />
-			<DrawerNav.Screen name="CashOut" component={MerchantDashboard} />
-			<DrawerNav.Screen name="MyTransactions" component={MerchantDashboard} />
-			<DrawerNav.Screen name="WhereToSpend" component={MerchantDashboard} />
+			<DrawerNav.Screen name="MerchantCashoutAmount" component={MerchantCashoutAmount} />
+			<DrawerNav.Screen name="MerchantLoadup" component={MerchantLoadup} />
+			<DrawerNav.Screen name="MerchantPayoutSelection" component={MerchantPayoutSelection} />
 			<DrawerNav.Screen name="SignUpYourBusiness" component={MerchantDashboard} />
 			<DrawerNav.Screen name="Settings" component={MerchantDashboard} />
 			<DrawerNav.Screen name="HelpAndContact" component={MerchantDashboard} />
