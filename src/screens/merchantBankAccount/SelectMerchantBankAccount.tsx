@@ -5,9 +5,9 @@ import { Text, Image } from 'react-native-elements';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { BackBtn, Header, CancelBtn, Button } from "src/shared/uielements";
 import { colors } from "src/theme/colors";
-import { underlineHeader, viewBase, wrappingContainerBase } from "src/theme/elements";
+import { underlineHeaderB, viewBase, wrappingContainerBase } from "src/theme/elements";
 
-type SelectBankAccountProps = {
+type SelectMerchantBankAccountProps = {
 	navigation?: any
 	route?: any
 }
@@ -15,11 +15,15 @@ type SelectBankAccountProps = {
 const styles = StyleSheet.create({
 	headerText: {
 		fontSize: 32,
-        lineHeight: 32
+        lineHeight: 32,
+		color: colors.purple
 	},
 	bodyText: {
         color: colors.bodyText
     },
+	text: {
+		color: colors.purple
+	},
 	form: {
 		marginTop: 40,
 		paddingHorizontal: 20
@@ -33,12 +37,12 @@ const styles = StyleSheet.create({
 		height: 55,
 		borderWidth: 1,
 		borderRadius: 30,
-		borderColor: colors.darkGreen,
+		borderColor: colors.purple,
 		marginVertical: 10
 	}
 });
 
-const SelectBankAccountView = (props: SelectBankAccountProps) => {
+const SelectMerchantBankAccountView = (props: SelectMerchantBankAccountProps) => {
 	const [account, setAccount] = useState('');
 	const [goNext, setGoNext] = useState(false);
 
@@ -54,23 +58,26 @@ const SelectBankAccountView = (props: SelectBankAccountProps) => {
 	return (
 		<View style={viewBase}>
 			<Header
-				leftComponent={<BackBtn onClick={() => props.navigation.goBack()} />}
-				rightComponent={<CancelBtn text="Close" onClick={() => props.navigation.navigate('Tabs')} />}
+				leftComponent={<BackBtn color={colors.purple} onClick={() => props.navigation.goBack()} />}
+				rightComponent={<CancelBtn text="Close" color={colors.purple} onClick={() => props.navigation.navigate('Tabs')} />}
 			/>
 
 			<ScrollView style={wrappingContainerBase}>
-				<View style={underlineHeader}>
+				<View style={underlineHeaderB}>
 					<Text style={styles.headerText}>Select account</Text>
 				</View>
-				<Text style={styles.bodyText}>Which account would you like to link to BerkShares?</Text>
+				<View>
+					<Text style={styles.bodyText}>Which account would you like to link to BerkShares?</Text>
+					<Text style={styles.text}>NB: Make sure to link your business bank account.</Text>
+				</View>
 				<View style={styles.form}>
 					<TouchableOpacity style={styles.accountView} onPress={() => onValueChange("1")}>
-						<Text >Checking</Text>
-						<Text >$1,000.76</Text>
+						<Text style={styles.text}>Checking</Text>
+						<Text style={styles.text}>$1,000.76</Text>
 					</TouchableOpacity>
 					<TouchableOpacity style={styles.accountView} onPress={() => onValueChange("2")}>
-						<Text >Saving</Text>
-						<Text >$100,000.76</Text>
+						<Text style={styles.text}>Saving</Text>
+						<Text style={styles.text}>$100,000.76</Text>
 					</TouchableOpacity>
 				</View>
 			</ScrollView>
@@ -78,8 +85,8 @@ const SelectBankAccountView = (props: SelectBankAccountProps) => {
 	);
 }
 
-const SelectBankAccount = (props: SelectBankAccountProps) => {
+const SelectMerchantBankAccount = (props: SelectMerchantBankAccountProps) => {
 	const navigation = useNavigation();
-	return <SelectBankAccountView {...props} navigation={navigation} />;
+	return <SelectMerchantBankAccountView {...props} navigation={navigation} />;
 }
-export default SelectBankAccount
+export default SelectMerchantBankAccount

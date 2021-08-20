@@ -6,7 +6,7 @@ import { colors } from "src/theme/colors";
 import { baseHeader, wrappingContainerBase, viewBase, dialogViewBase } from "src/theme/elements";
 import { BarCodeScanner } from 'expo-barcode-scanner';
 
-type QRCodeScanProps = {
+type MerchantQRCodeScanProps = {
 	navigation?: any,
 	route?: any,
 }
@@ -39,21 +39,20 @@ const styles = StyleSheet.create({
 		backgroundColor: 'rgba(0,0,0,0.8)'
 	},
 	dialogFooter: {
-		padding: 20,
+		// padding: 20,
 	},
 	headerText: {
 		fontSize: 25,
-		color: colors.darkRed,
+		color: colors.purple,
+		textAlign: 'center'
 	},
-	view: {
-		padding: 10,
-	},
-	detailView: {
-		flexDirection: 'row', 
-		justifyContent: 'space-between'
+	dialog: {
+		height: 450
 	},
 	detailText: {
 		fontSize: 14,
+		color: colors.purple,
+		textAlign: 'center'
 	},
 	separator: {
 		borderTopWidth: 1, 
@@ -65,6 +64,17 @@ const styles = StyleSheet.create({
 		flex: 1, 
 		justifyContent: 'center', 
 		alignItems: 'center'
+	},
+	roundBtn: {
+		marginBottom: 10,
+		borderWidth: 1,
+		borderColor: colors.purple
+	},
+	description: {
+		color: colors.bodyText,
+		fontSize: 10,
+		textAlign: 'center',
+		marginTop: 10
 	}
 });
 
@@ -77,110 +87,61 @@ type PaymentConfirmProps = {
 const PaymentConfirm = (props: PaymentConfirmProps) => {
 
 	return (
-		<Dialog visible={props.visible} onClose={()=>props.onConfirm()}>
+		<Dialog visible={props.visible} onClose={()=>props.onConfirm()} style={styles.dialog}>
 			<View style={dialogViewBase}>
 				<View style={wrappingContainerBase}>
 					<View style={ baseHeader }>
 						<Text h1 style={styles.headerText}> B$ { props.amount } </Text>
 					</View>
-					<View style={styles.view}>
-						<View style={styles.detailView}>
-							<Text style={styles.detailText}>TRANSACTION ID</Text>
-							<Text style={{...styles.detailText, fontWeight: 'bold'}}>05636826HDI934</Text>
-						</View>
-						<View style={styles.detailView}>
-							<Text style={styles.detailText}>TYPE</Text>
-							<Text style={{...styles.detailText, fontWeight: 'bold'}}>PURCHASE</Text>
-						</View>
-						<View style={styles.detailView}>
-							<Text style={styles.detailText}>DATE</Text>
-							<Text style={{...styles.detailText, fontWeight: 'bold'}}>4:22, JUN 17, 2021</Text>
-						</View>
+					<View>
+						<Text style={styles.detailText}>or</Text>
+						<Text style={styles.detailText}>choose to round up and directly donate to the Community Chest Fund which provides scholarships & grants to people in the area.</Text>
 					</View>
 				</View>
 				<View style={styles.dialogFooter}>
 					<Button
-						type="darkGreen"
-						title="Confirm"
+						type="transparent"
+						title="Pay B$14.34"
+						style={styles.roundBtn}
 						onPress={() => props.onConfirm()}
 					/>
+					<Button
+						type="purple"
+						title="Round up to B$ 15.00"
+						onPress={() => props.onConfirm()}
+					/>
+					<Text style={styles.description}>*THE ROUND UP IS A NON REFUNABLE DONATION.</Text>
 				</View>
 			</View>
 		</Dialog>
 	)
 }
 
-type FeeConfirmProps = {
-	visible: boolean,
-	onConfirm: () => void,
-	onCancel: () => void,
-	amount: number,
-}
-
-const FeeConfirm = (props: FeeConfirmProps) => {
-
-	return (
-		<Dialog visible={props.visible} onClose={() => props.onCancel()}>
-			<View style={dialogViewBase }>
-				<ScrollView style={wrappingContainerBase}>
-					<View style={ baseHeader }>
-						<Text h1> B$ { props.amount } </Text>
-					</View>
-					<View style={styles.view}>
-						<View style={styles.detailView}>
-							<Text style={styles.detailText}>COMMUNITY CHEST</Text>
-							<Text style={{...styles.detailText, fontWeight: 'bold'}}>B$ 0.66</Text>
-						</View>
-						<View style={styles.detailView}>
-							<Text style={styles.detailText}>DORY & GINGER</Text>
-							<Text style={{...styles.detailText, fontWeight: 'bold'}}>B$ 14.34</Text>
-						</View>
-						<View style={styles.separator}></View>
-						<View style={styles.detailView}>
-							<Text style={styles.detailText}>TOTAL</Text>
-							<Text style={{...styles.detailText, fontWeight: 'bold'}}>B$ 15.00</Text>
-						</View>
-					</View>
-				</ScrollView>
-
-				<View style={{...styles.dialogFooter, flexDirection: 'row'}}>
-					<Button
-						type="darkGreen"
-						style={{backgroundColor: colors.white, borderWidth: 1, flex: 1, marginRight: 10}}
-						title="No, thanks"
-						textStyle={{color: colors.darkGreen}}
-						onPress={() => props.onCancel()}
-					/>
-					<Button
-						type="darkGreen"
-						title="Confirm"
-						style={{flex: 1}}
-						onPress={() => props.onConfirm()}
-					/>
-				</View>
-			</View>
-		</Dialog>
-	)
-}
-
-const QRCodeScan = (props: QRCodeScanProps) => {
-	const [hasPermission, setHasPermission] = useState<boolean>(null || false);
+const MerchantQRCodeScan = (props: MerchantQRCodeScanProps) => {
+	const [isPermissionSelected, setIsPermissionSelected] = useState<boolean>(false);
+	const [hasPermission, setHasPermission] = useState<boolean>(false);
 	const [isScanned, setIsScanned] = useState<boolean>(false);
 	const [isEnabled, setIsEnabled] = useState<boolean>(false);
 	const [isPaymentDialogOpen, setIsPaymentDialogOpen] = useState<boolean>(false);
-	const [isFeeDialogOpen, setIsFeeDialogOpen] = useState<boolean>(false);
 
   	const toggleSwitch = () => {
 		setIsEnabled(previousState => !previousState);
 		if (!isEnabled) {
 			setIsEnabled(previousState => !previousState);
-			props.navigation.navigate("PaymentRequest");
+			props.navigation.navigate("MerchantRequest");
 		}
 	}
 
 	useEffect(() => {
+		setTimeout(() => {
+			setIsPaymentDialogOpen(true);
+		}, 2000);
+	}, []);
+
+	useEffect(() => {
 		(async () => {
 			const {status} = await BarCodeScanner.requestPermissionsAsync();
+			setIsPermissionSelected(true);
 			setHasPermission(status === 'granted');
 		})();
 	}, []);
@@ -190,7 +151,7 @@ const QRCodeScan = (props: QRCodeScanProps) => {
 		setIsPaymentDialogOpen(true);
 	}
 
-	if (hasPermission === null) {
+	if (isPermissionSelected === false) {
 		return <Text>Requesting for camera permission</Text>;
 	}
 
@@ -200,17 +161,7 @@ const QRCodeScan = (props: QRCodeScanProps) => {
 
 	const onPayConfirm = () => {
 		setIsPaymentDialogOpen(false);
-		setIsFeeDialogOpen(true);
-	}
-
-	const onFeeConfirm = () => {
-		setIsFeeDialogOpen(false);
-		props.navigation.navigate("PaymentPending");
-	}
-
-	const onCancle = () => {
-		setIsFeeDialogOpen(false);
-		props.navigation.navigate("Dashboard");
+		props.navigation.navigate("MerchantPaymentPending");
 	}
 
 	return (
@@ -223,7 +174,7 @@ const QRCodeScan = (props: QRCodeScanProps) => {
 			</View>
 			<View style={styles.toggleView}>
 				<Header
-					rightComponent={<CancelBtn text="Close" color={colors.white} onClick={() => props.navigation.navigate('Dashboard')} />}
+					rightComponent={<CancelBtn text="Close" color={colors.white} onClick={() => props.navigation.navigate('MerchantDashboard')} />}
 				/>
 				<View style={styles.switchView}>
 					<Switch
@@ -234,9 +185,8 @@ const QRCodeScan = (props: QRCodeScanProps) => {
 				</View>
 			</View>
 			{ isPaymentDialogOpen && <PaymentConfirm visible={isPaymentDialogOpen} amount={14.34} onConfirm={onPayConfirm} /> }
-			{ isFeeDialogOpen && <FeeConfirm visible={isFeeDialogOpen} amount={0.66} onConfirm={onFeeConfirm} onCancel={onCancle} /> }
 		</View>
 	);
 }
 
-export default QRCodeScan
+export default MerchantQRCodeScan
