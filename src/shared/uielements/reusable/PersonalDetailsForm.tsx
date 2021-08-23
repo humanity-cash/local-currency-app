@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { ReactElement, useEffect, useState } from "react";
 import { View, StyleSheet } from "react-native";
 import { Text } from "react-native-elements";
 import { useUserDetails } from "src/hooks";
@@ -6,6 +6,8 @@ import { colors } from "src/theme/colors";
 import { IMap, PersonalDetailsErrors } from "src/utils/types";
 import { validateDetailsForm } from "src/utils/validation";
 import BlockInput from "../BlockInput";
+
+import Translation from 'src/translation/en.json';
 
 interface PersonalDetailsState extends IMap {
   firstname: string;
@@ -31,13 +33,10 @@ const styles = StyleSheet.create({
   }
 });
 
-const PersonalDetailsForm = (props: PersonalDetailsProps) => {
+const PersonalDetailsForm = (props: PersonalDetailsProps): ReactElement => {
   const { personalDetails, updatePersonalDetails } = useUserDetails();
-  const [
-    validationErrors,
-    setValidationErrors,
-  ] = useState<PersonalDetailsErrors>({});
-  const [state, setState] = useState<PersonalDetailsState>({
+  const [ validationErrors, setValidationErrors ] = useState<PersonalDetailsErrors>({});
+  const [ state, setState ] = useState<PersonalDetailsState>({
     firstname: "",
     lastname: "",
   });
@@ -59,11 +58,11 @@ const PersonalDetailsForm = (props: PersonalDetailsProps) => {
     });
   }, [personalDetails]);
 
-  const onValueChange = (name: any, change: any) => {
+  const onValueChange = (name: string, change: string) => {
     setState({
       ...state,
       [name]: change,
-    } as any);
+    } as PersonalDetailsState);
     updatePersonalDetails({ [name]: change });
   };
 
@@ -71,9 +70,9 @@ const PersonalDetailsForm = (props: PersonalDetailsProps) => {
     <View>
       <View
         style={styles.container}>
-          <Text style={styles.bodyText}>We use your personal details to set up your BerkShares Wallet. Don't worry. This information is not shared publicly!</Text>
+          <Text style={styles.bodyText}>{Translation.PROFILE.PERSIONAL_DETAILS_BODY}</Text>
       </View>
-      <Text style={styles.label}>FIRST NAME</Text>
+      <Text style={styles.label}>{Translation.LABEL.FIRST_NAME}</Text>
       {showValidation && validationErrors.firstname && (
         <Text h3 style={{ marginTop: 5, color: colors.textError }}>
           {validationErrors.firstname}
@@ -86,7 +85,7 @@ const PersonalDetailsForm = (props: PersonalDetailsProps) => {
         onChange={onValueChange}
         style={props.style}
       />
-      <Text style={styles.label}>LAST NAME</Text>
+      <Text style={styles.label}>{Translation.LABEL.LAST_NAME}</Text>
       {showValidation && validationErrors.lastname && (
         <Text h3 style={{ marginTop: 5, color: colors.textError }}>
           {validationErrors.lastname}

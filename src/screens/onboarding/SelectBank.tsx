@@ -1,8 +1,8 @@
 import { useNavigation } from '@react-navigation/native';
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, TouchableWithoutFeedback, View, KeyboardAvoidingView, Platform, ScrollView } from 'react-native';
+import { StyleSheet, TouchableWithoutFeedback, View, ScrollView } from 'react-native';
 import { Text, Image } from 'react-native-elements';
-import { BackBtn, Header, CancelBtn, SearchInput, Button } from "src/shared/uielements";
+import { BackBtn, Header, CancelBtn, SearchInput } from "src/shared/uielements";
 import { colors } from "src/theme/colors";
 import { baseHeader, viewBase, wrappingContainerBase, underlineHeader } from "src/theme/elements";
 import listOfBanks from "src/mocks/banks";
