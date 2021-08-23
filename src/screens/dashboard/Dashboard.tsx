@@ -1,6 +1,6 @@
 import { AntDesign, Entypo } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
-import React, { useEffect, useState } from 'react';
+import React, { ReactElement, useEffect, useState } from 'react';
 import { StyleSheet, TouchableWithoutFeedback, View, ScrollView } from 'react-native';
 import { Text, Image } from "react-native-elements";
 import { TouchableOpacity } from "react-native-gesture-handler";
@@ -9,6 +9,8 @@ import { colors } from "src/theme/colors";
 import { viewBase, wrappingContainerBase, baseHeader } from "src/theme/elements";
 import Button from "src/shared/uielements/Button";
 import DwollaDialog from "./DwollaDialog";
+import Translation from 'src/translation/en.json';
+import * as Routes from 'src/navigation/constants';
 
 type DashboardProps = {
 	navigation?: any;
@@ -91,19 +93,20 @@ const styles = StyleSheet.create({
 	topupText: {color: colors.white, fontSize: 16}
 });
 
+const feedData = {
+	month: "SEPTEMBER",
+	author: "Dory & Ginger",
+	content: "Our motto is Live and Give. We have treasures for your home and lifestyle, along with the perfect gift for that special someone or that occasion that begs for something unique."
+}
+
 const DashboardView = (props: DashboardProps) => {
-	const [showQRScan, setShowQRScan] = useState(false);
-	const [alert, setAlert] = useState(false);
-	const [amount, setAmount] = useState("");
+	const [alert, setAlert] = useState<boolean>(false);
+	const [amount, setAmount] = useState<string>("");
 	const [isVisible, setIsVisible] = useState<boolean>(false);
 
 	useEffect(() => {
 		setAlert(amount === "");
 	}, [amount]);
-
-	const onScanClose = () => {
-		setShowQRScan(false);
-	}
 
 	const onClose = () => {
 		setIsVisible(false);
@@ -128,19 +131,19 @@ const DashboardView = (props: DashboardProps) => {
 			<ScrollView style={wrappingContainerBase}>
 				<View style={styles.content}>
 					<View style={baseHeader}>
-						<Text style={styles.headerText}>BerkShares</Text>
+						<Text style={styles.headerText}>{Translation.LANDING_PAGE.TITLE}</Text>
 					</View>
 					<View style={styles.amountView}>
 						<Text style={styles.text}>B$ -</Text>
-						<TouchableOpacity style={styles.topupButton} onPress={()=>props.navigation.navigate("TopUp")}>
+						<TouchableOpacity style={styles.topupButton} onPress={()=>props.navigation.navigate(Routes.LOAD_UP)}>
 							<Text style={styles.topupText}>Load up B$</Text>
 						</TouchableOpacity>	
 					</View>
 					{alert && 
 						<View style={styles.alertView}>
 							<AntDesign name="exclamationcircleo" size={18} style={styles.alertIcon} />
-							<Text style={styles.alertText}>Link your bank account to start using the app. &nbsp;
-								<Text style={styles.alertIcon} onPress={()=>setIsVisible(true)}>Link bank account &gt;</Text>
+							<Text style={styles.alertText}>{Translation.BANK_ACCOUNT.ACCOUNT_ALERT} &nbsp;
+								<Text style={styles.alertIcon} onPress={()=>setIsVisible(true)}>{Translation.BANK_ACCOUNT.ACCOUNT_LINK_TEXT} &gt;</Text>
 							</Text>
 						</View>
 					}
@@ -148,12 +151,10 @@ const DashboardView = (props: DashboardProps) => {
 					<View style={styles.feedView}>
 						<View style={styles.feedHeader}>
 							<Text h3 >Merchant of the month</Text>
-							<Text h3 >SeptemebEr</Text>
+							<Text h3 >{feedData.month}</Text>
 						</View>
-						<Text h2>Dory & Ginger</Text>
-						<Text style={styles.bodyText}>
-							Our motto is Live and Give. We have treasures for your home and lifestyle, along with the perfect gift for that special someone or that occasion that begs for something unique.
-						</Text>
+						<Text h2>{feedData.author}</Text>
+						<Text style={styles.bodyText}>{feedData.content}</Text>
 						<Image
 							source={require('../../../assets/images/feed1.png')}
 							containerStyle={styles.image}
@@ -173,7 +174,7 @@ const DashboardView = (props: DashboardProps) => {
 	);
 }
 
-const Dashboard = (props: DashboardProps) => {
+const Dashboard = (props: DashboardProps): ReactElement => {
 	const navigation = useNavigation();
 	return <DashboardView {...props} navigation={navigation} />;
 };

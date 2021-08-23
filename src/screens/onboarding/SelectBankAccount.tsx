@@ -1,9 +1,9 @@
 import { useNavigation } from '@react-navigation/native';
-import React, { useState, useEffect } from 'react';
-import { StyleSheet, ScrollView, View, KeyboardAvoidingView, Platform, TouchableWithoutFeedback } from 'react-native';
-import { Text, Image } from 'react-native-elements';
+import React, { ReactElement, useState, useEffect } from 'react';
+import { StyleSheet, ScrollView, View } from 'react-native';
+import { Text } from 'react-native-elements';
 import { TouchableOpacity } from 'react-native-gesture-handler';
-import { BackBtn, Header, CancelBtn, Button } from "src/shared/uielements";
+import { BackBtn, Header, CancelBtn } from "src/shared/uielements";
 import { colors } from "src/theme/colors";
 import { underlineHeader, viewBase, wrappingContainerBase } from "src/theme/elements";
 
@@ -78,7 +78,7 @@ const SelectBankAccountView = (props: SelectBankAccountProps) => {
 	);
 }
 
-const SelectBankAccount = (props: SelectBankAccountProps) => {
+const SelectBankAccount = (props: SelectBankAccountProps): ReactElement => {
 	const navigation = useNavigation();
 	return <SelectBankAccountView {...props} navigation={navigation} />;
 }

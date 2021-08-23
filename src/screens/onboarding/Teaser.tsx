@@ -1,11 +1,13 @@
 import { useNavigation } from '@react-navigation/native';
-import React from 'react';
+import React, { ReactElement } from 'react';
 import { StyleSheet, ImageBackground, View } from 'react-native';
 import { Text } from 'react-native-elements';
-import { useUserDetails } from "src/hooks";
-import { Button, Header } from 'src/shared/uielements';
+import { Button } from 'src/shared/uielements';
 import { viewBase } from "src/theme/elements";
 import { colors } from "src/theme/colors";
+
+import Translation from 'src/translation/en.json';
+import * as Routes from 'src/navigation/constants';
 
 type TeaserProps = {
 	navigation?: any
@@ -49,7 +51,6 @@ const styles = StyleSheet.create({
 });
 
 const TeaserView = (props: TeaserProps) => {
-	const { loggedIn } = useUserDetails();
 	return (
 		<View style={ viewBase }>
 			<ImageBackground
@@ -58,20 +59,20 @@ const TeaserView = (props: TeaserProps) => {
 				style={styles.image}>
 
 				<View style={styles.titleView}>
-					<Text style={styles.titleText}>BerkShares</Text>
-					<Text style={styles.description}>for the Berkshire Region</Text>
+					<Text style={styles.titleText}>{Translation.LANDING_PAGE.TITLE}</Text>
+					<Text style={styles.description}>{Translation.LANDING_PAGE.DESCRIPTION}</Text>
 				</View>
 
 				<View style={styles.bottomView}>
 					<Button
 						type="darkGreen"
-						title="Log In"
-						onPress={() => props.navigation.navigate('Login')}
+						title={Translation.BUTTON.LOGIN}
+						onPress={() => props.navigation.navigate(Routes.LOGIN)}
 					/>
 					<Button
 						type="darkRed"
-						title="Create an account"
-						onPress={() => props.navigation.navigate('CreateAccount')}
+						title={Translation.BUTTON.CREATE_ACCOUNT}
+						onPress={() => props.navigation.navigate(Routes.CREATE_ACCOUNT)}
 						style={styles.createAccountBtn}
 						textStyle={{color: colors.darkGreen}}
 					/>
@@ -81,7 +82,7 @@ const TeaserView = (props: TeaserProps) => {
 	);
 }
 
-const Teaser = (props: TeaserProps) => {
+const Teaser = (props: TeaserProps): ReactElement => {
 	const navigation = useNavigation();
 	return <TeaserView {...props} navigation={navigation}/>;
 }

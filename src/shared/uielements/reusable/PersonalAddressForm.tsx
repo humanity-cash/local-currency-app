@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, ReactElement } from "react";
 import { View, StyleSheet, Picker } from "react-native";
 import { Text } from "react-native-elements";
 import { useUserDetails } from "src/hooks";
@@ -58,7 +58,7 @@ const styles = StyleSheet.create({
 	}
 });
 
-const PersonalAddressForm = (props: PersonalAddressProps) => {
+const PersonalAddressForm = (props: PersonalAddressProps): ReactElement => {
   const { personalDetails, updatePersonalDetails } = useUserDetails();
   const [
     validationErrors,
@@ -96,11 +96,11 @@ const PersonalAddressForm = (props: PersonalAddressProps) => {
     });
   }, [personalDetails]);
 
-  const onValueChange = (name: any, change: any) => {
+  const onValueChange = (name: string, change: string) => {
     setState({
       ...state,
       [name]: change,
-    } as any);
+    } as PersonalAddressState);
     updatePersonalDetails({ [name]: change });
   };
 

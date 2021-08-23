@@ -73,13 +73,13 @@ const styles = StyleSheet.create({
 	},
 });
 
-type ReturnDialogProps = {
+type ReturnPaymentDialogProps = {
 	visible: boolean,
 	onConfirm: ()=>void,
 	onCancel: ()=>void
 }
 
-const ReturnDialog = (props: ReturnDialogProps) => {
+const ReturnPaymentDialog = (props: ReturnPaymentDialogProps) => {
 
 	return (
 		<Dialog visible={props.visible} onClose={()=>props.onCancel()} backgroundStyle={{backgroundColor: colors.overlayPurple}}>
@@ -202,14 +202,14 @@ const DrawerContent = (props: DrawerContentComponentProps) => {
 						onPress={signOut} 
 				/>
 			</Drawer.Section>
-			{ isVisible && <ReturnDialog visible={isVisible} onConfirm={onScanConfirm} onCancel={onScanCancel} /> }
+			{ isVisible && <ReturnPaymentDialog visible={isVisible} onConfirm={onScanConfirm} onCancel={onScanCancel} /> }
 		</View>
 	)
 }
 
 const DrawerNav = createDrawerNavigator();
 
-const MerchantTabs = () => {
+const MerchantTabs: React.FC = () => {
 	return (
 		<DrawerNav.Navigator initialRouteName="MerchantDashboard" drawerContent={ props => <DrawerContent {...props} />}>
 			<DrawerNav.Screen name="MerchantDashboard" component={MerchantDashboard} />
