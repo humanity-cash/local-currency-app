@@ -1,9 +1,11 @@
 import { useNavigation } from '@react-navigation/native';
-import React from 'react';
-import { StyleSheet, View, KeyboardAvoidingView, ScrollView, Platform, TouchableOpacity, Switch } from 'react-native';
+import React, { ReactElement } from 'react';
+import { StyleSheet, View, KeyboardAvoidingView, ScrollView, Platform } from 'react-native';
 import { Text } from 'react-native-elements';
 import { Header, Button, CancelBtn } from "src/shared/uielements";
 import { baseHeader, modalViewBase, wrappingContainerBase } from "src/theme/elements";
+import Translation from 'src/translation/en.json';
+import * as Routes from 'src/navigation/constants';
 
 type RedemptionInProgressProps = {
 	navigation?: any,
@@ -27,14 +29,14 @@ const RedemptionInProgressView = (props: RedemptionInProgressProps) => {
 	return (
 		<View style={modalViewBase}>
 			<Header
-				rightComponent={<CancelBtn text={"Close"} onClick={() => props.navigation.navigate("Dashboard")} />}
+				rightComponent={<CancelBtn text={Translation.BUTTON.CLOSE} onClick={() => props.navigation.navigate(Routes.DASHBOARD)} />}
 			/>
 			<ScrollView style={wrappingContainerBase}>
 				<View style={ baseHeader }>
-					<Text style={styles.headerText}>Your redemption is in progress!</Text>
+					<Text style={styles.headerText}>{Translation.PAYMENT.REDEMPTION_PROCESS}</Text>
 				</View>
 				<View>
-					<Text>You’ll get an email once your funds are available in your bank account. Don’t worry, it won’t take too long.</Text>
+					<Text>{Translation.PAYMENT.REDEMPTION_PROCESS_DETAIL}</Text>
 				</View>
 			</ScrollView>
 			<KeyboardAvoidingView
@@ -42,8 +44,8 @@ const RedemptionInProgressView = (props: RedemptionInProgressProps) => {
 				<View style={styles.bottomView}>
 					<Button
 						type="darkGreen"
-						title="Go back to home"
-						onPress={() => props.navigation.navigate("Dashboard")}
+						title={Translation.BUTTON.GO_BACK_HOME}
+						onPress={() => props.navigation.navigate(Routes.DASHBOARD)}
 					/>
 				</View>
 			</KeyboardAvoidingView>
@@ -52,7 +54,7 @@ const RedemptionInProgressView = (props: RedemptionInProgressProps) => {
 }
 
 
-const RedemptionInProgress = (props:RedemptionInProgressProps) => {
+const RedemptionInProgress = (props:RedemptionInProgressProps): ReactElement => {
 	const navigation = useNavigation();
 	return <RedemptionInProgressView {...props} navigation={navigation} />;
 }

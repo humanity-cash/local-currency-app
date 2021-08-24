@@ -1,11 +1,13 @@
-import React, { useState, useEffect } from 'react';
-import { StyleSheet, View, KeyboardAvoidingView, ScrollView, Platform } from 'react-native';
+import React, { ReactElement, useState } from 'react';
+import { StyleSheet, View, ScrollView } from 'react-native';
 import { Text } from 'react-native-elements';
 import { useUserDetails } from "src/hooks";
 import { Header, Button, CancelBtn, BackBtn, BusinessAddressForm } from "src/shared/uielements";
 import { underlineHeaderB, viewBaseB, wrappingContainerBase } from "src/theme/elements";
 import { colors } from "src/theme/colors";
 import { validateAddressForm } from "src/utils/validation";
+import Translation from 'src/translation/en.json';
+import * as Routes from 'src/navigation/constants';
 
 type BusinessAddressProps = {
 	navigation?: any,
@@ -45,8 +47,8 @@ const styles = StyleSheet.create({
 	}
 });
 
-const BusinessAddress = (props: BusinessAddressProps) => {
-	const { personalDetails, updateStatus } = useUserDetails();
+const BusinessAddress = (props: BusinessAddressProps): ReactElement => {
+	const {personalDetails, updateStatus} = useUserDetails();
 	const [goNext, setGoNext] = useState(false);
 	const [showValidation, setShowValidation] = useState(false);
 
@@ -55,7 +57,7 @@ const BusinessAddress = (props: BusinessAddressProps) => {
 		setShowValidation(true);
 		if (validation.valid) {
 			updateStatus({ personalDetails: true });
-			props.navigation.navigate("BusinessWelcome");
+			props.navigation.navigate(Routes.BUSINESS_WELCOME);
 		}
 	}
 
@@ -63,11 +65,11 @@ const BusinessAddress = (props: BusinessAddressProps) => {
 		<View style={viewBaseB}>
 			<Header
 				leftComponent={<BackBtn color={colors.purple} onClick={() => props.navigation.goBack()} />}
-				rightComponent={<CancelBtn color={colors.purple} text="Log out" onClick={() => props.navigation.navigate('Teaser')} />}
+				rightComponent={<CancelBtn color={colors.purple} text={Translation.BUTTON.LOGOUT} onClick={() => props.navigation.navigate(Routes.TEASER)} />}
 			/>
 			<ScrollView style={wrappingContainerBase}>
                 <View style={underlineHeaderB}>
-                    <Text style={styles.headerText}>Business information</Text>
+                    <Text style={styles.headerText}>{Translation.PROFILE.BUSINESS_INFORMATION}</Text>
                 </View>
 				<View style={styles.formView}>
 					<BusinessAddressForm
@@ -79,7 +81,7 @@ const BusinessAddress = (props: BusinessAddressProps) => {
 			</ScrollView>
 			<Button
 				type="purple"
-				title="Next"
+				title={Translation.BUTTON.NEXT}
 				disabled={!goNext}
 				style={styles.bottomButton}
 				onPress={onNextPress}

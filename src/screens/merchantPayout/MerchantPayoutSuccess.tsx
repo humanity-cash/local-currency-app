@@ -1,9 +1,11 @@
-import React from 'react';
+import React, { ReactElement } from 'react';
 import { StyleSheet, View, KeyboardAvoidingView, ScrollView, Platform } from 'react-native';
 import { Text } from 'react-native-elements';
 import { Header, Button, CancelBtn } from "src/shared/uielements";
 import { baseHeader, viewBase, wrappingContainerBase } from "src/theme/elements";
 import { colors } from "src/theme/colors";
+import Translation from 'src/translation/en.json';
+import * as Routes from 'src/navigation/constants';
 
 type MerchantPayoutSuccessProps = {
 	navigation?: any,
@@ -26,18 +28,18 @@ const styles = StyleSheet.create({
 	},
 });
 
-const MerchantPayoutSuccess = (props: MerchantPayoutSuccessProps) => {
+const MerchantPayoutSuccess = (props: MerchantPayoutSuccessProps): ReactElement => {
 
 	return (
 		<View style={viewBase}>
 			<Header
-				rightComponent={<CancelBtn text="Close" color={colors.purple} onClick={() => props.navigation.navigate('MerchantDashboard')} />}
+				rightComponent={<CancelBtn text={Translation.BUTTON.CLOSE} color={colors.purple} onClick={() => props.navigation.navigate(Routes.MERCHANT_DASHBOARD)} />}
 			/>
 			<ScrollView style={wrappingContainerBase}>
 				<View style={ baseHeader }>
-					<Text style={styles.headerText}>Succeeded!</Text>
+					<Text style={styles.headerText}>{Translation.COMMON.SUCCEEDED}</Text>
 				</View>
-				<Text style={styles.text}>The BerkShares are now available in your personal account.</Text>
+				<Text style={styles.text}>{Translation.PAYMENT.BERKSHARE_AVAILABLE_PERSONAL}</Text>
 			</ScrollView>
 			<KeyboardAvoidingView
 				behavior={Platform.OS == "ios" ? "padding" : "height"} >
@@ -45,7 +47,7 @@ const MerchantPayoutSuccess = (props: MerchantPayoutSuccessProps) => {
 					<Button
 						type="purple"
 						title="Close"
-						onPress={() => props.navigation.navigate("MerchantDashboard")}
+						onPress={() => props.navigation.navigate(Routes.MERCHANT_DASHBOARD)}
 					/>
 				</View>
 			</KeyboardAvoidingView>

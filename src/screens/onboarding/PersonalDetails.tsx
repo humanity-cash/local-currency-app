@@ -7,7 +7,6 @@ import { BackBtn, Button, Header, CancelBtn, PersonalDetailsForm } from 'src/sha
 import { underlineHeader, viewBase, wrappingContainerBase } from "src/theme/elements";
 import { validateDetailsForm } from "src/utils/validation";
 import { colors } from "src/theme/colors";
-
 import Translation from 'src/translation/en.json';
 import * as Routes from 'src/navigation/constants';
 

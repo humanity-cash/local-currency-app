@@ -1,10 +1,12 @@
-import React, { useEffect, useState } from 'react';
+import React, { ReactElement, useEffect, useState } from 'react';
 import { StyleSheet, View, Switch, ScrollView } from 'react-native';
 import { Text } from 'react-native-elements';
 import { Header, CancelBtn, Dialog, Button } from "src/shared/uielements";
 import { colors } from "src/theme/colors";
 import { baseHeader, wrappingContainerBase, viewBase, dialogViewBase } from "src/theme/elements";
 import { BarCodeScanner } from 'expo-barcode-scanner';
+import Translation from 'src/translation/en.json';
+import * as Routes from 'src/navigation/constants';
 
 type QRCodeScanProps = {
 	navigation?: any,
@@ -55,6 +57,10 @@ const styles = StyleSheet.create({
 	detailText: {
 		fontSize: 14,
 	},
+	infoText: {
+		fontWeight: 'bold',
+		fontSize: 14
+	},
 	separator: {
 		borderTopWidth: 1, 
 		borderTopColor: colors.darkGreen, 
@@ -85,16 +91,16 @@ const PaymentConfirm = (props: PaymentConfirmProps) => {
 					</View>
 					<View style={styles.view}>
 						<View style={styles.detailView}>
-							<Text style={styles.detailText}>TRANSACTION ID</Text>
-							<Text style={{...styles.detailText, fontWeight: 'bold'}}>05636826HDI934</Text>
+							<Text style={styles.detailText}>{Translation.LABEL.TRANSACTION_ID}</Text>
+							<Text style={styles.infoText}>05636826HDI934</Text>
 						</View>
 						<View style={styles.detailView}>
-							<Text style={styles.detailText}>TYPE</Text>
-							<Text style={{...styles.detailText, fontWeight: 'bold'}}>PURCHASE</Text>
+							<Text style={styles.detailText}>{Translation.COMMON.TYPE}</Text>
+							<Text style={styles.infoText}>PURCHASE</Text>
 						</View>
 						<View style={styles.detailView}>
-							<Text style={styles.detailText}>DATE</Text>
-							<Text style={{...styles.detailText, fontWeight: 'bold'}}>4:22, JUN 17, 2021</Text>
+							<Text style={styles.detailText}>{Translation.COMMON.DATE}</Text>
+							<Text style={styles.infoText}>4:22, JUN 17, 2021</Text>
 						</View>
 					</View>
 				</View>
@@ -129,16 +135,16 @@ const FeeConfirm = (props: FeeConfirmProps) => {
 					<View style={styles.view}>
 						<View style={styles.detailView}>
 							<Text style={styles.detailText}>COMMUNITY CHEST</Text>
-							<Text style={{...styles.detailText, fontWeight: 'bold'}}>B$ 0.66</Text>
+							<Text style={styles.infoText}>B$ 0.66</Text>
 						</View>
 						<View style={styles.detailView}>
 							<Text style={styles.detailText}>DORY & GINGER</Text>
-							<Text style={{...styles.detailText, fontWeight: 'bold'}}>B$ 14.34</Text>
+							<Text style={styles.infoText}>B$ 14.34</Text>
 						</View>
 						<View style={styles.separator}></View>
 						<View style={styles.detailView}>
 							<Text style={styles.detailText}>TOTAL</Text>
-							<Text style={{...styles.detailText, fontWeight: 'bold'}}>B$ 15.00</Text>
+							<Text style={styles.infoText}>B$ 15.00</Text>
 						</View>
 					</View>
 				</ScrollView>
@@ -163,7 +169,7 @@ const FeeConfirm = (props: FeeConfirmProps) => {
 	)
 }
 
-const QRCodeScan = (props: QRCodeScanProps) => {
+const QRCodeScan = (props: QRCodeScanProps): ReactElement => {
 	const [hasPermission, setHasPermission] = useState<boolean>(null || false);
 	const [isScanned, setIsScanned] = useState<boolean>(false);
 	const [isEnabled, setIsEnabled] = useState<boolean>(false);
@@ -174,7 +180,7 @@ const QRCodeScan = (props: QRCodeScanProps) => {
 		setIsEnabled(previousState => !previousState);
 		if (!isEnabled) {
 			setIsEnabled(previousState => !previousState);
-			props.navigation.navigate("PaymentRequest");
+			props.navigation.navigate(Routes.PAYMENT_REQUEST);
 		}
 	}
 
@@ -186,16 +192,17 @@ const QRCodeScan = (props: QRCodeScanProps) => {
 	}, []);
 	
 	const handleBarCodeScanned = (data: HandleScaned) => {
+		console.log(data);
 		setIsScanned(true);
 		setIsPaymentDialogOpen(true);
 	}
 
 	if (hasPermission === null) {
-		return <Text>Requesting for camera permission</Text>;
+		return <Text>{Translation.OTHER.REQUEST_CAMERA_PERMISSION}</Text>;
 	}
 
 	if (hasPermission === false) {
-		return <Text>No access to camera</Text>;
+		return <Text>{Translation.OTHER.NO_CAMERA_PERMISSION}</Text>;
 	}
 
 	const onPayConfirm = () => {
@@ -205,12 +212,12 @@ const QRCodeScan = (props: QRCodeScanProps) => {
 
 	const onFeeConfirm = () => {
 		setIsFeeDialogOpen(false);
-		props.navigation.navigate("PaymentPending");
+		props.navigation.navigate(Routes.PAYMENT_PENDING);
 	}
 
 	const onCancle = () => {
 		setIsFeeDialogOpen(false);
-		props.navigation.navigate("Dashboard");
+		props.navigation.navigate(Routes.DASHBOARD);
 	}
 
 	return (
@@ -223,7 +230,7 @@ const QRCodeScan = (props: QRCodeScanProps) => {
 			</View>
 			<View style={styles.toggleView}>
 				<Header
-					rightComponent={<CancelBtn text="Close" color={colors.white} onClick={() => props.navigation.navigate('Dashboard')} />}
+					rightComponent={<CancelBtn text="Close" color={colors.white} onClick={() => props.navigation.navigate(Routes.DASHBOARD)} />}
 				/>
 				<View style={styles.switchView}>
 					<Switch

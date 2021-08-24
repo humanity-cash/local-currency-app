@@ -1,15 +1,15 @@
 import { createStackNavigator } from "@react-navigation/stack";
-import React from "react";
+import React, { ReactElement } from "react";
 import SelectMerchantBank from "src/screens/merchantBankAccount/SelectMerchantBank";
 import LoginToMerchantBank from "src/screens/merchantBankAccount/LoginToMerchantBank";
 import SelectMerchantBankAccount from "src/screens/merchantBankAccount/SelectMerchantBankAccount";
 import Congratulations from "src/screens/merchantBankAccount/Congratulations";
 
 const MerchantBankAccountStack = createStackNavigator()
-function MerchantBankAccountScreen() {
+function MerchantBankAccountScreen(): ReactElement {
 	return (
 		<MerchantBankAccountStack.Navigator
-			screenOptions={({ route, navigation }) => ({
+			screenOptions={() => ({
 				headerShown: false
 			})}
 		>

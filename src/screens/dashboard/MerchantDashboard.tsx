@@ -1,6 +1,6 @@
 import { AntDesign, Entypo, Octicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
-import React, { useEffect, useState } from 'react';
+import React, { ReactElement, useState } from 'react';
 import { StyleSheet, TouchableWithoutFeedback, View, ScrollView } from 'react-native';
 import { Text } from "react-native-elements";
 import { TouchableOpacity } from "react-native-gesture-handler";
@@ -11,6 +11,8 @@ import { Button, SearchInput } from "src/shared/uielements";
 import MerchantTransactionList from "./MerchantTransactionList";
 import { MyTransactionItem } from "src/utils/types";
 import transactionList from "src/mocks/transactions";
+import Translation from 'src/translation/en.json';
+import * as Routes from 'src/navigation/constants';
 
 type MerchantDashboardProps = {
 	navigation?: any;
@@ -97,6 +99,7 @@ const styles = StyleSheet.create({
 
 const MerchantDashboardView = (props: MerchantDashboardProps) => {
 	const [searchText, setSearchText] = useState<string>("");
+	const [isDetailViewOpen, setIsDetailViewOpen] = useState<boolean>(false);
 	const [selectedItem, setSelectedItem] = useState<MyTransactionItem>({
 		transactionId: 0,
 		avatar: "",
@@ -105,21 +108,15 @@ const MerchantDashboardView = (props: MerchantDashboardProps) => {
 		amount: "",
 		date: ""
 	});
-	const [isDetailViewOpen, setIsDetailViewOpen] = useState<boolean>(false);
-	const [alert, setAlert] = useState(false);
-	const [amount, setAmount] = useState("");
 
-	useEffect(() => {
-		setAlert(amount === "");
-	}, [amount]);
-
-	const onSearchChange = (name: any, change: any) => {
+	const onSearchChange = (name: string, change: string) => {
 		setSearchText(change);
 	}
 
 	const viewDetail = (item: MyTransactionItem) => {
 		setSelectedItem(item);
 		setIsDetailViewOpen(true);
+		console.log(selectedItem, isDetailViewOpen);
 	}
 
 	return (
@@ -133,7 +130,7 @@ const MerchantDashboardView = (props: MerchantDashboardProps) => {
 								size={25}
 								color={colors.purple}
 							/>
-							<Text style={styles.mainTextColor}>Menu</Text>
+							<Text style={styles.mainTextColor}>{Translation.BUTTON.MENU}</Text>
 						</View>
 					</TouchableWithoutFeedback>
 				}
@@ -141,19 +138,18 @@ const MerchantDashboardView = (props: MerchantDashboardProps) => {
 			<ScrollView style={wrappingContainerBase}>
 				<View style={styles.content}>
 					<View style={baseHeader}>
-						<Text style={styles.headerText}>BerkShares</Text>
+						<Text style={styles.headerText}>{Translation.LANDING_PAGE.TITLE}</Text>
 					</View>
 					<View style={styles.amountView}>
 						<Text style={styles.text}>B$ 382.91</Text>
 					</View>
-					{alert && 
-						<View style={styles.alertView}>
-							<AntDesign name="exclamationcircleo" size={18} style={styles.alertIcon} />
-							<Text style={styles.alertText}>Create a personal profile son you can easily switch accounts. &nbsp;
-								<Text style={styles.alertIcon} onPress={()=>props.navigation.navigate("PersonalProfile")}>Go to set up &gt;</Text>
-							</Text>
-						</View>
-					}
+
+					<View style={styles.alertView}>
+						<AntDesign name="exclamationcircleo" size={18} style={styles.alertIcon} />
+						<Text style={styles.alertText}>{Translation.PROFILE.PERSONAL_PROFILE_ALERT} &nbsp;
+							<Text style={styles.alertIcon} onPress={()=>props.navigation.navigate(Routes.PERSONAL_PROFILE)}>{Translation.BUTTON.GOTO_SETUP} &gt;</Text>
+						</Text>
+					</View>
 
 					<View style={styles.filterView}>
 						<View style={styles.filterInput}>
@@ -181,15 +177,15 @@ const MerchantDashboardView = (props: MerchantDashboardProps) => {
 			</ScrollView>
 			<Button
 				type="purple"
-				title="Receive or Scan to Pay"
+				title={Translation.BUTTON.RECEIVE_OR_SCAN}
 				style={styles.scanButton}
-				onPress={()=>props.navigation.navigate("MerchantQRCodeScan")}
+				onPress={()=>props.navigation.navigate(Routes.MERCHANT_QRCODE_SCAN)}
 			/>
 		</View>
 	);
 }
 
-const MerchantDashboard = (props: MerchantDashboardProps) => {
+const MerchantDashboard = (props: MerchantDashboardProps): ReactElement => {
 	const navigation = useNavigation();
 	return <MerchantDashboardView {...props} navigation={navigation} />;
 };

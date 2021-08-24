@@ -1,10 +1,12 @@
 import { useNavigation } from '@react-navigation/native';
-import React from 'react';
+import React, { ReactElement } from 'react';
 import { StyleSheet, View, KeyboardAvoidingView, ScrollView, Platform } from 'react-native';
 import { Text } from 'react-native-elements';
 import { Header, Button, CancelBtn } from "src/shared/uielements";
 import { baseHeader, modalViewBase, wrappingContainerBase } from "src/theme/elements";
 import { colors } from "src/theme/colors";
+import Translation from 'src/translation/en.json';
+import * as Routes from 'src/navigation/constants';
 
 type MerchantRedemptionInProgressProps = {
 	navigation?: any,
@@ -32,14 +34,14 @@ const MerchantRedemptionInProgressView = (props: MerchantRedemptionInProgressPro
 	return (
 		<View style={modalViewBase}>
 			<Header
-				rightComponent={<CancelBtn text={"Close"} color={colors.purple} onClick={() => props.navigation.navigate("MerchantDashboard")} />}
+				rightComponent={<CancelBtn text={Translation.BUTTON.CLOSE} color={colors.purple} onClick={() => props.navigation.navigate(Routes.MERCHANT_DASHBOARD)} />}
 			/>
 			<ScrollView style={wrappingContainerBase}>
 				<View style={ baseHeader }>
-					<Text style={styles.headerText}>Your redemption is in progress!</Text>
+					<Text style={styles.headerText}>{Translation.PAYMENT.REDEMPTION_PROCESS}</Text>
 				</View>
 				<View>
-					<Text style={styles.bodyText}>You’ll get an email once your funds are available in your bank account. Don’t worry, it won’t take too long.</Text>
+					<Text style={styles.bodyText}>{Translation.PAYMENT.REDEMPTION_PROCESS_DETAIL}</Text>
 				</View>
 			</ScrollView>
 			<KeyboardAvoidingView
@@ -47,8 +49,8 @@ const MerchantRedemptionInProgressView = (props: MerchantRedemptionInProgressPro
 				<View style={styles.bottomView}>
 					<Button
 						type="purple"
-						title="Go back to home"
-						onPress={() => props.navigation.navigate("MerchantDashboard")}
+						title={Translation.BUTTON.GO_BACK_HOME}
+						onPress={() => props.navigation.navigate(Routes.MERCHANT_DASHBOARD)}
 					/>
 				</View>
 			</KeyboardAvoidingView>
@@ -57,7 +59,7 @@ const MerchantRedemptionInProgressView = (props: MerchantRedemptionInProgressPro
 }
 
 
-const MerchantRedemptionInProgress = (props:MerchantRedemptionInProgressProps) => {
+const MerchantRedemptionInProgress = (props:MerchantRedemptionInProgressProps): ReactElement => {
 	const navigation = useNavigation();
 	return <MerchantRedemptionInProgressView {...props} navigation={navigation} />;
 }

@@ -1,9 +1,11 @@
-import React from 'react';
-import { StyleSheet, View, KeyboardAvoidingView, ScrollView, Platform, Picker } from 'react-native';
+import React, { ReactElement } from 'react';
+import { StyleSheet, View, KeyboardAvoidingView, ScrollView, Platform } from 'react-native';
 import { Text } from 'react-native-elements';
 import { Header, Button } from "src/shared/uielements";
 import { viewBaseB, wrappingContainerBase } from "src/theme/elements";
 import { colors } from "src/theme/colors";
+import Translation from 'src/translation/en.json';
+import * as Routes from 'src/navigation/constants';
 
 type BusinessWelcomeProps = {
 	navigation?: any,
@@ -26,28 +28,28 @@ const styles = StyleSheet.create({
 	}
 });
 
-const BusinessWelcome = (props: BusinessWelcomeProps) => {
+const BusinessWelcome = (props: BusinessWelcomeProps): ReactElement => {
 	
 	return (
 		<View style={viewBaseB}>
 			<Header />
 			<ScrollView style={wrappingContainerBase}>
-                <Text style={styles.headerText}>Thank you! Welcome to the BerkShares App. Now it is time to add some BerkShares to your wallet!</Text>
+                <Text style={styles.headerText}>{Translation.PROFILE.WELCOME_BERKSHARES}</Text>
 			</ScrollView>
 			<KeyboardAvoidingView
 				behavior={Platform.OS == "ios" ? "padding" : "height"} >
 				<View style={styles.bottomView}>
 					<Button
 						type="transparent"
-						title="Skip for now"
+						title={Translation.BUTTON.SKIP_NOW}
 						style={styles.skipBtn}
 						textStyle={styles.skipBtn}
-						onPress={()=>props.navigation.navigate("MerchantTabs")}
+						onPress={()=>props.navigation.navigate(Routes.MERCHANT_TABS)}
 					/>
 					<Button
 						type="purple"
-						title="Link my business bank account"
-						onPress={()=>props.navigation.navigate("MerchantBankAccount")}
+						title={Translation.BUTTON.LINK_BUSINESS_BANK}
+						onPress={()=>props.navigation.navigate(Routes.MERCHANT_BANK_ACCOUNT)}
 					/>
 				</View>
 			</KeyboardAvoidingView>

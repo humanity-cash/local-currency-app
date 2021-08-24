@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {ReactElement, useState} from 'react';
 import { StyleSheet, View, ScrollView } from 'react-native';
 import { Text, Image } from 'react-native-elements';
 import { Modal, ModalHeader, Header, CancelBtn, BackBtn } from "src/shared/uielements";
@@ -122,7 +122,7 @@ const CategoryView = (props: CategoryViewProps) => {
 			</View>
 			<ScrollView horizontal={true} style={ styles.merchantsView }>
 				{
-					data.merchants.map((item: MerchantEntry, idx: any) => (
+					data.merchants.map((item: MerchantEntry, idx: number) => (
 						<TouchableOpacity style={styles.merchantItem} key={idx} onPress={() => props.onSelect(item)}>
 							<Image
 								source={require('../../../assets/images/feed1.png')}
@@ -137,7 +137,7 @@ const CategoryView = (props: CategoryViewProps) => {
 	)
 }
 
-const MerchantDictionary = (props: MerchantDictionaryProps) => {
+const MerchantDictionary = (props: MerchantDictionaryProps): ReactElement => {
 	const [isVisible, setIsVisible] = useState<boolean>(false);
 	const [selected, setSelected] = useState<MerchantEntry>({
 		title: "",
@@ -182,8 +182,8 @@ const MerchantDictionary = (props: MerchantDictionaryProps) => {
 					</View>
 					<View style={styles.popularMerchantView}>
 						<View style={styles.popularTextView}>
-							<Text style={styles.popularTitle}>Dory & Ginger</Text>
-							<Text style={styles.popularText}>We have treasures for your home and lifestyle, along with the perfect gift for that special someone or that occasion that begs for something unique.</Text>
+							<Text style={styles.popularTitle}>{merchantList[0].merchants[0].title}</Text>
+							<Text style={styles.popularText}>{merchantList[0].merchants[0].description}</Text>
 						</View>
 						<Image
 							source={require('../../../assets/images/feed1.png')}
@@ -191,7 +191,7 @@ const MerchantDictionary = (props: MerchantDictionaryProps) => {
 						/>
 					</View>
 					{
-						merchantList.map((category: MerchantCategory, idx: any) => (
+						merchantList.map((category: MerchantCategory, idx: number) => (
 							<CategoryView category={category} onSelect={handleSelect} key={idx} />
 						))
 					}
@@ -206,10 +206,8 @@ const MerchantDictionary = (props: MerchantDictionaryProps) => {
 						<ScrollView style={styles.modalWrap}>
 							<Text style={styles.modalHeader}>{selected.title}</Text>
 							<View style={styles.feedView}>
-								<Text h2>Dory & Ginger</Text>
-								<Text style={styles.popularText}>
-									Our motto is Live and Give. We have treasures for your home and lifestyle, along with the perfect gift for that special someone or that occasion that begs for something unique.
-								</Text>
+								<Text h2>{selected.title}</Text>
+								<Text style={styles.popularText}>{selected.description}</Text>
 								<Image
 									source={require('../../../assets/images/feed1.png')}
 									containerStyle={styles.feedImage}

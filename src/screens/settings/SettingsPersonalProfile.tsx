@@ -1,5 +1,5 @@
 import { useNavigation } from '@react-navigation/native';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, ReactElement } from 'react';
 import { ScrollView, StyleSheet, View, TouchableOpacity, Platform, Image, KeyboardAvoidingView} from "react-native";
 import { Text } from "react-native-elements";
 import * as ImagePicker from 'expo-image-picker';
@@ -7,6 +7,7 @@ import { useUserDetails } from "src/hooks";
 import { Header, BackBtn, BlockInput, Button } from "src/shared/uielements";
 import { colors } from "src/theme/colors";
 import { viewBase, underlineHeader } from "src/theme/elements";
+import Translation from 'src/translation/en.json';
 
 interface PersonalProfileState {
 	avatar: string;
@@ -54,9 +55,9 @@ const styles = StyleSheet.create({
 	}
 });
 
-export const SettingsPersonalDetails = () => {
+export const SettingsPersonalDetails = (): ReactElement => {
 	const navigation = useNavigation();
-	const { personalDetails, updatePersonalDetails } = useUserDetails();
+	const {personalDetails, updatePersonalDetails} = useUserDetails();
 	const [canSave, setCanSave] = useState<boolean>(false);
 	const [state, setState] = useState<PersonalProfileState>({
 		avatar: "",
@@ -68,21 +69,28 @@ export const SettingsPersonalDetails = () => {
 	}, [state]);
 
 	useEffect(() => {
+		setState({
+			avatar: personalDetails.avatar,
+			username: personalDetails.username
+		});
+	}, [personalDetails]);
+
+	useEffect(() => {
 		(async () => {
 		  if (Platform.OS !== 'web') {
 			const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
 			if (status !== 'granted') {
-			  alert('Sorry, we need camera roll permissions to make this work!');
+			  alert(Translation.OTHER.NO_CAMERA_PERMISSION);
 			}
 		  }
 		})();
 	}, []);
 
-	const onValueChange = (name: any, change: any) => {
+	const onValueChange = (name: string, change: string) => {
 		setState({
 		  ...state,
 		  [name]: change,
-		} as any);
+		} as PersonalProfileState);
 		updatePersonalDetails({ [name]: change });
 	};
 
@@ -106,9 +114,9 @@ export const SettingsPersonalDetails = () => {
 			/>
 			<ScrollView style={styles.container}>
 				<View style={ underlineHeader }>
-					<Text style={styles.headerText}>My profile</Text>
+					<Text style={styles.headerText}>{Translation.PROFILE.MY_PROFILE}</Text>
 				</View>
-				<Text>This information is shared publicly.</Text>
+				<Text>{Translation.COMMUNITY_CHEST.INFORMATION_SHARE}</Text>
 				<View style={styles.contentView}>
 					<View style={styles.imageView}>
 						<TouchableOpacity onPress={pickImage}>
@@ -116,9 +124,9 @@ export const SettingsPersonalDetails = () => {
 						{state.avatar !== '' && <Image source={{ uri: state.avatar }} style={styles.placeholder} />}
 						</TouchableOpacity>
 					</View>
-					<Text style={styles.imageDesc1}>Change profile picture</Text>
-					<Text style={styles.imageDesc2}>(MAX 200MB / JPG, JPEG, PNG)</Text>
-					<Text h3>USER NAME</Text>
+					<Text style={styles.imageDesc1}>{Translation.PROFILE.CHANGE_PICTURE}</Text>
+					<Text style={styles.imageDesc2}>{Translation.LABEL.MAX_BERKSHARES}</Text>
+					<Text h3>{Translation.LABEL.USERNAME}</Text>
 					<BlockInput
 						name="username"
 						placeholder="@username"
@@ -133,7 +141,7 @@ export const SettingsPersonalDetails = () => {
 				<View style={styles.bottomView}>
 					<Button
 						type="darkGreen"
-						title="Save changes"
+						title={Translation.BUTTON.SAVE_CHANGE}
 						disabled={!canSave}
 						onPress={()=>setCanSave(true)}
 					/>

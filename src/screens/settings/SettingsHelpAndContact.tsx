@@ -1,5 +1,5 @@
 import { useNavigation } from '@react-navigation/native';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, ReactElement } from 'react';
 import { ScrollView, StyleSheet, View } from "react-native";
 import { Text } from 'react-native-elements';
 import { Header, Modal, ModalHeader, BackBtn, Button, AccordionCard, SearchInput } from "src/shared/uielements";
@@ -7,6 +7,7 @@ import { underlineHeader, viewBase, modalViewBase } from "src/theme/elements";
 import faqList from "src/mocks/faq";
 import { colors } from "src/theme/colors";
 import { AccordionEntry } from "src/utils/types";
+import Translation from 'src/translation/en.json';
 
 const styles = StyleSheet.create({
 	headerText: {
@@ -50,7 +51,7 @@ const styles = StyleSheet.create({
 	},
 });
 
-export const SettingsHelpAndContact = () => {
+export const SettingsHelpAndContact = (): ReactElement => {
 
 	const [searchText, setSearchText] = useState<string>("");
 	const [isContacted, setIsContacted] = useState<boolean>(false);
@@ -62,7 +63,7 @@ export const SettingsHelpAndContact = () => {
 		setFaqData(filtered);
 	}, [searchText]);
 
-	const onSearchChange = (name: any, change: any) => {
+	const onSearchChange = (name: string, change: string) => {
 		setSearchText(change);
 	}
 
@@ -73,9 +74,9 @@ export const SettingsHelpAndContact = () => {
 			/>
 			<ScrollView style={styles.container}>
 				<View style={ underlineHeader }>
-					<Text style={styles.headerText}>Help & Contact</Text>
+					<Text style={styles.headerText}>{Translation.OTHER.HELP_CONTACT}</Text>
 				</View>
-				<Text style={styles.section}>We are here to help you with anything and everything on the BerkShares app.</Text>
+				<Text style={styles.section}>{Translation.OTHER.HELP_CONTACT_DETAIL}</Text>
 				<SearchInput
 					label="Search"
 					name="searchText"
@@ -85,7 +86,7 @@ export const SettingsHelpAndContact = () => {
 					onChange={onSearchChange}
 				/>
 				<View style={styles.faqView}>
-					<Text style={styles.sectionHeader}>FREQUENTLY ASKED QUESTIONS</Text>
+					<Text style={styles.sectionHeader}>{Translation.LABEL.QUESTIONS_FREQUENTLY}</Text>
 					{faqData.map((faq: AccordionEntry, index: number) => (
 						<AccordionCard key={`faq-card-${index}`} title={faq.title} content={faq.content} />
 					))}
@@ -93,7 +94,7 @@ export const SettingsHelpAndContact = () => {
 			</ScrollView>
 			<Button
 				type="darkGreen"
-				title="Contact"
+				title={Translation.BUTTON.CONTACT}
 				style={styles.contactBtn}
 				onPress={()=>setIsContacted(true)}
 			/>
@@ -104,8 +105,8 @@ export const SettingsHelpAndContact = () => {
 							leftComponent={<BackBtn onClick={()=>setIsContacted(false)} />}
 						/>
 						<ScrollView style={styles.modalWrap}>
-							<Text style={styles.modalHeader}>Contact</Text>
-							<Text style={styles.section}>If you have questions, complaints, remarks, or just like to chat, please send an email to fennie@humanity.cash or contact the Schumacher Center by calling 010 - 125 087 66.</Text>
+							<Text style={styles.modalHeader}>{Translation.OTHER.CONTACT}</Text>
+							<Text style={styles.section}>{Translation.OTHER.CONTACT_DETAIL}</Text>
 						</ScrollView>
 					</View>
 				</Modal>

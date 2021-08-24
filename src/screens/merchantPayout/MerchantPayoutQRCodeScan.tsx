@@ -1,10 +1,12 @@
-import React, { useEffect, useState } from 'react';
+import React, { ReactElement, useEffect, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { Text } from 'react-native-elements';
 import { Header, CancelBtn, BackBtn } from "src/shared/uielements";
 import { colors } from "src/theme/colors";
 import { viewBase } from "src/theme/elements";
 import { BarCodeScanner } from 'expo-barcode-scanner';
+import Translation from 'src/translation/en.json';
+import * as Routes from 'src/navigation/constants';
 
 type MerchantPayoutQRCodeScanProps = {
 	navigation?: any,
@@ -37,14 +39,14 @@ const styles = StyleSheet.create({
 	}
 });
 
-const MerchantPayoutQRCodeScan = (props: MerchantPayoutQRCodeScanProps) => {
+const MerchantPayoutQRCodeScan = (props: MerchantPayoutQRCodeScanProps): ReactElement => {
 	const [isPermissionSelected, setIsPermissionSelected] = useState<boolean>(false);
 	const [hasPermission, setHasPermission] = useState<boolean>(false);
 	const [isScanned, setIsScanned] = useState<boolean>(false);
 
 	useEffect(() => {
 		setTimeout(() => {
-			props.navigation.navigate("MerchantPayoutPending");
+			props.navigation.navigate(Routes.MERCHANT_PAYOUT_PENDING);
 		}, 2000);
 	}, []);
 
@@ -57,16 +59,17 @@ const MerchantPayoutQRCodeScan = (props: MerchantPayoutQRCodeScanProps) => {
 	}, []);
 	
 	const handleBarCodeScanned = (data: HandleScaned) => {
+		console.log(data);
 		setIsScanned(true);
 		props.navigation.navigate("MerchantPayoutPending");
 	}
 
 	if (isPermissionSelected === false) {
-		return <Text>Requesting for camera permission</Text>;
+		return <Text>{Translation.OTHER.REQUEST_CAMERA_PERMISSION}</Text>;
 	}
 
 	if (hasPermission === false) {
-		return <Text>No access to camera</Text>;
+		return <Text>{Translation.OTHER.NO_CAMERA_PERMISSION}</Text>;
 	}
 
 	return (
@@ -80,7 +83,7 @@ const MerchantPayoutQRCodeScan = (props: MerchantPayoutQRCodeScanProps) => {
 			<View style={styles.toggleView}>
 				<Header
 					leftComponent={<BackBtn color={colors.purple} onClick={() => props.navigation.goBack()} />}
-					rightComponent={<CancelBtn text="Close" color={colors.white} onClick={() => props.navigation.navigate('MerchantDashboard')} />}
+					rightComponent={<CancelBtn text={Translation.BUTTON.CLOSE} color={colors.white} onClick={() => props.navigation.navigate(Routes.MERCHANT_DASHBOARD)} />}
 				/>
 				<View style={styles.switchView}>
 				</View>

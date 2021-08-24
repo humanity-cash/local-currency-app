@@ -5,7 +5,7 @@ import { StyleSheet, View, Text, Image, TouchableWithoutFeedback } from 'react-n
 import { Drawer } from 'react-native-paper';
 import Dashboard from "./Dashboard";
 import { Octicons } from '@expo/vector-icons';
-import { TopUp, QRCodeScan, Request } from "../index";
+import { QRCodeScan, PaymentRequest } from "../index";
 import CashoutAmount from "../cashout/CashoutAmount";
 import MyTransactions from "../transactions/MyTransactions";
 import MerchantDictionary from "../merchant/MerchantDictionary";
@@ -143,7 +143,7 @@ const DrawerContent = (props: DrawerContentComponentProps) => {
 						<DrawerItem label="Where to spend"  onPress={() => {props.navigation.navigate(Routes.WHERE_TO_SPEND)}} />
 						<DrawerItem label="Sign up your business"  onPress={() => {props.navigation.navigate(Routes.SIGNUP_YOUR_BUSINESS)}} />
 						<DrawerItem label="Settings"  onPress={() => {props.navigation.navigate(Routes.SETTINGS)}} />
-						<DrawerItem label="Scan to pay"  onPress={() => {props.navigation.navigate(Routes.HELP_CONTACT)}} />
+						<DrawerItem label="Help and Contact"  onPress={() => {props.navigation.navigate(Routes.HELP_CONTACT)}} />
 					</Drawer.Section>
 				</View>
 			</DrawerContentScrollView>
@@ -170,8 +170,7 @@ const Tabs = (): ReactElement => {
 		<DrawerNav.Navigator initialRouteName={Routes.DASHBOARD} drawerContent={ props => <DrawerContent {...props} />}>
 			<DrawerNav.Screen name={Routes.DASHBOARD} component={Dashboard} />
 			<DrawerNav.Screen name={Routes.SCAN_PAY} component={QRCodeScan} />
-			<DrawerNav.Screen name={Routes.RECEIVE_PAYMENT} component={Request} />
-		  	<DrawerNav.Screen name={Routes.LOAD_UP} component={TopUp} />
+			<DrawerNav.Screen name={Routes.RECEIVE_PAYMENT} component={PaymentRequest} />
 			<DrawerNav.Screen name={Routes.CASHOUT} component={CashoutAmount} />
 			<DrawerNav.Screen name={Routes.MY_TRANSACTIONS} component={MyTransactions} />
 			<DrawerNav.Screen name={Routes.WHERE_TO_SPEND} component={MerchantDictionary} />

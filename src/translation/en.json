@@ -12,6 +12,7 @@
         "SWITCH_ACCOUNT": "Switch account"
     },
     "BUTTON": {
+        "CONFIRM": "Confirm",
         "NEXT": "Next",
         "BACK": "Back",
         "CLOSE": "Close",
@@ -32,6 +33,7 @@
         "LOAD_UP_BERKSHARES": "Load up BerkShares",
         "SKIP_NOW": "Skip for now",
         "EXPLORE_BERKSHARES": "Explore BerkShares",
+        "SIGNUP_BUSINESS": "Sign up your business",
         "GO_TO_LOGIN": "Go to log in",
         "PAY": "Pay",
         "RECEIVE": "Receive",
@@ -49,7 +51,10 @@
         "DELETE_ACCOUNT": "Delete account",
         "SAVE_CHANGE": "Save changes",
         "REMOVE": "Remove",
-        "DELETED_ACCOUNT": "Sad to see you leave. Your account has been deleted. Hope to see you back soon."
+        "MENU": "Menu",
+        "RECEIVE_OR_SCAN":"Receive or Scan to Pay",
+        "GOTO_SETUP": "Go to set up",
+        "LINK_BUSINESS_BANK": "Link my business bank account"
     },
     "LABEL": {
         "EMAIL_ADDR": "EMAIL ADDRESS",
@@ -57,6 +62,7 @@
         "CONFIRM_PASSWORD": "CONFIRM PASSWORD",
         "PASSWORD_REG": "MIN.8 CHARACTERS, 1 CAPITICAL, 1 LOWER AND 1 SYMBOL",
         "NO_MATCH": "NO MATCH",
+        "USERNAME": "USER NAME",
         "EMAIL_USERNAME": "EMAIL ADDRESS OR USER NAME",
         "FIRST_NAME": "FIRST NAME",
         "LAST_NAME": "LAST NAME",
@@ -66,10 +72,13 @@
         "STATE": "STATE",
         "POSTAL_CODE": "POSTAL CODE",
         "ACCOUNT_NAME": "ACCOUNT NAME",
+        "ACCOUNT_TYPE": "ACCOUNT TYPE",
+        "ACCOUNT_NUMBER": "ACCOUNT NUMBER",
         "AMOUNT": "AMOUNT",
         "MAX_BERKSHARES": "MAX B$ 2,000.00",
         "START_DATE": "START DATE",
         "END DATE": "END DATE",
+        "TRANSACTION_ID": "TRANSACTION ID",
         "TRANSACTION_TYPE": "TYPE OF TRANSACTIONS",
         "BUSINESS_TYPE": "TYPE OF BUSINESS",
         "FIRST_NAME_BUSINESS": "FIRST NAME OF THE BUSINESS OWNER OR EXECUTIVE",
@@ -80,7 +89,9 @@
         "WHERE_CAN_FIND": "Where can customers fine you?",
         "QUESTIONS_FREQUENTLY": "FREQUENTLY ASKED QUESTIONS",
         "NEW_PASSWORD": "NEW PASSWORD",
-        "CONFIRM_NEW_PASSWORD": "Confirm new password"
+        "CONFIRM_NEW_PASSWORD": "Confirm new password",
+        "OLD_PASSWORD": "OLD PASSWORD",
+        "RETURN_AMOUNT": "RETURN AMOUNT"
     },
     "LANDING_PAGE": {
         "TITLE": "BerkShares",
@@ -120,10 +131,13 @@
         "BUSINESS_DETAIL": "Business details",
         "USE_BUSINESS_INFOMATION": "We use your business information to set up your Wallet. The type of entity determines the required information.",
         "BUSINESS_OWNER": "Business owner details",
-        "USE_PERSONAL_DETAILS": "We use your personal details to set up your BerkShares wallet. Don't worry, this information is not shared publicy!",
-        "BUSINESS_INFORMATION": "Business information"
+        "BUSINESS_INFORMATION": "Business information",
+        "PERSONAL_PROFILE_ALERT": "Create a personal profile son you can easily switch accounts.",
+        "MY_PROFILE": "My profile",
+        "CHANGE_PICTURE": "Change profile picture"
     },
     "BANK_ACCOUNT": {
+        "BANK_ACCOUNT": "Bank account",
         "ACCOUNT_ALERT": "Link your bank account to start using the app.",
         "ACCOUNT_LINK_TEXT": "Link bank account",
         "USE_DWOLLA": "BerkShares uses Dwolla to link our business bank account",
@@ -141,10 +155,13 @@
         "CONGRATULATION_DETAIL": "You have linked your Salisbury Checking (US-08-CHAS-0686-5892) bank account! Your are ready to load up your BerkShares and start supporting your community!"
     },
     "LOAD_UP": {
+        "TITLE": "Load up B$",
+        "LOAD_UP_BERKSHARES": "Load up BerkShares",
         "LOAD_UP_DETAIL": "Specify the amount of BerkShares (B$1 = USD 1) you would like to load up.",
         "TOTAL_COSTS": "Total costs",
         "LOAD_UP_SUCCESS": "Congratulations! You have topped up",
-        "LOAD_UP_SUCCESS_DETAIL": "The BerkShares will be available in about 3 business days!"
+        "LOAD_UP_SUCCESS_DETAIL": "The BerkShares will be available in about 3 business days!",
+        "LOAD_UP_SUCCESS_AVAILABLE": "The BerkShares will soon be available in your wallet!"
     },
     "FORGOT_PASSWORD": {
         "FORGOT_PASSWORD": "Forgot password",
@@ -158,10 +175,10 @@
         "PAYMENT_RECEIVE_SUCCESS": "Succeeded! You have received B$ {{amount}}",
         "CASH_OUT": "Cash out to USD",
         "CASH_OUT_DETAIL": "Select the amount of BerkShares you would like to redeem to USD. Please note that the maximum amount is $ 2,000.00 and you can not exceed your account balance.",
-        "REDEMPTION_FEE": "Redemption fee({{fee}}%)",
+        "REDEMPTION_FEE": "Redemption fee ",
         "NET_CASH_OUT": "Net cash out",
         "CASH_OUT_CONFIRM": "Are you sure you want to cash out?",
-        "CASH_OUT_CONFIRM_DETAIL": "You will redeem 100 BerkShares for USD 95.50 after a {{fee}}% fee.",
+        "CASH_OUT_CONFIRM_DETAIL": "You will redeem 100 BerkShares for USD 95.50 after a 1.5% fee.",
         "REDEMPTION_PROCESS": "Your redemption is in process!",
         "REDEMPTION_PROCESS_DETAIL": "You'll get an email once your funds are available in your bank account. Don't worry, it won't take too long.",
         "MY_TRANSACTIONS": "My Transactions",
@@ -176,13 +193,29 @@
         "SHOW_QR_CODE_TO_CASHIER": "Show QR code to the cashier",
         "PAYMENT_RETURN_SUCCESS": "SUcceeded! You have received B$ {{amount}} in return.",
         "WHERE_TO_SPEND": "Where t spend",
-        "MERCHANT_MONTH": "MERCHANT OF THE MONTH"
+        "MERCHANT_MONTH": "MERCHANT OF THE MONTH",
+        "PENDING": "Pending...",
+        "PENDING_DETAIL": "This usually takes 5-6 seconds",
+        "SEND_RETURN": "Send return",
+        "PAYOUT_SOMEONE": "Send B$ to someone",
+        "PAYOUT_SOMEONE_DETAIL": "To whom would you like to send BerkShares?",
+        "BERKSHARE_AVAILABLE_PERSONAL": "The BerkShares are now available in your personal account.",
+        "PAYOUT_AMOUNT_PERSONAL": "Select the amount of BerkShares you would like to pay out to your personal account.",
+        "PAYOUT_IN": "Pay out in B$",
+        "SELECT_PAYOUT_AMOUNT": "Select the amount of BerkShares you would like to pay out.",
+        "SCAN_QR": "Scan the recipients QR",
+        "SCAN_QR_DETAIL": "Scan the QR code of the recipients. The recipient can pull this up by clicking on 'Receive payment'."
     },
     "OTHER": {
+        "SETTING": "Setting",
         "HELP_CONTACT": "Help & Contact",
         "HELP_CONTACT_DETAIL": "We are here to help you with anything and everything on the BerkShares app.",
         "CONTACT": "Contact",
-        "CONTACT_DETAIL": "If you have questions, complaints, remarks, or just like to chat, please send an email to fennie@humanity.cash or contact the Schumacher Center by calling 010-125 08766"
+        "CONTACT_DETAIL": "If you have questions, complaints, remarks, or just like to chat, please send an email to fennie@humanity.cash or contact the Schumacher Center by calling 010-125 08766",
+        "DELETED_ACCOUNT_MESSAGE": "Sad to see you leave. Your account has been deleted. Hope to see you back soon.",
+        "NO_CAMERA_PERMISSION": "Sorry, we need camera roll permissions to make this work!",
+        "REQUEST_CAMERA_PERMISSION": "Requesting for camera permission",
+        "LEGAL": "Legal"
     },
     "COMMUNITY_CHEST": {
         "CONTENT": "The BerkShares community want to support the lcal community. Therefor, we ask you at each transaction if you are willing to make a donation. This donation will go to a local project. On this page you will find the current project and its status.",
