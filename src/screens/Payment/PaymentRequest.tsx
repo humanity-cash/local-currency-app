@@ -1,10 +1,12 @@
-import React, {useState, useEffect} from 'react';
-import { StyleSheet, View, KeyboardAvoidingView, ScrollView, Platform, TouchableOpacity, Switch } from 'react-native';
+import React, {useState, useEffect, ReactElement} from 'react';
+import { StyleSheet, View, KeyboardAvoidingView, ScrollView, Platform, Switch } from 'react-native';
 import { Text } from 'react-native-elements';
 import { Header, Button, CancelBtn, BackBtn, BorderedInput } from "src/shared/uielements";
 import { baseHeader, viewBase, wrappingContainerBase } from "src/theme/elements";
 import { colors } from "src/theme/colors";
 import QRCodeGen from "./QRCodeGen";
+import Translation from 'src/translation/en.json';
+import * as Routes from 'src/navigation/constants';
 
 type RequestProps = {
 	navigation?: any,
@@ -22,7 +24,11 @@ const styles = StyleSheet.create({
 		fontWeight: '400',
 		lineHeight: 40
 	},
-	switchView: {flex: 1, justifyContent: 'center', alignItems: 'center'},
+	switchView: {
+		flex: 1, 
+		justifyContent: 'center', 
+		alignItems: 'center'
+	},
 	contentView: { 
 		marginTop: 5
 	},
@@ -30,30 +36,6 @@ const styles = StyleSheet.create({
 		marginTop: 20, 
 		color: colors.text, 
 		fontSize: 12 
-	},
-	defaultAmountView: {
-		flexDirection: 'row',
-		flexWrap: 'wrap',
-		paddingTop: 5,
-	},
-	defaultAmountItem: {
-		width: 100,
-		height: 40,
-		borderRadius: 20,
-		borderWidth: 1,
-		borderColor: colors.darkGreen,
-		alignItems: 'center',
-		justifyContent: 'center',
-		marginRight: 8,
-	},
-	selectedAmountItem: {
-		width: 100,
-		height: 40,
-		backgroundColor: colors.lightGreen,
-		borderRadius: 20,
-		alignItems: 'center',
-		justifyContent: 'center',
-		marginRight: 8,
 	},
 	bottomView: {
 		padding: 20,
@@ -64,11 +46,11 @@ const styles = StyleSheet.create({
 	}
 });
 
-const Request = (props: RequestProps) => {
+const PaymentRequest = (props: RequestProps): ReactElement => {
 
-	const [state, setState] = useState({
+	const [state, setState] = useState<AmountState>({
 		amount: "1",
-		costs: "1"
+		cost: "1"
 	});
 	const [goNext, setGoNext] = useState<boolean>(false);
 	const [isEnabled, setIsEnabled] = useState<boolean>(true);
@@ -76,22 +58,22 @@ const Request = (props: RequestProps) => {
 	const [isOpenAmount, setIsOpenAmount] = useState<boolean>(false);
 
 	useEffect(() => {
-		setGoNext(state.costs !== "");
+		setGoNext(state.cost !== "");
 	}, [state]);
 
-	const onValueChange = (name: any, change: any) => {
+	const onValueChange = (name: string, change: string) => {
 		const costs = change;
 		setState({
 		  ...state,
 		  [name]: change,
 		  costs: costs,
-		} as any);
+		} as AmountState);
 	};
 
 	const toggleSwitch = () => {
 		setIsEnabled(previousState => !previousState);
 		if (isEnabled) {
-			props.navigation.navigate("QRCodeScan");
+			props.navigation.navigate(Routes.QRCODE_SCAN);
 		}
 	}
 
@@ -113,7 +95,7 @@ const Request = (props: RequestProps) => {
 		<View style={viewBase}>
 			<Header
 				leftComponent={<BackBtn onClick={() => props.navigation.goBack()} />}
-				rightComponent={<CancelBtn text="Close" onClick={() => props.navigation.navigate('Dashboard')} />}
+				rightComponent={<CancelBtn text={Translation.BUTTON.CLOSE} onClick={() => props.navigation.navigate(Routes.DASHBOARD)} />}
 			/>
 			<ScrollView style={wrappingContainerBase}>
 				<View style={ baseHeader }>
@@ -126,28 +108,7 @@ const Request = (props: RequestProps) => {
 					</View>
 				</View>
 				<View style={styles.contentView}>
-					<Text style={styles.label}>MOST FREQUENTLY USED</Text>
-					<View style={styles.defaultAmountView}>
-						<TouchableOpacity 
-							style={state.amount=='5' ? styles.selectedAmountItem : styles.defaultAmountItem} 
-							onPress={()=>onValueChange('amount', "5")}
-						>
-							<Text>B$ 5.00</Text>
-						</TouchableOpacity>
-						<TouchableOpacity 
-							style={state.amount=='1' ? styles.selectedAmountItem : styles.defaultAmountItem}  
-							onPress={()=>onValueChange('amount', "1")}
-						>
-							<Text>B$ 1.00</Text>
-						</TouchableOpacity>
-						<TouchableOpacity 
-							style={state.amount=='0.2' ? styles.selectedAmountItem : styles.defaultAmountItem} 
-							onPress={()=>onValueChange('amount', "0.2")}
-						>
-							<Text>B$ 0.2</Text>
-						</TouchableOpacity>
-					</View>
-					<Text style={styles.label}>REQUEST AMOUNT</Text>
+					<Text style={styles.label}>{Translation.LABEL.AMOUNT}</Text>
 					<BorderedInput
 						label="Amount"
 						name="amount"
@@ -165,14 +126,14 @@ const Request = (props: RequestProps) => {
 					<Button
 						type="transparent"
 						disabled={!goNext}
-						title="Open amount"
+						title={Translation.BUTTON.OPEN_AMOUNT}
 						style={styles.openBtn}
 						onPress={openAmount}
 					/>
 					<Button
 						type="darkGreen"
 						disabled={!goNext}
-						title="Next"
+						title={Translation.BUTTON.NEXT}
 						onPress={requestAmount}
 					/>
 				</View>
@@ -182,4 +143,4 @@ const Request = (props: RequestProps) => {
 	);
 }
 
-export default Request
+export default PaymentRequest

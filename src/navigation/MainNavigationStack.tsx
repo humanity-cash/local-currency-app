@@ -1,9 +1,8 @@
 import { DefaultTheme, NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
-import React from "react";
+import React, { ReactElement } from "react";
 import "react-native-gesture-handler";
 import { useRouteTracking } from "src/hooks";
-import ConfirmPin from "src/screens/authentication/ConfirmPin";
 import Login from "src/screens/authentication/Login";
 import TopUp from "src/screens/onboarding/TopUp";
 import TopUpSuccess from "src/screens/onboarding/TopUpSuccess";
@@ -40,13 +39,11 @@ import Tabs from "src/screens/dashboard/Tabs";
 import QRCodeScan from "src/screens/payment/QRCodeScan";
 import PaymentPending from "src/screens/payment/PaymentPending";
 import PaymentSuccess from "src/screens/payment/PaymentSuccess";
-import Request from "src/screens/payment/Request";
+import PaymentRequest from "src/screens/payment/PaymentRequest";
 import { ForgotPasswordNavigator } from "src/navigation/ForgotPasswordStack";
 import { CashoutNavigator } from "src/navigation/CashoutNavigator";
-
 import { SignupBusinessNavigator } from 'src/navigation/SignupBusinessNavigator';
 import { MerchantBankAccountNavigator } from 'src/navigation/MerchantBankAccountNavigator';
-
 import MerchantTabs from "src/screens/dashboard/MerchantTabs";
 import MerchantPaymentPending from "src/screens/merchantPayment/MerchantPaymentPending";
 import MerchantPaymentSuccess from "src/screens/merchantPayment/MerchantPaymentSuccess";
@@ -66,7 +63,7 @@ const PrimaryStack = createStackNavigator();
 function PrimaryStackScreen() {
   return (
     <PrimaryStack.Navigator
-      screenOptions={({ route, navigation }) => ({
+      screenOptions={() => ({
         headerShown: false,
       })}
     >
@@ -85,12 +82,11 @@ function PrimaryStackScreen() {
       <PrimaryStack.Screen name="TermsEmail" component={TermsEmail} />
       <PrimaryStack.Screen name="ConfirmEmail" component={ConfirmEmail} />
       <PrimaryStack.Screen name="EmailConfirmed" component={EmailConfirmed} />
-      <PrimaryStack.Screen name="TopUp" component={TopUp} />
+      <PrimaryStack.Screen name="LoadUp" component={TopUp} />
       <PrimaryStack.Screen name="TopUpSuccess" component={TopUpSuccess} />
       <PrimaryStack.Screen name="SelectPayment" component={SelectPayment} />
       <PrimaryStack.Screen name="Deposit" component={Deposit} />
       <PrimaryStack.Screen name="CreditCard" component={CreditCard} />
-      <PrimaryStack.Screen name="ConfirmPin" component={ConfirmPin} />
       <PrimaryStack.Screen name="SettingsTermsAndConditions" component={SettingsTermsAndConditions} />
       <PrimaryStack.Screen name="Settings" component={Settings} />
       <PrimaryStack.Screen name="SettingsPersonalProfile" component={SettingsPersonalProfile} />
@@ -107,7 +103,7 @@ function PrimaryStackScreen() {
       <PrimaryStack.Screen name="QRCodeScan" component={QRCodeScan} />
       <PrimaryStack.Screen name="PaymentPending" component={PaymentPending} />
       <PrimaryStack.Screen name="PaymentSuccess" component={PaymentSuccess} />
-      <PrimaryStack.Screen name="PaymentRequest" component={Request} />
+      <PrimaryStack.Screen name="PaymentRequest" component={PaymentRequest} />
       <PrimaryStack.Screen name="ForgotPassword" component={ForgotPasswordNavigator} />
       <PrimaryStack.Screen name="Cashout" component={CashoutNavigator} />
 
@@ -132,13 +128,13 @@ function PrimaryStackScreen() {
   );
 }
 
-export const MainNavigationStack = () => {
-  const { currentRoute, update } = useRouteTracking();
+export const MainNavigationStack = (): ReactElement => {
+  const { update } = useRouteTracking();
   const ref = React.useRef<any>();
   return (
     <NavigationContainer
       ref={ref}
-      onStateChange={(state) => {
+      onStateChange={() => {
         update({ current: ref?.current?.getCurrentRoute().name });
       }}
       theme={{

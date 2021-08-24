@@ -1,9 +1,11 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, ReactElement} from 'react';
 import { StyleSheet, View, KeyboardAvoidingView, ScrollView, Platform } from 'react-native';
 import { Text } from 'react-native-elements';
 import { Header, Button, CancelBtn, BackBtn, BorderedInput, Dialog } from "src/shared/uielements";
 import { underlineHeaderB, viewBaseB, dialogViewBase, wrappingContainerBase } from "src/theme/elements";
 import { colors } from "src/theme/colors";
+import Translation from 'src/translation/en.json';
+import * as Routes from 'src/navigation/constants';
 
 type MerchantPayoutToPersonalProps = {
 	navigation?: any,
@@ -60,7 +62,7 @@ const styles = StyleSheet.create({
 	}
 });
 
-const MerchantCashoutAmount = (props: MerchantPayoutToPersonalProps) => {
+const MerchantCashoutAmount = (props: MerchantPayoutToPersonalProps): ReactElement => {
 
 	const [amount, setAmount] = useState<string>('');
     const [isVisible, setIsVisible] = useState<boolean>(false);
@@ -76,7 +78,7 @@ const MerchantCashoutAmount = (props: MerchantPayoutToPersonalProps) => {
 
     const doScan = () => {
         setIsVisible(false);
-        props.navigation.navigate("MerchantPayoutQRCodeScan");
+        props.navigation.navigate(Routes.MERCHANT_PAYOUT_QR_SCAN);
     }
 
 	return (
@@ -87,13 +89,13 @@ const MerchantCashoutAmount = (props: MerchantPayoutToPersonalProps) => {
 			/>
 			<ScrollView style={wrappingContainerBase}>
 				<View style={underlineHeaderB}>
-					<Text style={styles.headerText}>Pay out in B$</Text>
+					<Text style={styles.headerText}>{Translation.PAYMENT.PAYOUT_IN}</Text>
 				</View>
 				<View>
-					<Text style={styles.bodyText}>Select the amount of BerkShares you would like to pay out.</Text>
+					<Text style={styles.bodyText}>{Translation.PAYMENT.SELECT_PAYOUT_AMOUNT}</Text>
 					<View style={styles.formLabel}>
-						<Text style={styles.labelText}>AMOUNT</Text>
-						<Text style={styles.labelText}>Max. B$ 2,000.00</Text>
+						<Text style={styles.labelText}>{Translation.LABEL.AMOUNT}</Text>
+						<Text style={styles.labelText}>{Translation.LABEL.MAX_BERKSHARES}</Text>
 					</View>
 					<BorderedInput
 						label="Amount"
@@ -125,8 +127,8 @@ const MerchantCashoutAmount = (props: MerchantPayoutToPersonalProps) => {
 				<Dialog visible={isVisible} onClose={()=>setIsVisible(false)} backgroundStyle={styles.dialogBg}>
 					<View style={dialogViewBase}>
 						<View style={styles.dialogWrap}>
-							<Text style={styles.dialogHeader}>Scan the recipients QR.</Text>
-							<Text style={styles.bodyText}>Scan the QR code of the recipients. The recipient can pull this up by clicking on 'Receive payment'.</Text>
+							<Text style={styles.dialogHeader}>{Translation.PAYMENT.SCAN_QR}</Text>
+							<Text style={styles.bodyText}>{Translation.PAYMENT.SCAN_QR_DETAIL}</Text>
 						</View>
 						<Button
 							type="purple"

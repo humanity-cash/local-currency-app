@@ -1,5 +1,5 @@
 import { AntDesign } from "@expo/vector-icons";
-import React, { useRef, useLayoutEffect } from 'react';
+import React, { useRef } from 'react';
 import { TextInput, TouchableWithoutFeedback, View, StyleSheet } from 'react-native';
 import { colors } from "src/theme/colors";
 

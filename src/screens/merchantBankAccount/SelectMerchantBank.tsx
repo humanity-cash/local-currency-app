@@ -1,11 +1,14 @@
 import { useNavigation } from '@react-navigation/native';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, ReactElement } from 'react';
 import { StyleSheet, TouchableWithoutFeedback, View, ScrollView } from 'react-native';
 import { Text, Image } from 'react-native-elements';
-import { BackBtn, Header, CancelBtn, SearchInput, Button } from "src/shared/uielements";
+import { BackBtn, Header, CancelBtn, SearchInput } from "src/shared/uielements";
 import { colors } from "src/theme/colors";
 import { baseHeader, viewBaseB, wrappingContainerBase, underlineHeaderB } from "src/theme/elements";
 import listOfBanks from "src/mocks/banks";
+import { Bank } from "src/utils/types";
+import Translation from 'src/translation/en.json';
+import * as Routes from 'src/navigation/constants';
 
 type SelectMerchantBankProps = {
 	navigation?: any
@@ -53,16 +56,16 @@ const SelectMerchantBankView = (props: SelectMerchantBankProps) => {
 
 	useEffect(() => {
 		if (bank !== '') {
-			props.navigation.navigate("LoginToMerchantBank")
+			props.navigation.navigate(Routes.LOGIN_MERCHANT_BANK)
 		}
 	},[bank]);
 
-	const onValueChange = (name: any, change: any) => {
+	const onValueChange = (name: string, change: string) => {
 		setSearchPhrase(change);
 	}
 
 	const renderBanks = () => {
-		let found: any[] = [];
+		let found: Bank[] = [];
 		if (searchPhrase !== '') {
 			found = listOfBanks.filter(entry => entry.name.toLowerCase().includes(searchPhrase.toLowerCase()));
 		}
@@ -88,13 +91,13 @@ const SelectMerchantBankView = (props: SelectMerchantBankProps) => {
 		<View style={viewBaseB}>
 			<Header
 				leftComponent={<BackBtn color={colors.purple} onClick={() => props.navigation.goBack()} />}
-				rightComponent={<CancelBtn text="Close" color={colors.purple} onClick={() => props.navigation.navigate('MerchantTabs')} />}
+				rightComponent={<CancelBtn text={Translation.BUTTON.CLOSE} color={colors.purple} onClick={() => props.navigation.navigate(Routes.MERCHANT_TABS)} />}
 			/>
 
 			<ScrollView style={wrappingContainerBase}>
 				<View style={ baseHeader }>
 					<View style={underlineHeaderB}>
-						<Text style={styles.headerText}>Select your bank</Text>
+						<Text style={styles.headerText}>{Translation.BANK_ACCOUNT.SELECT_BANK}</Text>
 					</View>
 					<SearchInput
 						label="Search"
@@ -115,7 +118,7 @@ const SelectMerchantBankView = (props: SelectMerchantBankProps) => {
 	);
 }
 
-const SelectMerchantBank = (props: SelectMerchantBankProps) => {
+const SelectMerchantBank = (props: SelectMerchantBankProps): ReactElement => {
 	const navigation = useNavigation();
 	return <SelectMerchantBankView {...props} navigation={navigation} />;
 }

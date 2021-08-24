@@ -1,10 +1,12 @@
 import { useNavigation } from '@react-navigation/native';
-import React, { useState } from 'react';
+import React, { ReactElement, useState } from 'react';
 import { ScrollView, StyleSheet, View } from "react-native";
 import { Text } from "react-native-elements";
 import { Button, Header, BackBtn, Dialog } from "src/shared/uielements";
 import { colors } from "src/theme/colors";
 import { underlineHeader, viewBase, dialogViewBase } from "src/theme/elements";
+import Translation from 'src/translation/en.json';
+import * as Routes from 'src/navigation/constants';
 
 const styles = StyleSheet.create({
 	headerText: {
@@ -50,14 +52,14 @@ const styles = StyleSheet.create({
 	}
 });
 
-export const Settings = () => {
+export const Settings = (): ReactElement => {
 	const navigation = useNavigation();
 
 	const [isVisible, setIsVisible] = useState<boolean>(false);
 
 	const handleDelete = () => {
 		setIsVisible(false);
-		navigation.navigate("SettingsDeleteAccount");
+		navigation.navigate(Routes.SETTING_DELETE_ACCOUNT);
 	}
 	
 	return (
@@ -67,39 +69,39 @@ export const Settings = () => {
 			/>
 			<ScrollView style={styles.container}>
 				<View style={ underlineHeader }>
-					<Text style={styles.headerText}>Setting</Text>
+					<Text style={styles.headerText}>{Translation.OTHER.SETTING}</Text>
 				</View>
 				<View style={styles.settingsView}>
 					<Button
 						type="transparent"
-						title="My profile"
+						title={Translation.BUTTON.MY_PROFILE}
 						style={styles.settingItem}
-						onPress={()=>navigation.navigate("SettingsPersonalProfile")}
+						onPress={()=>navigation.navigate(Routes.SETTING_PERSONAL_PROFILE)}
 					/>
 					<Button
 						type="transparent"
-						title="Bank account"
+						title={Translation.BUTTON.BANK_ACCOUNT}
 						style={styles.settingItem}
-						onPress={()=>navigation.navigate("SettingsBankAccount")}
+						onPress={()=>navigation.navigate(Routes.SETTING_BANK_ACCOUNT)}
 					/>
 					<Button
 						type="transparent"
-						title="Security"
+						title={Translation.BUTTON.SECURITY}
 						style={styles.settingItem}
-						onPress={()=>navigation.navigate("SettingsSecurity")}
+						onPress={()=>navigation.navigate(Routes.SETTING_SECURITY)}
 					/>
 					<Button
 						type="transparent"
-						title="Legal"
+						title={Translation.BUTTON.LEGAL}
 						style={styles.settingItem}
-						onPress={()=>navigation.navigate("SettingsTermsAndConditions")}
+						onPress={()=>navigation.navigate(Routes.SETTING_TERMS_CONDITIONS)}
 					/>
 				</View>
 			</ScrollView>
 			<View style={styles.signOutView}>
 				<Button
 					type="transparent"
-					title="Delete account"
+					title={Translation.BUTTON.DELETE_ACCOUNT}
 					textStyle={styles.signOutButton}
 					onPress={()=>setIsVisible(true)}
 				/>

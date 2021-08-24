@@ -1,18 +1,15 @@
-import React, {useState, useEffect} from 'react';
-import { StyleSheet, View, KeyboardAvoidingView, ScrollView, Platform, TouchableOpacity, Switch } from 'react-native';
+import React, {useState, useEffect, ReactElement} from 'react';
+import { StyleSheet, View, KeyboardAvoidingView, ScrollView, Platform } from 'react-native';
 import { Text } from 'react-native-elements';
 import { Header, Button, CancelBtn, BackBtn, BorderedInput } from "src/shared/uielements";
 import { underlineHeaderB, viewBaseB, wrappingContainerBase } from "src/theme/elements";
 import { colors } from "src/theme/colors";
+import Translation from 'src/translation/en.json';
+import * as Routes from 'src/navigation/constants';
 
 type MerchantRequestProps = {
 	navigation?: any,
 	route?: any,
-}
-
-type AmountState = {
-	amount: string,
-	costs: string
 }
 
 const styles = StyleSheet.create({
@@ -21,7 +18,11 @@ const styles = StyleSheet.create({
 		fontWeight: '400',
 		lineHeight: 40
 	},
-	switchView: {flex: 1, justifyContent: 'center', alignItems: 'center'},
+	switchView: {
+		flex: 1, 
+		justifyContent: 'center', 
+		alignItems: 'center'
+	},
 	contentView: { 
 		marginTop: 5
 	},
@@ -43,7 +44,7 @@ const styles = StyleSheet.create({
 	}
 });
 
-const MerchantRequest = (props: MerchantRequestProps) => {
+const MerchantRequest = (props: MerchantRequestProps): ReactElement => {
 
 	const [amount, setAmount] = useState<string>("");
 	const [goNext, setGoNext] = useState<boolean>(false);
@@ -53,26 +54,26 @@ const MerchantRequest = (props: MerchantRequestProps) => {
 	}, [amount]);
 
 
-	const onValueChange = (name: any, change: any) => {
+	const onValueChange = (name: string, change: string) => {
 		setAmount(change);
 	}
 
 	const onReturn = () => {
-		props.navigation.navigate('MerchantPaymentPending');
+		props.navigation.navigate(Routes.MERCHANT_PAYMENT_PENDING);
 	}
 
 	return (
 		<View style={viewBaseB}>
 			<Header
 				leftComponent={<BackBtn color={colors.purple} onClick={() => props.navigation.goBack()} />}
-				rightComponent={<CancelBtn color={colors.purple} text="Close" onClick={() => props.navigation.navigate('MerchantDashboard')} />}
+				rightComponent={<CancelBtn color={colors.purple} text={Translation.BUTTON.CLOSE} onClick={() => props.navigation.navigate(Routes.MERCHANT_DASHBOARD)} />}
 			/>
 			<ScrollView style={wrappingContainerBase}>
 				<View style={underlineHeaderB}>
-					<Text style={styles.headerText}>Send return</Text>
+					<Text style={styles.headerText}>{Translation.PAYMENT.SEND_RETURN}</Text>
 				</View>
 				<View style={styles.contentView}>
-					<Text style={styles.label}>RETURN AMOUNT</Text>
+					<Text style={styles.label}>{Translation.LABEL.RETURN_AMOUNT}</Text>
 					<BorderedInput
 						label="Amount"
 						name="amount"

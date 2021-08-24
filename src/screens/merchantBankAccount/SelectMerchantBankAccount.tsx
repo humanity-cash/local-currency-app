@@ -1,9 +1,9 @@
 import { useNavigation } from '@react-navigation/native';
-import React, { useState, useEffect } from 'react';
-import { StyleSheet, ScrollView, View, KeyboardAvoidingView, Platform, TouchableWithoutFeedback } from 'react-native';
-import { Text, Image } from 'react-native-elements';
+import React, { useState, useEffect, ReactElement } from 'react';
+import { StyleSheet, ScrollView, View } from 'react-native';
+import { Text } from 'react-native-elements';
 import { TouchableOpacity } from 'react-native-gesture-handler';
-import { BackBtn, Header, CancelBtn, Button } from "src/shared/uielements";
+import { BackBtn, Header, CancelBtn } from "src/shared/uielements";
 import { colors } from "src/theme/colors";
 import { underlineHeaderB, viewBase, wrappingContainerBase } from "src/theme/elements";
 
@@ -85,7 +85,7 @@ const SelectMerchantBankAccountView = (props: SelectMerchantBankAccountProps) =>
 	);
 }
 
-const SelectMerchantBankAccount = (props: SelectMerchantBankAccountProps) => {
+const SelectMerchantBankAccount = (props: SelectMerchantBankAccountProps): ReactElement => {
 	const navigation = useNavigation();
 	return <SelectMerchantBankAccountView {...props} navigation={navigation} />;
 }

@@ -13,6 +13,37 @@ export const TABS = "Tabs";
 export const MERCHANT_TABS = "MerchantTabs";
 export const SELECT_BANK_ACCOUNT = "SelectBank";
 export const TOPUP_SUCCESS = "TopUpSuccess";
+export const QRCODE_SCAN = "QRCodeScan";
+export const BUSINESS_OWNER_DETAIL = "BusinessOwnerDetail";
+export const BUSINESS_OWNER_ADDRESS = "BusinessOwnerAddress"
+export const BUSINESS_INFO = "BusinessInfo";
+export const BUSINESS_ADDRESS = "BusinessAddress";
+export const BUSINESS_WELCOME = "BusinessWelcome";
+export const SETTING_DELETE_ACCOUNT = "SettingsDeleteAccount";
+export const SETTING_PERSONAL_PROFILE = "SettingsPersonalProfile";
+export const SETTING_BANK_ACCOUNT = "SettingsBankAccount";
+export const SETTING_SECURITY = "SettingsSecurity";
+export const SETTING_TERMS_CONDITIONS = "SettingsTermsAndConditions";
+export const PAYMENT_SUCCESS = "PaymentSuccess";
+export const PAYMENT_REQUEST = "PaymentRequest";
+export const PAYMENT_PENDING = "PaymentPending";
+
+export const MERCHANT_QRCODE_SCAN = "MerchantQRCodeScan";
+export const MERCHANT_BANK_ACCOUNT = "MerchantBankAccount";
+export const SELECT_MERCHANT_BANK_ACCOUNT = "SelectMerchantBankAccount";
+export const LOGIN_MERCHANT_BANK = "LoginToMerchantBank";
+export const MERCHANT_CASHOUT_PASSWORD = "MerchantCashoutPassword";
+export const MERCHANT_REDEMPTION_IN_PROGRESS = "MerchantRedemptionInProgress";
+export const MERCHANT_LOADUP_PENDING = "MerchantLoadupPending";
+export const MERCHANT_LOADUP_SUCCESS = "MerchantLoadupSuccess";
+export const MERCHANT_PAYMENT_SUCCESS = "MerchantPaymentSuccess";
+export const MERCHANT_PAYMENT_PENDING = "MerchantPaymentPending";
+export const MERCHANT_RETURN = "MerchantReturn";
+export const MERCHANT_PAYOUT_SUCCESS = "MerchantPayoutSuccess";
+export const MERCHANT_PAYOUT_PENDING = "MerchantPayoutPending";
+export const MERCHANT_PAYOUT_PERSONAL = "MerchantPayoutToPersonal";
+export const MERCHANT_PAYOUT_SOMEONE = "MerchantPayoutToSomeone";
+export const MERCHANT_PAYOUT_QR_SCAN = "MerchantPayoutQRCodeScan";
 
 // Personal tabs
 export const DASHBOARD = "Dashboard";
@@ -25,5 +56,4 @@ export const WHERE_TO_SPEND = "WhereToSpend";
 export const SIGNUP_YOUR_BUSINESS = "SignUpYourBusiness";
 export const SETTINGS = "Settings";
 export const HELP_CONTACT = "HelpAndContact";
-
-//
+export const BUSINESS_DETAIL = "BusinessDetail";

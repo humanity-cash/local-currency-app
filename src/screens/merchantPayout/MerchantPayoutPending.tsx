@@ -1,9 +1,11 @@
-import React, { useEffect } from 'react';
+import React, { ReactElement, useEffect } from 'react';
 import { StyleSheet, View, KeyboardAvoidingView, ActivityIndicator, ScrollView, Platform } from 'react-native';
 import { Text } from 'react-native-elements';
 import { Header } from "src/shared/uielements";
 import { colors } from "src/theme/colors";
 import { baseHeader, viewBase, wrappingContainerBase } from "src/theme/elements";
+import Translation from 'src/translation/en.json';
+import * as Routes from 'src/navigation/constants';
 
 type MerchantPayoutPendingProps = {
 	navigation?: any,
@@ -25,11 +27,11 @@ const styles = StyleSheet.create({
 	},
 });
 
-const MerchantPayoutPending = (props: MerchantPayoutPendingProps) => {
+const MerchantPayoutPending = (props: MerchantPayoutPendingProps): ReactElement => {
 
 	useEffect(() => {
 		setTimeout(() => {
-			props.navigation.navigate("MerchantPayoutSuccess");
+			props.navigation.navigate(Routes.MERCHANT_PAYOUT_SUCCESS);
 		}, 2000);
 	});
 
@@ -38,8 +40,8 @@ const MerchantPayoutPending = (props: MerchantPayoutPendingProps) => {
 			<Header />
 			<ScrollView style={wrappingContainerBase}>
 				<View style={ baseHeader }>
-					<Text style={styles.headerText}>Pending...</Text>
-					<Text style={styles.text}>This usually takes 5-6 seconds</Text>
+					<Text style={styles.headerText}>{Translation.PAYMENT.PENDING}</Text>
+					<Text style={styles.text}>{Translation.PAYMENT.PENDING_DETAIL}</Text>
 				</View>
 			</ScrollView>
 			<KeyboardAvoidingView

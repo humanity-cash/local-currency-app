@@ -1,10 +1,12 @@
-import React, { useEffect, useState } from 'react';
+import React, { ReactElement, useEffect, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { Text } from 'react-native-elements';
 import { Header, CancelBtn } from "src/shared/uielements";
 import { colors } from "src/theme/colors";
 import { viewBase } from "src/theme/elements";
 import { BarCodeScanner } from 'expo-barcode-scanner';
+import Translation from 'src/translation/en.json';
+import * as Routes from 'src/navigation/constants';
 
 type MerchantReturnQRCodeScanProps = {
 	navigation?: any,
@@ -32,7 +34,7 @@ const styles = StyleSheet.create({
 	}
 });
 
-const MerchantReturnQRCodeScan = (props: MerchantReturnQRCodeScanProps) => {
+const MerchantReturnQRCodeScan = (props: MerchantReturnQRCodeScanProps): ReactElement => {
 	const [isPermissionSelected, setIsPermissionSelected] = useState<boolean>(false);
 	const [hasPermission, setHasPermission] = useState<boolean>(false);
 	const [isScanned, setIsScanned] = useState<boolean>(false);
@@ -46,16 +48,17 @@ const MerchantReturnQRCodeScan = (props: MerchantReturnQRCodeScanProps) => {
 	}, []);
 	
 	const handleBarCodeScanned = (data: HandleScaned) => {
+		console.log(data);
 		setIsScanned(true);
-		props.navigation.navigate('MerchantReturn')
+		props.navigation.navigate(Routes.MERCHANT_RETURN)
 	}
 
 	if (isPermissionSelected === false) {
-		return <Text>Requesting for camera permission</Text>;
+		return <Text>{Translation.OTHER.REQUEST_CAMERA_PERMISSION}</Text>;
 	}
 
 	if (hasPermission === false) {
-		return <Text>No access to camera</Text>;
+		return <Text>{Translation.OTHER.NO_CAMERA_PERMISSION}</Text>;
 	}
 
 	return (
@@ -68,7 +71,7 @@ const MerchantReturnQRCodeScan = (props: MerchantReturnQRCodeScanProps) => {
 			</View>
 			<View style={styles.toggleView}>
 				<Header
-					rightComponent={<CancelBtn text="Close" color={colors.white} onClick={() => props.navigation.navigate('MerchantDashboard')} />}
+					rightComponent={<CancelBtn text={Translation.BUTTON.CLOSE} color={colors.white} onClick={() => props.navigation.navigate(Routes.MERCHANT_DASHBOARD)} />}
 				/>
 			</View>
 		</View>

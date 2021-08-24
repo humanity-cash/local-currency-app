@@ -1,5 +1,5 @@
 import { createStackNavigator } from "@react-navigation/stack";
-import React from "react";
+import React, { ReactElement } from "react";
 import BusinessProfile from "src/screens/signupBusiness/BusinessProfile";
 import BusinessDetail from "src/screens/signupBusiness/BusinessDetail";
 import BusinessOwnerDetail from "src/screens/signupBusiness/BusinessOwnerDetail";
@@ -9,10 +9,10 @@ import BusinessAddress from "src/screens/signupBusiness/BusinessAddress";
 import BusinessWelcome from "src/screens/signupBusiness/BusinessWelcome";
 
 const SignupBusinessStack = createStackNavigator()
-function SignupBusinessScreen() {
+function SignupBusinessScreen(): ReactElement {
 	return (
 		<SignupBusinessStack.Navigator
-			screenOptions={({ route, navigation }) => ({
+			screenOptions={() => ({
 				headerShown: false,
 			})}
 		>

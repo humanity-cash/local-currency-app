@@ -1,9 +1,11 @@
-import React from 'react';
+import React, { ReactElement } from 'react';
 import { StyleSheet, View, KeyboardAvoidingView, ScrollView, Platform } from 'react-native';
 import { Text } from 'react-native-elements';
-import { Header, Button, CancelBtn, BackBtn } from "src/shared/uielements";
+import { Header, Button, BackBtn } from "src/shared/uielements";
 import { underlineHeader, viewBase, wrappingContainerBase } from "src/theme/elements";
 import { colors } from "src/theme/colors";
+import Translation from 'src/translation/en.json';
+import * as Routes from 'src/navigation/constants';
 
 type BusinessAccountProps = {
 	navigation?: any,
@@ -29,7 +31,7 @@ const styles = StyleSheet.create({
 	},
 });
 
-const BusinessAccount = (props: BusinessAccountProps) => {
+const BusinessAccount = (props: BusinessAccountProps): ReactElement => {
 
 	return (
 		<View style={viewBase}>
@@ -38,10 +40,10 @@ const BusinessAccount = (props: BusinessAccountProps) => {
 			/>
 			<ScrollView style={wrappingContainerBase}>
                 <View style={underlineHeader}>
-                    <Text style={styles.headerText}>Business account</Text>
+                    <Text style={styles.headerText}>{Translation.PROFILE.BUSINESS_ACCOUNT}</Text>
                 </View>
                 <View style={styles.bodyView}>
-                    <Text style={styles.bodyText}>You do not have a business account linked. If you do have a business that accepts BerkShares you can sign up and link your business!</Text>
+                    <Text style={styles.bodyText}>{Translation.PROFILE.BUSINESS_ACCOUNT_DETAIL}</Text>
                 </View>
 			</ScrollView>
 			<KeyboardAvoidingView
@@ -49,8 +51,8 @@ const BusinessAccount = (props: BusinessAccountProps) => {
 				<View style={styles.bottomView}>
 					<Button
 						type="darkGreen"
-						title="Sign up your business"
-						onPress={()=>props.navigation.navigate("SignupBusiness")}
+						title={Translation.BUTTON.SIGNUP_BUSINESS}
+						onPress={()=>props.navigation.navigate(Routes.SIGNUP_BUSINESS)}
 					/>
 				</View>
 			</KeyboardAvoidingView>

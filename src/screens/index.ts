@@ -29,12 +29,12 @@ import Tabs from "./dashboard/Tabs";
 import QRCodeScan from "./payment/QRCodeScan";
 import PaymentPending from "./payment/PaymentPending";
 import PaymentSuccess from "./payment/PaymentPending";
-import Request from "./payment/Request";
+import PaymentRequest from "./payment/PaymentRequest";
 import MerchantDictionary from "./merchant/MerchantDictionary";
 
 export {
 	Teaser, CreateAccount, Verification, VerificationHelp, Password, PasswordConfirm, Passcode, TouchId,
 	PersonalDetails, PersonalAddress, TermsEmail, ConfirmEmail, EmailConfirmed, TopUp, TopUpSuccess, SelectPayment,
 	Deposit, CreditCard, ConfirmPin, Login, Dashboard, LinkBankAccount, SelectBank, LoginToBank, 
-	SelectBankAccount, Congratulations, SelectAccountType, Tabs, QRCodeScan, PaymentPending, PaymentSuccess, Request, MerchantDictionary
+	SelectBankAccount, Congratulations, SelectAccountType, Tabs, QRCodeScan, PaymentPending, PaymentSuccess, PaymentRequest, MerchantDictionary
 };

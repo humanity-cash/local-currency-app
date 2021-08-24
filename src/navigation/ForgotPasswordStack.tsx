@@ -1,15 +1,15 @@
 import { createStackNavigator } from "@react-navigation/stack";
-import React from "react";
+import React, { ReactElement } from "react";
 import ForgotPasswordNewPassword from "src/screens/authentication/ForgotPasswordNewPassword";
 import ForgotPasswordEmail from "src/screens/authentication/ForgotPasswordEmail";
 import ForgotPasswordSuccess from "src/screens/authentication/ForgotPasswordSuccess";
 import ForgotPasswordVerification from "src/screens/authentication/ForgotPasswordVerification";
 
 const ForgotPasswordStack = createStackNavigator()
-function ForgotPasswordStackScreen() {
+function ForgotPasswordStackScreen(): ReactElement {
 	return (
 		<ForgotPasswordStack.Navigator
-			screenOptions={({ route, navigation }) => ({
+			screenOptions={() => ({
 				headerShown: false
 			})}
 		>

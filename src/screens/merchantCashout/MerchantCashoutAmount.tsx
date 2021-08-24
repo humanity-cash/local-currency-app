@@ -1,10 +1,12 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, ReactElement} from 'react';
 import { StyleSheet, View, KeyboardAvoidingView, ScrollView, Platform } from 'react-native';
 import { Text } from 'react-native-elements';
 import { Header, Button, CancelBtn, BackBtn, BorderedInput, Dialog } from "src/shared/uielements";
 import { underlineHeaderB, viewBaseB, dialogViewBase, wrappingContainerBase } from "src/theme/elements";
 import { colors } from "src/theme/colors";
 import { IMap } from "src/utils/types";
+import Translation from 'src/translation/en.json';
+import * as Routes from 'src/navigation/constants';
 
 type MerchantCashoutAmountProps = {
 	navigation?: any,
@@ -81,7 +83,7 @@ const styles = StyleSheet.create({
 	}
 });
 
-const MerchantCashoutAmount = (props: MerchantCashoutAmountProps) => {
+const MerchantCashoutAmount = (props: MerchantCashoutAmountProps): ReactElement => {
 
 	const [state, setState] = useState<MerchantCashoutState>({
 		amount: "1",
@@ -108,24 +110,24 @@ const MerchantCashoutAmount = (props: MerchantCashoutAmountProps) => {
 
 	const doCashout = () => {
 		setIsVisible(false);
-		props.navigation.navigate("MerchantCashoutPassword");
+		props.navigation.navigate(Routes.MERCHANT_CASHOUT_PASSWORD);
 	}
 
 	return (
 		<View style={viewBaseB}>
 			<Header
 				leftComponent={<BackBtn color={colors.purple} onClick={() => props.navigation.goBack()} />}
-				rightComponent={<CancelBtn text={"Close"} color={colors.purple} onClick={() => props.navigation.goBack()} />}
+				rightComponent={<CancelBtn text={Translation.BUTTON.CLOSE} color={colors.purple} onClick={() => props.navigation.goBack()} />}
 			/>
 			<ScrollView style={wrappingContainerBase}>
 				<View style={underlineHeaderB}>
-					<Text style={styles.headerText}>Cash out to USD$</Text>
+					<Text style={styles.headerText}>{Translation.PAYMENT.CASH_OUT}</Text>
 				</View>
 				<View>
-					<Text style={styles.bodyText}>Select the amount of BerkShares you would like to redeem to USD Dollar. Please note that the maximum amount is $ 2,000.00 and you can not exceed your account balance.</Text>
+					<Text style={styles.bodyText}>{Translation.PAYMENT.CASH_OUT_DETAIL}</Text>
 					<View style={styles.formLabel}>
-						<Text style={styles.labelText}>AMOUNT</Text>
-						<Text style={styles.labelText}>Max. B$ 2,000.00</Text>
+						<Text style={styles.labelText}>{Translation.LABEL.AMOUNT}</Text>
+						<Text style={styles.labelText}>{Translation.LABEL.MAX_BERKSHARES}</Text>
 					</View>
 					<BorderedInput
 						label="Amount"
@@ -140,11 +142,11 @@ const MerchantCashoutAmount = (props: MerchantCashoutAmountProps) => {
 						onChange={onValueChange}
 					/>
 					<View style={styles.resultView}>
-						<Text style={styles.resultText}>Redemption fee (1,5%)</Text>
+						<Text style={styles.resultText}>{Translation.PAYMENT.REDEMPTION_FEE}(1.5%)</Text>
 						<Text style={styles.resultText}>$ -</Text>
 					</View>
 					<View style={styles.resultView}>
-						<Text style={styles.resultText}>Net cash out</Text>
+						<Text style={styles.resultText}>{Translation.PAYMENT.NET_CASH_OUT}</Text>
 						<Text style={styles.resultText}>$ -</Text>
 					</View>
 				</View>

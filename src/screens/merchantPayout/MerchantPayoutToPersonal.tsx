@@ -1,9 +1,11 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, ReactElement} from 'react';
 import { StyleSheet, View, KeyboardAvoidingView, ScrollView, Platform } from 'react-native';
 import { Text } from 'react-native-elements';
 import { Header, Button, CancelBtn, BackBtn, BorderedInput } from "src/shared/uielements";
 import { underlineHeaderB, viewBaseB, wrappingContainerBase } from "src/theme/elements";
 import { colors } from "src/theme/colors";
+import Translation from 'src/translation/en.json';
+import * as Routes from 'src/navigation/constants';
 
 type MerchantPayoutToPersonalProps = {
 	navigation?: any,
@@ -45,7 +47,7 @@ const styles = StyleSheet.create({
 	}
 });
 
-const MerchantCashoutAmount = (props: MerchantPayoutToPersonalProps) => {
+const MerchantCashoutAmount = (props: MerchantPayoutToPersonalProps): ReactElement => {
 
 	const [amount, setAmount] = useState<string>('');
 	const [goNext, setGoNext] = useState(false);
@@ -62,17 +64,17 @@ const MerchantCashoutAmount = (props: MerchantPayoutToPersonalProps) => {
 		<View style={viewBaseB}>
 			<Header
 				leftComponent={<BackBtn color={colors.purple} onClick={() => props.navigation.goBack()} />}
-				rightComponent={<CancelBtn text={"Close"} color={colors.purple} onClick={() => props.navigation.goBack()} />}
+				rightComponent={<CancelBtn text={Translation.BUTTON.CLOSE} color={colors.purple} onClick={() => props.navigation.goBack()} />}
 			/>
 			<ScrollView style={wrappingContainerBase}>
 				<View style={underlineHeaderB}>
-					<Text style={styles.headerText}>Send B$ to someone</Text>
+					<Text style={styles.headerText}>{Translation.PAYMENT.PAYOUT_SOMEONE}</Text>
 				</View>
 				<View>
-					<Text style={styles.bodyText}>Select the amount of BerkShares you would like to pay out to your personal account.</Text>
+					<Text style={styles.bodyText}>{Translation.PAYMENT.PAYOUT_AMOUNT_PERSONAL}</Text>
 					<View style={styles.formLabel}>
-						<Text style={styles.labelText}>AMOUNT</Text>
-						<Text style={styles.labelText}>Max. B$ 2,000.00</Text>
+						<Text style={styles.labelText}>{Translation.LABEL.AMOUNT}</Text>
+						<Text style={styles.labelText}>{Translation.LABEL.MAX_BERKSHARES}</Text>
 					</View>
 					<BorderedInput
 						label="Amount"
@@ -94,8 +96,8 @@ const MerchantCashoutAmount = (props: MerchantPayoutToPersonalProps) => {
 					<Button
 						type="purple"
 						disabled={!goNext}
-						title="Confirm"
-						onPress={()=>props.navigation.navigate("MerchantPayoutPending")}
+						title={Translation.BUTTON.CONFIRM}
+						onPress={()=>props.navigation.navigate(Routes.MERCHANT_PAYOUT_PENDING)}
 					/>
 				</View>
 			</KeyboardAvoidingView>

@@ -1,12 +1,14 @@
-import { useIsFocused, useNavigation } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 import * as LocalAuthentication from "expo-local-authentication";
-import React, { useEffect, useState } from 'react';
+import React, { ReactElement, useEffect, useState } from 'react';
 import { ScrollView, KeyboardAvoidingView, Platform, StyleSheet, View } from 'react-native';
 import { Text } from 'react-native-elements';
 import { useUserDetails } from "src/hooks";
 import { Header, BackBtn, BlockInput, Button } from "src/shared/uielements";
 import { baseHeader, viewBaseB, wrappingContainerBase } from "src/theme/elements";
 import { colors } from "src/theme/colors";
+import Translation from 'src/translation/en.json';
+import * as Routes from 'src/navigation/constants';
 
 type MerchantCashoutPasswordProps = {
 	navigation?: any,
@@ -49,8 +51,6 @@ const strongRegex = new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#\$%\^&\*])(?=.{8
 
 const MerchantCashoutPasswordView = (props: MerchantCashoutPasswordProps) => {
 	const { authorization: { touchID } } = useUserDetails();
-    const isFocused = useIsFocused();
-    const [autoFocus, setAutoFocus] = useState<boolean>(true);
 	const [goNext, setGoNext] = useState<boolean>(true);
 	const [password, setPassword] = useState<string>("");
 	
@@ -60,20 +60,18 @@ const MerchantCashoutPasswordView = (props: MerchantCashoutPasswordProps) => {
 
 	useEffect(() => {
 		async function askFingerprint() {
-			if (isFocused && touchID) {
+			if (touchID) {
 				const data = await LocalAuthentication.authenticateAsync({
 					disableDeviceFallback: true,
 					cancelLabel: 'Close'
 				});
-				setAutoFocus(false);
+				console.log(data);
 			}
 		}
 		askFingerprint();
+	}, [touchID]);
 
-		setAutoFocus(isFocused);
-	}, [isFocused, touchID]);
-
-	const onValueChange = (name: any, change: any) => {
+	const onValueChange = (name: string, change: string) => {
 		setPassword(change);
 	};
 
@@ -85,10 +83,10 @@ const MerchantCashoutPasswordView = (props: MerchantCashoutPasswordProps) => {
 
 			<ScrollView style={wrappingContainerBase}>
 				<View style={baseHeader}>
-					<Text style={styles.headerText}>Verify with password</Text>
+					<Text style={styles.headerText}>{Translation.COMMON.VERIFY_PASSOWRD}</Text>
 				</View>
 				<View style={styles.form}>
-					<Text style={styles.label}>PASSWORD</Text>
+					<Text style={styles.label}>{Translation.LABEL.PASSWORD}</Text>
 					<BlockInput
 						name="password"
 						placeholder="Password"
@@ -106,15 +104,15 @@ const MerchantCashoutPasswordView = (props: MerchantCashoutPasswordProps) => {
 				<View style={styles.bottomView}>
 					<Button
 						type="transparent"
-						title="Forgot Passowrd?"
+						title={Translation.BUTTON.FORGOT_PASSWORD}
                         textStyle={styles.forgotText}
-						onPress={() => props.navigation.navigate("ForgotPassword")}
+						onPress={() => props.navigation.navigate(Routes.FORGOT_PASSWORD)}
 					/>
 					<Button
 						type="purple"
-						title="Confirm"
+						title={Translation.BUTTON.CONFIRM}
 						disabled={!goNext}
-						onPress={() => props.navigation.navigate("MerchantRedemptionInProgress")}
+						onPress={() => props.navigation.navigate(Routes.MERCHANT_REDEMPTION_IN_PROGRESS)}
 					/>
 				</View>
 			</KeyboardAvoidingView>
@@ -122,7 +120,7 @@ const MerchantCashoutPasswordView = (props: MerchantCashoutPasswordProps) => {
 	);
 }
 
-const MerchantCashoutPassword = (props:MerchantCashoutPasswordProps) => {
+const MerchantCashoutPassword = (props:MerchantCashoutPasswordProps): ReactElement => {
 	const navigation = useNavigation();
 	return <MerchantCashoutPasswordView {...props} navigation={navigation} />;
 }

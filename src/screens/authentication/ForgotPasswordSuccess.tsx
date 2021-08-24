@@ -1,7 +1,7 @@
 import { useNavigation } from '@react-navigation/native';
-import React from 'react';
+import React, { ReactElement } from 'react';
 import { StyleSheet, View } from 'react-native';
-import { Image, Text } from 'react-native-elements';
+import { Text } from 'react-native-elements';
 import { Button, Header, CancelBtn, BackBtn } from "src/shared/uielements";
 import { baseHeader, viewBase, wrappingContainerBase } from "src/theme/elements";
 
@@ -46,7 +46,7 @@ const ForgotPasswordSuccessView = (props: ForgotPasswordSuccessProps) => {
 	);
 }
 
-const ForgotPasswordSuccess = (props:ForgotPasswordSuccessProps) => {
+const ForgotPasswordSuccess = (props:ForgotPasswordSuccessProps): ReactElement => {
 	const navigation = useNavigation();
 	return <ForgotPasswordSuccessView {...props} navigation={navigation} />;
 }

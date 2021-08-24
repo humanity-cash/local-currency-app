@@ -1,10 +1,12 @@
 import { useNavigation } from '@react-navigation/native';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, ReactElement } from 'react';
 import { StyleSheet, ScrollView, View, KeyboardAvoidingView, Platform } from 'react-native';
 import { Text, Image } from 'react-native-elements';
 import { BackBtn, Header, CancelBtn, BlockInput, Button } from "src/shared/uielements";
 import { colors } from "src/theme/colors";
 import { viewBaseB, wrappingContainerBase, underlineHeaderB } from "src/theme/elements";
+import Translation from 'src/translation/en.json';
+import * as Routes from 'src/navigation/constants';
 
 type LoginToMerchantBankProps = {
 	navigation?: any
@@ -70,14 +72,14 @@ const LoginToMerchantBankView = (props: LoginToMerchantBankProps) => {
 		<View style={viewBaseB}>
 			<Header
 				leftComponent={<BackBtn color={colors.purple} onClick={() => props.navigation.goBack()} />}
-				rightComponent={<CancelBtn text="Close" color={colors.purple} onClick={() => props.navigation.navigate('Tabs')} />}
+				rightComponent={<CancelBtn text="Close" color={colors.purple} onClick={() => props.navigation.navigate(Routes.TABS)} />}
 			/>
 
 			<ScrollView style={wrappingContainerBase}>
 				<View style={underlineHeaderB}>
-					<Text style={styles.headerText}>Log in to your bank</Text>
+					<Text style={styles.headerText}>{Translation.BANK_ACCOUNT.LOGIN_BANK}</Text>
 				</View>
-				<Text style={styles.bodyText}>By providing your Chase bank credencials to Dwolla, you're enabling Dwolla to retrieve your financial data.</Text>
+				<Text style={styles.bodyText}>{Translation.BANK_ACCOUNT.LOGIN_BANK_DETAIL}</Text>
 				<View style={styles.imageView}>
 					<Image
 						source={require('../../../assets/images/bank1.png')}
@@ -85,7 +87,7 @@ const LoginToMerchantBankView = (props: LoginToMerchantBankProps) => {
 					/>
 				</View>
 				<View style={styles.form}>
-					<Text style={styles.label}>ACCOUNT NAME</Text>
+					<Text style={styles.label}>{Translation.LABEL.ACCOUNT_NAME}</Text>
 					<BlockInput
 						name="accountName"
 						placeholder="Account name"
@@ -94,7 +96,7 @@ const LoginToMerchantBankView = (props: LoginToMerchantBankProps) => {
 						onChange={onValueChange}
 					/>
 
-					<Text style={styles.label}>PASSWORD</Text>
+					<Text style={styles.label}>{Translation.LABEL.PASSWORD}</Text>
 					<BlockInput
 						name="password"
 						placeholder="Password"
@@ -111,7 +113,7 @@ const LoginToMerchantBankView = (props: LoginToMerchantBankProps) => {
 						type="purple"
 						title="Submit"
 						disabled={!goNext}
-						onPress={() => props.navigation.navigate("SelectMerchantBankAccount")}
+						onPress={() => props.navigation.navigate(Routes.SELECT_MERCHANT_BANK_ACCOUNT)}
 					/>
 				</View>
 			</KeyboardAvoidingView>
@@ -119,7 +121,7 @@ const LoginToMerchantBankView = (props: LoginToMerchantBankProps) => {
 	);
 }
 
-const LoginToMerchantBank = (props: LoginToMerchantBankProps) => {
+const LoginToMerchantBank = (props: LoginToMerchantBankProps): ReactElement => {
 	const navigation = useNavigation();
 	return <LoginToMerchantBankView {...props} navigation={navigation} />;
 }

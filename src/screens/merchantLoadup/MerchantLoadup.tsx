@@ -1,9 +1,6 @@
 import { useNavigation } from "@react-navigation/native";
-import React, { useEffect, useState } from "react";
-import {
-    KeyboardAvoidingView,
-    Platform, ScrollView, StyleSheet, View
-} from "react-native";
+import React, { ReactElement, useEffect, useState } from "react";
+import { KeyboardAvoidingView, Platform, ScrollView, StyleSheet, View } from "react-native";
 import { Text } from "react-native-elements";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { usePaymentDetails } from "src/hooks";
@@ -11,6 +8,8 @@ import { BackBtn, BorderedInput, Button, Header, CancelBtn } from "src/shared/ui
 import { colors } from "src/theme/colors";
 import { underlineHeaderB, viewBaseB, wrappingContainerBase } from "src/theme/elements";
 import { IMap } from "src/utils/types";
+import Translation from 'src/translation/en.json';
+import * as Routes from 'src/navigation/constants';
 
 interface MerchantLoadupState extends IMap {
   amount: string;
@@ -110,13 +109,13 @@ const MerchantLoadupView = (props: MerchantLoadupProps) => {
     setGoNext(Object.keys(state).every((key) => state[key] !== ""));
   }, [state]);
 
-  const onValueChange = (name: any, change: any) => {
+  const onValueChange = (name: string, change: string) => {
     const costs = change;
     setState({
       ...state,
       [name]: change,
       costs: costs,
-    } as any);
+    } as MerchantLoadupState);
     update({ [name]: change });
   };
 
@@ -124,21 +123,20 @@ const MerchantLoadupView = (props: MerchantLoadupProps) => {
     <View style={viewBaseB}>
       <Header
         leftComponent={<BackBtn color={colors.purple} onClick={() => props.navigation.goBack()} />}
-        rightComponent={<CancelBtn color={colors.purple} text="Close" onClick={() => props.navigation.navigate("MerchantDashboard")}/>}
+        rightComponent={<CancelBtn color={colors.purple} text={Translation.BUTTON.CLOSE} onClick={() => props.navigation.navigate(Routes.MERCHANT_DASHBOARD)}/>}
       />
 
       <ScrollView style={wrappingContainerBase}>
         <View style={styles.container}>
           <View style={underlineHeaderB}>
-            <Text style={styles.headerText}>Load up B$</Text>
+            <Text style={styles.headerText}>{Translation.LOAD_UP.TITLE}</Text>
           </View>
           <View style={styles.content}>
             <View style={styles.bodyView}>
-              <Text style={styles.bodyText}>Specify the amount of BerkShares </Text>
-              <Text style={styles.bodyText}>(B$1 = USD1) you would like to load up.</Text>
+              <Text style={styles.bodyText}>{Translation.LOAD_UP.LOAD_UP_DETAIL}</Text>
             </View>
 
-            <Text style={styles.text}>AMOUNT</Text>
+            <Text style={styles.text}>{Translation.LABEL.AMOUNT}</Text>
             <View style={styles.defaultAmountView}>
               <TouchableOpacity 
                 style={state.amount=='50' ? styles.selectedAmountItem : styles.defaultAmountItem} 
@@ -161,8 +159,8 @@ const MerchantLoadupView = (props: MerchantLoadupProps) => {
             </View>
             
             <View style={styles.maxBView}>
-              <Text style={styles.text}>AMOUNT</Text>
-              <Text style={styles.text}>MAX. B$ 2.000</Text>
+              <Text style={styles.text}>{Translation.LABEL.AMOUNT}</Text>
+              <Text style={styles.text}>{Translation.LABEL.MAX_BERKSHARES}</Text>
             </View>
             <BorderedInput
               label="Amount"
@@ -178,7 +176,7 @@ const MerchantLoadupView = (props: MerchantLoadupProps) => {
             />
 
             <View style={styles.totalView}>
-              <Text h2 style={styles.amountText}>Total costs</Text>
+              <Text h2 style={styles.amountText}>{Translation.LOAD_UP.TOTAL_COSTS}</Text>
               <Text h2 style={styles.amountText}>$ {state.amount==="" ? "-" : state.costs}</Text>
             </View>
           </View>
@@ -190,13 +188,13 @@ const MerchantLoadupView = (props: MerchantLoadupProps) => {
         <View style={styles.bottomView}>
           <Button
             type="purple"
-            title="Load up"
+            title={Translation.BUTTON.LOAD_UP}
             disabled={!goNext}
             onPress={() => {
               if (parseFloat(state.amount) > 2000) {
                 return;
               }
-              props.navigation.navigate("MerchantLoadupPending");
+              props.navigation.navigate(Routes.MERCHANT_LOADUP_PENDING);
             }}
           />
         </View>
@@ -205,7 +203,7 @@ const MerchantLoadupView = (props: MerchantLoadupProps) => {
   );
 };
 
-const MerchantLoadup = (props: MerchantLoadupProps) => {
+const MerchantLoadup = (props: MerchantLoadupProps): ReactElement => {
   const navigation = useNavigation();
   return <MerchantLoadupView {...props} navigation={navigation} />;
 };
