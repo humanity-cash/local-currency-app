@@ -1,11 +1,10 @@
 import {
-	CreditCardDetails, CreditCardDetailsErrors,
-	PersonalAddressErrors,
-	PersonalDetails,
-	PersonalDetailsErrors,
 	BusinessAddressErrors,
 	BusinessDetails,
-	BusinessDetailsErrors
+	BusinessDetailsErrors, CreditCardDetails, CreditCardDetailsErrors,
+	PersonalAddressErrors,
+	PersonalDetails,
+	PersonalDetailsErrors
 } from "./types";
 
 const creditCardNumberValidation = (number: string) => {
@@ -102,3 +101,9 @@ export const validateBusinessDetailsForm = (businessDetails: BusinessDetails) =>
 	}
 	return { errors, valid: Object.keys(errors).length === 0 };
 }
+
+const passwordRegex = new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#\$%\^&\*])(?=.{8,})");
+const emailValidation = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+export const isPasswordValid = (p: string): boolean => passwordRegex.test(p)
+
+export const isEmailValid = (e: string): boolean => emailValidation.test(e)
