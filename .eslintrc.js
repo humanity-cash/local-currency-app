@@ -10,4 +10,7 @@ module.exports = {
     "prettier",
     "prettier/@typescript-eslint",
   ],
+  "rules": {
+    "@typescript-eslint/ban-ts-comment": "off"
+  }
 };
