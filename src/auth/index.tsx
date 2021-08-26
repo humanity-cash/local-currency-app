@@ -1,6 +1,6 @@
-/* eslint-disable no-useless-catch */
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import  * as AWSService  from './aws-cognito';
+import { UpdateUserAttributesInput } from './types';
 
 /**AWS COGNITO ERRORS */
 export const NEW_PASSWORD_REQUIRED_ERROR = 'newPasswordRequiredError'
@@ -11,31 +11,29 @@ export enum AuthStatus {
 	SignedOut,
 }
 
-export interface IAuth {
-	sessionInfo?: {
+interface Session {
 		username?: string;
 		email?: string;
 		sub?: string;
 		accessToken?: string;
 		refreshToken?: string;
-	};
-	attrInfo?: any;
+}
+
+export interface IAuth {
+	updateAttributes?: any;
+	sessionInfo?: Session;
+	resendEmailVerificationCode?: any;
 	authStatus?: AuthStatus;
 	signIn?: any;
-	isNewUser?: boolean;
 	setSignInDetails: any;
-	setNewPassword?: any;
 	signInDetails: { password: string; email: string };
-	newPassword: string;
 	signOut?: any;
-	completeNewPassword?: any;
-	verifyCode?: any;
 	getSession?: any;
-	sendCode?: any;
-	forgotPassword?: any;
-	changePassword?: any;
 	getAttributes?: any;
-	setAttribute?: any;
+	signUpDetails?: any;
+	setSignUpDetails?: any;
+	emailVerification?: any;
+	signUp?: any;
 }
 
 const defaultState: IAuth = {
@@ -45,148 +43,129 @@ const defaultState: IAuth = {
 	setSignInDetails: () => { 
 		console.log('setSigninDetails is not loaded yet')
 	},
-	newPassword: '',
 };
 
 export const AuthContext = React.createContext(defaultState);
-
-export const AuthIsSignedIn: React.FunctionComponent = ({ children }) => {
-	const { authStatus }: IAuth = useContext(AuthContext);
-
-	return <>{authStatus === AuthStatus.SignedIn ? children : null}</>;
-};
-
-export const AuthIsNotSignedIn: React.FunctionComponent = ({ children }) => {
-	const { authStatus }: IAuth = useContext(AuthContext);
-
-	return <>{authStatus !== AuthStatus.SignedIn ? children : null}</>;
-};
 
 const AuthProvider: React.FunctionComponent = ({ children }) => {
 	const [authStatus, setAuthStatus] = useState(AuthStatus.Loading);
 	const [sessionInfo, setSessionInfo] = useState({});
 	const [signInDetails, setSignInDetails] = useState({
-		email: '',
-		password: '',
+		email: 'tech@humanity.cash',
+		password: 'Esraa@keyko1',
 	});
-	const [newPassword, setNewPassword] = useState('');
-	const [isNewUser, setIsNewUser] = useState(false);
+	const [signUpDetails, setSignUpDetails] = useState({
+		email: 'tech@humanity.cash',
+		password: 'Esraa@keyko1',
+		confirmPassword: 'Esraa@keyko1',
+	});
+
 	const [userAttributes, setUserAttributes] = useState({});
 
 	useEffect(() => {
 		async function getSessionInfo() {
 			try {
-				const session: any = await getSession();
-				console.log(
-					'🚀 ~ file: auth.tsx ~ line 66 ~ getSessionInfo ~ session',
-					session
-				);
-				setSessionInfo({
-					accessToken: session.accessToken.jwtToken,
-					refreshToken: session.refreshToken.token,
-				});
-				window.localStorage.setItem(
-					'accessToken',
-					`${session.accessToken.jwtToken}`
-				);
-				window.localStorage.setItem(
-					'refreshToken',
-					`${session.refreshToken.token}`
-				);
-				setAuthStatus(AuthStatus.SignedIn);
+				const response: any = await getSession();
+				if (response.success) {
+					setSessionInfo({
+						accessToken: response.data.accessToken.jwtToken,
+						refreshToken: response.data.refreshToken.token,
+					});
+					setAuthStatus(AuthStatus.SignedIn);
+				} else {
+					setAuthStatus(AuthStatus.SignedOut);
+				}
 			} catch (err) {
-        console.log("🚀 ~ file: index.tsx ~ line 103 ~ getSessionInfo ~ err", err)
 				setAuthStatus(AuthStatus.SignedOut);
 			}
 		}
 		getSessionInfo();
-	}, [setAuthStatus, authStatus]);
+	}, [authStatus]);
 
-	const completeNewPassword = async () => {
-		const response: any = await AWSService.completeNewPasswordChallenge(
-			userAttributes,
-			newPassword
-		);
-		if (!response.success) {
-			// TODO: Navigate to right screen
-		}
+	const emailVerification = async (verificationCode: string) => {
+		const { email } = signUpDetails;
+		const response: any = await AWSService.confirmEmailVerificationCode({
+			email,
+			code: verificationCode,
+		});
+		return response;
 	};
 
-	const signIn = async () => {
-		const { email, password } = signInDetails;
-		const response: any = await AWSService.signInWithEmail(email, password);
+	const resendEmailVerificationCode = async () => {
+		const { email } = signUpDetails;
+		const response: any = await AWSService.resendEmailVerificationCode({
+			email,
+		});
+
+		return response;
+	};
+
+	const signUp = async () => {
+		const { email, password } = signUpDetails;
+		const response: any = await AWSService.signUp({ email, password });
+		return response;
+	};
+
+	const signIn = async ({
+		email = signUpDetails.email,
+		password = signUpDetails.password,
+	} = {}) => {
+		const response: any = await AWSService.signIn({ email, password });
 		if (!response.success) {
 			if (
 				response?.data?.error?.message === NEW_PASSWORD_REQUIRED_ERROR
 			) {
-				setUserAttributes(response?.data?.attributes);
-				setIsNewUser(true);
 				return;
 			}
 			if (response?.data?.error?.message === WRONG_CREDS_ERROR) {
-				// TODO: show toast
 				return;
 			}
 		}
 		if (response?.success) {
+			setUserAttributes(response.data.idToken.payload);
 			setAuthStatus(AuthStatus.SignedIn);
-			// TODO: Navigate to right screen
 		}
+	};
+
+	const getAttributes = async () => {
+		const response = await AWSService.getUserAttributes();
+
+		return response;
+	};
+
+
+	const updateAttributes = async ({ update }: UpdateUserAttributesInput) => {
+		const response = await AWSService.updateUserAttributes({ update });
+
+		return response;
 	};
 
 	const signOut = () => {
-		AWSService.signOut();
+		AWSService.signOut()
 		setAuthStatus(AuthStatus.SignedOut);
-		// TODO: Navigate to right screen
 	};
 
 	const getSession = async () => {
-		try {
-			const session = await AWSService.getSession();
-			return session;
-		} catch (err) {
-			throw err;
-		}
-	};
+		const session = await AWSService.getSession();
 
-	const forgotPassword = async (
-		username: string,
-		code: string,
-		password: string
-	) => {
-		try {
-			await AWSService.forgotPassword(username, code, password);
-		} catch (err) {
-			throw err;
-		}
-	};
-
-	const changePassword = async (
-		username: string,
-		oldPassword: string,
-		newPassword: string
-	) => {
-		try {
-			await AWSService.changePassword(username, oldPassword, newPassword);
-		} catch (err) {
-			throw err;
-		}
+		return session;
 	};
 
 	const state: IAuth = {
+		getAttributes,
+		updateAttributes,
 		authStatus,
 		sessionInfo,
 		signIn,
 		signOut,
+		signUp,
 		getSession,
-		isNewUser,
 		setSignInDetails,
-		completeNewPassword,
-		setNewPassword,
 		signInDetails,
-		newPassword,
-		forgotPassword,
-		changePassword,
+		signUpDetails,
+		setSignUpDetails,
+		emailVerification,
+		resendEmailVerificationCode
 	};
 
 	return (

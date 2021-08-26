@@ -13,10 +13,10 @@ export default function App(): ReactElement | null {
 	}
 
 	return (
-		<ThemeProvider theme={theme}>
-			<AuthProvider>
+		<AuthProvider>
+			<ThemeProvider theme={theme}>
 				<MainNavigationStack />
-			</AuthProvider>
-		</ThemeProvider>
+			</ThemeProvider>
+		</AuthProvider>
 	);
 }
