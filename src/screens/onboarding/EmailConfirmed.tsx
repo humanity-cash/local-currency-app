@@ -1,16 +1,12 @@
 import { useNavigation } from '@react-navigation/native';
-import React from 'react';
+import React, { useContext } from 'react';
 import { StyleSheet, View } from 'react-native';
-import { Image, Text } from 'react-native-elements';
-import { useUserDetails } from "src/hooks";
-import { Button, Header, BackBtn } from "src/shared/uielements";
-import { baseHeader, viewBase, wrappingContainerBase } from "src/theme/elements";
+import { Text } from 'react-native-elements';
+import { AuthContext } from 'src/auth';
+import { BUTTON_TYPES } from 'src/constants';
+import { BackBtn, Button, Header } from "src/shared/uielements";
 import { colors } from "src/theme/colors";
-
-type EmailConfirmedProps = {
-	navigation?: any
-	route: any
-}
+import { baseHeader, viewBase, wrappingContainerBase } from "src/theme/elements";
 
 const styles = StyleSheet.create({
 	headerText: {
@@ -40,33 +36,36 @@ const styles = StyleSheet.create({
 	}
 });
 
-const EmailConfirmedView = (props: EmailConfirmedProps) => {
-	const { personalDetails: { email }} = useUserDetails();
+const EmailConfirmed = () => {
+	const navigation = useNavigation();
+	const { signUpDetails: { email, password }, signIn } = useContext(AuthContext);
+
 	return (
 		<View style={viewBase}>
 			<Header
-                leftComponent={<BackBtn onClick={() => props.navigation.goBack()} />}
-            />
-
+				leftComponent={
+					<BackBtn onClick={() => navigation.goBack()} />
+				}
+			/>
 			<View style={wrappingContainerBase}>
-				<View style={ baseHeader }>
-					<Text style={styles.headerText}>Mail address confirmed!</Text>
+				<View style={baseHeader}>
+					<Text style={styles.headerText}>
+						Mail address confirmed!
+					</Text>
 				</View>
-				<Text style={styles.bodyText}>Your email address {email} is confirmed.</Text>
+				<Text style={styles.bodyText}>
+					Your email address {email} is confirmed.
+				</Text>
 			</View>
 			<View style={styles.bottomView}>
 				<Button
-					type="darkGreen"
-					title="NEXT"
-					onPress={() => props.navigation.navigate("Password")}
+					type={BUTTON_TYPES.DARK_GREEN}
+					title='NEXT'
+					onPress={() => signIn({ email, password })}
 				/>
 			</View>
 		</View>
 	);
 }
 
-const EmailConfirmed = (props:EmailConfirmedProps) => {
-	const navigation = useNavigation();
-	return <EmailConfirmedView {...props} navigation={navigation} />;
-}
 export default EmailConfirmed;
