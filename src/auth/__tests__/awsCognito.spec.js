@@ -1,3 +1,4 @@
+/* eslint-disable jest/no-disabled-tests */
 import * as userAuth from '../aws-cognito';
 
 /**This user is already signed up + verified */
@@ -6,10 +7,6 @@ const authed = {
 	password: 'Esraa@keyko1',
 } 
 
-/**
- * Missing Tests: 
- * confirmEmailVerificationCode 
- */
 describe('AWS Cognito', () => {
 	it.skip('signup', async () => {
 		// console.log('signIn', signIn)
@@ -21,9 +18,9 @@ describe('AWS Cognito', () => {
 		// const deleteResponse = await userAuth.deleteUser()
 		// expect(deleteResponse.success).toEqual(true)
 		// const response = await userAuth.confirmEmailVerificationCode({email , code: '736628'})
-		// // const response = await userAuth.signIn({ email, password })
-		// // await userAuth.updateUserAttributes({ update: {'custom:city': "newCity"} })
-		// // await userAuth.getUserAttributes()
+		// const response = await userAuth.signIn({ email, password })
+		// await userAuth.updateUserAttributes({ update: {'custom:city': "newCity"} })
+		// await userAuth.getUserAttributes()
 		expect(1).toEqual(1)
 	})
 	it.skip('already signedup', async () => {

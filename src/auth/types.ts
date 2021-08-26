@@ -1,11 +1,11 @@
 export interface UserAttributes {
-	profilePicture?: string
-	tag?: string
-	address1?: string
-	address2?: string
-	city?: string
-	state?: string
-	postalCode?: string
+	'custom:profilePicture'?: string
+	'custom:tag'?: string
+	'custom:address1'?: string
+	'custom:address2'?: string
+	'custom:city'?: string
+	'custom:state'?: string
+	'custom:postalCode'?: string
 }
 
 export interface UpdateUserAttributesInput {
@@ -28,3 +28,4 @@ export interface ConfirmEmailVerificationCodeInput {
 }
 
 export type CognitoResponse<T> = Promise<{ success: boolean, data: { error: string } | T }>
+export type CogResponse<T> = { success: boolean, data: { error: string } | T }
