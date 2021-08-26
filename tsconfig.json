@@ -23,7 +23,6 @@
   ],
   "exclude": [
     "node_modules",
-    "src/shared/uielements/FloatingButton.tsx"
   ],
   "extends": "expo/tsconfig.base"
 }

@@ -1,6 +1,6 @@
 import { DefaultTheme, NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
-import React from "react";
+import React, { useContext } from "react";
 import "react-native-gesture-handler";
 import { useRouteTracking } from "src/hooks";
 import ConfirmPin from "src/screens/authentication/ConfirmPin";
@@ -51,67 +51,160 @@ import MerchantTabs from "src/screens/dashboard/MerchantTabs";
 import MerchantQRCodeScan from "src/screens/merchantPayment/MerchantQRCodeScan";
 import MerchantPaymentPending from "src/screens/merchantPayment/MerchantPaymentPending";
 import MerchantPaymentSuccess from "src/screens/merchantPayment/MerchantPaymentSuccess";
+import { AuthContext, AuthStatus } from "src/auth";
 
 const PrimaryStack = createStackNavigator();
 
-function PrimaryStackScreen() {
+const PrimaryStackScreen = () => {
+  const { authStatus } = useContext(AuthContext)
+
   return (
-    <PrimaryStack.Navigator
-      screenOptions={({ route, navigation }) => ({
-        headerShown: false,
-      })}
-    >
-      <PrimaryStack.Screen name="Teaser" component={Teaser} />
-      <PrimaryStack.Screen name="Login" component={Login} />
-      <PrimaryStack.Screen name="CreateAccount" component={CreateAccount} />
-      <PrimaryStack.Screen name="Verification" component={Verification} />
-      <PrimaryStack.Screen name="VerificationHelp" component={VerificationHelp} />
-      <PrimaryStack.Screen name="Password" component={Password} />
-      <PrimaryStack.Screen name="ConfirmPassword" component={PasswordConfirm} />
-      <PrimaryStack.Screen name="Passcode" component={Passcode} />
-      <PrimaryStack.Screen name="TouchId" component={TouchId} />
-      <PrimaryStack.Screen name="PersonalProfile" component={PersonalProfile} />
-      <PrimaryStack.Screen name="PersonalDetails" component={PersonalDetails} />
-      <PrimaryStack.Screen name="PersonalAddress" component={PersonalAddress} />
-      <PrimaryStack.Screen name="TermsEmail" component={TermsEmail} />
-      <PrimaryStack.Screen name="ConfirmEmail" component={ConfirmEmail} />
-      <PrimaryStack.Screen name="EmailConfirmed" component={EmailConfirmed} />
-      <PrimaryStack.Screen name="TopUp" component={TopUp} />
-      <PrimaryStack.Screen name="TopUpSuccess" component={TopUpSuccess} />
-      <PrimaryStack.Screen name="SelectPayment" component={SelectPayment} />
-      <PrimaryStack.Screen name="Deposit" component={Deposit} />
-      <PrimaryStack.Screen name="CreditCard" component={CreditCard} />
-      <PrimaryStack.Screen name="ConfirmPin" component={ConfirmPin} />
-      <PrimaryStack.Screen name="SettingsTermsAndConditions" component={SettingsTermsAndConditions} />
-      <PrimaryStack.Screen name="Settings" component={Settings} />
-      <PrimaryStack.Screen name="SettingsPersonalProfile" component={SettingsPersonalProfile} />
-      <PrimaryStack.Screen name="SettingsSecurity" component={SettingsSecurity} />
-      <PrimaryStack.Screen name="SettingsBankAccount" component={SettingsBankAccount} />
-      <PrimaryStack.Screen name="SettingsDeleteAccount" component={SettingsDeleteAccount} />
-      <PrimaryStack.Screen name="SelectAccountType" component={SelectAccountType} />
-      <PrimaryStack.Screen name="LinkBankAccount" component={LinkBankAccount} />
-      <PrimaryStack.Screen name="SelectBank" component={SelectBank} />
-      <PrimaryStack.Screen name="LoginToBank" component={LoginToBank} />
-      <PrimaryStack.Screen name="SelectBankAccount" component={SelectBankAccount} />
-      <PrimaryStack.Screen name="Congratulations" component={Congratulations} />
-      <PrimaryStack.Screen name="Tabs" component={Tabs} />
-      <PrimaryStack.Screen name="QRCodeScan" component={QRCodeScan} />
-      <PrimaryStack.Screen name="PaymentPending" component={PaymentPending} />
-      <PrimaryStack.Screen name="PaymentSuccess" component={PaymentSuccess} />
-      <PrimaryStack.Screen name="PaymentRequest" component={Request} />
-      <PrimaryStack.Screen name="ForgotPassword" component={ForgotPasswordNavigator} />
-      <PrimaryStack.Screen name="Cashout" component={CashoutNavigator} />
+		<PrimaryStack.Navigator
+			screenOptions={() => ({
+				headerShown: false,
+			})}>
+			{authStatus === AuthStatus.SignedOut ? (
+				<>
+					<PrimaryStack.Screen name='Teaser' component={Teaser} />
+					<PrimaryStack.Screen name='Login' component={Login} />
+					<PrimaryStack.Screen
+						name='CreateAccount'
+						component={CreateAccount}
+					/>
+					<PrimaryStack.Screen name='Password' component={Password} />
+					{/* <PrimaryStack.Screen
+						name='ConfirmPassword'
+						component={PasswordConfirm}
+					/> */}
+					<PrimaryStack.Screen
+						name='Verification'
+						component={Verification}
+					/>
+					<PrimaryStack.Screen
+						name='VerificationHelp'
+						component={VerificationHelp}
+					/>
+					<PrimaryStack.Screen name='Passcode' component={Passcode} />
+					<PrimaryStack.Screen name='TouchId' component={TouchId} />
+					<PrimaryStack.Screen
+						name='PersonalProfile'
+						component={PersonalProfile}
+					/>
+					<PrimaryStack.Screen
+						name='PersonalDetails'
+						component={PersonalDetails}
+					/>
+					<PrimaryStack.Screen
+						name='PersonalAddress'
+						component={PersonalAddress}
+					/>
+					<PrimaryStack.Screen
+						name='TermsEmail'
+						component={TermsEmail}
+					/>
+					<PrimaryStack.Screen
+						name='ConfirmEmail'
+						component={ConfirmEmail}
+					/>
+					<PrimaryStack.Screen
+						name='EmailConfirmed'
+						component={EmailConfirmed}
+					/>
+				</>
+			) : (
+				<>
 
-      <PrimaryStack.Screen name="MerchantTabs" component={MerchantTabs} />      
-      <PrimaryStack.Screen name="MerchantQRCodeScan" component={MerchantQRCodeScan} />
-      <PrimaryStack.Screen name="MerchantRequest" component={MerchantQRCodeScan} />
-      <PrimaryStack.Screen name="MerchantPaymentPending" component={MerchantPaymentPending} />
-      <PrimaryStack.Screen name="MerchantPaymentSuccess" component={MerchantPaymentSuccess} />
-
-      <PrimaryStack.Screen name="SignupBusiness" component={SignupBusinessNavigator} />
-      <PrimaryStack.Screen name="MerchantBankAccount" component={MerchantBankAccountNavigator} />
-      
-    </PrimaryStack.Navigator>
+					<PrimaryStack.Screen name='Tabs' component={Tabs} />
+					<PrimaryStack.Screen
+						name='QRCodeScan'
+						component={QRCodeScan}
+					/>
+					<PrimaryStack.Screen
+						name='PaymentPending'
+						component={PaymentPending}
+					/>
+					<PrimaryStack.Screen
+						name='PaymentSuccess'
+						component={PaymentSuccess}
+					/>
+					<PrimaryStack.Screen
+						name='PaymentRequest'
+						component={Request}
+					/>
+					<PrimaryStack.Screen
+						name='ForgotPassword'
+						component={ForgotPasswordNavigator}
+					/>
+					<PrimaryStack.Screen
+						name='Cashout'
+						component={CashoutNavigator}
+					/>
+					<PrimaryStack.Screen name='TopUp' component={TopUp} />
+					<PrimaryStack.Screen
+						name='TopUpSuccess'
+						component={TopUpSuccess}
+					/>
+					<PrimaryStack.Screen
+						name='SelectPayment'
+						component={SelectPayment}
+					/>
+					<PrimaryStack.Screen name='Deposit' component={Deposit} />
+					<PrimaryStack.Screen
+						name='CreditCard'
+						component={CreditCard}
+					/>
+					<PrimaryStack.Screen
+						name='ConfirmPin'
+						component={ConfirmPin}
+					/>
+					<PrimaryStack.Screen
+						name='SettingsTermsAndConditions'
+						component={SettingsTermsAndConditions}
+					/>
+					<PrimaryStack.Screen name='Settings' component={Settings} />
+					<PrimaryStack.Screen
+						name='SettingsPersonalProfile'
+						component={SettingsPersonalProfile}
+					/>
+					<PrimaryStack.Screen
+						name='SettingsSecurity'
+						component={SettingsSecurity}
+					/>
+					<PrimaryStack.Screen
+						name='SettingsBankAccount'
+						component={SettingsBankAccount}
+					/>
+					<PrimaryStack.Screen
+						name='SettingsDeleteAccount'
+						component={SettingsDeleteAccount}
+					/>
+					<PrimaryStack.Screen
+						name='SelectAccountType'
+						component={SelectAccountType}
+					/>
+					<PrimaryStack.Screen
+						name='LinkBankAccount'
+						component={LinkBankAccount}
+					/>
+					<PrimaryStack.Screen
+						name='SelectBank'
+						component={SelectBank}
+					/>
+					<PrimaryStack.Screen
+						name='LoginToBank'
+						component={LoginToBank}
+					/>
+					<PrimaryStack.Screen
+						name='SelectBankAccount'
+						component={SelectBankAccount}
+					/>
+					<PrimaryStack.Screen
+						name='Congratulations'
+						component={Congratulations}
+					/>
+				</>
+			)}
+		</PrimaryStack.Navigator>
   );
 }
 
@@ -136,3 +229,27 @@ export const MainNavigationStack = () => {
     </NavigationContainer>
   );
 };
+
+/* <PrimaryStack.Screen name="SignupBusiness" component={SignupBusinessNavigator} />
+<PrimaryStack.Screen name="MerchantBankAccount" component={MerchantBankAccountNavigator} />
+  */
+					// <PrimaryStack.Screen
+					// 	name='MerchantTabs'
+					// 	component={MerchantTabs}
+					// />
+					// <PrimaryStack.Screen
+					// 	name='MerchantQRCodeScan'
+					// 	component={MerchantQRCodeScan}
+					// />
+					// <PrimaryStack.Screen
+					// 	name='MerchantRequest'
+					// 	component={MerchantQRCodeScan}
+					// />
+					// <PrimaryStack.Screen
+					// 	name='MerchantPaymentPending'
+					// 	component={MerchantPaymentPending}
+					// />
+					// <PrimaryStack.Screen
+					// 	name='MerchantPaymentSuccess'
+					// 	component={MerchantPaymentSuccess}
+					// />
