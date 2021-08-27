@@ -1,29 +1,26 @@
 import { AntDesign, Entypo } from "@expo/vector-icons";
-import { useNavigation } from "@react-navigation/native";
-import React, { ReactElement, useEffect, useState } from 'react';
-import { StyleSheet, TouchableWithoutFeedback, View, ScrollView } from 'react-native';
-import { Text, Image } from "react-native-elements";
+import { DrawerActions, useNavigation } from "@react-navigation/native";
+import React, { useState } from 'react';
+import { ScrollView, StyleSheet, TouchableWithoutFeedback, View } from 'react-native';
+import { Image, Text } from "react-native-elements";
 import { TouchableOpacity } from "react-native-gesture-handler";
-import { Header } from "src/shared/uielements";
-import { colors } from "src/theme/colors";
-import { viewBase, wrappingContainerBase, baseHeader } from "src/theme/elements";
-import Button from "src/shared/uielements/Button";
-import DwollaDialog from "./DwollaDialog";
-import Translation from 'src/translation/en.json';
+import { BUTTON_TYPES, SCREENS } from 'src/constants';
 import * as Routes from 'src/navigation/constants';
+import { Header } from "src/shared/uielements";
+import Button from "src/shared/uielements/Button";
+import { colors } from "src/theme/colors";
+import { baseHeader, viewBase, wrappingContainerBase } from "src/theme/elements";
+import Translation from 'src/translation/en.json';
+import DwollaDialog from "./DwollaDialog";
 
-type DashboardProps = {
-	navigation?: any;
-	route?: any;
-};
 
 const styles = StyleSheet.create({
 	content: { paddingBottom: 40 },
-	inlineView: {flexDirection: 'row'},
+	inlineView: { flexDirection: 'row' },
 	headerText: {
 		fontSize: 40,
 		fontWeight: '400',
-		lineHeight: 40
+		lineHeight: 40,
 	},
 	amountView: {
 		borderBottomColor: colors.darkGreen,
@@ -31,13 +28,13 @@ const styles = StyleSheet.create({
 		flexDirection: 'row',
 		justifyContent: 'space-between',
 		paddingBottom: 2,
-		marginBottom: 10
+		marginBottom: 10,
 	},
 	text: {
 		fontSize: 18,
 		fontWeight: 'bold',
 		paddingLeft: 5,
-		paddingRight: 5
+		paddingRight: 5,
 	},
 	alertView: {
 		borderLeftWidth: 5,
@@ -48,41 +45,41 @@ const styles = StyleSheet.create({
 		flexDirection: 'row',
 		justifyContent: 'space-between',
 		alignItems: 'center',
-		marginBottom: 10
+		marginBottom: 10,
 	},
 	alertIcon: {
 		color: colors.alert,
-		fontWeight: 'bold'
+		fontWeight: 'bold',
 	},
 	alertText: {
-		color: colors.black, 
-		width: '90%'
+		color: colors.black,
+		width: '90%',
 	},
 	feedView: {
 		backgroundColor: colors.card,
 		padding: 10,
 	},
 	feedHeader: {
-		flexDirection: 'row', 
-		justifyContent: 'space-between', 
-		marginBottom: 20, 
-		marginTop: 10
+		flexDirection: 'row',
+		justifyContent: 'space-between',
+		marginBottom: 20,
+		marginTop: 10,
 	},
 	bodyText: {
-		paddingVertical: 10
+		paddingVertical: 10,
 	},
 	image: {
-		alignItems: "center",
+		alignItems: 'center',
 		width: '100%',
 		height: 300,
 		marginRight: 20,
-		borderRadius: 5
+		borderRadius: 5,
 	},
 	scanButton: {
 		width: '90%',
 		position: 'absolute',
 		bottom: 45,
-		left: '5%'
+		left: '5%',
 	},
 	topupButton: {
 		paddingLeft: 10,
@@ -90,7 +87,7 @@ const styles = StyleSheet.create({
 		borderRadius: 10,
 		backgroundColor: colors.darkGreen,
 	},
-	topupText: {color: colors.white, fontSize: 16}
+	topupText: { color: colors.white, fontSize: 16 },
 });
 
 const feedData = {
@@ -99,24 +96,24 @@ const feedData = {
 	content: "Our motto is Live and Give. We have treasures for your home and lifestyle, along with the perfect gift for that special someone or that occasion that begs for something unique."
 }
 
-const DashboardView = (props: DashboardProps) => {
-	const [alert, setAlert] = useState<boolean>(false);
-	const [amount, setAmount] = useState<string>("");
+const Dashboard = (): JSX.Element => {
+	const navigation = useNavigation();
 	const [isVisible, setIsVisible] = useState<boolean>(false);
-
-	useEffect(() => {
-		setAlert(amount === "");
-	}, [amount]);
 
 	const onClose = () => {
 		setIsVisible(false);
-	}
+	};
+
+	const alert = false;
 
 	return (
 		<View style={viewBase}>
 			<Header
 				leftComponent={
-					<TouchableWithoutFeedback onPress={() => props.navigation.toggleDrawer()}>
+					<TouchableWithoutFeedback
+						onPress={() =>
+							navigation.dispatch(DrawerActions.toggleDrawer())
+						}>
 						<View style={styles.inlineView}>
 							<Entypo
 								name='menu'
@@ -135,18 +132,18 @@ const DashboardView = (props: DashboardProps) => {
 					</View>
 					<View style={styles.amountView}>
 						<Text style={styles.text}>B$ -</Text>
-						<TouchableOpacity style={styles.topupButton} onPress={()=>props.navigation.navigate(Routes.LOAD_UP)}>
+						<TouchableOpacity style={styles.topupButton} onPress={()=>navigation.navigate(Routes.LOAD_UP)}>
 							<Text style={styles.topupText}>Load up B$</Text>
-						</TouchableOpacity>	
+						</TouchableOpacity>
 					</View>
-					{alert && 
+					{alert && (
 						<View style={styles.alertView}>
 							<AntDesign name="exclamationcircleo" size={18} style={styles.alertIcon} />
 							<Text style={styles.alertText}>{Translation.BANK_ACCOUNT.ACCOUNT_ALERT} &nbsp;
 								<Text style={styles.alertIcon} onPress={()=>setIsVisible(true)}>{Translation.BANK_ACCOUNT.ACCOUNT_LINK_TEXT} &gt;</Text>
 							</Text>
 						</View>
-					}
+					)}
 
 					<View style={styles.feedView}>
 						<View style={styles.feedHeader}>
@@ -163,19 +160,16 @@ const DashboardView = (props: DashboardProps) => {
 				</View>
 			</ScrollView>
 			<Button
-				type="darkGreen"
-				title="Scan to Pay or Request"
+				type={BUTTON_TYPES.DARK_GREEN}
+				title='Scan to Pay or Request'
 				style={styles.scanButton}
-				onPress={()=>props.navigation.navigate("QRCodeScan")}
+				onPress={() => navigation.navigate(SCREENS.QR_CODE_SCAN)}
 			/>
-
-			{ isVisible && <DwollaDialog visible={isVisible} onClose={onClose} /> }
+			{isVisible && (
+				<DwollaDialog visible={isVisible} onClose={onClose} />
+			)}
 		</View>
 	);
-}
-
-const Dashboard = (props: DashboardProps): ReactElement => {
-	const navigation = useNavigation();
-	return <DashboardView {...props} navigation={navigation} />;
 };
-export default Dashboard
+
+export default Dashboard;

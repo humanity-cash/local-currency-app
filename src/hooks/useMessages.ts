@@ -1,6 +1,6 @@
 import { useCallback, useEffect } from "react";
 import { createStore, useStore } from "react-hookstore";
-import { AsyncStorage } from "react-native";
+import AsyncStorage  from "@react-native-async-storage/async-storage";
 import { makeId } from "src/utils/common";
 import { Message } from "src/utils/types";
 
