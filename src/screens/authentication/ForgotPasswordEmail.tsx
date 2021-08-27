@@ -1,5 +1,5 @@
 import { useNavigation } from "@react-navigation/native";
-import React, { useEffect, useState } from "react";
+import React, { ReactElement, useEffect, useState } from "react";
 import {
   KeyboardAvoidingView, Platform, ScrollView, StyleSheet, View
 } from "react-native";
@@ -7,9 +7,6 @@ import { Text } from "react-native-elements";
 import { useUserDetails } from "src/hooks";
 import { BlockInput, Button, CancelBtn, Header, BackBtn } from "src/shared/uielements";
 import { viewBase, baseHeader } from "src/theme/elements";
-import { colors } from "src/theme/colors";
-
-const MAIN_PHONE_COUNTRY = "+41";
 
 type ForgotPasswordEmailProps = {
   navigation?: any;
@@ -95,7 +92,7 @@ const ForgotPasswordEmailView = (props: ForgotPasswordEmailProps) => {
   );
 };
 
-const ForgotPasswordEmail = (props: ForgotPasswordEmailProps) => {
+const ForgotPasswordEmail = (props: ForgotPasswordEmailProps): ReactElement => {
   const navigation = useNavigation();
   return <ForgotPasswordEmailView navigation={navigation} {...props} />;
 };

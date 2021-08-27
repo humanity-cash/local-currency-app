@@ -1,5 +1,5 @@
 import { useNavigation } from '@react-navigation/native';
-import React, { useState } from 'react';
+import React, { ReactElement, useState } from 'react';
 import { KeyboardAvoidingView, Platform, ScrollView, View, StyleSheet } from 'react-native';
 import { Text } from 'react-native-elements';
 import { useUserDetails } from "src/hooks";
@@ -7,6 +7,8 @@ import { BackBtn, Button, Header, CancelBtn, PersonalDetailsForm } from 'src/sha
 import { underlineHeader, viewBase, wrappingContainerBase } from "src/theme/elements";
 import { validateDetailsForm } from "src/utils/validation";
 import { colors } from "src/theme/colors";
+import Translation from 'src/translation/en.json';
+import * as Routes from 'src/navigation/constants';
 
 type PersonalDetailsProps = {
 	navigation?: any
@@ -37,7 +39,7 @@ const PersonalDetailsView = (props: PersonalDetailsProps) => {
 		const validation = validateDetailsForm(personalDetails);
 		setShowValidation(true);
 		if (validation.valid) {
-			props.navigation.navigate('PersonalAddress');
+			props.navigation.navigate(Routes.PERSONAL_ADDRESS);
 		}
 	}
 
@@ -45,13 +47,13 @@ const PersonalDetailsView = (props: PersonalDetailsProps) => {
 		<View style={viewBase}>
 			<Header
 				leftComponent={<BackBtn onClick={() => props.navigation.goBack()} />}
-				rightComponent={<CancelBtn text="Log out" onClick={() => props.navigation.navigate('Teaser')} />}
+				rightComponent={<CancelBtn text={Translation.BUTTON.LOGOUT} onClick={() => props.navigation.navigate(Routes.TEASER)} />}
 			/>
 
 			<ScrollView style={ wrappingContainerBase }>
 				<View style={styles.content}>
 					<View style={underlineHeader}>
-						<Text style={styles.headerText}>Personal details</Text>
+						<Text style={styles.headerText}>{Translation.PROFILE.PERSIONAL_DETAILS}</Text>
 					</View>
 					<PersonalDetailsForm
 						isValid={setGoNext}
@@ -65,7 +67,7 @@ const PersonalDetailsView = (props: PersonalDetailsProps) => {
 				<View style={styles.bottomView}>
 					<Button
 						type="darkGreen"
-						title="NEXT"
+						title={Translation.BUTTON.NEXT}
 						disabled={!goNext}
 						onPress={onNextPress}
 					/>
@@ -75,7 +77,7 @@ const PersonalDetailsView = (props: PersonalDetailsProps) => {
 	);
 }
 
-const PersonalDetails = (props: PersonalDetailsProps) => {
+const PersonalDetails = (props: PersonalDetailsProps): ReactElement => {
 	const navigation = useNavigation();
 	return <PersonalDetailsView {...props} navigation={navigation} />;
 }

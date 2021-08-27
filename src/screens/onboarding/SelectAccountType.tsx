@@ -1,12 +1,15 @@
 import { useNavigation } from "@react-navigation/native";
-import React, { useState } from "react";
+import React, { ReactElement } from "react";
 import { ScrollView, View, StyleSheet } from "react-native";
 import { Text } from "react-native-elements";
 import Button from "src/shared/uielements/Button";
-import { BackBtn, CancelBtn } from "src/shared/uielements/header";
+import { CancelBtn } from "src/shared/uielements/header";
 import Header from "src/shared/uielements/header/Header";
 import { underlineHeader, viewBaseWhite, wrappingContainerBase } from "src/theme/elements";
 import { colors } from "src/theme/colors";
+
+import Translation from 'src/translation/en.json';
+import * as Routes from 'src/navigation/constants';
 
 type SelectAccountTypeProps = {
   navigation?: any;
@@ -40,24 +43,24 @@ const SelectAccountTypeView = (props: SelectAccountTypeProps) => {
   return (
     <View style={viewBaseWhite}>
 		<Header
-			rightComponent={<CancelBtn text="Close" onClick={() => props.navigation.navigate('Teaser')} />}
+			rightComponent={<CancelBtn text={Translation.BUTTON.CLOSE} onClick={() => props.navigation.navigate(Routes.TEASER)} />}
 		/>
 
       	<ScrollView style={wrappingContainerBase}>
 		  	<View style={underlineHeader}>
-				<Text style={styles.headerText}>Hi</Text>
+				<Text style={styles.headerText}>{Translation.PROFILE.HI}</Text>
 			</View>
-			<Text style={styles.bodyText}>Select the profile you’d like to create. If you’re a business owner, you can automatically set up a personal profile.</Text>
+			<Text style={styles.bodyText}>{Translation.PROFILE.SELECT_PROFILE}</Text>
 			<View style={styles.accountType}>
 				<Button 
 					type="transparent" 
-					onPress={() => props.navigation.navigate("PersonalProfile")} 
-					title="Personal"
+					onPress={() => props.navigation.navigate(Routes.PERSONAL_PROFILE)} 
+					title={Translation.BUTTON.PERSONAL}
 					style={styles.button} />
 				<Button 
 					type="transparent" 
-					onPress={() => props.navigation.navigate("SignupBusiness")} 
-					title="Business and personal" 
+					onPress={() => props.navigation.navigate(Routes.SIGNUP_BUSINESS)} 
+					title={Translation.BUTTON.BUSINESS_PERSONAL}
 					style={styles.button}/>
 			</View>
 		</ScrollView>
@@ -65,7 +68,7 @@ const SelectAccountTypeView = (props: SelectAccountTypeProps) => {
   );
 };
 
-const SelectAccountType = (props: SelectAccountTypeProps) => {
+const SelectAccountType = (props: SelectAccountTypeProps): ReactElement => {
   const navigation = useNavigation();
   return <SelectAccountTypeView {...props} navigation={navigation} />;
 };

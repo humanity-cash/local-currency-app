@@ -1,5 +1,4 @@
-import { useNavigation } from "@react-navigation/native";
-import React from 'react';
+import React, { ReactElement } from 'react';
 import { StyleSheet, View } from 'react-native';
 import QRCode from 'react-native-qrcode-svg';
 
@@ -9,6 +8,9 @@ import { dialogViewBase } from "src/theme/elements";
 import { colors } from "src/theme/colors";
 
 const styles = StyleSheet.create({
+    dialogBg: {
+        backgroundColor: colors.overlayPurple
+    },
 	dialogWrap: {
 		paddingHorizontal: 10,
 		height: "100%",
@@ -29,11 +31,10 @@ type MerchantQRCodeGenProps = {
     amount?: string
 }
 
-const MerchantQRCodeGen = (props: MerchantQRCodeGenProps) => {
-    const navigation = useNavigation();
+const MerchantQRCodeGen = (props: MerchantQRCodeGenProps): ReactElement => {
 
     return (
-        <Dialog visible={props.visible} onClose={()=>props.onClose()}>
+        <Dialog visible={props.visible} onClose={()=>props.onClose()} backgroundStyle={styles.dialogBg}>
             <View style={dialogViewBase}>
                 <View style={styles.dialogWrap}>
                     <QRCode

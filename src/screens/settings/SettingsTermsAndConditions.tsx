@@ -1,11 +1,11 @@
 import { useNavigation } from '@react-navigation/native';
-import React from 'react';
+import React, { ReactElement } from 'react';
 import { ScrollView, StyleSheet, View } from "react-native";
 import { Text } from 'react-native-elements';
 import { Header, BackBtn, AccordionCard } from "src/shared/uielements";
 import { underlineHeader, viewBase } from "src/theme/elements";
-import { colors } from "src/theme/colors";
 import { AccordionEntry } from "src/utils/types";
+import Translation from 'src/translation/en.json';
 
 const styles = StyleSheet.create({
 	headerText: {
@@ -33,7 +33,7 @@ const privacyPolicy: AccordionEntry = {
   content: "Privacy Policy"
 }
 
-export const SettingsTermsAndConditions = () => {
+export const SettingsTermsAndConditions = (): ReactElement => {
 
 	const navigation = useNavigation();
 
@@ -44,11 +44,11 @@ export const SettingsTermsAndConditions = () => {
 			/>
 			<ScrollView style={styles.container}>
 				<View style={ underlineHeader }>
-					<Text style={styles.headerText}>Legal</Text>
+					<Text style={styles.headerText}>{Translation.OTHER.LEGAL}</Text>
 				</View>
 				<View style={styles.faqView}>
 					<AccordionCard title={termsAndConditions.title} content={termsAndConditions.content} />
-          <AccordionCard title={privacyPolicy.title} content={privacyPolicy.content} />
+                    <AccordionCard title={privacyPolicy.title} content={privacyPolicy.content} />
 				</View>
 			</ScrollView>
 		</View>

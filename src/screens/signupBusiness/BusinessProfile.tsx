@@ -1,5 +1,5 @@
 import { useNavigation } from '@react-navigation/native';
-import React, { useState, useEffect } from 'react';
+import React, { ReactElement, useState } from 'react';
 import { ScrollView, View, StyleSheet } from 'react-native';
 import { Text } from 'react-native-elements';
 import { useUserDetails } from "src/hooks";
@@ -7,6 +7,8 @@ import { Button, BackBtn, Header, CancelBtn, BusinessProfileForm } from 'src/sha
 import { underlineHeaderB, viewBaseB, wrappingContainerBase } from "src/theme/elements";
 import { validateBusinessProfileForm } from "src/utils/validation";
 import { colors } from "src/theme/colors";
+import Translation from 'src/translation/en.json';
+import * as Routes from 'src/navigation/constants';
 
 type BusinessProfileProps = {
 	navigation?: any
@@ -37,7 +39,7 @@ const styles = StyleSheet.create({
 });
 
 const BusinessProfileView = (props: BusinessProfileProps) => {
-	const { businessDetails, updateBusinessDetails } = useUserDetails();
+	const { businessDetails } = useUserDetails();
 	const [goNext, setGoNext] = useState<boolean>(false);
 	const [isShowValidation, setIsShowValidation] = useState<boolean>(false);
 
@@ -45,7 +47,7 @@ const BusinessProfileView = (props: BusinessProfileProps) => {
 		const validation = validateBusinessProfileForm(businessDetails);
 		setIsShowValidation(true);
 		if (validation.valid) {
-			props.navigation.navigate('BusinessDetail');
+			props.navigation.navigate(Routes.BUSINESS_DETAIL);
 		}
 	}
 
@@ -53,12 +55,12 @@ const BusinessProfileView = (props: BusinessProfileProps) => {
 		<View style={viewBaseB}>
 			<Header
 				leftComponent={<BackBtn color={colors.purple} onClick={() => props.navigation.goBack()} />}
-				rightComponent={<CancelBtn color={colors.purple} text="Log out" onClick={() => props.navigation.navigate('Teaser')} />}
+				rightComponent={<CancelBtn color={colors.purple} text={Translation.BUTTON.LOGOUT} onClick={() => props.navigation.navigate(Routes.TEASER)} />}
 			/>
 
 			<ScrollView style={wrappingContainerBase}>
 				<View style={underlineHeaderB}>
-					<Text style={styles.headerText}>Set up your profile</Text>
+					<Text style={styles.headerText}>{Translation.PROFILE.SETUP_PROFILE}</Text>
 				</View>
 				<View style={styles.formView}>
 					<BusinessProfileForm
@@ -69,7 +71,7 @@ const BusinessProfileView = (props: BusinessProfileProps) => {
 			</ScrollView>
 			<Button
 				type="purple"
-				title="Next"
+				title={Translation.BUTTON.NEXT}
 				disabled={!goNext}
 				onPress={onNextPress}
 				style={styles.bottomButton}
@@ -78,7 +80,7 @@ const BusinessProfileView = (props: BusinessProfileProps) => {
 	);
 }
 
-const BusinessProfile = (props: BusinessProfileProps) => {
+const BusinessProfile = (props: BusinessProfileProps): ReactElement => {
 	const navigation = useNavigation();
 	return <BusinessProfileView {...props} navigation={navigation} />;
 }

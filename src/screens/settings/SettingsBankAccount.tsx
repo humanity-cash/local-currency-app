@@ -1,10 +1,12 @@
 import { useNavigation } from '@react-navigation/native';
-import React, { useState } from 'react';
+import React, { ReactElement, useState } from 'react';
 import { ScrollView, StyleSheet, View } from "react-native";
 import { Text, Image } from 'react-native-elements';
 import { Header, Dialog, BackBtn, Button } from "src/shared/uielements";
 import { underlineHeader, viewBase, dialogViewBase } from "src/theme/elements";
 import { colors } from "src/theme/colors";
+import Translation from 'src/translation/en.json';
+import * as Routes from 'src/navigation/constants';
 
 const styles = StyleSheet.create({
 	content: {
@@ -72,11 +74,11 @@ const styles = StyleSheet.create({
 	}
 });
 
-export const SettingsBankAccount = () => {
+export const SettingsBankAccount = (): ReactElement => {
 	const navigation = useNavigation();
 
 	const [isVisible, setIsVisible] = useState<boolean>(false);
-	const [hasBankAccount, setHasBankAccount] = useState<boolean>(true);
+	const [hasBankAccount, setHasBankAccount] = useState<boolean>(false);
 
 	const handleRemove = () => {
 		setHasBankAccount(false);
@@ -90,7 +92,7 @@ export const SettingsBankAccount = () => {
 			/>
 			<ScrollView style={styles.content}>
 				<View style={ underlineHeader }>
-					<Text style={styles.headerText}>Bank account</Text>
+					<Text style={styles.headerText}>{Translation.BANK_ACCOUNT.BANK_ACCOUNT}</Text>
 				</View>
 				{
 					hasBankAccount && (
@@ -100,15 +102,15 @@ export const SettingsBankAccount = () => {
 								containerStyle={styles.image}
 							/>
 							<View style={styles.inlineView}>
-								<Text style={styles.label}>ACCOUNT NAME</Text>
+								<Text style={styles.label}>{Translation.LABEL.ACCOUNT_NAME}</Text>
 								<Text style={styles.text}>ACCOUNTNAMEOFTHISBANK</Text>
 							</View>
 							<View style={styles.inlineView}>
-								<Text style={styles.label}>ACCOUNT TYPE</Text>
+								<Text style={styles.label}>{Translation.LABEL.ACCOUNT_TYPE}</Text>
 								<Text style={styles.text}>CHECKINGS</Text>
 							</View>
 							<View style={styles.inlineView}>
-								<Text style={styles.label}>ACCOUNT NUMBER</Text>
+								<Text style={styles.label}>{Translation.LABEL.ACCOUNT_NUMBER}</Text>
 								<Text style={styles.text}>US-08-CHAS-0686-5892</Text>
 							</View>
 						</View>
@@ -117,7 +119,7 @@ export const SettingsBankAccount = () => {
 				{
 					!hasBankAccount && (
 						<View style={styles.noAccount}>
-							<Text style={styles.noAccountText}>You do not have a bank account linked. Link your bank account in order to enable buying new BerkShares and/or cash out to USD.</Text>
+							<Text style={styles.noAccountText}>{Translation.COMMUNITY_CHEST.NO_BANK_ACCOUNT}</Text>
 						</View>
 					)
 				}
@@ -127,7 +129,7 @@ export const SettingsBankAccount = () => {
 					hasBankAccount && (
 						<Button
 							type="transparent"
-							title="Delete account"
+							title={Translation.BUTTON.DELETE_ACCOUNT}
 							textStyle={styles.deleteBtn}
 							onPress={()=>setIsVisible(true)}
 						/>
@@ -137,8 +139,8 @@ export const SettingsBankAccount = () => {
 					!hasBankAccount && (
 						<Button
 							type="darkGreen"
-							title="Link my business bank account"
-							onPress={()=>navigation.navigate("")}
+							title={Translation.BUTTON.LINK_BUSINESS_BANK}
+							onPress={()=>navigation.navigate(Routes.SELECT_BANK_ACCOUNT)}
 						/>
 					)
 				}
@@ -147,12 +149,12 @@ export const SettingsBankAccount = () => {
 				<Dialog visible={isVisible} onClose={()=>setIsVisible(false)}>
 					<View style={dialogViewBase}>
 						<View style={styles.dialogWrap}>
-							<Text style={styles.dialogHeader}>Are you sure you want to remove this bank account?</Text>
+							<Text style={styles.dialogHeader}>{Translation.COMMUNITY_CHEST.REMOVE_BANK_ACCOUNT}</Text>
 						</View>
 						<View style={styles.dialogBottom}>
 							<Button
 								type="darkGreen"
-								title="Remove"
+								title={Translation.BUTTON.REMOVE}
 								onPress={handleRemove}
 							/>
 						</View>

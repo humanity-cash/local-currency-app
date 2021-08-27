@@ -1,5 +1,5 @@
 import { useIsFocused, useNavigation } from '@react-navigation/native';
-import React, { useEffect, useState } from 'react';
+import React, { ReactElement, useEffect, useState } from 'react';
 import { Keyboard, StyleSheet, View } from 'react-native';
 import { Text } from 'react-native-elements';
 import { useUserDetails } from "src/hooks";
@@ -77,7 +77,7 @@ const ForgotPasswordNewCodeConfirmView = (props: ForgotPasswordNewCodeConfirmPro
 	);
 }
 
-const ForgotPasswordNewCodeConfirm = (props:ForgotPasswordNewCodeConfirmProps) => {
+const ForgotPasswordNewCodeConfirm = (props:ForgotPasswordNewCodeConfirmProps): ReactElement => {
 	const navigation = useNavigation();
 	return <ForgotPasswordNewCodeConfirmView {...props} navigation={navigation} />;
 }

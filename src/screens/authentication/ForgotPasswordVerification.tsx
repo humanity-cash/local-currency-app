@@ -1,5 +1,5 @@
 import { useNavigation } from '@react-navigation/native';
-import React, { useState } from 'react';
+import React, { ReactElement } from 'react';
 import { Keyboard, KeyboardAvoidingView, Platform, StyleSheet, TouchableOpacity, View } from 'react-native';
 import { Text } from 'react-native-elements';
 import { useUserDetails } from "src/hooks";
@@ -35,7 +35,6 @@ const styles = StyleSheet.create({
 const VALID_CODE = '123456';
 
 const ForgotPasswordVerificationView = (props: ForgotPasswordVerificationProps) => {
-	const [noCodeReceived, setNoCodeReceived] = useState(false);
 	const { personalDetails: { email } } = useUserDetails();
 
 	const onComplete = (text: string) => {
@@ -65,7 +64,6 @@ const ForgotPasswordVerificationView = (props: ForgotPasswordVerificationProps) 
 			>
 				<View style={styles.bottomView}>
 					<TouchableOpacity style={styles.sendCodeBtn} onPress={() => {
-						setNoCodeReceived(true);
 						Keyboard.dismiss();
 					}}>
 						<Text style={styles.bottomNavigation}>Send code again</Text>
@@ -76,7 +74,7 @@ const ForgotPasswordVerificationView = (props: ForgotPasswordVerificationProps) 
 	);
 }
 
-const ForgotPasswordVerification = (props:ForgotPasswordVerificationProps) => {
+const ForgotPasswordVerification = (props:ForgotPasswordVerificationProps): ReactElement => {
 	const navigation = useNavigation();
 	return <ForgotPasswordVerificationView navigation={navigation} {...props} />;
 }

@@ -1,8 +1,7 @@
-import { useIsFocused, useNavigation } from '@react-navigation/native';
-import React, { useEffect, useState } from 'react';
+import { useNavigation } from '@react-navigation/native';
+import React, { ReactElement, useEffect, useState } from 'react';
 import { StyleSheet, View, KeyboardAvoidingView, Platform } from 'react-native';
 import { Text } from 'react-native-elements';
-import { useUserDetails } from "src/hooks";
 import { BackBtn, CancelBtn, Header, BlockInput, Button } from "src/shared/uielements";
 import { baseHeader, viewBase, wrappingContainerBase } from "src/theme/elements";
 import { IMap } from "src/utils/types";
@@ -60,7 +59,6 @@ const styles = StyleSheet.create({
 const strongRegex = new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#\$%\^&\*])(?=.{8,})");
 
 const ForgotPasswordNewPasswordView = (props: ForgotPasswordNewPasswordProps) => {
-	const { updateAuthorization } = useUserDetails();
 	const [goNext, setGoNext] = useState<boolean>(false);
 	const [isMatch, setIsMatch] = useState<boolean>(true);
 	const [state, setState] = useState<PasswordForm>({
@@ -73,7 +71,7 @@ const ForgotPasswordNewPasswordView = (props: ForgotPasswordNewPasswordProps) =>
 		setGoNext(Object.keys(state).every((key) => state[key] !== "") && strongRegex.test(state.password));
 	},[state]);
 
-	const onValueChange = (name: any, change: any) => {
+	const onValueChange = (name: string, change: string) => {
 		setState({
 			...state,
 			[name]: change
@@ -133,7 +131,7 @@ const ForgotPasswordNewPasswordView = (props: ForgotPasswordNewPasswordProps) =>
 	);
 }
 
-const ForgotPasswordNewPassword = (props:ForgotPasswordNewPasswordProps) => {
+const ForgotPasswordNewPassword = (props:ForgotPasswordNewPasswordProps): ReactElement => {
 	const navigation = useNavigation();
 	return <ForgotPasswordNewPasswordView {...props} navigation={navigation} />;
 }

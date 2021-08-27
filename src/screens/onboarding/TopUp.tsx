@@ -1,5 +1,5 @@
 import { useNavigation } from "@react-navigation/native";
-import React, { useEffect, useState } from "react";
+import React, { ReactElement, useEffect, useState } from "react";
 import {
     KeyboardAvoidingView,
     Platform, ScrollView, StyleSheet, View
@@ -15,6 +15,8 @@ import {
     wrappingContainerBase
 } from "src/theme/elements";
 import { IMap } from "src/utils/types";
+import Translation from 'src/translation/en.json';
+import * as Routes from 'src/navigation/constants';
 
 interface TopUpState extends IMap {
   amount: string;
@@ -26,6 +28,9 @@ type TopUpProps = {
 };
 
 const styles = StyleSheet.create({
+  container: { 
+    paddingBottom: 40 
+  },
   headerText: {
     paddingBottom: 10,
 		fontSize: 32,
@@ -38,6 +43,9 @@ const styles = StyleSheet.create({
   text: {
     color: colors.text, 
     fontSize: 12
+  },
+  amountText: {
+    marginTop: 30
   },
   defaultAmountView: {
     flexDirection: 'row',
@@ -96,13 +104,13 @@ const TopUpView = (props: TopUpProps) => {
     setGoNext(Object.keys(state).every((key) => state[key] !== ""));
   }, [state]);
 
-  const onValueChange = (name: any, change: any) => {
+  const onValueChange = (name: string, change: string) => {
     const costs = change;
     setState({
       ...state,
       [name]: change,
       costs: costs,
-    } as any);
+    } as TopUpState);
     update({ [name]: change });
   };
 
@@ -112,24 +120,23 @@ const TopUpView = (props: TopUpProps) => {
         leftComponent={<BackBtn onClick={() => props.navigation.goBack()} />}
         rightComponent={
           <CancelBtn
-            text="Close"
+            text={Translation.BUTTON.CLOSE}
             onClick={() =>
-              props.navigation.navigate("Dashboard")
+              props.navigation.navigate(Routes.DASHBOARD)
             }
           />
         }
       />
 
       <ScrollView style={wrappingContainerBase}>
-        <View style={{ paddingBottom: 40 }}>
+        <View style={styles.container}>
           <View style={underlineHeader}>
-            <Text style={styles.headerText}>Top Up B$</Text>
+            <Text style={styles.headerText}>{Translation.BUTTON.LOAD_UP}</Text>
           </View>
           <View style={styles.view}>
-            <Text>Specify the amount of BerkShares </Text>
-            <Text>(B$1 = USD$1) you would like to top up.</Text>
+            <Text>{Translation.LOAD_UP.LOAD_UP_DETAIL}</Text>
 
-            <Text style={{ ...styles.text, marginTop: 30 }}>AMOUNT</Text>
+            <Text style={{...styles.text, ...styles.amountText}}>{Translation.LABEL.AMOUNT}</Text>
             <View style={styles.defaultAmountView}>
               <TouchableOpacity 
                 style={state.amount=='50' ? styles.selectedAmountItem : styles.defaultAmountItem} 
@@ -152,7 +159,7 @@ const TopUpView = (props: TopUpProps) => {
             </View>
             
             <View style={styles.maxBView}>
-              <Text style={styles.text}>AMOUNT</Text>
+              <Text style={styles.text}>{Translation.LABEL.AMOUNT}</Text>
               <Text style={styles.text}>MAX. B$ 2.000</Text>
             </View>
             <BorderedInput
@@ -166,8 +173,8 @@ const TopUpView = (props: TopUpProps) => {
             />
 
             <View style={styles.totalView}>
-              <Text h2 style={{color: colors.text}}>Total costs</Text>
-              <Text h2 style={{color: colors.text}}>USD$ {state.amount==="" ? "-" : state.costs}</Text>
+              <Text h2 style={{color: colors.text}}>{Translation.LOAD_UP.TOTAL_COSTS}</Text>
+              <Text h2 style={{color: colors.text}}>{Translation.COMMON.USD} {state.amount==="" ? "-" : state.costs}</Text>
             </View>
           </View>
         </View>
@@ -178,13 +185,13 @@ const TopUpView = (props: TopUpProps) => {
         <View style={styles.bottomView}>
           <Button
             type="darkGreen"
-            title="Top Up"
+            title={Translation.BUTTON.LOAD_UP}
             disabled={!goNext}
             onPress={() => {
               if (parseFloat(state.amount) > 2000) {
                 return;
               }
-              props.navigation.navigate("TopUpSuccess");
+              props.navigation.navigate(Routes.TOPUP_SUCCESS);
             }}
           />
         </View>
@@ -193,7 +200,7 @@ const TopUpView = (props: TopUpProps) => {
   );
 };
 
-const TopUp = (props: TopUpProps) => {
+const TopUp = (props: TopUpProps): ReactElement => {
   const navigation = useNavigation();
   return <TopUpView {...props} navigation={navigation} />;
 };

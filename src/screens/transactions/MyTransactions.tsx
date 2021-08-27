@@ -1,5 +1,5 @@
 import { useNavigation } from '@react-navigation/native';
-import React, {useState} from 'react';
+import React, {ReactElement, useState} from 'react';
 import { StyleSheet, View, KeyboardAvoidingView, ScrollView, Platform } from 'react-native';
 import { Text } from 'react-native-elements';
 import { TouchableOpacity } from 'react-native-gesture-handler';
@@ -11,6 +11,8 @@ import MyTransactionList from './MyTransactionList';
 import { MyTransactionItem } from "src/utils/types";
 import transactionList from "src/mocks/transactions";
 import QRCodeGen from "src/screens/payment/QRCodeGen";
+import Translation from 'src/translation/en.json';
+import * as Routes from 'src/navigation/constants';
 
 type MyTransactionsProps = {
 	navigation?: any,
@@ -74,6 +76,12 @@ const styles = StyleSheet.create({
 	},
 });
 
+const transactionData = {
+	transactionId: "05636826HDI934",
+	type: "PURCHASE",
+	date: "4:22, JUN 17, 2021"
+}
+
 type TransactionDetailProps = {
 	visible: boolean,
 	data: MyTransactionItem,
@@ -93,23 +101,23 @@ const TransactionDetail = (props: TransactionDetailProps) => {
 					</View>
 					<View style={styles.view}>
 						<View style={styles.detailView}>
-							<Text style={styles.detailText}>TRANSACTION ID</Text>
-							<Text style={{...styles.detailText, fontWeight: 'bold'}}>05636826HDI934</Text>
+							<Text style={styles.detailText}>{Translation.PAYMENT.TRANSACTION_ID}</Text>
+							<Text style={{...styles.detailText, fontWeight: 'bold'}}>{transactionData.transactionId}</Text>
 						</View>
 						<View style={styles.detailView}>
 							<Text style={styles.detailText}>TYPE</Text>
-							<Text style={{...styles.detailText, fontWeight: 'bold'}}>PURCHASE</Text>
+							<Text style={{...styles.detailText, fontWeight: 'bold'}}>{transactionData.type}</Text>
 						</View>
 						<View style={styles.detailView}>
 							<Text style={styles.detailText}>DATE</Text>
-							<Text style={{...styles.detailText, fontWeight: 'bold'}}>4:22, JUN 17, 2021</Text>
+							<Text style={{...styles.detailText, fontWeight: 'bold'}}>{transactionData.date}</Text>
 						</View>
 					</View>
 				</ScrollView>
 				<View style={styles.dialogFooter}>
 					<Button
 						type="transparent"
-						title="I want to make a return"
+						title={Translation.BUTTON.WANT_RETURN}
 						textStyle={styles.returnText}
 						onPress={onReturn}
 					/>
@@ -133,7 +141,7 @@ const MyTransactionsView = (props: MyTransactionsProps) => {
 	const [isDetailViewOpen, setIsDetailViewOpen] = useState<boolean>(false);
 	const [isReturnViewOpen, setIsReturnViewOpen] = useState<boolean>(false);
 
-	const onSearchChange = (name: any, change: any) => {
+	const onSearchChange = (name: string, change: string) => {
 		setSearchText(change);
 	}
 
@@ -159,7 +167,7 @@ const MyTransactionsView = (props: MyTransactionsProps) => {
 			/>
 			<ScrollView style={wrappingContainerBase}>
 				<View style={ baseHeader }>
-					<Text style={styles.headerText}>My Transactions</Text>
+					<Text style={styles.headerText}>{Translation.PAYMENT.MY_TRANSACTIONS}</Text>
 				</View>
 				<View style={styles.totalAmountView}>
 					<Text></Text>
@@ -191,8 +199,8 @@ const MyTransactionsView = (props: MyTransactionsProps) => {
 				<View style={styles.bottomView}>
 					<Button
 						type="darkGreen"
-						title="Scan to Pay or Request"
-						onPress={()=>props.navigation.navigate("QRCodeScan")}
+						title={Translation.BUTTON.SCAN}
+						onPress={()=>props.navigation.navigate(Routes.QRCODE_SCAN)}
 					/>
 				</View>
 			</KeyboardAvoidingView>
@@ -202,7 +210,7 @@ const MyTransactionsView = (props: MyTransactionsProps) => {
 	);
 }
 
-const MyTransactions = (props:MyTransactionsProps) => {
+const MyTransactions = (props:MyTransactionsProps): ReactElement => {
 	const navigation = useNavigation();
 	return <MyTransactionsView {...props} navigation={navigation} />;
 }

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, ReactElement } from 'react';
 import { StyleSheet, View, KeyboardAvoidingView, ScrollView, Platform, Picker } from 'react-native';
 import { Text } from 'react-native-elements';
 import { useUserDetails } from "src/hooks";
@@ -6,6 +6,8 @@ import { Header, Button, CancelBtn, BackBtn, BlockInput } from "src/shared/uiele
 import { underlineHeaderB, viewBaseB, wrappingContainerBase } from "src/theme/elements";
 import { colors } from "src/theme/colors";
 import { Industry } from "src/utils/types";
+import Translation from 'src/translation/en.json';
+import * as Routes from 'src/navigation/constants';
 
 type BusinessInfoProps = {
 	navigation?: any,
@@ -61,7 +63,7 @@ const styles = StyleSheet.create({
 	},
 });
 
-const BusinessInfo = (props: BusinessInfoProps) => {
+const BusinessInfo = (props: BusinessInfoProps): ReactElement => {
 	const { businessDetails, updateBusinessDetails } = useUserDetails();
 	const [goNext, setGoNext] = useState<boolean>(false);
 	const [state, setState] = useState<BusinessInfoState>({
@@ -82,11 +84,11 @@ const BusinessInfo = (props: BusinessInfoProps) => {
 		setGoNext(businessDetails.registeredBusinessname !== "" && businessDetails.ein !== "");
 	}, [businessDetails]);
 
-	const onValueChange = (name: any, change: any) => {
+	const onValueChange = (name: string, change: string) => {
 		setState({
 		  ...state,
 		  [name]: change,
-		} as any);
+		} as BusinessInfoState);
 		updateBusinessDetails({ [name]: change });
 	};
 
@@ -94,16 +96,16 @@ const BusinessInfo = (props: BusinessInfoProps) => {
 		<View style={viewBaseB}>
 			<Header
 				leftComponent={<BackBtn color={colors.purple} onClick={() => props.navigation.goBack()} />}
-				rightComponent={<CancelBtn color={colors.purple} text="Log out" onClick={() => props.navigation.navigate('Teaser')} />}
+				rightComponent={<CancelBtn color={colors.purple} text={Translation.BUTTON.LOGOUT} onClick={() => props.navigation.navigate(Routes.TEASER)} />}
 			/>
 			<ScrollView style={wrappingContainerBase}>
                 <View style={underlineHeaderB}>
-                    <Text style={styles.headerText}>Business information</Text>
+                    <Text style={styles.headerText}>{Translation.PROFILE.BUSINESS_INFORMATION}</Text>
                 </View>
                 <Text style={styles.bodyText}></Text>
 
 				<View style={styles.formView}>
-					<Text style={styles.label}>REGISTERED BUSINESS NAME</Text>
+					<Text style={styles.label}>{Translation.LABEL.REGISTERD_NAME}</Text>
 					<BlockInput
 						name="registeredBusinessname"
 						placeholder="Registered business name"
@@ -112,7 +114,7 @@ const BusinessInfo = (props: BusinessInfoProps) => {
 						style={styles.input}
 					/>
 
-					<Text style={styles.label}>INDUSTRY</Text>
+					<Text style={styles.label}>{Translation.LABEL.INDUSTRY}</Text>
 					<Picker
 						selectedValue={state.industry}
 						style={styles.picker}
@@ -123,7 +125,7 @@ const BusinessInfo = (props: BusinessInfoProps) => {
 						}
 					</Picker>
 
-					<Text style={styles.label}>EMPLOYEE IDENTIFICATION NUMBER (EIN)</Text>
+					<Text style={styles.label}>{Translation.LABEL.EIN}</Text>
 					<BlockInput
 						name="ein"
 						placeholder="Employee identification number"
@@ -138,9 +140,9 @@ const BusinessInfo = (props: BusinessInfoProps) => {
 				<View style={styles.bottomView}>
 					<Button
 						type="purple"
-						title="Next"
+						title={Translation.BUTTON.NEXT}
 						disabled={!goNext}
-						onPress={()=>props.navigation.navigate("BusinessAddress")}
+						onPress={()=>props.navigation.navigate(Routes.BUSINESS_ADDRESS)}
 					/>
 				</View>
 			</KeyboardAvoidingView>

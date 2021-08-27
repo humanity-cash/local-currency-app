@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, ReactElement } from 'react';
 import { StyleSheet, View, KeyboardAvoidingView, ScrollView, Platform, Picker } from 'react-native';
 import { Text } from 'react-native-elements';
 import { useUserDetails } from "src/hooks";
@@ -6,6 +6,8 @@ import { Header, Button, CancelBtn, BackBtn } from "src/shared/uielements";
 import { underlineHeaderB, viewBaseB, wrappingContainerBase } from "src/theme/elements";
 import { colors } from "src/theme/colors";
 import { BusinessType } from "src/utils/types";
+import Translation from 'src/translation/en.json';
+import * as Routes from 'src/navigation/constants';
 
 type BusinessDetailProps = {
 	navigation?: any,
@@ -50,8 +52,8 @@ const styles = StyleSheet.create({
 	},
 });
 
-const BusinessDetail = (props: BusinessDetailProps) => {
-	const { businessDetails, updateBusinessDetails } = useUserDetails();
+const BusinessDetail = (props: BusinessDetailProps): ReactElement => {
+	const { updateBusinessDetails } = useUserDetails();
 	const [businessType, setBusinessType] = useState<BusinessType>(BusinessType.SOLE_PROPRIETORSHIP);
 
 	useEffect(() => {
@@ -62,15 +64,15 @@ const BusinessDetail = (props: BusinessDetailProps) => {
 		<View style={viewBaseB}>
 			<Header
 				leftComponent={<BackBtn color={colors.purple} onClick={() => props.navigation.goBack()} />}
-				rightComponent={<CancelBtn color={colors.purple} text="Log out" onClick={() => props.navigation.navigate('Teaser')} />}
+				rightComponent={<CancelBtn color={colors.purple} text={Translation.BUTTON.LOGOUT} onClick={() => props.navigation.navigate(Routes.TEASER)} />}
 			/>
 			<ScrollView style={wrappingContainerBase}>
                 <View style={underlineHeaderB}>
-                    <Text style={styles.headerText}>Business details</Text>
+                    <Text style={styles.headerText}>{Translation.PROFILE.BUSINESS_DETAIL}</Text>
                 </View>
-                <Text style={styles.bodyText}>We use your business information to set up your Wallet. The type of entity determines the required information.</Text>
+                <Text style={styles.bodyText}>{Translation.PROFILE.PERSIONAL_DETAILS_BODY}</Text>
 
-				<Text style={styles.label}>TYPE OF BUSINESS</Text>
+				<Text style={styles.label}>{Translation.LABEL.BUSINESS_TYPE}</Text>
 				<Picker
 					selectedValue={businessType}
 					style={styles.picker}
@@ -86,8 +88,8 @@ const BusinessDetail = (props: BusinessDetailProps) => {
 				<View style={styles.bottomView}>
 					<Button
 						type="purple"
-						title="Next"
-						onPress={()=>props.navigation.navigate("BusinessOwnerDetail")}
+						title={Translation.BUTTON.NEXT}
+						onPress={()=>props.navigation.navigate(Routes.BUSINESS_OWNER_DETAIL)}
 					/>
 				</View>
 			</KeyboardAvoidingView>

@@ -1,5 +1,5 @@
 import { useNavigation } from '@react-navigation/native';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, ReactElement } from 'react';
 import { ScrollView, StyleSheet, Switch, View } from "react-native";
 import { Text } from "react-native-elements";
 import { useUserDetails } from "src/hooks";
@@ -7,6 +7,8 @@ import { Header, BlockInput, Button, BackBtn } from "src/shared/uielements";
 import { colors } from "src/theme/colors";
 import { viewBase, underlineHeader } from "src/theme/elements";
 import { IMap } from "src/utils/types";
+import Translation from 'src/translation/en.json';
+import * as Routes from 'src/navigation/constants';
 
 interface SecurityProps extends IMap {
 	password: string;
@@ -52,7 +54,7 @@ const styles = StyleSheet.create({
 	}
 });
 
-export const SettingsSecurity = () => {
+export const SettingsSecurity = (): ReactElement => {
 	const navigation = useNavigation();
 	const { authorization, updateAuthorization } = useUserDetails();
 	const [switchToggle, setSwitchToggle] = useState<boolean>(false);
@@ -89,10 +91,10 @@ export const SettingsSecurity = () => {
 			/>
 			<ScrollView style={styles.content}>
 				<View style={ underlineHeader }>
-					<Text style={styles.headerText}>Security</Text>
+					<Text style={styles.headerText}>{Translation.COMMUNITY_CHEST.SECURITY}</Text>
 				</View>
 				<View style={styles.view}>
-					<Text style={styles.text}>Allow touch ID</Text>
+					<Text style={styles.text}>{Translation.COMMUNITY_CHEST.ALLOW_TOUCH}</Text>
 					<Switch
 						trackColor={{ false: colors.white, true: colors.green }}
 						thumbColor={colors.white}
@@ -103,7 +105,7 @@ export const SettingsSecurity = () => {
 				</View>
 				<View style={ underlineHeader }></View>
 				<View>
-					<Text h3 style={styles.label}>OLD PASSWORD</Text>
+					<Text h3 style={styles.label}>{Translation.LABEL.OLD_PASSWORD}</Text>
 					<BlockInput
 						name="password"
 						placeholder="password"
@@ -112,8 +114,8 @@ export const SettingsSecurity = () => {
 						onChange={onValueChange}
 					/>
 
-					<Text h3 style={styles.label}>NEW PASSWORD</Text>
-					<Text h3>(MIN.8 CHARACTERS, 1 CAPITICAL, 1 LOWER AND 1 SYMBOL)</Text>
+					<Text h3 style={styles.label}>{Translation.LABEL.NEW_PASSWORD}</Text>
+					<Text h3>({Translation.LABEL.PASSWORD_REG})</Text>
 					<BlockInput
 						name="newPassword"
 						placeholder="new password"
@@ -122,7 +124,7 @@ export const SettingsSecurity = () => {
 						onChange={onValueChange}
 					/>
 
-					<Text h3 style={styles.label}>CONFIRM NEW PASSWORD</Text>
+					<Text h3 style={styles.label}>{Translation.LABEL.CONFIRM_NEW_PASSWORD}</Text>
 					<BlockInput
 						name="newPassowrdConfirm"
 						placeholder="new password confirm"
@@ -135,9 +137,9 @@ export const SettingsSecurity = () => {
 			<View style={styles.bottomView}>
 				<Button
 					type="darkGreen"
-					title="Save changes"
+					title={Translation.BUTTON.SAVE_CHANGE}
 					disabled={!canSave}
-					onPress={()=>navigation.navigate("SettingsPersonalProfile")}
+					onPress={()=>navigation.navigate(Routes.SETTING_PERSONAL_PROFILE)}
 				/>
 			</View>
 		</View>

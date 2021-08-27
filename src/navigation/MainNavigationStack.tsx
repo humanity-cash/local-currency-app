@@ -1,57 +1,46 @@
 import { DefaultTheme, NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
-import React, { useContext } from "react";
+import React, { ReactElement, useContext } from "react";
 import "react-native-gesture-handler";
+import { AuthContext, AuthStatus } from "src/auth";
 import { useRouteTracking } from "src/hooks";
-import ConfirmPin from "src/screens/authentication/ConfirmPin";
+import { CashoutNavigator } from "src/navigation/CashoutNavigator";
+import { ForgotPasswordNavigator } from "src/navigation/ForgotPasswordStack";
 import Login from "src/screens/authentication/Login";
-import TopUp from "src/screens/onboarding/TopUp";
-import TopUpSuccess from "src/screens/onboarding/TopUpSuccess";
+import Tabs from "src/screens/dashboard/Tabs";
 import ConfirmEmail from "src/screens/onboarding/ConfirmEmail";
+import Congratulations from "src/screens/onboarding/Congratulations";
 import CreateAccount from "src/screens/onboarding/CreateAccount";
 import CreditCard from "src/screens/onboarding/CreditCard";
 import Deposit from "src/screens/onboarding/Deposit";
 import EmailConfirmed from "src/screens/onboarding/EmailConfirmed";
-import Password from "src/screens/onboarding/Password";
-import PasswordConfirm from "src/screens/onboarding/PasswordConfirm";
+import LinkBankAccount from "src/screens/onboarding/LinkBankAccount";
+import LoginToBank from "src/screens/onboarding/LoginToBank";
 import Passcode from "src/screens/onboarding/Passcode";
-import TouchId from "src/screens/onboarding/TouchId";
+import Password from "src/screens/onboarding/Password";
 import PersonalAddress from "src/screens/onboarding/PersonalAddress";
 import PersonalDetails from "src/screens/onboarding/PersonalDetails";
 import PersonalProfile from "src/screens/onboarding/PersonalProfile";
+import SelectAccountType from "src/screens/onboarding/SelectAccountType";
+import SelectBank from "src/screens/onboarding/SelectBank";
+import SelectBankAccount from "src/screens/onboarding/SelectBankAccount";
 import SelectPayment from "src/screens/onboarding/SelectPayment";
 import Teaser from "src/screens/onboarding/Teaser";
 import TermsEmail from "src/screens/onboarding/TermsEmail";
+import TopUp from "src/screens/onboarding/TopUp";
+import TopUpSuccess from "src/screens/onboarding/TopUpSuccess";
+import TouchId from "src/screens/onboarding/TouchId";
 import Verification from "src/screens/onboarding/Verification";
 import VerificationHelp from "src/screens/onboarding/VerificationHelp";
-import { Settings } from "src/screens/settings/Settings";
-import SettingsSecurity from "src/screens/settings/SettingsSecurity";
-import SettingsPersonalProfile from "src/screens/settings/SettingsPersonalProfile";
-import SettingsTermsAndConditions from "src/screens/settings/SettingsTermsAndConditions";
-import SettingsBankAccount from "src/screens/settings/SettingsBankAccount";
-import SettingsDeleteAccount from "src/screens/settings/SettingsDeleteAccount";
-import SelectAccountType from "src/screens/onboarding/SelectAccountType";
-import LinkBankAccount from "src/screens/onboarding/LinkBankAccount";
-import SelectBank from "src/screens/onboarding/SelectBank";
-import LoginToBank from "src/screens/onboarding/LoginToBank";
-import SelectBankAccount from "src/screens/onboarding/SelectBankAccount";
-import Congratulations from "src/screens/onboarding/Congratulations";
-import Tabs from "src/screens/dashboard/Tabs";
-import QRCodeScan from "src/screens/payment/QRCodeScan";
 import PaymentPending from "src/screens/payment/PaymentPending";
 import PaymentSuccess from "src/screens/payment/PaymentSuccess";
-import Request from "src/screens/payment/Request";
-import { ForgotPasswordNavigator } from "src/navigation/ForgotPasswordStack";
-import { CashoutNavigator } from "src/navigation/CashoutNavigator";
-
-import { SignupBusinessNavigator } from 'src/navigation/SignupBusinessNavigator';
-import { MerchantBankAccountNavigator } from 'src/navigation/MerchantBankAccountNavigator';
-
-import MerchantTabs from "src/screens/dashboard/MerchantTabs";
-import MerchantQRCodeScan from "src/screens/merchantPayment/MerchantQRCodeScan";
-import MerchantPaymentPending from "src/screens/merchantPayment/MerchantPaymentPending";
-import MerchantPaymentSuccess from "src/screens/merchantPayment/MerchantPaymentSuccess";
-import { AuthContext, AuthStatus } from "src/auth";
+import QRCodeScan from "src/screens/payment/QRCodeScan";
+import { Settings } from "src/screens/settings/Settings";
+import SettingsBankAccount from "src/screens/settings/SettingsBankAccount";
+import SettingsDeleteAccount from "src/screens/settings/SettingsDeleteAccount";
+import SettingsPersonalProfile from "src/screens/settings/SettingsPersonalProfile";
+import SettingsSecurity from "src/screens/settings/SettingsSecurity";
+import SettingsTermsAndConditions from "src/screens/settings/SettingsTermsAndConditions";
 
 const PrimaryStack = createStackNavigator();
 
@@ -127,10 +116,10 @@ const PrimaryStackScreen = () => {
 						name='PaymentSuccess'
 						component={PaymentSuccess}
 					/>
-					<PrimaryStack.Screen
+					{/* <PrimaryStack.Screen
 						name='PaymentRequest'
 						component={Request}
-					/>
+					/> */}
 					<PrimaryStack.Screen
 						name='ForgotPassword'
 						component={ForgotPasswordNavigator}
@@ -153,10 +142,10 @@ const PrimaryStackScreen = () => {
 						name='CreditCard'
 						component={CreditCard}
 					/>
-					<PrimaryStack.Screen
+					{/* <PrimaryStack.Screen
 						name='ConfirmPin'
 						component={ConfirmPin}
-					/>
+					/> */}
 					<PrimaryStack.Screen
 						name='SettingsTermsAndConditions'
 						component={SettingsTermsAndConditions}
@@ -208,13 +197,13 @@ const PrimaryStackScreen = () => {
   );
 }
 
-export const MainNavigationStack = () => {
-  const { currentRoute, update } = useRouteTracking();
+export const MainNavigationStack = (): ReactElement => {
+  const { update } = useRouteTracking();
   const ref = React.useRef<any>();
   return (
     <NavigationContainer
       ref={ref}
-      onStateChange={(state) => {
+      onStateChange={() => {
         update({ current: ref?.current?.getCurrentRoute().name });
       }}
       theme={{

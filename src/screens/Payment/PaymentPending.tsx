@@ -1,9 +1,11 @@
-import React, { useEffect } from 'react';
+import React, { ReactElement, useEffect } from 'react';
 import { StyleSheet, View, KeyboardAvoidingView, ActivityIndicator, ScrollView, Platform } from 'react-native';
 import { Text } from 'react-native-elements';
 import { Header } from "src/shared/uielements";
 import { colors } from "src/theme/colors";
 import { baseHeader, viewBase, wrappingContainerBase } from "src/theme/elements";
+import Translation from 'src/translation/en.json';
+import * as Routes from 'src/navigation/constants';
 
 type PaymentPendingProps = {
 	navigation?: any,
@@ -21,11 +23,11 @@ const styles = StyleSheet.create({
 	},
 });
 
-const PaymentPending = (props: PaymentPendingProps) => {
+const PaymentPending = (props: PaymentPendingProps): ReactElement => {
 
 	useEffect(() => {
 		setTimeout(() => {
-			props.navigation.navigate("PaymentSuccess");
+			props.navigation.navigate(Routes.PAYMENT_SUCCESS);
 		}, 2000);
 	});
 
@@ -33,9 +35,9 @@ const PaymentPending = (props: PaymentPendingProps) => {
 		<View style={viewBase}>
 			<Header />
 			<ScrollView style={wrappingContainerBase}>
-				<View style={ baseHeader }>
-					<Text style={styles.headerText}>Pending...</Text>
-					<Text>This usually takes 5-6 seconds</Text>
+				<View style={baseHeader}>
+					<Text style={styles.headerText}>{Translation.PAYMENT.PENDING}</Text>
+					<Text>{Translation.PAYMENT.PENDING_DETAIL}</Text>
 				</View>
 			</ScrollView>
 			<KeyboardAvoidingView

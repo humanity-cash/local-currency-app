@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, ReactElement } from 'react';
 import { StyleSheet, View, KeyboardAvoidingView, ScrollView, Platform } from 'react-native';
 import { Text } from 'react-native-elements';
 import { useUserDetails } from "src/hooks";
@@ -6,6 +6,8 @@ import { Header, Button, CancelBtn, BackBtn, PersonalDetailsForm } from "src/sha
 import { underlineHeaderB, viewBaseB, wrappingContainerBase } from "src/theme/elements";
 import { colors } from "src/theme/colors";
 import { validateDetailsForm } from "src/utils/validation";
+import Translation from 'src/translation/en.json';
+import * as Routes from 'src/navigation/constants';
 
 type BusinessOwnerDetailProps = {
 	navigation?: any,
@@ -43,8 +45,8 @@ const styles = StyleSheet.create({
 	},
 });
 
-const BusinessOwnerDetail = (props: BusinessOwnerDetailProps) => {
-	const { personalDetails } = useUserDetails();
+const BusinessOwnerDetail = (props: BusinessOwnerDetailProps): ReactElement => {
+	const {personalDetails} = useUserDetails();
 	const [goNext, setGoNext] = useState(false);
 	const [showValidation, setShowValidation] = useState(false);
 
@@ -52,7 +54,7 @@ const BusinessOwnerDetail = (props: BusinessOwnerDetailProps) => {
 		const validation = validateDetailsForm(personalDetails);
 		setShowValidation(true);
 		if (validation.valid) {
-			props.navigation.navigate('BusinessOwnerAddress');
+			props.navigation.navigate(Routes.BUSINESS_OWNER_ADDRESS);
 		}
 	}
 
@@ -60,11 +62,11 @@ const BusinessOwnerDetail = (props: BusinessOwnerDetailProps) => {
 		<View style={viewBaseB}>
 			<Header
 				leftComponent={<BackBtn color={colors.purple} onClick={() => props.navigation.goBack()} />}
-				rightComponent={<CancelBtn color={colors.purple} text="Log out" onClick={() => props.navigation.navigate('Teaser')} />}
+				rightComponent={<CancelBtn color={colors.purple} text={Translation.BUTTON.CLOSE} onClick={() => props.navigation.navigate(Routes.TEASER)} />}
 			/>
 			<ScrollView style={wrappingContainerBase}>
                 <View style={underlineHeaderB}>
-                    <Text style={styles.headerText}>Business owner details</Text>
+                    <Text style={styles.headerText}>{Translation.PROFILE.BUSINESS_OWNER}</Text>
                 </View>
 				<View style={styles.formView}>
 					<PersonalDetailsForm
@@ -79,7 +81,7 @@ const BusinessOwnerDetail = (props: BusinessOwnerDetailProps) => {
 				<View style={styles.bottomView}>
 					<Button
 						type="purple"
-						title="Next"
+						title={Translation.BUTTON.NEXT}
 						disabled={!goNext}
 						onPress={onNextPress}
 					/>
