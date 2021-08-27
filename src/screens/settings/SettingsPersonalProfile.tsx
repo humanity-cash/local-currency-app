@@ -1,17 +1,14 @@
 import { useNavigation } from '@react-navigation/native';
 import * as ImagePicker from 'expo-image-picker';
 import React, { useContext, useEffect, useState } from 'react';
-import {
-	Image,
-	KeyboardAvoidingView, Platform, ScrollView,
-	StyleSheet, TouchableOpacity, View
-} from 'react-native';
-import { Text } from 'react-native-elements';
+import { Image, KeyboardAvoidingView, Platform, ScrollView, StyleSheet, TouchableOpacity, View } from "react-native";
+import { Text } from "react-native-elements";
 import { AuthContext } from 'src/auth';
 import { BUTTON_TYPES } from 'src/constants';
-import { BackBtn, BlockInput, Button, Header } from 'src/shared/uielements';
-import { colors } from 'src/theme/colors';
-import { underlineHeader, viewBase } from 'src/theme/elements';
+import { BackBtn, BlockInput, Button, Header } from "src/shared/uielements";
+import { colors } from "src/theme/colors";
+import { underlineHeader, viewBase } from "src/theme/elements";
+import Translation from 'src/translation/en.json';
 
 interface PersonalProfileState {
 	avatar: string;
@@ -86,19 +83,15 @@ export const SettingsPersonalDetails = (): JSX.Element => {
 
 	useEffect(() => {
 		(async () => {
-			if (Platform.OS !== 'web') {
-				const { status } =
-					await ImagePicker.requestMediaLibraryPermissionsAsync();
-				if (status !== 'granted') {
-					alert(
-						'Sorry, we need camera roll permissions to make this work!'
-					);
-				}
+		  if (Platform.OS !== 'web') {
+			const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
+			if (status !== 'granted') {
+			  alert(Translation.OTHER.NO_CAMERA_PERMISSION);
 			}
-		})();
+		}})();
 	}, []);
 
-	const onValueChange = (name: any, change: any) => {
+	const onValueChange = (name: string, change: string) => {
 		setState({
 			...state,
 			[name]: change,
@@ -124,10 +117,10 @@ export const SettingsPersonalDetails = (): JSX.Element => {
 				leftComponent={<BackBtn onClick={() => navigation.goBack()} />}
 			/>
 			<ScrollView style={styles.container}>
-				<View style={underlineHeader}>
-					<Text style={styles.headerText}>My profile</Text>
+				<View style={ underlineHeader }>
+					<Text style={styles.headerText}>{Translation.PROFILE.MY_PROFILE}</Text>
 				</View>
-				<Text>This information is shared publicly.</Text>
+				<Text>{Translation.COMMUNITY_CHEST.INFORMATION_SHARE}</Text>
 				<View style={styles.contentView}>
 					<View style={styles.imageView}>
 						<TouchableOpacity onPress={pickImage}>
@@ -142,13 +135,9 @@ export const SettingsPersonalDetails = (): JSX.Element => {
 							)}
 						</TouchableOpacity>
 					</View>
-					<Text style={styles.imageDesc1}>
-						Change profile picture
-					</Text>
-					<Text style={styles.imageDesc2}>
-						(MAX 200MB / JPG, JPEG, PNG)
-					</Text>
-					<Text h3>USER NAME</Text>
+					<Text style={styles.imageDesc1}>{Translation.PROFILE.CHANGE_PICTURE}</Text>
+					<Text style={styles.imageDesc2}>{Translation.LABEL.MAX_BERKSHARES}</Text>
+					<Text h3>{Translation.LABEL.USERNAME}</Text>
 					<BlockInput
 						name='username'
 						placeholder='@username'
@@ -162,7 +151,7 @@ export const SettingsPersonalDetails = (): JSX.Element => {
 				<View style={styles.bottomView}>
 					<Button
 						type={BUTTON_TYPES.DARK_GREEN}
-						title='Save changes'
+						title={Translation.BUTTON.SAVE_CHANGE}
 						disabled={!canSave}
 						onPress={async () => {
 							const response = await updateAttributes({

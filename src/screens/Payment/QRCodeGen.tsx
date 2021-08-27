@@ -1,5 +1,4 @@
-import { useNavigation } from "@react-navigation/native";
-import React from 'react';
+import React, { ReactElement } from 'react';
 import { StyleSheet, View } from 'react-native';
 import QRCode from 'react-native-qrcode-svg';
 
@@ -28,8 +27,7 @@ type QRCodeGenProps = {
     amount?: string
 }
 
-const QRCodeGen = (props: QRCodeGenProps) => {
-    const navigation = useNavigation();
+const QRCodeGen = (props: QRCodeGenProps): ReactElement => {
 
     return (
         <Dialog visible={props.visible} onClose={()=>props.onClose()}>

@@ -1,23 +1,15 @@
 import { useNavigation } from '@react-navigation/native';
 import React, { useContext } from 'react';
-import {
-	ScrollView,
-	KeyboardAvoidingView,
-	Platform,
-	StyleSheet,
-	View,
-} from 'react-native';
+import { KeyboardAvoidingView, Platform, ScrollView, StyleSheet, View } from 'react-native';
 import { Text } from 'react-native-elements';
-import { Header, BackBtn, BlockInput, Button } from 'src/shared/uielements';
-import {
-	baseHeader,
-	viewBase,
-	wrappingContainerBase,
-} from 'src/theme/elements';
-import { colors } from 'src/theme/colors';
 import { AuthContext } from 'src/auth';
-import { BUTTON_TYPES, SCREENS } from 'src/constants';
 import { SignInInput } from 'src/auth/types';
+import { BUTTON_TYPES } from 'src/constants';
+import * as Routes from 'src/navigation/constants';
+import { BackBtn, BlockInput, Button, Header } from "src/shared/uielements";
+import { colors } from "src/theme/colors";
+import { baseHeader, viewBase, wrappingContainerBase } from "src/theme/elements";
+import Translation from 'src/translation/en.json';
 
 const styles = StyleSheet.create({
 	headerText: {
@@ -61,18 +53,18 @@ const Login = (): JSX.Element => {
 
 			<ScrollView style={wrappingContainerBase}>
 				<View style={baseHeader}>
-					<Text style={styles.headerText}>Log in</Text>
+					<Text style={styles.headerText}>{Translation.LANDING_PAGE.LOGIN}</Text>
 				</View>
-				<Text style={styles.bodyText}>Welcome back</Text>
+				<Text style={styles.bodyText}>{Translation.LANDING_PAGE.WELCOME_BACK}</Text>
 				<View style={styles.form}>
-					<Text style={styles.label}>Email address or user name</Text>
+					<Text style={styles.label}>{Translation.LABEL.EMAIL_USERNAME}</Text>
 					<BlockInput
 						name='email'
 						placeholder='Email'
 						value={signInDetails.email}
 						onChange={onValueChange}
 					/>
-					<Text style={styles.label}>Password</Text>
+					<Text style={styles.label}>{Translation.LABEL.PASSWORD}</Text>
 					<BlockInput
 						name='password'
 						placeholder='Password'
@@ -90,7 +82,7 @@ const Login = (): JSX.Element => {
 						type={BUTTON_TYPES.TRANSPARENT}
 						title='Forgot Passowrd?'
 						onPress={() =>
-							navigation.navigate(SCREENS.FORGOT_PASSWORD)
+							navigation.navigate(Routes.FORGOT_PASSWORD)
 						}
 					/>
 					<Button

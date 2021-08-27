@@ -1,11 +1,12 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, ReactElement} from 'react';
 import { StyleSheet, View, KeyboardAvoidingView, ScrollView, Platform } from 'react-native';
 import { Text } from 'react-native-elements';
-import { useDialogStatus } from "src/hooks";
 import { Header, Button, CancelBtn, BackBtn, BorderedInput, Dialog } from "src/shared/uielements";
 import { underlineHeader, viewBase, dialogViewBase, wrappingContainerBase } from "src/theme/elements";
 import { colors } from "src/theme/colors";
 import { IMap } from "src/utils/types";
+import Translation from 'src/translation/en.json';
+import * as Routes from 'src/navigation/constants';
 
 type CashoutAmountProps = {
 	navigation?: any,
@@ -64,16 +65,14 @@ const styles = StyleSheet.create({
 	}
 });
 
-const CashoutAmount = (props: CashoutAmountProps) => {
+const CashoutAmount = (props: CashoutAmountProps): ReactElement => {
 
 	const [state, setState] = useState<CashoutState>({
 		amount: "1",
 		costs: "1"
 	});
 	const [goNext, setGoNext] = useState(false);
-	const [cashout, setCashout] = useState(false);
 	const [isVisible, setIsVisible] = useState(false);
-	const { setDialogStatus } = useDialogStatus();
 
 	useEffect(() => {
 		setGoNext(state.costs !== "");
@@ -89,17 +88,11 @@ const CashoutAmount = (props: CashoutAmountProps) => {
 
 	const viewConfirm = () => {
 		setIsVisible(true);
-		setCashout(false);
 	}
 
 	const doCashout = () => {
 		setIsVisible(false);
-		props.navigation.navigate("Cashout");
-	}
-
-	const onCashoutClose = () => {
-		setIsVisible(false);
-		setCashout(false);
+		props.navigation.navigate(Routes.CASHOUT);
 	}
 
 	return (
@@ -110,13 +103,13 @@ const CashoutAmount = (props: CashoutAmountProps) => {
 			/>
 			<ScrollView style={wrappingContainerBase}>
 				<View style={ underlineHeader }>
-					<Text style={styles.headerText}>Cash out to USD$</Text>
+					<Text style={styles.headerText}>{Translation.PAYMENT.CASH_OUT}</Text>
 				</View>
 				<View>
-					<Text>Select the amount of BerkShares you would like to redeem to USD Dollar. Please note that the maximum amount is $ 2,000.00 and you can not exceed your account balance.</Text>
+					<Text>{Translation.PAYMENT.CASH_OUT_DETAIL}</Text>
 					<View style={ styles.formLabel }>
-						<Text style={styles.labelText}>AMOUNT</Text>
-						<Text style={styles.labelText}>Max. B$ 2,000.00</Text>
+						<Text style={styles.labelText}>{Translation.LABEL.AMOUNT}</Text>
+						<Text style={styles.labelText}>{Translation.LABEL.MAX_BERKSHARES}</Text>
 					</View>
 					<BorderedInput
 						label="Amount"
@@ -128,12 +121,12 @@ const CashoutAmount = (props: CashoutAmountProps) => {
 						onChange={onValueChange}
 					/>
 					<View style={styles.resultView}>
-						<Text style={styles.resultText}>Redemption fee (1,5%)</Text>
-						<Text style={styles.resultText}>USD$ -</Text>
+						<Text style={styles.resultText}>{Translation.PAYMENT.REDEMPTION_FEE} (1.5%)</Text>
+						<Text style={styles.resultText}>{Translation.COMMON.USD} -</Text>
 					</View>
 					<View style={styles.resultView}>
-						<Text style={{ ...styles.resultText, fontWeight: 'bold' }}>Total costs</Text>
-						<Text style={{ ...styles.resultText, fontWeight: 'bold' }}>USD$ -</Text>
+						<Text style={{ ...styles.resultText, fontWeight: 'bold' }}>{Translation.LOAD_UP.TOTAL_COSTS}</Text>
+						<Text style={{ ...styles.resultText, fontWeight: 'bold' }}>{Translation.COMMON.USD} -</Text>
 					</View>
 				</View>
 			</ScrollView>
@@ -143,7 +136,7 @@ const CashoutAmount = (props: CashoutAmountProps) => {
 					<Button
 						type="darkGreen"
 						disabled={!goNext}
-						title="Confirm"
+						title={Translation.BUTTON.CONFIRM}
 						onPress={viewConfirm}
 					/>
 				</View>
@@ -153,13 +146,13 @@ const CashoutAmount = (props: CashoutAmountProps) => {
 				<Dialog visible={isVisible} onClose={()=>setIsVisible(false)}>
 					<View style={dialogViewBase}>
 						<View style={styles.dialogWrap}>
-							<Text style={styles.dialogHeader}>Are you sure you want to cash out?</Text>
-							<Text>You will redeem 100 BerkShares for USD$ 98,50 after a 1,5% fee.</Text>
+							<Text style={styles.dialogHeader}>{Translation.PAYMENT.CASH_OUT_CONFIRM}</Text>
+							<Text>{Translation.PAYMENT.CASH_OUT_CONFIRM_DETAIL}</Text>
 						</View>
 						<View style={styles.dialogBottom}>
 							<Button
 								type="darkGreen"
-								title="Cash out to USD$"
+								title={Translation.BUTTON.CASH_OUT}
 								onPress={doCashout}
 							/>
 						</View>

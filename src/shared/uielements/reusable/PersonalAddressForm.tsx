@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, ReactElement } from "react";
 import { View, StyleSheet, Picker } from "react-native";
 import { Text } from "react-native-elements";
 import { useUserDetails } from "src/hooks";
@@ -7,6 +7,7 @@ import { colors } from "src/theme/colors";
 import { IMap, PersonalAddressErrors } from "src/utils/types";
 import { validateAddressForm } from "src/utils/validation";
 import BlockInput from "../BlockInput";
+import Translation from 'src/translation/en.json';
 
 interface PersonalAddressState extends IMap {
   addressLine: string;
@@ -58,7 +59,7 @@ const styles = StyleSheet.create({
 	}
 });
 
-const PersonalAddressForm = (props: PersonalAddressProps) => {
+const PersonalAddressForm = (props: PersonalAddressProps): ReactElement => {
   const { personalDetails, updatePersonalDetails } = useUserDetails();
   const [
     validationErrors,
@@ -96,20 +97,20 @@ const PersonalAddressForm = (props: PersonalAddressProps) => {
     });
   }, [personalDetails]);
 
-  const onValueChange = (name: any, change: any) => {
+  const onValueChange = (name: string, change: string) => {
     setState({
       ...state,
       [name]: change,
-    } as any);
+    } as PersonalAddressState);
     updatePersonalDetails({ [name]: change });
   };
 
   return (
     <View>
       <View style={styles.container}>
-          <Text style={styles.bodyText}>We use your personal details to set up your BerkShares Wallet. Don't worry. This information is not shared publicly!</Text>
+          <Text style={styles.bodyText}>{Translation.PROFILE.PERSIONAL_DETAILS_BODY}</Text>
       </View>
-      <Text style={styles.label}>ADDRESS 1</Text>
+      <Text style={styles.label}>{Translation.LABEL.ADDRESS1}</Text>
       {showValidation && validationErrors.addressLine && (
         <Text style={styles.errorLabel}>
           {validationErrors.addressLine}
@@ -122,7 +123,7 @@ const PersonalAddressForm = (props: PersonalAddressProps) => {
         onChange={onValueChange}
         style={props.style}
       />
-      <Text style={styles.label}>ADDRESS 2</Text>
+      <Text style={styles.label}>{Translation.LABEL.ADDRESS2}</Text>
       {showValidation && validationErrors.addressLine2 && (
         <Text style={styles.errorLabel}>
           {validationErrors.addressLine2}
@@ -138,7 +139,7 @@ const PersonalAddressForm = (props: PersonalAddressProps) => {
       
       <View style={styles.inlineView}>
         <View style={styles.cityView}>
-          <Text style={styles.label}>CITY</Text>
+          <Text style={styles.label}>{Translation.LABEL.CITY}</Text>
           {showValidation && validationErrors.city && (
             <Text style={styles.errorLabel}>
               {validationErrors.city}
@@ -153,7 +154,7 @@ const PersonalAddressForm = (props: PersonalAddressProps) => {
           />
         </View>
         <View style={styles.stateView}>
-          <Text style={styles.label}>STATE</Text>
+          <Text style={styles.label}>{Translation.LABEL.STATE}</Text>
           {showValidation && validationErrors.country && (
             <Text style={styles.errorLabel}>
               {validationErrors.country}
@@ -171,7 +172,7 @@ const PersonalAddressForm = (props: PersonalAddressProps) => {
         </View>
       </View>
       
-      <Text style={styles.label}>POSTAL CODE</Text>
+      <Text style={styles.label}>{Translation.LABEL.POSTAL_CODE}</Text>
       {showValidation && validationErrors.zipCode && (
         <Text style={styles.errorLabel}>
           {validationErrors.zipCode}

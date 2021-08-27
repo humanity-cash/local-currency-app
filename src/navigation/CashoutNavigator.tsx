@@ -1,12 +1,12 @@
 import { createStackNavigator } from "@react-navigation/stack";
-import React from "react";
+import React, { ReactElement } from "react";
 import RedemptionInProgress from "src/screens/cashout/RedemptionInProgress";
 
 const CashoutStack = createStackNavigator()
-function CashoutStackScreen() {
+function CashoutStackScreen(): ReactElement {
 	return (
 		<CashoutStack.Navigator
-			screenOptions={({ route, navigation }) => ({
+			screenOptions={() => ({
 				headerShown: false
 			})}
 		>

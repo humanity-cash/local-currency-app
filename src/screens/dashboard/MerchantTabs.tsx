@@ -4,16 +4,23 @@ import { createDrawerNavigator, DrawerContentComponentProps, DrawerContentScroll
 import React, { useState } from 'react';
 import { StyleSheet, View, Text, Image, TouchableWithoutFeedback } from 'react-native';
 import { Drawer } from 'react-native-paper';
+import { colors } from "src/theme/colors";
+import { baseHeader, wrappingContainerBase, dialogViewBase } from "src/theme/elements";
+import { Dialog, Button } from "src/shared/uielements";
+
 import MerchantDashboard from "./MerchantDashboard";
 import MerchantQRCodeScan from "../merchantPayment/MerchantQRCodeScan";
 import MerchantRequest from "../merchantPayment/MerchantRequest";
-import { colors } from "src/theme/colors";
+import MerchantReturnQRCodeScan from "../merchantPayment/MerchantReturnQRCodeScan";
+import MerchantCashoutAmount from "src/screens/merchantCashout/MerchantCashoutAmount";
+import MerchantLoadup from "src/screens/merchantLoadup/MerchantLoadup";
+import MerchantPayoutSelection from 'src/screens/merchantPayout/MerchantPayoutSelection';
 
 const styles = StyleSheet.create({
 	headerText: {
-		fontSize: 40,
-		fontWeight: '400',
-		lineHeight: 40
+		fontSize: 32,
+		lineHeight: 35,
+		color: colors.purple
 	},
 	drawerWrap: {
 		flex: 1,
@@ -59,14 +66,59 @@ const styles = StyleSheet.create({
 	},
 	inlineView: {
 		flexDirection: 'row'
-	}
+	},
+	detailText: {
+		fontSize: 16,
+		color: colors.bodyText
+	},
 });
+
+type ReturnPaymentDialogProps = {
+	visible: boolean,
+	onConfirm: ()=>void,
+	onCancel: ()=>void
+}
+
+const ReturnPaymentDialog = (props: ReturnPaymentDialogProps) => {
+
+	return (
+		<Dialog visible={props.visible} onClose={()=>props.onCancel()} backgroundStyle={{backgroundColor: colors.overlayPurple}}>
+			<View style={dialogViewBase}>
+				<View style={wrappingContainerBase}>
+					<View style={ baseHeader }>
+						<Text style={styles.headerText}>Scan the recipients QR.</Text>
+					</View>
+					<Text style={styles.detailText}>
+						The customer needs to generate QR code via the inital transaction in their transactioin overview. There they generate a QR code which needs to be scanned by you.
+					</Text>
+				</View>
+				<View>
+					<Button
+						type="purple"
+						title="Scan"
+						onPress={()=>props.onConfirm()}
+					/>
+				</View>
+			</View>
+		</Dialog>
+	)
+}
 
 const DrawerContent = (props: DrawerContentComponentProps) => {
 	const [isExpanded, setIsExpanded] = useState<boolean>(false);
+	const [isVisible, setIsVisible] = useState<boolean>(false);
 	
 	const signOut = () => {
 		props.navigation.navigate('Teaser');
+	}
+
+	const onScanConfirm = () => {
+		setIsVisible(false);
+		props.navigation.navigate('MerchantReturnQRCodeScan');
+	}
+
+	const onScanCancel = () => {
+		setIsVisible(false);
 	}
 
 	return (
@@ -126,10 +178,10 @@ const DrawerContent = (props: DrawerContentComponentProps) => {
 					<Drawer.Section>
 						<DrawerItem label="Receive payment"  onPress={() => {props.navigation.navigate('MerchantRequest')}} />
 						<DrawerItem label="Scan to pay" onPress={() => {props.navigation.navigate('MerchantQRCodeScan')}} />
-						<DrawerItem label="Make a return"  onPress={() => {props.navigation.navigate('LoadUp')}} />
-						<DrawerItem label="Load up B$"  onPress={() => {props.navigation.navigate('CashOut')}} />
-						<DrawerItem label="Send B$ to someone"  onPress={() => {props.navigation.navigate('CashOut')}} />
-						<DrawerItem label="Cash out to USD"  onPress={() => {props.navigation.navigate('CashOut')}} />
+						<DrawerItem label="Make a return"  onPress={() => {setIsVisible(true)}} />
+						<DrawerItem label="Load up B$"  onPress={() => {props.navigation.navigate('MerchantLoadup')}} />
+						<DrawerItem label="Send B$ to someone"  onPress={() => {props.navigation.navigate('MerchantPayoutSelection')}} />
+						<DrawerItem label="Cash out to USD"  onPress={() => {props.navigation.navigate('MerchantCashoutAmount')}} />
 					</Drawer.Section>
 					<Drawer.Section>
 						<DrawerItem label="Report"  onPress={() => {props.navigation.navigate('SignUpYourBusiness')}} />
@@ -150,22 +202,23 @@ const DrawerContent = (props: DrawerContentComponentProps) => {
 						onPress={signOut} 
 				/>
 			</Drawer.Section>
+			{ isVisible && <ReturnPaymentDialog visible={isVisible} onConfirm={onScanConfirm} onCancel={onScanCancel} /> }
 		</View>
 	)
 }
 
 const DrawerNav = createDrawerNavigator();
 
-const MerchantTabs = () => {
+const MerchantTabs: React.FC = () => {
 	return (
 		<DrawerNav.Navigator initialRouteName="MerchantDashboard" drawerContent={ props => <DrawerContent {...props} />}>
 			<DrawerNav.Screen name="MerchantDashboard" component={MerchantDashboard} />
 			<DrawerNav.Screen name="MerchantRequest" component={MerchantRequest} />
 			<DrawerNav.Screen name="MerchantQRCodeScan" component={MerchantQRCodeScan} />
-		  	<DrawerNav.Screen name="LoadUp" component={MerchantDashboard} />
-			<DrawerNav.Screen name="CashOut" component={MerchantDashboard} />
-			<DrawerNav.Screen name="MyTransactions" component={MerchantDashboard} />
-			<DrawerNav.Screen name="WhereToSpend" component={MerchantDashboard} />
+			<DrawerNav.Screen name="MerchantReturnQRCodeScan" component={MerchantReturnQRCodeScan} />
+			<DrawerNav.Screen name="MerchantCashoutAmount" component={MerchantCashoutAmount} />
+			<DrawerNav.Screen name="MerchantLoadup" component={MerchantLoadup} />
+			<DrawerNav.Screen name="MerchantPayoutSelection" component={MerchantPayoutSelection} />
 			<DrawerNav.Screen name="SignUpYourBusiness" component={MerchantDashboard} />
 			<DrawerNav.Screen name="Settings" component={MerchantDashboard} />
 			<DrawerNav.Screen name="HelpAndContact" component={MerchantDashboard} />

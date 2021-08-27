@@ -1,10 +1,12 @@
-import React, { useEffect, useState } from 'react';
-import { StyleSheet, View, Switch, ScrollView } from 'react-native';
+import React, { ReactElement, useEffect, useState } from 'react';
+import { StyleSheet, View, Switch } from 'react-native';
 import { Text } from 'react-native-elements';
 import { Header, CancelBtn, Dialog, Button } from "src/shared/uielements";
 import { colors } from "src/theme/colors";
 import { baseHeader, wrappingContainerBase, viewBase, dialogViewBase } from "src/theme/elements";
 import { BarCodeScanner } from 'expo-barcode-scanner';
+import Translation from 'src/translation/en.json';
+import * as Routes from 'src/navigation/constants';
 
 type MerchantQRCodeScanProps = {
 	navigation?: any,
@@ -117,7 +119,7 @@ const PaymentConfirm = (props: PaymentConfirmProps) => {
 	)
 }
 
-const MerchantQRCodeScan = (props: MerchantQRCodeScanProps) => {
+const MerchantQRCodeScan = (props: MerchantQRCodeScanProps): ReactElement => {
 	const [isPermissionSelected, setIsPermissionSelected] = useState<boolean>(false);
 	const [hasPermission, setHasPermission] = useState<boolean>(false);
 	const [isScanned, setIsScanned] = useState<boolean>(false);
@@ -147,6 +149,7 @@ const MerchantQRCodeScan = (props: MerchantQRCodeScanProps) => {
 	}, []);
 	
 	const handleBarCodeScanned = (data: HandleScaned) => {
+		console.log(data);
 		setIsScanned(true);
 		setIsPaymentDialogOpen(true);
 	}
@@ -161,7 +164,7 @@ const MerchantQRCodeScan = (props: MerchantQRCodeScanProps) => {
 
 	const onPayConfirm = () => {
 		setIsPaymentDialogOpen(false);
-		props.navigation.navigate("MerchantPaymentPending");
+		props.navigation.navigate(Routes.MERCHANT_PAYMENT_PENDING);
 	}
 
 	return (
@@ -174,7 +177,7 @@ const MerchantQRCodeScan = (props: MerchantQRCodeScanProps) => {
 			</View>
 			<View style={styles.toggleView}>
 				<Header
-					rightComponent={<CancelBtn text="Close" color={colors.white} onClick={() => props.navigation.navigate('MerchantDashboard')} />}
+					rightComponent={<CancelBtn text={Translation.BUTTON.CLOSE} color={colors.white} onClick={() => props.navigation.navigate(Routes.MERCHANT_DASHBOARD)} />}
 				/>
 				<View style={styles.switchView}>
 					<Switch

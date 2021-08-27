@@ -1,11 +1,13 @@
 import { useNavigation } from '@react-navigation/native';
 import React from 'react';
-import { StyleSheet, ImageBackground, View } from 'react-native';
+import { ImageBackground, StyleSheet, View } from 'react-native';
 import { Text } from 'react-native-elements';
+import { BUTTON_TYPES } from 'src/constants';
+import * as Routes from 'src/navigation/constants';
 import { Button } from 'src/shared/uielements';
-import { viewBase } from "src/theme/elements";
 import { colors } from "src/theme/colors";
-import { BUTTON_TYPES, SCREENS } from 'src/constants';
+import { viewBase } from "src/theme/elements";
+import Translation from 'src/translation/en.json';
 
 const styles = StyleSheet.create({
 	content: {
@@ -49,24 +51,24 @@ const Teaser = (): JSX.Element => {
 	return (
 		<View style={ viewBase }>
 			<ImageBackground
-				source={require('../../../assets/images/splash1.png')}
+				source={require('../../../assets/images/mainscreen.jpg')}
 				resizeMode="cover" 
 				style={styles.image}>
 				<View style={styles.titleView}>
-					<Text style={styles.titleText}>BerkShares</Text>
-					<Text style={styles.description}>for the Berkshire Region</Text>
+					<Text style={styles.titleText}>{Translation.LANDING_PAGE.TITLE}</Text>
+					<Text style={styles.description}>{Translation.LANDING_PAGE.DESCRIPTION}</Text>
 				</View>
 
 				<View style={styles.bottomView}>
 					<Button
 						type={BUTTON_TYPES.DARK_GREEN}
 						title="Log In"
-						onPress={() => navigation.navigate(SCREENS.LOGIN)}
+						onPress={() => navigation.navigate(Routes.LOGIN)}
 					/>
 					<Button
 						type={BUTTON_TYPES.DARK_RED}
 						title="Create an account"
-						onPress={() => navigation.navigate(SCREENS.CREATE_ACCOUNT)}
+						onPress={() => navigation.navigate(Routes.CREATE_ACCOUNT)}
 						style={styles.createAccountBtn}
 						textStyle={{color: colors.darkGreen}}
 					/>
@@ -74,6 +76,6 @@ const Teaser = (): JSX.Element => {
 			</ImageBackground>
 		</View>
 	);
-}
+};
 
-export default Teaser
+export default Teaser;

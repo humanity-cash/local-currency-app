@@ -1,10 +1,12 @@
 import { useNavigation } from '@react-navigation/native';
-import React from 'react';
+import React, { ReactElement } from 'react';
 import { StyleSheet, View, KeyboardAvoidingView, Platform, ScrollView } from 'react-native';
 import { Text } from 'react-native-elements';
 import { Header, Button } from "src/shared/uielements";
 import { colors } from "src/theme/colors";
 import { baseHeader, viewBaseWhite, wrappingContainerBase } from "src/theme/elements";
+import Translation from 'src/translation/en.json';
+import * as Routes from 'src/navigation/constants';
 
 type CongratulationsProps = {
 	navigation?: any
@@ -39,12 +41,10 @@ const CongratulationsView = (props: CongratulationsProps) => {
 			<Header />
 			<ScrollView style={wrappingContainerBase}>
 				<View style={baseHeader}>
-					<Text style={styles.headerText}>Congratulations!</Text>
+					<Text style={styles.headerText}>{Translation.BANK_ACCOUNT.CONGRATULATION}</Text>
 				</View>
 				<View style={styles.bodyView}>
-					<Text style={styles.bodyText}>You have linked your </Text>
-					<Text style={styles.text}>Salisbury Checking (US-08-CHAS-0686-5892) </Text>
-					<Text style={styles.bodyText}>bank account! You are ready to load up your BerkShares and start supporting your community!</Text>
+					<Text style={styles.bodyText}>{Translation.BANK_ACCOUNT.CONGRATULATION_DETAIL}</Text>
 				</View>				
 			</ScrollView>
 			<KeyboardAvoidingView
@@ -52,14 +52,14 @@ const CongratulationsView = (props: CongratulationsProps) => {
 				<View style={styles.bottomView}>
 					<Button
 						type="transparent"
-						title="Skip for now"
+						title={Translation.BUTTON.SKIP_NOW}
 						textStyle={styles.text}
-						onPress={() => props.navigation.navigate("MerchantTabs")}
+						onPress={() => props.navigation.navigate(Routes.MERCHANT_DASHBOARD)}
 					/>
 					<Button
 						type="purple"
-						title="Load up BerkShares"
-						onPress={() => props.navigation.navigate("TopUp")}
+						title={Translation.LOAD_UP.LOAD_UP_BERKSHARES}
+						onPress={() => props.navigation.navigate(Routes.LOAD_UP)}
 					/>
 				</View>
 			</KeyboardAvoidingView>
@@ -67,7 +67,7 @@ const CongratulationsView = (props: CongratulationsProps) => {
 	);
 }
 
-const Congratulations = (props: CongratulationsProps) => {
+const Congratulations = (props: CongratulationsProps): ReactElement => {
 	const navigation = useNavigation();
 	return <CongratulationsView {...props} navigation={navigation} />;
 }

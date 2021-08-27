@@ -1,32 +1,44 @@
 import { EvilIcons, Octicons } from '@expo/vector-icons';
-import { createDrawerNavigator, DrawerContentComponentProps, DrawerContentOptions, DrawerContentScrollView, DrawerItem } from '@react-navigation/drawer';
-import React, { useContext, useState } from 'react';
-import { Image, StyleSheet, Text, TouchableWithoutFeedback, View } from 'react-native';
+import {
+	createDrawerNavigator,
+	DrawerContentComponentProps,
+	DrawerContentOptions,
+	DrawerContentScrollView,
+	DrawerItem
+} from '@react-navigation/drawer';
+import React, { ReactElement, useContext, useState } from 'react';
+import {
+	Image,
+	StyleSheet,
+	Text,
+	TouchableWithoutFeedback,
+	View
+} from 'react-native';
 import { Drawer } from 'react-native-paper';
 import { AuthContext } from 'src/auth';
-import { SCREENS } from 'src/constants';
-import { colors } from "src/theme/colors";
-import CashoutAmount from "../cashout/CashoutAmount";
-import MerchantDictionary from "../merchant/MerchantDictionary";
-import TopUp from '../onboarding/TopUp';
+import * as Routes from 'src/navigation/constants';
+import { colors } from 'src/theme/colors';
+import Translation from 'src/translation/en.json';
+import CashoutAmount from '../cashout/CashoutAmount';
+import MerchantDictionary from '../merchant/MerchantDictionary';
+import PaymentRequest from '../payment/PaymentRequest';
 import QRCodeScan from '../payment/QRCodeScan';
-import Request from '../payment/Request';
-import Settings from "../settings/Settings";
-import SettingsHelpAndContact from "../settings/SettingsHelpAndContact";
+import Settings from '../settings/Settings';
+import SettingsHelpAndContact from '../settings/SettingsHelpAndContact';
 import BusinessAccount from '../signupBusiness/BusinessAccount';
-import MyTransactions from "../transactions/MyTransactions";
-import Dashboard from "./Dashboard";
+import MyTransactions from '../transactions/MyTransactions';
+import Dashboard from './Dashboard';
 
 const styles = StyleSheet.create({
 	headerText: {
 		fontSize: 40,
 		fontWeight: '400',
-		lineHeight: 40
+		lineHeight: 40,
 	},
 	drawerWrap: {
 		flex: 1,
 		backgroundColor: colors.lightGreen,
-		paddingVertical: 30
+		paddingVertical: 30,
 	},
 	imageView: {
 		justifyContent: 'center',
@@ -34,42 +46,42 @@ const styles = StyleSheet.create({
 		width: 50,
 		height: 50,
 		borderRadius: 25,
-		backgroundColor: colors.white
+		backgroundColor: colors.white,
 	},
 	image: {
 		width: '70%',
 		height: '70%',
-		borderRadius: 20
+		borderRadius: 20,
 	},
 	infoView: {
 		paddingVertical: 10,
-		backgroundColor: colors.lightGreen1
+		backgroundColor: colors.lightGreen1,
 	},
 	userInfo: {
 		flexDirection: 'row',
 		alignItems: 'center',
 		paddingVertical: 5,
 		paddingHorizontal: 10,
-		backgroundColor: colors.lightGreen1
+		backgroundColor: colors.lightGreen1,
 	},
 	usernameView: {
-		paddingHorizontal: 10
+		paddingHorizontal: 10,
 	},
 	fadeText: {
-		color: colors.darkGreen
+		color: colors.darkGreen,
 	},
 	berkAmount: {
 		fontSize: 32,
 		color: colors.lightBg,
 		paddingHorizontal: 15,
-		paddingTop: 10
+		paddingTop: 10,
 	},
 	bottomSection: {
-		paddingBottom: 10
+		paddingBottom: 10,
 	},
 	inlineView: {
-		flexDirection: 'row'
-	}
+		flexDirection: 'row',
+	},
 });
 
 const DrawerContent = (
@@ -96,7 +108,7 @@ const DrawerContent = (
 									<Text>Dagmar van Eijk</Text>
 									<View style={styles.inlineView}>
 										<Text style={styles.fadeText}>
-											Switch account
+											{Translation.COMMON.SWITCH_ACCOUNT}
 										</Text>
 										<EvilIcons
 											name='chevron-down'
@@ -112,7 +124,7 @@ const DrawerContent = (
 								<TouchableWithoutFeedback
 									onPress={() =>
 										props.navigation.navigate(
-											SCREENS.MERCHANT_TABS
+											Routes.MERCHANT_TABS
 										)
 									}>
 									<View style={styles.userInfo}>
@@ -130,7 +142,7 @@ const DrawerContent = (
 								<TouchableWithoutFeedback
 									onPress={() =>
 										props.navigation.navigate(
-											SCREENS.MERCHANT_TABS
+											Routes.MERCHANT_TABS
 										)
 									}>
 									<View style={styles.userInfo}>
@@ -153,31 +165,35 @@ const DrawerContent = (
 						<DrawerItem
 							label='Scan to pay'
 							onPress={() => {
-								props.navigation.navigate(SCREENS.SCAN_TO_PAY);
+								props.navigation.navigate(Routes.SCAN_PAY);
 							}}
 						/>
 						<DrawerItem
 							label='Receive payment'
 							onPress={() => {
-								props.navigation.navigate(SCREENS.RECIEVE_PAYMENT);
+								props.navigation.navigate(
+									Routes.RECEIVE_PAYMENT
+								);
 							}}
 						/>
 						<DrawerItem
 							label='Load up B$'
 							onPress={() => {
-								props.navigation.navigate(SCREENS.LOAD_UP);
+								props.navigation.navigate(Routes.LOAD_UP);
 							}}
 						/>
 						<DrawerItem
 							label='Cash out'
 							onPress={() => {
-								props.navigation.navigate(SCREENS.CASH_OUT);
+								props.navigation.navigate(Routes.CASHOUT);
 							}}
 						/>
 						<DrawerItem
 							label='My Transactions'
 							onPress={() => {
-								props.navigation.navigate(SCREENS.MY_TRANSACTIONS);
+								props.navigation.navigate(
+									Routes.MY_TRANSACTIONS
+								);
 							}}
 						/>
 					</Drawer.Section>
@@ -185,27 +201,29 @@ const DrawerContent = (
 						<DrawerItem
 							label='Where to spend'
 							onPress={() => {
-								props.navigation.navigate(SCREENS.WHERE_TO_SPEND);
+								props.navigation.navigate(
+									Routes.WHERE_TO_SPEND
+								);
 							}}
 						/>
 						<DrawerItem
 							label='Sign up your business'
 							onPress={() => {
 								props.navigation.navigate(
-									SCREENS.SIGN_UP_YOUR_BUSINESS
+									Routes.SIGNUP_YOUR_BUSINESS
 								);
 							}}
 						/>
 						<DrawerItem
 							label='Settings'
 							onPress={() => {
-								props.navigation.navigate(SCREENS.SETTINGS);
+								props.navigation.navigate(Routes.SETTINGS);
 							}}
 						/>
 						<DrawerItem
-							label='Scan to pay'
+							label='Help and Contact'
 							onPress={() => {
-								props.navigation.navigate(SCREENS.HELP_AND_CONTACT);
+								props.navigation.navigate(Routes.HELP_CONTACT);
 							}}
 						/>
 					</Drawer.Section>
@@ -230,35 +248,37 @@ const DrawerContent = (
 
 const DrawerNav = createDrawerNavigator();
 
-const Tabs = (): JSX.Element => {
+const Tabs = (): ReactElement => {
 	return (
 		<DrawerNav.Navigator
-			initialRouteName='Dashboard'
+			initialRouteName={Routes.DASHBOARD}
 			drawerContent={(props) => <DrawerContent {...props} />}>
-			<DrawerNav.Screen name='Dashboard' component={Dashboard} />
-			<DrawerNav.Screen name='ScanToPay' component={QRCodeScan} />
-			<DrawerNav.Screen name='ReceivePayment' component={Request} />
-			<DrawerNav.Screen name='LoadUp' component={TopUp} />
-			<DrawerNav.Screen name='CashOut' component={CashoutAmount} />
+			<DrawerNav.Screen name={Routes.DASHBOARD} component={Dashboard} />
+			<DrawerNav.Screen name={Routes.SCAN_PAY} component={QRCodeScan} />
 			<DrawerNav.Screen
-				name='MyTransactions'
+				name={Routes.RECEIVE_PAYMENT}
+				component={PaymentRequest}
+			/>
+			<DrawerNav.Screen name={Routes.CASHOUT} component={CashoutAmount} />
+			<DrawerNav.Screen
+				name={Routes.MY_TRANSACTIONS}
 				component={MyTransactions}
 			/>
 			<DrawerNav.Screen
-				name='WhereToSpend'
+				name={Routes.WHERE_TO_SPEND}
 				component={MerchantDictionary}
 			/>
 			<DrawerNav.Screen
-				name='SignUpYourBusiness'
+				name={Routes.SIGNUP_YOUR_BUSINESS}
 				component={BusinessAccount}
 			/>
-			<DrawerNav.Screen name='Settings' component={Settings} />
+			<DrawerNav.Screen name={Routes.SETTINGS} component={Settings} />
 			<DrawerNav.Screen
-				name='HelpAndContact'
+				name={Routes.HELP_CONTACT}
 				component={SettingsHelpAndContact}
 			/>
 		</DrawerNav.Navigator>
 	);
-}
+};
 
 export default Tabs;

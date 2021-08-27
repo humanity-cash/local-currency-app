@@ -1,12 +1,12 @@
 import { useNavigation } from '@react-navigation/native';
-import React, { useState } from 'react';
+import React, { ReactElement } from 'react';
 import { StyleSheet, View } from 'react-native';
-import { Image, Text } from 'react-native-elements';
-import { useModalStatusBar } from "src/hooks";
-import { useUserDetails } from "src/hooks";
+import { Text } from 'react-native-elements';
 import { Button, Header } from "src/shared/uielements";
 import { baseHeader, viewBase, wrappingContainerBase } from "src/theme/elements";
 import { colors } from "src/theme/colors";
+import Translation from 'src/translation/en.json';
+import * as Routes from 'src/navigation/constants';
 
 type LinkBankAccountProps = {
 	navigation?: any
@@ -29,13 +29,6 @@ const styles = StyleSheet.create({
 });
 
 const LinkBankAccountView = (props: LinkBankAccountProps) => {
-	const [isVisible, setIsVisible] = useState(false);
-	const { personalDetails: { email }} = useUserDetails();
-
-	const selectBank = () => {
-		setIsVisible(false);
-		props.navigation.navigate("SelectBank");
-	}
 
 	return (
 		<View style={viewBase}>
@@ -43,27 +36,27 @@ const LinkBankAccountView = (props: LinkBankAccountProps) => {
 
 			<View style={wrappingContainerBase}>
 				<View style={ baseHeader }>
-					<Text style={styles.headerText}>Thank you! Welcome to the BerkShares App. Now it is time to add some BerkShares to your wallet!</Text>
+					<Text style={styles.headerText}>{Translation.PROFILE.WELCOME_BERKSHARES}</Text>
 				</View>
 			</View>
 			<View style={styles.bottomView}>
 				<Button
 					type="transparent"
-					title="Skip for now"
+					title={Translation.BUTTON.SKIP_NOW}
 					style={styles.skipBtn}
-					onPress={() => props.navigation.navigate("Tabs")}
+					onPress={() => props.navigation.navigate(Routes.TABS)}
 				/>
 				<Button
 					type="darkGreen"
-					title="Link my bank account"
-					onPress={() => props.navigation.navigate("SelectBank")}
+					title={Routes.LINK_BANK_ACCOUNT}
+					onPress={() => props.navigation.navigate(Routes.SELECT_BANK_ACCOUNT)}
 				/>
 			</View>
 		</View>
 	);
 }
 
-const LinkBankAccount = (props:LinkBankAccountProps) => {
+const LinkBankAccount = (props:LinkBankAccountProps): ReactElement => {
 	const navigation = useNavigation();
 	return <LinkBankAccountView {...props} navigation={navigation} />;
 }

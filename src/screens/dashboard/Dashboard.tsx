@@ -2,20 +2,24 @@ import { AntDesign, Entypo } from '@expo/vector-icons';
 import { DrawerActions, useNavigation } from '@react-navigation/native';
 import React, { useState } from 'react';
 import {
-	ScrollView, StyleSheet,
+	ScrollView,
+	StyleSheet,
 	TouchableWithoutFeedback,
 	View
 } from 'react-native';
 import { Image, Text } from 'react-native-elements';
 import { TouchableOpacity } from 'react-native-gesture-handler';
-import { BUTTON_TYPES, SCREENS } from 'src/constants';
+import { BUTTON_TYPES } from 'src/constants';
+import * as Routes from 'src/navigation/constants';
 import { Header } from 'src/shared/uielements';
 import Button from 'src/shared/uielements/Button';
 import { colors } from 'src/theme/colors';
 import {
-	baseHeader, viewBase,
+	baseHeader,
+	viewBase,
 	wrappingContainerBase
 } from 'src/theme/elements';
+import Translation from 'src/translation/en.json';
 import DwollaDialog from './DwollaDialog';
 
 const styles = StyleSheet.create({
@@ -94,6 +98,13 @@ const styles = StyleSheet.create({
 	topupText: { color: colors.white, fontSize: 16 },
 });
 
+const feedData = {
+	month: 'SEPTEMBER',
+	author: 'Dory & Ginger',
+	content:
+		'Our motto is Live and Give. We have treasures for your home and lifestyle, along with the perfect gift for that special someone or that occasion that begs for something unique.',
+};
+
 const Dashboard = (): JSX.Element => {
 	const navigation = useNavigation();
 	const [isVisible, setIsVisible] = useState<boolean>(false);
@@ -126,13 +137,15 @@ const Dashboard = (): JSX.Element => {
 			<ScrollView style={wrappingContainerBase}>
 				<View style={styles.content}>
 					<View style={baseHeader}>
-						<Text style={styles.headerText}>BerkShares</Text>
+						<Text style={styles.headerText}>
+							{Translation.LANDING_PAGE.TITLE}
+						</Text>
 					</View>
 					<View style={styles.amountView}>
 						<Text style={styles.text}>B$ -</Text>
 						<TouchableOpacity
 							style={styles.topupButton}
-							onPress={() => navigation.navigate(SCREENS.TOP_UP)}>
+							onPress={() => navigation.navigate(Routes.LOAD_UP)}>
 							<Text style={styles.topupText}>Load up B$</Text>
 						</TouchableOpacity>
 					</View>
@@ -144,12 +157,12 @@ const Dashboard = (): JSX.Element => {
 								style={styles.alertIcon}
 							/>
 							<Text style={styles.alertText}>
-								Link your bank account to start using the app.
-								&nbsp;
+								{Translation.BANK_ACCOUNT.ACCOUNT_ALERT} &nbsp;
 								<Text
 									style={styles.alertIcon}
 									onPress={() => setIsVisible(true)}>
-									Link bank account &gt;
+									{Translation.BANK_ACCOUNT.ACCOUNT_LINK_TEXT}{' '}
+									&gt;
 								</Text>
 							</Text>
 						</View>
@@ -158,15 +171,10 @@ const Dashboard = (): JSX.Element => {
 					<View style={styles.feedView}>
 						<View style={styles.feedHeader}>
 							<Text h3>Merchant of the month</Text>
-							<Text h3>SeptemebEr</Text>
+							<Text h3>{feedData.month}</Text>
 						</View>
-						<Text h2>Dory & Ginger</Text>
-						<Text style={styles.bodyText}>
-							Our motto is Live and Give. We have treasures for
-							your home and lifestyle, along with the perfect gift
-							for that special someone or that occasion that begs
-							for something unique.
-						</Text>
+						<Text h2>{feedData.author}</Text>
+						<Text style={styles.bodyText}>{feedData.content}</Text>
 						<Image
 							source={require('../../../assets/images/feed1.png')}
 							containerStyle={styles.image}
@@ -178,7 +186,7 @@ const Dashboard = (): JSX.Element => {
 				type={BUTTON_TYPES.DARK_GREEN}
 				title='Scan to Pay or Request'
 				style={styles.scanButton}
-				onPress={() => navigation.navigate(SCREENS.QR_CODE_SCAN)}
+				onPress={() => navigation.navigate(Routes.QRCODE_SCAN)}
 			/>
 			{isVisible && (
 				<DwollaDialog visible={isVisible} onClose={onClose} />

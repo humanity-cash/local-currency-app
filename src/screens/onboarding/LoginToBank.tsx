@@ -1,10 +1,10 @@
 import { useNavigation } from '@react-navigation/native';
-import React, { useState, useEffect } from 'react';
+import React, { ReactElement, useState, useEffect } from 'react';
 import { StyleSheet, ScrollView, View, KeyboardAvoidingView, Platform } from 'react-native';
 import { Text, Image } from 'react-native-elements';
 import { BackBtn, Header, CancelBtn, BlockInput, Button } from "src/shared/uielements";
 import { colors } from "src/theme/colors";
-import { baseHeader, viewBaseWhite, wrappingContainerBase, underlineHeader } from "src/theme/elements";
+import { viewBaseWhite, wrappingContainerBase, underlineHeader } from "src/theme/elements";
 
 type LoginToBankProps = {
 	navigation?: any
@@ -112,7 +112,7 @@ const LoginToBankView = (props: LoginToBankProps) => {
 	);
 }
 
-const LoginToBank = (props: LoginToBankProps) => {
+const LoginToBank = (props: LoginToBankProps): ReactElement => {
 	const navigation = useNavigation();
 	return <LoginToBankView {...props} navigation={navigation} />;
 }
