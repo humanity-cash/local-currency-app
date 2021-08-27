@@ -9,7 +9,8 @@ import {
 } from 'react-native';
 import { CheckBox, Text } from 'react-native-elements';
 import { AuthContext } from 'src/auth';
-import { BUTTON_TYPES, SCREENS } from 'src/constants';
+import { BUTTON_TYPES } from 'src/constants';
+import * as Routes from 'src/navigation/constants';
 import BlockInput from 'src/shared/uielements/BlockInput';
 import Button from 'src/shared/uielements/Button';
 import BackBtn from 'src/shared/uielements/header/BackBtn';
@@ -104,8 +105,10 @@ const CreateAccount = (): JSX.Element => {
 					<Button
 						type={BUTTON_TYPES.DARK_GREEN}
 						title='NEXT'
-						disabled={!isEmailValid(signUpDetails.email) || !isSelected}
-						onPress={() => navigation.navigate(SCREENS.PASSWORD)}
+						disabled={
+							!isEmailValid(signUpDetails.email) || !isSelected
+						}
+						onPress={() => navigation.navigate(Routes.PASSWORD)}
 					/>
 				</View>
 			</KeyboardAvoidingView>

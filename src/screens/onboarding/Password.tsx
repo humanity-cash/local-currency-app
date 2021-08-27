@@ -3,24 +3,29 @@ import React, { useContext, useEffect, useState } from 'react';
 import { KeyboardAvoidingView, Platform, StyleSheet, View } from 'react-native';
 import { Text } from 'react-native-elements';
 import { AuthContext } from 'src/auth';
-import { BUTTON_TYPES, SCREENS } from 'src/constants';
-import { BackBtn, BlockInput, Button, Header } from "src/shared/uielements";
-import { colors } from "src/theme/colors";
-import { baseHeader, viewBaseWhite, wrappingContainerBase } from "src/theme/elements";
+import { BUTTON_TYPES } from 'src/constants';
+import * as Routes from 'src/navigation/constants';
+import { BackBtn, BlockInput, Button, Header } from 'src/shared/uielements';
+import { colors } from 'src/theme/colors';
+import {
+	baseHeader,
+	viewBaseWhite,
+	wrappingContainerBase
+} from 'src/theme/elements';
 import { isPasswordValid } from 'src/utils/validation';
 
 const styles = StyleSheet.create({
 	headerText: {
 		fontSize: 32,
 		color: colors.darkGreen,
-		lineHeight: 35
+		lineHeight: 35,
 	},
 	inlineView: {
 		flexDirection: 'row',
-		justifyContent: 'space-between'
+		justifyContent: 'space-between',
 	},
 	bodyText: {
-		color: colors.bodyText
+		color: colors.bodyText,
 	},
 	errorText: {
 		color: colors.mistakeRed,
@@ -28,26 +33,22 @@ const styles = StyleSheet.create({
 		lineHeight: 14,
 	},
 	form: {
-		marginTop: 30
+		marginTop: 30,
 	},
 	label: {
 		fontSize: 12,
 		lineHeight: 14,
-		color: colors.bodyText
+		color: colors.bodyText,
 	},
 	bottomView: {
 		paddingHorizontal: 20,
-    	paddingBottom: 50
+		paddingBottom: 50,
 	},
 });
 
 const Password = (): JSX.Element => {
 	const navigation = useNavigation();
-	const {
-		setSignUpDetails,
-		signUpDetails,
-		signUp
-	} = useContext(AuthContext);
+	const { setSignUpDetails, signUpDetails, signUp } = useContext(AuthContext);
 	const [isValidPassword, setIsValidPassword] = useState<boolean>(false);
 
 	useEffect(() => {
@@ -125,7 +126,7 @@ const Password = (): JSX.Element => {
 						onPress={async () => {
 							const response = await signUp();
 							if (response.success) {
-								navigation.navigate(SCREENS.VERIFICATION);
+								navigation.navigate(Routes.VERIFICATION);
 							}
 						}}
 					/>

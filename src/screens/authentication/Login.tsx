@@ -4,7 +4,8 @@ import { KeyboardAvoidingView, Platform, ScrollView, StyleSheet, View } from 're
 import { Text } from 'react-native-elements';
 import { AuthContext } from 'src/auth';
 import { SignInInput } from 'src/auth/types';
-import { BUTTON_TYPES, SCREENS } from 'src/constants';
+import { BUTTON_TYPES } from 'src/constants';
+import * as Routes from 'src/navigation/constants';
 import { BackBtn, BlockInput, Button, Header } from "src/shared/uielements";
 import { colors } from "src/theme/colors";
 import { baseHeader, viewBase, wrappingContainerBase } from "src/theme/elements";
@@ -81,7 +82,7 @@ const Login = (): JSX.Element => {
 						type={BUTTON_TYPES.TRANSPARENT}
 						title='Forgot Passowrd?'
 						onPress={() =>
-							navigation.navigate(SCREENS.FORGOT_PASSWORD)
+							navigation.navigate(Routes.FORGOT_PASSWORD)
 						}
 					/>
 					<Button

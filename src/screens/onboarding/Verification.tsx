@@ -1,28 +1,29 @@
 import { useNavigation } from '@react-navigation/native';
 import React, { useContext, useState } from 'react';
 import {
-    KeyboardAvoidingView,
-    Platform,
-    ScrollView,
-    StyleSheet,
-    TouchableOpacity,
-    View
+	KeyboardAvoidingView,
+	Platform,
+	ScrollView,
+	StyleSheet,
+	TouchableOpacity,
+	View
 } from 'react-native';
 import { Text } from 'react-native-elements';
 import { AuthContext } from 'src/auth';
-import { BUTTON_TYPES, SCREENS } from 'src/constants';
+import { BUTTON_TYPES } from 'src/constants';
 import { useUserDetails } from 'src/hooks';
+import * as Routes from 'src/navigation/constants';
 import {
-    BackBtn,
-    Button,
-    ConfirmationCode,
-    Header
+	BackBtn,
+	Button,
+	ConfirmationCode,
+	Header
 } from 'src/shared/uielements';
 import { colors } from 'src/theme/colors';
 import {
-    baseHeader,
-    viewBase,
-    wrappingContainerBase
+	baseHeader,
+	viewBase,
+	wrappingContainerBase
 } from 'src/theme/elements';
 
 const styles = StyleSheet.create({
@@ -71,9 +72,7 @@ const Verification = (): JSX.Element => {
 	return (
 		<View style={viewBase}>
 			<Header
-				leftComponent={
-					<BackBtn onClick={() => navigation.goBack()} />
-				}
+				leftComponent={<BackBtn onClick={() => navigation.goBack()} />}
 			/>
 
 			<ScrollView style={wrappingContainerBase}>
@@ -121,7 +120,7 @@ const Verification = (): JSX.Element => {
 					{noCodeReceived && (
 						<TouchableOpacity
 							onPress={() =>
-								navigation.navigate(SCREENS.VERIFICATION_HELP)
+								navigation.navigate(Routes.VERIFICATION_HELP)
 							}>
 							<Text style={styles.bottomNavigation}>
 								Need help?
@@ -133,7 +132,7 @@ const Verification = (): JSX.Element => {
 						title='NEXT'
 						disabled={!goNext}
 						onPress={() =>
-							navigation.navigate(SCREENS.EMAIL_CONFIRMED)
+							navigation.navigate(Routes.EMAIL_CONFIRMED)
 						}
 					/>
 				</View>
