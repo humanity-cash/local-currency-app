@@ -1,76 +1,53 @@
 import { useNavigation } from '@react-navigation/native';
-import React, { ReactElement, useEffect, useState } from 'react';
-import { ScrollView, KeyboardAvoidingView, Platform, StyleSheet, View } from 'react-native';
+import React, { useContext } from 'react';
+import { KeyboardAvoidingView, Platform, ScrollView, StyleSheet, View } from 'react-native';
 import { Text } from 'react-native-elements';
-import { Header, BackBtn, BlockInput, Button } from "src/shared/uielements";
-import { baseHeader, viewBase, wrappingContainerBase } from "src/theme/elements";
+import { AuthContext } from 'src/auth';
+import { SignInInput } from 'src/auth/types';
+import { BUTTON_TYPES, SCREENS } from 'src/constants';
+import { BackBtn, BlockInput, Button, Header } from "src/shared/uielements";
 import { colors } from "src/theme/colors";
-import { IMap } from "src/utils/types";
-
+import { baseHeader, viewBase, wrappingContainerBase } from "src/theme/elements";
 import Translation from 'src/translation/en.json';
-import * as Routes from 'src/navigation/constants';
-
-type LoginProps = {
-	navigation?: any,
-	route: any
-}
-
-interface LoginForm extends IMap {
-	password: string
-	email: string
-}
 
 const styles = StyleSheet.create({
 	headerText: {
 		fontSize: 32,
 		color: colors.darkGreen,
-		lineHeight: 35
+		lineHeight: 35,
 	},
 	bodyText: {
-		color: colors.bodyText
+		color: colors.bodyText,
 	},
 	form: {
-		marginVertical: 30
+		marginVertical: 30,
 	},
 	label: {
 		fontSize: 12,
 		lineHeight: 14,
-		color: colors.bodyText
+		color: colors.bodyText,
 	},
 	bottomView: {
 		paddingHorizontal: 20,
-    	paddingBottom: 50
+		paddingBottom: 50,
 	},
 });
 
-//eslint-disable-next-line
-const strongRegex = new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#\$%\^&\*])(?=.{8,})");
+const Login = (): JSX.Element => {
+	const navigation = useNavigation();
+	const { signIn, signInDetails, setSignInDetails } = useContext(AuthContext);
 
-//eslint-disable-next-line
-const emailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w\w+)+$/;
-
-const LoginView = (props: LoginProps) => {
-	const [goNext, setGoNext] = useState<boolean>(true);
-	const [state, setState] = useState<LoginForm>({
-		email: "",
-		password: ""
-	})
-	
-	useEffect(() => {
-		setGoNext(Object.keys(state).every((key) => state[key] !== "") && strongRegex.test(state.password) && emailRegex.test(state.email));
-	},[state]);
-
-	const onValueChange = (name: string, change: string) => {
-		setState({
-			...state,
-			[name]: change
-		});
+	const onValueChange = (name: 'email' | 'password', change: string) => {
+		setSignInDetails((pv: SignInInput) => ({
+			...pv,
+			[name]: change,
+		}));
 	};
 
 	return (
 		<View style={viewBase}>
 			<Header
-				leftComponent={<BackBtn onClick={() => props.navigation.goBack()} />}
+				leftComponent={<BackBtn onClick={() => navigation.goBack()} />}
 			/>
 
 			<ScrollView style={wrappingContainerBase}>
@@ -81,16 +58,16 @@ const LoginView = (props: LoginProps) => {
 				<View style={styles.form}>
 					<Text style={styles.label}>{Translation.LABEL.EMAIL_USERNAME}</Text>
 					<BlockInput
-						name="email"
-						placeholder="Email"
-						value={state.email}
+						name='email'
+						placeholder='Email'
+						value={signInDetails.email}
 						onChange={onValueChange}
 					/>
 					<Text style={styles.label}>{Translation.LABEL.PASSWORD}</Text>
 					<BlockInput
-						name="password"
-						placeholder="Password"
-						value={state.password}
+						name='password'
+						placeholder='Password'
+						value={signInDetails.password}
 						secureTextEntry={true}
 						onChange={onValueChange}
 					/>
@@ -98,28 +75,44 @@ const LoginView = (props: LoginProps) => {
 			</ScrollView>
 
 			<KeyboardAvoidingView
-				behavior={Platform.OS == "ios" ? "padding" : "height"}
-			>
+				behavior={Platform.OS == 'ios' ? 'padding' : 'height'}>
 				<View style={styles.bottomView}>
 					<Button
-						type="transparent"
-						title="Forgot Passowrd?"
-						onPress={() => props.navigation.navigate(Routes.FORGOT_PASSWORD)}
+						type={BUTTON_TYPES.TRANSPARENT}
+						title='Forgot Passowrd?'
+						onPress={() =>
+							navigation.navigate(SCREENS.FORGOT_PASSWORD)
+						}
 					/>
 					<Button
-						type="darkGreen"
-						title="Log in"
-						disabled={!goNext}
-						onPress={() => props.navigation.navigate(Routes.SELECT_ACCOUNT_TYPE)}
+						type={BUTTON_TYPES.DARK_GREEN}
+						title='Log in'
+						disabled={false}
+						onPress={signIn}
 					/>
 				</View>
 			</KeyboardAvoidingView>
 		</View>
 	);
-}
+};
 
-const Login = (props:LoginProps): ReactElement => {
-	const navigation = useNavigation();
-	return <LoginView {...props} navigation={navigation} />;
-}
-export default Login
+export default Login;
+
+// useEffect(() => {
+// 	async function askFingerprint() {
+// 		if (isFocused && touchID) {
+// 			const data = await LocalAuthentication.authenticateAsync({
+// 				disableDeviceFallback: true,
+// 				cancelLabel: 'Close'
+// 			});
+// 			setAutoFocus(false);
+// 		}
+// 	}
+// 	askFingerprint();
+
+// 	setAutoFocus(isFocused);
+// }, [isFocused, touchID]);
+
+// const isFocused = useIsFocused();
+// const [autoFocus, setAutoFocus] = useState<boolean>(true);
+
