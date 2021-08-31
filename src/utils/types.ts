@@ -321,6 +321,23 @@ export type MyTransactionItem = {
 	date: string
 }
 
+export enum MerchantTransactionType {
+  SALE = 'Sale',
+	RETURN = 'Return',
+	CASH_OUT = 'Cash out',
+	TRANSFER = 'Transfer',
+  DONATION = 'Donation',
+  CUSTOMER_RETURN = 'Customer return',
+  PURCHASEMENT = 'Purchasement'
+}
+
+export type MerchantTransactionItem = {
+  transactionId: string,
+  type: MerchantTransactionType,
+  amount: number,
+  date: string
+}
+
 export type MerchantCategory = {
   id: string;
   name: string;
@@ -338,5 +355,13 @@ export type MerchantEntry = {
 
 export type AccordionEntry = {
 	title: string,
-	content: string
+	content: string,
+  style?: IMap,
+  textColor?: string;
+}
+
+export enum AccountType {
+  PERSONAL = 'Personal',
+  MERCHANT = 'Merchant',
+  CASHIER = 'Cashier'
 }

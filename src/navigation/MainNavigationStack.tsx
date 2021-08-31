@@ -42,6 +42,17 @@ import SettingsPersonalProfile from "src/screens/settings/SettingsPersonalProfil
 import SettingsSecurity from "src/screens/settings/SettingsSecurity";
 import SettingsTermsAndConditions from "src/screens/settings/SettingsTermsAndConditions";
 
+import MerchantTabs from "src/screens/dashboard/MerchantTabs";
+
+import CashierDashboard from "src/screens/dashboard/CashierDashboard";
+import CashierHelp from "src/screens/cashier/CashierHelp";
+import CashierRequest from "src/screens/cashier/CashierRequest";
+import CashierTransactions from "src/screens/cashier/CashierTransactions";
+import CashierPaymentSuccess from "src/screens/cashier/CashierPaymentSuccess";
+
+import Report from "src/screens/report/Report";
+import ReportSuccess from "src/screens/report/ReportSuccess";
+
 const PrimaryStack = createStackNavigator();
 
 const PrimaryStackScreen = () => {
@@ -190,6 +201,40 @@ const PrimaryStackScreen = () => {
 					<PrimaryStack.Screen
 						name='Congratulations'
 						component={Congratulations}
+					/>
+					<PrimaryStack.Screen
+						name='MerchantTabs'
+						component={MerchantTabs}
+					/>
+
+					<PrimaryStack.Screen
+						name='CashierDashboard'
+						component={CashierDashboard}
+					/>
+					<PrimaryStack.Screen
+						name='CashierHelp'
+						component={CashierHelp}
+					/>
+					<PrimaryStack.Screen
+						name='CashierRequest'
+						component={CashierRequest}
+					/>
+					<PrimaryStack.Screen
+						name='CashierTransactions'
+						component={CashierTransactions}
+					/>
+					<PrimaryStack.Screen
+						name='CashierPaymentSuccess'
+						component={CashierPaymentSuccess}
+					/>
+
+					<PrimaryStack.Screen
+						name='Report'
+						component={Report}
+					/>
+					<PrimaryStack.Screen
+						name='ReportSuccess'
+						component={ReportSuccess}
 					/>
 				</>
 			)}

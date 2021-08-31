@@ -54,7 +54,15 @@
         "MENU": "Menu",
         "RECEIVE_OR_SCAN":"Receive or Scan to Pay",
         "GOTO_SETUP": "Go to set up",
-        "LINK_BUSINESS_BANK": "Link my business bank account"
+        "LINK_BUSINESS_BANK": "Link my business bank account",
+        "NEED_HELP": "Need help?",
+        "SWITCH_VIEW": "Switch view",
+        "TAKE_ME_BACK": "Take me back",
+        "HOW_TO_WORK": "How does this work?",
+        "TODAY": "Today",
+        "WEEK": "Week",
+        "MONTH": "Month",
+        "SEND_REPORT": "Send report"
     },
     "LABEL": {
         "EMAIL_ADDR": "EMAIL ADDRESS",
@@ -75,6 +83,7 @@
         "ACCOUNT_TYPE": "ACCOUNT TYPE",
         "ACCOUNT_NUMBER": "ACCOUNT NUMBER",
         "AMOUNT": "AMOUNT",
+        "AMOUNT1": "AMOUNT (B$ 1 = USD 1)",
         "MAX_BERKSHARES": "MAX B$ 2,000.00",
         "START_DATE": "START DATE",
         "END DATE": "END DATE",
@@ -91,7 +100,9 @@
         "NEW_PASSWORD": "NEW PASSWORD",
         "CONFIRM_NEW_PASSWORD": "Confirm new password",
         "OLD_PASSWORD": "OLD PASSWORD",
-        "RETURN_AMOUNT": "RETURN AMOUNT"
+        "RETURN_AMOUNT": "RETURN AMOUNT",
+        "TIME_PERIOD": "TIME PERIOD",
+        "TYPE_OF_TRANSACTIONS": "TYPE OF TRANSACTIONS"
     },
     "LANDING_PAGE": {
         "TITLE": "BerkShares",
@@ -230,5 +241,24 @@
         "HAVE_BERKSHARES": "You still have BerkShares. Cash out before you delete your account.",
         "GO_CASHOUT": "Go to cash out",
         "CONFIRM_DELETE_ACCOUNT": "Are you sure you want to delete your account?"
+    },
+    "REPORT": {
+        "MAKE_REPORT": "Make a report",
+        "SELECT_TIME_TYPE": "Select the time period and the type of transactions you want to create a report for.",
+        "SPECIFY_TIME_PERIOD": "Please specify time period",
+        "SENT_REPORT": "Your report has been sent to your email address"
+    },
+    "CASHIER": {
+        "CASHIER_VIEW_SWITCH": "Are you sure you want to switch to cashier view?",
+        "CASHIER_VIEW_SWITCH_DETAIL": "You can only switch back by logging out.",
+        "HELP": "Help",
+        "HELP_DETAIL": "We are here to help you with anything and everything on the Berkshares app.",
+        "LOGOUT_CONFIRM": "Are you sure you want to log out?",
+        "LOGOUT_CONFIRM_DETAIL": "Please note that you will need the password to log back in.",
+        "RECEIVE_PAYMENT": "Receive payment",
+        "TRANSACTIONS": "Transactions",
+        "BALANCE": "BALANCE",
+        "PAYMENT_SUCCESS": "Succeeded! You have received B$",
+        "PAYMENT_SUCCESS_DETAIL": "Receipt will appear in either your as well as the customer’s transaction overview."
     }
 }
