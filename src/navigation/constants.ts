@@ -49,6 +49,15 @@ export const MERCHANT_PAYOUT_PERSONAL = "MerchantPayoutToPersonal";
 export const MERCHANT_PAYOUT_SOMEONE = "MerchantPayoutToSomeone";
 export const MERCHANT_PAYOUT_QR_SCAN = "MerchantPayoutQRCodeScan";
 
+export const CASHIER_DASHBOARD = "CashierDashboard";
+export const CASHIER_HELP = "CashierHelp";
+export const CASHIER_REQUEST = "CashierRequest";
+export const CASHIER_TRANSACTIONS = "CashierTransactions";
+export const CASHIER_PAYMENT_SUCCESS = "CashierPaymentSuccess";
+
+export const REPORT = "Report";
+export const REPORT_SUCCESS = "ReportSuccess";
+
 // Personal tabs
 export const DASHBOARD = "Dashboard";
 export const SCAN_PAY = "ScanToPay";

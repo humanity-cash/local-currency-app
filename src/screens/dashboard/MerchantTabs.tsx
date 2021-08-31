@@ -7,6 +7,10 @@ import { Drawer } from 'react-native-paper';
 import { colors } from "src/theme/colors";
 import { baseHeader, wrappingContainerBase, dialogViewBase } from "src/theme/elements";
 import { Dialog, Button } from "src/shared/uielements";
+import Translation from 'src/translation/en.json';
+import * as Routes from 'src/navigation/constants';
+import { AccountType } from 'src/utils/types';
+import { useAccountType } from "src/hooks";
 
 import MerchantDashboard from "./MerchantDashboard";
 import MerchantQRCodeScan from "../merchantPayment/MerchantQRCodeScan";
@@ -71,6 +75,9 @@ const styles = StyleSheet.create({
 		fontSize: 16,
 		color: colors.bodyText
 	},
+	dialogBg: {
+		backgroundColor: colors.overlayPurple
+	}
 });
 
 type ReturnPaymentDialogProps = {
@@ -80,9 +87,8 @@ type ReturnPaymentDialogProps = {
 }
 
 const ReturnPaymentDialog = (props: ReturnPaymentDialogProps) => {
-
 	return (
-		<Dialog visible={props.visible} onClose={()=>props.onCancel()} backgroundStyle={{backgroundColor: colors.overlayPurple}}>
+		<Dialog visible={props.visible} onClose={()=>props.onCancel()} backgroundStyle={styles.dialogBg}>
 			<View style={dialogViewBase}>
 				<View style={wrappingContainerBase}>
 					<View style={ baseHeader }>
@@ -104,9 +110,39 @@ const ReturnPaymentDialog = (props: ReturnPaymentDialogProps) => {
 	)
 }
 
+type CashierViewDialogProps = {
+	visible: boolean,
+	onConfirm: ()=>void,
+	onCancel: ()=>void
+}
+
+const CashierViewDialogDialog = (props: CashierViewDialogProps) => {
+	return (
+		<Dialog visible={props.visible} onClose={()=>props.onCancel()} backgroundStyle={styles.dialogBg}>
+			<View style={dialogViewBase}>
+				<View style={wrappingContainerBase}>
+					<View style={ baseHeader }>
+						<Text style={styles.headerText}>{Translation.CASHIER.CASHIER_VIEW_SWITCH}</Text>
+					</View>
+					<Text style={styles.detailText}>{Translation.CASHIER.CASHIER_VIEW_SWITCH_DETAIL}</Text>
+				</View>
+				<View>
+					<Button
+						type="purple"
+						title={Translation.BUTTON.SWITCH_VIEW}
+						onPress={()=>props.onConfirm()}
+					/>
+				</View>
+			</View>
+		</Dialog>
+	)
+}
+
 const DrawerContent = (props: DrawerContentComponentProps) => {
+	const { setUseAccountType } = useAccountType();
 	const [isExpanded, setIsExpanded] = useState<boolean>(false);
 	const [isVisible, setIsVisible] = useState<boolean>(false);
+	const [isCashierView, setIsCashierView] = useState<boolean>(false);
 	
 	const signOut = () => {
 		props.navigation.navigate('Teaser');
@@ -119,6 +155,21 @@ const DrawerContent = (props: DrawerContentComponentProps) => {
 
 	const onScanCancel = () => {
 		setIsVisible(false);
+	}
+
+	const onCashierViewConfirm = () => {
+		setIsCashierView(false);
+		setUseAccountType(AccountType.CASHIER);
+		props.navigation.navigate(Routes.CASHIER_DASHBOARD);
+	}
+
+	const onCashierViewCancel = () => {
+		setIsCashierView(false);
+	}
+
+	const onPersonal = () => {
+		setUseAccountType(AccountType.PERSONAL);
+		props.navigation.navigate("Tabs");
 	}
 
 	return (
@@ -145,7 +196,7 @@ const DrawerContent = (props: DrawerContentComponentProps) => {
 						</TouchableWithoutFeedback>
 						{isExpanded && (
 							<View>
-								<TouchableWithoutFeedback onPress={() => props.navigation.navigate("Tabs")}>
+								<TouchableWithoutFeedback onPress={onPersonal}>
 									<View style={styles.userInfo}>
 										<View style={styles.imageView}>
 											<Image
@@ -158,7 +209,7 @@ const DrawerContent = (props: DrawerContentComponentProps) => {
 										</View>
 									</View>
 								</TouchableWithoutFeedback>
-								<TouchableWithoutFeedback onPress={() => props.navigation.navigate("Tabs")}>
+								<TouchableWithoutFeedback onPress={() => setIsCashierView(true)}>
 									<View style={styles.userInfo}>
 										<View style={styles.imageView}>
 										<Image
@@ -184,7 +235,7 @@ const DrawerContent = (props: DrawerContentComponentProps) => {
 						<DrawerItem label="Cash out to USD"  onPress={() => {props.navigation.navigate('MerchantCashoutAmount')}} />
 					</Drawer.Section>
 					<Drawer.Section>
-						<DrawerItem label="Report"  onPress={() => {props.navigation.navigate('SignUpYourBusiness')}} />
+						<DrawerItem label="Report"  onPress={() => {props.navigation.navigate('Report')}} />
 						<DrawerItem label="Settings"  onPress={() => {props.navigation.navigate('Settings')}} />
 						<DrawerItem label="Help and Contact"  onPress={() => {props.navigation.navigate('HelpAndContact')}} />
 					</Drawer.Section>
@@ -203,6 +254,7 @@ const DrawerContent = (props: DrawerContentComponentProps) => {
 				/>
 			</Drawer.Section>
 			{ isVisible && <ReturnPaymentDialog visible={isVisible} onConfirm={onScanConfirm} onCancel={onScanCancel} /> }
+			{ isCashierView && <CashierViewDialogDialog visible={isCashierView} onConfirm={onCashierViewConfirm} onCancel={onCashierViewCancel} /> }
 		</View>
 	)
 }

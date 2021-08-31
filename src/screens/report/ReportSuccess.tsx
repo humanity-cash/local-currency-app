@@ -6,8 +6,10 @@ import { baseHeader, viewBase, wrappingContainerBase } from "src/theme/elements"
 import { colors } from "src/theme/colors";
 import Translation from 'src/translation/en.json';
 import * as Routes from 'src/navigation/constants';
+import { AccountType } from 'src/utils/types';
+import { useAccountType } from "src/hooks";
 
-type MerchantPaymentSuccessProps = {
+type ReportSuccessProps = {
 	navigation?: any,
 	route?: any,
 }
@@ -28,27 +30,31 @@ const styles = StyleSheet.create({
 	},
 });
 
-const MerchantPaymentSuccess = (props: MerchantPaymentSuccessProps): ReactElement => {
+const ReportSuccess = (props: ReportSuccessProps): ReactElement => {
+	const { details } = useAccountType();
+
+	const onConfirm = () => {
+		details.accountType === AccountType.MERCHANT ? props.navigation.navigate(Routes.MERCHANT_DASHBOARD) : props.navigation.navigate(Routes.CASHIER_DASHBOARD);
+	}
 
 	return (
 		<View style={viewBase}>
 			<Header
-				rightComponent={<CancelBtn text="Close" color={colors.purple} onClick={() => props.navigation.navigate(Routes.MERCHANT_DASHBOARD)} />}
+				rightComponent={<CancelBtn text={Translation.BUTTON.CLOSE} color={colors.purple} onClick={onConfirm} />}
 			/>
 			<ScrollView style={wrappingContainerBase}>
-				<View style={baseHeader}>
+				<View style={ baseHeader }>
 					<Text style={styles.headerText}>{Translation.COMMON.SUCCEEDED}</Text>
-					<Text style={styles.headerText}>{Translation.COMMON.THANK_YOU}</Text>
 				</View>
-				<Text style={styles.text}>{Translation.PAYMENT.PAYMENT_SUCCESS_DETAIL}</Text>
+				<Text style={styles.text}>{Translation.REPORT.SENT_REPORT} fennie@humanity.cash</Text>
 			</ScrollView>
 			<KeyboardAvoidingView
 				behavior={Platform.OS == "ios" ? "padding" : "height"} >
 				<View style={styles.bottomView}>
 					<Button
 						type="purple"
-						title={Translation.BUTTON.NEXT}
-						onPress={() => props.navigation.navigate(Routes.MERCHANT_DASHBOARD)}
+						title={Translation.BUTTON.GO_BACK_HOME}
+						onPress={onConfirm}
 					/>
 				</View>
 			</KeyboardAvoidingView>
@@ -56,4 +62,4 @@ const MerchantPaymentSuccess = (props: MerchantPaymentSuccessProps): ReactElemen
 	);
 }
 
-export default MerchantPaymentSuccess
+export default ReportSuccess

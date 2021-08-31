@@ -19,6 +19,9 @@ import { AuthContext } from 'src/auth';
 import * as Routes from 'src/navigation/constants';
 import { colors } from 'src/theme/colors';
 import Translation from 'src/translation/en.json';
+import { AccountType } from 'src/utils/types';
+import { useAccountType } from "src/hooks";
+
 import CashoutAmount from '../cashout/CashoutAmount';
 import MerchantDictionary from '../merchant/MerchantDictionary';
 import PaymentRequest from '../payment/PaymentRequest';
@@ -87,8 +90,19 @@ const styles = StyleSheet.create({
 const DrawerContent = (
 	props: DrawerContentComponentProps<DrawerContentOptions>
 ) => {
+	const { setUseAccountType } = useAccountType();
 	const { signOut } = useContext(AuthContext);
 	const [isExpanded, setIsExpanded] = useState<boolean>(false);
+
+	const onMerchant = () => {
+		setUseAccountType(AccountType.MERCHANT);
+		props.navigation.navigate(Routes.MERCHANT_TABS);
+	}
+
+	const onCashier = () => {
+		setUseAccountType(AccountType.CASHIER);
+		props.navigation.navigate(Routes.CASHIER_DASHBOARD);
+	}
 
 	return (
 		<View style={styles.drawerWrap}>
@@ -122,11 +136,7 @@ const DrawerContent = (
 						{isExpanded && (
 							<View>
 								<TouchableWithoutFeedback
-									onPress={() =>
-										props.navigation.navigate(
-											Routes.MERCHANT_TABS
-										)
-									}>
+									onPress={onMerchant}>
 									<View style={styles.userInfo}>
 										<View style={styles.imageView}>
 											<Image
@@ -140,11 +150,7 @@ const DrawerContent = (
 									</View>
 								</TouchableWithoutFeedback>
 								<TouchableWithoutFeedback
-									onPress={() =>
-										props.navigation.navigate(
-											Routes.MERCHANT_TABS
-										)
-									}>
+									onPress={onCashier}>
 									<View style={styles.userInfo}>
 										<View style={styles.imageView}>
 											<Image

@@ -1,6 +1,6 @@
-import { MyTransactionItem } from "../utils/types";
+import { MyTransactionItem, MerchantTransactionItem, MerchantTransactionType } from "../utils/types";
 
-const transactionList: MyTransactionItem[] = [
+export const consumerTransactions: MyTransactionItem[] = [
 	{
 		transactionId: 1,
 		avatar: "feed1.png",
@@ -74,4 +74,51 @@ const transactionList: MyTransactionItem[] = [
 	}
 ];
 
-export default transactionList;
+export const merchantTransactions: MerchantTransactionItem[] = [
+	{
+		transactionId: '12345',
+		type: MerchantTransactionType.SALE,
+		amount: 15,
+		date: "2021-08-31"
+	}, {
+		transactionId: '12346',
+		type: MerchantTransactionType.RETURN,
+		amount: 10,
+		date: "2021-08-01"
+	}, {
+		transactionId: '12347',
+		type: MerchantTransactionType.CASH_OUT,
+		amount: 10,
+		date: "2021-07-29"
+	}, {
+		transactionId: '12348',
+		type: MerchantTransactionType.TRANSFER,
+		amount: 10,
+		date: "2021-07-28"
+	}, {
+		transactionId: '12349',
+		type: MerchantTransactionType.CASH_OUT,
+		amount: 10,
+		date: "2021-07-29"
+	}, {
+		transactionId: '12350',
+		type: MerchantTransactionType.CUSTOMER_RETURN,
+		amount: 10,
+		date: "2021-07-28"
+	}, {
+		transactionId: '12351',
+		type: MerchantTransactionType.DONATION,
+		amount: 10,
+		date: "2021-07-27"
+	}, {
+		transactionId: '12352',
+		type: MerchantTransactionType.PURCHASEMENT,
+		amount: 10,
+		date: "2021-07-26"
+	}, {
+		transactionId: '12349',
+		type: MerchantTransactionType.SALE,
+		amount: 10,
+		date: "2021-07-25"
+	}
+];

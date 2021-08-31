@@ -7,7 +7,7 @@ import { colors } from "src/theme/colors";
 import Translation from 'src/translation/en.json';
 import * as Routes from 'src/navigation/constants';
 
-type MerchantPaymentSuccessProps = {
+type CashierPaymentSuccessProps = {
 	navigation?: any,
 	route?: any,
 }
@@ -28,27 +28,26 @@ const styles = StyleSheet.create({
 	},
 });
 
-const MerchantPaymentSuccess = (props: MerchantPaymentSuccessProps): ReactElement => {
+const CashierPaymentSuccess = (props: CashierPaymentSuccessProps): ReactElement => {
 
 	return (
 		<View style={viewBase}>
 			<Header
-				rightComponent={<CancelBtn text="Close" color={colors.purple} onClick={() => props.navigation.navigate(Routes.MERCHANT_DASHBOARD)} />}
+				rightComponent={<CancelBtn text="Close" color={colors.purple} onClick={() => props.navigation.navigate(Routes.CASHIER_DASHBOARD)} />}
 			/>
 			<ScrollView style={wrappingContainerBase}>
-				<View style={baseHeader}>
-					<Text style={styles.headerText}>{Translation.COMMON.SUCCEEDED}</Text>
-					<Text style={styles.headerText}>{Translation.COMMON.THANK_YOU}</Text>
+				<View style={ baseHeader }>
+					<Text style={styles.headerText}>{Translation.CASHIER.PAYMENT_SUCCESS} 15.00</Text>
 				</View>
-				<Text style={styles.text}>{Translation.PAYMENT.PAYMENT_SUCCESS_DETAIL}</Text>
+				<Text style={styles.text}>{Translation.CASHIER.PAYMENT_SUCCESS_DETAIL}</Text>
 			</ScrollView>
 			<KeyboardAvoidingView
 				behavior={Platform.OS == "ios" ? "padding" : "height"} >
 				<View style={styles.bottomView}>
 					<Button
 						type="purple"
-						title={Translation.BUTTON.NEXT}
-						onPress={() => props.navigation.navigate(Routes.MERCHANT_DASHBOARD)}
+						title={Translation.BUTTON.CLOSE}
+						onPress={() => props.navigation.navigate(Routes.CASHIER_DASHBOARD)}
 					/>
 				</View>
 			</KeyboardAvoidingView>
@@ -56,4 +55,4 @@ const MerchantPaymentSuccess = (props: MerchantPaymentSuccessProps): ReactElemen
 	);
 }
 
-export default MerchantPaymentSuccess
+export default CashierPaymentSuccess
