@@ -6,7 +6,7 @@ import { Header, Modal, ModalHeader, BackBtn, Button, AccordionCard, SearchInput
 import { underlineHeader, viewBase, modalViewBase } from "src/theme/elements";
 import faqList from "src/mocks/faq";
 import { colors } from "src/theme/colors";
-import { AccordionEntry } from "src/utils/types";
+import { FaqData } from "src/utils/types";
 import Translation from 'src/translation/en.json';
 
 const styles = StyleSheet.create({
@@ -55,11 +55,11 @@ export const SettingsHelpAndContact = (): ReactElement => {
 
 	const [searchText, setSearchText] = useState<string>("");
 	const [isContacted, setIsContacted] = useState<boolean>(false);
-	const [faqData, setFaqData] = useState<AccordionEntry[]>([]);
+	const [faqData, setFaqData] = useState<FaqData[]>([]);
 	const navigation = useNavigation();
 
 	useEffect(() => {
-		const filtered: AccordionEntry[] = faqList.filter((item: AccordionEntry) => item.title.toLowerCase().includes(searchText.toLowerCase()));
+		const filtered: FaqData[] = faqList.filter((item: FaqData) => item.title.toLowerCase().includes(searchText.toLowerCase()));
 		setFaqData(filtered);
 	}, [searchText]);
 
@@ -87,7 +87,7 @@ export const SettingsHelpAndContact = (): ReactElement => {
 				/>
 				<View style={styles.faqView}>
 					<Text style={styles.sectionHeader}>{Translation.LABEL.QUESTIONS_FREQUENTLY}</Text>
-					{faqData.map((faq: AccordionEntry, index: number) => (
+					{faqData.map((faq: FaqData, index: number) => (
 						<AccordionCard key={`faq-card-${index}`} title={faq.title} content={faq.content} />
 					))}
 				</View>
