@@ -212,7 +212,7 @@ const Report = (): JSX.Element => {
                                 <Text style={styles.label}>{Translation.LABEL.START_DATE}</Text>
                                 <TouchableOpacity onPress={()=>setIsStartDate(true)} style={styles.date} >
                                     <Text style={startDate == null ? styles.placeholder : styles.amountText}>
-                                        {startDate == null ? "MM/DD/YY" : moment(startDate).format('DD/MM/yyyy')}
+                                        {startDate == null ? "DD/MM/YY" : moment(startDate).format('DD/MM/yyyy')}
                                     </Text>
                                 </TouchableOpacity>
                             </View>
@@ -221,7 +221,7 @@ const Report = (): JSX.Element => {
                                 <Text style={styles.label}>{Translation.LABEL.END_DATE}</Text>
                                 <TouchableOpacity onPress={()=>setIsEndDate(true)} style={styles.date}>
                                     <Text style={endDate == null ? styles.placeholder : styles.amountText}>
-                                        {endDate == null ? "MM/DD/YY" : moment(endDate).format('DD/MM/yyyy')}
+                                        {endDate == null ? "DD/MM/YY" : moment(endDate).format('DD/MM/yyyy')}
                                     </Text>
                                 </TouchableOpacity>
                             </View>
