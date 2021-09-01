@@ -353,11 +353,15 @@ export type MerchantEntry = {
   phone: string;
 }
 
-export type AccordionEntry = {
+export interface AccordionEntry {
 	title: string,
 	content: string,
   style?: IMap,
   textColor?: string;
+}
+
+export interface FaqData extends AccordionEntry {
+  type?: string
 }
 
 export enum UserType {
