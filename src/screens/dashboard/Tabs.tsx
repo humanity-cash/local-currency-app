@@ -1,4 +1,4 @@
-import { EvilIcons, Octicons } from '@expo/vector-icons';
+import { EvilIcons, Feather } from '@expo/vector-icons';
 import {
 	createDrawerNavigator,
 	DrawerContentComponentProps,
@@ -235,8 +235,8 @@ const DrawerContent = (
 			<Drawer.Section style={styles.bottomSection}>
 				<DrawerItem
 					icon={() => (
-						<Octicons
-							name='sign-out'
+						<Feather 
+							name="log-out"
 							size={24}
 							color={colors.text}
 						/>

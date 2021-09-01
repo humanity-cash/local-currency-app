@@ -1,5 +1,5 @@
 import { EvilIcons } from '@expo/vector-icons';
-import { Octicons } from '@expo/vector-icons';
+import { Feather } from '@expo/vector-icons';
 import { createDrawerNavigator, DrawerContentComponentProps, DrawerContentScrollView, DrawerItem } from '@react-navigation/drawer';
 import React, { useState, useContext } from 'react';
 import { StyleSheet, View, Text, Image, TouchableWithoutFeedback } from 'react-native';
@@ -92,10 +92,12 @@ const ReturnPaymentDialog = (props: ReturnPaymentDialogProps) => {
 			<View style={dialogViewBase}>
 				<View style={wrappingContainerBase}>
 					<View style={ baseHeader }>
-						<Text style={styles.headerText}>Scan the recipients QR.</Text>
+						<Text style={styles.headerText}>
+							{Translation.PAYMENT.SCAN_RECIPIENTS_QR}
+						</Text>
 					</View>
 					<Text style={styles.detailText}>
-						The customer needs to generate QR code via the inital transaction in their transactioin overview. There they generate a QR code which needs to be scanned by you.
+						{Translation.PAYMENT.SCAN_RECIPIENTS_QR_DETAIL}
 					</Text>
 				</View>
 				<View>
@@ -145,12 +147,12 @@ const DrawerContent = (props: DrawerContentComponentProps) => {
 	const [isCashierView, setIsCashierView] = useState<boolean>(false);
 	
 	const signOut = () => {
-		props.navigation.navigate('Teaser');
+		props.navigation.navigate(Routes.TEASER);
 	}
 
 	const onScanConfirm = () => {
 		setIsVisible(false);
-		props.navigation.navigate('MerchantReturnQRCodeScan');
+		props.navigation.navigate(Routes.MERCHANT_RETURN_QRCODE_SCAN);
 	}
 
 	const onScanCancel = () => {
@@ -227,29 +229,29 @@ const DrawerContent = (props: DrawerContentComponentProps) => {
 					</View>
 					<Text style={styles.berkAmount}>B$ 50.00</Text>
 					<Drawer.Section>
-						<DrawerItem label="Receive payment"  onPress={() => {props.navigation.navigate('MerchantRequest')}} />
-						<DrawerItem label="Scan to pay" onPress={() => {props.navigation.navigate('MerchantQRCodeScan')}} />
-						<DrawerItem label="Make a return"  onPress={() => {setIsVisible(true)}} />
-						<DrawerItem label="Load up B$"  onPress={() => {props.navigation.navigate('MerchantLoadup')}} />
-						<DrawerItem label="Send B$ to someone"  onPress={() => {props.navigation.navigate('MerchantPayoutSelection')}} />
-						<DrawerItem label="Cash out to USD"  onPress={() => {props.navigation.navigate('MerchantCashoutAmount')}} />
+						<DrawerItem label={Translation.TABS.RECEIVE_PAYMENT}  onPress={() => {props.navigation.navigate(Routes.MERCHANT_REQUEST)}} />
+						<DrawerItem label={Translation.TABS.SCAN_TO_PAY} onPress={() => {props.navigation.navigate(Routes.MERCHANT_QRCODE_SCAN)}} />
+						<DrawerItem label={Translation.TABS.MAKE_RETURN}  onPress={() => {setIsVisible(true)}} />
+						<DrawerItem label={Translation.TABS.LOADUP}  onPress={() => {props.navigation.navigate(Routes.MERCHANT_LOADUP)}} />
+						<DrawerItem label={Translation.TABS.SEND_TO_SOMEONE}  onPress={() => {props.navigation.navigate(Routes.MERCHANT_PAYOUT_SELECTION)}} />
+						<DrawerItem label={Translation.TABS.CASHOUT}  onPress={() => {props.navigation.navigate(Routes.MERCHANT_CASHOUT_AMOUNT)}} />
 					</Drawer.Section>
 					<Drawer.Section>
-						<DrawerItem label="Report"  onPress={() => {props.navigation.navigate('Report')}} />
-						<DrawerItem label="Settings"  onPress={() => {props.navigation.navigate('Settings')}} />
-						<DrawerItem label="Help and Contact"  onPress={() => {props.navigation.navigate('HelpAndContact')}} />
+						<DrawerItem label={Translation.TABS.REPORT}  onPress={() => {props.navigation.navigate(Routes.REPORT)}} />
+						<DrawerItem label={Translation.TABS.SETTINGS}  onPress={() => {props.navigation.navigate(Routes.MERCHANT_SETTINGS)}} />
+						<DrawerItem label={Translation.TABS.HELP_AND_CONTACT}  onPress={() => {props.navigation.navigate(Routes.MERCHANT_HELP_AND_CONTACT)}} />
 					</Drawer.Section>
 				</View>
 			</DrawerContentScrollView>
 			<Drawer.Section style={styles.bottomSection}>
 				<DrawerItem 
 						icon={() => 
-						<Octicons 
-							name="sign-out"
+						<Feather 
+							name="log-out"
 							size={24}
-							color={colors.bodyText}
+							color={colors.purple}
 						/>}
-						label="Sign out" 
+						label={Translation.TABS.SIGN_OUT} 
 						onPress={signOut} 
 				/>
 			</Drawer.Section>
@@ -263,17 +265,17 @@ const DrawerNav = createDrawerNavigator();
 
 const MerchantTabs: React.FC = () => {
 	return (
-		<DrawerNav.Navigator initialRouteName="MerchantDashboard" drawerContent={ props => <DrawerContent {...props} />}>
-			<DrawerNav.Screen name="MerchantDashboard" component={MerchantDashboard} />
-			<DrawerNav.Screen name="MerchantRequest" component={MerchantRequest} />
-			<DrawerNav.Screen name="MerchantQRCodeScan" component={MerchantQRCodeScan} />
-			<DrawerNav.Screen name="MerchantReturnQRCodeScan" component={MerchantReturnQRCodeScan} />
-			<DrawerNav.Screen name="MerchantCashoutAmount" component={MerchantCashoutAmount} />
-			<DrawerNav.Screen name="MerchantLoadup" component={MerchantLoadup} />
-			<DrawerNav.Screen name="MerchantPayoutSelection" component={MerchantPayoutSelection} />
-			<DrawerNav.Screen name="SignUpYourBusiness" component={MerchantDashboard} />
-			<DrawerNav.Screen name="Settings" component={MerchantDashboard} />
-			<DrawerNav.Screen name="HelpAndContact" component={MerchantDashboard} />
+		<DrawerNav.Navigator initialRouteName={Routes.MERCHANT_DASHBOARD} drawerContent={ props => <DrawerContent {...props} />}>
+			<DrawerNav.Screen name={Routes.MERCHANT_DASHBOARD} component={MerchantDashboard} />
+			<DrawerNav.Screen name={Routes.MERCHANT_REQUEST} component={MerchantRequest} />
+			<DrawerNav.Screen name={Routes.MERCHANT_QRCODE_SCAN} component={MerchantQRCodeScan} />
+			<DrawerNav.Screen name={Routes.MERCHANT_RETURN_QRCODE_SCAN} component={MerchantReturnQRCodeScan} />
+			<DrawerNav.Screen name={Routes.MERCHANT_CASHOUT_AMOUNT} component={MerchantCashoutAmount} />
+			<DrawerNav.Screen name={Routes.MERCHANT_LOADUP} component={MerchantLoadup} />
+			<DrawerNav.Screen name={Routes.MERCHANT_PAYOUT_SELECTION} component={MerchantPayoutSelection} />
+			<DrawerNav.Screen name={Routes.REPORT} component={MerchantDashboard} />
+			<DrawerNav.Screen name={Routes.MERCHANT_SETTINGS} component={MerchantDashboard} />
+			<DrawerNav.Screen name={Routes.MERCHANT_HELP_AND_CONTACT} component={MerchantDashboard} />
 		</DrawerNav.Navigator>
 	);
 }
