@@ -3,7 +3,7 @@ import { StyleSheet, View } from 'react-native';
 import { Text } from 'react-native-elements';
 import { colors } from "src/theme/colors";
 import { TouchableOpacity } from 'react-native-gesture-handler';
-import { MerchantTransactionItem, MerchantTransactionType } from "src/utils/types";
+import { MerchantTransactionItem, MerchantTransactionType, TransactionTypes } from "src/utils/types";
 import { getBerksharePrefix } from "src/utils/common";
 
 type CashierTransactionListProps = {
@@ -62,24 +62,6 @@ type TransactionItemProps = {
 const TransactionItem = (props: TransactionItemProps) => {
 	const {item, selected} = props;
 
-	const getTransactionType = (type: MerchantTransactionType) => {
-		if (type === MerchantTransactionType.SALE) {
-			return "Customer sale";
-		} else if (type === MerchantTransactionType.PURCHASEMENT) {
-			return "Purchasement";
-		} else if (type === MerchantTransactionType.CASH_OUT) {
-			return "Cash out";
-		} else if (type === MerchantTransactionType.CUSTOMER_RETURN) {
-			return "Customer return";
-		} else if (type === MerchantTransactionType.TRANSFER) {
-			return "Transfer";
-		} else if (type === MerchantTransactionType.RETURN) {
-			return "Return";
-		} else {
-			return "Donation";
-		}
-	}
-
 	const getStyle = (type: MerchantTransactionType) => {
 		if (type === MerchantTransactionType.SALE || type === MerchantTransactionType.RETURN) {
 			return styles.plusText;
@@ -92,7 +74,7 @@ const TransactionItem = (props: TransactionItemProps) => {
 		<View style={selected === item.transactionId ? styles.selectedItem : styles.item}>
 			<View>
 				<Text style={styles.transactionType}>
-					{getTransactionType(item.type)}
+					{TransactionTypes[item.type]}
 				</Text>
 				<Text style={styles.timeText}>7 MIN AGO</Text>
 			</View>
