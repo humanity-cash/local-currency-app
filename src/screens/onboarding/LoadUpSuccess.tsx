@@ -1,16 +1,11 @@
 import { useNavigation } from '@react-navigation/native';
-import React, { ReactElement } from 'react';
+import React from 'react';
 import { StyleSheet, View, KeyboardAvoidingView, Platform, ScrollView } from 'react-native';
 import { Text } from 'react-native-elements';
 import { Header, CancelBtn, Button } from "src/shared/uielements";
 import { baseHeader, viewBase, wrappingContainerBase } from "src/theme/elements";
 import Translation from 'src/translation/en.json';
 import * as Routes from 'src/navigation/constants';
-
-type TopUpSuccessProps = {
-	navigation?: any
-	route?: any
-}
 
 const styles = StyleSheet.create({
 	headerText: {
@@ -24,11 +19,12 @@ const styles = StyleSheet.create({
 	},
 });
 
-const TopUpSuccessView = (props: TopUpSuccessProps) => {
+const LoadUpSuccess = (): JSX.Element => {
+	const navigation = useNavigation();
 	return (
 		<View style={viewBase}>
 			<Header
-				rightComponent={<CancelBtn text={Translation.BUTTON.CLOSE} onClick={() => props.navigation.navigate(Routes.DASHBOARD)} />}
+				rightComponent={<CancelBtn text={Translation.BUTTON.CLOSE} onClick={() => navigation.navigate(Routes.DASHBOARD)} />}
 			/>
 			<ScrollView style={wrappingContainerBase}>
 				<View style={ baseHeader }>
@@ -43,7 +39,7 @@ const TopUpSuccessView = (props: TopUpSuccessProps) => {
 					<Button
 						type="darkGreen"
 						title={Translation.BUTTON.EXPLORE_BERKSHARES}
-						onPress={() => props.navigation.navigate(Routes.DASHBOARD)}
+						onPress={() => navigation.navigate(Routes.DASHBOARD)}
 					/>
 				</View>
 			</KeyboardAvoidingView>
@@ -51,8 +47,4 @@ const TopUpSuccessView = (props: TopUpSuccessProps) => {
 	);
 }
 
-const TopUpSuccess = (props: TopUpSuccessProps): ReactElement => {
-	const navigation = useNavigation();
-	return <TopUpSuccessView {...props} navigation={navigation} />;
-}
-export default TopUpSuccess
+export default LoadUpSuccess
