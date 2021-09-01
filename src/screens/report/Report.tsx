@@ -1,23 +1,19 @@
 import { useNavigation } from "@react-navigation/native";
-import React, { ReactElement, useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { KeyboardAvoidingView, Platform, ScrollView, StyleSheet, View, TouchableOpacity } from "react-native";
 import { Text } from "react-native-elements";
 import DateTimePicker from '@react-native-community/datetimepicker';
 import {Picker} from '@react-native-picker/picker';
 import moment from 'moment';
+import { AuthContext } from 'src/auth';
 import { BackBtn, Button, Header, CancelBtn } from "src/shared/uielements";
 import { colors } from "src/theme/colors";
 import { underlineHeaderB, viewBaseB, wrappingContainerBase } from "src/theme/elements";
 import Translation from 'src/translation/en.json';
 import * as Routes from 'src/navigation/constants';
 import { merchantTransactions } from 'src/mocks/transactionTypes';
-import { AccountType } from 'src/utils/types';
-import { useAccountType } from "src/hooks";
-
-type ReportProps = {
-  navigation?: any;
-  route?: any;
-};
+import { UserType } from 'src/utils/types';
+import { BUTTON_TYPES } from 'src/constants';
 
 const styles = StyleSheet.create({
     headerText: {
@@ -137,7 +133,8 @@ const enum ReportType {
     MONTH = "Month"
 };
 
-const ReportView = (props: ReportProps) => {
+const Report = (): JSX.Element => {
+    const navigation = useNavigation();
     const [startDate, setStartDate] = useState<Date | null>(null);
     const [endDate, setEndDate] = useState<Date | null>();
     const [isStartDate, setIsStartDate] = useState<boolean>(false);
@@ -145,12 +142,13 @@ const ReportView = (props: ReportProps) => {
     const [selectedType, setSelectedType] = useState<string>("");
     const [goNext, setGoNext] = useState(false);
     const [reportType, setReportType] = useState<ReportType>(ReportType.ALL);
-    const { details } = useAccountType();
+    const {userType} = useContext(AuthContext);
 
     useEffect(() => {
         setGoNext(true);
     }, []);
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const onStartDateChange = (event: any, selectedDate?: Date) => {
         const currentDate = selectedDate || startDate;
         setIsStartDate(Platform.OS === 'ios');
@@ -158,6 +156,7 @@ const ReportView = (props: ReportProps) => {
         setReportType(ReportType.ALL);
     };
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const onEndDateChange = (event: any, selectedDate?: Date) => {
         const currentDate = selectedDate || startDate;
         setIsEndDate(Platform.OS === 'ios');
@@ -166,13 +165,13 @@ const ReportView = (props: ReportProps) => {
     };
 
     const onConfirm = () => {
-		details.accountType === AccountType.MERCHANT ? props.navigation.navigate(Routes.MERCHANT_DASHBOARD) : props.navigation.navigate(Routes.CASHIER_DASHBOARD);
+		userType === UserType.MERCHANT ? navigation.navigate(Routes.MERCHANT_DASHBOARD) : navigation.navigate(Routes.CASHIER_DASHBOARD);
 	}
 
     return (
         <View style={viewBaseB}>
             <Header
-                leftComponent={<BackBtn color={colors.purple} onClick={() => props.navigation.goBack()} />}
+                leftComponent={<BackBtn color={colors.purple} onClick={() => navigation.goBack()} />}
                 rightComponent={<CancelBtn color={colors.purple} text={Translation.BUTTON.CLOSE} onClick={onConfirm}/>}
             />
 
@@ -210,7 +209,7 @@ const ReportView = (props: ReportProps) => {
 
                         <View style={styles.inlineView}>
                             <View style={styles.dateView}>
-                                <Text style={styles.label}>START DATE</Text>
+                                <Text style={styles.label}>{Translation.LABEL.START_DATE}</Text>
                                 <TouchableOpacity onPress={()=>setIsStartDate(true)} style={styles.date} >
                                     <Text style={startDate == null ? styles.placeholder : styles.amountText}>
                                         {startDate == null ? "MM/DD/YY" : moment(startDate).format('DD/MM/yyyy')}
@@ -219,7 +218,7 @@ const ReportView = (props: ReportProps) => {
                             </View>
                             <View style={styles.separator}></View>
                             <View style={styles.dateView}>
-                                <Text style={styles.label}>END DATE</Text>
+                                <Text style={styles.label}>{Translation.LABEL.END_DATE}</Text>
                                 <TouchableOpacity onPress={()=>setIsEndDate(true)} style={styles.date}>
                                     <Text style={endDate == null ? styles.placeholder : styles.amountText}>
                                         {endDate == null ? "MM/DD/YY" : moment(endDate).format('DD/MM/yyyy')}
@@ -227,8 +226,8 @@ const ReportView = (props: ReportProps) => {
                                 </TouchableOpacity>
                             </View>
                         </View>
-                        {details.accountType === AccountType.MERCHANT && <View>
-                            <Text style={styles.label}>TYPE OF TRANSACTIONS</Text>
+                        {userType === UserType.MERCHANT && <View>
+                            <Text style={styles.label}>{Translation.LABEL.TRANSACTION_TYPE}</Text>
                             <View style={styles.typeView}>
                                 <Picker
                                     selectedValue={selectedType}
@@ -253,11 +252,11 @@ const ReportView = (props: ReportProps) => {
             >
                 <View style={styles.bottomView}>
                 <Button
-                    type="purple"
+                    type={BUTTON_TYPES.PURPLE}
                     title={Translation.BUTTON.SEND_REPORT}
                     disabled={!goNext}
                     onPress={() => {
-                        props.navigation.navigate(Routes.REPORT_SUCCESS);
+                        navigation.navigate(Routes.REPORT_SUCCESS);
                     }}
                 />
                 </View>
@@ -285,8 +284,4 @@ const ReportView = (props: ReportProps) => {
     );
 };
 
-const Report = (props: ReportProps): ReactElement => {
-  const navigation = useNavigation();
-  return <ReportView {...props} navigation={navigation} />;
-};
 export default Report;
