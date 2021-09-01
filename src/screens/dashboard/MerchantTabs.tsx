@@ -1,16 +1,16 @@
 import { EvilIcons } from '@expo/vector-icons';
 import { Octicons } from '@expo/vector-icons';
 import { createDrawerNavigator, DrawerContentComponentProps, DrawerContentScrollView, DrawerItem } from '@react-navigation/drawer';
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { StyleSheet, View, Text, Image, TouchableWithoutFeedback } from 'react-native';
 import { Drawer } from 'react-native-paper';
+import { AuthContext } from 'src/auth';
 import { colors } from "src/theme/colors";
 import { baseHeader, wrappingContainerBase, dialogViewBase } from "src/theme/elements";
 import { Dialog, Button } from "src/shared/uielements";
 import Translation from 'src/translation/en.json';
 import * as Routes from 'src/navigation/constants';
-import { AccountType } from 'src/utils/types';
-import { useAccountType } from "src/hooks";
+import { UserType } from 'src/utils/types';
 
 import MerchantDashboard from "./MerchantDashboard";
 import MerchantQRCodeScan from "../merchantPayment/MerchantQRCodeScan";
@@ -139,7 +139,7 @@ const CashierViewDialogDialog = (props: CashierViewDialogProps) => {
 }
 
 const DrawerContent = (props: DrawerContentComponentProps) => {
-	const { setUseAccountType } = useAccountType();
+	const {setUserType} = useContext(AuthContext);
 	const [isExpanded, setIsExpanded] = useState<boolean>(false);
 	const [isVisible, setIsVisible] = useState<boolean>(false);
 	const [isCashierView, setIsCashierView] = useState<boolean>(false);
@@ -159,7 +159,7 @@ const DrawerContent = (props: DrawerContentComponentProps) => {
 
 	const onCashierViewConfirm = () => {
 		setIsCashierView(false);
-		setUseAccountType(AccountType.CASHIER);
+		setUserType(UserType.CASHIER);
 		props.navigation.navigate(Routes.CASHIER_DASHBOARD);
 	}
 
@@ -168,7 +168,7 @@ const DrawerContent = (props: DrawerContentComponentProps) => {
 	}
 
 	const onPersonal = () => {
-		setUseAccountType(AccountType.PERSONAL);
+		setUserType(UserType.PERSONAL);
 		props.navigation.navigate("Tabs");
 	}
 

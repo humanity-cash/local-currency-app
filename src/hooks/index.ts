@@ -3,7 +3,6 @@ import useMessages from "./useMessages";
 import useModalStatusBar from "./useModalStatusBar";
 import useDialogStatus from "./useDialogStatus";
 import useNotifications from "./useNotifications";
-import useAccountType from "./useAccountType";
 import usePaymentDetails from "./usePaymentDetails";
 import useRouteTracking from "./useRouteTracking";
 import useShares from "./useShares";
@@ -17,7 +16,6 @@ export {
 	useModalStatusBar,
 	useDialogStatus,
 	useNotifications,
-	useAccountType,
 	usePaymentDetails,
 	useRouteTracking,
 	useShares,

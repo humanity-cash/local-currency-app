@@ -1,18 +1,16 @@
-import React, { ReactElement } from 'react';
+
+import { useNavigation } from '@react-navigation/native';
+import React, { useContext } from 'react';
 import { StyleSheet, View, KeyboardAvoidingView, ScrollView, Platform } from 'react-native';
 import { Text } from 'react-native-elements';
+import { AuthContext } from 'src/auth';
 import { Header, Button, CancelBtn } from "src/shared/uielements";
 import { baseHeader, viewBase, wrappingContainerBase } from "src/theme/elements";
 import { colors } from "src/theme/colors";
 import Translation from 'src/translation/en.json';
 import * as Routes from 'src/navigation/constants';
-import { AccountType } from 'src/utils/types';
-import { useAccountType } from "src/hooks";
-
-type ReportSuccessProps = {
-	navigation?: any,
-	route?: any,
-}
+import { UserType } from 'src/utils/types';
+import { BUTTON_TYPES } from 'src/constants';
 
 const styles = StyleSheet.create({
 	headerText: {
@@ -30,11 +28,12 @@ const styles = StyleSheet.create({
 	},
 });
 
-const ReportSuccess = (props: ReportSuccessProps): ReactElement => {
-	const { details } = useAccountType();
+const ReportSuccess = (): JSX.Element => {
+	const navigation = useNavigation();
+	const {userType} = useContext(AuthContext);
 
 	const onConfirm = () => {
-		details.accountType === AccountType.MERCHANT ? props.navigation.navigate(Routes.MERCHANT_DASHBOARD) : props.navigation.navigate(Routes.CASHIER_DASHBOARD);
+		userType === UserType.MERCHANT ? navigation.navigate(Routes.MERCHANT_DASHBOARD) : navigation.navigate(Routes.CASHIER_DASHBOARD);
 	}
 
 	return (
@@ -52,7 +51,7 @@ const ReportSuccess = (props: ReportSuccessProps): ReactElement => {
 				behavior={Platform.OS == "ios" ? "padding" : "height"} >
 				<View style={styles.bottomView}>
 					<Button
-						type="purple"
+						type={BUTTON_TYPES.PURPLE}
 						title={Translation.BUTTON.GO_BACK_HOME}
 						onPress={onConfirm}
 					/>

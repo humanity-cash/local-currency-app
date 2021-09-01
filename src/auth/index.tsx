@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import  * as AWSService  from './aws-cognito';
 import { UpdateUserAttributesInput } from './types';
+import { UserType } from 'src/utils/types';
 
 /**AWS COGNITO ERRORS */
 export const NEW_PASSWORD_REQUIRED_ERROR = 'newPasswordRequiredError'
@@ -24,6 +25,8 @@ export interface IAuth {
 	sessionInfo?: Session;
 	resendEmailVerificationCode?: any;
 	authStatus?: AuthStatus;
+	userType?: UserType;
+	setUserType?: any;
 	signIn?: any;
 	setSignInDetails: any;
 	signInDetails: { password: string; email: string };
@@ -49,6 +52,7 @@ export const AuthContext = React.createContext(defaultState);
 
 const AuthProvider: React.FunctionComponent = ({ children }) => {
 	const [authStatus, setAuthStatus] = useState(AuthStatus.Loading);
+	const [userType, setUserType] = useState(UserType.PERSONAL);
 	const [sessionInfo, setSessionInfo] = useState({});
 	const [signInDetails, setSignInDetails] = useState({
 		email: 'tech@humanity.cash',
@@ -155,6 +159,8 @@ const AuthProvider: React.FunctionComponent = ({ children }) => {
 		getAttributes,
 		updateAttributes,
 		authStatus,
+		userType,
+		setUserType,
 		sessionInfo,
 		signIn,
 		signOut,

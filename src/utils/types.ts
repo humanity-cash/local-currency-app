@@ -360,7 +360,7 @@ export type AccordionEntry = {
   textColor?: string;
 }
 
-export enum AccountType {
+export enum UserType {
   PERSONAL = 'Personal',
   MERCHANT = 'Merchant',
   CASHIER = 'Cashier'
