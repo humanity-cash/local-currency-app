@@ -1,6 +1,6 @@
 import { AntDesign, Feather } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
-import React, { ReactElement, useState } from 'react';
+import React, { useState } from 'react';
 import { StyleSheet, View, ScrollView, Image, TouchableOpacity } from 'react-native';
 import { Text } from "react-native-elements";
 import { Header } from "src/shared/uielements";
@@ -9,11 +9,7 @@ import { baseHeader, viewBaseB, wrappingContainerBase, dialogViewBase } from "sr
 import { Button, CancelBtn, Dialog} from "src/shared/uielements";
 import Translation from 'src/translation/en.json';
 import * as Routes from 'src/navigation/constants';
-
-type CashierDashboardProps = {
-	navigation?: any;
-	route?: any;
-};
+import { BUTTON_TYPES } from "src/constants";
 
 const styles = StyleSheet.create({
 	container: {
@@ -63,7 +59,8 @@ const styles = StyleSheet.create({
 	},
 });
 
-const CashierDashboardView = (props: CashierDashboardProps) => {
+const CashierDashboard = (): JSX.Element => {
+    const navigation = useNavigation();
     const [isVisible, setIsVisible] = useState<boolean>(false);
 
     const onLogout = () => {
@@ -76,7 +73,7 @@ const CashierDashboardView = (props: CashierDashboardProps) => {
 
     const onConfirm = () => {
         setIsVisible(false);
-        props.navigation.navigate(Routes.TEASER);
+        navigation.navigate(Routes.TEASER);
     }
 
 	return (
@@ -86,7 +83,7 @@ const CashierDashboardView = (props: CashierDashboardProps) => {
 			/>
 			<ScrollView style={wrappingContainerBase}>
 				<View style={styles.container}>
-					<TouchableOpacity style={styles.itemView} onPress={()=>props.navigation.navigate(Routes.CASHIER_REQUEST)}>
+					<TouchableOpacity style={styles.itemView} onPress={()=>navigation.navigate(Routes.CASHIER_REQUEST)}>
                         <View style={styles.receiveBtn}>
                             <Image
                                 source={require("../../../assets/images/coin.png")}
@@ -95,7 +92,7 @@ const CashierDashboardView = (props: CashierDashboardProps) => {
                             <Text style={styles.text}>Receive payment</Text>
                         </View>
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.itemView} onPress={()=>props.navigation.navigate(Routes.CASHIER_TRANSACTIONS)}>
+                    <TouchableOpacity style={styles.itemView} onPress={()=>navigation.navigate(Routes.CASHIER_TRANSACTIONS)}>
                         <Feather name="server" size={20} color={colors.purple} style={styles.icon} />
                         <Text style={styles.text}>Transactions</Text>
                     </TouchableOpacity>
@@ -103,18 +100,18 @@ const CashierDashboardView = (props: CashierDashboardProps) => {
                         <Feather name="rotate-ccw" size={20} color={colors.purple} style={styles.icon} />
                         <Text style={styles.text}>Make a return</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.itemView} onPress={()=>props.navigation.navigate(Routes.REPORT)}>
+                    <TouchableOpacity style={styles.itemView} onPress={()=>navigation.navigate(Routes.REPORT)}>
                         <AntDesign name="profile" size={20} color={colors.purple} style={styles.icon} />
                         <Text style={styles.text}>Make a report</Text>
                     </TouchableOpacity>
 				</View>
 			</ScrollView>
 			<Button
-				type="transparent"
+				type={BUTTON_TYPES.TRANSPARENT}
 				title={Translation.BUTTON.NEED_HELP}
                 textStyle={styles.text}
                 style={styles.bottomBtn}
-				onPress={()=>props.navigation.navigate(Routes.CASHIER_HELP)}
+				onPress={()=>navigation.navigate(Routes.CASHIER_HELP)}
 			/>
 
             {isVisible && 
@@ -128,13 +125,13 @@ const CashierDashboardView = (props: CashierDashboardProps) => {
                     </View>
                     <View>
                         <Button
-                            type="transparent"
+                            type={BUTTON_TYPES.TRANSPARENT}
                             title={Translation.BUTTON.LOGOUT}
                             textStyle={styles.text}
-                            onPress={()=>props.navigation.navigate(Routes.TEASER)}
+                            onPress={()=>navigation.navigate(Routes.TEASER)}
                         />
                         <Button
-                            type="purple"
+                            type={BUTTON_TYPES.PURPLE}
                             title={Translation.BUTTON.TAKE_ME_BACK}
                             onPress={()=>onConfirm()}
                         />
@@ -145,8 +142,4 @@ const CashierDashboardView = (props: CashierDashboardProps) => {
 	);
 }
 
-const CashierDashboard = (props: CashierDashboardProps): ReactElement => {
-	const navigation = useNavigation();
-	return <CashierDashboardView {...props} navigation={navigation} />;
-};
 export default CashierDashboard

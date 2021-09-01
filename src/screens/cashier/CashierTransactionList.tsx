@@ -4,6 +4,7 @@ import { Text } from 'react-native-elements';
 import { colors } from "src/theme/colors";
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { MerchantTransactionItem, MerchantTransactionType } from "src/utils/types";
+import { getBerksharePrefix } from "src/utils/common";
 
 type CashierTransactionListProps = {
 	data: MerchantTransactionItem[],
@@ -76,14 +77,6 @@ const TransactionItem = (props: TransactionItemProps) => {
 			return "Return";
 		} else {
 			return "Donation";
-		}
-	}
-
-	const getBerksharePrefix = (type: MerchantTransactionType) => {
-		if (type === MerchantTransactionType.SALE || type === MerchantTransactionType.RETURN) {
-			return "+ B$";
-		} else {
-			return "- B$";
 		}
 	}
 
