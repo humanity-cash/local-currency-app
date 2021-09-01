@@ -67,7 +67,8 @@ export const signIn = async ({ email, password }: SignInInput): CognitoResponse<
 				resolve({ success: true, data: response });
 			},
 			onFailure: function (error: any) {
-				console.log("🚀 ~ file: aws-cognito.ts ~ line 73 ~ error", error)
+				console.log("🚀 ~  line 75 ~ authenticationDetails", authenticationDetails)
+				console.log("🚀 ~  ~ line 73 ~ error", error)
 				resolve({ success: false, data: { error: error.code } });
 			},
 		})
