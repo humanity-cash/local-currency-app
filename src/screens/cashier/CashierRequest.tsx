@@ -8,6 +8,7 @@ import { colors } from "src/theme/colors";
 import Translation from 'src/translation/en.json';
 import * as Routes from 'src/navigation/constants';
 import CashierQRCodeGen from 'src/screens/cashier/CashierQRCodeGen';
+import { BUTTON_TYPES } from 'src/constants';
 
 const styles = StyleSheet.create({
 	headerText: {
@@ -94,14 +95,14 @@ const CashierRequest = (): JSX.Element => {
 				behavior={Platform.OS == "ios" ? "padding" : "height"} >
 				<View style={styles.bottomView}>
 					<Button
-						type="transparent"
+						type={BUTTON_TYPES.TRANSPARENT}
 						disabled={!goNext}
 						title={Translation.BUTTON.HOW_TO_WORK}
 						textStyle={styles.text}
 						onPress={requestAmount}
 					/>
 					<Button
-						type="purple"
+						type={BUTTON_TYPES.PURPLE}
 						disabled={!goNext}
 						title="Next"
 						onPress={requestAmount}

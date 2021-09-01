@@ -8,6 +8,7 @@ import { baseHeader, viewBase, wrappingContainerBase } from "src/theme/elements"
 import { colors } from "src/theme/colors";
 import Translation from 'src/translation/en.json';
 import * as Routes from 'src/navigation/constants';
+import { BUTTON_TYPES } from 'src/constants';
 
 const styles = StyleSheet.create({
 	headerText: {
@@ -30,7 +31,7 @@ const CashierPaymentSuccess = (): JSX.Element => {
 	return (
 		<View style={viewBase}>
 			<Header
-				rightComponent={<CancelBtn text="Close" color={colors.purple} onClick={() => navigation.navigate(Routes.CASHIER_DASHBOARD)} />}
+				rightComponent={<CancelBtn text={Translation.BUTTON.CLOSE} color={colors.purple} onClick={() => navigation.navigate(Routes.CASHIER_DASHBOARD)} />}
 			/>
 			<ScrollView style={wrappingContainerBase}>
 				<View style={ baseHeader }>
@@ -42,7 +43,7 @@ const CashierPaymentSuccess = (): JSX.Element => {
 				behavior={Platform.OS == "ios" ? "padding" : "height"} >
 				<View style={styles.bottomView}>
 					<Button
-						type="purple"
+						type={BUTTON_TYPES.PURPLE}
 						title={Translation.BUTTON.CLOSE}
 						onPress={() => navigation.navigate(Routes.CASHIER_DASHBOARD)}
 					/>

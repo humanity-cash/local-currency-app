@@ -1,4 +1,4 @@
-import React, { useEffect, ReactElement } from 'react';
+import React, { useEffect } from 'react';
 import { useNavigation } from '@react-navigation/native';
 import { StyleSheet, View } from 'react-native';
 import QRCode from 'react-native-qrcode-svg';
@@ -32,11 +32,11 @@ const styles = StyleSheet.create({
 
 type CashierQRCodeGenProps = {
 	visible: boolean,
-	onClose: ()=>void,
+	onClose: () => void,
     amount?: number
 }
 
-const CashierQRCodeGen = (props: CashierQRCodeGenProps): ReactElement => {
+const CashierQRCodeGen = (props: CashierQRCodeGenProps): JSX.Element => {
 
     const navigation = useNavigation();
 
