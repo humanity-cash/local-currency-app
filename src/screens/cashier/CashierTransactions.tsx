@@ -10,6 +10,7 @@ import CashierTransactionList from "./CashierTransactionList";
 import { merchantTransactions } from "src/mocks/transactions";
 import Translation from 'src/translation/en.json';
 import { MerchantTransactionItem, MerchantTransactionType } from "src/utils/types";
+import { getBerksharePrefix } from "src/utils/common";
 
 const styles = StyleSheet.create({
 	mainTextColor: {
@@ -96,14 +97,6 @@ const TransactionDetail = (props: TransactionDetailProps) => {
 			return "Return";
 		} else {
 			return "Donation";
-		}
-	}
-
-	const getBerksharePrefix = (type: MerchantTransactionType) => {
-		if (type === MerchantTransactionType.SALE || type === MerchantTransactionType.RETURN) {
-			return "+ B$";
-		} else {
-			return "- B$";
 		}
 	}
 
