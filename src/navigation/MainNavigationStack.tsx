@@ -54,66 +54,70 @@ const PrimaryStackScreen = () => {
 			})}>
 			{authStatus === AuthStatus.SignedOut ? (
 				<>
-					<PrimaryStack.Screen name='Teaser' component={Teaser} />
-					<PrimaryStack.Screen name='Login' component={Login} />
+					<PrimaryStack.Screen name="Teaser" component={Teaser} />
+					<PrimaryStack.Screen name="Login" component={Login} />
 					<PrimaryStack.Screen
-						name='CreateAccount'
+						name="CreateAccount"
 						component={CreateAccount}
 					/>
-					<PrimaryStack.Screen name='Password' component={Password} />
+					<PrimaryStack.Screen name="Password" component={Password} />
 					{/* <PrimaryStack.Screen
 						name='ConfirmPassword'
 						component={PasswordConfirm}
 					/> */}
 					<PrimaryStack.Screen
-						name='Verification'
+						name="Verification"
 						component={Verification}
 					/>
 					<PrimaryStack.Screen
-						name='VerificationHelp'
+						name="VerificationHelp"
 						component={VerificationHelp}
 					/>
-					<PrimaryStack.Screen name='Passcode' component={Passcode} />
-					<PrimaryStack.Screen name='TouchId' component={TouchId} />
+					<PrimaryStack.Screen name="Passcode" component={Passcode} />
+					<PrimaryStack.Screen name="TouchId" component={TouchId} />
+
 					<PrimaryStack.Screen
-						name='PersonalProfile'
-						component={PersonalProfile}
-					/>
-					<PrimaryStack.Screen
-						name='PersonalDetails'
-						component={PersonalDetails}
-					/>
-					<PrimaryStack.Screen
-						name='PersonalAddress'
-						component={PersonalAddress}
-					/>
-					<PrimaryStack.Screen
-						name='TermsEmail'
+						name="TermsEmail"
 						component={TermsEmail}
 					/>
 					<PrimaryStack.Screen
-						name='ConfirmEmail'
+						name="ConfirmEmail"
 						component={ConfirmEmail}
 					/>
 					<PrimaryStack.Screen
-						name='EmailConfirmed'
+						name="EmailConfirmed"
 						component={EmailConfirmed}
 					/>
 				</>
 			) : (
 				<>
-
-					<PrimaryStack.Screen name='Tabs' component={Tabs} />
 					<PrimaryStack.Screen
-						name='QRCodeScan'
+						name="SelectAccountType"
+						component={SelectAccountType}
+					/>
+					<PrimaryStack.Screen
+						name="PersonalProfile"
+						component={PersonalProfile}
+					/>
+					<PrimaryStack.Screen
+						name="PersonalDetails"
+						component={PersonalDetails}
+					/>
+					<PrimaryStack.Screen
+						name="PersonalAddress"
+						component={PersonalAddress}
+					/>
+					<PrimaryStack.Screen name="Tabs" component={Tabs} />
+					<PrimaryStack.Screen
+						name="QRCodeScan"
 						component={QRCodeScan}
 					/>
 					<PrimaryStack.Screen
-						name='PaymentPending'
+						name="PaymentPending"
 						component={PaymentPending}
 					/>
 					<PrimaryStack.Screen
-						name='PaymentSuccess'
+						name="PaymentSuccess"
 						component={PaymentSuccess}
 					/>
 					{/* <PrimaryStack.Screen
@@ -121,25 +125,25 @@ const PrimaryStackScreen = () => {
 						component={Request}
 					/> */}
 					<PrimaryStack.Screen
-						name='ForgotPassword'
+						name="ForgotPassword"
 						component={ForgotPasswordNavigator}
 					/>
 					<PrimaryStack.Screen
-						name='Cashout'
+						name="Cashout"
 						component={CashoutNavigator}
 					/>
-					<PrimaryStack.Screen name='TopUp' component={TopUp} />
+					<PrimaryStack.Screen name="TopUp" component={TopUp} />
 					<PrimaryStack.Screen
-						name='TopUpSuccess'
+						name="TopUpSuccess"
 						component={TopUpSuccess}
 					/>
 					<PrimaryStack.Screen
-						name='SelectPayment'
+						name="SelectPayment"
 						component={SelectPayment}
 					/>
-					<PrimaryStack.Screen name='Deposit' component={Deposit} />
+					<PrimaryStack.Screen name="Deposit" component={Deposit} />
 					<PrimaryStack.Screen
-						name='CreditCard'
+						name="CreditCard"
 						component={CreditCard}
 					/>
 					{/* <PrimaryStack.Screen
@@ -147,48 +151,44 @@ const PrimaryStackScreen = () => {
 						component={ConfirmPin}
 					/> */}
 					<PrimaryStack.Screen
-						name='SettingsTermsAndConditions'
+						name="SettingsTermsAndConditions"
 						component={SettingsTermsAndConditions}
 					/>
-					<PrimaryStack.Screen name='Settings' component={Settings} />
+					<PrimaryStack.Screen name="Settings" component={Settings} />
 					<PrimaryStack.Screen
-						name='SettingsPersonalProfile'
+						name="SettingsPersonalProfile"
 						component={SettingsPersonalProfile}
 					/>
 					<PrimaryStack.Screen
-						name='SettingsSecurity'
+						name="SettingsSecurity"
 						component={SettingsSecurity}
 					/>
 					<PrimaryStack.Screen
-						name='SettingsBankAccount'
+						name="SettingsBankAccount"
 						component={SettingsBankAccount}
 					/>
 					<PrimaryStack.Screen
-						name='SettingsDeleteAccount'
+						name="SettingsDeleteAccount"
 						component={SettingsDeleteAccount}
 					/>
 					<PrimaryStack.Screen
-						name='SelectAccountType'
-						component={SelectAccountType}
-					/>
-					<PrimaryStack.Screen
-						name='LinkBankAccount'
+						name="LinkBankAccount"
 						component={LinkBankAccount}
 					/>
 					<PrimaryStack.Screen
-						name='SelectBank'
+						name="SelectBank"
 						component={SelectBank}
 					/>
 					<PrimaryStack.Screen
-						name='LoginToBank'
+						name="LoginToBank"
 						component={LoginToBank}
 					/>
 					<PrimaryStack.Screen
-						name='SelectBankAccount'
+						name="SelectBankAccount"
 						component={SelectBankAccount}
 					/>
 					<PrimaryStack.Screen
-						name='Congratulations'
+						name="Congratulations"
 						component={Congratulations}
 					/>
 				</>
