@@ -1,22 +1,20 @@
 import { DefaultTheme, NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
-import React, { ReactElement, useContext } from "react";
-import "react-native-gesture-handler";
+import React, { useContext } from "react";
 import { AuthContext, AuthStatus } from "src/auth";
 import { useRouteTracking } from "src/hooks";
 import { CashoutNavigator } from "src/navigation/CashoutNavigator";
 import { ForgotPasswordNavigator } from "src/navigation/ForgotPasswordStack";
+import { SignupBusinessNavigator } from "src/navigation/SignupBusinessNavigator";
+
 import Login from "src/screens/authentication/Login";
 import Tabs from "src/screens/dashboard/Tabs";
 import ConfirmEmail from "src/screens/onboarding/ConfirmEmail";
-import Congratulations from "src/screens/onboarding/Congratulations";
+import BankLinkSuccess from "src/screens/onboarding/BankLinkSuccess";
 import CreateAccount from "src/screens/onboarding/CreateAccount";
-import CreditCard from "src/screens/onboarding/CreditCard";
-import Deposit from "src/screens/onboarding/Deposit";
 import EmailConfirmed from "src/screens/onboarding/EmailConfirmed";
 import LinkBankAccount from "src/screens/onboarding/LinkBankAccount";
 import LoginToBank from "src/screens/onboarding/LoginToBank";
-import Passcode from "src/screens/onboarding/Passcode";
 import Password from "src/screens/onboarding/Password";
 import PersonalAddress from "src/screens/onboarding/PersonalAddress";
 import PersonalDetails from "src/screens/onboarding/PersonalDetails";
@@ -24,18 +22,15 @@ import PersonalProfile from "src/screens/onboarding/PersonalProfile";
 import SelectAccountType from "src/screens/onboarding/SelectAccountType";
 import SelectBank from "src/screens/onboarding/SelectBank";
 import SelectBankAccount from "src/screens/onboarding/SelectBankAccount";
-import SelectPayment from "src/screens/onboarding/SelectPayment";
 import Teaser from "src/screens/onboarding/Teaser";
 import TermsEmail from "src/screens/onboarding/TermsEmail";
-import TopUp from "src/screens/onboarding/TopUp";
-import TopUpSuccess from "src/screens/onboarding/TopUpSuccess";
-import TouchId from "src/screens/onboarding/TouchId";
+import LoadUp from "src/screens/onboarding/LoadUp";
+import LoadUpSuccess from "src/screens/onboarding/LoadUpSuccess";
 import Verification from "src/screens/onboarding/Verification";
 import VerificationHelp from "src/screens/onboarding/VerificationHelp";
 import PaymentPending from "src/screens/payment/PaymentPending";
 import PaymentSuccess from "src/screens/payment/PaymentSuccess";
 import QRCodeScan from "src/screens/payment/QRCodeScan";
-import { Settings } from "src/screens/settings/Settings";
 import SettingsBankAccount from "src/screens/settings/SettingsBankAccount";
 import SettingsDeleteAccount from "src/screens/settings/SettingsDeleteAccount";
 import SettingsPersonalProfile from "src/screens/settings/SettingsPersonalProfile";
@@ -49,9 +44,10 @@ import CashierHelp from "src/screens/cashier/CashierHelp";
 import CashierRequest from "src/screens/cashier/CashierRequest";
 import CashierTransactions from "src/screens/cashier/CashierTransactions";
 import CashierPaymentSuccess from "src/screens/cashier/CashierPaymentSuccess";
-
 import Report from "src/screens/report/Report";
 import ReportSuccess from "src/screens/report/ReportSuccess";
+
+import * as Routes from './constants';
 
 const PrimaryStack = createStackNavigator();
 
@@ -65,50 +61,53 @@ const PrimaryStackScreen = () => {
 			})}>
 			{authStatus === AuthStatus.SignedOut ? (
 				<>
-					<PrimaryStack.Screen name='Teaser' component={Teaser} />
-					<PrimaryStack.Screen name='Login' component={Login} />
+					<PrimaryStack.Screen name={Routes.TEASER} component={Teaser} />
+					<PrimaryStack.Screen name={Routes.LOGIN} component={Login} />
 					<PrimaryStack.Screen
-						name='CreateAccount'
+						name={Routes.CREATE_ACCOUNT}
 						component={CreateAccount}
 					/>
-					<PrimaryStack.Screen name='Password' component={Password} />
+					<PrimaryStack.Screen name={Routes.PASSWORD} component={Password} />
 					{/* <PrimaryStack.Screen
 						name='ConfirmPassword'
 						component={PasswordConfirm}
 					/> */}
 					<PrimaryStack.Screen
-						name='Verification'
+						name={Routes.VERIFICATION}
 						component={Verification}
 					/>
 					<PrimaryStack.Screen
-						name='VerificationHelp'
+						name={Routes.VERIFICATION_HELP}
 						component={VerificationHelp}
 					/>
-					<PrimaryStack.Screen name='Passcode' component={Passcode} />
-					<PrimaryStack.Screen name='TouchId' component={TouchId} />
+					{/* <PrimaryStack.Screen name={'TouchId'} component={TouchId} /> */}
 					<PrimaryStack.Screen
-						name='PersonalProfile'
+						name={Routes.PERSONAL_PROFILE}
 						component={PersonalProfile}
 					/>
 					<PrimaryStack.Screen
-						name='PersonalDetails'
+						name={Routes.PERSONAL_DETAILS}
 						component={PersonalDetails}
 					/>
 					<PrimaryStack.Screen
-						name='PersonalAddress'
+						name={Routes.PERSONAL_ADDRESS}
 						component={PersonalAddress}
 					/>
 					<PrimaryStack.Screen
-						name='TermsEmail'
+						name={Routes.TERMS_EMAIL}
 						component={TermsEmail}
 					/>
 					<PrimaryStack.Screen
-						name='ConfirmEmail'
+						name={Routes.CONFIRM_EMAIL}
 						component={ConfirmEmail}
 					/>
 					<PrimaryStack.Screen
-						name='EmailConfirmed'
+						name={Routes.EMAIL_CONFIRMED}
 						component={EmailConfirmed}
+					/>
+					<PrimaryStack.Screen
+						name={Routes.FORGOT_PASSWORD}
+						component={ForgotPasswordNavigator}
 					/>
 				</>
 			) : (
@@ -116,15 +115,15 @@ const PrimaryStackScreen = () => {
 
 					<PrimaryStack.Screen name='Tabs' component={Tabs} />
 					<PrimaryStack.Screen
-						name='QRCodeScan'
+						name={Routes.QRCODE_SCAN}
 						component={QRCodeScan}
 					/>
 					<PrimaryStack.Screen
-						name='PaymentPending'
+						name={Routes.PAYMENT_PENDING}
 						component={PaymentPending}
 					/>
 					<PrimaryStack.Screen
-						name='PaymentSuccess'
+						name={Routes.PAYMENT_SUCCESS}
 						component={PaymentSuccess}
 					/>
 					{/* <PrimaryStack.Screen
@@ -132,108 +131,95 @@ const PrimaryStackScreen = () => {
 						component={Request}
 					/> */}
 					<PrimaryStack.Screen
-						name='ForgotPassword'
-						component={ForgotPasswordNavigator}
-					/>
-					<PrimaryStack.Screen
-						name='Cashout'
+						name={Routes.CASHOUT}
 						component={CashoutNavigator}
 					/>
-					<PrimaryStack.Screen name='TopUp' component={TopUp} />
+					<PrimaryStack.Screen name={Routes.LOAD_UP} component={LoadUp} />
 					<PrimaryStack.Screen
-						name='TopUpSuccess'
-						component={TopUpSuccess}
+						name={Routes.LOADUP_SUCCESS}
+						component={LoadUpSuccess}
 					/>
 					<PrimaryStack.Screen
-						name='SelectPayment'
-						component={SelectPayment}
-					/>
-					<PrimaryStack.Screen name='Deposit' component={Deposit} />
-					<PrimaryStack.Screen
-						name='CreditCard'
-						component={CreditCard}
-					/>
-					{/* <PrimaryStack.Screen
-						name='ConfirmPin'
-						component={ConfirmPin}
-					/> */}
-					<PrimaryStack.Screen
-						name='SettingsTermsAndConditions'
+						name={Routes.SETTING_TERMS_CONDITIONS}
 						component={SettingsTermsAndConditions}
 					/>
-					<PrimaryStack.Screen name='Settings' component={Settings} />
 					<PrimaryStack.Screen
-						name='SettingsPersonalProfile'
+						name={Routes.SETTING_PERSONAL_PROFILE}
 						component={SettingsPersonalProfile}
 					/>
 					<PrimaryStack.Screen
-						name='SettingsSecurity'
+						name={Routes.SETTING_SECURITY}
 						component={SettingsSecurity}
 					/>
 					<PrimaryStack.Screen
-						name='SettingsBankAccount'
+						name={Routes.SETTING_BANK_ACCOUNT}
 						component={SettingsBankAccount}
 					/>
 					<PrimaryStack.Screen
-						name='SettingsDeleteAccount'
+						name={Routes.SETTING_DELETE_ACCOUNT}
 						component={SettingsDeleteAccount}
 					/>
 					<PrimaryStack.Screen
-						name='SelectAccountType'
+						name={Routes.SELECT_ACCOUNT_TYPE}
 						component={SelectAccountType}
 					/>
 					<PrimaryStack.Screen
-						name='LinkBankAccount'
+						name={Routes.LINK_BANK_ACCOUNT}
 						component={LinkBankAccount}
 					/>
 					<PrimaryStack.Screen
-						name='SelectBank'
+						name={Routes.SELECT_BANK}
 						component={SelectBank}
 					/>
 					<PrimaryStack.Screen
-						name='LoginToBank'
+						name={Routes.LOGIN_BANK}
 						component={LoginToBank}
 					/>
 					<PrimaryStack.Screen
-						name='SelectBankAccount'
+						name={Routes.SELECT_BANK_ACCOUNT}
 						component={SelectBankAccount}
 					/>
 					<PrimaryStack.Screen
-						name='Congratulations'
-						component={Congratulations}
+						name={Routes.BANK_LINK_SUCCESS}
+						component={BankLinkSuccess}
 					/>
 					<PrimaryStack.Screen
-						name='MerchantTabs'
+						name={Routes.SIGNUP_BUSINESS}
+						component={SignupBusinessNavigator}
+					/>
+
+					<PrimaryStack.Screen
+						name={Routes.MERCHANT_TABS}
 						component={MerchantTabs}
 					/>
 
 					<PrimaryStack.Screen
-						name='CashierDashboard'
+						name={Routes.CASHIER_DASHBOARD}
 						component={CashierDashboard}
 					/>
 					<PrimaryStack.Screen
-						name='CashierHelp'
+						name={Routes.CASHIER_HELP}
 						component={CashierHelp}
 					/>
 					<PrimaryStack.Screen
-						name='CashierRequest'
+						name={Routes.CASHIER_REQUEST}
 						component={CashierRequest}
 					/>
 					<PrimaryStack.Screen
-						name='CashierTransactions'
+						name={Routes.CASHIER_TRANSACTIONS}
 						component={CashierTransactions}
 					/>
 					<PrimaryStack.Screen
-						name='CashierPaymentSuccess'
+						name={Routes.CASHIER_PAYMENT_SUCCESS}
 						component={CashierPaymentSuccess}
 					/>
 
 					<PrimaryStack.Screen
-						name='Report'
+						name={Routes.REPORT}
 						component={Report}
 					/>
 					<PrimaryStack.Screen
-						name='ReportSuccess'
+						name={Routes.REPORT_SUCCESS}
 						component={ReportSuccess}
 					/>
 				</>
@@ -242,8 +228,9 @@ const PrimaryStackScreen = () => {
   );
 }
 
-export const MainNavigationStack = (): ReactElement => {
+export const MainNavigationStack = (): JSX.Element => {
   const { update } = useRouteTracking();
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const ref = React.useRef<any>();
   return (
     <NavigationContainer
@@ -263,27 +250,3 @@ export const MainNavigationStack = (): ReactElement => {
     </NavigationContainer>
   );
 };
-
-/* <PrimaryStack.Screen name="SignupBusiness" component={SignupBusinessNavigator} />
-<PrimaryStack.Screen name="MerchantBankAccount" component={MerchantBankAccountNavigator} />
-  */
-					// <PrimaryStack.Screen
-					// 	name='MerchantTabs'
-					// 	component={MerchantTabs}
-					// />
-					// <PrimaryStack.Screen
-					// 	name='MerchantQRCodeScan'
-					// 	component={MerchantQRCodeScan}
-					// />
-					// <PrimaryStack.Screen
-					// 	name='MerchantRequest'
-					// 	component={MerchantQRCodeScan}
-					// />
-					// <PrimaryStack.Screen
-					// 	name='MerchantPaymentPending'
-					// 	component={MerchantPaymentPending}
-					// />
-					// <PrimaryStack.Screen
-					// 	name='MerchantPaymentSuccess'
-					// 	component={MerchantPaymentSuccess}
-					// />
