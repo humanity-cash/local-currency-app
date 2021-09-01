@@ -129,7 +129,7 @@ const Button = (props: ButtonProps) => {
 			style={{
 				...styles[props.type].button,
 				...(props.disabled ? { opacity: 0.5 } : {}),
-				...props.style
+				...props?.style
 			} as any}
 		>
 			<View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
