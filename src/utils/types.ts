@@ -331,6 +331,16 @@ export enum MerchantTransactionType {
   PURCHASEMENT = 'Purchasement'
 }
 
+export const TransactionTypes = {
+  'Sale': 'Customer sale',
+  'Return': 'Return',
+  'Cash out': 'Cash out',
+  'Transfer': 'Transfer',
+  'Donation': 'Donation',
+  'Customer return': 'Customer return',
+  'Purchasement': 'Purchasement'
+}
+
 export type MerchantTransactionItem = {
   transactionId: string,
   type: MerchantTransactionType,
