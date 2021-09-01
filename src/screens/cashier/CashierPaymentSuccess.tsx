@@ -1,4 +1,6 @@
-import React, { ReactElement } from 'react';
+
+import { useNavigation } from '@react-navigation/native';
+import React from 'react';
 import { StyleSheet, View, KeyboardAvoidingView, ScrollView, Platform } from 'react-native';
 import { Text } from 'react-native-elements';
 import { Header, Button, CancelBtn } from "src/shared/uielements";
@@ -6,11 +8,6 @@ import { baseHeader, viewBase, wrappingContainerBase } from "src/theme/elements"
 import { colors } from "src/theme/colors";
 import Translation from 'src/translation/en.json';
 import * as Routes from 'src/navigation/constants';
-
-type CashierPaymentSuccessProps = {
-	navigation?: any,
-	route?: any,
-}
 
 const styles = StyleSheet.create({
 	headerText: {
@@ -28,12 +25,12 @@ const styles = StyleSheet.create({
 	},
 });
 
-const CashierPaymentSuccess = (props: CashierPaymentSuccessProps): ReactElement => {
-
+const CashierPaymentSuccess = (): JSX.Element => {
+	const navigation = useNavigation();
 	return (
 		<View style={viewBase}>
 			<Header
-				rightComponent={<CancelBtn text="Close" color={colors.purple} onClick={() => props.navigation.navigate(Routes.CASHIER_DASHBOARD)} />}
+				rightComponent={<CancelBtn text="Close" color={colors.purple} onClick={() => navigation.navigate(Routes.CASHIER_DASHBOARD)} />}
 			/>
 			<ScrollView style={wrappingContainerBase}>
 				<View style={ baseHeader }>
@@ -47,7 +44,7 @@ const CashierPaymentSuccess = (props: CashierPaymentSuccessProps): ReactElement 
 					<Button
 						type="purple"
 						title={Translation.BUTTON.CLOSE}
-						onPress={() => props.navigation.navigate(Routes.CASHIER_DASHBOARD)}
+						onPress={() => navigation.navigate(Routes.CASHIER_DASHBOARD)}
 					/>
 				</View>
 			</KeyboardAvoidingView>

@@ -1,4 +1,5 @@
-import React, {useState, useEffect, ReactElement} from 'react';
+import { useNavigation } from '@react-navigation/native';
+import React, {useState, useEffect} from 'react';
 import { StyleSheet, View, KeyboardAvoidingView, ScrollView, Platform } from 'react-native';
 import { Text } from 'react-native-elements';
 import { Header, Button, CancelBtn, BackBtn, BorderedInput } from "src/shared/uielements";
@@ -7,11 +8,6 @@ import { colors } from "src/theme/colors";
 import Translation from 'src/translation/en.json';
 import * as Routes from 'src/navigation/constants';
 import CashierQRCodeGen from 'src/screens/cashier/CashierQRCodeGen';
-
-type CashierRequestProps = {
-	navigation?: any,
-	route?: any,
-}
 
 const styles = StyleSheet.create({
 	headerText: {
@@ -46,8 +42,8 @@ const styles = StyleSheet.create({
 	}
 });
 
-const CashierRequest = (props: CashierRequestProps): ReactElement => {
-
+const CashierRequest = (): JSX.Element => {
+	const navigation = useNavigation();
 	const [amount, setAmount] = useState<string>("");
 	const [goNext, setGoNext] = useState<boolean>(false);
 	const [isVisible, setIsVisible] = useState<boolean>(false);
@@ -71,8 +67,8 @@ const CashierRequest = (props: CashierRequestProps): ReactElement => {
 	return (
 		<View style={viewBaseB}>
 			<Header
-				leftComponent={<BackBtn color={colors.purple} onClick={() => props.navigation.goBack()} />}
-				rightComponent={<CancelBtn color={colors.purple} text={Translation.BUTTON.CLOSE} onClick={() => props.navigation.navigate(Routes.CASHIER_DASHBOARD)} />}
+				leftComponent={<BackBtn color={colors.purple} onClick={() => navigation.goBack()} />}
+				rightComponent={<CancelBtn color={colors.purple} text={Translation.BUTTON.CLOSE} onClick={() => navigation.navigate(Routes.CASHIER_DASHBOARD)} />}
 			/>
 			<ScrollView style={wrappingContainerBase}>
 				<View style={baseHeader}>

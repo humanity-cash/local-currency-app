@@ -1,5 +1,5 @@
 import { useNavigation } from "@react-navigation/native";
-import React, { ReactElement, useState } from 'react';
+import React, { useState } from 'react';
 import { StyleSheet, View, ScrollView } from 'react-native';
 import { Text } from "react-native-elements";
 import { Header } from "src/shared/uielements";
@@ -9,13 +9,7 @@ import { SearchInput, Dialog, BackBtn } from "src/shared/uielements";
 import CashierTransactionList from "./CashierTransactionList";
 import { merchantTransactions } from "src/mocks/transactions";
 import Translation from 'src/translation/en.json';
-import * as Routes from 'src/navigation/constants';
 import { MerchantTransactionItem, MerchantTransactionType } from "src/utils/types";
-
-type CashierTransactionsProps = {
-	navigation?: any;
-	route?: any;
-};
 
 const styles = StyleSheet.create({
 	mainTextColor: {
@@ -81,7 +75,7 @@ const styles = StyleSheet.create({
 type TransactionDetailProps = {
 	visible: boolean,
 	data: MerchantTransactionItem,
-	onConfirm: ()=>void
+	onConfirm: () => void
 }
 
 const TransactionDetail = (props: TransactionDetailProps) => {
@@ -153,7 +147,8 @@ const TransactionDetail = (props: TransactionDetailProps) => {
 	)
 }
 
-const CashierTransactionsView = (props: CashierTransactionsProps) => {
+const CashierTransactions = (): JSX.Element => {
+	const navigation = useNavigation();
 	const [searchText, setSearchText] = useState<string>("");
 	const [isDetailViewOpen, setIsDetailViewOpen] = useState<boolean>(false);
 	const [selectedItem, setSelectedItem] = useState<MerchantTransactionItem>({
@@ -179,7 +174,7 @@ const CashierTransactionsView = (props: CashierTransactionsProps) => {
 	return (
 		<View style={viewBaseB}>
 			<Header
-				leftComponent={<BackBtn color={colors.purple} onClick={() => props.navigation.goBack()} />}
+				leftComponent={<BackBtn color={colors.purple} onClick={() => navigation.goBack()} />}
 			/>
 			<ScrollView style={wrappingContainerBase}>
 				<View>
@@ -212,8 +207,4 @@ const CashierTransactionsView = (props: CashierTransactionsProps) => {
 	);
 }
 
-const CashierTransactions = (props: CashierTransactionsProps): ReactElement => {
-	const navigation = useNavigation();
-	return <CashierTransactionsView {...props} navigation={navigation} />;
-};
 export default CashierTransactions

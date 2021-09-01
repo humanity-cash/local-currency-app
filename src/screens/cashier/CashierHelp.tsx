@@ -1,5 +1,5 @@
 import { useNavigation } from '@react-navigation/native';
-import React, { useState, useEffect, ReactElement } from 'react';
+import React, { useState, useEffect } from 'react';
 import { ScrollView, StyleSheet, View } from "react-native";
 import { Text } from 'react-native-elements';
 import { Header, BackBtn, AccordionCard, SearchInput } from "src/shared/uielements";
@@ -40,7 +40,7 @@ const styles = StyleSheet.create({
 	}
 });
 
-export const MerchantSettingsHelpAndContact = (): ReactElement => {
+export const MerchantSettingsHelpAndContact = (): JSX.Element => {
 
 	const [searchText, setSearchText] = useState<string>("");
 	const [faqData, setFaqData] = useState<AccordionEntry[]>([]);
