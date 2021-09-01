@@ -6,7 +6,7 @@ import {
 	DrawerContentScrollView,
 	DrawerItem
 } from '@react-navigation/drawer';
-import React, { ReactElement, useContext, useState } from 'react';
+import React, { useContext, useState } from 'react';
 import {
 	Image,
 	StyleSheet,
@@ -188,7 +188,7 @@ const DrawerContent = (
 						<DrawerItem
 							label='Cash out'
 							onPress={() => {
-								props.navigation.navigate(Routes.CASHOUT);
+								props.navigation.navigate(Routes.CASHOUT_AMOUNT);
 							}}
 						/>
 						<DrawerItem
@@ -213,7 +213,7 @@ const DrawerContent = (
 							label='Sign up your business'
 							onPress={() => {
 								props.navigation.navigate(
-									Routes.SIGNUP_YOUR_BUSINESS
+									Routes.BUSINESS_ACCOUNT
 								);
 							}}
 						/>
@@ -251,7 +251,7 @@ const DrawerContent = (
 
 const DrawerNav = createDrawerNavigator();
 
-const Tabs = (): ReactElement => {
+const Tabs = (): JSX.Element => {
 	return (
 		<DrawerNav.Navigator
 			initialRouteName={Routes.DASHBOARD}
@@ -262,7 +262,7 @@ const Tabs = (): ReactElement => {
 				name={Routes.RECEIVE_PAYMENT}
 				component={PaymentRequest}
 			/>
-			<DrawerNav.Screen name={Routes.CASHOUT} component={CashoutAmount} />
+			<DrawerNav.Screen name={Routes.CASHOUT_AMOUNT} component={CashoutAmount} />
 			<DrawerNav.Screen
 				name={Routes.MY_TRANSACTIONS}
 				component={MyTransactions}
@@ -272,7 +272,7 @@ const Tabs = (): ReactElement => {
 				component={MerchantDictionary}
 			/>
 			<DrawerNav.Screen
-				name={Routes.SIGNUP_YOUR_BUSINESS}
+				name={Routes.BUSINESS_ACCOUNT}
 				component={BusinessAccount}
 			/>
 			<DrawerNav.Screen name={Routes.SETTINGS} component={Settings} />

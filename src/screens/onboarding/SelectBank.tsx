@@ -6,11 +6,9 @@ import { BackBtn, Header, CancelBtn, SearchInput } from "src/shared/uielements";
 import { colors } from "src/theme/colors";
 import { baseHeader, viewBase, wrappingContainerBase, underlineHeader } from "src/theme/elements";
 import listOfBanks from "src/mocks/banks";
-
-type SelectBankProps = {
-	navigation?: any
-	route?: any
-}
+import { Bank } from "src/utils/types";
+import Translation from 'src/translation/en.json';
+import * as Routes from 'src/navigation/constants';
 
 const styles = StyleSheet.create({
 	headerText: {
@@ -42,22 +40,23 @@ const styles = StyleSheet.create({
 	},
 });
 
-const SelectBankView = (props: SelectBankProps) => {
+const SelectBank = (): JSX.Element => {
+	const navigation = useNavigation();
 	const [searchPhrase, setSearchPhrase] = useState('');
 	const [bank, setBank] = useState('');
 
 	useEffect(() => {
 		if (bank !== '') {
-			props.navigation.navigate("LoginToBank")
+			navigation.navigate(Routes.LOGIN_BANK)
 		}
 	},[bank]);
 
-	const onValueChange = (name: any, change: any) => {
+	const onValueChange = (name: string, change: string) => {
 		setSearchPhrase(change);
 	}
 
 	const renderBanks = () => {
-		let found: any[] = [];
+		let found: Bank[] = [];
 		if (searchPhrase !== '') {
 			found = listOfBanks.filter(entry => entry.name.toLowerCase().includes(searchPhrase.toLowerCase()));
 		}
@@ -82,14 +81,14 @@ const SelectBankView = (props: SelectBankProps) => {
 	return (
 		<View style={viewBase}>
 			<Header
-				leftComponent={<BackBtn onClick={() => props.navigation.goBack()} />}
-				rightComponent={<CancelBtn text="Close" onClick={() => props.navigation.navigate('Tabs')} />}
+				leftComponent={<BackBtn onClick={() => navigation.goBack()} />}
+				rightComponent={<CancelBtn text="Close" onClick={() => navigation.navigate(Routes.DASHBOARD)} />}
 			/>
 
 			<ScrollView style={wrappingContainerBase}>
 				<View style={ baseHeader }>
 					<View style={underlineHeader}>
-						<Text style={styles.headerText}>Select your bank</Text>
+						<Text style={styles.headerText}>{Translation.BANK_ACCOUNT.SELECT_BANK}</Text>
 					</View>
 					<SearchInput
 						label="Search"
@@ -108,8 +107,4 @@ const SelectBankView = (props: SelectBankProps) => {
 	);
 }
 
-const SelectBank = (props: SelectBankProps) => {
-	const navigation = useNavigation();
-	return <SelectBankView {...props} navigation={navigation} />;
-}
 export default SelectBank

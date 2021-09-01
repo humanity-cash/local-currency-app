@@ -1,15 +1,13 @@
 import { useNavigation } from '@react-navigation/native';
-import React, { ReactElement } from 'react';
+import React from 'react';
 import { StyleSheet, View, KeyboardAvoidingView, Platform, ScrollView } from 'react-native';
 import { Text } from 'react-native-elements';
 import { Header, Button } from "src/shared/uielements";
 import { colors } from "src/theme/colors";
 import { baseHeader, viewBaseWhite, wrappingContainerBase } from "src/theme/elements";
-
-type CongratulationsProps = {
-	navigation?: any
-	route?: any
-}
+import Translation from 'src/translation/en.json';
+import * as Routes from 'src/navigation/constants';
+import { BUTTON_TYPES } from 'src/constants';
 
 const styles = StyleSheet.create({
 	headerText: {
@@ -25,28 +23,29 @@ const styles = StyleSheet.create({
 	},
 });
 
-const CongratulationsView = (props: CongratulationsProps) => {
+const BankLinkSuccess = (): JSX.Element => {
+	const navigation = useNavigation();
 	return (
 		<View style={viewBaseWhite}>
 			<Header />
 			<ScrollView style={wrappingContainerBase}>
 				<View style={ baseHeader }>
-					<Text style={styles.headerText}>Congratulations!</Text>
+					<Text style={styles.headerText}>{Translation.BANK_ACCOUNT.CONGRATULATION}!</Text>
 				</View>
-				<Text style={styles.bodyText}>You have linked your Salisbury Checking (US-08-CHAS-0686-5892) bank account! You are ready to load up your BerkShares and start supporting your community!</Text>
+				<Text style={styles.bodyText}>{Translation.BANK_ACCOUNT.CONGRATULATION_DETAIL}</Text>
 			</ScrollView>
 			<KeyboardAvoidingView
 				behavior={Platform.OS == "ios" ? "padding" : "height"} >
 				<View style={styles.bottomView}>
 					<Button
-						type="transparent"
-						title="Skip for now"
-						onPress={() => props.navigation.navigate("Tabs")}
+						type={BUTTON_TYPES.TRANSPARENT}
+						title={Translation.BUTTON.SKIP_NOW}
+						onPress={() => navigation.navigate(Routes.DASHBOARD)}
 					/>
 					<Button
-						type="darkGreen"
-						title="Load up BerkShares"
-						onPress={() => props.navigation.navigate("TopUp")}
+						type={BUTTON_TYPES.DARK_GREEN}
+						title={Translation.BUTTON.LOAD_UP_BERKSHARES}
+						onPress={() => navigation.navigate(Routes.LOAD_UP)}
 					/>
 				</View>
 			</KeyboardAvoidingView>
@@ -54,8 +53,4 @@ const CongratulationsView = (props: CongratulationsProps) => {
 	);
 }
 
-const Congratulations = (props: CongratulationsProps): ReactElement => {
-	const navigation = useNavigation();
-	return <CongratulationsView {...props} navigation={navigation} />;
-}
-export default Congratulations
+export default BankLinkSuccess

@@ -1,5 +1,5 @@
 import { useNavigation } from '@react-navigation/native';
-import React, { ReactElement } from 'react';
+import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import { Text } from 'react-native-elements';
 import { Button, Header } from "src/shared/uielements";
@@ -7,11 +7,7 @@ import { baseHeader, viewBase, wrappingContainerBase } from "src/theme/elements"
 import { colors } from "src/theme/colors";
 import Translation from 'src/translation/en.json';
 import * as Routes from 'src/navigation/constants';
-
-type LinkBankAccountProps = {
-	navigation?: any
-	route: any
-}
+import { BUTTON_TYPES } from 'src/constants';
 
 const styles = StyleSheet.create({
 	headerText: {
@@ -28,8 +24,8 @@ const styles = StyleSheet.create({
 	}
 });
 
-const LinkBankAccountView = (props: LinkBankAccountProps) => {
-
+const LinkBankAccount = (): JSX.Element => {
+	const navigation = useNavigation();
 	return (
 		<View style={viewBase}>
 			<Header />
@@ -41,23 +37,19 @@ const LinkBankAccountView = (props: LinkBankAccountProps) => {
 			</View>
 			<View style={styles.bottomView}>
 				<Button
-					type="transparent"
+					type={BUTTON_TYPES.TRANSPARENT}
 					title={Translation.BUTTON.SKIP_NOW}
 					style={styles.skipBtn}
-					onPress={() => props.navigation.navigate(Routes.TABS)}
+					onPress={() => navigation.navigate(Routes.DASHBOARD)}
 				/>
 				<Button
-					type="darkGreen"
+					type={BUTTON_TYPES.DARK_GREEN}
 					title={Routes.LINK_BANK_ACCOUNT}
-					onPress={() => props.navigation.navigate(Routes.SELECT_BANK_ACCOUNT)}
+					onPress={() => navigation.navigate(Routes.SELECT_BANK_ACCOUNT)}
 				/>
 			</View>
 		</View>
 	);
 }
 
-const LinkBankAccount = (props:LinkBankAccountProps): ReactElement => {
-	const navigation = useNavigation();
-	return <LinkBankAccountView {...props} navigation={navigation} />;
-}
 export default LinkBankAccount;
