@@ -1,20 +1,13 @@
 import { useNavigation } from '@react-navigation/native';
-import React, { ReactElement, useState } from 'react';
-import { KeyboardAvoidingView, Platform, ScrollView, View, StyleSheet } from 'react-native';
+import React, { useState } from 'react';
+import { KeyboardAvoidingView, Platform, ScrollView, StyleSheet, View } from 'react-native';
 import { Text } from 'react-native-elements';
-import { useUserDetails } from "src/hooks";
-import { BackBtn, Button, Header, CancelBtn, PersonalAddressForm } from 'src/shared/uielements';
-import { underlineHeader, viewBase, wrappingContainerBase } from "src/theme/elements";
-import { validateAddressForm } from "src/utils/validation";
-import { colors } from "src/theme/colors";
-
-import Translation from 'src/translation/en.json';
+import { BUTTON_TYPES } from 'src/constants';
 import * as Routes from 'src/navigation/constants';
-
-type PersonalAddressProps = {
-	navigation?: any
-	route?: any
-}
+import { BackBtn, Button, CancelBtn, Header, PersonalAddressForm } from 'src/shared/uielements';
+import { colors } from "src/theme/colors";
+import { underlineHeader, viewBase, wrappingContainerBase } from "src/theme/elements";
+import Translation from 'src/translation/en.json';
 
 const styles = StyleSheet.create({
 	content: { 
@@ -31,25 +24,21 @@ const styles = StyleSheet.create({
 	},
 });
 
-const PersonalAddressView = (props: PersonalAddressProps) => {
-	const { personalDetails, updateStatus } = useUserDetails();
+const PersonalAddress = () => {
+	const navigation = useNavigation();
 	const [goNext, setGoNext] = useState(false);
 	const [showValidation, setShowValidation] = useState(false);
 
 	const onNextPress = () => {
-		const validation = validateAddressForm(personalDetails);
-		setShowValidation(true);
-		if (validation.valid) {
-			updateStatus({ personalDetails: true });
-			props.navigation.navigate(Routes.LINK_BANK_ACCOUNT)
-		}
+		// save account details
+		navigation.navigate(Routes.LINK_BANK_ACCOUNT)
 	}
 
 	return (
 		<View style={viewBase}>
 			<Header
-				leftComponent={<BackBtn onClick={() => props.navigation.goBack()} />}
-				rightComponent={<CancelBtn text={Translation.BUTTON.LOGOUT} onClick={() => props.navigation.navigate(Routes.TEASER)} />}
+				leftComponent={<BackBtn onClick={() => navigation.goBack()} />}
+				rightComponent={<CancelBtn text={Translation.BUTTON.LOGOUT} onClick={() => navigation.navigate(Routes.TEASER)} />}
 			/>
 
 			<ScrollView style={ wrappingContainerBase }>
@@ -68,7 +57,7 @@ const PersonalAddressView = (props: PersonalAddressProps) => {
 			>
 				<View style={styles.bottomView}>
 					<Button
-						type="darkGreen"
+						type={BUTTON_TYPES.DARK_GREEN}
 						title={Translation.BUTTON.NEXT}
 						disabled={!goNext}
 						onPress={onNextPress}
@@ -79,8 +68,4 @@ const PersonalAddressView = (props: PersonalAddressProps) => {
 	);
 }
 
-const PersonalAddress = (props: PersonalAddressProps): ReactElement => {
-	const navigation = useNavigation();
-	return <PersonalAddressView {...props} navigation={navigation} />;
-}
 export default PersonalAddress

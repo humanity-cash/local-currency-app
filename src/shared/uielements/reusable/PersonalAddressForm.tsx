@@ -1,21 +1,11 @@
-import React, { useEffect, useState, ReactElement } from "react";
-import { View, StyleSheet, Picker } from "react-native";
+import React, { ReactElement, useContext } from "react";
+import { Picker, StyleSheet, View } from "react-native";
 import { Text } from "react-native-elements";
-import { useUserDetails } from "src/hooks";
+import { AuthContext } from "src/auth";
 import countries from "src/mocks/countries";
 import { colors } from "src/theme/colors";
-import { IMap, PersonalAddressErrors } from "src/utils/types";
-import { validateAddressForm } from "src/utils/validation";
-import BlockInput from "../BlockInput";
 import Translation from 'src/translation/en.json';
-
-interface PersonalAddressState extends IMap {
-  addressLine: string;
-  addressLine2: string;
-  zipCode: string;
-  city: string;
-  country: string;
-}
+import BlockInput from "../BlockInput";
 
 interface PersonalAddressProps {
   isValid: (valid: boolean) => void;
@@ -60,49 +50,13 @@ const styles = StyleSheet.create({
 });
 
 const PersonalAddressForm = (props: PersonalAddressProps): ReactElement => {
-  const { personalDetails, updatePersonalDetails } = useUserDetails();
-  const [
-    validationErrors,
-    setValidationErrors,
-  ] = useState<PersonalAddressErrors>({});
-  const [state, setState] = useState<PersonalAddressState>({
-    addressLine: "",
-    addressLine2: "",
-    zipCode: "",
-    city: "",
-    country: "",
-  });
-  const { showValidation } = props;
-
-  useEffect(() => {
-    const validation = validateAddressForm(personalDetails);
-    setValidationErrors(validation.errors);
-  }, [personalDetails]);
-
-  useEffect(() => {
-    props.isValid(
-      Object.keys(state).every(
-        (key) => state[key] !== "" || key === "addressLine2"
-      )
-    );
-  }, [state]);
-
-  useEffect(() => {
-    setState({
-      addressLine: personalDetails.addressLine,
-      addressLine2: personalDetails.addressLine2,
-      zipCode: personalDetails.zipCode,
-      city: personalDetails.city,
-      country: personalDetails.country,
-    });
-  }, [personalDetails]);
+  const { signUpDetails, setSignUpDetails } = useContext(AuthContext);
 
   const onValueChange = (name: string, change: string) => {
-    setState({
-      ...state,
+    setSignUpDetails((pv: any) => ({
+      ...pv,
       [name]: change,
-    } as PersonalAddressState);
-    updatePersonalDetails({ [name]: change });
+    }));
   };
 
   return (
@@ -111,28 +65,28 @@ const PersonalAddressForm = (props: PersonalAddressProps): ReactElement => {
           <Text style={styles.bodyText}>{Translation.PROFILE.PERSIONAL_DETAILS_BODY}</Text>
       </View>
       <Text style={styles.label}>{Translation.LABEL.ADDRESS1}</Text>
-      {showValidation && validationErrors.addressLine && (
+      {/* {showValidation && validationErrors.addressLine && (
         <Text style={styles.errorLabel}>
           {validationErrors.addressLine}
         </Text>
-      )}
+      )} */}
       <BlockInput
         name="addressLine"
         placeholder="Street number, street name"
-        value={state.addressLine}
+        value={signUpDetails.addressLine}
         onChange={onValueChange}
         style={props.style}
       />
-      <Text style={styles.label}>{Translation.LABEL.ADDRESS2}</Text>
+      {/* <Text style={styles.label}>{Translation.LABEL.ADDRESS2}</Text>
       {showValidation && validationErrors.addressLine2 && (
         <Text style={styles.errorLabel}>
           {validationErrors.addressLine2}
         </Text>
-      )}
+      )} */}
       <BlockInput
         name="addressLine2"
         placeholder="Apt."
-        value={state.addressLine2}
+        value={signUpDetails.addressLine2}
         onChange={onValueChange}
         style={props.style}
       />
@@ -140,28 +94,28 @@ const PersonalAddressForm = (props: PersonalAddressProps): ReactElement => {
       <View style={styles.inlineView}>
         <View style={styles.cityView}>
           <Text style={styles.label}>{Translation.LABEL.CITY}</Text>
-          {showValidation && validationErrors.city && (
+          {/* {showValidation && validationErrors.city && (
             <Text style={styles.errorLabel}>
               {validationErrors.city}
             </Text>
-          )}
+          )} */}
           <BlockInput
             name="city"
             placeholder="City"
-            value={state.city}
+            value={signUpDetails.city}
             onChange={onValueChange}
             style={props.style}
           />
         </View>
         <View style={styles.stateView}>
           <Text style={styles.label}>{Translation.LABEL.STATE}</Text>
-          {showValidation && validationErrors.country && (
+          {/* {showValidation && validationErrors.country && (
             <Text style={styles.errorLabel}>
               {validationErrors.country}
             </Text>
-          )}
+          )} */}
           <Picker
-            selectedValue={state.country}
+            selectedValue={signUpDetails.state}
             style={styles.picker}
             onValueChange={(itemValue) => onValueChange("country", itemValue)}
           >
@@ -173,16 +127,16 @@ const PersonalAddressForm = (props: PersonalAddressProps): ReactElement => {
       </View>
       
       <Text style={styles.label}>{Translation.LABEL.POSTAL_CODE}</Text>
-      {showValidation && validationErrors.zipCode && (
+      {/* {showValidation && validationErrors.zipCode && (
         <Text style={styles.errorLabel}>
           {validationErrors.zipCode}
         </Text>
-      )}
+      )} */}
       <BlockInput
-        name="zipCode"
+        name="postalCode"
         placeholder="00000"
         keyboardType="number-pad"
-        value={state.zipCode}
+        value={signUpDetails.postalCode}
         onChange={onValueChange}
         style={props.style}
       />
