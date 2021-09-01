@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import  * as AWSService  from './aws-cognito';
+import * as AWSService from './aws-cognito';
 import { UpdateUserAttributesInput } from './types';
 
 /**AWS COGNITO ERRORS */
@@ -54,10 +54,21 @@ const AuthProvider: React.FunctionComponent = ({ children }) => {
 		email: 'tech@humanity.cash',
 		password: 'Esraa@keyko1',
 	});
+	// Personal Account
 	const [signUpDetails, setSignUpDetails] = useState({
-		email: 'tech@humanity.cash',
+		email: 'esraa@humanity.cash',
 		password: 'Esraa@keyko1',
 		confirmPassword: 'Esraa@keyko1',
+		type: null, //'personal' or 'business'
+		tag: 'sat',
+		avatar: '',
+		firstName: 'Satoshi',
+		lastName: 'Nakamoto',
+		address1: 'Satoshi Street 21',
+		address2: 'Nakamoto Street 21',
+		city: 'Sato',
+		state: 'MA',
+		postalCode: '2100000000'
 	});
 
 	const [userAttributes, setUserAttributes] = useState({});
@@ -106,10 +117,10 @@ const AuthProvider: React.FunctionComponent = ({ children }) => {
 		return response;
 	};
 
-	const signIn = async ({
+	const signIn = async (
 		email = signUpDetails.email,
 		password = signUpDetails.password,
-	} = {}) => {
+	) => {
 		const response: any = await AWSService.signIn({ email, password });
 		if (!response.success) {
 			if (
