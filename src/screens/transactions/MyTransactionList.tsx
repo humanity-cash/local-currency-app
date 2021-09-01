@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, ReactElement} from 'react';
 import { StyleSheet, View } from 'react-native';
 import { Text, Image } from 'react-native-elements';
 import { colors } from "src/theme/colors";
@@ -26,7 +26,7 @@ const styles = StyleSheet.create({
 		justifyContent: 'space-between',
 		alignItems: 'center',
 		padding: 5,
-		backgroundColor: colors.inputBg
+		backgroundColor: colors.card
 	},
 	imageContainer: {
 		flexDirection: 'row',
@@ -37,6 +37,10 @@ const styles = StyleSheet.create({
 		width: 60,
 		height: 60,
 		borderRadius: 30
+	},
+	timeText: {
+		fontSize: 10,
+		color: colors.darkGreen
 	},
 	amountText: {
 		fontWeight: 'bold',
@@ -59,14 +63,17 @@ const TransactionItem = (props: MyTransactionItemProps) => {
 					source={require("../../../assets/images/placeholder2.png")}
 					containerStyle={styles.image}
 				/>
-				<Text>{item.name}</Text>
+				<View>
+					<Text>{item.name}</Text>
+					<Text style={styles.timeText}>2:51, JUN 16, 2021</Text>
+				</View>
 			</View>
 			<Text style={styles.amountText}>-B$ {item.amount}</Text>
 		</View>
 	);
 }
 
-const MyTransactionList = (props: MyTransactionListProps) => {
+const MyTransactionList = (props: MyTransactionListProps): ReactElement => {
 
 	const [list, setList] = useState<MyTransactionItem[]>([]);
 	const [selected, setSelected] = useState<number>(0);
@@ -95,7 +102,7 @@ const MyTransactionList = (props: MyTransactionListProps) => {
 	return (
 		<View style={styles.listView}>
 		{
-			list.map((item: MyTransactionItem, i: any) => 
+			list.map((item: MyTransactionItem, i: number) => 
 				<TouchableOpacity onPress={()=>handleSelect(item)} key={i}>
 					<TransactionItem item={item} selected={selected} />
 				</TouchableOpacity>

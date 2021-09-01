@@ -1,4 +1,5 @@
-import React, { ReactElement, useEffect, useState } from 'react';
+import { useNavigation } from '@react-navigation/native';
+import React, { useEffect, useState } from 'react';
 import { StyleSheet, View, Switch, ScrollView } from 'react-native';
 import { Text } from 'react-native-elements';
 import { Header, CancelBtn, Dialog, Button } from "src/shared/uielements";
@@ -7,11 +8,7 @@ import { baseHeader, wrappingContainerBase, viewBase, dialogViewBase } from "src
 import { BarCodeScanner } from 'expo-barcode-scanner';
 import Translation from 'src/translation/en.json';
 import * as Routes from 'src/navigation/constants';
-
-type QRCodeScanProps = {
-	navigation?: any,
-	route?: any,
-}
+import { BUTTON_TYPES } from 'src/constants';
 
 type HandleScaned = {
 	type: string,
@@ -106,8 +103,8 @@ const PaymentConfirm = (props: PaymentConfirmProps) => {
 				</View>
 				<View style={styles.dialogFooter}>
 					<Button
-						type="darkGreen"
-						title="Confirm"
+						type={BUTTON_TYPES.DARK_GREEN}
+						title={Translation.BUTTON.CONFIRM}
 						onPress={() => props.onConfirm()}
 					/>
 				</View>
@@ -151,16 +148,14 @@ const FeeConfirm = (props: FeeConfirmProps) => {
 
 				<View style={{...styles.dialogFooter, flexDirection: 'row'}}>
 					<Button
-						type="darkGreen"
+						type={BUTTON_TYPES.DARK_GREEN}
 						style={{backgroundColor: colors.white, borderWidth: 1, flex: 1, marginRight: 10}}
 						title="No, thanks"
-						textStyle={{color: colors.darkGreen}}
 						onPress={() => props.onCancel()}
 					/>
 					<Button
-						type="darkGreen"
-						title="Confirm"
-						style={{flex: 1}}
+						type={BUTTON_TYPES.DARK_GREEN}
+						title={Translation.BUTTON.CONFIRM}
 						onPress={() => props.onConfirm()}
 					/>
 				</View>
@@ -169,7 +164,8 @@ const FeeConfirm = (props: FeeConfirmProps) => {
 	)
 }
 
-const QRCodeScan = (props: QRCodeScanProps): ReactElement => {
+const QRCodeScan = (): JSX.Element => {
+	const navigation = useNavigation();
 	const [hasPermission, setHasPermission] = useState<boolean>(null || false);
 	const [isScanned, setIsScanned] = useState<boolean>(false);
 	const [isEnabled, setIsEnabled] = useState<boolean>(false);
@@ -180,7 +176,7 @@ const QRCodeScan = (props: QRCodeScanProps): ReactElement => {
 		setIsEnabled(previousState => !previousState);
 		if (!isEnabled) {
 			setIsEnabled(previousState => !previousState);
-			props.navigation.navigate(Routes.PAYMENT_REQUEST);
+			navigation.navigate(Routes.PAYMENT_REQUEST);
 		}
 	}
 
@@ -212,12 +208,12 @@ const QRCodeScan = (props: QRCodeScanProps): ReactElement => {
 
 	const onFeeConfirm = () => {
 		setIsFeeDialogOpen(false);
-		props.navigation.navigate(Routes.PAYMENT_PENDING);
+		navigation.navigate(Routes.PAYMENT_PENDING);
 	}
 
 	const onCancle = () => {
 		setIsFeeDialogOpen(false);
-		props.navigation.navigate(Routes.DASHBOARD);
+		navigation.navigate(Routes.DASHBOARD);
 	}
 
 	return (
@@ -230,7 +226,7 @@ const QRCodeScan = (props: QRCodeScanProps): ReactElement => {
 			</View>
 			<View style={styles.toggleView}>
 				<Header
-					rightComponent={<CancelBtn text="Close" color={colors.white} onClick={() => props.navigation.navigate(Routes.DASHBOARD)} />}
+					rightComponent={<CancelBtn text={Translation.BUTTON.CLOSE} color={colors.white} onClick={() => navigation.goBack()} />}
 				/>
 				<View style={styles.switchView}>
 					<Switch
