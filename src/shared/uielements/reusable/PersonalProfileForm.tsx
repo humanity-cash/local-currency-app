@@ -1,22 +1,10 @@
-import React, { useEffect, useState } from "react";
-import { View, TouchableOpacity, Platform, StyleSheet } from "react-native";
-import { Text, Image } from "react-native-elements";
 import * as ImagePicker from 'expo-image-picker';
-import { useUserDetails } from "src/hooks";
+import React, { ReactElement, useContext, useEffect } from "react";
+import { Platform, StyleSheet, TouchableOpacity, View } from "react-native";
+import { Image, Text } from "react-native-elements";
+import { AuthContext } from 'src/auth';
 import { colors } from "src/theme/colors";
-import { IMap, PersonalDetailsErrors } from "src/utils/types";
-import { validateDetailsForm } from "src/utils/validation";
 import BlockInput from "../BlockInput";
-
-interface PersonalProfileState extends IMap {
-  avatar: string;
-  username: string;
-}
-
-interface PersonalProfileProps {
-  isValid: (valid: boolean) => void;
-  showValidation?: boolean;
-}
 
 const styles = StyleSheet.create({
   container: {
@@ -63,14 +51,8 @@ const styles = StyleSheet.create({
   }
 });
 
-const PersonalProfileForm = (props: PersonalProfileProps) => {
-  const { personalDetails, updatePersonalDetails } = useUserDetails();
-  const [validationErrors, setValidationErrors] = useState<PersonalDetailsErrors>({});
-  const [state, setState] = useState<PersonalProfileState>({
-    avatar: "",
-    username: ""
-  });
-  const { showValidation } = props;
+const PersonalProfileForm = (): ReactElement => {
+  const { signUpDetails, setSignUpDetails } = useContext(AuthContext);
 
   useEffect(() => {
 		(async () => {
@@ -83,30 +65,7 @@ const PersonalProfileForm = (props: PersonalProfileProps) => {
 		})();
 	}, []);
 
-  useEffect(() => {
-    const validation = validateDetailsForm(personalDetails);
-    setValidationErrors(validation.errors);
-  }, [personalDetails]);
-
-  useEffect(() => {
-    props.isValid(state.username !== "");
-  }, [state]);
-
-  useEffect(() => {
-    setState({
-      avatar: personalDetails.avatar,
-      username: personalDetails.username
-    });
-  }, [personalDetails]);
-
-  const onValueChange = (name: any, change: any) => {
-    setState({
-      ...state,
-      [name]: change,
-    } as any);
-    updatePersonalDetails({ [name]: change });
-  };
-
+ //
   const pickImage = async () => {
 		const result = await ImagePicker.launchImageLibraryAsync({
 			mediaTypes: ImagePicker.MediaTypeOptions.All,
@@ -116,9 +75,13 @@ const PersonalProfileForm = (props: PersonalProfileProps) => {
 		});
 	
 		if (!result.cancelled) {
-		  	onValueChange('avatar', result.uri);
+		  	setSignUpDetails((pv: any) => ({ ...pv, avatar: result.uri }));
 		}
-	};
+	}
+
+  const onValueChange = (name: string, change: string) => {
+    setSignUpDetails((pv: any) => ({...pv, tag: change }))
+  };
 
   return (
     <View style={styles.container}>
@@ -126,11 +89,11 @@ const PersonalProfileForm = (props: PersonalProfileProps) => {
       <View style={styles.pickImageView}>
         <TouchableOpacity onPress={pickImage}>
           <View style={styles.imageView}>
-            {state.avatar === '' && <Image 
+            {signUpDetails.avatar === '' && <Image 
               source={require('../../../../assets/images/placeholder5.png')}
               containerStyle={styles.image} 
             />}
-            {state.avatar !== '' && <Image source={{ uri: state.avatar }} style={styles.image} />}
+            {signUpDetails.avatar !== '' && <Image source={{ uri: signUpDetails.avatar }} style={styles.image} />}
           </View>
         </TouchableOpacity>
         <Text style={styles.label}>UPLOAD PROFILE PICTURE</Text>
@@ -138,9 +101,9 @@ const PersonalProfileForm = (props: PersonalProfileProps) => {
       </View>
       <Text style={styles.smallLabel}>USER NAME*</Text>
       <BlockInput
-        name="username"
+        name="tag"
         placeholder="@username"
-        value={state.username}
+        value={signUpDetails.username}
         onChange={onValueChange}
       />
     </View>
@@ -148,3 +111,12 @@ const PersonalProfileForm = (props: PersonalProfileProps) => {
 };
 
 export default PersonalProfileForm;
+
+  // useEffect(() => {
+  //   const validation = validateDetailsForm(personalDetails);
+  //   setValidationErrors(validation.errors);
+  // }, [personalDetails]);
+
+  // useEffect(() => {
+  //   props.isValid(state.username !== "");
+  // }, [state]);

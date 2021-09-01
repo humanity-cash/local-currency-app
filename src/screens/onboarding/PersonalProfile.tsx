@@ -1,20 +1,16 @@
 import { useNavigation } from '@react-navigation/native';
 import React, { ReactElement, useState } from 'react';
-import { KeyboardAvoidingView, Platform, ScrollView, View, StyleSheet } from 'react-native';
+import { KeyboardAvoidingView, Platform, ScrollView, StyleSheet, View } from 'react-native';
 import { Text } from 'react-native-elements';
+import { BUTTON_TYPES } from 'src/constants';
 import { useUserDetails } from "src/hooks";
-import { Button, BackBtn, Header, CancelBtn, PersonalProfileForm } from 'src/shared/uielements';
-import { underlineHeader, viewBase, wrappingContainerBase } from "src/theme/elements";
-import { validateProfileForm } from "src/utils/validation";
-import { colors } from "src/theme/colors";
-
-import Translation from 'src/translation/en.json';
 import * as Routes from 'src/navigation/constants';
+import { BackBtn, Button, CancelBtn, Header, PersonalProfileForm } from 'src/shared/uielements';
+import { colors } from "src/theme/colors";
+import { underlineHeader, viewBase, wrappingContainerBase } from "src/theme/elements";
+import Translation from 'src/translation/en.json';
+import { validateProfileForm } from "src/utils/validation";
 
-type PersonalProfileProps = {
-	navigation?: any
-	route?: any
-}
 
 const styles = StyleSheet.create({
 	headerText: {
@@ -29,7 +25,8 @@ const styles = StyleSheet.create({
 	},
 });
 
-const PersonalProfileView = (props: PersonalProfileProps) => {
+const PersonalProfile = (): ReactElement => {
+	const navigation = useNavigation()
 	const { personalDetails } = useUserDetails();
 	const [goNext, setGoNext] = useState<boolean>(false);
 	const [isShowValidation, setIsShowValidation] = useState<boolean>(false);
@@ -38,14 +35,14 @@ const PersonalProfileView = (props: PersonalProfileProps) => {
 		const validation = validateProfileForm(personalDetails);
 		setIsShowValidation(true);
 		if (validation.valid) {
-			props.navigation.navigate(Routes.PERSONAL_DETAILS);
+			navigation.navigate(Routes.PERSONAL_DETAILS);
 		}
 	}
 
 	return (
 		<View style={viewBase}>
 			<Header
-				leftComponent={<BackBtn onClick={() => props.navigation.goBack()} />}
+				leftComponent={<BackBtn onClick={() => navigation.goBack()} />}
 				rightComponent={<CancelBtn text={Translation.BUTTON.LOGOUT} onClick={() => props.navigation.navigate(Routes.TEASER)} />}
 			/>
 
@@ -63,7 +60,7 @@ const PersonalProfileView = (props: PersonalProfileProps) => {
 			>
 				<View style={styles.bottomView}>
 					<Button
-						type="darkGreen"
+						type={BUTTON_TYPES.DARK_GREEN}
 						title={Translation.BUTTON.NEXT}
 						disabled={!goNext}
 						onPress={onNextPress}
@@ -74,8 +71,4 @@ const PersonalProfileView = (props: PersonalProfileProps) => {
 	);
 }
 
-const PersonalProfile = (props: PersonalProfileProps): ReactElement => {
-	const navigation = useNavigation();
-	return <PersonalProfileView {...props} navigation={navigation} />;
-}
 export default PersonalProfile

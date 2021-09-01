@@ -1,20 +1,15 @@
 import { useNavigation } from "@react-navigation/native";
-import React, { ReactElement } from "react";
-import { ScrollView, View, StyleSheet } from "react-native";
+import React, { useContext } from "react";
+import { ScrollView, StyleSheet, View } from "react-native";
 import { Text } from "react-native-elements";
+import { AuthContext } from "src/auth";
+import * as Routes from 'src/navigation/constants';
 import Button from "src/shared/uielements/Button";
 import { CancelBtn } from "src/shared/uielements/header";
 import Header from "src/shared/uielements/header/Header";
-import { underlineHeader, viewBaseWhite, wrappingContainerBase } from "src/theme/elements";
 import { colors } from "src/theme/colors";
-
+import { underlineHeader, viewBaseWhite, wrappingContainerBase } from "src/theme/elements";
 import Translation from 'src/translation/en.json';
-import * as Routes from 'src/navigation/constants';
-
-type SelectAccountTypeProps = {
-  navigation?: any;
-  route?: any;
-};
 
 const styles = StyleSheet.create({
 	headerText: {
@@ -38,12 +33,24 @@ const styles = StyleSheet.create({
 	}
 });
 
-const SelectAccountTypeView = (props: SelectAccountTypeProps) => {
-  
+const SelectAccountType = () => {
+	const navigation = useNavigation()
+	const { setSignupDetails } = useContext(AuthContext);
+
+	const handlePersonal = () => {
+		setSignupDetails(( pv: any ) => ({...pv, type: 'personal'}))
+		navigation.navigate(Routes.PERSONAL_PROFILE)
+	}
+
+	const handleBuisness = () => {
+		setSignupDetails(( pv: any ) => ({...pv, type: 'buisness'}))
+		navigation.navigate(Routes.SIGNUP_BUSINESS);
+	}
+
   return (
     <View style={viewBaseWhite}>
 		<Header
-			rightComponent={<CancelBtn text={Translation.BUTTON.CLOSE} onClick={() => props.navigation.navigate(Routes.TEASER)} />}
+			rightComponent={<CancelBtn text={Translation.BUTTON.CLOSE} onClick={() => navigation.navigate(Routes.TEASER)} />}
 		/>
 
       	<ScrollView style={wrappingContainerBase}>
@@ -54,12 +61,12 @@ const SelectAccountTypeView = (props: SelectAccountTypeProps) => {
 			<View style={styles.accountType}>
 				<Button 
 					type="transparent" 
-					onPress={() => props.navigation.navigate(Routes.PERSONAL_PROFILE)} 
+					onPress={handlePersonal} 
 					title={Translation.BUTTON.PERSONAL}
 					style={styles.button} />
 				<Button 
 					type="transparent" 
-					onPress={() => props.navigation.navigate(Routes.SIGNUP_BUSINESS)} 
+					onPress={handleBuisness} 
 					title={Translation.BUTTON.BUSINESS_PERSONAL}
 					style={styles.button}/>
 			</View>
@@ -68,8 +75,4 @@ const SelectAccountTypeView = (props: SelectAccountTypeProps) => {
   );
 };
 
-const SelectAccountType = (props: SelectAccountTypeProps): ReactElement => {
-  const navigation = useNavigation();
-  return <SelectAccountTypeView {...props} navigation={navigation} />;
-};
 export default SelectAccountType;
