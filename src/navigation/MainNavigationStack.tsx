@@ -113,7 +113,7 @@ const PrimaryStackScreen = () => {
 			) : (
 				<>
 
-					<PrimaryStack.Screen name='Tabs' component={Tabs} />
+					<PrimaryStack.Screen name={Routes.TABS} component={Tabs} />
 					<PrimaryStack.Screen
 						name={Routes.QRCODE_SCAN}
 						component={QRCodeScan}
