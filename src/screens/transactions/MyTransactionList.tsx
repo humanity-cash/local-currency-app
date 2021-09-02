@@ -1,4 +1,4 @@
-import React, {useState, useEffect, ReactElement} from 'react';
+import React, {useState, useEffect} from 'react';
 import { StyleSheet, View } from 'react-native';
 import { Text, Image } from 'react-native-elements';
 import { colors } from "src/theme/colors";
@@ -73,7 +73,7 @@ const TransactionItem = (props: MyTransactionItemProps) => {
 	);
 }
 
-const MyTransactionList = (props: MyTransactionListProps): ReactElement => {
+const MyTransactionList = (props: MyTransactionListProps): JSX.Element => {
 
 	const [list, setList] = useState<MyTransactionItem[]>([]);
 	const [selected, setSelected] = useState<number>(0);
