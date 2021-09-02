@@ -106,7 +106,7 @@ const LoadUp = (): JSX.Element => {
           <CancelBtn
             text={Translation.BUTTON.CLOSE}
             onClick={() =>
-              navigation.navigate(Routes.DASHBOARD)
+              navigation.navigate(Routes.TABS)
             }
           />
         }

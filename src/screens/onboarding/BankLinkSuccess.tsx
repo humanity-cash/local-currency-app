@@ -40,7 +40,7 @@ const BankLinkSuccess = (): JSX.Element => {
 					<Button
 						type={BUTTON_TYPES.TRANSPARENT}
 						title={Translation.BUTTON.SKIP_NOW}
-						onPress={() => navigation.navigate(Routes.DASHBOARD)}
+						onPress={() => navigation.navigate(Routes.TABS)}
 					/>
 					<Button
 						type={BUTTON_TYPES.DARK_GREEN}
