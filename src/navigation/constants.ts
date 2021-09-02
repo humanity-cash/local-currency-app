@@ -38,16 +38,32 @@ export const SELECT_MERCHANT_BANK_ACCOUNT = "SelectMerchantBankAccount";
 export const LOGIN_MERCHANT_BANK = "LoginToMerchantBank";
 export const MERCHANT_CASHOUT_PASSWORD = "MerchantCashoutPassword";
 export const MERCHANT_REDEMPTION_IN_PROGRESS = "MerchantRedemptionInProgress";
+export const MERCHANT_LOADUP = "MerchantLoadup";
 export const MERCHANT_LOADUP_PENDING = "MerchantLoadupPending";
 export const MERCHANT_LOADUP_SUCCESS = "MerchantLoadupSuccess";
 export const MERCHANT_PAYMENT_SUCCESS = "MerchantPaymentSuccess";
 export const MERCHANT_PAYMENT_PENDING = "MerchantPaymentPending";
 export const MERCHANT_RETURN = "MerchantReturn";
+export const MERCHANT_RETURN_QRCODE_SCAN = "MerchantReturnQRCodeScan";
 export const MERCHANT_PAYOUT_SUCCESS = "MerchantPayoutSuccess";
 export const MERCHANT_PAYOUT_PENDING = "MerchantPayoutPending";
 export const MERCHANT_PAYOUT_PERSONAL = "MerchantPayoutToPersonal";
 export const MERCHANT_PAYOUT_SOMEONE = "MerchantPayoutToSomeone";
 export const MERCHANT_PAYOUT_QR_SCAN = "MerchantPayoutQRCodeScan";
+export const MERCHANT_REQUEST = "MerchantRequest";
+export const MERCHANT_PAYOUT_SELECTION = "MerchantPayoutSelection";
+export const MERCHANT_CASHOUT_AMOUNT = "MerchantCashoutAmount";
+export const MERCHANT_SETTINGS = "MerchantSettings";
+export const MERCHANT_HELP_AND_CONTACT = "MerchantHelpAndContact";
+
+export const CASHIER_DASHBOARD = "CashierDashboard";
+export const CASHIER_HELP = "CashierHelp";
+export const CASHIER_REQUEST = "CashierRequest";
+export const CASHIER_TRANSACTIONS = "CashierTransactions";
+export const CASHIER_PAYMENT_SUCCESS = "CashierPaymentSuccess";
+
+export const REPORT = "Report";
+export const REPORT_SUCCESS = "ReportSuccess";
 
 // Personal tabs
 export const DASHBOARD = "Dashboard";

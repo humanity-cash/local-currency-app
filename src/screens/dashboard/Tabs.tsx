@@ -1,4 +1,4 @@
-import { EvilIcons, Octicons } from '@expo/vector-icons';
+import { EvilIcons, Feather } from '@expo/vector-icons';
 import {
 	createDrawerNavigator,
 	DrawerContentComponentProps,
@@ -19,6 +19,7 @@ import { AuthContext } from 'src/auth';
 import * as Routes from 'src/navigation/constants';
 import { colors } from 'src/theme/colors';
 import Translation from 'src/translation/en.json';
+import { UserType } from 'src/utils/types';
 import CashoutAmount from '../cashout/CashoutAmount';
 import MerchantDictionary from '../merchant/MerchantDictionary';
 import PaymentRequest from '../payment/PaymentRequest';
@@ -87,8 +88,18 @@ const styles = StyleSheet.create({
 const DrawerContent = (
 	props: DrawerContentComponentProps<DrawerContentOptions>
 ) => {
-	const { signOut } = useContext(AuthContext);
+	const { signOut, setUserType } = useContext(AuthContext);
 	const [isExpanded, setIsExpanded] = useState<boolean>(false);
+
+	const onMerchant = () => {
+		setUserType(UserType.MERCHANT);
+		props.navigation.navigate(Routes.MERCHANT_TABS);
+	}
+
+	const onCashier = () => {
+		setUserType(UserType.CASHIER);
+		props.navigation.navigate(Routes.CASHIER_DASHBOARD);
+	}
 
 	return (
 		<View style={styles.drawerWrap}>
@@ -122,11 +133,7 @@ const DrawerContent = (
 						{isExpanded && (
 							<View>
 								<TouchableWithoutFeedback
-									onPress={() =>
-										props.navigation.navigate(
-											Routes.MERCHANT_TABS
-										)
-									}>
+									onPress={onMerchant}>
 									<View style={styles.userInfo}>
 										<View style={styles.imageView}>
 											<Image
@@ -140,11 +147,7 @@ const DrawerContent = (
 									</View>
 								</TouchableWithoutFeedback>
 								<TouchableWithoutFeedback
-									onPress={() =>
-										props.navigation.navigate(
-											Routes.MERCHANT_TABS
-										)
-									}>
+									onPress={onCashier}>
 									<View style={styles.userInfo}>
 										<View style={styles.imageView}>
 											<Image
@@ -232,8 +235,8 @@ const DrawerContent = (
 			<Drawer.Section style={styles.bottomSection}>
 				<DrawerItem
 					icon={() => (
-						<Octicons
-							name='sign-out'
+						<Feather 
+							name="log-out"
 							size={24}
 							color={colors.text}
 						/>
