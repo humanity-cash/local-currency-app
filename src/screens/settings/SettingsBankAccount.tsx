@@ -140,7 +140,7 @@ export const SettingsBankAccount = (): ReactElement => {
 						<Button
 							type="darkGreen"
 							title={Translation.BUTTON.LINK_BUSINESS_BANK}
-							onPress={()=>navigation.navigate(Routes.SELECT_BANK_ACCOUNT)}
+							onPress={()=>navigation.navigate(Routes.SELECT_BANK)}
 						/>
 					)
 				}
