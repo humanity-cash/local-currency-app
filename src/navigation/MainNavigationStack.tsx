@@ -102,6 +102,10 @@ const PrimaryStackScreen = () => {
 			) : (
 				<>
 					<PrimaryStack.Screen
+						name={Routes.SELECT_ACCOUNT_TYPE}
+						component={SelectAccountType}
+					/>
+					<PrimaryStack.Screen
 						name={Routes.PERSONAL_PROFILE}
 						component={PersonalProfile}
 					/>
@@ -158,10 +162,6 @@ const PrimaryStackScreen = () => {
 					<PrimaryStack.Screen
 						name={Routes.SETTING_DELETE_ACCOUNT}
 						component={SettingsDeleteAccount}
-					/>
-					<PrimaryStack.Screen
-						name={Routes.SELECT_ACCOUNT_TYPE}
-						component={SelectAccountType}
 					/>
 					<PrimaryStack.Screen
 						name={Routes.LINK_BANK_ACCOUNT}
