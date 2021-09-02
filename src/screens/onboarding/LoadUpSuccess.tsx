@@ -24,7 +24,7 @@ const LoadUpSuccess = (): JSX.Element => {
 	return (
 		<View style={viewBase}>
 			<Header
-				rightComponent={<CancelBtn text={Translation.BUTTON.CLOSE} onClick={() => navigation.navigate(Routes.DASHBOARD)} />}
+				rightComponent={<CancelBtn text={Translation.BUTTON.CLOSE} onClick={() => navigation.navigate(Routes.TABS)} />}
 			/>
 			<ScrollView style={wrappingContainerBase}>
 				<View style={ baseHeader }>
@@ -39,7 +39,7 @@ const LoadUpSuccess = (): JSX.Element => {
 					<Button
 						type="darkGreen"
 						title={Translation.BUTTON.EXPLORE_BERKSHARES}
-						onPress={() => navigation.navigate(Routes.DASHBOARD)}
+						onPress={() => navigation.navigate(Routes.TABS)}
 					/>
 				</View>
 			</KeyboardAvoidingView>
