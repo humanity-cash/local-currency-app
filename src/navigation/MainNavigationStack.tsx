@@ -82,18 +82,6 @@ const PrimaryStackScreen = () => {
 					/>
 					{/* <PrimaryStack.Screen name={'TouchId'} component={TouchId} /> */}
 					<PrimaryStack.Screen
-						name={Routes.PERSONAL_PROFILE}
-						component={PersonalProfile}
-					/>
-					<PrimaryStack.Screen
-						name={Routes.PERSONAL_DETAILS}
-						component={PersonalDetails}
-					/>
-					<PrimaryStack.Screen
-						name={Routes.PERSONAL_ADDRESS}
-						component={PersonalAddress}
-					/>
-					<PrimaryStack.Screen
 						name={Routes.TERMS_EMAIL}
 						component={TermsEmail}
 					/>
@@ -112,7 +100,18 @@ const PrimaryStackScreen = () => {
 				</>
 			) : (
 				<>
-
+					<PrimaryStack.Screen
+						name={Routes.PERSONAL_PROFILE}
+						component={PersonalProfile}
+					/>
+					<PrimaryStack.Screen
+						name={Routes.PERSONAL_DETAILS}
+						component={PersonalDetails}
+					/>
+					<PrimaryStack.Screen
+						name={Routes.PERSONAL_ADDRESS}
+						component={PersonalAddress}
+					/>
 					<PrimaryStack.Screen name={Routes.TABS} component={Tabs} />
 					<PrimaryStack.Screen
 						name={Routes.QRCODE_SCAN}
