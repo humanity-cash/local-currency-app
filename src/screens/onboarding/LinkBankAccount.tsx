@@ -45,7 +45,7 @@ const LinkBankAccount = (): JSX.Element => {
 				<Button
 					type={BUTTON_TYPES.DARK_GREEN}
 					title={Routes.LINK_BANK_ACCOUNT}
-					onPress={() => navigation.navigate(Routes.SELECT_BANK_ACCOUNT)}
+					onPress={() => navigation.navigate(Routes.SELECT_BANK)}
 				/>
 			</View>
 		</View>

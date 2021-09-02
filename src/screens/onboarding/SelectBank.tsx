@@ -82,7 +82,7 @@ const SelectBank = (): JSX.Element => {
 		<View style={viewBase}>
 			<Header
 				leftComponent={<BackBtn onClick={() => navigation.goBack()} />}
-				rightComponent={<CancelBtn text="Close" onClick={() => navigation.navigate(Routes.DASHBOARD)} />}
+				rightComponent={<CancelBtn text="Close" onClick={() => navigation.navigate(Routes.TABS)} />}
 			/>
 
 			<ScrollView style={wrappingContainerBase}>
