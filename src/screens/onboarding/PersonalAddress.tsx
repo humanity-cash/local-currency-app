@@ -1,7 +1,8 @@
 import { useNavigation } from '@react-navigation/native';
-import React, { ReactElement, useState } from 'react';
+import React, { ReactElement, useState, useContext } from 'react';
 import { KeyboardAvoidingView, Platform, ScrollView, View, StyleSheet } from 'react-native';
 import { Text } from 'react-native-elements';
+import { AuthContext } from 'src/auth';
 import { useUserDetails } from "src/hooks";
 import { BackBtn, Button, Header, CancelBtn, PersonalAddressForm } from 'src/shared/uielements';
 import { underlineHeader, viewBase, wrappingContainerBase } from "src/theme/elements";
@@ -32,6 +33,7 @@ const styles = StyleSheet.create({
 });
 
 const PersonalAddressView = (props: PersonalAddressProps) => {
+	const { signOut } = useContext(AuthContext);
 	const { personalDetails, updateStatus } = useUserDetails();
 	const [goNext, setGoNext] = useState(false);
 	const [showValidation, setShowValidation] = useState(false);
@@ -49,7 +51,7 @@ const PersonalAddressView = (props: PersonalAddressProps) => {
 		<View style={viewBase}>
 			<Header
 				leftComponent={<BackBtn onClick={() => props.navigation.goBack()} />}
-				rightComponent={<CancelBtn text={Translation.BUTTON.LOGOUT} onClick={() => props.navigation.navigate(Routes.TEASER)} />}
+				rightComponent={<CancelBtn text={Translation.BUTTON.LOGOUT} onClick={signOut} />}
 			/>
 
 			<ScrollView style={ wrappingContainerBase }>
