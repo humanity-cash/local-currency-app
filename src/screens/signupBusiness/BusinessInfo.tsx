@@ -1,6 +1,7 @@
-import React, { useState, useEffect, ReactElement } from 'react';
+import React, { useState, useEffect, ReactElement, useContext } from 'react';
 import { StyleSheet, View, KeyboardAvoidingView, ScrollView, Platform, Picker } from 'react-native';
 import { Text } from 'react-native-elements';
+import { AuthContext } from 'src/auth';
 import { useUserDetails } from "src/hooks";
 import { Header, Button, CancelBtn, BackBtn, BlockInput } from "src/shared/uielements";
 import { underlineHeaderB, viewBaseB, wrappingContainerBase } from "src/theme/elements";
@@ -64,6 +65,7 @@ const styles = StyleSheet.create({
 });
 
 const BusinessInfo = (props: BusinessInfoProps): ReactElement => {
+	const { signOut } = useContext(AuthContext);
 	const { businessDetails, updateBusinessDetails } = useUserDetails();
 	const [goNext, setGoNext] = useState<boolean>(false);
 	const [state, setState] = useState<BusinessInfoState>({
@@ -96,7 +98,7 @@ const BusinessInfo = (props: BusinessInfoProps): ReactElement => {
 		<View style={viewBaseB}>
 			<Header
 				leftComponent={<BackBtn color={colors.purple} onClick={() => props.navigation.goBack()} />}
-				rightComponent={<CancelBtn color={colors.purple} text={Translation.BUTTON.LOGOUT} onClick={() => props.navigation.navigate(Routes.TEASER)} />}
+				rightComponent={<CancelBtn color={colors.purple} text={Translation.BUTTON.LOGOUT} onClick={signOut} />}
 			/>
 			<ScrollView style={wrappingContainerBase}>
                 <View style={underlineHeaderB}>
