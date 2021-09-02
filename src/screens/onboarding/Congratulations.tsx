@@ -1,8 +1,8 @@
 import { useNavigation } from '@react-navigation/native';
-import React from 'react';
+import React, { ReactElement } from 'react';
 import { StyleSheet, View, KeyboardAvoidingView, Platform, ScrollView } from 'react-native';
 import { Text } from 'react-native-elements';
-import { BackBtn, Header, CancelBtn, Button } from "src/shared/uielements";
+import { Header, Button } from "src/shared/uielements";
 import { colors } from "src/theme/colors";
 import { baseHeader, viewBaseWhite, wrappingContainerBase } from "src/theme/elements";
 
@@ -54,7 +54,7 @@ const CongratulationsView = (props: CongratulationsProps) => {
 	);
 }
 
-const Congratulations = (props: CongratulationsProps) => {
+const Congratulations = (props: CongratulationsProps): ReactElement => {
 	const navigation = useNavigation();
 	return <CongratulationsView {...props} navigation={navigation} />;
 }

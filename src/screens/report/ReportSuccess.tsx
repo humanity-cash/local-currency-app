@@ -1,16 +1,16 @@
-import React, { ReactElement } from 'react';
+
+import { useNavigation } from '@react-navigation/native';
+import React, { useContext } from 'react';
 import { StyleSheet, View, KeyboardAvoidingView, ScrollView, Platform } from 'react-native';
 import { Text } from 'react-native-elements';
+import { AuthContext } from 'src/auth';
 import { Header, Button, CancelBtn } from "src/shared/uielements";
 import { baseHeader, viewBase, wrappingContainerBase } from "src/theme/elements";
 import { colors } from "src/theme/colors";
 import Translation from 'src/translation/en.json';
 import * as Routes from 'src/navigation/constants';
-
-type MerchantPaymentSuccessProps = {
-	navigation?: any,
-	route?: any,
-}
+import { UserType } from 'src/utils/types';
+import { BUTTON_TYPES } from 'src/constants';
 
 const styles = StyleSheet.create({
 	headerText: {
@@ -28,27 +28,32 @@ const styles = StyleSheet.create({
 	},
 });
 
-const MerchantPaymentSuccess = (props: MerchantPaymentSuccessProps): ReactElement => {
+const ReportSuccess = (): JSX.Element => {
+	const navigation = useNavigation();
+	const {userType} = useContext(AuthContext);
+
+	const onConfirm = () => {
+		userType === UserType.MERCHANT ? navigation.navigate(Routes.MERCHANT_DASHBOARD) : navigation.navigate(Routes.CASHIER_DASHBOARD);
+	}
 
 	return (
 		<View style={viewBase}>
 			<Header
-				rightComponent={<CancelBtn text="Close" color={colors.purple} onClick={() => props.navigation.navigate(Routes.MERCHANT_DASHBOARD)} />}
+				rightComponent={<CancelBtn text={Translation.BUTTON.CLOSE} color={colors.purple} onClick={onConfirm} />}
 			/>
 			<ScrollView style={wrappingContainerBase}>
-				<View style={baseHeader}>
+				<View style={ baseHeader }>
 					<Text style={styles.headerText}>{Translation.COMMON.SUCCEEDED}</Text>
-					<Text style={styles.headerText}>{Translation.COMMON.THANK_YOU}</Text>
 				</View>
-				<Text style={styles.text}>{Translation.PAYMENT.PAYMENT_SUCCESS_DETAIL}</Text>
+				<Text style={styles.text}>{Translation.REPORT.SENT_REPORT} fennie@humanity.cash</Text>
 			</ScrollView>
 			<KeyboardAvoidingView
 				behavior={Platform.OS == "ios" ? "padding" : "height"} >
 				<View style={styles.bottomView}>
 					<Button
-						type="purple"
-						title={Translation.BUTTON.NEXT}
-						onPress={() => props.navigation.navigate(Routes.MERCHANT_DASHBOARD)}
+						type={BUTTON_TYPES.PURPLE}
+						title={Translation.BUTTON.GO_BACK_HOME}
+						onPress={onConfirm}
 					/>
 				</View>
 			</KeyboardAvoidingView>
@@ -56,4 +61,4 @@ const MerchantPaymentSuccess = (props: MerchantPaymentSuccessProps): ReactElemen
 	);
 }
 
-export default MerchantPaymentSuccess
+export default ReportSuccess
