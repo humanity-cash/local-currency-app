@@ -28,6 +28,7 @@ import LoadUp from "src/screens/onboarding/LoadUp";
 import LoadUpSuccess from "src/screens/onboarding/LoadUpSuccess";
 import Verification from "src/screens/onboarding/Verification";
 import VerificationHelp from "src/screens/onboarding/VerificationHelp";
+import PaymentRequest from "src/screens/payment/PaymentRequest";
 import PaymentPending from "src/screens/payment/PaymentPending";
 import PaymentSuccess from "src/screens/payment/PaymentSuccess";
 import QRCodeScan from "src/screens/payment/QRCodeScan";
@@ -125,10 +126,10 @@ const PrimaryStackScreen = () => {
 						name={Routes.PAYMENT_SUCCESS}
 						component={PaymentSuccess}
 					/>
-					{/* <PrimaryStack.Screen
-						name='PaymentRequest'
-						component={Request}
-					/> */}
+					<PrimaryStack.Screen
+						name={Routes.PAYMENT_REQUEST}
+						component={PaymentRequest}
+					/>
 					<PrimaryStack.Screen
 						name={Routes.CASHOUT}
 						component={CashoutNavigator}
