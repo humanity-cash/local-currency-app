@@ -168,7 +168,7 @@ const DrawerContent = (
 						<DrawerItem
 							label='Scan to pay'
 							onPress={() => {
-								props.navigation.navigate(Routes.SCAN_PAY);
+								props.navigation.navigate(Routes.QRCODE_SCAN);
 							}}
 						/>
 						<DrawerItem
@@ -257,7 +257,7 @@ const Tabs = (): JSX.Element => {
 			initialRouteName={Routes.DASHBOARD}
 			drawerContent={(props) => <DrawerContent {...props} />}>
 			<DrawerNav.Screen name={Routes.DASHBOARD} component={Dashboard} />
-			<DrawerNav.Screen name={Routes.SCAN_PAY} component={QRCodeScan} />
+			<DrawerNav.Screen name={Routes.QRCODE_SCAN} component={QRCodeScan} />
 			<DrawerNav.Screen
 				name={Routes.RECEIVE_PAYMENT}
 				component={PaymentRequest}

@@ -17,7 +17,6 @@ export const MERCHANT_TABS = "MerchantTabs";
 export const SELECT_BANK = "SelectBank";
 export const SELECT_BANK_ACCOUNT = "SelectBankAccount";
 export const LOADUP_SUCCESS = "LoadUpSuccess";
-export const QRCODE_SCAN = "QRCodeScan";
 export const BUSINESS_OWNER_DETAIL = "BusinessOwnerDetail";
 export const BUSINESS_OWNER_ADDRESS = "BusinessOwnerAddress"
 export const BUSINESS_INFO = "BusinessInfo";
@@ -74,7 +73,7 @@ export const REPORT_SUCCESS = "ReportSuccess";
 
 // Personal tabs
 export const DASHBOARD = "Dashboard";
-export const SCAN_PAY = "ScanToPay";
+export const QRCODE_SCAN = "QRCodeScan";
 export const RECEIVE_PAYMENT = "ReceivePayment";
 export const LOAD_UP = "LoadUp";
 export const CASHOUT_AMOUNT = "CashOutAmount";
