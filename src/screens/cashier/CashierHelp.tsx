@@ -40,7 +40,7 @@ const styles = StyleSheet.create({
 	}
 });
 
-export const MerchantSettingsHelpAndContact = (): JSX.Element => {
+export const CashierSettingsHelpAndContact = (): JSX.Element => {
 
 	const [searchText, setSearchText] = useState<string>("");
 	const [faqData, setFaqData] = useState<FaqData[]>([]);
@@ -86,4 +86,4 @@ export const MerchantSettingsHelpAndContact = (): JSX.Element => {
 	);
 }
 
-export default MerchantSettingsHelpAndContact;
+export default CashierSettingsHelpAndContact;
