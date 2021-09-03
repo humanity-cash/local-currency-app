@@ -23,11 +23,11 @@ const styles = StyleSheet.create({
 	},
 });
 
-const MerchantPaymentPending = (): JSX.Element => {
+const CashierPaymentPending = (): JSX.Element => {
 	const navigation = useNavigation();
 	useEffect(() => {
 		setTimeout(() => {
-			navigation.navigate(Routes.MERCHANT_PAYMENT_SUCCESS);
+			navigation.navigate(Routes.CASHIER_RETURN_SUCCESS);
 		}, 2000);
 	});
 
@@ -50,4 +50,4 @@ const MerchantPaymentPending = (): JSX.Element => {
 	);
 }
 
-export default MerchantPaymentPending
+export default CashierPaymentPending
