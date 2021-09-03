@@ -2,7 +2,8 @@ import { DefaultTheme, NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import React, { ReactElement, useContext } from "react";
 import "react-native-gesture-handler";
-import { AuthContext, AuthStatus } from "src/auth";
+import { AuthContext } from "src/auth";
+import { AuthStatus } from "src/auth/types";
 import { useRouteTracking } from "src/hooks";
 import { CashoutNavigator } from "src/navigation/CashoutNavigator";
 import { ForgotPasswordNavigator } from "src/navigation/ForgotPasswordStack";
@@ -45,9 +46,9 @@ import SettingsTermsAndConditions from "src/screens/settings/SettingsTermsAndCon
 const PrimaryStack = createStackNavigator();
 
 const PrimaryStackScreen = () => {
-  const { authStatus } = useContext(AuthContext)
+	const { authStatus } = useContext(AuthContext);
 
-  return (
+	return (
 		<PrimaryStack.Navigator
 			screenOptions={() => ({
 				headerShown: false,
@@ -89,7 +90,7 @@ const PrimaryStackScreen = () => {
 						component={EmailConfirmed}
 					/>
 				</>
-			) : (
+			) : authStatus === AuthStatus.NotVerified ? (
 				<>
 					<PrimaryStack.Screen
 						name="SelectAccountType"
@@ -107,6 +108,33 @@ const PrimaryStackScreen = () => {
 						name="PersonalAddress"
 						component={PersonalAddress}
 					/>
+					<PrimaryStack.Screen
+						name="LinkBankAccount"
+						component={LinkBankAccount}
+					/>
+					<PrimaryStack.Screen
+						name="SelectBank"
+						component={SelectBank}
+					/>
+					<PrimaryStack.Screen
+						name="LoginToBank"
+						component={LoginToBank}
+					/>
+					<PrimaryStack.Screen
+						name="SelectBankAccount"
+						component={SelectBankAccount}
+					/>
+					<PrimaryStack.Screen
+						name="Congratulations"
+						component={Congratulations}
+					/>
+				</>
+			) : authStatus === AuthStatus.Loading ? (
+				<>
+					<PrimaryStack.Screen name="Teaser" component={Teaser} />
+				</>
+			) : (
+				<>
 					<PrimaryStack.Screen name="Tabs" component={Tabs} />
 					<PrimaryStack.Screen
 						name="QRCodeScan"
@@ -171,10 +199,10 @@ const PrimaryStackScreen = () => {
 						name="SettingsDeleteAccount"
 						component={SettingsDeleteAccount}
 					/>
-					<PrimaryStack.Screen
+					{/* <PrimaryStack.Screen
 						name="LinkBankAccount"
 						component={LinkBankAccount}
-					/>
+					/> */}
 					<PrimaryStack.Screen
 						name="SelectBank"
 						component={SelectBank}
@@ -194,51 +222,50 @@ const PrimaryStackScreen = () => {
 				</>
 			)}
 		</PrimaryStack.Navigator>
-  );
-}
+	);
+};
 
 export const MainNavigationStack = (): ReactElement => {
-  const { update } = useRouteTracking();
-  const ref = React.useRef<any>();
-  return (
-    <NavigationContainer
-      ref={ref}
-      onStateChange={() => {
-        update({ current: ref?.current?.getCurrentRoute().name });
-      }}
-      theme={{
-        ...DefaultTheme,
-        colors: {
-          ...DefaultTheme.colors,
-          background: "transparent",
-        },
-      }}
-    >
-      <PrimaryStackScreen />
-    </NavigationContainer>
-  );
+	const { update } = useRouteTracking();
+	const ref = React.useRef<any>();
+	return (
+		<NavigationContainer
+			ref={ref}
+			onStateChange={() => {
+				update({ current: ref?.current?.getCurrentRoute().name });
+			}}
+			theme={{
+				...DefaultTheme,
+				colors: {
+					...DefaultTheme.colors,
+					background: "transparent",
+				},
+			}}>
+			<PrimaryStackScreen />
+		</NavigationContainer>
+	);
 };
 
 /* <PrimaryStack.Screen name="SignupBusiness" component={SignupBusinessNavigator} />
 <PrimaryStack.Screen name="MerchantBankAccount" component={MerchantBankAccountNavigator} />
   */
-					// <PrimaryStack.Screen
-					// 	name='MerchantTabs'
-					// 	component={MerchantTabs}
-					// />
-					// <PrimaryStack.Screen
-					// 	name='MerchantQRCodeScan'
-					// 	component={MerchantQRCodeScan}
-					// />
-					// <PrimaryStack.Screen
-					// 	name='MerchantRequest'
-					// 	component={MerchantQRCodeScan}
-					// />
-					// <PrimaryStack.Screen
-					// 	name='MerchantPaymentPending'
-					// 	component={MerchantPaymentPending}
-					// />
-					// <PrimaryStack.Screen
-					// 	name='MerchantPaymentSuccess'
-					// 	component={MerchantPaymentSuccess}
-					// />
+// <PrimaryStack.Screen
+// 	name='MerchantTabs'
+// 	component={MerchantTabs}
+// />
+// <PrimaryStack.Screen
+// 	name='MerchantQRCodeScan'
+// 	component={MerchantQRCodeScan}
+// />
+// <PrimaryStack.Screen
+// 	name='MerchantRequest'
+// 	component={MerchantQRCodeScan}
+// />
+// <PrimaryStack.Screen
+// 	name='MerchantPaymentPending'
+// 	component={MerchantPaymentPending}
+// />
+// <PrimaryStack.Screen
+// 	name='MerchantPaymentSuccess'
+// 	component={MerchantPaymentSuccess}
+// />

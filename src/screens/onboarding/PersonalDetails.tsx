@@ -1,14 +1,13 @@
 import { useNavigation } from '@react-navigation/native';
 import React, { ReactElement, useState } from 'react';
-import { KeyboardAvoidingView, Platform, ScrollView, View, StyleSheet } from 'react-native';
+import { KeyboardAvoidingView, Platform, ScrollView, StyleSheet, View } from 'react-native';
 import { Text } from 'react-native-elements';
 import { useUserDetails } from "src/hooks";
-import { BackBtn, Button, Header, CancelBtn, PersonalDetailsForm } from 'src/shared/uielements';
-import { underlineHeader, viewBase, wrappingContainerBase } from "src/theme/elements";
-import { validateDetailsForm } from "src/utils/validation";
-import { colors } from "src/theme/colors";
-import Translation from 'src/translation/en.json';
 import * as Routes from 'src/navigation/constants';
+import { BackBtn, Button, CancelBtn, Header, PersonalDetailsForm } from 'src/shared/uielements';
+import { colors } from "src/theme/colors";
+import { underlineHeader, viewBase, wrappingContainerBase } from "src/theme/elements";
+import Translation from 'src/translation/en.json';
 
 type PersonalDetailsProps = {
 	navigation?: any
@@ -36,11 +35,11 @@ const PersonalDetailsView = (props: PersonalDetailsProps) => {
 	const [showValidation, setShowValidation] = useState(false);
 
 	const onNextPress = () => {
-		const validation = validateDetailsForm(personalDetails);
-		setShowValidation(true);
-		if (validation.valid) {
+		// const validation = validateDetailsForm(personalDetails);
+		// setShowValidation(true);
+		// if (validation.valid) {
 			props.navigation.navigate(Routes.PERSONAL_ADDRESS);
-		}
+		// }
 	}
 
 	return (
@@ -68,7 +67,7 @@ const PersonalDetailsView = (props: PersonalDetailsProps) => {
 					<Button
 						type="darkGreen"
 						title={Translation.BUTTON.NEXT}
-						disabled={!goNext}
+						disabled={false}
 						onPress={onNextPress}
 					/>
 				</View>

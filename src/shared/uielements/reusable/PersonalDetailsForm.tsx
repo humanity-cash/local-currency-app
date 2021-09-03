@@ -33,10 +33,10 @@ const styles = StyleSheet.create({
 });
 
 const PersonalDetailsForm = (props: PersonalDetailsProps): ReactElement => {
-  const { signUpDetails, setSignUpDetails } = useContext(AuthContext);
+  const { customerBasicVerificationDetails, setCustomerBasicVerificationDetails } = useContext(AuthContext);
 
   const onValueChange = (name: string, change: string) => {
-		setSignUpDetails((pv: any) => ({
+		setCustomerBasicVerificationDetails((pv: any) => ({
 			...pv,
 			[name]: change,
 		}));
@@ -57,7 +57,7 @@ const PersonalDetailsForm = (props: PersonalDetailsProps): ReactElement => {
       <BlockInput
         name="firstname"
         placeholder="First name"
-        value={signUpDetails.firstName}
+        value={customerBasicVerificationDetails.firstName}
         onChange={onValueChange}
         style={props.style}
       />
@@ -70,7 +70,7 @@ const PersonalDetailsForm = (props: PersonalDetailsProps): ReactElement => {
       <BlockInput
         name="lastname"
         placeholder="Last name"
-        value={signUpDetails.lastName}
+        value={customerBasicVerificationDetails.lastName}
         onChange={onValueChange}
         style={props.style}
       />

@@ -1,3 +1,4 @@
+export { };
 // import { AuthenticationDetails, CognitoUser, CognitoUserAttribute, CognitoUserPool, CognitoUserSession, ISignUpResult } from 'amazon-cognito-identity-js';
 // import { CognitoResponse, ConfirmEmailVerificationCodeInput, SignInInput, SignUpInput, UpdateUserAttributesInput } from './types';
 
@@ -151,4 +152,5 @@
 // 			}
 // 		});
 // 	})
+
 // }
