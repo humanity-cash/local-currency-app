@@ -44,7 +44,12 @@ import CashierDashboard from "src/screens/dashboard/CashierDashboard";
 import CashierHelp from "src/screens/cashier/CashierHelp";
 import CashierRequest from "src/screens/cashier/CashierRequest";
 import CashierTransactions from "src/screens/cashier/CashierTransactions";
-import CashierPaymentSuccess from "src/screens/cashier/CashierPaymentSuccess";
+import CashierRequestSuccess from "src/screens/cashier/CashierRequestSuccess";
+import CashierReturnQRCodeScan from "src/screens/cashier/CashierReturnQRCodeScan";
+import CashierReturn from "src/screens/cashier/CashierReturn";
+import CashierHowToWork from "src/screens/cashier/CashierHowToWork";
+import CashierPaymentPending from "src/screens/cashier/CashierPaymentPending";
+import CashierReturnSuccess from "src/screens/cashier/CashierReturnSuccess";
 import Report from "src/screens/report/Report";
 import ReportSuccess from "src/screens/report/ReportSuccess";
 
@@ -210,8 +215,28 @@ const PrimaryStackScreen = () => {
 						component={CashierTransactions}
 					/>
 					<PrimaryStack.Screen
-						name={Routes.CASHIER_PAYMENT_SUCCESS}
-						component={CashierPaymentSuccess}
+						name={Routes.CASHIER_REQUEST_SUCCESS}
+						component={CashierRequestSuccess}
+					/>
+					<PrimaryStack.Screen
+						name={Routes.CASHIER_RETURN_QRCODE_SCAN}
+						component={CashierReturnQRCodeScan}
+					/>
+					<PrimaryStack.Screen
+						name={Routes.CASHIER_RETURN}
+						component={CashierReturn}
+					/>
+					<PrimaryStack.Screen
+						name={Routes.CASHIER_HOW_TO_WORK}
+						component={CashierHowToWork}
+					/>
+					<PrimaryStack.Screen
+						name={Routes.CASHIER_PAYMENT_PENDING}
+						component={CashierPaymentPending}
+					/>
+					<PrimaryStack.Screen
+						name={Routes.CASHIER_RETURN_SUCCESS}
+						component={CashierReturnSuccess}
 					/>
 
 					<PrimaryStack.Screen

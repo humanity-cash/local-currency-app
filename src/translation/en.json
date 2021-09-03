@@ -62,7 +62,9 @@
         "TODAY": "Today",
         "WEEK": "Week",
         "MONTH": "Month",
-        "SEND_REPORT": "Send report"
+        "SEND_REPORT": "Send report",
+        "RETURN_AMOUNT": "Return amount",
+        "GOT_IT": "Got it"
     },
     "LABEL": {
         "EMAIL_ADDR": "EMAIL ADDRESS",
@@ -102,7 +104,8 @@
         "OLD_PASSWORD": "OLD PASSWORD",
         "RETURN_AMOUNT": "RETURN AMOUNT",
         "TIME_PERIOD": "TIME PERIOD",
-        "TYPE_OF_TRANSACTIONS": "TYPE OF TRANSACTIONS"
+        "TYPE_OF_TRANSACTIONS": "TYPE OF TRANSACTIONS",
+        "TRANSACTION_DETAILS": "TRANSACTION_DETAILS"
     },
     "LANDING_PAGE": {
         "TITLE": "BerkShares",
@@ -262,7 +265,17 @@
         "TRANSACTIONS": "Transactions",
         "BALANCE": "BALANCE",
         "PAYMENT_SUCCESS": "Succeeded! You have received B$",
-        "PAYMENT_SUCCESS_DETAIL": "Receipt will appear in either your as well as the customer’s transaction overview."
+        "PAYMENT_SUCCESS_DETAIL": "Receipt will appear in either your as well as the customer’s transaction overview.",
+        "MAKE_RETURN": "Make a return",
+        "MAKE_RETURN_DETAIL": "Specify the amount you want to return",
+        "HOW_TO_WORK": "How does this work?",
+        "HOW_TO_WORK_DETAIL": "The customer wants to make a purchase and pay with BerkShares. What do yo do?",
+        "HOW_TO_WORK_1": "You fill in the amount the customer had to pay.",
+        "HOW_TO_WORK_2": "Click on 'Next'. Then a QR code pops up",
+        "HOW_TO_WORK_3": "Show this QR code to the customer so they can scan and pay.",
+        "HOW_TO_WORK_4": "Wait for the payment confirmation.",
+        "HOW_TO_WORK_5": "Done!",
+        "HOW_TO_WORK_6": "If there is no confirmation, check the transaction  in the 'Transactions' section via the home page. Try again if the transaction does not show up in the overview."
     },
     "TABS": {
         "RECEIVE_PAYMENT": "Receive payment",
