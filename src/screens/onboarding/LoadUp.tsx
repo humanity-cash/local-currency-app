@@ -1,5 +1,5 @@
 import { useNavigation } from "@react-navigation/native";
-import React, { ReactElement, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
     KeyboardAvoidingView,
     Platform, ScrollView, StyleSheet, View
@@ -14,18 +14,9 @@ import {
     viewBase,
     wrappingContainerBase
 } from "src/theme/elements";
-import { IMap } from "src/utils/types";
 import Translation from 'src/translation/en.json';
 import * as Routes from 'src/navigation/constants';
-
-interface TopUpState extends IMap {
-  amount: string;
-}
-
-type TopUpProps = {
-  navigation?: any;
-  route?: any;
-};
+import { BUTTON_TYPES } from 'src/constants';
 
 const styles = StyleSheet.create({
   container: { 
@@ -88,41 +79,34 @@ const styles = StyleSheet.create({
 	},
 });
 
-const TopUpView = (props: TopUpProps) => {
-  const { update } = usePaymentDetails();
-  const [state, setState] = useState<TopUpState>({
-    amount: "1000",
-    costs: "1000"
-  });
+const LoadUp = (): JSX.Element => {
+  const navigation = useNavigation();
+  const {update} = usePaymentDetails();
+  const [amount, setAmount] = useState<string>("");
   const [goNext, setGoNext] = useState(false);
 
   useEffect(() => {
-    update({ amount: state.amount });
+    update({ amount: amount });
   }, []);
 
   useEffect(() => {
-    setGoNext(Object.keys(state).every((key) => state[key] !== ""));
-  }, [state]);
+    setGoNext(Number(amount) > 0);
+  }, [amount]);
 
   const onValueChange = (name: string, change: string) => {
-    const costs = change;
-    setState({
-      ...state,
-      [name]: change,
-      costs: costs,
-    } as TopUpState);
-    update({ [name]: change });
+    setAmount(change);
+    update({ amount: change });
   };
 
   return (
     <View style={viewBase}>
       <Header
-        leftComponent={<BackBtn onClick={() => props.navigation.goBack()} />}
+        leftComponent={<BackBtn onClick={() => navigation.goBack()} />}
         rightComponent={
           <CancelBtn
             text={Translation.BUTTON.CLOSE}
             onClick={() =>
-              props.navigation.navigate(Routes.DASHBOARD)
+              navigation.navigate(Routes.DASHBOARD)
             }
           />
         }
@@ -139,19 +123,19 @@ const TopUpView = (props: TopUpProps) => {
             <Text style={{...styles.text, ...styles.amountText}}>{Translation.LABEL.AMOUNT}</Text>
             <View style={styles.defaultAmountView}>
               <TouchableOpacity 
-                style={state.amount=='50' ? styles.selectedAmountItem : styles.defaultAmountItem} 
+                style={amount=='50' ? styles.selectedAmountItem : styles.defaultAmountItem} 
                 onPress={()=>onValueChange('amount', "50")}
               >
                 <Text>B$ 50</Text>
               </TouchableOpacity>
               <TouchableOpacity 
-                style={state.amount=='100' ? styles.selectedAmountItem : styles.defaultAmountItem}  
+                style={amount=='100' ? styles.selectedAmountItem : styles.defaultAmountItem}  
                 onPress={()=>onValueChange('amount', "100")}
               >
                 <Text>B$ 100</Text>
               </TouchableOpacity>
               <TouchableOpacity 
-                style={state.amount=='200' ? styles.selectedAmountItem : styles.defaultAmountItem} 
+                style={amount=='200' ? styles.selectedAmountItem : styles.defaultAmountItem} 
                 onPress={()=>onValueChange('amount', "200")}
               >
                 <Text>B$ 200</Text>
@@ -168,13 +152,13 @@ const TopUpView = (props: TopUpProps) => {
               keyboardType="number-pad"
               placeholder="Amount"
               prefix="B$"
-              value={state.amount}
+              value={amount}
               onChange={onValueChange}
             />
 
             <View style={styles.totalView}>
               <Text h2 style={{color: colors.text}}>{Translation.LOAD_UP.TOTAL_COSTS}</Text>
-              <Text h2 style={{color: colors.text}}>{Translation.COMMON.USD} {state.amount==="" ? "-" : state.costs}</Text>
+              <Text h2 style={{color: colors.text}}>{Translation.COMMON.USD} {amount==="" ? "-" : amount}</Text>
             </View>
           </View>
         </View>
@@ -184,14 +168,14 @@ const TopUpView = (props: TopUpProps) => {
       >
         <View style={styles.bottomView}>
           <Button
-            type="darkGreen"
+            type={BUTTON_TYPES.DARK_GREEN}
             title={Translation.BUTTON.LOAD_UP}
             disabled={!goNext}
             onPress={() => {
-              if (parseFloat(state.amount) > 2000) {
+              if (parseFloat(amount) > 2000) {
                 return;
               }
-              props.navigation.navigate(Routes.TOPUP_SUCCESS);
+              navigation.navigate(Routes.LOADUP_SUCCESS);
             }}
           />
         </View>
@@ -200,8 +184,4 @@ const TopUpView = (props: TopUpProps) => {
   );
 };
 
-const TopUp = (props: TopUpProps): ReactElement => {
-  const navigation = useNavigation();
-  return <TopUpView {...props} navigation={navigation} />;
-};
-export default TopUp;
+export default LoadUp;

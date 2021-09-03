@@ -1,16 +1,13 @@
 import { useNavigation } from '@react-navigation/native';
-import React, { ReactElement, useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { StyleSheet, ScrollView, View } from 'react-native';
 import { Text } from 'react-native-elements';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { BackBtn, Header, CancelBtn } from "src/shared/uielements";
 import { colors } from "src/theme/colors";
 import { underlineHeader, viewBase, wrappingContainerBase } from "src/theme/elements";
-
-type SelectBankAccountProps = {
-	navigation?: any
-	route?: any
-}
+import * as Routes from 'src/navigation/constants';
+import Translation from 'src/translation/en.json';
 
 const styles = StyleSheet.create({
 	headerText: {
@@ -38,38 +35,34 @@ const styles = StyleSheet.create({
 	}
 });
 
-const SelectBankAccountView = (props: SelectBankAccountProps) => {
+const SelectBankAccount = (): JSX.Element => {
+	const navigation = useNavigation();
 	const [account, setAccount] = useState('');
-	const [goNext, setGoNext] = useState(false);
-
-	useEffect(() => {
-		setGoNext(account !== "");
-	},[account]);
-
 	const onValueChange = (value: string) => {
 		setAccount(value);
-		props.navigation.navigate("Congratulations");
+		console.log(account);
+		navigation.navigate(Routes.BANK_LINK_SUCCESS);
 	}
 
 	return (
 		<View style={viewBase}>
 			<Header
-				leftComponent={<BackBtn onClick={() => props.navigation.goBack()} />}
-				rightComponent={<CancelBtn text="Close" onClick={() => props.navigation.navigate('Tabs')} />}
+				leftComponent={<BackBtn onClick={() => navigation.goBack()} />}
+				rightComponent={<CancelBtn text={Translation.BUTTON.CLOSE} onClick={() => navigation.navigate(Routes.DASHBOARD)} />}
 			/>
 
 			<ScrollView style={wrappingContainerBase}>
 				<View style={underlineHeader}>
-					<Text style={styles.headerText}>Select account</Text>
+					<Text style={styles.headerText}>{Translation.BANK_ACCOUNT.SELECT_BANK_ACCOUNT}</Text>
 				</View>
-				<Text style={styles.bodyText}>Which account would you like to link to BerkShares?</Text>
+				<Text style={styles.bodyText}>{Translation.BANK_ACCOUNT.SELECT_BANK_ACCOUNT_DETAIL}</Text>
 				<View style={styles.form}>
 					<TouchableOpacity style={styles.accountView} onPress={() => onValueChange("1")}>
-						<Text >Checking</Text>
+						<Text >{Translation.BUTTON.CHECKINGS}</Text>
 						<Text >$1,000.76</Text>
 					</TouchableOpacity>
 					<TouchableOpacity style={styles.accountView} onPress={() => onValueChange("2")}>
-						<Text >Saving</Text>
+						<Text >{Translation.BUTTON.SAVING}</Text>
 						<Text >$100,000.76</Text>
 					</TouchableOpacity>
 				</View>
@@ -78,8 +71,4 @@ const SelectBankAccountView = (props: SelectBankAccountProps) => {
 	);
 }
 
-const SelectBankAccount = (props: SelectBankAccountProps): ReactElement => {
-	const navigation = useNavigation();
-	return <SelectBankAccountView {...props} navigation={navigation} />;
-}
 export default SelectBankAccount
