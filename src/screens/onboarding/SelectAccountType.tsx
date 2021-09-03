@@ -33,17 +33,23 @@ const styles = StyleSheet.create({
 	}
 });
 
-const SelectAccountType = () => {
+const SelectAccountType = (): JSX.Element => {
 	const navigation = useNavigation()
-	const { setSignupDetails } = useContext(AuthContext);
+	const { setCustomerBasicVerificationDetails } = useContext(AuthContext);
 
 	const handlePersonal = () => {
-		setSignupDetails(( pv: any ) => ({...pv, type: 'personal'}))
+		setCustomerBasicVerificationDetails((pv: any) => ({
+			...pv,
+			type: "personal",
+		}));
 		navigation.navigate(Routes.PERSONAL_PROFILE)
 	}
 
 	const handleBuisness = () => {
-		setSignupDetails(( pv: any ) => ({...pv, type: 'buisness'}))
+		setCustomerBasicVerificationDetails((pv: any) => ({
+			...pv,
+			type: "buisness",
+		}));
 		navigation.navigate(Routes.SIGNUP_BUSINESS);
 	}
 

@@ -1,182 +1,149 @@
-import React, { useEffect, useState } from 'react';
-import * as AWSService from './aws-cognito';
-import { UpdateUserAttributesInput } from './types';
-
-/**AWS COGNITO ERRORS */
-export const NEW_PASSWORD_REQUIRED_ERROR = 'newPasswordRequiredError'
-export const WRONG_CREDS_ERROR = 'Incorrect username or password.'
-export enum AuthStatus {
-	Loading,
-	SignedIn,
-	SignedOut,
-}
-
-interface Session {
-		username?: string;
-		email?: string;
-		sub?: string;
-		accessToken?: string;
-		refreshToken?: string;
-}
-
-export interface IAuth {
-	updateAttributes?: any;
-	sessionInfo?: Session;
-	resendEmailVerificationCode?: any;
-	authStatus?: AuthStatus;
-	signIn?: any;
-	setSignInDetails: any;
-	signInDetails: { password: string; email: string };
-	signOut?: any;
-	getSession?: any;
-	getAttributes?: any;
-	signUpDetails?: any;
-	setSignUpDetails?: any;
-	emailVerification?: any;
-	signUp?: any;
-}
-
-const defaultState: IAuth = {
-	sessionInfo: {},
-	authStatus: AuthStatus.Loading,
-	signInDetails: { password: '', email: '' },
-	setSignInDetails: () => { 
-		console.log('setSigninDetails is not loaded yet')
-	},
-};
+import { CognitoUserAttribute, CognitoUserSession } from "amazon-cognito-identity-js";
+import React, { useEffect, useState } from "react";
+import { completedAllVerifications } from "src/auth/verification";
+import { Customer } from "./cognito";
+import {
+	AuthStatus,
+	BaseResponse,
+	CognitoResponse,
+	CustomerBasicVerification,
+	defaultState,
+	IAuth, UpdateUserAttributesInput
+} from "./types";
 
 export const AuthContext = React.createContext(defaultState);
 
 const AuthProvider: React.FunctionComponent = ({ children }) => {
-	const [authStatus, setAuthStatus] = useState(AuthStatus.Loading);
-	const [sessionInfo, setSessionInfo] = useState({});
+	const [authStatus, setAuthStatus] = useState(AuthStatus.SignedOut);
+	const [isUpdatedAttributes, setIsUpdatedAttributes] = useState(false);
 	const [signInDetails, setSignInDetails] = useState({
-		email: 'tech@humanity.cash',
-		password: 'Esraa@keyko1',
+		email: "esraa@humanity.cash",
+		password: "Esraa@keyko1",
 	});
-	// Personal Account
 	const [signUpDetails, setSignUpDetails] = useState({
-		email: 'esraa@humanity.cash',
-		password: 'Esraa@keyko1',
-		confirmPassword: 'Esraa@keyko1',
-		type: null, //'personal' or 'business'
-		tag: 'sat',
-		avatar: '',
-		firstName: 'Satoshi',
-		lastName: 'Nakamoto',
-		address1: 'Satoshi Street 21',
-		address2: 'Nakamoto Street 21',
-		city: 'Sato',
-		state: 'MA',
-		postalCode: '2100000000'
+		email: "esraa@humanity.cash",
+		password: "Esraa@keyko1",
+		confirmPassword: "Esraa@keyko1",
 	});
+	const [customerBasicVerificationDetails, setCustomerBasicVerificationDetails] =
+		useState<CustomerBasicVerification>({
+			type: "personal",
+			tag: "sat",
+			profilePicture: "",
+			firstName: "Satoshi",
+			lastName: "Nakamoto",
+			address1: "Satoshi Street 21",
+			address2: "Nakamoto Street 21",
+			city: "Sato",
+			state: "a",
+			postalCode: "2100000000",
+		});
 
-	const [userAttributes, setUserAttributes] = useState({});
-
-	useEffect(() => {
-		async function getSessionInfo() {
-			try {
-				const response: any = await getSession();
-				if (response.success) {
-					setSessionInfo({
-						accessToken: response.data.accessToken.jwtToken,
-						refreshToken: response.data.refreshToken.token,
-					});
-					setAuthStatus(AuthStatus.SignedIn);
+	async function getSessionInfo() {
+		try {
+			const response: BaseResponse<CognitoUserSession | null> = await Customer.getSession();
+			if (response.success) {
+				console.log('success')
+				const attrs: BaseResponse<CognitoUserAttribute[] | undefined> = await getAttributes();
+				const { isVerified } = completedAllVerifications(attrs?.data);
+				if (!isVerified) {
+					setAuthStatus(AuthStatus.NotVerified);
 				} else {
-					setAuthStatus(AuthStatus.SignedOut);
+					setAuthStatus(AuthStatus.SignedIn);
 				}
-			} catch (err) {
+			} else {
 				setAuthStatus(AuthStatus.SignedOut);
 			}
+		} catch (err) {
+			setAuthStatus(AuthStatus.SignedOut);
 		}
+	}
+
+	useEffect(() => {
 		getSessionInfo();
-	}, [authStatus]);
+	}, [authStatus, isUpdatedAttributes]);
 
-	const emailVerification = async (verificationCode: string) => {
-		const { email } = signUpDetails;
-		const response: any = await AWSService.confirmEmailVerificationCode({
-			email,
-			code: verificationCode,
-		});
-		return response;
-	};
+	const emailVerification = (verificationCode: string) =>
+		Customer.confirmEmailVerificationCode(
+			 signUpDetails.email,
+			 verificationCode,
+		);
 
-	const resendEmailVerificationCode = async () => {
-		const { email } = signUpDetails;
-		const response: any = await AWSService.resendEmailVerificationCode({
-			email,
-		});
-
-		return response;
-	};
+	const resendEmailVerificationCode = async () =>
+		Customer.resendEmailVerificationCode(
+			signUpDetails.email,
+		);
 
 	const signUp = async () => {
-		const { email, password } = signUpDetails;
-		const response: any = await AWSService.signUp({ email, password });
+		const response = await Customer.signUp(
+			signUpDetails.email,
+			signUpDetails.password
+		);
+		if (!response?.success) setAuthStatus(AuthStatus.SignedOut);
+		else setAuthStatus(AuthStatus.Loading);
+
 		return response;
 	};
 
 	const signIn = async (
-		email = signUpDetails.email,
-		password = signUpDetails.password,
+		email = signInDetails.email,
+		password = signInDetails.password
 	) => {
-		const response: any = await AWSService.signIn({ email, password });
-		if (!response.success) {
-			if (
-				response?.data?.error?.message === NEW_PASSWORD_REQUIRED_ERROR
-			) {
-				return;
-			}
-			if (response?.data?.error?.message === WRONG_CREDS_ERROR) {
-				return;
-			}
+		const response: BaseResponse<CognitoUserSession> =
+			await Customer.signIn({ email, password });
+		if (!response?.success) { // something went wrong in signIn
+			setAuthStatus(AuthStatus.SignedOut);
+		} else {
+			setAuthStatus(AuthStatus.Loading); // Invokes getSession useEffect
 		}
-		if (response?.success) {
-			setUserAttributes(response.data.idToken.payload);
-			setAuthStatus(AuthStatus.SignedIn);
-		}
-	};
-
-	const getAttributes = async () => {
-		const response = await AWSService.getUserAttributes();
 
 		return response;
 	};
 
+	const getAttributes = async (): CognitoResponse<CognitoUserAttribute[] | undefined> => Customer.getUserAttributes();
+
+	const completeBasicVerification = async (
+		update = customerBasicVerificationDetails
+	): CognitoResponse<string | undefined> =>
+		Customer.updateUserAttributes({
+			"custom:profilePicture": update.profilePicture,
+			"custom:tag": update.tag,
+			"custom:firstName": update.firstName,
+			"custom:lastName": update.lastName,
+			"custom:address1": update.address1,
+			"custom:address2": update.address2,
+			"custom:city": update.city,
+			"custom:state": update.state,
+			"custom:postalCode": update.postalCode,
+		});
 
 	const updateAttributes = async ({ update }: UpdateUserAttributesInput) => {
-		const response = await AWSService.updateUserAttributes({ update });
-
+		const response = await Customer.updateUserAttributes(update);
+		setIsUpdatedAttributes(true);
 		return response;
 	};
 
 	const signOut = () => {
-		AWSService.signOut()
+		Customer.signOut();
 		setAuthStatus(AuthStatus.SignedOut);
 	};
 
-	const getSession = async () => {
-		const session = await AWSService.getSession();
-
-		return session;
-	};
-
 	const state: IAuth = {
+		completeBasicVerification,
 		getAttributes,
 		updateAttributes,
 		authStatus,
-		sessionInfo,
 		signIn,
 		signOut,
 		signUp,
-		getSession,
 		setSignInDetails,
 		signInDetails,
 		signUpDetails,
 		setSignUpDetails,
+		customerBasicVerificationDetails,
+		setCustomerBasicVerificationDetails,
 		emailVerification,
-		resendEmailVerificationCode
+		resendEmailVerificationCode,
 	};
 
 	return (
@@ -185,3 +152,40 @@ const AuthProvider: React.FunctionComponent = ({ children }) => {
 };
 
 export default AuthProvider;
+
+// setSessionInfo({
+// 	accessToken: response.data.accessToken.jwtToken,
+// 	refreshToken: response.data.refreshToken.token,
+// });
+
+// console.log("🚀 ~ file: index.tsx ~ line 190 ~ response", response)
+// console.log("🚀 ~ file: index.tsx ~ line 190 ~ response", response?.data?.idToken?.payload)
+
+// const isCustomerVerified = () => {
+// 	const [isVerified, setIsVerified] = useState(false)
+
+// 	useEffect(() => {
+// 		const handler = async () => {
+// 			const attrs: any = await getAttributes();
+// 			const { isVerified } = completedAllVerifications(attrs?.data);
+// 			setIsVerified(isVerified);
+// 		};
+// 		handler();
+// 	},[isUpdatedAttributes, authStatus])
+
+// 	return isVerified;
+// };
+
+			// if (
+			// 	response?.data?.error?.message === NEW_PASSWORD_REQUIRED_ERROR
+			// ) {
+			// 	return;
+			// }
+			// if (response?.data?.error?.message === WRONG_CREDS_ERROR) {
+			// 	return;
+			// }
+	// const [userAttributes, setUserAttributes] = useState({});
+
+	// const [sessionInfo, setSessionInfo] = useState({});
+	// const [sessionInfo, setSessionInfo] = useState({});
+	// setUserAttributes(response.data.idToken.payload);

@@ -36,7 +36,7 @@ const styles = StyleSheet.create({
 	}
 });
 
-const EmailConfirmed = () => {
+const EmailConfirmed = (): JSX.Element => {
 	const navigation = useNavigation();
 	const { signUpDetails: { email, password }, signIn } = useContext(AuthContext);
 
@@ -61,7 +61,7 @@ const EmailConfirmed = () => {
 				<Button
 					type={BUTTON_TYPES.DARK_GREEN}
 					title='NEXT'
-					onPress={() => signIn({ email, password })}
+					onPress={() => signIn(email, password)}
 				/>
 			</View>
 		</View>

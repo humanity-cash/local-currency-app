@@ -1,50 +1,80 @@
-import { useNavigation } from '@react-navigation/native';
-import React, { useState } from 'react';
-import { KeyboardAvoidingView, Platform, ScrollView, StyleSheet, View } from 'react-native';
-import { Text } from 'react-native-elements';
-import { BUTTON_TYPES } from 'src/constants';
-import * as Routes from 'src/navigation/constants';
-import { BackBtn, Button, CancelBtn, Header, PersonalAddressForm } from 'src/shared/uielements';
+import { useNavigation } from "@react-navigation/native";
+import React, { useContext, useState } from "react";
+import {
+	KeyboardAvoidingView,
+	Platform,
+	ScrollView,
+	StyleSheet,
+	View
+} from "react-native";
+import { Text } from "react-native-elements";
+import { AuthContext } from "src/auth";
+import { BUTTON_TYPES } from "src/constants";
+import * as Routes from "src/navigation/constants";
+import {
+	BackBtn,
+	Button,
+	CancelBtn,
+	Header,
+	PersonalAddressForm
+} from "src/shared/uielements";
 import { colors } from "src/theme/colors";
-import { underlineHeader, viewBase, wrappingContainerBase } from "src/theme/elements";
-import Translation from 'src/translation/en.json';
+import {
+	underlineHeader,
+	viewBase,
+	wrappingContainerBase
+} from "src/theme/elements";
+import Translation from "src/translation/en.json";
 
 const styles = StyleSheet.create({
-	content: { 
-		paddingBottom: 40 
+	content: {
+		paddingBottom: 40,
 	},
 	headerText: {
 		fontSize: 32,
 		color: colors.darkGreen,
-		lineHeight: 35
+		lineHeight: 35,
 	},
-  	bottomView: {
+	bottomView: {
 		paddingHorizontal: 20,
-		paddingBottom: 50
+		paddingBottom: 50,
 	},
 });
 
 const PersonalAddress = () => {
+	const { completeBasicVerification } = useContext(AuthContext);
 	const navigation = useNavigation();
 	const [goNext, setGoNext] = useState(false);
 	const [showValidation, setShowValidation] = useState(false);
 
-	const onNextPress = () => {
-		// save account details
-		navigation.navigate(Routes.LINK_BANK_ACCOUNT)
-	}
+	const onNextPress = async () => {
+		const response = await completeBasicVerification();
+    // console.log("🚀 ~ file: PersonalAddress.tsx ~ line 52 ~ onNextPress ~ response", response)
+		if (response.success) {
+			navigation.navigate(Routes.LINK_BANK_ACCOUNT);
+		} else {
+			console.log("something went wrong in finalising customer signip");
+		}
+	};
 
 	return (
 		<View style={viewBase}>
 			<Header
 				leftComponent={<BackBtn onClick={() => navigation.goBack()} />}
-				rightComponent={<CancelBtn text={Translation.BUTTON.LOGOUT} onClick={() => navigation.navigate(Routes.TEASER)} />}
+				rightComponent={
+					<CancelBtn
+						text={Translation.BUTTON.LOGOUT}
+						onClick={() => navigation.navigate(Routes.TEASER)}
+					/>
+				}
 			/>
 
-			<ScrollView style={ wrappingContainerBase }>
+			<ScrollView style={wrappingContainerBase}>
 				<View style={styles.content}>
 					<View style={underlineHeader}>
-						<Text style={styles.headerText}>{Translation.PROFILE.PERSIONAL_DETAILS}</Text>
+						<Text style={styles.headerText}>
+							{Translation.PROFILE.PERSIONAL_DETAILS}
+						</Text>
 					</View>
 					<PersonalAddressForm
 						isValid={setGoNext}
@@ -53,19 +83,18 @@ const PersonalAddress = () => {
 				</View>
 			</ScrollView>
 			<KeyboardAvoidingView
-				behavior={Platform.OS == "ios" ? "padding" : "height"}
-			>
+				behavior={Platform.OS == "ios" ? "padding" : "height"}>
 				<View style={styles.bottomView}>
 					<Button
 						type={BUTTON_TYPES.DARK_GREEN}
 						title={Translation.BUTTON.NEXT}
-						disabled={!goNext}
+						disabled={false}
 						onPress={onNextPress}
 					/>
 				</View>
 			</KeyboardAvoidingView>
 		</View>
 	);
-}
+};
 
-export default PersonalAddress
+export default PersonalAddress;

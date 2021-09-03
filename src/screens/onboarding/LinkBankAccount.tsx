@@ -1,12 +1,13 @@
 import { useNavigation } from '@react-navigation/native';
-import React, { ReactElement } from 'react';
+import React, { ReactElement, useContext } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { Text } from 'react-native-elements';
-import { Button, Header } from "src/shared/uielements";
-import { baseHeader, viewBase, wrappingContainerBase } from "src/theme/elements";
-import { colors } from "src/theme/colors";
-import Translation from 'src/translation/en.json';
+import { AuthContext } from 'src/auth';
 import * as Routes from 'src/navigation/constants';
+import { Button, Header } from "src/shared/uielements";
+import { colors } from "src/theme/colors";
+import { baseHeader, viewBase, wrappingContainerBase } from "src/theme/elements";
+import Translation from 'src/translation/en.json';
 
 type LinkBankAccountProps = {
 	navigation?: any
@@ -29,7 +30,7 @@ const styles = StyleSheet.create({
 });
 
 const LinkBankAccountView = (props: LinkBankAccountProps) => {
-
+	const { signIn } = useContext(AuthContext)
 	return (
 		<View style={viewBase}>
 			<Header />
@@ -44,7 +45,7 @@ const LinkBankAccountView = (props: LinkBankAccountProps) => {
 					type="transparent"
 					title={Translation.BUTTON.SKIP_NOW}
 					style={styles.skipBtn}
-					onPress={() => props.navigation.navigate(Routes.TABS)}
+					onPress={signIn}
 				/>
 				<Button
 					type="darkGreen"

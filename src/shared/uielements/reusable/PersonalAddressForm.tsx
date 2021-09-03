@@ -50,97 +50,105 @@ const styles = StyleSheet.create({
 });
 
 const PersonalAddressForm = (props: PersonalAddressProps): ReactElement => {
-  const { signUpDetails, setSignUpDetails } = useContext(AuthContext);
+  const { customerBasicVerificationDetails, setCustomerBasicVerificationDetails } =
+		useContext(AuthContext);
 
   const onValueChange = (name: string, change: string) => {
-    setSignUpDetails((pv: any) => ({
+    setCustomerBasicVerificationDetails((pv: any) => ({
       ...pv,
       [name]: change,
     }));
   };
 
   return (
-    <View>
-      <View style={styles.container}>
-          <Text style={styles.bodyText}>{Translation.PROFILE.PERSIONAL_DETAILS_BODY}</Text>
-      </View>
-      <Text style={styles.label}>{Translation.LABEL.ADDRESS1}</Text>
-      {/* {showValidation && validationErrors.addressLine && (
+		<View>
+			<View style={styles.container}>
+				<Text style={styles.bodyText}>
+					{Translation.PROFILE.PERSIONAL_DETAILS_BODY}
+				</Text>
+			</View>
+			<Text style={styles.label}>{Translation.LABEL.ADDRESS1}</Text>
+			{/* {showValidation && validationErrors.addressLine && (
         <Text style={styles.errorLabel}>
           {validationErrors.addressLine}
         </Text>
       )} */}
-      <BlockInput
-        name="addressLine"
-        placeholder="Street number, street name"
-        value={signUpDetails.addressLine}
-        onChange={onValueChange}
-        style={props.style}
-      />
-      {/* <Text style={styles.label}>{Translation.LABEL.ADDRESS2}</Text>
+			<BlockInput
+				name="address1"
+				placeholder="Street number, street name"
+				value={customerBasicVerificationDetails.address1}
+				onChange={onValueChange}
+				style={props.style}
+			/>
+			{/* <Text style={styles.label}>{Translation.LABEL.ADDRESS2}</Text>
       {showValidation && validationErrors.addressLine2 && (
         <Text style={styles.errorLabel}>
           {validationErrors.addressLine2}
         </Text>
       )} */}
-      <BlockInput
-        name="addressLine2"
-        placeholder="Apt."
-        value={signUpDetails.addressLine2}
-        onChange={onValueChange}
-        style={props.style}
-      />
-      
-      <View style={styles.inlineView}>
-        <View style={styles.cityView}>
-          <Text style={styles.label}>{Translation.LABEL.CITY}</Text>
-          {/* {showValidation && validationErrors.city && (
+			<BlockInput
+				name="address2"
+				placeholder="Apt."
+				value={customerBasicVerificationDetails.address2}
+				onChange={onValueChange}
+				style={props.style}
+			/>
+
+			<View style={styles.inlineView}>
+				<View style={styles.cityView}>
+					<Text style={styles.label}>{Translation.LABEL.CITY}</Text>
+					{/* {showValidation && validationErrors.city && (
             <Text style={styles.errorLabel}>
               {validationErrors.city}
             </Text>
           )} */}
-          <BlockInput
-            name="city"
-            placeholder="City"
-            value={signUpDetails.city}
-            onChange={onValueChange}
-            style={props.style}
-          />
-        </View>
-        <View style={styles.stateView}>
-          <Text style={styles.label}>{Translation.LABEL.STATE}</Text>
-          {/* {showValidation && validationErrors.country && (
+					<BlockInput
+						name="city"
+						placeholder="City"
+						value={customerBasicVerificationDetails.city}
+						onChange={onValueChange}
+						style={props.style}
+					/>
+				</View>
+				<View style={styles.stateView}>
+					<Text style={styles.label}>{Translation.LABEL.STATE}</Text>
+					{/* {showValidation && validationErrors.country && (
             <Text style={styles.errorLabel}>
               {validationErrors.country}
             </Text>
           )} */}
-          <Picker
-            selectedValue={signUpDetails.state}
-            style={styles.picker}
-            onValueChange={(itemValue) => onValueChange("country", itemValue)}
-          >
-            {
-              countries.map((country: string, idx: number) => <Picker.Item label={country} value={country} key={idx} />)
-            }
-          </Picker>
-        </View>
-      </View>
-      
-      <Text style={styles.label}>{Translation.LABEL.POSTAL_CODE}</Text>
-      {/* {showValidation && validationErrors.zipCode && (
+					<Picker
+						selectedValue={customerBasicVerificationDetails.state}
+						style={styles.picker}
+						onValueChange={(itemValue) =>
+							onValueChange("country", itemValue)
+						}>
+						{countries.map((country: string, idx: number) => (
+							<Picker.Item
+								label={country}
+								value={country}
+								key={idx}
+							/>
+						))}
+					</Picker>
+				</View>
+			</View>
+
+			<Text style={styles.label}>{Translation.LABEL.POSTAL_CODE}</Text>
+			{/* {showValidation && validationErrors.zipCode && (
         <Text style={styles.errorLabel}>
           {validationErrors.zipCode}
         </Text>
       )} */}
-      <BlockInput
-        name="postalCode"
-        placeholder="00000"
-        keyboardType="number-pad"
-        value={signUpDetails.postalCode}
-        onChange={onValueChange}
-        style={props.style}
-      />
-    </View>
+			<BlockInput
+				name="postalCode"
+				placeholder="00000"
+				keyboardType="number-pad"
+				value={customerBasicVerificationDetails.postalCode}
+				onChange={onValueChange}
+				style={props.style}
+			/>
+		</View>
   );
 };
 
