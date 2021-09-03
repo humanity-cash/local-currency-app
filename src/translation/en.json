@@ -217,7 +217,8 @@
         "SCAN_QR": "Scan the recipients QR",
         "SCAN_QR_DETAIL": "Scan the QR code of the recipients. The recipient can pull this up by clicking on 'Receive payment'.",
         "SCAN_RECIPIENTS_QR": "Scan the recipients QR.",
-        "SCAN_RECIPIENTS_QR_DETAIL": "The customer needs to generate QR code via the inital transaction in their transactioin overview. There they generate a QR code which needs to be scanned by you."
+        "SCAN_RECIPIENTS_QR_DETAIL": "The customer needs to generate QR code via the inital transaction in their transactioin overview. There they generate a QR code which needs to be scanned by you.",
+        "SCAN_TO_PAY_REQUEST": "Scan to Pay or Request"
     },
     "OTHER": {
         "SETTING": "Setting",
