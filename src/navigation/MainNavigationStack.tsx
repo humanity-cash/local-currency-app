@@ -45,6 +45,11 @@ import MerchantPaymentSuccess from "src/screens/merchantPayment/MerchantPaymentS
 import MerchantReturn from "src/screens/merchantPayment/MerchantReturn";
 import MerchantLoadupPending from "src/screens/merchantLoadup/MerchantLoadupPending";
 import MerchantLoadupSuccess from "src/screens/merchantLoadup/MerchantLoadupSuccess";
+import MerchantPayoutToPersonal from "src/screens/merchantPayout/MerchantPayoutToPersonal";
+import MerchantPayoutToSomeone from "src/screens/merchantPayout/MerchantPayoutToSomeone";
+import MerchantPayoutPending from "src/screens/merchantPayout/MerchantPayoutPending";
+import MerchantPayoutSuccess from "src/screens/merchantPayout/MerchantPayoutSuccess";
+import MerchantPayoutQRCodeScan from "src/screens/merchantPayout/MerchantPayoutQRCodeScan";
 
 import CashierDashboard from "src/screens/dashboard/CashierDashboard";
 import CashierHelp from "src/screens/cashier/CashierHelp";
@@ -227,6 +232,27 @@ const PrimaryStackScreen = () => {
 						name={Routes.MERCHANT_LOADUP_SUCCESS}
 						component={MerchantLoadupSuccess}
 					/>
+					<PrimaryStack.Screen
+						name={Routes.MERCHANT_PAYOUT_PERSONAL}
+						component={MerchantPayoutToPersonal}
+					/>
+					<PrimaryStack.Screen
+						name={Routes.MERCHANT_PAYOUT_SOMEONE}
+						component={MerchantPayoutToSomeone}
+					/>
+					<PrimaryStack.Screen
+						name={Routes.MERCHANT_PAYOUT_PENDING}
+						component={MerchantPayoutPending}
+					/>
+					<PrimaryStack.Screen
+						name={Routes.MERCHANT_PAYOUT_SUCCESS}
+						component={MerchantPayoutSuccess}
+					/>
+					<PrimaryStack.Screen
+						name={Routes.MERCHANT_PAYOUT_QR_SCAN}
+						component={MerchantPayoutQRCodeScan}
+					/>
+					
 					
 					<PrimaryStack.Screen
 						name={Routes.CASHIER_DASHBOARD}

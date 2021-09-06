@@ -64,7 +64,9 @@
         "MONTH": "Month",
         "SEND_REPORT": "Send report",
         "RETURN_AMOUNT": "Return amount",
-        "GOT_IT": "Got it"
+        "GOT_IT": "Got it",
+        "MY_PERSONAL_ACCOUNT" :"My personal account",
+        "SOMEONE_ELSE" :"Someone else"
     },
     "LABEL": {
         "EMAIL_ADDR": "EMAIL ADDRESS",
