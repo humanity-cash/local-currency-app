@@ -1,5 +1,5 @@
 import { useNavigation } from "@react-navigation/native";
-import React, { ReactElement, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { KeyboardAvoidingView, Platform, ScrollView, StyleSheet, View } from "react-native";
 import { Text } from "react-native-elements";
 import { TouchableOpacity } from "react-native-gesture-handler";
@@ -7,19 +7,9 @@ import { usePaymentDetails } from "src/hooks";
 import { BackBtn, BorderedInput, Button, Header, CancelBtn } from "src/shared/uielements";
 import { colors } from "src/theme/colors";
 import { underlineHeaderB, viewBaseB, wrappingContainerBase } from "src/theme/elements";
-import { IMap } from "src/utils/types";
 import Translation from 'src/translation/en.json';
 import * as Routes from 'src/navigation/constants';
-
-interface MerchantLoadupState extends IMap {
-  amount: string;
-  costs: string;
-}
-
-type MerchantLoadupProps = {
-  navigation?: any;
-  route?: any;
-};
+import { BUTTON_TYPES } from "src/constants";
 
 const styles = StyleSheet.create({
   headerText: {
@@ -97,33 +87,28 @@ const styles = StyleSheet.create({
 	},
 });
 
-const MerchantLoadupView = (props: MerchantLoadupProps) => {
+const MAX_AMOUNT = 2000;
+
+const MerchantLoadup = (): JSX.Element => {
+  const navigation = useNavigation();
   const { update } = usePaymentDetails();
-  const [state, setState] = useState<MerchantLoadupState>({
-    amount: "",
-    costs: ""
-  });
-  const [goNext, setGoNext] = useState(false);
+  const [amount, setAmount] = useState<string>("");
+  const [goNext, setGoNext] = useState<boolean>(false);
 
   useEffect(() => {
-    setGoNext(Object.keys(state).every((key) => state[key] !== ""));
-  }, [state]);
+    setGoNext(Number(amount) > 0 && Number(amount) <= MAX_AMOUNT);
+  }, [amount]);
 
   const onValueChange = (name: string, change: string) => {
-    const costs = change;
-    setState({
-      ...state,
-      [name]: change,
-      costs: costs,
-    } as MerchantLoadupState);
+    setAmount(change);
     update({ [name]: change });
   };
 
   return (
     <View style={viewBaseB}>
       <Header
-        leftComponent={<BackBtn color={colors.purple} onClick={() => props.navigation.goBack()} />}
-        rightComponent={<CancelBtn color={colors.purple} text={Translation.BUTTON.CLOSE} onClick={() => props.navigation.navigate(Routes.MERCHANT_DASHBOARD)}/>}
+        leftComponent={<BackBtn color={colors.purple} onClick={() => navigation.goBack()} />}
+        rightComponent={<CancelBtn color={colors.purple} text={Translation.BUTTON.CLOSE} onClick={() => navigation.navigate(Routes.MERCHANT_DASHBOARD)}/>}
       />
 
       <ScrollView style={wrappingContainerBase}>
@@ -139,22 +124,22 @@ const MerchantLoadupView = (props: MerchantLoadupProps) => {
             <Text style={styles.text}>{Translation.LABEL.AMOUNT}</Text>
             <View style={styles.defaultAmountView}>
               <TouchableOpacity 
-                style={state.amount=='50' ? styles.selectedAmountItem : styles.defaultAmountItem} 
+                style={amount=='50' ? styles.selectedAmountItem : styles.defaultAmountItem} 
                 onPress={()=>onValueChange('amount', "50")}
               >
-                <Text style={state.amount=='50' ? styles.selectedAmountText : styles.amountText}>B$ 50</Text>
+                <Text style={amount=='50' ? styles.selectedAmountText : styles.amountText}>B$ 50</Text>
               </TouchableOpacity>
               <TouchableOpacity 
-                style={state.amount=='100' ? styles.selectedAmountItem : styles.defaultAmountItem}  
+                style={amount=='100' ? styles.selectedAmountItem : styles.defaultAmountItem}  
                 onPress={()=>onValueChange('amount', "100")}
               >
-                <Text style={state.amount=='100' ? styles.selectedAmountText : styles.amountText}>B$ 100</Text>
+                <Text style={amount=='100' ? styles.selectedAmountText : styles.amountText}>B$ 100</Text>
               </TouchableOpacity>
               <TouchableOpacity 
-                style={state.amount=='200' ? styles.selectedAmountItem : styles.defaultAmountItem} 
+                style={amount=='200' ? styles.selectedAmountItem : styles.defaultAmountItem} 
                 onPress={()=>onValueChange('amount', "200")}
               >
-                <Text style={state.amount=='200' ? styles.selectedAmountText : styles.amountText}>B$ 200</Text>
+                <Text style={amount=='200' ? styles.selectedAmountText : styles.amountText}>B$ 200</Text>
               </TouchableOpacity>
             </View>
             
@@ -171,13 +156,13 @@ const MerchantLoadupView = (props: MerchantLoadupProps) => {
               prefix="B$"
               style={styles.input}
 						  textStyle={styles.amountText}
-              value={state.amount}
+              value={amount}
               onChange={onValueChange}
             />
 
             <View style={styles.totalView}>
               <Text h2 style={styles.amountText}>{Translation.LOAD_UP.TOTAL_COSTS}</Text>
-              <Text h2 style={styles.amountText}>$ {state.amount==="" ? "-" : state.costs}</Text>
+              <Text h2 style={styles.amountText}>$ {amount==="" ? "-" : amount}</Text>
             </View>
           </View>
         </View>
@@ -187,15 +172,10 @@ const MerchantLoadupView = (props: MerchantLoadupProps) => {
       >
         <View style={styles.bottomView}>
           <Button
-            type="purple"
+            type={BUTTON_TYPES.PURPLE}
             title={Translation.BUTTON.LOAD_UP}
             disabled={!goNext}
-            onPress={() => {
-              if (parseFloat(state.amount) > 2000) {
-                return;
-              }
-              props.navigation.navigate(Routes.MERCHANT_LOADUP_PENDING);
-            }}
+            onPress={() => navigation.navigate(Routes.MERCHANT_LOADUP_PENDING)}
           />
         </View>
       </KeyboardAvoidingView>
@@ -203,8 +183,4 @@ const MerchantLoadupView = (props: MerchantLoadupProps) => {
   );
 };
 
-const MerchantLoadup = (props: MerchantLoadupProps): ReactElement => {
-  const navigation = useNavigation();
-  return <MerchantLoadupView {...props} navigation={navigation} />;
-};
 export default MerchantLoadup;
