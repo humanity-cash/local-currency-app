@@ -10,8 +10,10 @@ import useShares from "./useShares";
 import useTransaction from "./useTransaction";
 import useUserDetails from "./useUserDetails";
 import useWallet from "./useWallet";
+import useMediaLibraryPermission from "./useMediaLibraryPermission";
 
 export {
+	useMediaLibraryPermission,
 	useCachedResources,
 	useMessages,
 	useModalStatusBar,

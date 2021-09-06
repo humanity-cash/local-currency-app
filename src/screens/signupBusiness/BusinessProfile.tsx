@@ -10,11 +10,6 @@ import { colors } from "src/theme/colors";
 import Translation from 'src/translation/en.json';
 import * as Routes from 'src/navigation/constants';
 
-type BusinessProfileProps = {
-	navigation?: any
-	route?: any
-}
-
 const styles = StyleSheet.create({
 	buttonText: {
 		color: colors.white
@@ -38,24 +33,24 @@ const styles = StyleSheet.create({
 	},
 });
 
-const BusinessProfileView = (props: BusinessProfileProps) => {
-	const { businessDetails } = useUserDetails();
+const BusinessProfile = (): ReactElement => {
+	const navigation = useNavigation()
 	const [goNext, setGoNext] = useState<boolean>(false);
-	const [isShowValidation, setIsShowValidation] = useState<boolean>(false);
+	// const [isShowValidation, setIsShowValidation] = useState<boolean>(false);
 
 	const onNextPress = () => {
-		const validation = validateBusinessProfileForm(businessDetails);
-		setIsShowValidation(true);
-		if (validation.valid) {
-			props.navigation.navigate(Routes.BUSINESS_DETAIL);
-		}
+		navigation.navigate(Routes.BUSINESS_DETAIL);
+		// const validation = validateBusinessProfileForm(businessDetails);
+		// setIsShowValidation(true);
+		// if (validation.valid) {
+		// }
 	}
 
 	return (
 		<View style={viewBaseB}>
 			<Header
-				leftComponent={<BackBtn color={colors.purple} onClick={() => props.navigation.goBack()} />}
-				rightComponent={<CancelBtn color={colors.purple} text={Translation.BUTTON.LOGOUT} onClick={() => props.navigation.navigate(Routes.TEASER)} />}
+				leftComponent={<BackBtn color={colors.purple} onClick={() => navigation.goBack()} />}
+				rightComponent={<CancelBtn color={colors.purple} text={Translation.BUTTON.LOGOUT} onClick={() => navigation.navigate(Routes.TEASER)} />}
 			/>
 
 			<ScrollView style={wrappingContainerBase}>
@@ -64,15 +59,13 @@ const BusinessProfileView = (props: BusinessProfileProps) => {
 				</View>
 				<View style={styles.formView}>
 					<BusinessProfileForm
-						isValid={setGoNext}
-						showValidation={isShowValidation}
 					/>
 				</View>
 			</ScrollView>
 			<Button
 				type="purple"
 				title={Translation.BUTTON.NEXT}
-				disabled={!goNext}
+				disabled={false}
 				onPress={onNextPress}
 				style={styles.bottomButton}
 			/>
@@ -80,8 +73,4 @@ const BusinessProfileView = (props: BusinessProfileProps) => {
 	);
 }
 
-const BusinessProfile = (props: BusinessProfileProps): ReactElement => {
-	const navigation = useNavigation();
-	return <BusinessProfileView {...props} navigation={navigation} />;
-}
-export default BusinessProfile
+export default BusinessProfile;
