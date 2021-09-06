@@ -1,23 +1,19 @@
 import { AntDesign, Entypo, Octicons } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
-import React, { ReactElement, useState } from 'react';
-import { StyleSheet, TouchableWithoutFeedback, View, ScrollView } from 'react-native';
+import React, { useState } from 'react';
+import { StyleSheet, TouchableWithoutFeedback, View, ScrollView, TouchableOpacity } from 'react-native';
 import { Text } from "react-native-elements";
-import { TouchableOpacity } from "react-native-gesture-handler";
-import { Header } from "src/shared/uielements";
 import { colors } from "src/theme/colors";
-import { viewBaseB, wrappingContainerBase, baseHeader } from "src/theme/elements";
-import { Button, SearchInput } from "src/shared/uielements";
+import { viewBaseB, wrappingContainerBase, baseHeader, dialogViewBase } from "src/theme/elements";
+import { Button, SearchInput, Header, Dialog } from "src/shared/uielements";
 import MerchantTransactionList from "./MerchantTransactionList";
-import { MyTransactionItem } from "src/utils/types";
-import transactionList from "src/mocks/transactions";
+import MerchantTransactionsFilter from "./MerchantTransactionsFilter";
+import { MerchantTransactionItem, MerchantTransactionType, TransactionTypes } from "src/utils/types";
+import { merchantTransactions } from "src/mocks/transactions";
 import Translation from 'src/translation/en.json';
 import * as Routes from 'src/navigation/constants';
-
-type MerchantDashboardProps = {
-	navigation?: any;
-	route?: any;
-};
+import { getBerksharePrefix } from "src/utils/common";
+import { BUTTON_TYPES } from "src/constants";
 
 const styles = StyleSheet.create({
 	mainTextColor: {
@@ -80,6 +76,9 @@ const styles = StyleSheet.create({
 		backgroundColor: colors.white,
 		color: colors.purple
 	},
+	dialog: {
+		backgroundColor: colors.overlayPurple
+	},
 	filterBtn: {
 		width: 55,
 		height: 55,
@@ -89,41 +88,126 @@ const styles = StyleSheet.create({
 		alignItems: 'center',
 		justifyContent: 'center'
 	},
+	selectedFilterBtn: {
+		width: 55,
+		height: 55,
+		marginTop: 8,
+		borderRadius: 3,
+		backgroundColor: colors.purple,
+		alignItems: 'center',
+		justifyContent: 'center'
+	},
 	scanButton: {
 		width: '90%',
 		position: 'absolute',
 		bottom: 45,
 		left: '5%'
+	},
+	infoView: {
+		paddingHorizontal: 5,
+		paddingTop: 20
+	},
+	detailView: {
+		flexDirection: 'row', 
+		justifyContent: 'space-between'
+	},
+	detailText: {
+		fontSize: 10,
+		color: colors.bodyText
+	},
+	minusText: {
+		color: colors.darkRed,
+		textAlign: 'center'
+	},
+	plusText: {
+		color: colors.purple,
+		textAlign: 'center'
+	},
+	amountText: {
+		fontWeight: 'bold',
+		fontSize: 18
 	}
 });
 
-const MerchantDashboardView = (props: MerchantDashboardProps) => {
+type TransactionDetailProps = {
+	visible: boolean,
+	data: MerchantTransactionItem,
+	onConfirm: () => void
+}
+
+const TransactionDetail = (props: TransactionDetailProps) => {
+	const {data, visible, onConfirm} = props;
+
+	const getStyle = (type: MerchantTransactionType) => {
+		if (type === MerchantTransactionType.SALE || type === MerchantTransactionType.RETURN) {
+			return styles.plusText;
+		} else {
+			return styles.minusText;
+		}
+	}
+
+	return (
+		<Dialog visible={visible} onClose={onConfirm} backgroundStyle={styles.dialog}>
+			<View style={dialogViewBase}>
+				<ScrollView style={wrappingContainerBase}>
+					<View style={ baseHeader }>
+						<Text style={getStyle(data.type)}>
+							{TransactionTypes[data.type]}
+						</Text>
+						<Text h1 style={{...styles.amountText, ...getStyle(data.type)}}>
+							{getBerksharePrefix(data.type)} { data.amount.toFixed(2) } 
+						</Text>
+					</View>
+					<View style={styles.infoView}>
+						<View style={styles.detailView}>
+							<Text style={styles.detailText}>{Translation.PAYMENT.TRANSACTION_ID}</Text>
+							<Text style={{...styles.detailText, fontWeight: 'bold'}}>{data.transactionId}</Text>
+						</View>
+						<View style={styles.detailView}>
+							<Text style={styles.detailText}>TYPE</Text>
+							<Text style={{...styles.detailText, fontWeight: 'bold'}}>{data.type}</Text>
+						</View>
+						<View style={styles.detailView}>
+							<Text style={styles.detailText}>DATE</Text>
+							<Text style={{...styles.detailText, fontWeight: 'bold'}}>{data.date}</Text>
+						</View>
+					</View>
+				</ScrollView>
+			</View>
+		</Dialog>
+	)
+}
+
+const MerchantDashboard = (): JSX.Element => {
+	const navigation = useNavigation();
+	const [isFilterVisible, setIsFilterVisible] = useState<boolean>(false);
 	const [searchText, setSearchText] = useState<string>("");
 	const [isDetailViewOpen, setIsDetailViewOpen] = useState<boolean>(false);
-	const [selectedItem, setSelectedItem] = useState<MyTransactionItem>({
-		transactionId: 0,
-		avatar: "",
-		name: "",
-		type: "",
-		amount: "",
-		date: ""
+	const [selectedItem, setSelectedItem] = useState<MerchantTransactionItem>({
+		transactionId: "123457899",
+		type: MerchantTransactionType.SALE,
+		amount: 0,
+		date: "2021-01-01"
 	});
 
 	const onSearchChange = (name: string, change: string) => {
 		setSearchText(change);
 	}
 
-	const viewDetail = (item: MyTransactionItem) => {
+	const viewDetail = (item: MerchantTransactionItem) => {
 		setSelectedItem(item);
 		setIsDetailViewOpen(true);
-		console.log(selectedItem, isDetailViewOpen);
+	}
+
+	const onConfirm = () => {
+		setIsDetailViewOpen(false);
 	}
 
 	return (
 		<View style={viewBaseB}>
 			<Header
 				leftComponent={
-					<TouchableWithoutFeedback onPress={() => props.navigation.toggleDrawer()}>
+					<TouchableWithoutFeedback onPress={() => navigation.toggleDrawer()}>
 						<View style={styles.inlineView}>
 							<Entypo
 								name='menu'
@@ -146,8 +230,9 @@ const MerchantDashboardView = (props: MerchantDashboardProps) => {
 
 					<View style={styles.alertView}>
 						<AntDesign name="exclamationcircleo" size={18} style={styles.alertIcon} />
-						<Text style={styles.alertText}>{Translation.PROFILE.PERSONAL_PROFILE_ALERT} &nbsp;
-							<Text style={styles.alertIcon} onPress={()=>props.navigation.navigate(Routes.PERSONAL_PROFILE)}>{Translation.BUTTON.GOTO_SETUP} &gt;</Text>
+						<Text style={styles.alertText}>
+							{Translation.PROFILE.PERSONAL_PROFILE_ALERT} &nbsp;
+							<Text style={styles.alertIcon} onPress={()=>navigation.navigate(Routes.PERSONAL_PROFILE)}>{Translation.BUTTON.GOTO_SETUP} &gt;</Text>
 						</Text>
 					</View>
 
@@ -164,29 +249,27 @@ const MerchantDashboardView = (props: MerchantDashboardProps) => {
 								onChange={onSearchChange}
 							/>
 						</View>
-						<TouchableOpacity style={styles.filterBtn}>
+						<TouchableOpacity style={isFilterVisible ? styles.selectedFilterBtn : styles.filterBtn} onPress={()=>setIsFilterVisible(!isFilterVisible)}>
 							<Octicons 
 								name="settings"
 								size={24}
-								color={colors.purple}
+								color={isFilterVisible ? colors.white : colors.purple}
 							/>
 						</TouchableOpacity>
 					</View>
-					<MerchantTransactionList data={transactionList} onSelect={viewDetail} />
+					{isFilterVisible && <MerchantTransactionsFilter></MerchantTransactionsFilter>}
+					<MerchantTransactionList data={merchantTransactions} onSelect={viewDetail} />
 				</View>
 			</ScrollView>
 			<Button
-				type="purple"
+				type={BUTTON_TYPES.PURPLE}
 				title={Translation.BUTTON.RECEIVE_OR_SCAN}
 				style={styles.scanButton}
-				onPress={()=>props.navigation.navigate(Routes.MERCHANT_QRCODE_SCAN)}
+				onPress={()=>navigation.navigate(Routes.MERCHANT_QRCODE_SCAN)}
 			/>
+			{isDetailViewOpen && <TransactionDetail visible={isDetailViewOpen} data={selectedItem} onConfirm={onConfirm} />}
 		</View>
 	);
 }
 
-const MerchantDashboard = (props: MerchantDashboardProps): ReactElement => {
-	const navigation = useNavigation();
-	return <MerchantDashboardView {...props} navigation={navigation} />;
-};
 export default MerchantDashboard

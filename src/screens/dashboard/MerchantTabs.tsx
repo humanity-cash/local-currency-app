@@ -11,6 +11,7 @@ import { Dialog, Button } from "src/shared/uielements";
 import Translation from 'src/translation/en.json';
 import * as Routes from 'src/navigation/constants';
 import { UserType } from 'src/utils/types';
+import { BUTTON_TYPES } from 'src/constants';
 
 import MerchantDashboard from "./MerchantDashboard";
 import MerchantQRCodeScan from "../merchantPayment/MerchantQRCodeScan";
@@ -82,8 +83,8 @@ const styles = StyleSheet.create({
 
 type ReturnPaymentDialogProps = {
 	visible: boolean,
-	onConfirm: ()=>void,
-	onCancel: ()=>void
+	onConfirm: () => void,
+	onCancel: () => void
 }
 
 const ReturnPaymentDialog = (props: ReturnPaymentDialogProps) => {
@@ -102,7 +103,7 @@ const ReturnPaymentDialog = (props: ReturnPaymentDialogProps) => {
 				</View>
 				<View>
 					<Button
-						type="purple"
+						type={BUTTON_TYPES.PURPLE}
 						title="Scan"
 						onPress={()=>props.onConfirm()}
 					/>
@@ -130,7 +131,7 @@ const CashierViewDialogDialog = (props: CashierViewDialogProps) => {
 				</View>
 				<View>
 					<Button
-						type="purple"
+						type={BUTTON_TYPES.PURPLE}
 						title={Translation.BUTTON.SWITCH_VIEW}
 						onPress={()=>props.onConfirm()}
 					/>
@@ -171,7 +172,7 @@ const DrawerContent = (props: DrawerContentComponentProps) => {
 
 	const onPersonal = () => {
 		setUserType(UserType.PERSONAL);
-		props.navigation.navigate("Tabs");
+		props.navigation.navigate(Routes.DASHBOARD);
 	}
 
 	return (

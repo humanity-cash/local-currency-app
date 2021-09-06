@@ -40,7 +40,7 @@ const LinkBankAccount = (): JSX.Element => {
 					type={BUTTON_TYPES.TRANSPARENT}
 					title={Translation.BUTTON.SKIP_NOW}
 					style={styles.skipBtn}
-					onPress={() => navigation.navigate(Routes.DASHBOARD)}
+					onPress={() => navigation.navigate(Routes.TABS)}
 				/>
 				<Button
 					type={BUTTON_TYPES.DARK_GREEN}
