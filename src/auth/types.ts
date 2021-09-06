@@ -15,7 +15,7 @@ export interface CustomerBasicVerification  {
 	'type'?: string
  };
 
-export interface UserAttributes {
+export interface CustomerAttributes {
 	'custom:profilePicture'?: string
 	'custom:tag'?: string
 	'custom:firstName'?: string
@@ -30,6 +30,29 @@ export interface UserAttributes {
 	'custom:type'?: string
 }
 
+export interface BusinessAttributes {
+	"custom:busniess.story": string,
+	"custom:busniess.tag": string,
+	"custom:busniess.avatar": string,
+	"custom:busniess.type": string,
+	"custom:owner.firstName": string,
+	"custom:owner.lastName": string,
+	"custom:owner.address1": string,
+	"custom:owner.address2": string,
+	"custom:owner.city": string,
+	"custom:owner.state": string,
+	"custom:owner.postalCode": string,
+	"custom:busniess.registeredBusinessName": string,
+	"custom:busniess.industry": string,
+	"custom:busniess.ein": string,
+	"custom:busniess.address1": string,
+	"custom:busniess.address2": string,
+	"custom:busniess.city": string,
+	"custom:busniess.state": string,
+	"custom:busniess.postalCode": string,
+	"custom:busniess.phoneNumber"?: string,
+}
+
 export const REQUIRED_BASIC_DETAILS = [ 
 	'custom:profilePicture',
 	'custom:tag',
@@ -42,7 +65,7 @@ export const REQUIRED_BASIC_DETAILS = [
 
 export interface UpdateUserAttributesInput {
 	user: CognitoUser
-	update: UserAttributes
+	update: CustomerAttributes | BusinessAttributes
 }
 
 export interface SignInInput {
@@ -82,10 +105,10 @@ export interface Session {
 		sub?: string;
 		accessToken?: string;
 		refreshToken?: string;
-
 }
 
 export interface IAuth {
+	completeBasicBusniessVerification?: any;
 	completeBasicVerification?: any;
 	updateAttributes?: any;
 	sessionInfo?: Session;
@@ -113,7 +136,7 @@ export interface IAuth {
 export interface BusinessBasicVerification {
 	story: string,
 	tag: string,
-	profilePicture: string,
+	avatar: string,
 	type: string,
 	owner: {
 		firstName: string,
