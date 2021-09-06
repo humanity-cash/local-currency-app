@@ -1,5 +1,5 @@
 import { useNavigation } from '@react-navigation/native';
-import React, { ReactElement } from 'react';
+import React from 'react';
 import { StyleSheet, View, KeyboardAvoidingView, Platform, ScrollView } from 'react-native';
 import { Text } from 'react-native-elements';
 import { Header, CancelBtn, Button } from "src/shared/uielements";
@@ -7,11 +7,7 @@ import { colors } from "src/theme/colors";
 import { baseHeader, viewBase, wrappingContainerBase } from "src/theme/elements";
 import Translation from 'src/translation/en.json';
 import * as Routes from 'src/navigation/constants';
-
-type TopUpSuccessProps = {
-	navigation?: any
-	route?: any
-}
+import { BUTTON_TYPES } from 'src/constants';
 
 const styles = StyleSheet.create({
 	headerText: {
@@ -29,11 +25,12 @@ const styles = StyleSheet.create({
 	},
 });
 
-const TopUpSuccessView = (props: TopUpSuccessProps) => {
+const LoadUpSuccess = (): JSX.Element => {
+	const navigation = useNavigation();
 	return (
 		<View style={viewBase}>
 			<Header
-				rightComponent={<CancelBtn text={Translation.BUTTON.CLOSE} color={colors.purple} onClick={() => props.navigation.navigate(Routes.MERCHANT_DASHBOARD)} />}
+				rightComponent={<CancelBtn text={Translation.BUTTON.CLOSE} color={colors.purple} onClick={() => navigation.navigate(Routes.MERCHANT_DASHBOARD)} />}
 			/>
 			<ScrollView style={wrappingContainerBase}>
 				<View style={ baseHeader }>
@@ -46,9 +43,9 @@ const TopUpSuccessView = (props: TopUpSuccessProps) => {
 				behavior={Platform.OS == "ios" ? "padding" : "height"} >
 				<View style={styles.bottomView}>
 					<Button
-						type="purple"
+						type={BUTTON_TYPES.PURPLE}
 						title={Translation.BUTTON.EXPLORE_BERKSHARES}
-						onPress={() => props.navigation.navigate(Routes.MERCHANT_DASHBOARD)}
+						onPress={() => navigation.navigate(Routes.MERCHANT_DASHBOARD)}
 					/>
 				</View>
 			</KeyboardAvoidingView>
@@ -56,8 +53,4 @@ const TopUpSuccessView = (props: TopUpSuccessProps) => {
 	);
 }
 
-const TopUpSuccess = (props: TopUpSuccessProps): ReactElement => {
-	const navigation = useNavigation();
-	return <TopUpSuccessView {...props} navigation={navigation} />;
-}
-export default TopUpSuccess
+export default LoadUpSuccess

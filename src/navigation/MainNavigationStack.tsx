@@ -43,6 +43,8 @@ import MerchantTabs from "src/screens/dashboard/MerchantTabs";
 import MerchantPaymentPending from "src/screens/merchantPayment/MerchantPaymentPending";
 import MerchantPaymentSuccess from "src/screens/merchantPayment/MerchantPaymentSuccess";
 import MerchantReturn from "src/screens/merchantPayment/MerchantReturn";
+import MerchantLoadupPending from "src/screens/merchantLoadup/MerchantLoadupPending";
+import MerchantLoadupSuccess from "src/screens/merchantLoadup/MerchantLoadupSuccess";
 
 import CashierDashboard from "src/screens/dashboard/CashierDashboard";
 import CashierHelp from "src/screens/cashier/CashierHelp";
@@ -217,7 +219,15 @@ const PrimaryStackScreen = () => {
 						name={Routes.MERCHANT_RETURN}
 						component={MerchantReturn}
 					/>
-
+					<PrimaryStack.Screen
+						name={Routes.MERCHANT_LOADUP_PENDING}
+						component={MerchantLoadupPending}
+					/>
+					<PrimaryStack.Screen
+						name={Routes.MERCHANT_LOADUP_SUCCESS}
+						component={MerchantLoadupSuccess}
+					/>
+					
 					<PrimaryStack.Screen
 						name={Routes.CASHIER_DASHBOARD}
 						component={CashierDashboard}
