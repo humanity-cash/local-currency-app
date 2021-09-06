@@ -8,6 +8,7 @@ import { colors } from "src/theme/colors";
 import { BusinessType } from "src/utils/types";
 import Translation from 'src/translation/en.json';
 import * as Routes from 'src/navigation/constants';
+import { useNavigation } from '@react-navigation/native';
 
 type BusinessDetailProps = {
 	navigation?: any,
@@ -52,49 +53,68 @@ const styles = StyleSheet.create({
 	},
 });
 
-const BusinessDetail = (props: BusinessDetailProps): ReactElement => {
-	const { updateBusinessDetails } = useUserDetails();
-	const [businessType, setBusinessType] = useState<BusinessType>(BusinessType.SOLE_PROPRIETORSHIP);
-
-	useEffect(() => {
-		updateBusinessDetails({ "businessType": businessType });
-	}, [businessType]);
+const BusinessDetail = (): ReactElement => {
+	const navigation = useNavigation();
+	/** Need to integrate business type from auth context here */
+	const [businessType, setBusinessType] = useState<BusinessType>(
+		BusinessType.SOLE_PROPRIETORSHIP
+	);
 
 	return (
 		<View style={viewBaseB}>
 			<Header
-				leftComponent={<BackBtn color={colors.purple} onClick={() => props.navigation.goBack()} />}
-				rightComponent={<CancelBtn color={colors.purple} text={Translation.BUTTON.LOGOUT} onClick={() => props.navigation.navigate(Routes.TEASER)} />}
+				leftComponent={
+					<BackBtn
+						color={colors.purple}
+						onClick={() => navigation.goBack()}
+					/>
+				}
+				rightComponent={
+					<CancelBtn
+						color={colors.purple}
+						text={Translation.BUTTON.LOGOUT}
+						onClick={() => navigation.navigate(Routes.TEASER)}
+					/>
+				}
 			/>
 			<ScrollView style={wrappingContainerBase}>
-                <View style={underlineHeaderB}>
-                    <Text style={styles.headerText}>{Translation.PROFILE.BUSINESS_DETAIL}</Text>
-                </View>
-                <Text style={styles.bodyText}>{Translation.PROFILE.PERSIONAL_DETAILS_BODY}</Text>
+				<View style={underlineHeaderB}>
+					<Text style={styles.headerText}>
+						{Translation.PROFILE.BUSINESS_DETAIL}
+					</Text>
+				</View>
+				<Text style={styles.bodyText}>
+					{Translation.PROFILE.PERSIONAL_DETAILS_BODY}
+				</Text>
 
-				<Text style={styles.label}>{Translation.LABEL.BUSINESS_TYPE}</Text>
+				<Text style={styles.label}>
+					{Translation.LABEL.BUSINESS_TYPE}
+				</Text>
 				<Picker
 					selectedValue={businessType}
 					style={styles.picker}
-					onValueChange={(itemValue: BusinessType) => setBusinessType(itemValue)}
-				>
-					{
-						BusinessTypes.map((type: BusinessType, idx: number) => <Picker.Item label={type} value={type} key={idx} />)
-					}
+					onValueChange={(itemValue: BusinessType) =>
+						setBusinessType(itemValue)
+					}>
+					{BusinessTypes.map((type: BusinessType, idx: number) => (
+						<Picker.Item label={type} value={type} key={idx} />
+					))}
 				</Picker>
 			</ScrollView>
 			<KeyboardAvoidingView
-				behavior={Platform.OS == "ios" ? "padding" : "height"} >
+				behavior={Platform.OS == "ios" ? "padding" : "height"}>
 				<View style={styles.bottomView}>
 					<Button
 						type="purple"
 						title={Translation.BUTTON.NEXT}
-						onPress={()=>props.navigation.navigate(Routes.BUSINESS_OWNER_DETAIL)}
+						onPress={() =>
+							navigation.navigate(Routes.BUSINESS_OWNER_DETAIL)
+						}
 					/>
 				</View>
 			</KeyboardAvoidingView>
 		</View>
 	);
-}
+};
 
 export default BusinessDetail

@@ -1,18 +1,12 @@
-import React, { ReactElement, useState } from 'react';
+import React, { ReactElement } from 'react';
 import { StyleSheet, View, ScrollView } from 'react-native';
 import { Text } from 'react-native-elements';
-import { useUserDetails } from "src/hooks";
 import { Header, Button, CancelBtn, BackBtn, BusinessAddressForm } from "src/shared/uielements";
 import { underlineHeaderB, viewBaseB, wrappingContainerBase } from "src/theme/elements";
 import { colors } from "src/theme/colors";
-import { validateAddressForm } from "src/utils/validation";
 import Translation from 'src/translation/en.json';
 import * as Routes from 'src/navigation/constants';
-
-type BusinessAddressProps = {
-	navigation?: any,
-	route?: any,
-}
+import { useNavigation } from '@react-navigation/native';
 
 const styles = StyleSheet.create({
     headerText: {
@@ -47,24 +41,16 @@ const styles = StyleSheet.create({
 	}
 });
 
-const BusinessAddress = (props: BusinessAddressProps): ReactElement => {
-	const {personalDetails, updateStatus} = useUserDetails();
-	const [goNext, setGoNext] = useState(false);
-	const [showValidation, setShowValidation] = useState(false);
-
+const BusinessAddress = (): ReactElement => {
+	const navigation = useNavigation();
 	const onNextPress = () => {
-		const validation = validateAddressForm(personalDetails);
-		setShowValidation(true);
-		if (validation.valid) {
-			updateStatus({ personalDetails: true });
-			props.navigation.navigate(Routes.BUSINESS_WELCOME);
-		}
+			navigation.navigate(Routes.BUSINESS_WELCOME);
 	}
 
 	return (
 		<View style={viewBaseB}>
 			<Header
-				leftComponent={<BackBtn color={colors.purple} onClick={() => props.navigation.goBack()} />}
+				leftComponent={<BackBtn color={colors.purple} onClick={() => navigation.goBack()} />}
 				rightComponent={<CancelBtn color={colors.purple} text={Translation.BUTTON.LOGOUT} onClick={() => props.navigation.navigate(Routes.TEASER)} />}
 			/>
 			<ScrollView style={wrappingContainerBase}>
@@ -73,8 +59,6 @@ const BusinessAddress = (props: BusinessAddressProps): ReactElement => {
                 </View>
 				<View style={styles.formView}>
 					<BusinessAddressForm
-						isValid={setGoNext}
-						showValidation={showValidation}
 						style={styles.input}
 					/>
 				</View>
@@ -82,7 +66,7 @@ const BusinessAddress = (props: BusinessAddressProps): ReactElement => {
 			<Button
 				type="purple"
 				title={Translation.BUTTON.NEXT}
-				disabled={!goNext}
+				disabled={false}
 				style={styles.bottomButton}
 				onPress={onNextPress}
 			/>
