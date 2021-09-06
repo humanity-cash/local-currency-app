@@ -39,6 +39,10 @@ import SettingsSecurity from "src/screens/settings/SettingsSecurity";
 import SettingsTermsAndConditions from "src/screens/settings/SettingsTermsAndConditions";
 
 import MerchantTabs from "src/screens/dashboard/MerchantTabs";
+// import MerchantDashboard from "src/screens/dashboard/MerchantDashboard";
+import MerchantPaymentPending from "src/screens/merchantPayment/MerchantPaymentPending";
+import MerchantPaymentSuccess from "src/screens/merchantPayment/MerchantPaymentSuccess";
+import MerchantReturn from "src/screens/merchantPayment/MerchantReturn";
 
 import CashierDashboard from "src/screens/dashboard/CashierDashboard";
 import CashierHelp from "src/screens/cashier/CashierHelp";
@@ -196,6 +200,22 @@ const PrimaryStackScreen = () => {
 					<PrimaryStack.Screen
 						name={Routes.MERCHANT_TABS}
 						component={MerchantTabs}
+					/>
+					{/* <PrimaryStack.Screen
+						name={Routes.MERCHANT_DASHBOARD}
+						component={MerchantDashboard}
+					/> */}
+					<PrimaryStack.Screen
+						name={Routes.MERCHANT_PAYMENT_PENDING}
+						component={MerchantPaymentPending}
+					/>
+					<PrimaryStack.Screen
+						name={Routes.MERCHANT_PAYMENT_SUCCESS}
+						component={MerchantPaymentSuccess}
+					/>
+					<PrimaryStack.Screen
+						name={Routes.MERCHANT_RETURN}
+						component={MerchantReturn}
 					/>
 
 					<PrimaryStack.Screen

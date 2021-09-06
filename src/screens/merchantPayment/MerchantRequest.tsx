@@ -1,17 +1,14 @@
-import React, {useState, useEffect, ReactElement} from 'react';
-import { StyleSheet, View, KeyboardAvoidingView, ScrollView, Platform, Switch } from 'react-native';
+import React, {useState, useEffect} from 'react';
+import { StyleSheet, View, KeyboardAvoidingView, ScrollView, Platform } from 'react-native';
+import { useNavigation } from '@react-navigation/core';
 import { Text } from 'react-native-elements';
-import { Header, Button, CancelBtn, BackBtn, BorderedInput } from "src/shared/uielements";
+import { Header, Button, CancelBtn, BackBtn, BorderedInput, ToggleButton } from "src/shared/uielements";
 import { baseHeader, viewBaseB, wrappingContainerBase } from "src/theme/elements";
 import { colors } from "src/theme/colors";
 import MerchantQRCodeGen from "./MerchantQRCodeGen";
 import Translation from 'src/translation/en.json';
 import * as Routes from 'src/navigation/constants';
-
-type MerchantRequestProps = {
-	navigation?: any,
-	route?: any,
-}
+import { BUTTON_TYPES } from 'src/constants';
 
 type AmountState = {
 	amount: string,
@@ -47,18 +44,33 @@ const styles = StyleSheet.create({
 	bottomView: {
 		padding: 20,
 		paddingBottom: 45
+	},
+	switch: {
+		borderColor: colors.purple,
+	},
+	switchText: {
+		color: colors.purple
+	},
+	toggleBg: {
+		backgroundColor: colors.purple
 	}
 });
 
-const MerchantRequest = (props: MerchantRequestProps): ReactElement => {
-
+const MerchantRequest = (): JSX.Element => {
+	const navigation = useNavigation();
 	const [state, setState] = useState<AmountState>({
 		amount: "1",
 		costs: "1"
 	});
 	const [goNext, setGoNext] = useState<boolean>(false);
-	const [isEnabled, setIsEnabled] = useState<boolean>(true);
 	const [isVisible, setIsVisible] = useState<boolean>(false);
+
+	useEffect(() => {
+		isVisible && setTimeout(() => {
+			setIsVisible(false);
+			navigation.navigate(Routes.MERCHANT_PAYMENT_SUCCESS);
+		}, 2000);
+	}, [isVisible]);
 
 	useEffect(() => {
 		setGoNext(state.costs !== "");
@@ -73,13 +85,6 @@ const MerchantRequest = (props: MerchantRequestProps): ReactElement => {
 		} as AmountState);
 	};
 
-	const toggleSwitch = () => {
-		setIsEnabled(previousState => !previousState);
-		if (isEnabled) {
-			props.navigation.navigate(Routes.MERCHANT_QRCODE_SCAN);
-		}
-	}
-
 	const requestAmount = () => {
 		setIsVisible(true);
 	}
@@ -91,16 +96,20 @@ const MerchantRequest = (props: MerchantRequestProps): ReactElement => {
 	return (
 		<View style={viewBaseB}>
 			<Header
-				leftComponent={<BackBtn color={colors.purple} onClick={() => props.navigation.goBack()} />}
-				rightComponent={<CancelBtn color={colors.purple} text={Translation.BUTTON.CLOSE} onClick={() => props.navigation.navigate(Routes.MERCHANT_DASHBOARD)} />}
+				leftComponent={<BackBtn color={colors.purple} onClick={() => navigation.goBack()} />}
+				rightComponent={<CancelBtn color={colors.purple} text={Translation.BUTTON.CLOSE} onClick={() => navigation.navigate(Routes.MERCHANT_DASHBOARD)} />}
 			/>
 			<ScrollView style={wrappingContainerBase}>
 				<View style={baseHeader}>
 					<View style={styles.switchView}>
-						<Switch
-							ios_backgroundColor="#3e3e3e"
-							onValueChange={toggleSwitch}
-							value={isEnabled}
+						<ToggleButton
+							value={false}
+							onChange={()=>navigation.navigate(Routes.MERCHANT_QRCODE_SCAN)}
+							activeText="Pay"
+							inActiveText="Receive"
+							style={styles.switch}
+							textStyle={styles.switchText}
+							circleStyle={styles.toggleBg}
 						/>
 					</View>
 				</View>
@@ -124,9 +133,9 @@ const MerchantRequest = (props: MerchantRequestProps): ReactElement => {
 				behavior={Platform.OS == "ios" ? "padding" : "height"} >
 				<View style={styles.bottomView}>
 					<Button
-						type="purple"
+						type={BUTTON_TYPES.PURPLE}
 						disabled={!goNext}
-						title="Next"
+						title={Translation.BUTTON.NEXT}
 						onPress={requestAmount}
 					/>
 				</View>
