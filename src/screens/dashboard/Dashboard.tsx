@@ -5,20 +5,14 @@ import {
 	ScrollView,
 	StyleSheet,
 	TouchableWithoutFeedback,
-	View
+	View,
+	TouchableOpacity
 } from 'react-native';
 import { Image, Text } from 'react-native-elements';
-import { TouchableOpacity } from 'react-native-gesture-handler';
-import { BUTTON_TYPES } from 'src/constants';
 import * as Routes from 'src/navigation/constants';
 import { Header } from 'src/shared/uielements';
-import Button from 'src/shared/uielements/Button';
 import { colors } from 'src/theme/colors';
-import {
-	baseHeader,
-	viewBase,
-	wrappingContainerBase
-} from 'src/theme/elements';
+import { baseHeader, viewBase, wrappingContainerBase } from 'src/theme/elements';
 import Translation from 'src/translation/en.json';
 import DwollaDialog from './DwollaDialog';
 
@@ -83,11 +77,26 @@ const styles = StyleSheet.create({
 		marginRight: 20,
 		borderRadius: 5,
 	},
+	qrIcon: {
+		width: 24,
+		height: 24,
+		marginRight: 20
+	},
 	scanButton: {
+		flexDirection: 'row',
+		justifyContent: 'center',
+		alignItems: 'center',
 		width: '90%',
+		height: 55,
 		position: 'absolute',
 		bottom: 45,
-		left: '5%',
+		color: colors.white,
+		backgroundColor: colors.darkGreen,
+		alignSelf: 'center',
+		borderRadius: 30
+	},
+	scanBtnText: {
+		color: colors.white
 	},
 	topupButton: {
 		paddingLeft: 10,
@@ -182,12 +191,13 @@ const Dashboard = (): JSX.Element => {
 					</View>
 				</View>
 			</ScrollView>
-			<Button
-				type={BUTTON_TYPES.DARK_GREEN}
-				title='Scan to Pay or Request'
-				style={styles.scanButton}
-				onPress={() => navigation.navigate(Routes.QRCODE_SCAN)}
-			/>
+			<TouchableOpacity onPress={()=>navigation.navigate(Routes.QRCODE_SCAN)} style={styles.scanButton}>
+				<Image
+					source={require('../../../assets/images/qr_code_consumer.png')}
+					containerStyle={styles.qrIcon}
+				/>
+				<Text style={styles.scanBtnText}>{Translation.BUTTON.SCAN}</Text>
+			</TouchableOpacity>
 			{isVisible && (
 				<DwollaDialog visible={isVisible} onClose={onClose} />
 			)}

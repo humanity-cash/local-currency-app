@@ -20,6 +20,7 @@ import MerchantReturnQRCodeScan from "../merchantPayment/MerchantReturnQRCodeSca
 import MerchantCashoutAmount from "src/screens/merchantCashout/MerchantCashoutAmount";
 import MerchantLoadup from "src/screens/merchantLoadup/MerchantLoadup";
 import MerchantPayoutSelection from 'src/screens/merchantPayout/MerchantPayoutSelection';
+import Report from 'src/screens/report/Report';
 
 const styles = StyleSheet.create({
 	headerText: {
@@ -274,7 +275,7 @@ const MerchantTabs: React.FC = () => {
 			<DrawerNav.Screen name={Routes.MERCHANT_CASHOUT_AMOUNT} component={MerchantCashoutAmount} />
 			<DrawerNav.Screen name={Routes.MERCHANT_LOADUP} component={MerchantLoadup} />
 			<DrawerNav.Screen name={Routes.MERCHANT_PAYOUT_SELECTION} component={MerchantPayoutSelection} />
-			<DrawerNav.Screen name={Routes.REPORT} component={MerchantDashboard} />
+			<DrawerNav.Screen name={Routes.REPORT} component={Report} />
 			<DrawerNav.Screen name={Routes.MERCHANT_SETTINGS} component={MerchantDashboard} />
 			<DrawerNav.Screen name={Routes.MERCHANT_HELP_AND_CONTACT} component={MerchantDashboard} />
 		</DrawerNav.Navigator>

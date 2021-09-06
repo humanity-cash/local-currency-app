@@ -1,8 +1,9 @@
 import { AntDesign, Feather } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { StyleSheet, View, ScrollView, Image, TouchableOpacity } from 'react-native';
 import { Text } from "react-native-elements";
+import { AuthContext } from 'src/auth';
 import { Header } from "src/shared/uielements";
 import { colors } from "src/theme/colors";
 import { baseHeader, viewBaseB, wrappingContainerBase, dialogViewBase } from "src/theme/elements";
@@ -61,6 +62,7 @@ const styles = StyleSheet.create({
 
 const CashierDashboard = (): JSX.Element => {
     const navigation = useNavigation();
+    const { signOut } = useContext(AuthContext);
     const [isVisible, setIsVisible] = useState<boolean>(false);
 
     const onLogout = () => {
@@ -73,7 +75,7 @@ const CashierDashboard = (): JSX.Element => {
 
     const onConfirm = () => {
         setIsVisible(false);
-        navigation.navigate(Routes.TEASER);
+        signOut();
     }
 
 	return (
@@ -128,12 +130,12 @@ const CashierDashboard = (): JSX.Element => {
                             type={BUTTON_TYPES.TRANSPARENT}
                             title={Translation.BUTTON.LOGOUT}
                             textStyle={styles.text}
-                            onPress={()=>navigation.navigate(Routes.TEASER)}
+                            onPress={onConfirm}
                         />
                         <Button
                             type={BUTTON_TYPES.PURPLE}
                             title={Translation.BUTTON.TAKE_ME_BACK}
-                            onPress={()=>onConfirm()}
+                            onPress={()=>onCancel()}
                         />
                     </View>
                 </View>
