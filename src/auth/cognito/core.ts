@@ -1,11 +1,14 @@
+/** This file includes the lowest layer of integration with AWS Cognito */
 import { AuthenticationDetails, CognitoUser, CognitoUserAttribute, CognitoUserPool, CognitoUserSession, ICognitoUserAttributeData, ISignUpResult } from 'amazon-cognito-identity-js';
-import { CognitoResponse, SignUpInput, UserAttributes } from '../types';
+import { BusinessAttributes, CognitoResponse, CustomerAttributes, SignUpInput } from '../types';
 
 /**Responses */
+
 const NOT_AUTHENTICATED = { success: false, data: { error: "noUserAuthed" } };
 type CognitoError = any
 
 /**Authenticated Account*/
+
 export const getSession = async (user: CognitoUser | null): CognitoResponse<CognitoUserSession> =>
 	new Promise(function (resolve) {
 		if (!user) resolve({ ...NOT_AUTHENTICATED, user }); // currentUser
@@ -16,7 +19,7 @@ export const getSession = async (user: CognitoUser | null): CognitoResponse<Cogn
 	})
 
 
-export const signOut = (user: CognitoUser | null): void => user?.signOut() //currentUser?.
+export const signOut = (user: CognitoUser | null): void => user?.signOut() 
 
 export const getUserAttributes = (user: CognitoUser | null): CognitoResponse<CognitoUserAttribute[] | undefined> =>  //currentUser
 	new Promise((resolve) => {
@@ -96,7 +99,6 @@ export const resendEmailVerificationCode = (user: CognitoUser): CognitoResponse<
 		});
 	})
 
-// const cognitoUser = getCognitoUser(email);
 
 /**UTILS */
 export const buildUserAttribute = (name: string, value: string): CognitoUserAttribute =>
@@ -107,7 +109,7 @@ export const buildSignUpAttributeList = (email: string): CognitoUserAttribute[] 
 	return [attributeEmail];
 }
 
-export const buildUpdateUserAttributes = (update: UserAttributes): CognitoUserAttribute[] => {
+export const buildUpdateUserAttributes = (update: CustomerAttributes | BusinessAttributes): CognitoUserAttribute[] => {
 	if (!Object?.keys(update)?.length) return [];
 	return Object.keys(update).map((name: string) =>
 		//@ts-ignore

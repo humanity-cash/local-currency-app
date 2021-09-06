@@ -1,3 +1,3 @@
-import * as Customer from './customer';
+import * as userController from './user';
 
-export { Customer };
+export { userController };
