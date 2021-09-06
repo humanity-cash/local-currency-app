@@ -9,11 +9,6 @@ import { colors } from "src/theme/colors";
 import { underlineHeader, viewBase, wrappingContainerBase } from "src/theme/elements";
 import Translation from 'src/translation/en.json';
 
-type PersonalDetailsProps = {
-	navigation?: any
-	route?: any
-}
-
 const styles = StyleSheet.create({
 	content: { 
 		paddingBottom: 40 
@@ -29,24 +24,18 @@ const styles = StyleSheet.create({
 	},
 });
 
-const PersonalDetailsView = (props: PersonalDetailsProps) => {
-	const { personalDetails } = useUserDetails();
-	const [goNext, setGoNext] = useState(false);
-	const [showValidation, setShowValidation] = useState(false);
+const PersonalDetailsView = () => {
+	const navigation = useNavigation()
 
 	const onNextPress = () => {
-		// const validation = validateDetailsForm(personalDetails);
-		// setShowValidation(true);
-		// if (validation.valid) {
-			props.navigation.navigate(Routes.PERSONAL_ADDRESS);
-		// }
+			navigation.navigate(Routes.PERSONAL_ADDRESS);
 	}
 
 	return (
 		<View style={viewBase}>
 			<Header
-				leftComponent={<BackBtn onClick={() => props.navigation.goBack()} />}
-				rightComponent={<CancelBtn text={Translation.BUTTON.LOGOUT} onClick={() => props.navigation.navigate(Routes.TEASER)} />}
+				leftComponent={<BackBtn onClick={() => navigation.goBack()} />}
+				rightComponent={<CancelBtn text={Translation.BUTTON.LOGOUT} onClick={() => navigation.navigate(Routes.TEASER)} />}
 			/>
 
 			<ScrollView style={ wrappingContainerBase }>
@@ -54,10 +43,7 @@ const PersonalDetailsView = (props: PersonalDetailsProps) => {
 					<View style={underlineHeader}>
 						<Text style={styles.headerText}>{Translation.PROFILE.PERSIONAL_DETAILS}</Text>
 					</View>
-					<PersonalDetailsForm
-						isValid={setGoNext}
-						showValidation={showValidation}
-					/>
+					<PersonalDetailsForm />
 				</View>
 			</ScrollView>
 			<KeyboardAvoidingView

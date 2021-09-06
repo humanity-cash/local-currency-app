@@ -133,7 +133,7 @@ const PersonalDetailsForm = (props: PersonalDetailsProps): ReactElement => {
 					label={Translation.LABEL.FIRST_NAME}
 					name="firstName"
 					placeHolder="First Name"
-					value={customerBasicVerificationDetails.firstName}
+					inputValue={customerBasicVerificationDetails.firstName}
 					onInputChange={onValueChange}
 				/>
 			</>
@@ -149,7 +149,7 @@ const PersonalDetailsForm = (props: PersonalDetailsProps): ReactElement => {
 					label={Translation.LABEL.LAST_NAME}
 					name="lastName"
 					placeHolder="Last Name"
-					value={customerBasicVerificationDetails.lastName}
+					inputValue={customerBasicVerificationDetails.lastName}
 					onInputChange={onValueChange}
 				/>
 			</>
