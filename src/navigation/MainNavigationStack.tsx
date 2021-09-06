@@ -2,6 +2,9 @@ import { DefaultTheme, NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import React, { ReactElement, useContext } from "react";
 import "react-native-gesture-handler";
+import { SignupBusinessNavigator } from "src/navigation/SignupBusinessNavigator";
+import MerchantTabs from "src/screens/dashboard/MerchantTabs"
+import { MerchantBankAccountNavigator } from "src/navigation/MerchantBankAccountNavigator";
 import { AuthContext } from "src/auth";
 import { AuthStatus } from "src/auth/types";
 import { useRouteTracking } from "src/hooks";
@@ -53,7 +56,8 @@ const PrimaryStackScreen = () => {
 			screenOptions={() => ({
 				headerShown: false,
 			})}>
-			{authStatus === AuthStatus.SignedOut ? (
+			{authStatus === AuthStatus.SignedOut ||
+			authStatus === AuthStatus.Loading ? (
 				<>
 					<PrimaryStack.Screen name="Teaser" component={Teaser} />
 					<PrimaryStack.Screen name="Login" component={Login} />
@@ -128,10 +132,18 @@ const PrimaryStackScreen = () => {
 						name="Congratulations"
 						component={Congratulations}
 					/>
-				</>
-			) : authStatus === AuthStatus.Loading ? (
-				<>
-					<PrimaryStack.Screen name="Teaser" component={Teaser} />
+					<PrimaryStack.Screen
+						name="SignupBusiness"
+						component={SignupBusinessNavigator}
+					/>
+					<PrimaryStack.Screen
+						name="MerchantBankAccount"
+						component={MerchantBankAccountNavigator}
+					/>
+					<PrimaryStack.Screen
+						name="MerchantTabs"
+						component={MerchantTabs}
+					/>
 				</>
 			) : (
 				<>
@@ -269,3 +281,8 @@ export const MainNavigationStack = (): ReactElement => {
 // 	name='MerchantPaymentSuccess'
 // 	component={MerchantPaymentSuccess}
 // />
+// : authStatus === AuthStatus.Loading ? (
+// 				<>
+// 					<PrimaryStack.Screen name="Teaser" component={Teaser} />
+// 				</>
+// 			)

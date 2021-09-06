@@ -5,6 +5,7 @@ import { Customer } from "./cognito";
 import {
 	AuthStatus,
 	BaseResponse,
+	BusinessBasicVerification,
 	CognitoResponse,
 	CustomerBasicVerification,
 	defaultState,
@@ -38,6 +39,31 @@ const AuthProvider: React.FunctionComponent = ({ children }) => {
 			state: "a",
 			postalCode: "2100000000",
 		});
+
+		const [buisnessBasicVerification, setBuisnessBasicVerification] =
+			useState<BusinessBasicVerification>({
+				story: "tell a story story",
+				tag: "store tag(username)",
+				profilePicture: "",
+				type: "business type",
+				owner: {
+					firstName: "Owner first name",
+					lastName: "Owner last name",
+					address1: "Satoshi Street 21",
+					address2: "Nakamoto Street 21",
+					city: "Sato",
+					state: "a",
+					postalCode: "2100000000",
+				},
+				registeredBusinessName: "Registered Name",
+				industry: "Industry",
+				ein: "Employee Identification Number",
+				address1: "Satoshi Street 21",
+				address2: "Nakamoto Street 21",
+				city: "Sato",
+				state: "a",
+				postalCode: "2100000000",
+			});
 
 	async function getSessionInfo() {
 		try {
@@ -137,6 +163,8 @@ const AuthProvider: React.FunctionComponent = ({ children }) => {
 		signOut,
 		signUp,
 		setSignInDetails,
+		buisnessBasicVerification,
+		setBuisnessBasicVerification,
 		signInDetails,
 		signUpDetails,
 		setSignUpDetails,

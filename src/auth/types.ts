@@ -106,6 +106,33 @@ export interface IAuth {
 	isVerified?: boolean;
 	setCustomerBasicVerificationDetails?: any;
 	customerBasicVerificationDetails?: any;
+	buisnessBasicVerification?: any,
+	setBuisnessBasicVerification?: any
+}
+
+export interface BusinessBasicVerification {
+	story: string,
+	tag: string,
+	profilePicture: string,
+	type: string,
+	owner: {
+		firstName: string,
+		lastName: string,
+		address1: string,
+		address2: string,
+		city: string,
+		state: string,
+		postalCode: string,
+	},
+	registeredBusinessName: string,
+	industry: string,
+	ein: string,
+	address1: string,
+	address2: string,
+	city: string,
+	state: string,
+	postalCode: string,
+	phoneNumber?: string,
 }
 
 export const defaultState: IAuth = {
