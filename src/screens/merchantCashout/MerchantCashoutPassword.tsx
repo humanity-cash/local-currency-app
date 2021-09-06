@@ -1,19 +1,16 @@
 import { useNavigation } from '@react-navigation/native';
 import * as LocalAuthentication from "expo-local-authentication";
-import React, { ReactElement, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { ScrollView, KeyboardAvoidingView, Platform, StyleSheet, View } from 'react-native';
 import { Text } from 'react-native-elements';
 import { useUserDetails } from "src/hooks";
 import { Header, BackBtn, BlockInput, Button } from "src/shared/uielements";
 import { baseHeader, viewBaseB, wrappingContainerBase } from "src/theme/elements";
 import { colors } from "src/theme/colors";
+import { isPasswordValid } from 'src/utils/validation';
 import Translation from 'src/translation/en.json';
 import * as Routes from 'src/navigation/constants';
-
-type MerchantCashoutPasswordProps = {
-	navigation?: any,
-	route: any
-}
+import { BUTTON_TYPES } from 'src/constants';
 
 const styles = StyleSheet.create({
 	headerText: {
@@ -46,16 +43,14 @@ const styles = StyleSheet.create({
 	},
 });
 
-//eslint-disable-next-line
-const strongRegex = new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#\$%\^&\*])(?=.{8,})");
-
-const MerchantCashoutPasswordView = (props: MerchantCashoutPasswordProps) => {
+const MerchantCashoutPassword = (): JSX.Element => {
+	const navigation = useNavigation();
 	const { authorization: { touchID } } = useUserDetails();
 	const [goNext, setGoNext] = useState<boolean>(true);
 	const [password, setPassword] = useState<string>("");
 	
 	useEffect(() => {
-		setGoNext(password !== "" && strongRegex.test(password));
+		setGoNext(isPasswordValid(password));
 	},[password]);
 
 	useEffect(() => {
@@ -78,7 +73,7 @@ const MerchantCashoutPasswordView = (props: MerchantCashoutPasswordProps) => {
 	return (
 		<View style={viewBaseB}>
 			<Header
-				leftComponent={<BackBtn color={colors.purple} onClick={() => props.navigation.goBack()} />}
+				leftComponent={<BackBtn color={colors.purple} onClick={() => navigation.goBack()} />}
 			/>
 
 			<ScrollView style={wrappingContainerBase}>
@@ -103,16 +98,16 @@ const MerchantCashoutPasswordView = (props: MerchantCashoutPasswordProps) => {
 			>
 				<View style={styles.bottomView}>
 					<Button
-						type="transparent"
+						type={BUTTON_TYPES.TRANSPARENT}
 						title={Translation.BUTTON.FORGOT_PASSWORD}
                         textStyle={styles.forgotText}
-						onPress={() => props.navigation.navigate(Routes.FORGOT_PASSWORD)}
+						onPress={() => navigation.navigate(Routes.FORGOT_PASSWORD)}
 					/>
 					<Button
-						type="purple"
+						type={BUTTON_TYPES.PURPLE}
 						title={Translation.BUTTON.CONFIRM}
 						disabled={!goNext}
-						onPress={() => props.navigation.navigate(Routes.MERCHANT_REDEMPTION_IN_PROGRESS)}
+						onPress={() => navigation.navigate(Routes.MERCHANT_REDEMPTION_IN_PROGRESS)}
 					/>
 				</View>
 			</KeyboardAvoidingView>
@@ -120,8 +115,4 @@ const MerchantCashoutPasswordView = (props: MerchantCashoutPasswordProps) => {
 	);
 }
 
-const MerchantCashoutPassword = (props:MerchantCashoutPasswordProps): ReactElement => {
-	const navigation = useNavigation();
-	return <MerchantCashoutPasswordView {...props} navigation={navigation} />;
-}
 export default MerchantCashoutPassword

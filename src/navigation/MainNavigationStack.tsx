@@ -50,6 +50,8 @@ import MerchantPayoutToSomeone from "src/screens/merchantPayout/MerchantPayoutTo
 import MerchantPayoutPending from "src/screens/merchantPayout/MerchantPayoutPending";
 import MerchantPayoutSuccess from "src/screens/merchantPayout/MerchantPayoutSuccess";
 import MerchantPayoutQRCodeScan from "src/screens/merchantPayout/MerchantPayoutQRCodeScan";
+import MerchantCashoutPassword from "src/screens/merchantCashout/MerchantCashoutPassword";
+import MerchantRedemptionInProgress from "src/screens/merchantCashout/MerchantRedemptionInProgress";
 
 import CashierDashboard from "src/screens/dashboard/CashierDashboard";
 import CashierHelp from "src/screens/cashier/CashierHelp";
@@ -251,6 +253,14 @@ const PrimaryStackScreen = () => {
 					<PrimaryStack.Screen
 						name={Routes.MERCHANT_PAYOUT_QR_SCAN}
 						component={MerchantPayoutQRCodeScan}
+					/>
+					<PrimaryStack.Screen
+						name={Routes.MERCHANT_CASHOUT_PASSWORD}
+						component={MerchantCashoutPassword}
+					/>
+					<PrimaryStack.Screen
+						name={Routes.MERCHANT_REDEMPTION_IN_PROGRESS}
+						component={MerchantRedemptionInProgress}
 					/>
 					
 					
