@@ -143,14 +143,10 @@ const CashierViewDialogDialog = (props: CashierViewDialogProps) => {
 }
 
 const DrawerContent = (props: DrawerContentComponentProps) => {
-	const {setUserType} = useContext(AuthContext);
+	const { signOut, setUserType } = useContext(AuthContext);
 	const [isExpanded, setIsExpanded] = useState<boolean>(false);
 	const [isVisible, setIsVisible] = useState<boolean>(false);
 	const [isCashierView, setIsCashierView] = useState<boolean>(false);
-	
-	const signOut = () => {
-		props.navigation.navigate(Routes.TEASER);
-	}
 
 	const onScanConfirm = () => {
 		setIsVisible(false);
