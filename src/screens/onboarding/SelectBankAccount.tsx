@@ -48,7 +48,7 @@ const SelectBankAccount = (): JSX.Element => {
 		<View style={viewBase}>
 			<Header
 				leftComponent={<BackBtn onClick={() => navigation.goBack()} />}
-				rightComponent={<CancelBtn text={Translation.BUTTON.CLOSE} onClick={() => navigation.navigate(Routes.DASHBOARD)} />}
+				rightComponent={<CancelBtn text={Translation.BUTTON.CLOSE} onClick={() => navigation.navigate(Routes.TABS)} />}
 			/>
 
 			<ScrollView style={wrappingContainerBase}>

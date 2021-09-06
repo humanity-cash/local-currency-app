@@ -1,11 +1,11 @@
 import { AntDesign, Entypo, Octicons } from "@expo/vector-icons";
-import { useNavigation } from "@react-navigation/native";
+import { useNavigation, DrawerActions } from "@react-navigation/native";
 import React, { useState } from 'react';
 import { StyleSheet, TouchableWithoutFeedback, View, ScrollView, TouchableOpacity } from 'react-native';
-import { Text } from "react-native-elements";
+import { Text, Image } from "react-native-elements";
 import { colors } from "src/theme/colors";
 import { viewBaseB, wrappingContainerBase, baseHeader, dialogViewBase } from "src/theme/elements";
-import { Button, SearchInput, Header, Dialog } from "src/shared/uielements";
+import { SearchInput, Header, Dialog } from "src/shared/uielements";
 import MerchantTransactionList from "./MerchantTransactionList";
 import MerchantTransactionsFilter from "./MerchantTransactionsFilter";
 import { MerchantTransactionItem, MerchantTransactionType, TransactionTypes } from "src/utils/types";
@@ -13,7 +13,6 @@ import { merchantTransactions } from "src/mocks/transactions";
 import Translation from 'src/translation/en.json';
 import * as Routes from 'src/navigation/constants';
 import { getBerksharePrefix } from "src/utils/common";
-import { BUTTON_TYPES } from "src/constants";
 
 const styles = StyleSheet.create({
 	mainTextColor: {
@@ -97,11 +96,26 @@ const styles = StyleSheet.create({
 		alignItems: 'center',
 		justifyContent: 'center'
 	},
+	qrIcon: {
+		width: 24,
+		height: 24,
+		marginRight: 20
+	},
 	scanButton: {
+		flexDirection: 'row',
+		justifyContent: 'center',
+		alignItems: 'center',
 		width: '90%',
+		height: 55,
 		position: 'absolute',
 		bottom: 45,
-		left: '5%'
+		color: colors.white,
+		backgroundColor: colors.purple,
+		alignSelf: 'center',
+		borderRadius: 30
+	},
+	scanBtnText: {
+		color: colors.white
 	},
 	infoView: {
 		paddingHorizontal: 5,
@@ -207,7 +221,7 @@ const MerchantDashboard = (): JSX.Element => {
 		<View style={viewBaseB}>
 			<Header
 				leftComponent={
-					<TouchableWithoutFeedback onPress={() => navigation.toggleDrawer()}>
+					<TouchableWithoutFeedback onPress={() => navigation.dispatch(DrawerActions.toggleDrawer())}>
 						<View style={styles.inlineView}>
 							<Entypo
 								name='menu'
@@ -261,12 +275,13 @@ const MerchantDashboard = (): JSX.Element => {
 					<MerchantTransactionList data={merchantTransactions} onSelect={viewDetail} />
 				</View>
 			</ScrollView>
-			<Button
-				type={BUTTON_TYPES.PURPLE}
-				title={Translation.BUTTON.RECEIVE_OR_SCAN}
-				style={styles.scanButton}
-				onPress={()=>navigation.navigate(Routes.MERCHANT_QRCODE_SCAN)}
-			/>
+			<TouchableOpacity onPress={()=>navigation.navigate(Routes.MERCHANT_QRCODE_SCAN)} style={styles.scanButton}>
+				<Image
+					source={require('../../../assets/images/qr_code_merchant.png')}
+					containerStyle={styles.qrIcon}
+				/>
+				<Text style={styles.scanBtnText}>{Translation.BUTTON.RECEIVE_OR_SCAN}</Text>
+			</TouchableOpacity>
 			{isDetailViewOpen && <TransactionDetail visible={isDetailViewOpen} data={selectedItem} onConfirm={onConfirm} />}
 		</View>
 	);

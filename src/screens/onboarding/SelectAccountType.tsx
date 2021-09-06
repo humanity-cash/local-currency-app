@@ -1,7 +1,8 @@
 import { useNavigation } from "@react-navigation/native";
-import React, { ReactElement } from "react";
+import React, { ReactElement, useContext } from "react";
 import { ScrollView, View, StyleSheet } from "react-native";
 import { Text } from "react-native-elements";
+import { AuthContext } from 'src/auth';
 import Button from "src/shared/uielements/Button";
 import { CancelBtn } from "src/shared/uielements/header";
 import Header from "src/shared/uielements/header/Header";
@@ -39,33 +40,33 @@ const styles = StyleSheet.create({
 });
 
 const SelectAccountTypeView = (props: SelectAccountTypeProps) => {
-  
-  return (
-    <View style={viewBaseWhite}>
-		<Header
-			rightComponent={<CancelBtn text={Translation.BUTTON.CLOSE} onClick={() => props.navigation.navigate(Routes.TEASER)} />}
-		/>
+	const { signOut } = useContext(AuthContext);
+	return (
+		<View style={viewBaseWhite}>
+			<Header
+				rightComponent={<CancelBtn text={Translation.BUTTON.CLOSE} onClick={signOut} />}
+			/>
 
-      	<ScrollView style={wrappingContainerBase}>
-		  	<View style={underlineHeader}>
-				<Text style={styles.headerText}>{Translation.PROFILE.HI}</Text>
-			</View>
-			<Text style={styles.bodyText}>{Translation.PROFILE.SELECT_PROFILE}</Text>
-			<View style={styles.accountType}>
-				<Button 
-					type="transparent" 
-					onPress={() => props.navigation.navigate(Routes.PERSONAL_PROFILE)} 
-					title={Translation.BUTTON.PERSONAL}
-					style={styles.button} />
-				<Button 
-					type="transparent" 
-					onPress={() => props.navigation.navigate(Routes.SIGNUP_BUSINESS)} 
-					title={Translation.BUTTON.BUSINESS_PERSONAL}
-					style={styles.button}/>
-			</View>
-		</ScrollView>
-    </View>
-  );
+			<ScrollView style={wrappingContainerBase}>
+				<View style={underlineHeader}>
+					<Text style={styles.headerText}>{Translation.PROFILE.HI}</Text>
+				</View>
+				<Text style={styles.bodyText}>{Translation.PROFILE.SELECT_PROFILE}</Text>
+				<View style={styles.accountType}>
+					<Button 
+						type="transparent" 
+						onPress={() => props.navigation.navigate(Routes.PERSONAL_PROFILE)} 
+						title={Translation.BUTTON.PERSONAL}
+						style={styles.button} />
+					<Button 
+						type="transparent" 
+						onPress={() => props.navigation.navigate(Routes.SIGNUP_BUSINESS)} 
+						title={Translation.BUTTON.BUSINESS_PERSONAL}
+						style={styles.button}/>
+				</View>
+			</ScrollView>
+		</View>
+	);
 };
 
 const SelectAccountType = (props: SelectAccountTypeProps): ReactElement => {
