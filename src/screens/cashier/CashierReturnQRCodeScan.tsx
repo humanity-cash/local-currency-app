@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { Text } from 'react-native-elements';
+import { useCameraPermission } from 'src/hooks';
 import { Header, CancelBtn } from "src/shared/uielements";
 import { colors } from "src/theme/colors";
 import { viewBase } from "src/theme/elements";
@@ -32,8 +33,7 @@ const styles = StyleSheet.create({
 
 const CashierReturnQRCodeScan = (): JSX.Element => {
 	const navigation = useNavigation();
-	const [isPermissionSelected, setIsPermissionSelected] = useState<boolean>(false);
-	const [hasPermission, setHasPermission] = useState<boolean>(false);
+	const hasPermission = useCameraPermission();
 	const [isScanned, setIsScanned] = useState<boolean>(false);
 
 	useEffect(() => {
@@ -41,23 +41,11 @@ const CashierReturnQRCodeScan = (): JSX.Element => {
 			navigation.navigate(Routes.CASHIER_RETURN);
 		},2000)
 	}, []);
-
-	useEffect(() => {
-		(async () => {
-			const {status} = await BarCodeScanner.requestPermissionsAsync();
-			setIsPermissionSelected(true);
-			setHasPermission(status === 'granted');
-		})();
-	}, []);
 	
 	const handleBarCodeScanned = (data: HandleScaned) => {
 		console.log(data);
 		setIsScanned(true);
 		navigation.navigate(Routes.CASHIER_RETURN);
-	}
-
-	if (isPermissionSelected === false) {
-		return <Text>{Translation.OTHER.REQUEST_CAMERA_PERMISSION}</Text>;
 	}
 
 	if (hasPermission === false) {

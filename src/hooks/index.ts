@@ -9,6 +9,7 @@ import useShares from "./useShares";
 import useTransaction from "./useTransaction";
 import useUserDetails from "./useUserDetails";
 import useWallet from "./useWallet";
+import useCameraPermission from "./useCameraPermission";
 
 export {
 	useCachedResources,
@@ -21,5 +22,6 @@ export {
 	useShares,
 	useTransaction,
 	useUserDetails,
-	useWallet
+	useWallet,
+	useCameraPermission
 }
