@@ -9,7 +9,7 @@ import { SearchInput, Dialog, BackBtn } from "src/shared/uielements";
 import CashierTransactionList from "./CashierTransactionList";
 import { merchantTransactions } from "src/mocks/transactions";
 import Translation from 'src/translation/en.json';
-import { MerchantTransactionItem, MerchantTransactionType } from "src/utils/types";
+import { MerchantTransactionItem, MerchantTransactionType, TransactionTypes } from "src/utils/types";
 import { getBerksharePrefix } from "src/utils/common";
 
 const styles = StyleSheet.create({
@@ -82,24 +82,6 @@ type TransactionDetailProps = {
 const TransactionDetail = (props: TransactionDetailProps) => {
 	const {data, visible, onConfirm} = props;
 
-	const getTransactionType = (type: MerchantTransactionType) => {
-		if (type === MerchantTransactionType.SALE) {
-			return "Customer sale";
-		} else if (type === MerchantTransactionType.PURCHASEMENT) {
-			return "Purchasement";
-		} else if (type === MerchantTransactionType.CASH_OUT) {
-			return "Cash out";
-		} else if (type === MerchantTransactionType.CUSTOMER_RETURN) {
-			return "Customer return";
-		} else if (type === MerchantTransactionType.TRANSFER) {
-			return "Transfer";
-		} else if (type === MerchantTransactionType.RETURN) {
-			return "Return";
-		} else {
-			return "Donation";
-		}
-	}
-
 	const getStyle = (type: MerchantTransactionType) => {
 		if (type === MerchantTransactionType.SALE || type === MerchantTransactionType.RETURN) {
 			return styles.plusText;
@@ -114,7 +96,7 @@ const TransactionDetail = (props: TransactionDetailProps) => {
 				<ScrollView style={wrappingContainerBase}>
 					<View style={ baseHeader }>
 						<Text style={getStyle(data.type)}>
-							{getTransactionType(data.type)}
+							{TransactionTypes[data.type]}
 						</Text>
 						<Text h1 style={{...styles.amountText, ...getStyle(data.type)}}>
 							{getBerksharePrefix(data.type)} { data.amount.toFixed(2) } 
