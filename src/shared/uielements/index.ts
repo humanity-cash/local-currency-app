@@ -14,6 +14,7 @@ import PinCode from "./PinCode";
 import SelectModal from "./SelectModal";
 import TransactionDetails from "./TransactionDetails";
 import WantedAndOffersChart from "./WantedAndOffersChart";
+import ToggleButton from "./ToggleButton";
 import {
 	ShareEntryCard,
 	ShareCardView,
@@ -82,5 +83,6 @@ export {
 	PersonalDetailsForm, 
 	PersonalProfileForm,
 	BusinessProfileForm,
-	BusinessAddressForm
+	BusinessAddressForm,
+	ToggleButton
 }
