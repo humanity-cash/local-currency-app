@@ -136,14 +136,6 @@ const PrimaryStackScreen = () => {
 						name="SignupBusiness"
 						component={SignupBusinessNavigator}
 					/>
-					<PrimaryStack.Screen
-						name="MerchantBankAccount"
-						component={MerchantBankAccountNavigator}
-					/>
-					<PrimaryStack.Screen
-						name="MerchantTabs"
-						component={MerchantTabs}
-					/>
 				</>
 			) : (
 				<>
@@ -230,6 +222,14 @@ const PrimaryStackScreen = () => {
 					<PrimaryStack.Screen
 						name="Congratulations"
 						component={Congratulations}
+					/>
+					<PrimaryStack.Screen
+						name="MerchantBankAccount"
+						component={MerchantBankAccountNavigator}
+					/>
+					<PrimaryStack.Screen
+						name="MerchantTabs"
+						component={MerchantTabs}
 					/>
 				</>
 			)}

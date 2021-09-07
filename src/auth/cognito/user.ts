@@ -3,15 +3,26 @@
  * which gets called from the auth context. the core.ts file holds the internal functions that
  * communicate directly with AWS.
  */
-import { AuthenticationDetails, CognitoUser, CognitoUserAttribute, CognitoUserSession, ISignUpResult } from 'amazon-cognito-identity-js';
-import { CognitoResponse, CustomerAttributes, BusinessAttributes } from 'src/auth/types';
-import { userPool, currtUser  } from './setup';
+import { AuthenticationDetails, CognitoUserAttribute, CognitoUserSession, ISignUpResult } from 'amazon-cognito-identity-js';
+import { BusinessBasicVerification, CustomerBasicVerification } from 'src/auth/types';
+import { CognitoCustomerAttributes, CognitoBusinessAttributes, CognitoSharedUserAttributes, CognitoResponse } from 'src/auth/cognito/types';
 import { SignInInput } from '../types';
 import * as Core from './core';
+import { CognitoUser, CognitoUserPool } from 'amazon-cognito-identity-js';
+import * as Utils from './utils'
 
+/**Cognito Setup */
+const USERPOOL_ID = 'eu-west-1_mJDPHPbDP' // staging poolId
+const CLIENT_ID = '5asu76mtbc5unne36moa5kejrb' // staging client
 
-/**Current Authorised user */
-let currentUser = currtUser;
+const poolData = {
+	UserPoolId: USERPOOL_ID,
+	ClientId: CLIENT_ID
+};
+
+const userPool = new CognitoUserPool(poolData);
+
+let currentUser: CognitoUser | null = userPool.getCurrentUser();
 
 /**Get a user that is not authroised */
 const getCognitoUser = (email: string): CognitoUser => new CognitoUser({
@@ -19,15 +30,16 @@ const getCognitoUser = (email: string): CognitoUser => new CognitoUser({
 	Pool: userPool,
 })
 
-export const getSession = async (): CognitoResponse<CognitoUserSession | null> => {
+export const getSession = async (): CognitoResponse<CognitoUserSession | undefined> => {
 	const response = await Core.getSession(currentUser);
+
 	return response;
 }
 
 /**SignUp with Email + Password */
 export const signUp = async (email: string, password: string)
 	: Promise<{ success: boolean, data: { error: string } | ISignUpResult | undefined }> => {
-	const attributeList: CognitoUserAttribute[] = Core.buildSignUpAttributeList(email);
+	const attributeList: CognitoUserAttribute[] = Utils.buildSignUpAttributeList(email);
 	const response = await Core.signUp(userPool, { email, password, attributeList });
 	return response;
 };
@@ -79,10 +91,28 @@ export const deleteUser = async (): CognitoResponse<string | undefined> => {
 };
 
 /**Update users properties we save in AWS */
-export const updateUserAttributes = async (update: BusinessAttributes | CustomerAttributes)
+export const updateUserAttributes = async (update: CognitoBusinessAttributes | CognitoCustomerAttributes | CognitoSharedUserAttributes)
 	: CognitoResponse<string | undefined> => {
-	const attributesList = Core.buildUpdateUserAttributes(update);
+	const attributesList = Utils.buildUpdateUserAttributes(update);
 	const response = await Core.updateUserAttributes(currentUser, attributesList);
 
 	return response;
 };
+
+/**Completes basic customer verifications */
+export const completeCustomerBasicVerification = async (data: CustomerBasicVerification)
+	: CognitoResponse<string | undefined> => {
+	const attributesList = Utils.buildUpdateUserAttributes(Utils.buildCompleteCustomerVerificationObject(data));
+	const response = await Core.updateUserAttributes(currentUser, attributesList);
+
+	return response;
+}
+
+/**Completes basic business verifications */
+export const completeBusinessBasicVerification = async (data: BusinessBasicVerification)
+	: CognitoResponse<string | undefined> => {
+	const attributesList = Utils.buildUpdateUserAttributes(Utils.buildCompleteBusinessVerificationObject(data));
+	const response = await Core.updateUserAttributes(currentUser, attributesList);
+
+	return response;
+}

@@ -1,137 +1,18 @@
 import { CognitoUser, CognitoUserAttribute } from "amazon-cognito-identity-js";
+import { CognitoCustomerAttributes, CognitoBusinessAttributes } from 'src/auth/cognito/types';
 
-export interface CustomerBasicVerification  {
-	'profilePicture'?: string
-	'tag'?: string
-	'address1'?: string
-	'address2'?: string
-	'city'?: string
-	'state'?: string
-	'postalCode'?: string
-	'basicVerification'?: string
-	'firstName'?: string
-	'lastName'?: string
-	'consent'?: string
-	'type'?: string
- };
-
-export interface CustomerAttributes {
-	'custom:profilePicture'?: string
-	'custom:tag'?: string
-	'custom:firstName'?: string
-	'custom:lastName'?: string
-	'custom:address1'?: string
-	'custom:address2'?: string
-	'custom:city'?: string
-	'custom:state'?: string
-	'custom:postalCode'?: string
-	'custom:basicVerification'?: string
-	'custom:consent'?: string
-	'custom:type'?: string
-}
-
-export interface BusinessAttributes {
-	"custom:busniess.story": string,
-	"custom:busniess.tag": string,
-	"custom:busniess.avatar": string,
-	"custom:busniess.type": string,
-	"custom:owner.firstName": string,
-	"custom:owner.lastName": string,
-	"custom:owner.address1": string,
-	"custom:owner.address2": string,
-	"custom:owner.city": string,
-	"custom:owner.state": string,
-	"custom:owner.postalCode": string,
-	"custom:busniess.registeredBusinessName": string,
-	"custom:busniess.industry": string,
-	"custom:busniess.ein": string,
-	"custom:busniess.address1": string,
-	"custom:busniess.address2": string,
-	"custom:busniess.city": string,
-	"custom:busniess.state": string,
-	"custom:busniess.postalCode": string,
-	"custom:busniess.phoneNumber"?: string,
-}
-
-export const REQUIRED_BASIC_DETAILS = [ 
-	'custom:profilePicture',
-	'custom:tag',
-	'custom:address1',
-	'custom:address2',
-	'custom:city',
-	'custom:state',
-	'custom:postalCode',
-];
-
-export interface UpdateUserAttributesInput {
-	user: CognitoUser
-	update: CustomerAttributes | BusinessAttributes
-}
-
-export interface SignInInput {
-	email: string
-	password: string
-}
-
-export interface SignUpInput {
-	email: string
-	password: string
-	attributeList: CognitoUserAttribute[]
-}
-
-export interface ConfirmEmailVerificationCodeInput {
-	code: string
-}
-
-export type BaseResponse<T> = { user?: CognitoUser | null, success: boolean, data: { error: string } | T }
-export type CognitoResponse<T> = Promise<BaseResponse<T>>
-export type CogResponse<T> = { success: boolean, data: { error: string } | T }
-
-/**AWS COGNITO ERRORS */
-export const COGNITO_USERNAME_EXISTS_EXCEPTION_CODE = 'UsernameExistsException'
-export const NEW_PASSWORD_REQUIRED_ERROR = 'newPasswordRequiredError'
-export const WRONG_CREDS_ERROR = 'Incorrect username or password.'
-
-export enum AuthStatus {
-	Loading,
-	NotVerified, //SignedIn but not verified
-	SignedIn,
-	SignedOut,
-}
-
-export interface Session {
-		username?: string;
-		email?: string;
-		sub?: string;
-		accessToken?: string;
-		refreshToken?: string;
-}
-
-export interface IAuth {
-	completeBasicBusniessVerification?: any;
-	completeBasicVerification?: any;
-	updateAttributes?: any;
-	sessionInfo?: Session;
-	resendEmailVerificationCode?: any;
-	authStatus?: AuthStatus;
-	signIn?: any;
-	setSignInDetails?: any;
-	signInDetails?: { password: string; email: string };
-	signOut?: any;
-	getSession?: any;
-	getAttributes?: any;
-	signUpDetails?: any;
-	setSignUpDetails?: any;
-	emailVerification?: any;
-	updateAttributeAfterSignUp?: any;
-	signUp?: any;
-	isCustomerVerified?: any;
-	isVerified?: boolean;
-	setCustomerBasicVerificationDetails?: any;
-	customerBasicVerificationDetails?: any;
-	buisnessBasicVerification?: any,
-	setBuisnessBasicVerification?: any
-}
+export interface CustomerBasicVerification {
+	avatar: string
+	tag: string
+	address1: string
+	address2: string
+	city: string
+	state: string
+	postalCode: string
+	firstName: string
+	lastName: string
+	type: string
+};
 
 export interface BusinessBasicVerification {
 	story: string,
@@ -158,16 +39,76 @@ export interface BusinessBasicVerification {
 	phoneNumber?: string,
 }
 
+/**Shared Update attributes input between Customer and Business */
+export interface UpdateUserAttributesInput {
+	user: CognitoUser
+	update: CognitoCustomerAttributes | CognitoBusinessAttributes
+}
+
+export interface SignInInput {
+	email: string
+	password: string
+}
+
+export interface SignUpInput {
+	email: string
+	password: string
+	attributeList: CognitoUserAttribute[]
+}
+
+export interface ConfirmEmailVerificationCodeInput {
+	code: string
+}
+
+
+export enum AuthStatus {
+	Loading,
+	NotVerified, // Signed In but didnt complete verification for customer nor business
+	SignedIn,
+	SignedOut,
+}
+
+export interface Session {
+	username?: string;
+	email?: string;
+	sub?: string;
+	accessToken?: string;
+	refreshToken?: string;
+}
+
+export interface IAuth {
+	completeBusniessBasicVerification?: any,
+	userAttributes?: any,
+	completeCustomerBasicVerification?: any,
+	updateAttributes?: any;
+	sessionInfo?: Session;
+	resendEmailVerificationCode?: any;
+	authStatus?: AuthStatus;
+	signIn?: any;
+	setSignInDetails?: any;
+	signInDetails?: { password: string; email: string };
+	signOut?: any;
+	getSession?: any;
+	getAttributes?: any;
+	signUpDetails?: any;
+	setSignUpDetails?: any;
+	emailVerification?: any;
+	updateAttributeAfterSignUp?: any;
+	signUp?: any;
+	isCustomerVerified?: any;
+	isVerified?: boolean;
+	setCustomerBasicVerificationDetails?: any;
+	customerBasicVerificationDetails?: any;
+	buisnessBasicVerification?: any,
+	setBuisnessBasicVerification?: any
+}
+
 export const defaultState: IAuth = {
 	sessionInfo: {},
 	authStatus: AuthStatus.Loading,
 	signInDetails: { password: '', email: '' },
 	isVerified: false,
-	setSignInDetails: () => { 
+	setSignInDetails: () => {
 		console.log('setSigninDetails is not loaded yet')
 	},
 };
-
-export interface ResendEmailVerificationCodeInput {
-	email: string
-}
