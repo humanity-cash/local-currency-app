@@ -1,38 +1,17 @@
-import { useEffect } from "react";
-import { createStore, useStore } from "react-hookstore";
+import { useEffect, useState } from "react";
 import { BarCodeScanner } from 'expo-barcode-scanner';
 
-const storeId = "CAMERA_PERMISSION_RECORD";
-
-type CameraPermissionState = {
-	status: boolean
-};
-
-const store = createStore<CameraPermissionState>(storeId, {
-	status: false
-});
-let loaded = false;
-
-const useMarketEntry = (): boolean => {
-	const [details] = useStore<CameraPermissionState>(storeId);
+const useCameraPermission = (): boolean => {
+	const [status, setStatus] = useState<boolean>(false);
 
 	useEffect(() => {
-		async function getCameraPermission() {
-			if (!loaded) {
-				try {
-					const {status} = await BarCodeScanner.requestPermissionsAsync();
-					store.setState({status: status === 'granted'});
-				} catch (error) {
-					// Error saving data
-				}
-				loaded = true;
-			}
+		async () => {
+			const {status} = await BarCodeScanner.requestPermissionsAsync();
+			setStatus(status === 'granted');
 		}
-
-		getCameraPermission();
 	}, []);
 
-	return details.status;
+	return status;
 };
 
-export default useMarketEntry;
+export default useCameraPermission;
