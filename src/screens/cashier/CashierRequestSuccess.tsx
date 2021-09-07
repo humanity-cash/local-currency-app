@@ -26,7 +26,7 @@ const styles = StyleSheet.create({
 	},
 });
 
-const CashierPaymentSuccess = (): JSX.Element => {
+const CashierRequestSuccess = (): JSX.Element => {
 	const navigation = useNavigation();
 	return (
 		<View style={viewBase}>
@@ -53,4 +53,4 @@ const CashierPaymentSuccess = (): JSX.Element => {
 	);
 }
 
-export default CashierPaymentSuccess
+export default CashierRequestSuccess

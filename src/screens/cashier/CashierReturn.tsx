@@ -1,4 +1,3 @@
-import { useNavigation } from '@react-navigation/native';
 import React, {useState, useEffect} from 'react';
 import { StyleSheet, View, KeyboardAvoidingView, ScrollView, Platform } from 'react-native';
 import { Text } from 'react-native-elements';
@@ -7,15 +6,18 @@ import { baseHeader, viewBaseB, wrappingContainerBase } from "src/theme/elements
 import { colors } from "src/theme/colors";
 import Translation from 'src/translation/en.json';
 import * as Routes from 'src/navigation/constants';
-import CashierQRCodeGen from 'src/screens/cashier/CashierQRCodeGen';
+import { useNavigation } from '@react-navigation/core';
 import { BUTTON_TYPES } from 'src/constants';
 
 const styles = StyleSheet.create({
 	headerText: {
 		fontSize: 32,
 		fontWeight: '400',
-		color: colors.purple,
-		lineHeight: 40
+		lineHeight: 40,
+		color: colors.purple
+	},
+	text: {
+		color: colors.bodyText
 	},
 	switchView: {
 		flex: 1, 
@@ -28,13 +30,34 @@ const styles = StyleSheet.create({
 	label: { 
 		marginTop: 20, 
 		color: colors.bodyText, 
-		fontSize: 12 
+		fontSize: 12
+	},
+	transactionDetail: {
+		backgroundColor: colors.white,
+		borderRadius: 3,
+		paddingVertical: 30,
+		paddingHorizontal: 20
+	},
+	amountText: {
+		fontSize: 32,
+		lineHeight: 32,
+		textAlign: 'center',
+		color: colors.purple
+	},
+	detailView: {
+		flex: 1,
+		flexDirection: 'row',
+		justifyContent: 'space-between'
+	},
+	detailText: {
+		fontSize: 10,
+		color: colors.bodyText
 	},
 	input: {
 		backgroundColor: colors.white,
 		color: colors.purple
 	},
-	text: {
+	inputText: {
 		color: colors.purple
 	},
 	bottomView: {
@@ -43,26 +66,29 @@ const styles = StyleSheet.create({
 	}
 });
 
-const CashierRequest = (): JSX.Element => {
+const transactionInfo = {
+	id: "015741EEFD444",
+	amount: 14.34,
+	type: "CUSTOMER SALE",
+	date: "4:22, JUN 17, 2021"
+};
+
+const CashierReturn = (): JSX.Element => {
 	const navigation = useNavigation();
 	const [amount, setAmount] = useState<string>("");
 	const [goNext, setGoNext] = useState<boolean>(false);
-	const [isVisible, setIsVisible] = useState<boolean>(false);
 
 	useEffect(() => {
 		setGoNext(Number(amount) > 0);
 	}, [amount]);
 
+
 	const onValueChange = (name: string, change: string) => {
 		setAmount(change);
-	};
-
-	const requestAmount = () => {
-		setIsVisible(true);
 	}
 
-	const onClose = () => {
-		setIsVisible(false);
+	const onReturn = () => {
+		navigation.navigate(Routes.CASHIER_PAYMENT_PENDING);
 	}
 
 	return (
@@ -73,10 +99,28 @@ const CashierRequest = (): JSX.Element => {
 			/>
 			<ScrollView style={wrappingContainerBase}>
 				<View style={baseHeader}>
-					<Text style={styles.headerText}>{Translation.CASHIER.RECEIVE_PAYMENT}</Text>
+					<Text style={styles.headerText}>{Translation.CASHIER.MAKE_RETURN}</Text>
+					<Text style={styles.text}>{Translation.CASHIER.MAKE_RETURN_DETAIL}</Text>
 				</View>
 				<View style={styles.contentView}>
-					<Text style={styles.label}>{Translation.LABEL.AMOUNT1}</Text>
+					<Text style={styles.label}>{Translation.LABEL.TRANSACTION_DETAILS}</Text>
+					<View style={styles.transactionDetail}>
+						<Text h1 style={styles.amountText}>B$ {transactionInfo.amount.toFixed(2)}</Text>
+						<View style={styles.detailView}>
+							<Text style={styles.detailText}>{Translation.PAYMENT.TRANSACTION_ID}</Text>
+							<Text style={styles.detailText}>{transactionInfo.id}</Text>
+						</View>
+						<View style={styles.detailView}>
+							<Text style={styles.detailText}>{Translation.COMMON.TYPE}</Text>
+							<Text style={styles.detailText}>{transactionInfo.type}</Text>
+						</View>
+						<View style={styles.detailView}>
+							<Text style={styles.detailText}>{Translation.COMMON.DATE}</Text>
+							<Text style={styles.detailText}>{transactionInfo.date}</Text>
+						</View>
+					</View>
+
+					<Text style={styles.label}>{Translation.LABEL.RETURN_AMOUNT}</Text>
 					<BorderedInput
 						label="Amount"
 						name="amount"
@@ -85,7 +129,7 @@ const CashierRequest = (): JSX.Element => {
 						placeholderTextColor={colors.greyedPurple}
 						prefix="B$"
 						style={styles.input}
-						textStyle={styles.text}
+						textStyle={styles.inputText}
 						value={amount}
 						onChange={onValueChange}
 					/>
@@ -95,22 +139,15 @@ const CashierRequest = (): JSX.Element => {
 				behavior={Platform.OS == "ios" ? "padding" : "height"} >
 				<View style={styles.bottomView}>
 					<Button
-						type={BUTTON_TYPES.TRANSPARENT}
-						title={Translation.BUTTON.HOW_TO_WORK}
-						textStyle={styles.text}
-						onPress={()=>navigation.navigate(Routes.CASHIER_HOW_TO_WORK)}
-					/>
-					<Button
 						type={BUTTON_TYPES.PURPLE}
 						disabled={!goNext}
-						title="Next"
-						onPress={requestAmount}
+						title={Translation.BUTTON.RETURN_AMOUNT}
+						onPress={onReturn}
 					/>
 				</View>
 			</KeyboardAvoidingView>
-			{ isVisible && <CashierQRCodeGen visible={isVisible} onClose={onClose} amount={Number(amount)} /> }
 		</View>
 	);
 }
 
-export default CashierRequest
+export default CashierReturn

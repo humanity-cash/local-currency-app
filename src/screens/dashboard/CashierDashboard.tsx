@@ -60,10 +60,43 @@ const styles = StyleSheet.create({
 	},
 });
 
+type ReturnPaymentDialogProps = {
+	visible: boolean,
+	onConfirm: () => void,
+	onCancel: () => void
+}
+
+const ReturnPaymentDialog = (props: ReturnPaymentDialogProps) => {
+	return (
+		<Dialog visible={props.visible} onClose={()=>props.onCancel()} backgroundStyle={styles.dialogBg}>
+			<View style={dialogViewBase}>
+				<View style={wrappingContainerBase}>
+					<View style={ baseHeader }>
+						<Text style={styles.headerText}>
+							{Translation.PAYMENT.SCAN_RECIPIENTS_QR}
+						</Text>
+					</View>
+					<Text style={styles.detailText}>
+						{Translation.PAYMENT.SCAN_RECIPIENTS_QR_DETAIL}
+					</Text>
+				</View>
+				<View>
+					<Button
+						type={BUTTON_TYPES.PURPLE}
+						title="Scan"
+						onPress={()=>props.onConfirm()}
+					/>
+				</View>
+			</View>
+		</Dialog>
+	)
+}
+
 const CashierDashboard = (): JSX.Element => {
     const navigation = useNavigation();
     const { signOut } = useContext(AuthContext);
     const [isVisible, setIsVisible] = useState<boolean>(false);
+    const [isReturn, setIsReturn] = useState<boolean>(false);
 
     const onLogout = () => {
         setIsVisible(true);
@@ -77,6 +110,15 @@ const CashierDashboard = (): JSX.Element => {
         setIsVisible(false);
         signOut();
     }
+
+    const onScanConfirm = () => {
+		setIsReturn(false);
+		navigation.navigate(Routes.CASHIER_RETURN_QRCODE_SCAN);
+	}
+
+	const onScanCancel = () => {
+		setIsReturn(false);
+	}
 
 	return (
 		<View style={viewBaseB}>
@@ -98,7 +140,7 @@ const CashierDashboard = (): JSX.Element => {
                         <Feather name="server" size={20} color={colors.purple} style={styles.icon} />
                         <Text style={styles.text}>Transactions</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.itemView}>
+                    <TouchableOpacity style={styles.itemView} onPress={()=>setIsReturn(true)}>
                         <Feather name="rotate-ccw" size={20} color={colors.purple} style={styles.icon} />
                         <Text style={styles.text}>Make a return</Text>
                     </TouchableOpacity>
@@ -140,6 +182,8 @@ const CashierDashboard = (): JSX.Element => {
                     </View>
                 </View>
             </Dialog>}
+
+            {isReturn && <ReturnPaymentDialog visible={isReturn} onConfirm={onScanConfirm} onCancel={onScanCancel} />}
 		</View>
 	);
 }

@@ -43,7 +43,7 @@ const CashierQRCodeGen = (props: CashierQRCodeGenProps): JSX.Element => {
     useEffect(() => {
         setTimeout(() => {
             props.onClose();
-            navigation.navigate(Routes.CASHIER_PAYMENT_SUCCESS);
+            navigation.navigate(Routes.CASHIER_REQUEST_SUCCESS);
         }, 2000);
     }, []);
 
