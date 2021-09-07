@@ -1,4 +1,4 @@
-import React, {useState, useEffect, ReactElement} from 'react';
+import React, {useState, useEffect} from 'react';
 import { StyleSheet, View, KeyboardAvoidingView, ScrollView, Platform } from 'react-native';
 import { Text } from 'react-native-elements';
 import { Header, Button, CancelBtn, BackBtn, BorderedInput } from "src/shared/uielements";
@@ -6,11 +6,8 @@ import { underlineHeaderB, viewBaseB, wrappingContainerBase } from "src/theme/el
 import { colors } from "src/theme/colors";
 import Translation from 'src/translation/en.json';
 import * as Routes from 'src/navigation/constants';
-
-type MerchantPayoutToPersonalProps = {
-	navigation?: any,
-	route?: any,
-}
+import { useNavigation } from '@react-navigation/core';
+import { BUTTON_TYPES } from 'src/constants';
 
 const styles = StyleSheet.create({
 	headerText: {
@@ -47,8 +44,8 @@ const styles = StyleSheet.create({
 	}
 });
 
-const MerchantCashoutAmount = (props: MerchantPayoutToPersonalProps): ReactElement => {
-
+const MerchantCashoutAmount = (): JSX.Element => {
+	const navigation = useNavigation();
 	const [amount, setAmount] = useState<string>('');
 	const [goNext, setGoNext] = useState(false);
 
@@ -63,8 +60,8 @@ const MerchantCashoutAmount = (props: MerchantPayoutToPersonalProps): ReactEleme
 	return (
 		<View style={viewBaseB}>
 			<Header
-				leftComponent={<BackBtn color={colors.purple} onClick={() => props.navigation.goBack()} />}
-				rightComponent={<CancelBtn text={Translation.BUTTON.CLOSE} color={colors.purple} onClick={() => props.navigation.goBack()} />}
+				leftComponent={<BackBtn color={colors.purple} onClick={() => navigation.goBack()} />}
+				rightComponent={<CancelBtn text={Translation.BUTTON.CLOSE} color={colors.purple} onClick={() => navigation.navigate(Routes.MERCHANT_DASHBOARD)} />}
 			/>
 			<ScrollView style={wrappingContainerBase}>
 				<View style={underlineHeaderB}>
@@ -94,10 +91,10 @@ const MerchantCashoutAmount = (props: MerchantPayoutToPersonalProps): ReactEleme
 				behavior={Platform.OS == "ios" ? "padding" : "height"} >
 				<View style={styles.bottomView}>
 					<Button
-						type="purple"
+						type={BUTTON_TYPES.PURPLE}
 						disabled={!goNext}
 						title={Translation.BUTTON.CONFIRM}
-						onPress={()=>props.navigation.navigate(Routes.MERCHANT_PAYOUT_PENDING)}
+						onPress={()=>navigation.navigate(Routes.MERCHANT_PAYOUT_PENDING)}
 					/>
 				</View>
 			</KeyboardAvoidingView>

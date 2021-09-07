@@ -39,6 +39,19 @@ import SettingsSecurity from "src/screens/settings/SettingsSecurity";
 import SettingsTermsAndConditions from "src/screens/settings/SettingsTermsAndConditions";
 
 import MerchantTabs from "src/screens/dashboard/MerchantTabs";
+// import MerchantDashboard from "src/screens/dashboard/MerchantDashboard";
+import MerchantPaymentPending from "src/screens/merchantPayment/MerchantPaymentPending";
+import MerchantPaymentSuccess from "src/screens/merchantPayment/MerchantPaymentSuccess";
+import MerchantReturn from "src/screens/merchantPayment/MerchantReturn";
+import MerchantLoadupPending from "src/screens/merchantLoadup/MerchantLoadupPending";
+import MerchantLoadupSuccess from "src/screens/merchantLoadup/MerchantLoadupSuccess";
+import MerchantPayoutToPersonal from "src/screens/merchantPayout/MerchantPayoutToPersonal";
+import MerchantPayoutToSomeone from "src/screens/merchantPayout/MerchantPayoutToSomeone";
+import MerchantPayoutPending from "src/screens/merchantPayout/MerchantPayoutPending";
+import MerchantPayoutSuccess from "src/screens/merchantPayout/MerchantPayoutSuccess";
+import MerchantPayoutQRCodeScan from "src/screens/merchantPayout/MerchantPayoutQRCodeScan";
+import MerchantCashoutPassword from "src/screens/merchantCashout/MerchantCashoutPassword";
+import MerchantRedemptionInProgress from "src/screens/merchantCashout/MerchantRedemptionInProgress";
 
 import CashierDashboard from "src/screens/dashboard/CashierDashboard";
 import CashierHelp from "src/screens/cashier/CashierHelp";
@@ -197,7 +210,60 @@ const PrimaryStackScreen = () => {
 						name={Routes.MERCHANT_TABS}
 						component={MerchantTabs}
 					/>
-
+					{/* <PrimaryStack.Screen
+						name={Routes.MERCHANT_DASHBOARD}
+						component={MerchantDashboard}
+					/> */}
+					<PrimaryStack.Screen
+						name={Routes.MERCHANT_PAYMENT_PENDING}
+						component={MerchantPaymentPending}
+					/>
+					<PrimaryStack.Screen
+						name={Routes.MERCHANT_PAYMENT_SUCCESS}
+						component={MerchantPaymentSuccess}
+					/>
+					<PrimaryStack.Screen
+						name={Routes.MERCHANT_RETURN}
+						component={MerchantReturn}
+					/>
+					<PrimaryStack.Screen
+						name={Routes.MERCHANT_LOADUP_PENDING}
+						component={MerchantLoadupPending}
+					/>
+					<PrimaryStack.Screen
+						name={Routes.MERCHANT_LOADUP_SUCCESS}
+						component={MerchantLoadupSuccess}
+					/>
+					<PrimaryStack.Screen
+						name={Routes.MERCHANT_PAYOUT_PERSONAL}
+						component={MerchantPayoutToPersonal}
+					/>
+					<PrimaryStack.Screen
+						name={Routes.MERCHANT_PAYOUT_SOMEONE}
+						component={MerchantPayoutToSomeone}
+					/>
+					<PrimaryStack.Screen
+						name={Routes.MERCHANT_PAYOUT_PENDING}
+						component={MerchantPayoutPending}
+					/>
+					<PrimaryStack.Screen
+						name={Routes.MERCHANT_PAYOUT_SUCCESS}
+						component={MerchantPayoutSuccess}
+					/>
+					<PrimaryStack.Screen
+						name={Routes.MERCHANT_PAYOUT_QR_SCAN}
+						component={MerchantPayoutQRCodeScan}
+					/>
+					<PrimaryStack.Screen
+						name={Routes.MERCHANT_CASHOUT_PASSWORD}
+						component={MerchantCashoutPassword}
+					/>
+					<PrimaryStack.Screen
+						name={Routes.MERCHANT_REDEMPTION_IN_PROGRESS}
+						component={MerchantRedemptionInProgress}
+					/>
+					
+					
 					<PrimaryStack.Screen
 						name={Routes.CASHIER_DASHBOARD}
 						component={CashierDashboard}
