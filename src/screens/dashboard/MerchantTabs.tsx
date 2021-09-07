@@ -1,7 +1,7 @@
 import { EvilIcons } from '@expo/vector-icons';
 import { Octicons } from '@expo/vector-icons';
 import { createDrawerNavigator, DrawerContentComponentProps, DrawerContentScrollView, DrawerItem } from '@react-navigation/drawer';
-import React, { useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { StyleSheet, View, Text, Image, TouchableWithoutFeedback } from 'react-native';
 import { Drawer } from 'react-native-paper';
 import { colors } from "src/theme/colors";
@@ -15,6 +15,7 @@ import MerchantReturnQRCodeScan from "../merchantPayment/MerchantReturnQRCodeSca
 import MerchantCashoutAmount from "src/screens/merchantCashout/MerchantCashoutAmount";
 import MerchantLoadup from "src/screens/merchantLoadup/MerchantLoadup";
 import MerchantPayoutSelection from 'src/screens/merchantPayout/MerchantPayoutSelection';
+import { AuthContext } from 'src/auth';
 
 const styles = StyleSheet.create({
 	headerText: {
@@ -107,6 +108,7 @@ const ReturnPaymentDialog = (props: ReturnPaymentDialogProps) => {
 const DrawerContent = (props: DrawerContentComponentProps) => {
 	const [isExpanded, setIsExpanded] = useState<boolean>(false);
 	const [isVisible, setIsVisible] = useState<boolean>(false);
+	const { userAttributes } = useContext(AuthContext);
 	
 	const signOut = () => {
 		props.navigation.navigate('Teaser');
@@ -126,48 +128,71 @@ const DrawerContent = (props: DrawerContentComponentProps) => {
 			<DrawerContentScrollView {...props}>
 				<View>
 					<View style={styles.infoView}>
-						<TouchableWithoutFeedback onPress={() => setIsExpanded(!isExpanded)}>
+						<TouchableWithoutFeedback
+							onPress={() => setIsExpanded(!isExpanded)}>
 							<View style={styles.userInfo}>
 								<View style={styles.imageView}>
 									<Image
 										source={require("../../../assets/images/placeholder5.png")}
-										style={styles.image} 
+										style={styles.image}
 									/>
 								</View>
 								<View style={styles.usernameView}>
-									<Text>Magic Fluke</Text>
+									<Text>
+										{
+											userAttributes?.[
+												"custom:personal.tag"
+											]
+										}
+									</Text>
 									<View style={styles.inlineView}>
-										<Text style={styles.fadeText}>Switch account</Text>
-										<EvilIcons name="chevron-down" size={26} color={colors.purple} />
+										<Text style={styles.fadeText}>
+											Switch account
+										</Text>
+										<EvilIcons
+											name="chevron-down"
+											size={26}
+											color={colors.purple}
+										/>
 									</View>
 								</View>
 							</View>
 						</TouchableWithoutFeedback>
 						{isExpanded && (
 							<View>
-								<TouchableWithoutFeedback onPress={() => props.navigation.navigate("Tabs")}>
+								<TouchableWithoutFeedback
+									onPress={() =>
+										props.navigation.navigate("Tabs")
+									}>
 									<View style={styles.userInfo}>
 										<View style={styles.imageView}>
 											<Image
 												source={require("../../../assets/images/placeholder5.png")}
-												style={styles.image} 
+												style={styles.image}
 											/>
 										</View>
 										<View style={styles.usernameView}>
-											<Text>Dagmar van Eijk</Text>
+											<Text>
+												{
+													userAttributes?.[
+														"custom:business.rbn"
+													]
+												}
+											</Text>
 										</View>
 									</View>
 								</TouchableWithoutFeedback>
-								<TouchableWithoutFeedback onPress={() => props.navigation.navigate("Tabs")}>
+								<TouchableWithoutFeedback
+									onPress={() => console.log("some")}>
 									<View style={styles.userInfo}>
 										<View style={styles.imageView}>
-										<Image
-											source={require("../../../assets/images/placeholder5.png")}
-											style={styles.image} 
-										/>
+											<Image
+												source={require("../../../assets/images/placeholder5.png")}
+												style={styles.image}
+											/>
 										</View>
 										<View style={styles.usernameView}>
-											<Text>Cashier Magic Fluke</Text>
+											<Text>Cashier</Text>
 										</View>
 									</View>
 								</TouchableWithoutFeedback>
@@ -176,35 +201,91 @@ const DrawerContent = (props: DrawerContentComponentProps) => {
 					</View>
 					<Text style={styles.berkAmount}>B$ 50.00</Text>
 					<Drawer.Section>
-						<DrawerItem label="Receive payment"  onPress={() => {props.navigation.navigate('MerchantRequest')}} />
-						<DrawerItem label="Scan to pay" onPress={() => {props.navigation.navigate('MerchantQRCodeScan')}} />
-						<DrawerItem label="Make a return"  onPress={() => {setIsVisible(true)}} />
-						<DrawerItem label="Load up B$"  onPress={() => {props.navigation.navigate('MerchantLoadup')}} />
-						<DrawerItem label="Send B$ to someone"  onPress={() => {props.navigation.navigate('MerchantPayoutSelection')}} />
-						<DrawerItem label="Cash out to USD"  onPress={() => {props.navigation.navigate('MerchantCashoutAmount')}} />
+						<DrawerItem
+							label="Receive payment"
+							onPress={() => {
+								props.navigation.navigate("MerchantRequest");
+							}}
+						/>
+						<DrawerItem
+							label="Scan to pay"
+							onPress={() => {
+								props.navigation.navigate("MerchantQRCodeScan");
+							}}
+						/>
+						<DrawerItem
+							label="Make a return"
+							onPress={() => {
+								setIsVisible(true);
+							}}
+						/>
+						<DrawerItem
+							label="Load up B$"
+							onPress={() => {
+								props.navigation.navigate("MerchantLoadup");
+							}}
+						/>
+						<DrawerItem
+							label="Send B$ to someone"
+							onPress={() => {
+								props.navigation.navigate(
+									"MerchantPayoutSelection"
+								);
+							}}
+						/>
+						<DrawerItem
+							label="Cash out to USD"
+							onPress={() => {
+								props.navigation.navigate(
+									"MerchantCashoutAmount"
+								);
+							}}
+						/>
 					</Drawer.Section>
 					<Drawer.Section>
-						<DrawerItem label="Report"  onPress={() => {props.navigation.navigate('SignUpYourBusiness')}} />
-						<DrawerItem label="Settings"  onPress={() => {props.navigation.navigate('Settings')}} />
-						<DrawerItem label="Help and Contact"  onPress={() => {props.navigation.navigate('HelpAndContact')}} />
+						<DrawerItem
+							label="Report"
+							onPress={() => {
+								props.navigation.navigate("SignUpYourBusiness");
+							}}
+						/>
+						<DrawerItem
+							label="Settings"
+							onPress={() => {
+								props.navigation.navigate("Settings");
+							}}
+						/>
+						<DrawerItem
+							label="Help and Contact"
+							onPress={() => {
+								props.navigation.navigate("HelpAndContact");
+							}}
+						/>
 					</Drawer.Section>
 				</View>
 			</DrawerContentScrollView>
 			<Drawer.Section style={styles.bottomSection}>
-				<DrawerItem 
-						icon={() => 
-						<Octicons 
+				<DrawerItem
+					icon={() => (
+						<Octicons
 							name="sign-out"
 							size={24}
 							color={colors.bodyText}
-						/>}
-						label="Sign out" 
-						onPress={signOut} 
+						/>
+					)}
+					label="Sign out"
+					onPress={signOut}
 				/>
 			</Drawer.Section>
-			{ isVisible && <ReturnPaymentDialog visible={isVisible} onConfirm={onScanConfirm} onCancel={onScanCancel} /> }
+			{isVisible && (
+				<ReturnPaymentDialog
+					visible={isVisible}
+					onConfirm={onScanConfirm}
+					onCancel={onScanCancel}
+				/>
+			)}
 		</View>
-	)
+	);
 }
 
 const DrawerNav = createDrawerNavigator();

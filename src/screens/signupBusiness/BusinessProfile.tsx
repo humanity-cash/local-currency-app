@@ -35,15 +35,9 @@ const styles = StyleSheet.create({
 
 const BusinessProfile = (): ReactElement => {
 	const navigation = useNavigation()
-	const [goNext, setGoNext] = useState<boolean>(false);
-	// const [isShowValidation, setIsShowValidation] = useState<boolean>(false);
 
 	const onNextPress = () => {
 		navigation.navigate(Routes.BUSINESS_DETAIL);
-		// const validation = validateBusinessProfileForm(businessDetails);
-		// setIsShowValidation(true);
-		// if (validation.valid) {
-		// }
 	}
 
 	return (

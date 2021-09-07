@@ -6,7 +6,7 @@ import {
 	DrawerContentScrollView,
 	DrawerItem
 } from '@react-navigation/drawer';
-import React, { ReactElement, useContext, useState } from 'react';
+import React, { useEffect, ReactElement, useContext, useState } from "react";
 import {
 	Image,
 	StyleSheet,
@@ -87,7 +87,7 @@ const styles = StyleSheet.create({
 const DrawerContent = (
 	props: DrawerContentComponentProps<DrawerContentOptions>
 ) => {
-	const { signOut } = useContext(AuthContext);
+	const { signOut, userAttributes } = useContext(AuthContext);
 	const [isExpanded, setIsExpanded] = useState<boolean>(false);
 
 	return (
@@ -100,18 +100,24 @@ const DrawerContent = (
 							<View style={styles.userInfo}>
 								<View style={styles.imageView}>
 									<Image
-										source={require('../../../assets/images/placeholder5.png')}
+										source={require("../../../assets/images/placeholder5.png")}
 										style={styles.image}
 									/>
 								</View>
 								<View style={styles.usernameView}>
-									<Text>Dagmar van Eijk</Text>
+									<Text>
+										{
+											userAttributes?.[
+												"custom:personal.tag"
+											]
+										}
+									</Text>
 									<View style={styles.inlineView}>
 										<Text style={styles.fadeText}>
 											{Translation.COMMON.SWITCH_ACCOUNT}
 										</Text>
 										<EvilIcons
-											name='chevron-down'
+											name="chevron-down"
 											size={26}
 											color={colors.darkGreen}
 										/>
@@ -130,30 +136,34 @@ const DrawerContent = (
 									<View style={styles.userInfo}>
 										<View style={styles.imageView}>
 											<Image
-												source={require('../../../assets/images/placeholder5.png')}
+												source={require("../../../assets/images/placeholder5.png")}
 												style={styles.image}
 											/>
 										</View>
 										<View style={styles.usernameView}>
-											<Text>Magic Fluke</Text>
+											<Text>
+												{
+													userAttributes?.[
+														"custom:business.rbn"
+													]
+												}
+											</Text>
 										</View>
 									</View>
 								</TouchableWithoutFeedback>
 								<TouchableWithoutFeedback
 									onPress={() =>
-										props.navigation.navigate(
-											Routes.MERCHANT_TABS
-										)
+										console.log("cashier screens")
 									}>
 									<View style={styles.userInfo}>
 										<View style={styles.imageView}>
 											<Image
-												source={require('../../../assets/images/placeholder5.png')}
+												source={require("../../../assets/images/placeholder5.png")}
 												style={styles.image}
 											/>
 										</View>
 										<View style={styles.usernameView}>
-											<Text>Cashier Magic Fluke</Text>
+											<Text>Cashier</Text>
 										</View>
 									</View>
 								</TouchableWithoutFeedback>
@@ -163,13 +173,13 @@ const DrawerContent = (
 					<Text style={styles.berkAmount}>B$ 50.00</Text>
 					<Drawer.Section>
 						<DrawerItem
-							label='Scan to pay'
+							label="Scan to pay"
 							onPress={() => {
 								props.navigation.navigate(Routes.SCAN_PAY);
 							}}
 						/>
 						<DrawerItem
-							label='Receive payment'
+							label="Receive payment"
 							onPress={() => {
 								props.navigation.navigate(
 									Routes.RECEIVE_PAYMENT
@@ -177,19 +187,19 @@ const DrawerContent = (
 							}}
 						/>
 						<DrawerItem
-							label='Load up B$'
+							label="Load up B$"
 							onPress={() => {
 								props.navigation.navigate(Routes.LOAD_UP);
 							}}
 						/>
 						<DrawerItem
-							label='Cash out'
+							label="Cash out"
 							onPress={() => {
 								props.navigation.navigate(Routes.CASHOUT);
 							}}
 						/>
 						<DrawerItem
-							label='My Transactions'
+							label="My Transactions"
 							onPress={() => {
 								props.navigation.navigate(
 									Routes.MY_TRANSACTIONS
@@ -199,7 +209,7 @@ const DrawerContent = (
 					</Drawer.Section>
 					<Drawer.Section>
 						<DrawerItem
-							label='Where to spend'
+							label="Where to spend"
 							onPress={() => {
 								props.navigation.navigate(
 									Routes.WHERE_TO_SPEND
@@ -207,7 +217,7 @@ const DrawerContent = (
 							}}
 						/>
 						<DrawerItem
-							label='Sign up your business'
+							label="Sign up your business"
 							onPress={() => {
 								props.navigation.navigate(
 									Routes.SIGNUP_YOUR_BUSINESS
@@ -215,13 +225,13 @@ const DrawerContent = (
 							}}
 						/>
 						<DrawerItem
-							label='Settings'
+							label="Settings"
 							onPress={() => {
 								props.navigation.navigate(Routes.SETTINGS);
 							}}
 						/>
 						<DrawerItem
-							label='Help and Contact'
+							label="Help and Contact"
 							onPress={() => {
 								props.navigation.navigate(Routes.HELP_CONTACT);
 							}}
@@ -233,12 +243,12 @@ const DrawerContent = (
 				<DrawerItem
 					icon={() => (
 						<Octicons
-							name='sign-out'
+							name="sign-out"
 							size={24}
 							color={colors.text}
 						/>
 					)}
-					label='Sign out'
+					label="Sign out"
 					onPress={signOut}
 				/>
 			</Drawer.Section>

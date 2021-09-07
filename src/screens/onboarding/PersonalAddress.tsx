@@ -41,15 +41,13 @@ const styles = StyleSheet.create({
 	},
 });
 
-const PersonalAddress = () => {
-	const { completeBasicVerification } = useContext(AuthContext);
+const PersonalAddress = (): React.ReactElement => {
+	const { completeCustomerBasicVerification } = useContext(AuthContext);
 	const navigation = useNavigation();
-	const [goNext, setGoNext] = useState(false);
-	const [showValidation, setShowValidation] = useState(false);
 
 	const onNextPress = async () => {
-		const response = await completeBasicVerification();
-    // console.log("🚀 ~ file: PersonalAddress.tsx ~ line 52 ~ onNextPress ~ response", response)
+		const response = await completeCustomerBasicVerification();
+    console.log("🚀 ~ file: PersonalAddress.tsx ~ line 50 ~ onNextPress ~ response", response)
 		if (response.success) {
 			navigation.navigate(Routes.LINK_BANK_ACCOUNT);
 		} else {
@@ -76,10 +74,7 @@ const PersonalAddress = () => {
 							{Translation.PROFILE.PERSIONAL_DETAILS}
 						</Text>
 					</View>
-					<PersonalAddressForm
-						isValid={setGoNext}
-						showValidation={showValidation}
-					/>
+					<PersonalAddressForm />
 				</View>
 			</ScrollView>
 			<KeyboardAvoidingView
