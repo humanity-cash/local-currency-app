@@ -66,7 +66,12 @@ export const CASHIER_DASHBOARD = "CashierDashboard";
 export const CASHIER_HELP = "CashierHelp";
 export const CASHIER_REQUEST = "CashierRequest";
 export const CASHIER_TRANSACTIONS = "CashierTransactions";
-export const CASHIER_PAYMENT_SUCCESS = "CashierPaymentSuccess";
+export const CASHIER_REQUEST_SUCCESS = "CashierRequestSuccess";
+export const CASHIER_RETURN_QRCODE_SCAN = "CashierReturnQRCodeScan";
+export const CASHIER_RETURN = "CashierReturn";
+export const CASHIER_HOW_TO_WORK = "CashierHowToWork";
+export const CASHIER_RETURN_SUCCESS = "CashierReturnSuccess";
+export const CASHIER_PAYMENT_PENDING = "CashierPaymentPending";
 
 export const REPORT = "Report";
 export const REPORT_SUCCESS = "ReportSuccess";
