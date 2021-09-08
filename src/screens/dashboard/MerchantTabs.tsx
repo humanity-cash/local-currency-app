@@ -143,7 +143,7 @@ const CashierViewDialogDialog = (props: CashierViewDialogProps) => {
 
 const DrawerContent = (props: DrawerContentComponentProps) => {
 	const { userAttributes } = useContext(AuthContext);
-	const { signOut, setUserType } = useContext(AuthContext);
+	const { signOut, updateUserType } = useContext(AuthContext);
 	const [isExpanded, setIsExpanded] = useState<boolean>(false);
 	const [isVisible, setIsVisible] = useState<boolean>(false);
 	const [isCashierView, setIsCashierView] = useState<boolean>(false);
@@ -159,7 +159,7 @@ const DrawerContent = (props: DrawerContentComponentProps) => {
 
 	const onCashierViewConfirm = () => {
 		setIsCashierView(false);
-		setUserType(UserType.Cashier);
+		updateUserType(UserType.Cashier);
 	}
 
 	const onCashierViewCancel = () => {
@@ -167,7 +167,7 @@ const DrawerContent = (props: DrawerContentComponentProps) => {
 	}
 
 	const onPersonal = () => {
-		setUserType(UserType.Customer);
+		updateUserType(UserType.Customer);
 	}
 
 	const userTag = userAttributes?.["custom:personal.tag"] || undefined

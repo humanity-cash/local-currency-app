@@ -1,5 +1,5 @@
 import React, { useContext } from "react";
-import { View, StyleSheet, Picker } from "react-native";
+import { Picker, StyleSheet, View } from "react-native";
 import { Text } from "react-native-elements";
 import { AuthContext } from "src/auth";
 import countries from "src/mocks/countries";
@@ -48,7 +48,6 @@ const styles = StyleSheet.create({
 
 const BusinessAddressForm = (props: BusinessAddressProps) => {
   const { buisnessBasicVerification, setBuisnessBasicVerification } = useContext(AuthContext);
-  console.log("🚀 ~ file: BusinessAddressForm.tsx ~ line 51 ~ BusinessAddressForm ~ buisnessBasicVerification", buisnessBasicVerification)
 
   const onValueChange = (name: any, change: any) => {
     // setBuisnessBasicVerification({ [name]: change });

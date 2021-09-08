@@ -1,7 +1,6 @@
 import React, { ReactElement, useContext } from "react";
 import { StyleSheet, View } from "react-native";
 import { Text } from "react-native-elements";
-import { BusinessBasicVerification } from "../../../auth/types";
 import { AuthContext } from "../../../auth";
 import { colors } from "../../../theme/colors";
 import Translation from "../../../translation/en.json";
@@ -62,7 +61,6 @@ const BusinessOwnerDetailsForm = (
 ): ReactElement => {
 	const { buisnessBasicVerification, setBuisnessBasicVerification } =
 		useContext(AuthContext);
-  console.log("🚀 ~ file: Bu", buisnessBasicVerification.owner.firstName)
 
 	const onValueChange = (name: string, change: string) => {
 		// setBuisnessBasicVerification((pv: BusinessBasicVerification) => ({
