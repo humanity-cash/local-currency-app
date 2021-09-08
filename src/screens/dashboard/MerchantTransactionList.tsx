@@ -1,13 +1,14 @@
 import React, {useState, useEffect} from 'react';
 import { StyleSheet, View } from 'react-native';
-import { Text, Image } from 'react-native-elements';
+import { Text } from 'react-native-elements';
 import { colors } from "src/theme/colors";
 import { TouchableOpacity } from 'react-native-gesture-handler';
-import { MyTransactionItem } from "src/utils/types";
+import { MerchantTransactionItem, MerchantTransactionType, TransactionTypes } from "src/utils/types";
+import { getBerksharePrefix } from "src/utils/common";
 
 type MerchantTransactionListProps = {
-	data: MyTransactionItem[],
-	onSelect: (item: MyTransactionItem) => void
+	data: MerchantTransactionItem[],
+	onSelect: (item: MerchantTransactionItem) => void
 }
 
 const styles = StyleSheet.create({
@@ -25,6 +26,17 @@ const styles = StyleSheet.create({
 		marginVertical: 5,
 		backgroundColor: colors.white
 	},
+	selectedItem: {
+		flex: 1,
+		flexDirection: 'row',
+		justifyContent: 'space-between',
+		alignItems: 'center',
+		height: 80,
+		paddingHorizontal: 20,
+		marginVertical: 5,
+		borderRadius: 3,
+		backgroundColor: colors.greyedPurple1
+	},
 	timeText: {
 		fontSize: 10,
 		color: colors.purple
@@ -34,39 +46,55 @@ const styles = StyleSheet.create({
 		fontSize: 18,
 		color: colors.darkRed
 	},
+	plusText: {
+		fontWeight: 'bold',
+		fontSize: 18,
+		color: colors.purple
+	},
 });
 
 type TransactionItemProps = {
-	item: MyTransactionItem,
-	selected: number
+	item: MerchantTransactionItem,
+	selected: string
 }
 
 const TransactionItem = (props: TransactionItemProps) => {
 	const {item, selected} = props;
+
+	const getStyle = (type: MerchantTransactionType) => {
+		if (type === MerchantTransactionType.SALE || type === MerchantTransactionType.RETURN) {
+			return styles.plusText;
+		} else {
+			return styles.amountText;
+		}
+	}
+
 	return (
-		<View style={ styles.item }>
+		<View style={selected === item.transactionId ? styles.selectedItem : styles.item}>
 			<View>
-				<Text style={styles.transactionType}>{item.name}</Text>
+				<Text style={styles.transactionType}>
+					{TransactionTypes[item.type]}
+				</Text>
 				<Text style={styles.timeText}>7 MIN AGO</Text>
 			</View>
-			<Text style={styles.amountText}>-B$ {item.amount}</Text>
+			<Text style={getStyle(item.type)}>{getBerksharePrefix(item.type)}  {item.amount.toFixed(2)}</Text>
 		</View>
 	);
 }
 
-const MerchantTransactionList = (props: MerchantTransactionListProps) => {
+const MerchantTransactionList = (props: MerchantTransactionListProps): JSX.Element => {
 
-	const [list, setList] = useState<MyTransactionItem[]>([]);
-	const [selected, setSelected] = useState<number>(0);
+	const [list, setList] = useState<MerchantTransactionItem[]>([]);
+	const [selected, setSelected] = useState<string>("");
 
 	useEffect(() => {
-		const data: MyTransactionItem[] = props.data;
+		const data: MerchantTransactionItem[] = props.data;
 
 		if (!data) {
 			return;
 		}
 
-		data.sort(function(a: MyTransactionItem, b: MyTransactionItem) {
+		data.sort(function(a: MerchantTransactionItem, b: MerchantTransactionItem) {
 			if (a.date > b.date) return -1;
 			if (a.date < b.date) return 1;
 			return 0;
@@ -75,7 +103,7 @@ const MerchantTransactionList = (props: MerchantTransactionListProps) => {
 		setList(data);
 	}, [props.data]);
 
-	const handleSelect = (item: MyTransactionItem) => {
+	const handleSelect = (item: MerchantTransactionItem) => {
 		setSelected(item.transactionId);
 		props.onSelect(item);
 	}
@@ -83,7 +111,7 @@ const MerchantTransactionList = (props: MerchantTransactionListProps) => {
 	return (
 		<View>
 		{
-			list.map((item: MyTransactionItem, i: any) => 
+			list.map((item: MerchantTransactionItem, i: number) => 
 				<TouchableOpacity onPress={()=>handleSelect(item)} key={i}>
 					<TransactionItem item={item} selected={selected} />
 				</TouchableOpacity>

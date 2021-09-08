@@ -1,16 +1,13 @@
-import React, {useState, useEffect, ReactElement} from 'react';
+import React, {useState, useEffect} from 'react';
 import { StyleSheet, View, KeyboardAvoidingView, ScrollView, Platform } from 'react-native';
+import { useNavigation } from '@react-navigation/core';
 import { Text } from 'react-native-elements';
 import { Header, Button, CancelBtn, BackBtn, BorderedInput, Dialog } from "src/shared/uielements";
 import { underlineHeaderB, viewBaseB, dialogViewBase, wrappingContainerBase } from "src/theme/elements";
 import { colors } from "src/theme/colors";
 import Translation from 'src/translation/en.json';
 import * as Routes from 'src/navigation/constants';
-
-type MerchantPayoutToPersonalProps = {
-	navigation?: any,
-	route?: any,
-}
+import { BUTTON_TYPES } from 'src/constants';
 
 const styles = StyleSheet.create({
 	headerText: {
@@ -62,8 +59,8 @@ const styles = StyleSheet.create({
 	}
 });
 
-const MerchantCashoutAmount = (props: MerchantPayoutToPersonalProps): ReactElement => {
-
+const MerchantCashoutAmount = (): JSX.Element => {
+	const navigation = useNavigation();
 	const [amount, setAmount] = useState<string>('');
     const [isVisible, setIsVisible] = useState<boolean>(false);
 	const [goNext, setGoNext] = useState(false);
@@ -78,14 +75,14 @@ const MerchantCashoutAmount = (props: MerchantPayoutToPersonalProps): ReactEleme
 
     const doScan = () => {
         setIsVisible(false);
-        props.navigation.navigate(Routes.MERCHANT_PAYOUT_QR_SCAN);
+        navigation.navigate(Routes.MERCHANT_PAYOUT_QR_SCAN);
     }
 
 	return (
 		<View style={viewBaseB}>
 			<Header
-				leftComponent={<BackBtn color={colors.purple} onClick={() => props.navigation.goBack()} />}
-				rightComponent={<CancelBtn text={"Close"} color={colors.purple} onClick={() => props.navigation.goBack()} />}
+				leftComponent={<BackBtn color={colors.purple} onClick={() => navigation.goBack()} />}
+				rightComponent={<CancelBtn text={Translation.BUTTON.CLOSE} color={colors.purple} onClick={() => navigation.navigate(Routes.MERCHANT_DASHBOARD)} />}
 			/>
 			<ScrollView style={wrappingContainerBase}>
 				<View style={underlineHeaderB}>
@@ -115,9 +112,9 @@ const MerchantCashoutAmount = (props: MerchantPayoutToPersonalProps): ReactEleme
 				behavior={Platform.OS == "ios" ? "padding" : "height"} >
 				<View style={styles.bottomView}>
 					<Button
-						type="purple"
+						type={BUTTON_TYPES.PURPLE}
 						disabled={!goNext}
-						title="Confirm"
+						title={Translation.BUTTON.CONFIRM}
 						onPress={()=>setIsVisible(true)}
 					/>
 				</View>
@@ -131,8 +128,8 @@ const MerchantCashoutAmount = (props: MerchantPayoutToPersonalProps): ReactEleme
 							<Text style={styles.bodyText}>{Translation.PAYMENT.SCAN_QR_DETAIL}</Text>
 						</View>
 						<Button
-							type="purple"
-							title="Scan"
+							type={BUTTON_TYPES.PURPLE}
+							title={Translation.BUTTON.SCAN}
 							onPress={doScan}
 						/>
 					</View>

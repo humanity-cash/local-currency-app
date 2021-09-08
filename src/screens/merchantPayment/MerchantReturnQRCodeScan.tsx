@@ -1,17 +1,14 @@
-import React, { ReactElement, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { Text } from 'react-native-elements';
+import { useCameraPermission } from 'src/hooks';
 import { Header, CancelBtn } from "src/shared/uielements";
 import { colors } from "src/theme/colors";
 import { viewBase } from "src/theme/elements";
 import { BarCodeScanner } from 'expo-barcode-scanner';
 import Translation from 'src/translation/en.json';
 import * as Routes from 'src/navigation/constants';
-
-type MerchantReturnQRCodeScanProps = {
-	navigation?: any,
-	route?: any,
-}
+import { useNavigation } from '@react-navigation/core';
 
 type HandleScaned = {
 	type: string,
@@ -34,27 +31,21 @@ const styles = StyleSheet.create({
 	}
 });
 
-const MerchantReturnQRCodeScan = (props: MerchantReturnQRCodeScanProps): ReactElement => {
-	const [isPermissionSelected, setIsPermissionSelected] = useState<boolean>(false);
-	const [hasPermission, setHasPermission] = useState<boolean>(false);
+const MerchantReturnQRCodeScan = (): JSX.Element => {
+	const navigation = useNavigation();
+	const hasPermission = useCameraPermission();
 	const [isScanned, setIsScanned] = useState<boolean>(false);
 
 	useEffect(() => {
-		(async () => {
-			const {status} = await BarCodeScanner.requestPermissionsAsync();
-			setIsPermissionSelected(true);
-			setHasPermission(status === 'granted');
-		})();
+		setTimeout(() => {
+			navigation.navigate(Routes.MERCHANT_RETURN);
+		}, 2000);
 	}, []);
 	
 	const handleBarCodeScanned = (data: HandleScaned) => {
 		console.log(data);
 		setIsScanned(true);
-		props.navigation.navigate(Routes.MERCHANT_RETURN)
-	}
-
-	if (isPermissionSelected === false) {
-		return <Text>{Translation.OTHER.REQUEST_CAMERA_PERMISSION}</Text>;
+		navigation.navigate(Routes.MERCHANT_RETURN)
 	}
 
 	if (hasPermission === false) {
@@ -71,7 +62,7 @@ const MerchantReturnQRCodeScan = (props: MerchantReturnQRCodeScanProps): ReactEl
 			</View>
 			<View style={styles.toggleView}>
 				<Header
-					rightComponent={<CancelBtn text={Translation.BUTTON.CLOSE} color={colors.white} onClick={() => props.navigation.navigate(Routes.MERCHANT_DASHBOARD)} />}
+					rightComponent={<CancelBtn text={Translation.BUTTON.CLOSE} color={colors.white} onClick={() => navigation.navigate(Routes.MERCHANT_DASHBOARD)} />}
 				/>
 			</View>
 		</View>

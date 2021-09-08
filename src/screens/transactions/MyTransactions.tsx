@@ -1,34 +1,33 @@
 import { useNavigation } from '@react-navigation/native';
-import React, {ReactElement, useState} from 'react';
-import { StyleSheet, View, KeyboardAvoidingView, ScrollView, Platform } from 'react-native';
-import { Text } from 'react-native-elements';
-import { TouchableOpacity } from 'react-native-gesture-handler';
+import React, {useState} from 'react';
+import { StyleSheet, View, ScrollView, TouchableOpacity } from 'react-native';
+import { Text, Image } from 'react-native-elements';
 import { Octicons } from '@expo/vector-icons';
 import { Header, Button, BackBtn, SearchInput, Dialog } from "src/shared/uielements";
 import { baseHeader, viewBase, dialogViewBase, wrappingContainerBase } from "src/theme/elements";
 import { colors } from "src/theme/colors";
 import MyTransactionList from './MyTransactionList';
 import { MyTransactionItem } from "src/utils/types";
-import transactionList from "src/mocks/transactions";
+import MyTransactionFilter from './MyTransactionsFilter';
+import { consumerTransactions } from "src/mocks/transactions";
 import QRCodeGen from "src/screens/payment/QRCodeGen";
 import Translation from 'src/translation/en.json';
 import * as Routes from 'src/navigation/constants';
-
-type MyTransactionsProps = {
-	navigation?: any,
-	route: any
-}
+import { BUTTON_TYPES } from 'src/constants';
 
 const styles = StyleSheet.create({
+	content: {
+		paddingBottom: 120
+	},
 	headerText: {
 		fontSize: 32,
 		fontWeight: '400',
-		lineHeight: 40
+		lineHeight: 35
 	},
 	totalAmountView: {
 		flexDirection: 'row',
 		justifyContent: 'space-between',
-		marginTop: 20,
+		paddingVertical: 10,
 		borderBottomWidth: 1,
 		borderBottomColor: colors.darkGreen
 	},
@@ -53,10 +52,35 @@ const styles = StyleSheet.create({
 		alignItems: 'center',
 		justifyContent: 'center'
 	},
-	bottomView: {
-		paddingLeft: 20,
-		paddingRight: 20,
-		paddingBottom: 45
+	selectedFilterBtn: {
+		width: 55,
+		height: 55,
+		marginTop: 8,
+		borderRadius: 3,
+		backgroundColor: colors.darkGreen,
+		alignItems: 'center',
+		justifyContent: 'center'
+	},
+	scanButton: {
+		flexDirection: 'row',
+		justifyContent: 'center',
+		alignItems: 'center',
+		width: '90%',
+		height: 55,
+		position: 'absolute',
+		bottom: 45,
+		color: colors.white,
+		backgroundColor: colors.darkGreen,
+		alignSelf: 'center',
+		borderRadius: 30
+	},
+	scanBtnText: {
+		color: colors.white
+	},
+	qrIcon: {
+		width: 24,
+		height: 24,
+		marginRight: 20
 	},
 	view: {
 		padding: 10,
@@ -70,10 +94,7 @@ const styles = StyleSheet.create({
 	},
 	returnText: {
 		color: colors.darkRed
-	},
-	dialogFooter: {
-		// padding: 20,
-	},
+	}
 });
 
 const transactionData = {
@@ -97,7 +118,7 @@ const TransactionDetail = (props: TransactionDetailProps) => {
 			<View style={dialogViewBase}>
 				<ScrollView style={wrappingContainerBase}>
 					<View style={ baseHeader }>
-						<Text h1 style={styles.returnText}> - B$ { data.amount } </Text>
+						<Text h1 style={styles.returnText}> - B$ {data.amount} </Text>
 					</View>
 					<View style={styles.view}>
 						<View style={styles.detailView}>
@@ -114,9 +135,9 @@ const TransactionDetail = (props: TransactionDetailProps) => {
 						</View>
 					</View>
 				</ScrollView>
-				<View style={styles.dialogFooter}>
+				<View>
 					<Button
-						type="transparent"
+						type={BUTTON_TYPES.TRANSPARENT}
 						title={Translation.BUTTON.WANT_RETURN}
 						textStyle={styles.returnText}
 						onPress={onReturn}
@@ -127,8 +148,9 @@ const TransactionDetail = (props: TransactionDetailProps) => {
 	)
 }
 
-const MyTransactionsView = (props: MyTransactionsProps) => {
-
+const MyTransactions = (): JSX.Element => {
+	const navigation = useNavigation();
+	const [isFilterVisible, setIsFilterVisible] = useState<boolean>(false);
 	const [searchText, setSearchText] = useState<string>("");
 	const [selectedItem, setSelectedItem] = useState<MyTransactionItem>({
 		transactionId: 0,
@@ -163,55 +185,52 @@ const MyTransactionsView = (props: MyTransactionsProps) => {
 	return (
 		<View style={viewBase}>
 			<Header
-				leftComponent={<BackBtn onClick={() => props.navigation.goBack()} />}
+				leftComponent={<BackBtn onClick={() => navigation.goBack()} />}
 			/>
 			<ScrollView style={wrappingContainerBase}>
-				<View style={ baseHeader }>
-					<Text style={styles.headerText}>{Translation.PAYMENT.MY_TRANSACTIONS}</Text>
-				</View>
-				<View style={styles.totalAmountView}>
-					<Text></Text>
-					<Text style={styles.amountText}>B$ 382.91</Text>
-				</View>
-				<View style={styles.filterView}>
-					<View style={styles.filterInput}>
-						<SearchInput
-							label="Search"
-							name="searchText"
-							keyboardType="default"
-							placeholder="Search"
-							value={searchText}
-							onChange={onSearchChange}
-						/>
+				<View style={styles.content}>
+					<View style={baseHeader}>
+						<Text style={styles.headerText}>{Translation.PAYMENT.MY_TRANSACTIONS}</Text>
 					</View>
-					<TouchableOpacity style={styles.filterBtn}>
-						<Octicons 
-							name="settings"
-							size={24}
-							color={colors.text}
-						/>
-					</TouchableOpacity>
+					<View style={styles.totalAmountView}>
+						<Text style={styles.amountText}>B$ 382.91</Text>
+					</View>
+					<View style={styles.filterView}>
+						<View style={styles.filterInput}>
+							<SearchInput
+								label="Search"
+								name="searchText"
+								keyboardType="default"
+								placeholder="Search"
+								value={searchText}
+								onChange={onSearchChange}
+							/>
+						</View>
+						<TouchableOpacity style={isFilterVisible ? styles.selectedFilterBtn : styles.filterBtn} onPress={()=>setIsFilterVisible(!isFilterVisible)}>
+							<Octicons 
+								name="settings"
+								size={24}
+								color={isFilterVisible ? colors.white : colors.text}
+							/>
+						</TouchableOpacity>
+					</View>
+					{isFilterVisible && <MyTransactionFilter></MyTransactionFilter>}
+					<MyTransactionList data={consumerTransactions} onSelect={viewDetail} />
 				</View>
-				<MyTransactionList data={transactionList} onSelect={viewDetail} />
 			</ScrollView>
-			<KeyboardAvoidingView
-				behavior={Platform.OS == "ios" ? "padding" : "height"} >
-				<View style={styles.bottomView}>
-					<Button
-						type="darkGreen"
-						title={Translation.BUTTON.SCAN}
-						onPress={()=>props.navigation.navigate(Routes.QRCODE_SCAN)}
-					/>
-				</View>
-			</KeyboardAvoidingView>
+
+			<TouchableOpacity onPress={()=>navigation.navigate(Routes.QRCODE_SCAN)} style={styles.scanButton}>
+				<Image
+					source={require('../../../assets/images/qr_code_consumer.png')}
+					containerStyle={styles.qrIcon}
+				/>
+				<Text style={styles.scanBtnText}>{Translation.PAYMENT.SCAN_TO_PAY_REQUEST}</Text>
+			</TouchableOpacity>
+
 			{isDetailViewOpen && <TransactionDetail visible={isDetailViewOpen} data={selectedItem} onReturn={onReturn} onConfirm={onConfirm} />}
 			{isReturnViewOpen && <QRCodeGen visible={isReturnViewOpen} onClose={onConfirm} isOpenAmount={true} amount={"10"} /> }
 		</View>
 	);
 }
 
-const MyTransactions = (props:MyTransactionsProps): ReactElement => {
-	const navigation = useNavigation();
-	return <MyTransactionsView {...props} navigation={navigation} />;
-}
 export default MyTransactions

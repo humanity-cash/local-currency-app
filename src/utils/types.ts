@@ -321,6 +321,33 @@ export type MyTransactionItem = {
 	date: string
 }
 
+export enum MerchantTransactionType {
+  SALE = 'Sale',
+	RETURN = 'Return',
+	CASH_OUT = 'Cash out',
+	TRANSFER = 'Transfer',
+  DONATION = 'Donation',
+  CUSTOMER_RETURN = 'Customer return',
+  PURCHASEMENT = 'Purchasement'
+}
+
+export const TransactionTypes = {
+  'Sale': 'Customer sale',
+  'Return': 'Return',
+  'Cash out': 'Cash out',
+  'Transfer': 'Transfer',
+  'Donation': 'Donation',
+  'Customer return': 'Customer return',
+  'Purchasement': 'Purchasement'
+}
+
+export type MerchantTransactionItem = {
+  transactionId: string,
+  type: MerchantTransactionType,
+  amount: number,
+  date: string
+}
+
 export type MerchantCategory = {
   id: string;
   name: string;
@@ -336,7 +363,19 @@ export type MerchantEntry = {
   phone: string;
 }
 
-export type AccordionEntry = {
+export interface AccordionEntry {
 	title: string,
-	content: string
+	content: string,
+  style?: IMap,
+  textColor?: string;
+}
+
+export interface FaqData extends AccordionEntry {
+  type?: string
+}
+
+export enum UserType {
+  PERSONAL = 'Personal',
+  MERCHANT = 'Merchant',
+  CASHIER = 'Cashier'
 }

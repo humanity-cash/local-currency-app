@@ -1,11 +1,10 @@
 import { useNavigation } from '@react-navigation/native';
-import React, { ReactElement, useState } from 'react';
+import React, { ReactElement, useContext } from 'react';
 import { ScrollView, View, StyleSheet } from 'react-native';
 import { Text } from 'react-native-elements';
-import { useUserDetails } from "src/hooks";
+import { AuthContext } from 'src/auth';
 import { Button, BackBtn, Header, CancelBtn, BusinessProfileForm } from 'src/shared/uielements';
 import { underlineHeaderB, viewBaseB, wrappingContainerBase } from "src/theme/elements";
-import { validateBusinessProfileForm } from "src/utils/validation";
 import { colors } from "src/theme/colors";
 import Translation from 'src/translation/en.json';
 import * as Routes from 'src/navigation/constants';
@@ -35,6 +34,7 @@ const styles = StyleSheet.create({
 
 const BusinessProfile = (): ReactElement => {
 	const navigation = useNavigation()
+	const { signOut } = useContext(AuthContext);
 
 	const onNextPress = () => {
 		navigation.navigate(Routes.BUSINESS_DETAIL);
@@ -44,7 +44,7 @@ const BusinessProfile = (): ReactElement => {
 		<View style={viewBaseB}>
 			<Header
 				leftComponent={<BackBtn color={colors.purple} onClick={() => navigation.goBack()} />}
-				rightComponent={<CancelBtn color={colors.purple} text={Translation.BUTTON.LOGOUT} onClick={() => navigation.navigate(Routes.TEASER)} />}
+				rightComponent={<CancelBtn color={colors.purple} text={Translation.BUTTON.LOGOUT} onClick={signOut} />}
 			/>
 
 			<ScrollView style={wrappingContainerBase}>

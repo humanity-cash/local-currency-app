@@ -1,5 +1,5 @@
 import { useNavigation } from "@react-navigation/native";
-import React, { useContext, useState } from "react";
+import React, { useContext } from "react";
 import {
 	KeyboardAvoidingView,
 	Platform,
@@ -42,16 +42,16 @@ const styles = StyleSheet.create({
 });
 
 const PersonalAddress = (): React.ReactElement => {
-	const { completeCustomerBasicVerification } = useContext(AuthContext);
+	const { completeCustomerBasicVerification, signOut } =
+		useContext(AuthContext);
 	const navigation = useNavigation();
 
 	const onNextPress = async () => {
 		const response = await completeCustomerBasicVerification();
-    console.log("🚀 ~ file: PersonalAddress.tsx ~ line 50 ~ onNextPress ~ response", response)
 		if (response.success) {
 			navigation.navigate(Routes.LINK_BANK_ACCOUNT);
 		} else {
-			console.log("something went wrong in finalising customer signip");
+			console.log("something went wrong in finalising customer signup");
 		}
 	};
 
@@ -62,7 +62,7 @@ const PersonalAddress = (): React.ReactElement => {
 				rightComponent={
 					<CancelBtn
 						text={Translation.BUTTON.LOGOUT}
-						onClick={() => navigation.navigate(Routes.TEASER)}
+						onClick={signOut}
 					/>
 				}
 			/>

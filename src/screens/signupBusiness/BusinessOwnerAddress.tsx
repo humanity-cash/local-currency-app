@@ -1,6 +1,7 @@
-import React, { ReactElement } from 'react';
 import { StyleSheet, View, ScrollView } from 'react-native';
+import React, { ReactElement, useContext } from 'react';
 import { Text } from 'react-native-elements';
+import { AuthContext } from 'src/auth';
 import { Header, Button, CancelBtn, BackBtn, PersonalAddressForm } from "src/shared/uielements";
 import { underlineHeaderB, viewBaseB, wrappingContainerBase } from "src/theme/elements";
 import { colors } from "src/theme/colors";
@@ -43,6 +44,7 @@ const styles = StyleSheet.create({
 
 const BusinessOwnerAddress = (): ReactElement => {
 	const navigation = useNavigation();
+	const { signOut } = useContext(AuthContext);
 
 	const onNextPress = () => {
 			navigation.navigate(Routes.BUSINESS_INFO)
@@ -52,7 +54,7 @@ const BusinessOwnerAddress = (): ReactElement => {
 		<View style={viewBaseB}>
 			<Header
 				leftComponent={<BackBtn color={colors.purple} onClick={() => navigation.goBack()} />}
-				rightComponent={<CancelBtn color={colors.purple} text={Translation.BUTTON.LOGOUT} onClick={() => navigation.navigate(Routes.TEASER)} />}
+				rightComponent={<CancelBtn color={colors.purple} text={Translation.BUTTON.LOGOUT} onClick={signOut} />}
 			/>
 			<ScrollView style={wrappingContainerBase}>
                 <View style={underlineHeaderB}>

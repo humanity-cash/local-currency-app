@@ -1,4 +1,4 @@
-import { EvilIcons, Octicons } from '@expo/vector-icons';
+import { EvilIcons, Feather } from '@expo/vector-icons';
 import {
 	createDrawerNavigator,
 	DrawerContentComponentProps,
@@ -6,7 +6,7 @@ import {
 	DrawerContentScrollView,
 	DrawerItem
 } from '@react-navigation/drawer';
-import React, { useEffect, ReactElement, useContext, useState } from "react";
+import React, { useContext, useState } from "react";
 import {
 	Image,
 	StyleSheet,
@@ -19,6 +19,7 @@ import { AuthContext } from 'src/auth';
 import * as Routes from 'src/navigation/constants';
 import { colors } from 'src/theme/colors';
 import Translation from 'src/translation/en.json';
+import { UserType } from 'src/utils/types';
 import CashoutAmount from '../cashout/CashoutAmount';
 import MerchantDictionary from '../merchant/MerchantDictionary';
 import PaymentRequest from '../payment/PaymentRequest';
@@ -87,8 +88,16 @@ const styles = StyleSheet.create({
 const DrawerContent = (
 	props: DrawerContentComponentProps<DrawerContentOptions>
 ) => {
-	const { signOut, userAttributes } = useContext(AuthContext);
+	const { signOut, setUserType, userAttributes } = useContext(AuthContext);
 	const [isExpanded, setIsExpanded] = useState<boolean>(false);
+
+	const onMerchant = () => {
+		setUserType(UserType.MERCHANT);
+	}
+
+	const onCashier = () => {
+		setUserType(UserType.CASHIER);
+	}
 
 	return (
 		<View style={styles.drawerWrap}>
@@ -128,11 +137,7 @@ const DrawerContent = (
 						{isExpanded && (
 							<View>
 								<TouchableWithoutFeedback
-									onPress={() =>
-										props.navigation.navigate(
-											Routes.MERCHANT_TABS
-										)
-									}>
+									onPress={onMerchant}>
 									<View style={styles.userInfo}>
 										<View style={styles.imageView}>
 											<Image
@@ -152,9 +157,7 @@ const DrawerContent = (
 									</View>
 								</TouchableWithoutFeedback>
 								<TouchableWithoutFeedback
-									onPress={() =>
-										console.log("cashier screens")
-									}>
+									onPress={onCashier}>
 									<View style={styles.userInfo}>
 										<View style={styles.imageView}>
 											<Image
@@ -175,7 +178,7 @@ const DrawerContent = (
 						<DrawerItem
 							label="Scan to pay"
 							onPress={() => {
-								props.navigation.navigate(Routes.SCAN_PAY);
+								props.navigation.navigate(Routes.QRCODE_SCAN);
 							}}
 						/>
 						<DrawerItem
@@ -195,7 +198,7 @@ const DrawerContent = (
 						<DrawerItem
 							label="Cash out"
 							onPress={() => {
-								props.navigation.navigate(Routes.CASHOUT);
+								props.navigation.navigate(Routes.CASHOUT_AMOUNT);
 							}}
 						/>
 						<DrawerItem
@@ -220,7 +223,7 @@ const DrawerContent = (
 							label="Sign up your business"
 							onPress={() => {
 								props.navigation.navigate(
-									Routes.SIGNUP_YOUR_BUSINESS
+									Routes.BUSINESS_ACCOUNT
 								);
 							}}
 						/>
@@ -242,8 +245,8 @@ const DrawerContent = (
 			<Drawer.Section style={styles.bottomSection}>
 				<DrawerItem
 					icon={() => (
-						<Octicons
-							name="sign-out"
+						<Feather 
+							name="log-out"
 							size={24}
 							color={colors.text}
 						/>
@@ -258,18 +261,18 @@ const DrawerContent = (
 
 const DrawerNav = createDrawerNavigator();
 
-const Tabs = (): ReactElement => {
+const Tabs = (): JSX.Element => {
 	return (
 		<DrawerNav.Navigator
 			initialRouteName={Routes.DASHBOARD}
 			drawerContent={(props) => <DrawerContent {...props} />}>
 			<DrawerNav.Screen name={Routes.DASHBOARD} component={Dashboard} />
-			<DrawerNav.Screen name={Routes.SCAN_PAY} component={QRCodeScan} />
+			<DrawerNav.Screen name={Routes.QRCODE_SCAN} component={QRCodeScan} />
 			<DrawerNav.Screen
 				name={Routes.RECEIVE_PAYMENT}
 				component={PaymentRequest}
 			/>
-			<DrawerNav.Screen name={Routes.CASHOUT} component={CashoutAmount} />
+			<DrawerNav.Screen name={Routes.CASHOUT_AMOUNT} component={CashoutAmount} />
 			<DrawerNav.Screen
 				name={Routes.MY_TRANSACTIONS}
 				component={MyTransactions}
@@ -279,7 +282,7 @@ const Tabs = (): ReactElement => {
 				component={MerchantDictionary}
 			/>
 			<DrawerNav.Screen
-				name={Routes.SIGNUP_YOUR_BUSINESS}
+				name={Routes.BUSINESS_ACCOUNT}
 				component={BusinessAccount}
 			/>
 			<DrawerNav.Screen name={Routes.SETTINGS} component={Settings} />
