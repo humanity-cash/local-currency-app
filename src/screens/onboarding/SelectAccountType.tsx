@@ -5,7 +5,6 @@ import { Text } from "react-native-elements";
 import { AuthContext } from "src/auth";
 import * as Routes from 'src/navigation/constants';
 import Button from "src/shared/uielements/Button";
-import { CancelBtn } from "src/shared/uielements/header";
 import Header from "src/shared/uielements/header/Header";
 import { colors } from "src/theme/colors";
 import { underlineHeader, viewBaseWhite, wrappingContainerBase } from "src/theme/elements";
@@ -55,10 +54,7 @@ const SelectAccountType = (): JSX.Element => {
 
   return (
     <View style={viewBaseWhite}>
-		<Header
-			rightComponent={<CancelBtn text={Translation.BUTTON.CLOSE} onClick={() => navigation.navigate(Routes.TEASER)} />}
-		/>
-
+		<Header />
       	<ScrollView style={wrappingContainerBase}>
 		  	<View style={underlineHeader}>
 				<Text style={styles.headerText}>{Translation.PROFILE.HI}</Text>

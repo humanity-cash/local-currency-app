@@ -1,11 +1,11 @@
-import { EvilIcons, Feather } from '@expo/vector-icons';
+import { EvilIcons, Feather } from "@expo/vector-icons";
 import {
 	createDrawerNavigator,
 	DrawerContentComponentProps,
 	DrawerContentOptions,
 	DrawerContentScrollView,
 	DrawerItem
-} from '@react-navigation/drawer';
+} from "@react-navigation/drawer";
 import React, { useContext, useState } from "react";
 import {
 	Image,
@@ -13,27 +13,27 @@ import {
 	Text,
 	TouchableWithoutFeedback,
 	View
-} from 'react-native';
-import { Drawer } from 'react-native-paper';
-import { AuthContext } from 'src/auth';
-import * as Routes from 'src/navigation/constants';
-import { colors } from 'src/theme/colors';
-import Translation from 'src/translation/en.json';
-import { UserType } from 'src/utils/types';
-import CashoutAmount from '../cashout/CashoutAmount';
-import MerchantDictionary from '../merchant/MerchantDictionary';
-import PaymentRequest from '../payment/PaymentRequest';
-import QRCodeScan from '../payment/QRCodeScan';
-import Settings from '../settings/Settings';
-import SettingsHelpAndContact from '../settings/SettingsHelpAndContact';
-import BusinessAccount from '../signupBusiness/BusinessAccount';
-import MyTransactions from '../transactions/MyTransactions';
-import Dashboard from './Dashboard';
+} from "react-native";
+import { Drawer } from "react-native-paper";
+import { AuthContext } from "src/auth";
+import { UserType } from "src/auth/types";
+import * as Routes from "src/navigation/constants";
+import { colors } from "src/theme/colors";
+import Translation from "src/translation/en.json";
+import CashoutAmount from "../cashout/CashoutAmount";
+import MerchantDictionary from "../merchant/MerchantDictionary";
+import PaymentRequest from "../payment/PaymentRequest";
+import QRCodeScan from "../payment/QRCodeScan";
+import Settings from "../settings/Settings";
+import SettingsHelpAndContact from "../settings/SettingsHelpAndContact";
+import BusinessAccount from "../signupBusiness/BusinessAccount";
+import MyTransactions from "../transactions/MyTransactions";
+import Dashboard from "./Dashboard";
 
 const styles = StyleSheet.create({
 	headerText: {
 		fontSize: 40,
-		fontWeight: '400',
+		fontWeight: "400",
 		lineHeight: 40,
 	},
 	drawerWrap: {
@@ -42,16 +42,16 @@ const styles = StyleSheet.create({
 		paddingVertical: 30,
 	},
 	imageView: {
-		justifyContent: 'center',
-		alignItems: 'center',
+		justifyContent: "center",
+		alignItems: "center",
 		width: 50,
 		height: 50,
 		borderRadius: 25,
 		backgroundColor: colors.white,
 	},
 	image: {
-		width: '70%',
-		height: '70%',
+		width: "70%",
+		height: "70%",
 		borderRadius: 20,
 	},
 	infoView: {
@@ -59,8 +59,8 @@ const styles = StyleSheet.create({
 		backgroundColor: colors.lightGreen1,
 	},
 	userInfo: {
-		flexDirection: 'row',
-		alignItems: 'center',
+		flexDirection: "row",
+		alignItems: "center",
 		paddingVertical: 5,
 		paddingHorizontal: 10,
 		backgroundColor: colors.lightGreen1,
@@ -81,7 +81,7 @@ const styles = StyleSheet.create({
 		paddingBottom: 10,
 	},
 	inlineView: {
-		flexDirection: 'row',
+		flexDirection: "row",
 	},
 });
 
@@ -92,12 +92,15 @@ const DrawerContent = (
 	const [isExpanded, setIsExpanded] = useState<boolean>(false);
 
 	const onMerchant = () => {
-		setUserType(UserType.MERCHANT);
-	}
+		setUserType(UserType.Business);
+	};
 
 	const onCashier = () => {
-		setUserType(UserType.CASHIER);
-	}
+		setUserType(UserType.Cashier);
+	};
+
+	const customerTag = userAttributes?.["custom:personal.tag"];
+	const businessTag = userAttributes?.["custom:business.tag"];
 
 	return (
 		<View style={styles.drawerWrap}>
@@ -105,7 +108,9 @@ const DrawerContent = (
 				<View>
 					<View style={styles.infoView}>
 						<TouchableWithoutFeedback
-							onPress={() => setIsExpanded(!isExpanded)}>
+							onPress={() =>
+								!businessTag ? null : setIsExpanded(!isExpanded)
+							}>
 							<View style={styles.userInfo}>
 								<View style={styles.imageView}>
 									<Image
@@ -114,13 +119,7 @@ const DrawerContent = (
 									/>
 								</View>
 								<View style={styles.usernameView}>
-									<Text>
-										{
-											userAttributes?.[
-												"custom:personal.tag"
-											]
-										}
-									</Text>
+									<Text>{customerTag}</Text>
 									<View style={styles.inlineView}>
 										<Text style={styles.fadeText}>
 											{Translation.COMMON.SWITCH_ACCOUNT}
@@ -137,38 +136,40 @@ const DrawerContent = (
 						{isExpanded && (
 							<View>
 								<TouchableWithoutFeedback
-									onPress={onMerchant}>
-									<View style={styles.userInfo}>
-										<View style={styles.imageView}>
-											<Image
-												source={require("../../../assets/images/placeholder5.png")}
-												style={styles.image}
-											/>
+									onPress={() =>
+										businessTag ? onMerchant() : null
+									}>
+									{businessTag ? (
+										<View style={styles.userInfo}>
+											<View style={styles.imageView}>
+												<Image
+													source={require("../../../assets/images/placeholder5.png")}
+													style={styles.image}
+												/>
+											</View>
+											<View style={styles.usernameView}>
+												<Text>{businessTag}</Text>
+											</View>
 										</View>
-										<View style={styles.usernameView}>
-											<Text>
-												{
-													userAttributes?.[
-														"custom:business.rbn"
-													]
-												}
-											</Text>
-										</View>
-									</View>
+									) : null}
 								</TouchableWithoutFeedback>
 								<TouchableWithoutFeedback
-									onPress={onCashier}>
-									<View style={styles.userInfo}>
-										<View style={styles.imageView}>
-											<Image
-												source={require("../../../assets/images/placeholder5.png")}
-												style={styles.image}
-											/>
+									onPress={() =>
+										businessTag ? onCashier() : null
+									}>
+									{businessTag ? (
+										<View style={styles.userInfo}>
+											<View style={styles.imageView}>
+												<Image
+													source={require("../../../assets/images/placeholder5.png")}
+													style={styles.image}
+												/>
+											</View>
+											<View style={styles.usernameView}>
+												<Text>Cashier</Text>
+											</View>
 										</View>
-										<View style={styles.usernameView}>
-											<Text>Cashier</Text>
-										</View>
-									</View>
+									) : null}
 								</TouchableWithoutFeedback>
 							</View>
 						)}
@@ -198,7 +199,9 @@ const DrawerContent = (
 						<DrawerItem
 							label="Cash out"
 							onPress={() => {
-								props.navigation.navigate(Routes.CASHOUT_AMOUNT);
+								props.navigation.navigate(
+									Routes.CASHOUT_AMOUNT
+								);
 							}}
 						/>
 						<DrawerItem
@@ -245,11 +248,7 @@ const DrawerContent = (
 			<Drawer.Section style={styles.bottomSection}>
 				<DrawerItem
 					icon={() => (
-						<Feather 
-							name="log-out"
-							size={24}
-							color={colors.text}
-						/>
+						<Feather name="log-out" size={24} color={colors.text} />
 					)}
 					label="Sign out"
 					onPress={signOut}
@@ -267,12 +266,18 @@ const Tabs = (): JSX.Element => {
 			initialRouteName={Routes.DASHBOARD}
 			drawerContent={(props) => <DrawerContent {...props} />}>
 			<DrawerNav.Screen name={Routes.DASHBOARD} component={Dashboard} />
-			<DrawerNav.Screen name={Routes.QRCODE_SCAN} component={QRCodeScan} />
+			<DrawerNav.Screen
+				name={Routes.QRCODE_SCAN}
+				component={QRCodeScan}
+			/>
 			<DrawerNav.Screen
 				name={Routes.RECEIVE_PAYMENT}
 				component={PaymentRequest}
 			/>
-			<DrawerNav.Screen name={Routes.CASHOUT_AMOUNT} component={CashoutAmount} />
+			<DrawerNav.Screen
+				name={Routes.CASHOUT_AMOUNT}
+				component={CashoutAmount}
+			/>
 			<DrawerNav.Screen
 				name={Routes.MY_TRANSACTIONS}
 				component={MyTransactions}
