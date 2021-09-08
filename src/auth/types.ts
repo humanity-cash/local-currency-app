@@ -61,6 +61,12 @@ export interface ConfirmEmailVerificationCodeInput {
 }
 
 
+export enum UserType {
+	Customer,
+	Business,
+	Cashier,
+}
+
 export enum AuthStatus {
 	Loading,
 	NotVerified, // Signed In but didnt complete verification for customer nor business
@@ -77,6 +83,8 @@ export interface Session {
 }
 
 export interface IAuth {
+	userType?: any,
+	setUserType?: any,
 	completeBusniessBasicVerification?: any,
 	userAttributes?: any,
 	completeCustomerBasicVerification?: any,

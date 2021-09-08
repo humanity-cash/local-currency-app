@@ -6,7 +6,7 @@ import { SignupBusinessNavigator } from "src/navigation/SignupBusinessNavigator"
 import MerchantTabs from "src/screens/dashboard/MerchantTabs"
 import { MerchantBankAccountNavigator } from "src/navigation/MerchantBankAccountNavigator";
 import { AuthContext } from "src/auth";
-import { AuthStatus } from "src/auth/types";
+import { AuthStatus, UserType } from "src/auth/types";
 import { useRouteTracking } from "src/hooks";
 import { CashoutNavigator } from "src/navigation/CashoutNavigator";
 import { ForgotPasswordNavigator } from "src/navigation/ForgotPasswordStack";
@@ -49,7 +49,7 @@ import SettingsTermsAndConditions from "src/screens/settings/SettingsTermsAndCon
 const PrimaryStack = createStackNavigator();
 
 const PrimaryStackScreen = () => {
-	const { authStatus } = useContext(AuthContext);
+	const { authStatus, userType } = useContext(AuthContext);
 
 	return (
 		<PrimaryStack.Navigator
@@ -137,7 +137,7 @@ const PrimaryStackScreen = () => {
 						component={SignupBusinessNavigator}
 					/>
 				</>
-			) : (
+			) : authStatus === AuthStatus.SignedIn && userType === UserType.Customer ? (
 				<>
 					<PrimaryStack.Screen name="Tabs" component={Tabs} />
 					<PrimaryStack.Screen
@@ -232,6 +232,108 @@ const PrimaryStackScreen = () => {
 						component={MerchantTabs}
 					/>
 				</>
+			) : authStatus === AuthStatus.SignedIn && userType === UserType.Business ? (
+				<>
+					<PrimaryStack.Screen name="Tabs" component={Tabs} />
+					<PrimaryStack.Screen
+						name="QRCodeScan"
+						component={QRCodeScan}
+					/>
+					<PrimaryStack.Screen
+						name="PaymentPending"
+						component={PaymentPending}
+					/>
+					<PrimaryStack.Screen
+						name="PaymentSuccess"
+						component={PaymentSuccess}
+					/>
+					{/* <PrimaryStack.Screen
+						name='PaymentRequest'
+						component={Request}
+					/> */}
+					<PrimaryStack.Screen
+						name="ForgotPassword"
+						component={ForgotPasswordNavigator}
+					/>
+					<PrimaryStack.Screen
+						name="Cashout"
+						component={CashoutNavigator}
+					/>
+					<PrimaryStack.Screen name="TopUp" component={TopUp} />
+					<PrimaryStack.Screen
+						name="TopUpSuccess"
+						component={TopUpSuccess}
+					/>
+					<PrimaryStack.Screen
+						name="SelectPayment"
+						component={SelectPayment}
+					/>
+					<PrimaryStack.Screen name="Deposit" component={Deposit} />
+					<PrimaryStack.Screen
+						name="CreditCard"
+						component={CreditCard}
+					/>
+					{/* <PrimaryStack.Screen
+						name='ConfirmPin'
+						component={ConfirmPin}
+					/> */}
+					<PrimaryStack.Screen
+						name="SettingsTermsAndConditions"
+						component={SettingsTermsAndConditions}
+					/>
+					<PrimaryStack.Screen name="Settings" component={Settings} />
+					<PrimaryStack.Screen
+						name="SettingsPersonalProfile"
+						component={SettingsPersonalProfile}
+					/>
+					<PrimaryStack.Screen
+						name="SettingsSecurity"
+						component={SettingsSecurity}
+					/>
+					<PrimaryStack.Screen
+						name="SettingsBankAccount"
+						component={SettingsBankAccount}
+					/>
+					<PrimaryStack.Screen
+						name="SettingsDeleteAccount"
+						component={SettingsDeleteAccount}
+					/>
+					{/* <PrimaryStack.Screen
+						name="LinkBankAccount"
+						component={LinkBankAccount}
+					/> */}
+					<PrimaryStack.Screen
+						name="SelectBank"
+						component={SelectBank}
+					/>
+					<PrimaryStack.Screen
+						name="LoginToBank"
+						component={LoginToBank}
+					/>
+					<PrimaryStack.Screen
+						name="SelectBankAccount"
+						component={SelectBankAccount}
+					/>
+					<PrimaryStack.Screen
+						name="Congratulations"
+						component={Congratulations}
+					/>
+					<PrimaryStack.Screen
+						name="MerchantBankAccount"
+						component={MerchantBankAccountNavigator}
+					/>
+					<PrimaryStack.Screen
+						name="MerchantTabs"
+						component={MerchantTabs}
+					/>
+				</>
+			): (
+				/** Cahsier screens */
+
+					<PrimaryStack.Screen
+						name="Congratulations"
+						component={Congratulations}
+					/>
 			)}
 		</PrimaryStack.Navigator>
 	);
