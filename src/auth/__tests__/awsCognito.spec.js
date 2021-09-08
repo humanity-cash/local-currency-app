@@ -3,7 +3,7 @@
 
 describe('pass', () => {
 	it('pass', () => {
-	expect(true).toEqaul(true)
+		console.log('hey')
 	})
 })
 // /**This user is already signed up + verified */
