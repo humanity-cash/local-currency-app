@@ -1,6 +1,11 @@
 // /* eslint-disable jest/no-disabled-tests */
 // import * as userAuth from '../aws-cognito';
 
+describe('pass', () => {
+	it('pass', () => {
+	expect(true).toEqaul(true)
+	})
+})
 // /**This user is already signed up + verified */
 // const authed = {
 // 	email: 'esraa@keyko.io',
