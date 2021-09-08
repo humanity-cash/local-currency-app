@@ -1,12 +1,12 @@
-import React, { ReactElement, useContext } from "react";
-import { View, TextInput, TouchableOpacity, StyleSheet } from "react-native";
-import { Text, Image } from "react-native-elements";
 import * as ImagePicker from 'expo-image-picker';
-import { colors } from "src/theme/colors";
-import BlockInput from "../BlockInput";
+import React, { ReactElement, useContext } from "react";
+import { StyleSheet, TextInput, TouchableOpacity, View } from "react-native";
+import { Image, Text } from "react-native-elements";
 import { AuthContext } from "src/auth";
 import { IAuth } from "src/auth/types";
 import { useMediaLibraryPermission } from "src/hooks";
+import { colors } from "src/theme/colors";
+import BlockInput from "../BlockInput";
 
 const styles = StyleSheet.create({
   inputBg: {
@@ -59,7 +59,6 @@ const BusinessProfileForm = (): ReactElement => {
   const { buisnessBasicVerification, setBuisnessBasicVerification } =
 		useContext(AuthContext);
 
-	console.log("🚀 ~ file: Bu", buisnessBasicVerification)
   useMediaLibraryPermission();
 
   const onValueChange = (name: any, change: any) => {

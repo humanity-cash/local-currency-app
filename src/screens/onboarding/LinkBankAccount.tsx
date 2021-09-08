@@ -3,6 +3,7 @@ import React, { useContext } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { Text } from 'react-native-elements';
 import { AuthContext } from 'src/auth';
+import { UserType } from "src/auth/types";
 import { BUTTON_TYPES } from 'src/constants';
 import * as Routes from 'src/navigation/constants';
 import { Button, Header } from "src/shared/uielements";
@@ -26,15 +27,18 @@ const styles = StyleSheet.create({
 });
 
 const LinkBankAccount = (): JSX.Element => {
-	const { signIn } = useContext(AuthContext)
+	const { updateUserType } = useContext(AuthContext)
 	const navigation = useNavigation();
+
 	return (
 		<View style={viewBase}>
 			<Header />
 
 			<View style={wrappingContainerBase}>
-				<View style={ baseHeader }>
-					<Text style={styles.headerText}>{Translation.PROFILE.WELCOME_BERKSHARES}</Text>
+				<View style={baseHeader}>
+					<Text style={styles.headerText}>
+						{Translation.PROFILE.WELCOME_BERKSHARES}
+					</Text>
 				</View>
 			</View>
 			<View style={styles.bottomView}>
@@ -42,7 +46,9 @@ const LinkBankAccount = (): JSX.Element => {
 					type={BUTTON_TYPES.TRANSPARENT}
 					title={Translation.BUTTON.SKIP_NOW}
 					style={styles.skipBtn}
-					onPress={signIn}
+					onPress={() =>
+					updateUserType(UserType.Customer)
+					}
 				/>
 				<Button
 					type={BUTTON_TYPES.DARK_GREEN}

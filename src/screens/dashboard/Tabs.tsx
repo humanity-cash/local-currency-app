@@ -88,15 +88,15 @@ const styles = StyleSheet.create({
 const DrawerContent = (
 	props: DrawerContentComponentProps<DrawerContentOptions>
 ) => {
-	const { signOut, setUserType, userAttributes } = useContext(AuthContext);
+	const { signOut, updateUserType, userAttributes } = useContext(AuthContext);
 	const [isExpanded, setIsExpanded] = useState<boolean>(false);
 
 	const onMerchant = () => {
-		setUserType(UserType.Business);
+		updateUserType(UserType.Business);
 	};
 
 	const onCashier = () => {
-		setUserType(UserType.Cashier);
+		updateUserType(UserType.Cashier);
 	};
 
 	const customerTag = userAttributes?.["custom:personal.tag"];

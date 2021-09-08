@@ -71,14 +71,10 @@ const PrimaryStack = createStackNavigator();
 
 const PrimaryStackScreen = () => {
 	const { authStatus, userType, userAttributes } = useContext(AuthContext);
-  console.log("🚀  ~ userType", userType)
-  console.log("🚀  ~ authStatus", authStatus)
 	const isVerifiedCustomer =
 		userAttributes?.["custom:basicCustomerV"] === "true";
-	console.log(
-		"🚀 ~  isVerifiedCustomer",
-		isVerifiedCustomer
-	);
+	const isVerifiedBusiness =
+		userAttributes?.["custom:basicBusinessV"] === "true";
 
 	return (
 		<PrimaryStack.Navigator
@@ -135,7 +131,8 @@ const PrimaryStackScreen = () => {
 					/>
 				</>
 			) : authStatus === AuthStatus.SignedIn &&
-			  userType === UserType.Customer ? (
+			  userType === UserType.Customer &&
+			  isVerifiedCustomer ? (
 				<>
 					<PrimaryStack.Screen name={Routes.TABS} component={Tabs} />
 					<PrimaryStack.Screen
@@ -186,9 +183,16 @@ const PrimaryStackScreen = () => {
 						name={Routes.SETTING_DELETE_ACCOUNT}
 						component={SettingsDeleteAccount}
 					/>
+					{!isVerifiedBusiness && (
+						<PrimaryStack.Screen
+							name={Routes.SIGNUP_BUSINESS}
+							component={SignupBusinessNavigator}
+						/>
+					)}
 				</>
 			) : authStatus === AuthStatus.SignedIn &&
-			  userType === UserType.Cashier ? (
+			  userType === UserType.Cashier &&
+			  isVerifiedBusiness ? (
 				/** Cahsier screens */
 				<>
 					<PrimaryStack.Screen
@@ -241,7 +245,8 @@ const PrimaryStackScreen = () => {
 					/>
 				</>
 			) : authStatus === AuthStatus.SignedIn &&
-			  userType === UserType.Business ? (
+			  userType === UserType.Business &&
+			  isVerifiedBusiness ? (
 				<>
 					<PrimaryStack.Screen
 						name={Routes.MERCHANT_TABS}
@@ -340,7 +345,7 @@ const PrimaryStackScreen = () => {
 						</>
 					)}
 				</>
-			) : (
+			) : !isVerifiedBusiness && !isVerifiedCustomer ? (
 				// Not Verified
 				<>
 					<PrimaryStack.Screen
@@ -382,6 +387,13 @@ const PrimaryStackScreen = () => {
 					<PrimaryStack.Screen
 						name={Routes.SIGNUP_BUSINESS}
 						component={SignupBusinessNavigator}
+					/>
+				</>
+			) : (
+				<>
+					<PrimaryStack.Screen
+						name={Routes.TEASER}
+						component={Teaser}
 					/>
 				</>
 			)}

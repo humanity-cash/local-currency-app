@@ -1,5 +1,5 @@
 import { CognitoUser, CognitoUserAttribute } from "amazon-cognito-identity-js";
-import { CognitoCustomerAttributes, CognitoBusinessAttributes } from 'src/auth/cognito/types';
+import { CognitoBusinessAttributes, CognitoCustomerAttributes } from 'src/auth/cognito/types';
 
 export interface CustomerBasicVerification {
 	avatar: string
@@ -84,7 +84,8 @@ export interface Session {
 
 export interface IAuth {
 	userType?: any,
-	setUserType?: any,
+	updateUserType?: any,
+	setAuthStatus?: any,
 	completeBusniessBasicVerification?: any,
 	userAttributes?: any,
 	completeCustomerBasicVerification?: any,

@@ -1,3 +1,4 @@
+import AsyncStorage from "@react-native-async-storage/async-storage";
 import {
 	CognitoUserAttribute,
 	CognitoUserSession
@@ -5,7 +6,7 @@ import {
 import React, { useEffect, useState } from "react";
 import { isBusinessVerified, isCustomerVerified } from "src/auth/verification";
 import { userController } from "./cognito";
-import { BaseResponse, CognitoResponse } from "./cognito/types";
+import { BaseResponse, CognitoBusinessAttributes, CognitoCustomerAttributes, CognitoResponse, CognitoSharedUserAttributes } from "./cognito/types";
 import {
 	buisnessBasicVerificationInitialState,
 	customerBasicVerificationInitialState,
@@ -17,9 +18,7 @@ import {
 	BusinessBasicVerification,
 	CustomerBasicVerification,
 	defaultState,
-	IAuth,
-	UpdateUserAttributesInput,
-	UserType
+	IAuth, UserType
 } from "./types";
 
 export const AuthContext = React.createContext(defaultState);
@@ -33,14 +32,31 @@ const convertAttributesArrayToObject = (attributes: any): any => {
 	return newObject;
 };
 
+const saveUserTypeToStorage = async (value: UserType) => {
+	try {
+		await AsyncStorage.setItem("@accType", String(value));
+		return true;
+	} catch (e) {
+		return false;
+	}
+};
+
+const getLatestSelectedAccountType = async () => {
+	try {
+		const value: string | null = await AsyncStorage.getItem("@accType");
+		if (!value) return "";
+		return value;
+	} catch (e) {
+		return "";
+	}
+};
 
 const AuthProvider: React.FunctionComponent = ({ children }) => {
-	const [userType, setUserType] = useState(UserType.Business);
+	const [userType, setUserType] = useState<UserType | undefined>(undefined);
 	const [authStatus, setAuthStatus] = useState(AuthStatus.SignedOut);
-	const [isUpdatedAttributes, setIsUpdatedAttributes] = useState(false);
 	const [signInDetails, setSignInDetails] = useState(signInInitialState);
 	const [signUpDetails, setSignUpDetails] = useState(signUpInitialState);
-	const [userAttributes, setUserAttributes] = useState<any>([]);
+	const [userAttributes, setUserAttributes] = useState<any>({});
 
 	const [
 		customerBasicVerificationDetails,
@@ -54,13 +70,23 @@ const AuthProvider: React.FunctionComponent = ({ children }) => {
 			buisnessBasicVerificationInitialState
 		);
 
+	const updateUserType = (newType: UserType): void => {
+		if (newType === userType) {
+			setAuthStatus(AuthStatus.Loading);
+		} else {
+			setUserType(newType);
+		}
+		saveUserTypeToStorage(newType);
+	};
+
 	async function getSessionInfo() {
 		try {
 			const response: BaseResponse<CognitoUserSession | undefined> =
 				await userController.getSession();
 			if (response.success) {
-				const userAttributes: BaseResponse<CognitoUserAttribute[] | undefined> =
-					await getAttributes();
+				const userAttributes: BaseResponse<
+					CognitoUserAttribute[] | undefined
+				> = await getAttributes();
 				const isVerified =
 					isCustomerVerified(userAttributes?.data) ||
 					isBusinessVerified(userAttributes?.data);
@@ -80,7 +106,7 @@ const AuthProvider: React.FunctionComponent = ({ children }) => {
 
 	useEffect(() => {
 		getSessionInfo();
-	}, [authStatus, isUpdatedAttributes]);
+	}, [authStatus, userType]);
 
 	const emailVerification = (verificationCode: string) =>
 		userController.confirmEmailVerificationCode(
@@ -117,6 +143,24 @@ const AuthProvider: React.FunctionComponent = ({ children }) => {
 		return response;
 	};
 
+	useEffect(() => {
+		const initialTypeState = async () => {
+			const latestType = await getLatestSelectedAccountType();
+			if (!latestType && isBusinessVerified) {
+				setUserType(UserType.Business);
+			} else if (!latestType && isCustomerVerified) {
+				setUserType(UserType.Customer);
+			} else if (latestType === "0" && isCustomerVerified) {
+				setUserType(UserType.Customer);
+			} else if (latestType === "1" && isBusinessVerified) {
+				setUserType(UserType.Business);
+			} else {
+				setUserType(undefined)
+			}
+		};
+		initialTypeState()
+	}, []);
+
 	const getAttributes = async (): CognitoResponse<
 		CognitoUserAttribute[] | undefined
 	> => {
@@ -143,7 +187,6 @@ const AuthProvider: React.FunctionComponent = ({ children }) => {
 			await userController.updateUserAttributes({
 				"custom:basicBusinessV": "true",
 			});
-			setAuthStatus(AuthStatus.Loading);
 		}
 
 		return response;
@@ -157,15 +200,18 @@ const AuthProvider: React.FunctionComponent = ({ children }) => {
 			await userController.updateUserAttributes({
 				"custom:basicCustomerV": "true",
 			});
-			setAuthStatus(AuthStatus.Loading);
 		}
 
 		return response;
 	};
 
-	const updateAttributes = async ({ update }: UpdateUserAttributesInput) => {
+	const updateAttributes = async (
+		update:
+			| CognitoBusinessAttributes
+			| CognitoCustomerAttributes
+			| CognitoSharedUserAttributes
+	) => {
 		const response = await userController.updateUserAttributes(update);
-		setIsUpdatedAttributes(true);
 		return response;
 	};
 
@@ -176,15 +222,16 @@ const AuthProvider: React.FunctionComponent = ({ children }) => {
 
 	const state: IAuth = {
 		userType,
-		setUserType,
 		getAttributes,
 		userAttributes,
 		updateAttributes,
 		authStatus,
 		signIn,
+		setAuthStatus,
 		signOut,
 		signUp,
 		setSignInDetails,
+		updateUserType,
 		buisnessBasicVerification,
 		setBuisnessBasicVerification,
 		signInDetails,
