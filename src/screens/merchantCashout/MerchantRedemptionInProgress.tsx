@@ -1,5 +1,5 @@
 import { useNavigation } from '@react-navigation/native';
-import React, { ReactElement } from 'react';
+import React from 'react';
 import { StyleSheet, View, KeyboardAvoidingView, ScrollView, Platform } from 'react-native';
 import { Text } from 'react-native-elements';
 import { Header, Button, CancelBtn } from "src/shared/uielements";
@@ -7,11 +7,7 @@ import { baseHeader, modalViewBase, wrappingContainerBase } from "src/theme/elem
 import { colors } from "src/theme/colors";
 import Translation from 'src/translation/en.json';
 import * as Routes from 'src/navigation/constants';
-
-type MerchantRedemptionInProgressProps = {
-	navigation?: any,
-	route?: any,
-}
+import { BUTTON_TYPES } from 'src/constants';
 
 const styles = StyleSheet.create({
 	headerText: {
@@ -29,12 +25,12 @@ const styles = StyleSheet.create({
 	},
 });
 
-const MerchantRedemptionInProgressView = (props: MerchantRedemptionInProgressProps) => {
-
+const MerchantRedemptionInProgress = (): JSX.Element => {
+	const navigation = useNavigation();
 	return (
 		<View style={modalViewBase}>
 			<Header
-				rightComponent={<CancelBtn text={Translation.BUTTON.CLOSE} color={colors.purple} onClick={() => props.navigation.navigate(Routes.MERCHANT_DASHBOARD)} />}
+				rightComponent={<CancelBtn text={Translation.BUTTON.CLOSE} color={colors.purple} onClick={() => navigation.navigate(Routes.MERCHANT_DASHBOARD)} />}
 			/>
 			<ScrollView style={wrappingContainerBase}>
 				<View style={ baseHeader }>
@@ -48,9 +44,9 @@ const MerchantRedemptionInProgressView = (props: MerchantRedemptionInProgressPro
 				behavior={Platform.OS == "ios" ? "padding" : "height"} >
 				<View style={styles.bottomView}>
 					<Button
-						type="purple"
+						type={BUTTON_TYPES.PURPLE}
 						title={Translation.BUTTON.GO_BACK_HOME}
-						onPress={() => props.navigation.navigate(Routes.MERCHANT_DASHBOARD)}
+						onPress={() => navigation.navigate(Routes.MERCHANT_DASHBOARD)}
 					/>
 				</View>
 			</KeyboardAvoidingView>
@@ -58,9 +54,4 @@ const MerchantRedemptionInProgressView = (props: MerchantRedemptionInProgressPro
 	);
 }
 
-
-const MerchantRedemptionInProgress = (props:MerchantRedemptionInProgressProps): ReactElement => {
-	const navigation = useNavigation();
-	return <MerchantRedemptionInProgressView {...props} navigation={navigation} />;
-}
 export default MerchantRedemptionInProgress

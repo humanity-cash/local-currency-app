@@ -1,11 +1,17 @@
 import {
 	CognitoUserAttribute,
-	CognitoUserSession,
+	CognitoUserSession
 } from "amazon-cognito-identity-js";
 import React, { useEffect, useState } from "react";
 import { isBusinessVerified, isCustomerVerified } from "src/auth/verification";
 import { userController } from "./cognito";
 import { BaseResponse, CognitoResponse } from "./cognito/types";
+import {
+	buisnessBasicVerificationInitialState,
+	customerBasicVerificationInitialState,
+	signInInitialState,
+	signUpInitialState
+} from "./consts";
 import {
 	AuthStatus,
 	BusinessBasicVerification,
@@ -13,14 +19,8 @@ import {
 	defaultState,
 	IAuth,
 	UpdateUserAttributesInput,
-	UserType,
+	UserType
 } from "./types";
-import {
-	buisnessBasicVerificationInitialState,
-	customerBasicVerificationInitialState,
-	signInInitialState,
-	signUpInitialState,
-} from "./consts";
 
 export const AuthContext = React.createContext(defaultState);
 

@@ -1,59 +1,66 @@
-import React, { useState, useEffect, ReactElement } from 'react';
-import { StyleSheet, View, KeyboardAvoidingView, ScrollView, Platform, Picker } from 'react-native';
-import { Text } from 'react-native-elements';
-import { useUserDetails } from "src/hooks";
-import { Header, Button, CancelBtn, BackBtn } from "src/shared/uielements";
-import { underlineHeaderB, viewBaseB, wrappingContainerBase } from "src/theme/elements";
+import { useNavigation } from "@react-navigation/native";
+import React, { ReactElement, useContext, useState } from "react";
+import {
+	KeyboardAvoidingView,
+	Picker,
+	Platform,
+	ScrollView,
+	StyleSheet,
+	View
+} from "react-native";
+import { Text } from "react-native-elements";
+import { AuthContext } from "src/auth";
+import * as Routes from "src/navigation/constants";
+import { BackBtn, Button, CancelBtn, Header } from "src/shared/uielements";
 import { colors } from "src/theme/colors";
+import {
+	underlineHeaderB,
+	viewBaseB,
+	wrappingContainerBase
+} from "src/theme/elements";
+import Translation from "src/translation/en.json";
 import { BusinessType } from "src/utils/types";
-import Translation from 'src/translation/en.json';
-import * as Routes from 'src/navigation/constants';
-import { useNavigation } from '@react-navigation/native';
-
-type BusinessDetailProps = {
-	navigation?: any,
-	route?: any,
-}
 
 const BusinessTypes: BusinessType[] = [
 	BusinessType.SOLE_PROPRIETORSHIP,
 	BusinessType.CORPORATION,
 	BusinessType.LLC,
 	BusinessType.PARTNERSHIP,
-	BusinessType.NON_PROFIT
+	BusinessType.NON_PROFIT,
 ];
 
 const styles = StyleSheet.create({
-    headerText: {
+	headerText: {
 		fontSize: 32,
-        lineHeight: 32,
+		lineHeight: 32,
 		color: colors.purple,
 	},
-    bodyView: {
-        paddingTop: 50,
-        paddingHorizontal: 17
-    },
-    bodyText: {
-        color: colors.bodyText
-    },
+	bodyView: {
+		paddingTop: 50,
+		paddingHorizontal: 17,
+	},
+	bodyText: {
+		color: colors.bodyText,
+	},
 	label: {
 		marginTop: 30,
-        color: colors.bodyText,
-		fontSize: 10
-    },
+		color: colors.bodyText,
+		fontSize: 10,
+	},
 	picker: {
 		height: 55,
 		borderRadius: 3,
 		color: colors.purple,
-		backgroundColor: colors.white
+		backgroundColor: colors.white,
 	},
-    bottomView: {
+	bottomView: {
 		paddingHorizontal: 20,
-        paddingBottom: 50
+		paddingBottom: 50,
 	},
 });
 
 const BusinessDetail = (): ReactElement => {
+	const { signOut } = useContext(AuthContext);
 	const navigation = useNavigation();
 	/** Need to integrate business type from auth context here */
 	const [businessType, setBusinessType] = useState<BusinessType>(
@@ -73,7 +80,7 @@ const BusinessDetail = (): ReactElement => {
 					<CancelBtn
 						color={colors.purple}
 						text={Translation.BUTTON.LOGOUT}
-						onClick={() => navigation.navigate(Routes.TEASER)}
+						onClick={signOut}
 					/>
 				}
 			/>
@@ -117,4 +124,4 @@ const BusinessDetail = (): ReactElement => {
 	);
 };
 
-export default BusinessDetail
+export default BusinessDetail;

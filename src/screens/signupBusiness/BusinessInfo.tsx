@@ -1,31 +1,31 @@
+import { useNavigation } from "@react-navigation/native";
 import React, { ReactElement, useContext } from "react";
 import {
-	StyleSheet,
-	View,
 	KeyboardAvoidingView,
-	ScrollView,
-	Platform,
 	Picker,
+	Platform,
+	ScrollView,
+	StyleSheet,
+	View
 } from "react-native";
 import { Text } from "react-native-elements";
+import { AuthContext } from "src/auth";
+import * as Routes from "src/navigation/constants";
 import {
-	Header,
-	Button,
-	CancelBtn,
 	BackBtn,
 	BlockInput,
+	Button,
+	CancelBtn,
+	Header
 } from "src/shared/uielements";
+import { colors } from "src/theme/colors";
 import {
 	underlineHeaderB,
 	viewBaseB,
-	wrappingContainerBase,
+	wrappingContainerBase
 } from "src/theme/elements";
-import { colors } from "src/theme/colors";
-import { Industry } from "src/utils/types";
 import Translation from "src/translation/en.json";
-import * as Routes from "src/navigation/constants";
-import { AuthContext } from "src/auth";
-import { useNavigation } from "@react-navigation/native";
+import { Industry } from "src/utils/types";
 
 const Industries: Industry[] = [
 	Industry.ARTS_ENTERTAINMENT,
@@ -71,7 +71,7 @@ const styles = StyleSheet.create({
 });
 
 const BusinessInfo = (): ReactElement => {
-	const { buisnessBasicVerification, setBuisnessBasicVerification } =
+	const { buisnessBasicVerification, setBuisnessBasicVerification, signOut } =
 		useContext(AuthContext);
 	const navigation = useNavigation();
 
@@ -92,7 +92,7 @@ const BusinessInfo = (): ReactElement => {
 					<CancelBtn
 						color={colors.purple}
 						text={Translation.BUTTON.LOGOUT}
-						onClick={() => navigation.navigate(Routes.TEASER)}
+						onClick={signOut}
 					/>
 				}
 			/>

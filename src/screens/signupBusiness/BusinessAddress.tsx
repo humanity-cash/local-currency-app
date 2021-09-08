@@ -1,24 +1,22 @@
+import { useNavigation } from "@react-navigation/native";
 import React, { ReactElement, useContext } from "react";
-import { StyleSheet, View, ScrollView } from "react-native";
+import { ScrollView, StyleSheet, View } from "react-native";
 import { Text } from "react-native-elements";
+import { AuthContext } from 'src/auth';
+import { BaseResponse } from "src/auth/cognito/types";
+import * as Routes from "src/navigation/constants";
 import {
-	Header,
-	Button,
-	CancelBtn,
 	BackBtn,
-	BusinessAddressForm,
+	BusinessAddressForm, Button,
+	CancelBtn, Header
 } from "src/shared/uielements";
+import { colors } from "src/theme/colors";
 import {
 	underlineHeaderB,
 	viewBaseB,
-	wrappingContainerBase,
+	wrappingContainerBase
 } from "src/theme/elements";
-import { colors } from "src/theme/colors";
 import Translation from "src/translation/en.json";
-import * as Routes from "src/navigation/constants";
-import { useNavigation } from "@react-navigation/native";
-import { AuthContext } from "src/auth";
-import { BaseResponse } from "src/auth/cognito/types";
 
 const styles = StyleSheet.create({
 	headerText: {
@@ -54,7 +52,7 @@ const styles = StyleSheet.create({
 });
 
 const BusinessAddress = (): ReactElement => {
-	const { completeBusniessBasicVerification } = useContext(AuthContext);
+	const { completeBusniessBasicVerification, signOut } = useContext(AuthContext);
 	const navigation = useNavigation();
 	const onNextPress = async () => {
 		const response: BaseResponse<string | undefined> =
@@ -77,7 +75,7 @@ const BusinessAddress = (): ReactElement => {
 					<CancelBtn
 						color={colors.purple}
 						text={Translation.BUTTON.LOGOUT}
-						onClick={() => navigation.navigate(Routes.TEASER)}
+						onClick={signOut}
 					/>
 				}
 			/>

@@ -1,16 +1,13 @@
-import React, { ReactElement } from 'react';
+import React from 'react';
 import { StyleSheet, View, KeyboardAvoidingView, ScrollView, Platform } from 'react-native';
+import { useNavigation } from '@react-navigation/core';
 import { Text } from 'react-native-elements';
 import { Header, Button, CancelBtn } from "src/shared/uielements";
 import { baseHeader, viewBase, wrappingContainerBase } from "src/theme/elements";
 import { colors } from "src/theme/colors";
 import Translation from 'src/translation/en.json';
 import * as Routes from 'src/navigation/constants';
-
-type MerchantPayoutSuccessProps = {
-	navigation?: any,
-	route?: any,
-}
+import { BUTTON_TYPES } from 'src/constants';
 
 const styles = StyleSheet.create({
 	headerText: {
@@ -28,12 +25,12 @@ const styles = StyleSheet.create({
 	},
 });
 
-const MerchantPayoutSuccess = (props: MerchantPayoutSuccessProps): ReactElement => {
-
+const MerchantPayoutSuccess = (): JSX.Element => {
+	const navigation = useNavigation();
 	return (
 		<View style={viewBase}>
 			<Header
-				rightComponent={<CancelBtn text={Translation.BUTTON.CLOSE} color={colors.purple} onClick={() => props.navigation.navigate(Routes.MERCHANT_DASHBOARD)} />}
+				rightComponent={<CancelBtn text={Translation.BUTTON.CLOSE} color={colors.purple} onClick={() => navigation.navigate(Routes.MERCHANT_DASHBOARD)} />}
 			/>
 			<ScrollView style={wrappingContainerBase}>
 				<View style={ baseHeader }>
@@ -45,9 +42,9 @@ const MerchantPayoutSuccess = (props: MerchantPayoutSuccessProps): ReactElement 
 				behavior={Platform.OS == "ios" ? "padding" : "height"} >
 				<View style={styles.bottomView}>
 					<Button
-						type="purple"
-						title="Close"
-						onPress={() => props.navigation.navigate(Routes.MERCHANT_DASHBOARD)}
+						type={BUTTON_TYPES.PURPLE}
+						title={Translation.BUTTON.CLOSE}
+						onPress={() => navigation.navigate(Routes.MERCHANT_DASHBOARD)}
 					/>
 				</View>
 			</KeyboardAvoidingView>

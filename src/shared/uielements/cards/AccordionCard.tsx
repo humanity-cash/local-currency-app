@@ -1,5 +1,5 @@
 import { Entypo } from '@expo/vector-icons';
-import React, { useState } from 'react';
+import React, { ReactElement, useState } from 'react';
 import { StyleSheet, TouchableWithoutFeedback, View } from "react-native";
 import { Text } from "react-native-elements";
 import { colors } from "src/theme/colors";
@@ -38,19 +38,28 @@ const styles = StyleSheet.create({
 	}
 });
 
-const AccordionCard = (props: AccordionEntry) => {
+const AccordionCard = (props: AccordionEntry): ReactElement => {
 	const [isExpanded, setIsExpanded] = useState<boolean>(false);
 	return (
-		<View style={styles.container}>
+		<View style={{
+			...styles.container,
+			...props.style
+		}}>
 			<TouchableWithoutFeedback onPress={() => setIsExpanded(!isExpanded)}>
 				<View style={styles.header}>
-					<Text style={styles.headerText}>{props.title}</Text>
-					<View style={styles.headerIcon}>
+					<Text style={{
+						...styles.headerText,
+						...props.style
+					}}>{props.title}</Text>
+					<View style={{
+						...styles.headerIcon,
+						...props.style
+					}}>
 						<Entypo 
 							style={isExpanded ? styles.headerActive : {}}
 							name="chevron-down" 
 							size={16} 
-							color={colors.text} 
+							color={props.textColor ? props.textColor : colors.text} 
 						/>
 					</View>
 				</View>

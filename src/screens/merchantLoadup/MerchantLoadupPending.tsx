@@ -1,16 +1,12 @@
-import React, { ReactElement, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { StyleSheet, View, KeyboardAvoidingView, ActivityIndicator, ScrollView, Platform } from 'react-native';
+import { useNavigation } from '@react-navigation/core';
 import { Text } from 'react-native-elements';
 import { Header } from "src/shared/uielements";
 import { colors } from "src/theme/colors";
 import { baseHeader, viewBase, wrappingContainerBase } from "src/theme/elements";
 import Translation from 'src/translation/en.json';
 import * as Routes from 'src/navigation/constants';
-
-type MerchantPaymentPendingProps = {
-	navigation?: any,
-	route?: any,
-}
 
 const styles = StyleSheet.create({
 	headerText: {
@@ -27,11 +23,11 @@ const styles = StyleSheet.create({
 	},
 });
 
-const MerchantPaymentPending = (props: MerchantPaymentPendingProps): ReactElement => {
-
+const MerchantLoadPending = (): JSX.Element => {
+	const navigation = useNavigation();
 	useEffect(() => {
 		setTimeout(() => {
-			props.navigation.navigate(Routes.MERCHANT_LOADUP_SUCCESS);
+			navigation.navigate(Routes.MERCHANT_LOADUP_SUCCESS);
 		}, 2000);
 	});
 
@@ -54,4 +50,4 @@ const MerchantPaymentPending = (props: MerchantPaymentPendingProps): ReactElemen
 	);
 }
 
-export default MerchantPaymentPending
+export default MerchantLoadPending
