@@ -35,7 +35,7 @@ const convertAttributesArrayToObject = (attributes: any): any => {
 
 
 const AuthProvider: React.FunctionComponent = ({ children }) => {
-	const [userType, setUserType] = useState(UserType.Customer);
+	const [userType, setUserType] = useState(UserType.Business);
 	const [authStatus, setAuthStatus] = useState(AuthStatus.SignedOut);
 	const [isUpdatedAttributes, setIsUpdatedAttributes] = useState(false);
 	const [signInDetails, setSignInDetails] = useState(signInInitialState);
@@ -59,7 +59,6 @@ const AuthProvider: React.FunctionComponent = ({ children }) => {
 			const response: BaseResponse<CognitoUserSession | undefined> =
 				await userController.getSession();
 			if (response.success) {
-				console.log("first success");
 				const userAttributes: BaseResponse<CognitoUserAttribute[] | undefined> =
 					await getAttributes();
 				const isVerified =
@@ -68,7 +67,6 @@ const AuthProvider: React.FunctionComponent = ({ children }) => {
 				if (!isVerified) {
 					setAuthStatus(AuthStatus.NotVerified);
 				} else {
-					console.log("second success");
 					setAuthStatus(AuthStatus.SignedIn);
 				}
 			} else {
@@ -141,11 +139,11 @@ const AuthProvider: React.FunctionComponent = ({ children }) => {
 		const response = await userController.completeBusinessBasicVerification(
 			update
 		);
-
 		if (response.success) {
 			await userController.updateUserAttributes({
 				"custom:basicBusinessV": "true",
 			});
+			setAuthStatus(AuthStatus.Loading);
 		}
 
 		return response;
@@ -159,6 +157,7 @@ const AuthProvider: React.FunctionComponent = ({ children }) => {
 			await userController.updateUserAttributes({
 				"custom:basicCustomerV": "true",
 			});
+			setAuthStatus(AuthStatus.Loading);
 		}
 
 		return response;
