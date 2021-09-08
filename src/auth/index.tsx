@@ -13,6 +13,7 @@ import {
 	defaultState,
 	IAuth,
 	UpdateUserAttributesInput,
+	UserType,
 } from "./types";
 import {
 	buisnessBasicVerificationInitialState,
@@ -34,6 +35,7 @@ const convertAttributesArrayToObject = (attributes: any): any => {
 
 
 const AuthProvider: React.FunctionComponent = ({ children }) => {
+	const [userType, setUserType] = useState(UserType.Customer);
 	const [authStatus, setAuthStatus] = useState(AuthStatus.SignedOut);
 	const [isUpdatedAttributes, setIsUpdatedAttributes] = useState(false);
 	const [signInDetails, setSignInDetails] = useState(signInInitialState);
@@ -174,6 +176,8 @@ const AuthProvider: React.FunctionComponent = ({ children }) => {
 	};
 
 	const state: IAuth = {
+		userType,
+		setUserType,
 		getAttributes,
 		userAttributes,
 		updateAttributes,

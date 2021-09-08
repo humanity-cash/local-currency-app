@@ -106,6 +106,7 @@ const ReturnPaymentDialog = (props: ReturnPaymentDialogProps) => {
 }
 
 const DrawerContent = (props: DrawerContentComponentProps) => {
+	 
 	const [isExpanded, setIsExpanded] = useState<boolean>(false);
 	const [isVisible, setIsVisible] = useState<boolean>(false);
 	const { userAttributes } = useContext(AuthContext);
