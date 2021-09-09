@@ -57,29 +57,13 @@ const styles = StyleSheet.create({
 });
 
 export const SettingsPersonalDetails = (): JSX.Element => {
-	const { getAttributes, updateAttributes } = useContext(AuthContext);
+	const { userAttributes } = useContext(AuthContext);
 	const navigation = useNavigation();
-	const [canSave, setCanSave] = useState<boolean>(false);
-	const [state, setState] = useState<PersonalProfileState>({
+	const [state, setState] = useState({
 		avatar: '',
-		username: '',
 	});
 
-	useEffect(() => {
-		const userAttributes = async () => {
-			const response = await getAttributes();
-			response?.data?.forEach((attribute: any) => {
-				if (attribute.Name === 'custom:tag') {
-					setState((pv) => ({ ...pv, username: attribute.Value }));
-				}
-			});
-		};
-		userAttributes();
-	}, []);
-
-	useEffect(() => {
-		setCanSave(state.username !== '');
-	}, [state]);
+	const username =  userAttributes['custom:personal.tag']
 
 	useEffect(() => {
 		(async () => {
@@ -141,7 +125,7 @@ export const SettingsPersonalDetails = (): JSX.Element => {
 					<BlockInput
 						name='username'
 						placeholder='@username'
-						value={state.username}
+						value={username}
 						onChange={onValueChange}
 					/>
 				</View>
@@ -152,14 +136,9 @@ export const SettingsPersonalDetails = (): JSX.Element => {
 					<Button
 						type={BUTTON_TYPES.DARK_GREEN}
 						title={Translation.BUTTON.SAVE_CHANGE}
-						disabled={!canSave}
+						disabled={true}
 						onPress={async () => {
-							const response = await updateAttributes({
-								update: { 'custom:tag': state.username },
-							});
-							if (response?.success) {
-								console.log('updated successfully');
-							}
+							// console.log('should update username)
 						}}
 					/>
 				</View>

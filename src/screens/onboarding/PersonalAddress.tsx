@@ -1,88 +1,95 @@
-import { useNavigation } from '@react-navigation/native';
-import React, { ReactElement, useState, useContext } from 'react';
-import { KeyboardAvoidingView, Platform, ScrollView, View, StyleSheet } from 'react-native';
-import { Text } from 'react-native-elements';
-import { AuthContext } from 'src/auth';
-import { useUserDetails } from "src/hooks";
-import { BackBtn, Button, Header, CancelBtn, PersonalAddressForm } from 'src/shared/uielements';
-import { underlineHeader, viewBase, wrappingContainerBase } from "src/theme/elements";
-import { validateAddressForm } from "src/utils/validation";
+import { useNavigation } from "@react-navigation/native";
+import React, { useContext } from "react";
+import {
+	KeyboardAvoidingView,
+	Platform,
+	ScrollView,
+	StyleSheet,
+	View
+} from "react-native";
+import { Text } from "react-native-elements";
+import { AuthContext } from "src/auth";
+import { BUTTON_TYPES } from "src/constants";
+import * as Routes from "src/navigation/constants";
+import {
+	BackBtn,
+	Button,
+	CancelBtn,
+	Header,
+	PersonalAddressForm
+} from "src/shared/uielements";
 import { colors } from "src/theme/colors";
-
-import Translation from 'src/translation/en.json';
-import * as Routes from 'src/navigation/constants';
-
-type PersonalAddressProps = {
-	navigation?: any
-	route?: any
-}
+import {
+	underlineHeader,
+	viewBase,
+	wrappingContainerBase
+} from "src/theme/elements";
+import Translation from "src/translation/en.json";
 
 const styles = StyleSheet.create({
-	content: { 
-		paddingBottom: 40 
+	content: {
+		paddingBottom: 40,
 	},
 	headerText: {
 		fontSize: 32,
 		color: colors.darkGreen,
-		lineHeight: 35
+		lineHeight: 35,
 	},
-  	bottomView: {
+	bottomView: {
 		paddingHorizontal: 20,
-		paddingBottom: 50
+		paddingBottom: 50,
 	},
 });
 
-const PersonalAddressView = (props: PersonalAddressProps) => {
-	const { signOut } = useContext(AuthContext);
-	const { personalDetails, updateStatus } = useUserDetails();
-	const [goNext, setGoNext] = useState(false);
-	const [showValidation, setShowValidation] = useState(false);
+const PersonalAddress = (): React.ReactElement => {
+	const { completeCustomerBasicVerification, signOut } =
+		useContext(AuthContext);
+	const navigation = useNavigation();
 
-	const onNextPress = () => {
-		const validation = validateAddressForm(personalDetails);
-		setShowValidation(true);
-		if (validation.valid) {
-			updateStatus({ personalDetails: true });
-			props.navigation.navigate(Routes.LINK_BANK_ACCOUNT)
+	const onNextPress = async () => {
+		const response = await completeCustomerBasicVerification();
+		if (response.success) {
+			navigation.navigate(Routes.LINK_BANK_ACCOUNT);
+		} else {
+			console.log("something went wrong in finalising customer signup");
 		}
-	}
+	};
 
 	return (
 		<View style={viewBase}>
 			<Header
-				leftComponent={<BackBtn onClick={() => props.navigation.goBack()} />}
-				rightComponent={<CancelBtn text={Translation.BUTTON.LOGOUT} onClick={signOut} />}
+				leftComponent={<BackBtn onClick={() => navigation.goBack()} />}
+				rightComponent={
+					<CancelBtn
+						text={Translation.BUTTON.LOGOUT}
+						onClick={signOut}
+					/>
+				}
 			/>
 
-			<ScrollView style={ wrappingContainerBase }>
+			<ScrollView style={wrappingContainerBase}>
 				<View style={styles.content}>
 					<View style={underlineHeader}>
-						<Text style={styles.headerText}>{Translation.PROFILE.PERSIONAL_DETAILS}</Text>
+						<Text style={styles.headerText}>
+							{Translation.PROFILE.PERSIONAL_DETAILS}
+						</Text>
 					</View>
-					<PersonalAddressForm
-						isValid={setGoNext}
-						showValidation={showValidation}
-					/>
+					<PersonalAddressForm />
 				</View>
 			</ScrollView>
 			<KeyboardAvoidingView
-				behavior={Platform.OS == "ios" ? "padding" : "height"}
-			>
+				behavior={Platform.OS == "ios" ? "padding" : "height"}>
 				<View style={styles.bottomView}>
 					<Button
-						type="darkGreen"
+						type={BUTTON_TYPES.DARK_GREEN}
 						title={Translation.BUTTON.NEXT}
-						disabled={!goNext}
+						disabled={false}
 						onPress={onNextPress}
 					/>
 				</View>
 			</KeyboardAvoidingView>
 		</View>
 	);
-}
+};
 
-const PersonalAddress = (props: PersonalAddressProps): ReactElement => {
-	const navigation = useNavigation();
-	return <PersonalAddressView {...props} navigation={navigation} />;
-}
-export default PersonalAddress
+export default PersonalAddress;

@@ -1,13 +1,13 @@
 import { useNavigation } from '@react-navigation/native';
 import React from 'react';
-import { StyleSheet, View, KeyboardAvoidingView, Platform, ScrollView } from 'react-native';
+import { KeyboardAvoidingView, Platform, ScrollView, StyleSheet, View } from 'react-native';
 import { Text } from 'react-native-elements';
-import { Header, Button } from "src/shared/uielements";
+import { BUTTON_TYPES } from 'src/constants';
+import * as Routes from 'src/navigation/constants';
+import { Button, Header } from "src/shared/uielements";
 import { colors } from "src/theme/colors";
 import { baseHeader, viewBaseWhite, wrappingContainerBase } from "src/theme/elements";
 import Translation from 'src/translation/en.json';
-import * as Routes from 'src/navigation/constants';
-import { BUTTON_TYPES } from 'src/constants';
 
 const styles = StyleSheet.create({
 	headerText: {

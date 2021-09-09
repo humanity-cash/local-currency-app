@@ -1,13 +1,15 @@
 import { useNavigation } from '@react-navigation/native';
-import React from 'react';
+import React, { useContext } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { Text } from 'react-native-elements';
-import { Button, Header } from "src/shared/uielements";
-import { baseHeader, viewBase, wrappingContainerBase } from "src/theme/elements";
-import { colors } from "src/theme/colors";
-import Translation from 'src/translation/en.json';
-import * as Routes from 'src/navigation/constants';
+import { AuthContext } from 'src/auth';
+import { UserType } from "src/auth/types";
 import { BUTTON_TYPES } from 'src/constants';
+import * as Routes from 'src/navigation/constants';
+import { Button, Header } from "src/shared/uielements";
+import { colors } from "src/theme/colors";
+import { baseHeader, viewBase, wrappingContainerBase } from "src/theme/elements";
+import Translation from 'src/translation/en.json';
 
 const styles = StyleSheet.create({
 	headerText: {
@@ -25,14 +27,18 @@ const styles = StyleSheet.create({
 });
 
 const LinkBankAccount = (): JSX.Element => {
+	const { updateUserType } = useContext(AuthContext)
 	const navigation = useNavigation();
+
 	return (
 		<View style={viewBase}>
 			<Header />
 
 			<View style={wrappingContainerBase}>
-				<View style={ baseHeader }>
-					<Text style={styles.headerText}>{Translation.PROFILE.WELCOME_BERKSHARES}</Text>
+				<View style={baseHeader}>
+					<Text style={styles.headerText}>
+						{Translation.PROFILE.WELCOME_BERKSHARES}
+					</Text>
 				</View>
 			</View>
 			<View style={styles.bottomView}>
@@ -40,7 +46,9 @@ const LinkBankAccount = (): JSX.Element => {
 					type={BUTTON_TYPES.TRANSPARENT}
 					title={Translation.BUTTON.SKIP_NOW}
 					style={styles.skipBtn}
-					onPress={() => navigation.navigate(Routes.TABS)}
+					onPress={() =>
+					updateUserType(UserType.Customer)
+					}
 				/>
 				<Button
 					type={BUTTON_TYPES.DARK_GREEN}

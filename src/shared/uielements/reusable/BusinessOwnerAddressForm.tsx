@@ -1,64 +1,69 @@
 import React, { ReactElement, useContext } from "react";
 import { Picker, StyleSheet, View } from "react-native";
 import { Text } from "react-native-elements";
+import { BusinessBasicVerification } from "src/auth/types";
 import { AuthContext } from "src/auth";
 import countries from "src/mocks/countries";
 import { colors } from "src/theme/colors";
-import Translation from 'src/translation/en.json';
+import Translation from "src/translation/en.json";
 import BlockInput from "../BlockInput";
 
-interface PersonalAddressProps {
-  style?: any;
+interface BusinessOwnerAddressFormProps {
+	style?: any;
 }
 
 const styles = StyleSheet.create({
-  container: {
-    marginBottom: 20
-  },
-  bodyText: {
-    color: colors.bodyText
-  },
-  label: {
-    color: colors.bodyText,
-    fontSize: 10
-  },
-  errorLabel: {
-    color: colors.bodyText,
-    fontSize: 10,
-    marginTop: 5
-  },
-  inlineView: {
-    flex: 1,
-    flexDirection: 'row'
-  },
-  cityView: {
-    width: '70%'
-  },
-  stateView: {
-    width: '30%'
-  },
-  picker: {
+	container: {
+		marginBottom: 20,
+	},
+	bodyText: {
+		color: colors.bodyText,
+	},
+	label: {
+		color: colors.bodyText,
+		fontSize: 10,
+	},
+	errorLabel: {
+		color: colors.bodyText,
+		fontSize: 10,
+		marginTop: 5,
+	},
+	inlineView: {
+		flex: 1,
+		flexDirection: "row",
+	},
+	cityView: {
+		width: "70%",
+	},
+	stateView: {
+		width: "30%",
+	},
+	picker: {
 		height: 55,
 		borderRadius: 3,
-    marginTop: 8,
-    marginLeft: 5,
+		marginTop: 8,
+		marginLeft: 5,
 		color: colors.purple,
-		backgroundColor: colors.white
-	}
+		backgroundColor: colors.white,
+	},
 });
 
-const PersonalAddressForm = (props: PersonalAddressProps): ReactElement => {
-  const { customerBasicVerificationDetails, setCustomerBasicVerificationDetails } =
-		useContext(AuthContext);
+const BusinessOwnerAddressForm = (
+	props: BusinessOwnerAddressFormProps
+): ReactElement => {
+	const {
+		buisnessBasicVerification,
+		setBuisnessBasicVerification
+	} = useContext(AuthContext);
 
-  const onValueChange = (name: string, change: string) => {
-    setCustomerBasicVerificationDetails((pv: any) => ({
-      ...pv,
-      [name]: change,
-    }));
-  };
+	const onValueChange = (name: string, change: string) => {
+		setBuisnessBasicVerification((pv: BusinessBasicVerification) => ({
+			...pv,
+			[name]: change,
+		}));
+	};
 
-  return (
+	return (
 		<View>
 			<View style={styles.container}>
 				<Text style={styles.bodyText}>
@@ -69,14 +74,14 @@ const PersonalAddressForm = (props: PersonalAddressProps): ReactElement => {
 			<BlockInput
 				name="address1"
 				placeholder="Street number, street name"
-				value={customerBasicVerificationDetails.address1}
+				value={buisnessBasicVerification?.owner?.address1}
 				onChange={onValueChange}
 				style={props.style}
 			/>
 			<BlockInput
 				name="address2"
 				placeholder="Apt."
-				value={customerBasicVerificationDetails.address2}
+				value={buisnessBasicVerification?.owner?.address2}
 				onChange={onValueChange}
 				style={props.style}
 			/>
@@ -87,7 +92,7 @@ const PersonalAddressForm = (props: PersonalAddressProps): ReactElement => {
 					<BlockInput
 						name="city"
 						placeholder="City"
-						value={customerBasicVerificationDetails.city}
+						value={buisnessBasicVerification?.owner?.city}
 						onChange={onValueChange}
 						style={props.style}
 					/>
@@ -95,7 +100,7 @@ const PersonalAddressForm = (props: PersonalAddressProps): ReactElement => {
 				<View style={styles.stateView}>
 					<Text style={styles.label}>{Translation.LABEL.STATE}</Text>
 					<Picker
-						selectedValue={customerBasicVerificationDetails.state}
+						selectedValue={buisnessBasicVerification?.owner?.state}
 						style={styles.picker}
 						onValueChange={(itemValue) =>
 							onValueChange("country", itemValue)
@@ -116,12 +121,12 @@ const PersonalAddressForm = (props: PersonalAddressProps): ReactElement => {
 				name="postalCode"
 				placeholder="00000"
 				keyboardType="number-pad"
-				value={customerBasicVerificationDetails.postalCode}
+				value={buisnessBasicVerification?.owner?.postalCode}
 				onChange={onValueChange}
 				style={props.style}
 			/>
 		</View>
-  );
+	);
 };
 
-export default PersonalAddressForm;
+export default BusinessOwnerAddressForm;
