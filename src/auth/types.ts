@@ -69,7 +69,6 @@ export enum UserType {
 
 export enum AuthStatus {
 	Loading,
-	NotVerified, // Signed In but didnt complete verification for customer nor business
 	SignedIn,
 	SignedOut,
 }
@@ -87,6 +86,8 @@ export interface IAuth {
 	updateUserType?: any,
 	setAuthStatus?: any,
 	completeBusniessBasicVerification?: any,
+	completedCustomerVerification: boolean,
+	completedBusinessVerification: boolean,
 	userAttributes?: any,
 	completeCustomerBasicVerification?: any,
 	updateAttributes?: any;
@@ -113,6 +114,8 @@ export interface IAuth {
 }
 
 export const defaultState: IAuth = {
+	completedCustomerVerification: false,
+	completedBusinessVerification: false,
 	sessionInfo: {},
 	authStatus: AuthStatus.Loading,
 	signInDetails: { password: '', email: '' },
@@ -121,3 +124,31 @@ export const defaultState: IAuth = {
 		console.log('setSigninDetails is not loaded yet')
 	},
 };
+
+// export interface IAuth {
+// 	userType?: UserType | undefined,
+// 	updateUserType?: (type: UserType) => void,
+// 	setAuthStatus?: (auth: AuthStatus) => void,
+// 	completeBusniessBasicVerification?: (update: BusinessBasicVerification) => Promise<CognitoResponse<string | undefined>>,
+// 	userAttributes?: any,
+// 	completeCustomerBasicVerification?: (update: CustomerBasicVerification) => Promise<CognitoResponse<string | undefined>>,
+// 	updateAttributes?: any;
+// 	sessionInfo?: Session;
+// 	resendEmailVerificationCode?: () => Promise<BaseResponse<unknown>>;
+// 	signIn?: (email: string, password: string) => Promise<BaseResponse<CognitoUserSession>>;
+// 	authStatus: AuthStatus;
+// 	setSignInDetails?: (data: { email?: string, password?: string }) => void;
+// 	signInDetails?: { password: string, email: string };
+// 	signOut?: () => void;
+// 	getAttributes?: () => Promise<CognitoResponse<CognitoUserAttribute[] | undefined>>;
+// 	signUpDetails?: { password: string, confirmPassword: string, email: string };
+// 	setSignUpDetails?: any;
+// 	emailVerification?: (verificationCode: string) => Promise<CognitoResponse<any>>;
+// 	signUp?: () => Promise<CognitoResponse<ISignUpResult | undefined>>;
+// 	setCustomerBasicVerificationDetails?: any;
+// 	customerBasicVerificationDetails?: CustomerBasicVerification;
+// 	buisnessBasicVerification?: BusinessBasicVerification,
+// 	setBuisnessBasicVerification?: any
+	// completedCustomerVerification: boolean,
+	// completedBusinessVerification: boolean,
+// }
