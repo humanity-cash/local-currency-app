@@ -1,19 +1,47 @@
 import { DefaultTheme, NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import React, { useContext } from "react";
-import { AuthContext, AuthStatus } from "src/auth";
+import "react-native-gesture-handler";
+import { AuthContext } from "src/auth";
+import { AuthStatus, UserType } from "src/auth/types";
 import { useRouteTracking } from "src/hooks";
 import { CashoutNavigator } from "src/navigation/CashoutNavigator";
 import { ForgotPasswordNavigator } from "src/navigation/ForgotPasswordStack";
+import { MerchantBankAccountNavigator } from "src/navigation/MerchantBankAccountNavigator";
 import { SignupBusinessNavigator } from "src/navigation/SignupBusinessNavigator";
-
 import Login from "src/screens/authentication/Login";
+import CashierHelp from "src/screens/cashier/CashierHelp";
+import CashierHowToWork from "src/screens/cashier/CashierHowToWork";
+import CashierPaymentPending from "src/screens/cashier/CashierPaymentPending";
+import CashierRequest from "src/screens/cashier/CashierRequest";
+import CashierRequestSuccess from "src/screens/cashier/CashierRequestSuccess";
+import CashierReturn from "src/screens/cashier/CashierReturn";
+import CashierReturnQRCodeScan from "src/screens/cashier/CashierReturnQRCodeScan";
+import CashierReturnSuccess from "src/screens/cashier/CashierReturnSuccess";
+import CashierTransactions from "src/screens/cashier/CashierTransactions";
+import CashierDashboard from "src/screens/dashboard/CashierDashboard";
+import MerchantDashboard from "src/screens/dashboard/MerchantDashboard";
+import MerchantTabs from "src/screens/dashboard/MerchantTabs";
 import Tabs from "src/screens/dashboard/Tabs";
-import ConfirmEmail from "src/screens/onboarding/ConfirmEmail";
+import MerchantCashoutPassword from "src/screens/merchantCashout/MerchantCashoutPassword";
+import MerchantRedemptionInProgress from "src/screens/merchantCashout/MerchantRedemptionInProgress";
+import MerchantLoadupPending from "src/screens/merchantLoadup/MerchantLoadupPending";
+import MerchantLoadupSuccess from "src/screens/merchantLoadup/MerchantLoadupSuccess";
+import MerchantPaymentPending from "src/screens/merchantPayment/MerchantPaymentPending";
+import MerchantPaymentSuccess from "src/screens/merchantPayment/MerchantPaymentSuccess";
+import MerchantReturn from "src/screens/merchantPayment/MerchantReturn";
+import MerchantPayoutPending from "src/screens/merchantPayout/MerchantPayoutPending";
+import MerchantPayoutQRCodeScan from "src/screens/merchantPayout/MerchantPayoutQRCodeScan";
+import MerchantPayoutSuccess from "src/screens/merchantPayout/MerchantPayoutSuccess";
+import MerchantPayoutToPersonal from "src/screens/merchantPayout/MerchantPayoutToPersonal";
+import MerchantPayoutToSomeone from "src/screens/merchantPayout/MerchantPayoutToSomeone";
 import BankLinkSuccess from "src/screens/onboarding/BankLinkSuccess";
+import ConfirmEmail from "src/screens/onboarding/ConfirmEmail";
 import CreateAccount from "src/screens/onboarding/CreateAccount";
 import EmailConfirmed from "src/screens/onboarding/EmailConfirmed";
 import LinkBankAccount from "src/screens/onboarding/LinkBankAccount";
+import LoadUp from "src/screens/onboarding/LoadUp";
+import LoadUpSuccess from "src/screens/onboarding/LoadUpSuccess";
 import LoginToBank from "src/screens/onboarding/LoginToBank";
 import Password from "src/screens/onboarding/Password";
 import PersonalAddress from "src/screens/onboarding/PersonalAddress";
@@ -24,69 +52,55 @@ import SelectBank from "src/screens/onboarding/SelectBank";
 import SelectBankAccount from "src/screens/onboarding/SelectBankAccount";
 import Teaser from "src/screens/onboarding/Teaser";
 import TermsEmail from "src/screens/onboarding/TermsEmail";
-import LoadUp from "src/screens/onboarding/LoadUp";
-import LoadUpSuccess from "src/screens/onboarding/LoadUpSuccess";
 import Verification from "src/screens/onboarding/Verification";
 import VerificationHelp from "src/screens/onboarding/VerificationHelp";
-import PaymentRequest from "src/screens/payment/PaymentRequest";
 import PaymentPending from "src/screens/payment/PaymentPending";
+import PaymentRequest from "src/screens/payment/PaymentRequest";
 import PaymentSuccess from "src/screens/payment/PaymentSuccess";
 import QRCodeScan from "src/screens/payment/QRCodeScan";
+import Report from "src/screens/report/Report";
+import ReportSuccess from "src/screens/report/ReportSuccess";
 import SettingsBankAccount from "src/screens/settings/SettingsBankAccount";
 import SettingsDeleteAccount from "src/screens/settings/SettingsDeleteAccount";
 import SettingsPersonalProfile from "src/screens/settings/SettingsPersonalProfile";
 import SettingsSecurity from "src/screens/settings/SettingsSecurity";
 import SettingsTermsAndConditions from "src/screens/settings/SettingsTermsAndConditions";
-
-import MerchantTabs from "src/screens/dashboard/MerchantTabs";
-// import MerchantDashboard from "src/screens/dashboard/MerchantDashboard";
-import MerchantPaymentPending from "src/screens/merchantPayment/MerchantPaymentPending";
-import MerchantPaymentSuccess from "src/screens/merchantPayment/MerchantPaymentSuccess";
-import MerchantReturn from "src/screens/merchantPayment/MerchantReturn";
-import MerchantLoadupPending from "src/screens/merchantLoadup/MerchantLoadupPending";
-import MerchantLoadupSuccess from "src/screens/merchantLoadup/MerchantLoadupSuccess";
-import MerchantPayoutToPersonal from "src/screens/merchantPayout/MerchantPayoutToPersonal";
-import MerchantPayoutToSomeone from "src/screens/merchantPayout/MerchantPayoutToSomeone";
-import MerchantPayoutPending from "src/screens/merchantPayout/MerchantPayoutPending";
-import MerchantPayoutSuccess from "src/screens/merchantPayout/MerchantPayoutSuccess";
-import MerchantPayoutQRCodeScan from "src/screens/merchantPayout/MerchantPayoutQRCodeScan";
-import MerchantCashoutPassword from "src/screens/merchantCashout/MerchantCashoutPassword";
-import MerchantRedemptionInProgress from "src/screens/merchantCashout/MerchantRedemptionInProgress";
-
-import CashierDashboard from "src/screens/dashboard/CashierDashboard";
-import CashierHelp from "src/screens/cashier/CashierHelp";
-import CashierRequest from "src/screens/cashier/CashierRequest";
-import CashierTransactions from "src/screens/cashier/CashierTransactions";
-import CashierRequestSuccess from "src/screens/cashier/CashierRequestSuccess";
-import CashierReturnQRCodeScan from "src/screens/cashier/CashierReturnQRCodeScan";
-import CashierReturn from "src/screens/cashier/CashierReturn";
-import CashierHowToWork from "src/screens/cashier/CashierHowToWork";
-import CashierPaymentPending from "src/screens/cashier/CashierPaymentPending";
-import CashierReturnSuccess from "src/screens/cashier/CashierReturnSuccess";
-import Report from "src/screens/report/Report";
-import ReportSuccess from "src/screens/report/ReportSuccess";
-
-import * as Routes from './constants';
+import * as Routes from "./constants";
 
 const PrimaryStack = createStackNavigator();
 
 const PrimaryStackScreen = () => {
-  const { authStatus } = useContext(AuthContext)
+	const {
+		authStatus,
+		userType,
+		completedCustomerVerification,
+		completedBusinessVerification,
+	} = useContext(AuthContext);
 
-  return (
+	return (
 		<PrimaryStack.Navigator
 			screenOptions={() => ({
 				headerShown: false,
 			})}>
-			{authStatus === AuthStatus.SignedOut ? (
+			{authStatus === AuthStatus.SignedOut ||
+			authStatus === AuthStatus.Loading ? (
 				<>
-					<PrimaryStack.Screen name={Routes.TEASER} component={Teaser} />
-					<PrimaryStack.Screen name={Routes.LOGIN} component={Login} />
+					<PrimaryStack.Screen
+						name={Routes.TEASER}
+						component={Teaser}
+					/>
+					<PrimaryStack.Screen
+						name={Routes.LOGIN}
+						component={Login}
+					/>
 					<PrimaryStack.Screen
 						name={Routes.CREATE_ACCOUNT}
 						component={CreateAccount}
 					/>
-					<PrimaryStack.Screen name={Routes.PASSWORD} component={Password} />
+					<PrimaryStack.Screen
+						name={Routes.PASSWORD}
+						component={Password}
+					/>
 					{/* <PrimaryStack.Screen
 						name='ConfirmPassword'
 						component={PasswordConfirm}
@@ -117,24 +131,10 @@ const PrimaryStackScreen = () => {
 						component={ForgotPasswordNavigator}
 					/>
 				</>
-			) : (
+			) : authStatus === AuthStatus.SignedIn &&
+			  userType === UserType.Customer &&
+			  completedCustomerVerification ? (
 				<>
-					<PrimaryStack.Screen
-						name={Routes.SELECT_ACCOUNT_TYPE}
-						component={SelectAccountType}
-					/>
-					<PrimaryStack.Screen
-						name={Routes.PERSONAL_PROFILE}
-						component={PersonalProfile}
-					/>
-					<PrimaryStack.Screen
-						name={Routes.PERSONAL_DETAILS}
-						component={PersonalDetails}
-					/>
-					<PrimaryStack.Screen
-						name={Routes.PERSONAL_ADDRESS}
-						component={PersonalAddress}
-					/>
 					<PrimaryStack.Screen name={Routes.TABS} component={Tabs} />
 					<PrimaryStack.Screen
 						name={Routes.QRCODE_SCAN}
@@ -156,7 +156,10 @@ const PrimaryStackScreen = () => {
 						name={Routes.CASHOUT}
 						component={CashoutNavigator}
 					/>
-					<PrimaryStack.Screen name={Routes.LOAD_UP} component={LoadUp} />
+					<PrimaryStack.Screen
+						name={Routes.LOAD_UP}
+						component={LoadUp}
+					/>
 					<PrimaryStack.Screen
 						name={Routes.LOADUP_SUCCESS}
 						component={LoadUpSuccess}
@@ -181,39 +184,79 @@ const PrimaryStackScreen = () => {
 						name={Routes.SETTING_DELETE_ACCOUNT}
 						component={SettingsDeleteAccount}
 					/>
+					{!completedBusinessVerification && (
+						<PrimaryStack.Screen
+							name={Routes.SIGNUP_BUSINESS}
+							component={SignupBusinessNavigator}
+						/>
+					)}
+				</>
+			) : authStatus === AuthStatus.SignedIn &&
+			  userType === UserType.Cashier &&
+			  completedBusinessVerification ? (
+				/** Cahsier screens */
+				<>
 					<PrimaryStack.Screen
-						name={Routes.LINK_BANK_ACCOUNT}
-						component={LinkBankAccount}
+						name={Routes.CASHIER_DASHBOARD}
+						component={CashierDashboard}
 					/>
 					<PrimaryStack.Screen
-						name={Routes.SELECT_BANK}
-						component={SelectBank}
+						name={Routes.CASHIER_HELP}
+						component={CashierHelp}
 					/>
 					<PrimaryStack.Screen
-						name={Routes.LOGIN_BANK}
-						component={LoginToBank}
+						name={Routes.CASHIER_REQUEST}
+						component={CashierRequest}
 					/>
 					<PrimaryStack.Screen
-						name={Routes.SELECT_BANK_ACCOUNT}
-						component={SelectBankAccount}
+						name={Routes.CASHIER_TRANSACTIONS}
+						component={CashierTransactions}
 					/>
 					<PrimaryStack.Screen
-						name={Routes.BANK_LINK_SUCCESS}
-						component={BankLinkSuccess}
+						name={Routes.CASHIER_REQUEST_SUCCESS}
+						component={CashierRequestSuccess}
 					/>
 					<PrimaryStack.Screen
-						name={Routes.SIGNUP_BUSINESS}
-						component={SignupBusinessNavigator}
+						name={Routes.CASHIER_RETURN_QRCODE_SCAN}
+						component={CashierReturnQRCodeScan}
 					/>
-
+					<PrimaryStack.Screen
+						name={Routes.CASHIER_RETURN}
+						component={CashierReturn}
+					/>
+					<PrimaryStack.Screen
+						name={Routes.CASHIER_HOW_TO_WORK}
+						component={CashierHowToWork}
+					/>
+					<PrimaryStack.Screen
+						name={Routes.CASHIER_PAYMENT_PENDING}
+						component={CashierPaymentPending}
+					/>
+					<PrimaryStack.Screen
+						name={Routes.CASHIER_RETURN_SUCCESS}
+						component={CashierReturnSuccess}
+					/>
+					<PrimaryStack.Screen
+						name={Routes.REPORT}
+						component={Report}
+					/>
+					<PrimaryStack.Screen
+						name={Routes.REPORT_SUCCESS}
+						component={ReportSuccess}
+					/>
+				</>
+			) : authStatus === AuthStatus.SignedIn &&
+			  userType === UserType.Business &&
+			  completedBusinessVerification ? (
+				<>
 					<PrimaryStack.Screen
 						name={Routes.MERCHANT_TABS}
 						component={MerchantTabs}
 					/>
-					{/* <PrimaryStack.Screen
+					<PrimaryStack.Screen
 						name={Routes.MERCHANT_DASHBOARD}
 						component={MerchantDashboard}
-					/> */}
+					/>
 					<PrimaryStack.Screen
 						name={Routes.MERCHANT_PAYMENT_PENDING}
 						component={MerchantPaymentPending}
@@ -262,82 +305,121 @@ const PrimaryStackScreen = () => {
 						name={Routes.MERCHANT_REDEMPTION_IN_PROGRESS}
 						component={MerchantRedemptionInProgress}
 					/>
-					
-					
 					<PrimaryStack.Screen
-						name={Routes.CASHIER_DASHBOARD}
-						component={CashierDashboard}
+						name="MerchantBankAccount"
+						component={MerchantBankAccountNavigator}
+					/>
+					{!completedCustomerVerification && (
+						<>
+							<PrimaryStack.Screen
+								name={Routes.PERSONAL_PROFILE}
+								component={PersonalProfile}
+							/>
+							<PrimaryStack.Screen
+								name={Routes.PERSONAL_DETAILS}
+								component={PersonalDetails}
+							/>
+							<PrimaryStack.Screen
+								name={Routes.PERSONAL_ADDRESS}
+								component={PersonalAddress}
+							/>
+							<PrimaryStack.Screen
+								name={Routes.LINK_BANK_ACCOUNT}
+								component={LinkBankAccount}
+							/>
+							<PrimaryStack.Screen
+								name={Routes.SELECT_BANK}
+								component={SelectBank}
+							/>
+							<PrimaryStack.Screen
+								name={Routes.LOGIN_BANK}
+								component={LoginToBank}
+							/>
+							<PrimaryStack.Screen
+								name={Routes.SELECT_BANK_ACCOUNT}
+								component={SelectBankAccount}
+							/>
+							<PrimaryStack.Screen
+								name={Routes.BANK_LINK_SUCCESS}
+								component={BankLinkSuccess}
+							/>
+						</>
+					)}
+				</>
+			) : !completedBusinessVerification &&
+			  !completedCustomerVerification ? (
+				// Not Verified
+				<>
+					<PrimaryStack.Screen
+						name={Routes.SELECT_ACCOUNT_TYPE}
+						component={SelectAccountType}
 					/>
 					<PrimaryStack.Screen
-						name={Routes.CASHIER_HELP}
-						component={CashierHelp}
+						name={Routes.PERSONAL_PROFILE}
+						component={PersonalProfile}
 					/>
 					<PrimaryStack.Screen
-						name={Routes.CASHIER_REQUEST}
-						component={CashierRequest}
+						name={Routes.PERSONAL_DETAILS}
+						component={PersonalDetails}
 					/>
 					<PrimaryStack.Screen
-						name={Routes.CASHIER_TRANSACTIONS}
-						component={CashierTransactions}
+						name={Routes.PERSONAL_ADDRESS}
+						component={PersonalAddress}
 					/>
 					<PrimaryStack.Screen
-						name={Routes.CASHIER_REQUEST_SUCCESS}
-						component={CashierRequestSuccess}
+						name={Routes.LINK_BANK_ACCOUNT}
+						component={LinkBankAccount}
 					/>
 					<PrimaryStack.Screen
-						name={Routes.CASHIER_RETURN_QRCODE_SCAN}
-						component={CashierReturnQRCodeScan}
+						name={Routes.SELECT_BANK}
+						component={SelectBank}
 					/>
 					<PrimaryStack.Screen
-						name={Routes.CASHIER_RETURN}
-						component={CashierReturn}
+						name={Routes.LOGIN_BANK}
+						component={LoginToBank}
 					/>
 					<PrimaryStack.Screen
-						name={Routes.CASHIER_HOW_TO_WORK}
-						component={CashierHowToWork}
+						name={Routes.SELECT_BANK_ACCOUNT}
+						component={SelectBankAccount}
 					/>
 					<PrimaryStack.Screen
-						name={Routes.CASHIER_PAYMENT_PENDING}
-						component={CashierPaymentPending}
+						name={Routes.BANK_LINK_SUCCESS}
+						component={BankLinkSuccess}
 					/>
 					<PrimaryStack.Screen
-						name={Routes.CASHIER_RETURN_SUCCESS}
-						component={CashierReturnSuccess}
+						name={Routes.SIGNUP_BUSINESS}
+						component={SignupBusinessNavigator}
 					/>
-
+				</>
+			) : (
+				<>
 					<PrimaryStack.Screen
-						name={Routes.REPORT}
-						component={Report}
-					/>
-					<PrimaryStack.Screen
-						name={Routes.REPORT_SUCCESS}
-						component={ReportSuccess}
+						name={Routes.TEASER}
+						component={Teaser}
 					/>
 				</>
 			)}
 		</PrimaryStack.Navigator>
-  );
-}
+	);
+};
 
 export const MainNavigationStack = (): JSX.Element => {
-  const { update } = useRouteTracking();
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const ref = React.useRef<any>();
-  return (
-    <NavigationContainer
-      ref={ref}
-      onStateChange={() => {
-        update({ current: ref?.current?.getCurrentRoute().name });
-      }}
-      theme={{
-        ...DefaultTheme,
-        colors: {
-          ...DefaultTheme.colors,
-          background: "transparent",
-        },
-      }}
-    >
-      <PrimaryStackScreen />
-    </NavigationContainer>
-  );
+	const { update } = useRouteTracking();
+	const ref = React.useRef<any>();
+	return (
+		<NavigationContainer
+			ref={ref}
+			onStateChange={() => {
+				update({ current: ref?.current?.getCurrentRoute().name });
+			}}
+			theme={{
+				...DefaultTheme,
+				colors: {
+					...DefaultTheme.colors,
+					background: "transparent",
+				},
+			}}>
+			<PrimaryStackScreen />
+		</NavigationContainer>
+	);
 };

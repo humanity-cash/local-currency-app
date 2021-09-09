@@ -1,16 +1,14 @@
 import { useNavigation } from '@react-navigation/native';
-import React, { useState, useContext } from 'react';
-import { KeyboardAvoidingView, Platform, ScrollView, View, StyleSheet } from 'react-native';
+import React, { ReactElement, useContext } from 'react';
+import { KeyboardAvoidingView, Platform, ScrollView, StyleSheet, View } from 'react-native';
 import { Text } from 'react-native-elements';
 import { AuthContext } from 'src/auth';
-import { useUserDetails } from "src/hooks";
-import { Button, BackBtn, Header, CancelBtn, PersonalProfileForm } from 'src/shared/uielements';
-import { underlineHeader, viewBase, wrappingContainerBase } from "src/theme/elements";
-import { validateProfileForm } from "src/utils/validation";
-import { colors } from "src/theme/colors";
-
-import Translation from 'src/translation/en.json';
+import { BUTTON_TYPES } from 'src/constants';
 import * as Routes from 'src/navigation/constants';
+import { BackBtn, Button, CancelBtn, Header, PersonalProfileForm } from 'src/shared/uielements';
+import { colors } from "src/theme/colors";
+import { underlineHeader, viewBase, wrappingContainerBase } from "src/theme/elements";
+import Translation from 'src/translation/en.json';
 
 const styles = StyleSheet.create({
 	headerText: {
@@ -25,19 +23,12 @@ const styles = StyleSheet.create({
 	},
 });
 
-const PersonalProfile = (): JSX.Element => {
-	const navigation = useNavigation();
+const PersonalProfile = (): ReactElement => {
+	const navigation = useNavigation()
 	const { signOut } = useContext(AuthContext);
-	const { personalDetails } = useUserDetails();
-	const [goNext, setGoNext] = useState<boolean>(false);
-	const [isShowValidation, setIsShowValidation] = useState<boolean>(false);
 
 	const onNextPress = () => {
-		const validation = validateProfileForm(personalDetails);
-		setIsShowValidation(true);
-		if (validation.valid) {
 			navigation.navigate(Routes.PERSONAL_DETAILS);
-		}
 	}
 
 	return (
@@ -52,8 +43,8 @@ const PersonalProfile = (): JSX.Element => {
 					<Text style={styles.headerText}>{Translation.PROFILE.SETUP_PROFILE}</Text>
 				</View>
 				<PersonalProfileForm
-					isValid={setGoNext}
-					showValidation={isShowValidation}
+					// isValid={setGoNext}
+					// showValidation={isShowValidation}
 				/>
 			</ScrollView>
 			<KeyboardAvoidingView
@@ -61,9 +52,9 @@ const PersonalProfile = (): JSX.Element => {
 			>
 				<View style={styles.bottomView}>
 					<Button
-						type="darkGreen"
+						type={BUTTON_TYPES.DARK_GREEN}
 						title={Translation.BUTTON.NEXT}
-						disabled={!goNext}
+						disabled={false}
 						onPress={onNextPress}
 					/>
 				</View>

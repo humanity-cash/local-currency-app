@@ -1,20 +1,13 @@
 import { useNavigation } from '@react-navigation/native';
-import React, { ReactElement, useState, useContext } from 'react';
+import React, { ReactElement, useContext } from 'react';
 import { ScrollView, View, StyleSheet } from 'react-native';
 import { Text } from 'react-native-elements';
 import { AuthContext } from 'src/auth';
-import { useUserDetails } from "src/hooks";
 import { Button, BackBtn, Header, CancelBtn, BusinessProfileForm } from 'src/shared/uielements';
 import { underlineHeaderB, viewBaseB, wrappingContainerBase } from "src/theme/elements";
-import { validateBusinessProfileForm } from "src/utils/validation";
 import { colors } from "src/theme/colors";
 import Translation from 'src/translation/en.json';
 import * as Routes from 'src/navigation/constants';
-
-type BusinessProfileProps = {
-	navigation?: any
-	route?: any
-}
 
 const styles = StyleSheet.create({
 	buttonText: {
@@ -39,24 +32,18 @@ const styles = StyleSheet.create({
 	},
 });
 
-const BusinessProfileView = (props: BusinessProfileProps) => {
+const BusinessProfile = (): ReactElement => {
+	const navigation = useNavigation()
 	const { signOut } = useContext(AuthContext);
-	const { businessDetails } = useUserDetails();
-	const [goNext, setGoNext] = useState<boolean>(false);
-	const [isShowValidation, setIsShowValidation] = useState<boolean>(false);
 
 	const onNextPress = () => {
-		const validation = validateBusinessProfileForm(businessDetails);
-		setIsShowValidation(true);
-		if (validation.valid) {
-			props.navigation.navigate(Routes.BUSINESS_DETAIL);
-		}
+		navigation.navigate(Routes.BUSINESS_DETAIL);
 	}
 
 	return (
 		<View style={viewBaseB}>
 			<Header
-				leftComponent={<BackBtn color={colors.purple} onClick={() => props.navigation.goBack()} />}
+				leftComponent={<BackBtn color={colors.purple} onClick={() => navigation.goBack()} />}
 				rightComponent={<CancelBtn color={colors.purple} text={Translation.BUTTON.LOGOUT} onClick={signOut} />}
 			/>
 
@@ -66,15 +53,13 @@ const BusinessProfileView = (props: BusinessProfileProps) => {
 				</View>
 				<View style={styles.formView}>
 					<BusinessProfileForm
-						isValid={setGoNext}
-						showValidation={isShowValidation}
 					/>
 				</View>
 			</ScrollView>
 			<Button
 				type="purple"
 				title={Translation.BUTTON.NEXT}
-				disabled={!goNext}
+				disabled={false}
 				onPress={onNextPress}
 				style={styles.bottomButton}
 			/>
@@ -82,8 +67,4 @@ const BusinessProfileView = (props: BusinessProfileProps) => {
 	);
 }
 
-const BusinessProfile = (props: BusinessProfileProps): ReactElement => {
-	const navigation = useNavigation();
-	return <BusinessProfileView {...props} navigation={navigation} />;
-}
-export default BusinessProfile
+export default BusinessProfile;

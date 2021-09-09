@@ -49,7 +49,7 @@ const Teaser = (): JSX.Element => {
 	const navigation = useNavigation();
 
 	return (
-		<View style={ viewBase }>
+		<View style={viewBase}>
 			<ImageBackground
 				source={require('../../../assets/images/mainscreen.jpg')}
 				resizeMode="cover" 

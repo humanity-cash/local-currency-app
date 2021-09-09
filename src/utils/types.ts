@@ -373,9 +373,3 @@ export interface AccordionEntry {
 export interface FaqData extends AccordionEntry {
   type?: string
 }
-
-export enum UserType {
-  PERSONAL = 'Personal',
-  MERCHANT = 'Merchant',
-  CASHIER = 'Cashier'
-}

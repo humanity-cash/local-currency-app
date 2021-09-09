@@ -1,7 +1,9 @@
 import useCachedResources from "./useCachedResources";
+import useCameraPermission from "./useCameraPermission";
+import useDialogStatus from "./useDialogStatus";
+import useMediaLibraryPermission from "./useMediaLibraryPermission";
 import useMessages from "./useMessages";
 import useModalStatusBar from "./useModalStatusBar";
-import useDialogStatus from "./useDialogStatus";
 import useNotifications from "./useNotifications";
 import usePaymentDetails from "./usePaymentDetails";
 import useRouteTracking from "./useRouteTracking";
@@ -9,9 +11,9 @@ import useShares from "./useShares";
 import useTransaction from "./useTransaction";
 import useUserDetails from "./useUserDetails";
 import useWallet from "./useWallet";
-import useCameraPermission from "./useCameraPermission";
 
 export {
+	useMediaLibraryPermission,
 	useCachedResources,
 	useMessages,
 	useModalStatusBar,
@@ -24,4 +26,4 @@ export {
 	useUserDetails,
 	useWallet,
 	useCameraPermission
-}
+};

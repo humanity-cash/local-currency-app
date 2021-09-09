@@ -1,177 +1,254 @@
-import React, { useEffect, useState } from 'react';
-import  * as AWSService  from './aws-cognito';
-import { UpdateUserAttributesInput } from './types';
-import { UserType } from 'src/utils/types';
-
-/**AWS COGNITO ERRORS */
-export const NEW_PASSWORD_REQUIRED_ERROR = 'newPasswordRequiredError'
-export const WRONG_CREDS_ERROR = 'Incorrect username or password.'
-export enum AuthStatus {
-	Loading,
-	SignedIn,
-	SignedOut,
-}
-
-interface Session {
-		username?: string;
-		email?: string;
-		sub?: string;
-		accessToken?: string;
-		refreshToken?: string;
-}
-
-export interface IAuth {
-	updateAttributes?: any;
-	sessionInfo?: Session;
-	resendEmailVerificationCode?: any;
-	authStatus?: AuthStatus;
-	userType?: UserType;
-	setUserType?: any;
-	signIn?: any;
-	setSignInDetails: any;
-	signInDetails: { password: string; email: string };
-	signOut?: any;
-	getSession?: any;
-	getAttributes?: any;
-	signUpDetails?: any;
-	setSignUpDetails?: any;
-	emailVerification?: any;
-	signUp?: any;
-}
-
-const defaultState: IAuth = {
-	sessionInfo: {},
-	authStatus: AuthStatus.Loading,
-	signInDetails: { password: '', email: '' },
-	setSignInDetails: () => { 
-		console.log('setSigninDetails is not loaded yet')
-	},
-};
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import {
+	CognitoUserAttribute,
+	CognitoUserSession
+} from "amazon-cognito-identity-js";
+import React, { useEffect, useState } from "react";
+import { userController } from "./cognito";
+import { BaseResponse, CognitoBusinessAttributes, CognitoCustomerAttributes, CognitoResponse, CognitoSharedUserAttributes } from "./cognito/types";
+import {
+	buisnessBasicVerificationInitialState,
+	customerBasicVerificationInitialState,
+	signInInitialState,
+	signUpInitialState
+} from "./consts";
+import {
+	AuthStatus,
+	BusinessBasicVerification,
+	CustomerBasicVerification,
+	defaultState,
+	IAuth, UserType
+} from "./types";
 
 export const AuthContext = React.createContext(defaultState);
 
-const AuthProvider: React.FunctionComponent = ({ children }) => {
-	const [authStatus, setAuthStatus] = useState(AuthStatus.Loading);
-	const [userType, setUserType] = useState(UserType.PERSONAL);
-	const [sessionInfo, setSessionInfo] = useState({});
-	const [signInDetails, setSignInDetails] = useState({
-		email: 'tech@humanity.cash',
-		password: 'Esraa@keyko1',
-	});
-	const [signUpDetails, setSignUpDetails] = useState({
-		email: 'tech@humanity.cash',
-		password: 'Esraa@keyko1',
-		confirmPassword: 'Esraa@keyko1',
-	});
+const convertAttributesArrayToObject = (attributes: any): any => {
+	const newObject: any = {};
+	for (let i = 0; i < attributes.length; i++) {
+		newObject[attributes[i].Name] = attributes[i].Value;
+	}
 
-	const [userAttributes, setUserAttributes] = useState({});
+	return newObject;
+};
+
+const saveUserTypeToStorage = async (value: UserType) => {
+	try {
+		await AsyncStorage.setItem("@accType", String(value));
+		return true;
+	} catch (e) {
+		return false;
+	}
+};
+
+const getLatestSelectedAccountType = async () => {
+	try {
+		const value: string | null = await AsyncStorage.getItem("@accType");
+		if (!value) return "";
+		return value;
+	} catch (e) {
+		return "";
+	}
+};
+
+const AuthProvider: React.FunctionComponent = ({ children }) => {
+	const [userType, setUserType] = useState<UserType | undefined>(undefined);
+	const [authStatus, setAuthStatus] = useState(AuthStatus.SignedOut);
+	const [signInDetails, setSignInDetails] = useState(signInInitialState);
+	const [signUpDetails, setSignUpDetails] = useState(signUpInitialState);
+	const [userAttributes, setUserAttributes] = useState<any>({});
+	const [completedCustomerVerification, setCompletedCustomerVerification] = useState<boolean>(false);
+	const [completedBusinessVerification, setCompletedBusinessVerification] = useState<boolean>(false);
 
 	useEffect(() => {
-		async function getSessionInfo() {
-			try {
-				const response: any = await getSession();
-				if (response.success) {
-					setSessionInfo({
-						accessToken: response.data.accessToken.jwtToken,
-						refreshToken: response.data.refreshToken.token,
-					});
-					setAuthStatus(AuthStatus.SignedIn);
-				} else {
-					setAuthStatus(AuthStatus.SignedOut);
-				}
-			} catch (err) {
+		const isVerifiedCustomer =
+			userAttributes?.["custom:basicCustomerV"] === "true";
+		const isVerifiedBusiness =
+			userAttributes?.["custom:basicBusinessV"] === "true";
+		setCompletedCustomerVerification(isVerifiedCustomer);
+		setCompletedBusinessVerification(isVerifiedBusiness);
+	}, [userAttributes, authStatus, userType]);
+
+	const [
+		customerBasicVerificationDetails,
+		setCustomerBasicVerificationDetails,
+	] = useState<CustomerBasicVerification>(
+		customerBasicVerificationInitialState
+	);
+
+	const [buisnessBasicVerification, setBuisnessBasicVerification] =
+		useState<BusinessBasicVerification>(
+			buisnessBasicVerificationInitialState
+		);
+
+	const updateUserType = (newType: UserType): void => {
+		if (newType === userType) {
+			setAuthStatus(AuthStatus.Loading);
+		} else {
+			setUserType(newType);
+		}
+		if (newType !== UserType.Cashier) {
+			// dont cache cashier option. it will lock the user in cashier screens
+			saveUserTypeToStorage(newType);
+		}
+	};
+
+	async function getSessionInfo() {
+		try {
+			const response: BaseResponse<CognitoUserSession | undefined> =
+				await userController.getSession();
+			if (response.success) {
+				await getAttributes();
+				setAuthStatus(AuthStatus.SignedIn);
+			} else {
 				setAuthStatus(AuthStatus.SignedOut);
 			}
+		} catch (err) {
+			setAuthStatus(AuthStatus.SignedOut);
 		}
+	}
+
+	useEffect(() => {
 		getSessionInfo();
-	}, [authStatus]);
+	}, [authStatus, userType]);
 
-	const emailVerification = async (verificationCode: string) => {
-		const { email } = signUpDetails;
-		const response: any = await AWSService.confirmEmailVerificationCode({
-			email,
-			code: verificationCode,
-		});
-		return response;
-	};
+	const emailVerification = (verificationCode: string) =>
+		userController.confirmEmailVerificationCode(
+			signUpDetails.email,
+			verificationCode
+		);
 
-	const resendEmailVerificationCode = async () => {
-		const { email } = signUpDetails;
-		const response: any = await AWSService.resendEmailVerificationCode({
-			email,
-		});
-
-		return response;
-	};
+	const resendEmailVerificationCode = async () =>
+		userController.resendEmailVerificationCode(signUpDetails.email);
 
 	const signUp = async () => {
-		const { email, password } = signUpDetails;
-		const response: any = await AWSService.signUp({ email, password });
+		const response = await userController.signUp(
+			signUpDetails.email,
+			signUpDetails.password
+		);
+		if (!response?.success) setAuthStatus(AuthStatus.SignedOut);
+		else setAuthStatus(AuthStatus.Loading); // Invokes getSession useEffect
+
 		return response;
 	};
 
-	const signIn = async ({
-		email = signUpDetails.email,
-		password = signUpDetails.password,
-	} = {}) => {
-		const response: any = await AWSService.signIn({ email, password });
+	const signIn = async (
+		email = signInDetails.email,
+		password = signInDetails.password
+	) => {
+		const response: BaseResponse<CognitoUserSession> =
+			await userController.signIn({ email, password });
+		if (!response?.success) {
+			setAuthStatus(AuthStatus.SignedOut); // Something went wrong in sign in
+		} else {
+			setAuthStatus(AuthStatus.Loading); // Invokes getSession useEffect
+		}
+
+		return response;
+	};
+
+	useEffect(() => {
+		const initialTypeState = async () => {
+			const latestType = await getLatestSelectedAccountType();
+			if (!latestType) {
+				updateUserType(UserType.Customer);
+			} else if (latestType === "2") {
+				updateUserType(UserType.Business);
+			} else if (latestType === "0") {
+				updateUserType(UserType.Customer);
+			} else if (latestType === "1") {
+				updateUserType(UserType.Business);
+			}
+		};
+		initialTypeState();
+	}, []);
+
+	const getAttributes = async (): CognitoResponse<
+		CognitoUserAttribute[] | undefined
+	> => {
+		const response = await userController.getAttributes();
 		if (!response.success) {
-			if (
-				response?.data?.error?.message === NEW_PASSWORD_REQUIRED_ERROR
-			) {
-				return;
-			}
-			if (response?.data?.error?.message === WRONG_CREDS_ERROR) {
-				return;
-			}
+			setUserAttributes({});
+		} else {
+			// ONLY place we use setUserAttributes
+			//@ts-ignore
+			setUserAttributes(
+				convertAttributesArrayToObject(response?.data) || {}
+			);
 		}
-		if (response?.success) {
-			setUserAttributes(response.data.idToken.payload);
-			setAuthStatus(AuthStatus.SignedIn);
-		}
-	};
-
-	const getAttributes = async () => {
-		const response = await AWSService.getUserAttributes();
 
 		return response;
 	};
 
+	const completeBusniessBasicVerification = async (
+		update = buisnessBasicVerification
+	): CognitoResponse<string | undefined> => {
+		const response = await userController.completeBusinessBasicVerification(
+			update
+		);
+		if (response.success) {
+			await userController.updateUserAttributes({
+				"custom:basicBusinessV": "true",
+			});
+		}
 
-	const updateAttributes = async ({ update }: UpdateUserAttributesInput) => {
-		const response = await AWSService.updateUserAttributes({ update });
+		return response;
+	};
 
+	const completeCustomerBasicVerification = async (
+		update = customerBasicVerificationDetails
+	): CognitoResponse<string | undefined> => {
+		const response = await userController.completeCustomerBasicVerification(update);
+		if (response.success) {
+			await userController.updateUserAttributes({
+				"custom:basicCustomerV": "true",
+			});
+		}
+
+		return response;
+	};
+
+	const updateAttributes = async (
+		update:
+			| CognitoBusinessAttributes
+			| CognitoCustomerAttributes
+			| CognitoSharedUserAttributes
+	) => {
+		const response = await userController.updateUserAttributes(update);
 		return response;
 	};
 
 	const signOut = () => {
-		AWSService.signOut()
+		userController.signOut();
 		setAuthStatus(AuthStatus.SignedOut);
-	};
-
-	const getSession = async () => {
-		const session = await AWSService.getSession();
-
-		return session;
+		if (userType === UserType.Cashier) {
+			setUserType(UserType.Business);
+		}
 	};
 
 	const state: IAuth = {
-		getAttributes,
+		userType,
+		userAttributes,
 		updateAttributes,
 		authStatus,
-		userType,
-		setUserType,
-		sessionInfo,
+		completedCustomerVerification,
+		completedBusinessVerification,
 		signIn,
+		setAuthStatus,
 		signOut,
 		signUp,
-		getSession,
 		setSignInDetails,
+		updateUserType,
+		buisnessBasicVerification,
+		setBuisnessBasicVerification,
 		signInDetails,
 		signUpDetails,
 		setSignUpDetails,
+		customerBasicVerificationDetails,
+		setCustomerBasicVerificationDetails,
+		completeBusniessBasicVerification,
+		completeCustomerBasicVerification,
 		emailVerification,
-		resendEmailVerificationCode
+		resendEmailVerificationCode,
 	};
 
 	return (
