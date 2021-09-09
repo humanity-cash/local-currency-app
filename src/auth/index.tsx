@@ -227,7 +227,6 @@ const AuthProvider: React.FunctionComponent = ({ children }) => {
 
 	const state: IAuth = {
 		userType,
-		getAttributes,
 		userAttributes,
 		updateAttributes,
 		authStatus,
