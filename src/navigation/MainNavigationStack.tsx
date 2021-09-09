@@ -70,11 +70,12 @@ import * as Routes from "./constants";
 const PrimaryStack = createStackNavigator();
 
 const PrimaryStackScreen = () => {
-	const { authStatus, userType, userAttributes } = useContext(AuthContext);
-	const isVerifiedCustomer =
-		userAttributes?.["custom:basicCustomerV"] === "true";
-	const isVerifiedBusiness =
-		userAttributes?.["custom:basicBusinessV"] === "true";
+	const {
+		authStatus,
+		userType,
+		completedCustomerVerification,
+		completedBusinessVerification,
+	} = useContext(AuthContext);
 
 	return (
 		<PrimaryStack.Navigator
@@ -132,7 +133,7 @@ const PrimaryStackScreen = () => {
 				</>
 			) : authStatus === AuthStatus.SignedIn &&
 			  userType === UserType.Customer &&
-			  isVerifiedCustomer ? (
+			  completedCustomerVerification ? (
 				<>
 					<PrimaryStack.Screen name={Routes.TABS} component={Tabs} />
 					<PrimaryStack.Screen
@@ -183,7 +184,7 @@ const PrimaryStackScreen = () => {
 						name={Routes.SETTING_DELETE_ACCOUNT}
 						component={SettingsDeleteAccount}
 					/>
-					{!isVerifiedBusiness && (
+					{!completedBusinessVerification && (
 						<PrimaryStack.Screen
 							name={Routes.SIGNUP_BUSINESS}
 							component={SignupBusinessNavigator}
@@ -192,7 +193,7 @@ const PrimaryStackScreen = () => {
 				</>
 			) : authStatus === AuthStatus.SignedIn &&
 			  userType === UserType.Cashier &&
-			  isVerifiedBusiness ? (
+			  completedBusinessVerification ? (
 				/** Cahsier screens */
 				<>
 					<PrimaryStack.Screen
@@ -246,7 +247,7 @@ const PrimaryStackScreen = () => {
 				</>
 			) : authStatus === AuthStatus.SignedIn &&
 			  userType === UserType.Business &&
-			  isVerifiedBusiness ? (
+			  completedBusinessVerification ? (
 				<>
 					<PrimaryStack.Screen
 						name={Routes.MERCHANT_TABS}
@@ -308,7 +309,7 @@ const PrimaryStackScreen = () => {
 						name="MerchantBankAccount"
 						component={MerchantBankAccountNavigator}
 					/>
-					{!isVerifiedCustomer && (
+					{!completedCustomerVerification && (
 						<>
 							<PrimaryStack.Screen
 								name={Routes.PERSONAL_PROFILE}
@@ -345,7 +346,8 @@ const PrimaryStackScreen = () => {
 						</>
 					)}
 				</>
-			) : !isVerifiedBusiness && !isVerifiedCustomer ? (
+			) : !completedBusinessVerification &&
+			  !completedCustomerVerification ? (
 				// Not Verified
 				<>
 					<PrimaryStack.Screen

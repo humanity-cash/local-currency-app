@@ -4,7 +4,6 @@ import {
 	CognitoUserSession
 } from "amazon-cognito-identity-js";
 import React, { useEffect, useState } from "react";
-import { isBusinessVerified, isCustomerVerified } from "src/auth/verification";
 import { userController } from "./cognito";
 import { BaseResponse, CognitoBusinessAttributes, CognitoCustomerAttributes, CognitoResponse, CognitoSharedUserAttributes } from "./cognito/types";
 import {
@@ -57,6 +56,17 @@ const AuthProvider: React.FunctionComponent = ({ children }) => {
 	const [signInDetails, setSignInDetails] = useState(signInInitialState);
 	const [signUpDetails, setSignUpDetails] = useState(signUpInitialState);
 	const [userAttributes, setUserAttributes] = useState<any>({});
+	const [completedCustomerVerification, setCompletedCustomerVerification] = useState<boolean>(false);
+	const [completedBusinessVerification, setCompletedBusinessVerification] = useState<boolean>(false);
+
+	useEffect(() => {
+		const isVerifiedCustomer =
+			userAttributes?.["custom:basicCustomerV"] === "true";
+		const isVerifiedBusiness =
+			userAttributes?.["custom:basicBusinessV"] === "true";
+		setCompletedCustomerVerification(isVerifiedCustomer);
+		setCompletedBusinessVerification(isVerifiedBusiness);
+	}, [userAttributes, authStatus, userType]);
 
 	const [
 		customerBasicVerificationDetails,
@@ -76,7 +86,10 @@ const AuthProvider: React.FunctionComponent = ({ children }) => {
 		} else {
 			setUserType(newType);
 		}
-		saveUserTypeToStorage(newType);
+		if (newType !== UserType.Cashier) {
+			// dont cache cashier option. it will lock the user in cashier screens
+			saveUserTypeToStorage(newType);
+		}
 	};
 
 	async function getSessionInfo() {
@@ -84,22 +97,12 @@ const AuthProvider: React.FunctionComponent = ({ children }) => {
 			const response: BaseResponse<CognitoUserSession | undefined> =
 				await userController.getSession();
 			if (response.success) {
-				const userAttributes: BaseResponse<
-					CognitoUserAttribute[] | undefined
-				> = await getAttributes();
-				const isVerified =
-					isCustomerVerified(userAttributes?.data) ||
-					isBusinessVerified(userAttributes?.data);
-				if (!isVerified) {
-					setAuthStatus(AuthStatus.NotVerified);
-				} else {
-					setAuthStatus(AuthStatus.SignedIn);
-				}
+				await getAttributes();
+				setAuthStatus(AuthStatus.SignedIn);
 			} else {
 				setAuthStatus(AuthStatus.SignedOut);
 			}
 		} catch (err) {
-			console.log("err", err);
 			setAuthStatus(AuthStatus.SignedOut);
 		}
 	}
@@ -146,19 +149,17 @@ const AuthProvider: React.FunctionComponent = ({ children }) => {
 	useEffect(() => {
 		const initialTypeState = async () => {
 			const latestType = await getLatestSelectedAccountType();
-			if (!latestType && isBusinessVerified) {
-				setUserType(UserType.Business);
-			} else if (!latestType && isCustomerVerified) {
-				setUserType(UserType.Customer);
-			} else if (latestType === "0" && isCustomerVerified) {
-				setUserType(UserType.Customer);
-			} else if (latestType === "1" && isBusinessVerified) {
-				setUserType(UserType.Business);
-			} else {
-				setUserType(undefined)
+			if (!latestType) {
+				updateUserType(UserType.Customer);
+			} else if (latestType === "2") {
+				updateUserType(UserType.Business);
+			} else if (latestType === "0") {
+				updateUserType(UserType.Customer);
+			} else if (latestType === "1") {
+				updateUserType(UserType.Business);
 			}
 		};
-		initialTypeState()
+		initialTypeState();
 	}, []);
 
 	const getAttributes = async (): CognitoResponse<
@@ -168,6 +169,7 @@ const AuthProvider: React.FunctionComponent = ({ children }) => {
 		if (!response.success) {
 			setUserAttributes({});
 		} else {
+			// ONLY place we use setUserAttributes
 			//@ts-ignore
 			setUserAttributes(
 				convertAttributesArrayToObject(response?.data) || {}
@@ -218,6 +220,9 @@ const AuthProvider: React.FunctionComponent = ({ children }) => {
 	const signOut = () => {
 		userController.signOut();
 		setAuthStatus(AuthStatus.SignedOut);
+		if (userType === UserType.Cashier) {
+			setUserType(UserType.Business);
+		}
 	};
 
 	const state: IAuth = {
@@ -226,6 +231,8 @@ const AuthProvider: React.FunctionComponent = ({ children }) => {
 		userAttributes,
 		updateAttributes,
 		authStatus,
+		completedCustomerVerification,
+		completedBusinessVerification,
 		signIn,
 		setAuthStatus,
 		signOut,
