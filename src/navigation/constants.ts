@@ -60,6 +60,11 @@ export const MERCHANT_REQUEST = "MerchantRequest";
 export const MERCHANT_PAYOUT_SELECTION = "MerchantPayoutSelection";
 export const MERCHANT_CASHOUT_AMOUNT = "MerchantCashoutAmount";
 export const MERCHANT_SETTINGS = "MerchantSettings";
+export const MERCHANT_SETTINGS_PROFILE = "MerchantSettingsProfile";
+export const MERCHANT_SETTINGS_BANK_ACCOUNT = "MerchantSettingsBankAccount";
+export const MERCHANT_SETTINGS_STATIC_QR = "MerchantSettingsStaticQR";
+export const MERCHANT_SETTINGS_LEGAL = "MerchantSettingsLegal";
+export const MERCHANT_SETTINGS_SECURITY = "MerchantSettingsSecurity";
 export const MERCHANT_HELP_AND_CONTACT = "MerchantHelpAndContact";
 
 export const CASHIER_DASHBOARD = "CashierDashboard";
