@@ -1,8 +1,9 @@
 import { useNavigation } from '@react-navigation/native';
-import React, { useEffect, useState } from 'react';
-import { StyleSheet, View, Switch, ScrollView } from 'react-native';
+import React, { useState } from 'react';
+import { StyleSheet, View, ScrollView } from 'react-native';
 import { Text } from 'react-native-elements';
-import { Header, CancelBtn, Dialog, Button } from "src/shared/uielements";
+import { useCameraPermission } from 'src/hooks';
+import { Header, CancelBtn, Dialog, Button, ToggleButton } from "src/shared/uielements";
 import { colors } from "src/theme/colors";
 import { baseHeader, wrappingContainerBase, viewBase, dialogViewBase } from "src/theme/elements";
 import { BarCodeScanner } from 'expo-barcode-scanner';
@@ -24,14 +25,6 @@ const styles = StyleSheet.create({
 	toggleView: {
 		position: 'absolute',
 		top: 0,
-		left: 0,
-		width: '100%',
-		height: 200,
-		backgroundColor: 'rgba(0,0,0,0.8)'
-	},
-	bottomView: {
-		position: 'absolute',
-		bottom: 0,
 		left: 0,
 		width: '100%',
 		height: 200,
@@ -68,6 +61,12 @@ const styles = StyleSheet.create({
 		flex: 1, 
 		justifyContent: 'center', 
 		alignItems: 'center'
+	},
+	switch: {
+		borderColor: colors.darkGreen,
+	},
+	switchText: {
+		color: colors.darkGreen
 	}
 });
 
@@ -166,35 +165,15 @@ const FeeConfirm = (props: FeeConfirmProps) => {
 
 const QRCodeScan = (): JSX.Element => {
 	const navigation = useNavigation();
-	const [hasPermission, setHasPermission] = useState<boolean>(null || false);
+	const hasPermission = useCameraPermission();
 	const [isScanned, setIsScanned] = useState<boolean>(false);
-	const [isEnabled, setIsEnabled] = useState<boolean>(false);
 	const [isPaymentDialogOpen, setIsPaymentDialogOpen] = useState<boolean>(false);
 	const [isFeeDialogOpen, setIsFeeDialogOpen] = useState<boolean>(false);
 
-  	const toggleSwitch = () => {
-		setIsEnabled(previousState => !previousState);
-		if (!isEnabled) {
-			setIsEnabled(previousState => !previousState);
-			navigation.navigate(Routes.PAYMENT_REQUEST);
-		}
-	}
-
-	useEffect(() => {
-		(async () => {
-			const {status} = await BarCodeScanner.requestPermissionsAsync();
-			setHasPermission(status === 'granted');
-		})();
-	}, []);
-	
 	const handleBarCodeScanned = (data: HandleScaned) => {
 		console.log(data);
 		setIsScanned(true);
 		setIsPaymentDialogOpen(true);
-	}
-
-	if (hasPermission === null) {
-		return <Text>{Translation.OTHER.REQUEST_CAMERA_PERMISSION}</Text>;
 	}
 
 	if (hasPermission === false) {
@@ -226,13 +205,16 @@ const QRCodeScan = (): JSX.Element => {
 			</View>
 			<View style={styles.toggleView}>
 				<Header
-					rightComponent={<CancelBtn text={Translation.BUTTON.CLOSE} color={colors.white} onClick={() => navigation.goBack()} />}
+					rightComponent={<CancelBtn text={Translation.BUTTON.CLOSE} color={colors.white} onClick={() => navigation.navigate(Routes.DASHBOARD)} />}
 				/>
 				<View style={styles.switchView}>
-					<Switch
-						ios_backgroundColor="#3e3e3e"
-						onValueChange={toggleSwitch}
-						value={isEnabled}
+					<ToggleButton
+						value={true}
+						onChange={()=>navigation.navigate(Routes.PAYMENT_REQUEST)}
+						activeText="Pay"
+						inActiveText="Receive"
+						style={styles.switch}
+						textStyle={styles.switchText}
 					/>
 				</View>
 			</View>

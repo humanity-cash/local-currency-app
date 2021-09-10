@@ -20,7 +20,6 @@ import CashierReturnQRCodeScan from "src/screens/cashier/CashierReturnQRCodeScan
 import CashierReturnSuccess from "src/screens/cashier/CashierReturnSuccess";
 import CashierTransactions from "src/screens/cashier/CashierTransactions";
 import CashierDashboard from "src/screens/dashboard/CashierDashboard";
-import MerchantDashboard from "src/screens/dashboard/MerchantDashboard";
 import MerchantTabs from "src/screens/dashboard/MerchantTabs";
 import Tabs from "src/screens/dashboard/Tabs";
 import MerchantCashoutPassword from "src/screens/merchantCashout/MerchantCashoutPassword";
@@ -35,6 +34,11 @@ import MerchantPayoutQRCodeScan from "src/screens/merchantPayout/MerchantPayoutQ
 import MerchantPayoutSuccess from "src/screens/merchantPayout/MerchantPayoutSuccess";
 import MerchantPayoutToPersonal from "src/screens/merchantPayout/MerchantPayoutToPersonal";
 import MerchantPayoutToSomeone from "src/screens/merchantPayout/MerchantPayoutToSomeone";
+import MerchantSettingsProfile from "src/screens/merchantSettings/MerchantSettingsProfile";
+import MerchantSettingsBankAccount from "src/screens/merchantSettings/MerchantSettingsBankAccount";
+import MerchantSettingsStaticQr from "src/screens/merchantSettings/MerchantSettingsStaticQr";
+import MerchantSettingsTermsAndConditions from "src/screens/merchantSettings/MerchantSettingsTermsAndConditions";
+import MerchantSettingsSecurity from "src/screens/merchantSettings/MerchantSettingsSecurity";
 import BankLinkSuccess from "src/screens/onboarding/BankLinkSuccess";
 import ConfirmEmail from "src/screens/onboarding/ConfirmEmail";
 import CreateAccount from "src/screens/onboarding/CreateAccount";
@@ -254,10 +258,6 @@ const PrimaryStackScreen = () => {
 						component={MerchantTabs}
 					/>
 					<PrimaryStack.Screen
-						name={Routes.MERCHANT_DASHBOARD}
-						component={MerchantDashboard}
-					/>
-					<PrimaryStack.Screen
 						name={Routes.MERCHANT_PAYMENT_PENDING}
 						component={MerchantPaymentPending}
 					/>
@@ -308,6 +308,30 @@ const PrimaryStackScreen = () => {
 					<PrimaryStack.Screen
 						name="MerchantBankAccount"
 						component={MerchantBankAccountNavigator}
+					/>
+					<PrimaryStack.Screen
+						name={Routes.REPORT_SUCCESS}
+						component={ReportSuccess}
+					/>
+					<PrimaryStack.Screen
+						name={Routes.MERCHANT_SETTINGS_PROFILE}
+						component={MerchantSettingsProfile}
+					/>
+					<PrimaryStack.Screen
+						name={Routes.MERCHANT_SETTINGS_BANK_ACCOUNT}
+						component={MerchantSettingsBankAccount}
+					/>
+					<PrimaryStack.Screen
+						name={Routes.MERCHANT_SETTINGS_STATIC_QR}
+						component={MerchantSettingsStaticQr}
+					/>
+					<PrimaryStack.Screen
+						name={Routes.MERCHANT_SETTINGS_LEGAL}
+						component={MerchantSettingsTermsAndConditions}
+					/>
+					<PrimaryStack.Screen
+						name={Routes.MERCHANT_SETTINGS_SECURITY}
+						component={MerchantSettingsSecurity}
 					/>
 					{!completedCustomerVerification && (
 						<>
