@@ -1,8 +1,9 @@
 import { AntDesign, Entypo, Octicons } from "@expo/vector-icons";
 import { useNavigation, DrawerActions } from "@react-navigation/native";
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { StyleSheet, TouchableWithoutFeedback, View, ScrollView, TouchableOpacity } from 'react-native';
 import { Text, Image } from "react-native-elements";
+import { AuthContext } from "src/auth";
 import { colors } from "src/theme/colors";
 import { viewBaseB, wrappingContainerBase, baseHeader, dialogViewBase } from "src/theme/elements";
 import { SearchInput, Header, Dialog } from "src/shared/uielements";
@@ -194,6 +195,7 @@ const TransactionDetail = (props: TransactionDetailProps) => {
 
 const MerchantDashboard = (): JSX.Element => {
 	const navigation = useNavigation();
+	const { completedCustomerVerification } = useContext(AuthContext);
 	const [isFilterVisible, setIsFilterVisible] = useState<boolean>(false);
 	const [searchText, setSearchText] = useState<string>("");
 	const [isDetailViewOpen, setIsDetailViewOpen] = useState<boolean>(false);
@@ -242,13 +244,13 @@ const MerchantDashboard = (): JSX.Element => {
 						<Text style={styles.text}>B$ 382.91</Text>
 					</View>
 
-					<View style={styles.alertView}>
+					{!completedCustomerVerification && <View style={styles.alertView}>
 						<AntDesign name="exclamationcircleo" size={18} style={styles.alertIcon} />
 						<Text style={styles.alertText}>
 							{Translation.PROFILE.PERSONAL_PROFILE_ALERT} &nbsp;
 							<Text style={styles.alertIcon} onPress={()=>navigation.navigate(Routes.PERSONAL_PROFILE)}>{Translation.BUTTON.GOTO_SETUP} &gt;</Text>
 						</Text>
-					</View>
+					</View>}
 
 					<View style={styles.filterView}>
 						<View style={styles.filterInput}>

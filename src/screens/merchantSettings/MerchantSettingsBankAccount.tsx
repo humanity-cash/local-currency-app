@@ -1,13 +1,13 @@
 import { useNavigation } from '@react-navigation/native';
-import React, { useEffect, useState, useContext } from 'react';
+import React, { ReactElement, useState } from 'react';
 import { ScrollView, StyleSheet, View } from "react-native";
 import { Text, Image } from 'react-native-elements';
-import { AuthContext } from "src/auth";
-import { Header, Dialog, BackBtn, Button } from "src/shared/uielements";
-import { underlineHeader, viewBase, dialogViewBase } from "src/theme/elements";
+import { Header, Dialog, CancelBtn, Button } from "src/shared/uielements";
+import { underlineHeaderB, viewBaseB, dialogViewBase } from "src/theme/elements";
 import { colors } from "src/theme/colors";
 import Translation from 'src/translation/en.json';
 import * as Routes from 'src/navigation/constants';
+import { BUTTON_TYPES } from 'src/constants';
 
 const styles = StyleSheet.create({
 	content: {
@@ -17,12 +17,13 @@ const styles = StyleSheet.create({
 	headerText: {
 		fontSize: 32,
 		fontWeight: '400',
+		color: colors.purple,
 		lineHeight: 40
 	},
 	section: {
 		paddingHorizontal: 20,
 		paddingVertical: 30,
-		backgroundColor: colors.card
+		backgroundColor: colors.white
 	},
 	noAccount: {
 		paddingHorizontal: 20,
@@ -30,7 +31,8 @@ const styles = StyleSheet.create({
 	},
 	noAccountText: {
 		textAlign: 'center',
-		fontSize: 16
+		fontSize: 16,
+		color: colors.purple
 	},
 	image: {
 		width: 115,
@@ -59,6 +61,9 @@ const styles = StyleSheet.create({
 	deleteBtn: {
 		color: colors.darkRed
 	},
+	dialogBg: {
+		backgroundColor: colors.overlayPurple
+	},
 	dialogWrap: {
 		paddingHorizontal: 10,
 		height: "100%",
@@ -67,6 +72,7 @@ const styles = StyleSheet.create({
 	dialogHeader: {
 		fontSize: 30,
 		lineHeight: 35,
+		color: colors.purple,
 		marginTop: 20,
 		marginBottom: 10,
 	},
@@ -75,15 +81,11 @@ const styles = StyleSheet.create({
 	}
 });
 
-export const SettingsBankAccount = (): JSX.Element => {
+export const MerchantSettingsBankAccount = (): ReactElement => {
 	const navigation = useNavigation();
-	const { completedCustomerVerification } = useContext(AuthContext);
-	const [isVisible, setIsVisible] = useState<boolean>(false);
-	const [hasBankAccount, setHasBankAccount] = useState<boolean>(false);
 
-	useEffect(() => {
-		completedCustomerVerification ? setHasBankAccount(true) : setHasBankAccount(false);
-	}, [completedCustomerVerification]);
+	const [isVisible, setIsVisible] = useState<boolean>(false);
+	const [hasBankAccount, setHasBankAccount] = useState<boolean>(true);
 
 	const handleRemove = () => {
 		setHasBankAccount(false);
@@ -91,12 +93,12 @@ export const SettingsBankAccount = (): JSX.Element => {
 	}
 
 	return (
-		<View style={viewBase}>
+		<View style={viewBaseB}>
 			<Header
-				leftComponent={<BackBtn onClick={() => navigation.goBack()} />}
+				rightComponent={<CancelBtn text={Translation.BUTTON.CLOSE} color={colors.purple} onClick={() => navigation.navigate(Routes.MERCHANT_DASHBOARD)} />}
 			/>
 			<ScrollView style={styles.content}>
-				<View style={ underlineHeader }>
+				<View style={ underlineHeaderB }>
 					<Text style={styles.headerText}>{Translation.BANK_ACCOUNT.BANK_ACCOUNT}</Text>
 				</View>
 				{
@@ -133,7 +135,7 @@ export const SettingsBankAccount = (): JSX.Element => {
 				{
 					hasBankAccount && (
 						<Button
-							type="transparent"
+							type={BUTTON_TYPES.TRANSPARENT}
 							title={Translation.BUTTON.DELETE_ACCOUNT}
 							textStyle={styles.deleteBtn}
 							onPress={()=>setIsVisible(true)}
@@ -143,22 +145,22 @@ export const SettingsBankAccount = (): JSX.Element => {
 				{
 					!hasBankAccount && (
 						<Button
-							type="darkGreen"
+							type={BUTTON_TYPES.PURPLE}
 							title={Translation.BUTTON.LINK_BUSINESS_BANK}
-							onPress={()=>navigation.navigate(Routes.SELECT_BANK)}
+							onPress={()=>navigation.navigate(Routes.MERCHANT_BANK_ACCOUNT)}
 						/>
 					)
 				}
 			</View>
 			{isVisible && (
-				<Dialog visible={isVisible} onClose={()=>setIsVisible(false)}>
+				<Dialog visible={isVisible} onClose={()=>setIsVisible(false)} backgroundStyle={styles.dialogBg}>
 					<View style={dialogViewBase}>
 						<View style={styles.dialogWrap}>
 							<Text style={styles.dialogHeader}>{Translation.COMMUNITY_CHEST.REMOVE_BANK_ACCOUNT}</Text>
 						</View>
 						<View style={styles.dialogBottom}>
 							<Button
-								type="darkGreen"
+								type={BUTTON_TYPES.PURPLE}
 								title={Translation.BUTTON.REMOVE}
 								onPress={handleRemove}
 							/>
@@ -170,4 +172,4 @@ export const SettingsBankAccount = (): JSX.Element => {
 	);
 }
 
-export default SettingsBankAccount;
+export default MerchantSettingsBankAccount;

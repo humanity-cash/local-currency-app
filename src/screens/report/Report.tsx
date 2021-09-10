@@ -22,6 +22,7 @@ import {
     wrappingContainerBase
 } from "src/theme/elements";
 import Translation from "src/translation/en.json";
+import { UserType } from "src/auth/types";
 
 const styles = StyleSheet.create({
 	headerText: {
@@ -307,7 +308,7 @@ const Report = (): JSX.Element => {
 								</TouchableOpacity>
 							</View>
 						</View>
-						{userType === UserType.MERCHANT && (
+						{userType === UserType.Business && (
 							<View>
 								<Text style={styles.label}>
 									{Translation.LABEL.TRANSACTION_TYPE}
