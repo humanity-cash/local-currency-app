@@ -66,7 +66,10 @@
         "RETURN_AMOUNT": "Return amount",
         "GOT_IT": "Got it",
         "MY_PERSONAL_ACCOUNT" :"My personal account",
-        "SOMEONE_ELSE" :"Someone else"
+        "SOMEONE_ELSE" :"Someone else",
+        "MAIL_QR_CODE": "Mail my QR code again",
+        "SHOW_MY_QR": "Show my QR",
+        "STATIC_QR": "Static QR"
     },
     "LABEL": {
         "EMAIL_ADDR": "EMAIL ADDRESS",
@@ -236,7 +239,12 @@
         "DELETED_ACCOUNT_MESSAGE": "Sad to see you leave. Your account has been deleted. Hope to see you back soon.",
         "NO_CAMERA_PERMISSION": "Sorry, we need camera roll permissions to make this work!",
         "REQUEST_CAMERA_PERMISSION": "Requesting for camera permission",
-        "LEGAL": "Legal"
+        "LEGAL": "Legal",
+        "STATIC_QR": "Static QR",
+        "STATIC_QR_DETAIL1": "After onboarding you have received a ‘static’ QR in your mailbox. You can print this QR code to receive payments.",
+        "STATIC_QR_DETAIL2": "However, the customer then determines the amount. Therefore we recommend to only use this QR code for exceptions. For daily use of the app, you can use the ‘Receive or Scan to pay’ button on the home screen of the app.",
+        "STATIC_QR_DETAIL3": "If you encounter any issue, don’t hesitate to contact us via info@berkshare.com. In the meantime you can use the back up QR code to receive payment. But when you do, please make sure the customer sends the correct amount!",
+        "ENABLE_CASHIER_VIEW" :"Enable cashier view"
     },
     "COMMUNITY_CHEST": {
         "CONTENT": "The BerkShares community want to support the lcal community. Therefor, we ask you at each transaction if you are willing to make a donation. This donation will go to a local project. On this page you will find the current project and its status.",
