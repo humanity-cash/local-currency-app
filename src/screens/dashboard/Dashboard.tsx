@@ -1,6 +1,6 @@
 import { AntDesign, Entypo } from '@expo/vector-icons';
 import { DrawerActions, useNavigation } from '@react-navigation/native';
-import React, { useState } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import {
 	ScrollView,
 	StyleSheet,
@@ -9,12 +9,15 @@ import {
 	TouchableOpacity
 } from 'react-native';
 import { Image, Text } from 'react-native-elements';
+import { AuthContext } from 'src/auth';
 import * as Routes from 'src/navigation/constants';
 import { Header } from 'src/shared/uielements';
 import { colors } from 'src/theme/colors';
 import { baseHeader, viewBase, wrappingContainerBase } from 'src/theme/elements';
 import Translation from 'src/translation/en.json';
 import DwollaDialog from './DwollaDialog';
+import { UserAPI } from 'src/api';
+import { IUserRequest, IUserResponse } from 'src/api/formatters';
 
 const styles = StyleSheet.create({
 	content: { paddingBottom: 40 },
@@ -116,7 +119,17 @@ const feedData = {
 
 const Dashboard = (): JSX.Element => {
 	const navigation = useNavigation();
+	const { cognitoId } = useContext(AuthContext);
 	const [isVisible, setIsVisible] = useState<boolean>(false);
+
+	useEffect(() => {
+		// const getHealth = async () => {
+		// 	if (cognitoId) {
+		// 		UserAPI.getUser("582de663-38ab-40e8-b5df-3fd850749f4f");
+		// 	}
+		// }
+		// getHealth();
+	}, [cognitoId]);
 
 	const onClose = () => {
 		setIsVisible(false);
