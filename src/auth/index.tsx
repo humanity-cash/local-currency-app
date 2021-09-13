@@ -58,14 +58,17 @@ const AuthProvider: React.FunctionComponent = ({ children }) => {
 	const [userAttributes, setUserAttributes] = useState<any>({});
 	const [completedCustomerVerification, setCompletedCustomerVerification] = useState<boolean>(false);
 	const [completedBusinessVerification, setCompletedBusinessVerification] = useState<boolean>(false);
+	const [cognitoId, setCognitoId] = useState<string>("");
 
 	useEffect(() => {
 		const isVerifiedCustomer =
 			userAttributes?.["custom:basicCustomerV"] === "true";
 		const isVerifiedBusiness =
 			userAttributes?.["custom:basicBusinessV"] === "true";
+		const identity = userAttributes?.["sub"];
 		setCompletedCustomerVerification(isVerifiedCustomer);
 		setCompletedBusinessVerification(isVerifiedBusiness);
+		setCognitoId(identity);
 	}, [userAttributes, authStatus, userType]);
 
 	const [
@@ -232,6 +235,7 @@ const AuthProvider: React.FunctionComponent = ({ children }) => {
 		authStatus,
 		completedCustomerVerification,
 		completedBusinessVerification,
+		cognitoId,
 		signIn,
 		setAuthStatus,
 		signOut,
