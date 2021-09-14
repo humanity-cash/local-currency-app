@@ -40,10 +40,10 @@ const styles = StyleSheet.create({
 		flexDirection: 'row'
 	},
 	cityView: {
-		width: '60%'
+		width: '70%'
 	},
 	stateContent: {
-		width: '40%'
+		width: '30%'
 	},
 	stateView: {
 		height: 55,
