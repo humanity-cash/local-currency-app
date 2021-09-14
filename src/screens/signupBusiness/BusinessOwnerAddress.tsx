@@ -8,6 +8,7 @@ import { colors } from "src/theme/colors";
 import Translation from 'src/translation/en.json';
 import * as Routes from 'src/navigation/constants';
 import { useNavigation } from '@react-navigation/native';
+import { UserType } from 'src/auth/types';
 
 const styles = StyleSheet.create({
     headerText: {
@@ -61,7 +62,7 @@ const BusinessOwnerAddress = (): ReactElement => {
                     <Text style={styles.headerText}>{Translation.PROFILE.BUSINESS_OWNER}</Text>
                 </View>
 				<View style={styles.formView}>
-					<PersonalAddressForm style={styles.input}/>
+					<PersonalAddressForm style={styles.input} userType={UserType.Business} />
 				</View>
 				
 			</ScrollView>

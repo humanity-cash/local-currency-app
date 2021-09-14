@@ -2,11 +2,18 @@ import React, {useState, ReactElement} from 'react';
 import { StyleSheet, View, TouchableOpacity, Platform } from 'react-native';
 import { Text } from 'react-native-elements';
 import DateTimePicker from '@react-native-community/datetimepicker';
-import {Picker} from '@react-native-picker/picker';
+import { Dropdown } from 'react-native-material-dropdown';
 import moment from 'moment';
 import Translation from 'src/translation/en.json';
 import { colors } from "src/theme/colors";
-import { merchantTransactions } from 'src/mocks/transactionTypes';
+
+const merchantTransactions = [
+    { value: 'All' },
+    { value: 'Sales' },
+    { value: 'Returns' },
+    { value: 'Cash outs' },
+    { value: 'Expenses' }
+]
 
 const styles = StyleSheet.create({
     container: {
@@ -55,8 +62,15 @@ const styles = StyleSheet.create({
         marginTop: 7,
         backgroundColor: colors.white
     },
-    pickerView: {
-        color: colors.purple
+    itemText: {
+        paddingLeft: 10
+    },
+    dropdownContainer: {
+        paddingHorizontal: 20, 
+        paddingBottom: 20
+    },
+    dropdownInputContainer: {
+        borderBottomColor: 'transparent'
     },
     clearFilter: {
 		paddingVertical: 15,
@@ -74,7 +88,7 @@ const MerchantTransactionsFilter = (): ReactElement => {
     const [endDate, setEndDate] = useState<Date | null>(null);
     const [isStartDate, setIsStartDate] = useState<boolean>(false);
     const [isEndDate, setIsEndDate] = useState<boolean>(false);
-    const [selectedType, setSelectedType] = useState<string>("");
+    const [selectedType, setSelectedType] = useState<string>("All");
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const onStartDateChange = (event: any, selectedDate?: Date) => {
@@ -91,7 +105,7 @@ const MerchantTransactionsFilter = (): ReactElement => {
     };
 
     const clearFilter = () => {
-        setSelectedType("");
+        setSelectedType("All");
         setStartDate(null)
         setEndDate(null);
     };
@@ -119,18 +133,17 @@ const MerchantTransactionsFilter = (): ReactElement => {
             </View>
             <Text style={styles.label}>{Translation.LABEL.TRANSACTION_TYPE}</Text>
             <View style={styles.typeView}>
-                <Picker
-                    selectedValue={selectedType}
-                    style={styles.pickerView} 
-                    onValueChange={(itemValue) =>
-                        setSelectedType(itemValue)
-                    }
-                >
-                    <Picker.Item label="All" value="" style={styles.mainText}/>
-                    {merchantTransactions.map((u:string) => 
-                        <Picker.Item label={u} value={u} key={u} style={styles.mainText} />)
-                    }
-                </Picker>
+                <Dropdown
+                    value={selectedType}
+                    data={merchantTransactions}
+                    selectedItemColor={colors.purple}
+                    itemColor={colors.greyedPurple}
+                    textColor={colors.purple}
+                    itemTextStyle={styles.itemText}
+                    containerStyle={styles.dropdownContainer}
+                    inputContainerStyle={styles.dropdownInputContainer}
+                    onChangeText={(itemValue) => setSelectedType(itemValue)}
+                /> 
             </View>
             <TouchableOpacity style={styles.clearFilter} onPress={clearFilter}>
                 <Text style={styles.clearText}>{Translation.PAYMENT.CLEAR_FILTER}</Text>
