@@ -39,7 +39,7 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
     marginVertical: 8,
     borderWidth: 0,
-    color: colors.text,
+    color: colors.purple,
   },
   imageView: {
     width: 80, 
@@ -61,7 +61,7 @@ const BusinessProfileForm = (): ReactElement => {
 
   useMediaLibraryPermission();
 
-  const onValueChange = (name: any, change: any) => {
+  const onValueChange = (name: string, change: string) => {
     setBuisnessBasicVerification((pv: IAuth) => ({ ...pv, [name]: change }));
   };
 
@@ -109,6 +109,7 @@ const BusinessProfileForm = (): ReactElement => {
 			<BlockInput
 				name="businessname"
 				placeholder="Business name"
+				placeholderTextColor={colors.greyedPurple}
 				value={buisnessBasicVerification.tag}
 				onChange={onValueChange}
 				style={styles.inputBg}

@@ -59,6 +59,7 @@ const styles = StyleSheet.create({
     typeView: {
         height: 55,
         justifyContent: 'center',
+        borderRadius: 3,
         marginTop: 7,
         backgroundColor: colors.white
     },
