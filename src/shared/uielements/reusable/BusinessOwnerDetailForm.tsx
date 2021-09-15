@@ -2,12 +2,14 @@ import React, { ReactElement, useContext } from "react";
 import { StyleSheet, View } from "react-native";
 import { Text } from "react-native-elements";
 import { AuthContext } from "../../../auth";
+import { BusinessBasicVerification } from "src/auth/types";
 import { colors } from "../../../theme/colors";
 import Translation from "../../../translation/en.json";
 import BlockInput from "../BlockInput";
+import { IMap } from "src/utils/types";
 
 interface PersonalDetailsProps {
-	style?: any;
+	style?: IMap;
 }
 
 const styles = StyleSheet.create({
@@ -63,10 +65,10 @@ const BusinessOwnerDetailsForm = (
 		useContext(AuthContext);
 
 	const onValueChange = (name: string, change: string) => {
-		// setBuisnessBasicVerification((pv: BusinessBasicVerification) => ({
-		// 	...pv,
-		// 	owner: { ...pv.owner, [name]: change },
-		// }));
+		setBuisnessBasicVerification((pv: BusinessBasicVerification) => ({
+			...pv,
+			owner: { ...pv.owner, [name]: change },
+		}));
 	};
 
 	const FirstNameInput = () => {
@@ -76,7 +78,7 @@ const BusinessOwnerDetailsForm = (
 					labelStyle={styles.label}
 					inputStyle={props.style}
 					label={Translation.LABEL.FIRST_NAME}
-					name="owner.firstName"
+					name="firstName"
 					placeHolder="First Name"
 					inputValue={buisnessBasicVerification.owner.firstName}
 					onInputChange={onValueChange}
@@ -92,7 +94,7 @@ const BusinessOwnerDetailsForm = (
 					labelStyle={styles.label}
 					inputStyle={props.style}
 					label={Translation.LABEL.LAST_NAME}
-					name="owner.lastName"
+					name="lastName"
 					placeHolder="Last Name"
 					inputValue={buisnessBasicVerification.owner.lastName}
 					onInputChange={onValueChange}

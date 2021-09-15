@@ -8,6 +8,7 @@ import {
 	View
 } from "react-native";
 import { Text } from "react-native-elements";
+import { UserType } from "src/auth/types";
 import { AuthContext } from "src/auth";
 import { BUTTON_TYPES } from "src/constants";
 import * as Routes from "src/navigation/constants";
@@ -74,7 +75,7 @@ const PersonalAddress = (): React.ReactElement => {
 							{Translation.PROFILE.PERSIONAL_DETAILS}
 						</Text>
 					</View>
-					<PersonalAddressForm />
+					<PersonalAddressForm userType={UserType.Customer} />
 				</View>
 			</ScrollView>
 			<KeyboardAvoidingView

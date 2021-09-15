@@ -1,50 +1,64 @@
 import React, { ReactElement, useContext } from "react";
-import { Picker, StyleSheet, View } from "react-native";
+import { StyleSheet, View } from "react-native";
 import { Text } from "react-native-elements";
 import { AuthContext } from "src/auth";
-import countries from "src/mocks/countries";
+import { Dropdown } from 'react-native-material-dropdown';
 import { colors } from "src/theme/colors";
 import Translation from 'src/translation/en.json';
 import BlockInput from "../BlockInput";
+import { IMap } from "src/utils/types";
+import { UserType } from "src/auth/types";
+import countries from "src/mocks/countries";
 
 interface PersonalAddressProps {
-  style?: any;
+	userType: UserType,
+  	style?: IMap;
 }
 
 const styles = StyleSheet.create({
-  container: {
-    marginBottom: 20
-  },
-  bodyText: {
-    color: colors.bodyText
-  },
-  label: {
-    color: colors.bodyText,
-    fontSize: 10
-  },
-  errorLabel: {
-    color: colors.bodyText,
-    fontSize: 10,
-    marginTop: 5
-  },
-  inlineView: {
-    flex: 1,
-    flexDirection: 'row'
-  },
-  cityView: {
-    width: '70%'
-  },
-  stateView: {
-    width: '30%'
-  },
-  picker: {
+	container: {
+		marginBottom: 20
+	},
+	bodyText: {
+		color: colors.bodyText
+	},
+	label: {
+		color: colors.bodyText,
+		fontSize: 10
+	},
+	errorLabel: {
+		color: colors.bodyText,
+		fontSize: 10,
+		marginTop: 5
+	},
+	inlineView: {
+		flex: 1,
+		flexDirection: 'row'
+	},
+	cityView: {
+		width: '70%'
+	},
+	stateContent: {
+		width: '30%'
+	},
+	stateView: {
 		height: 55,
+		justifyContent: 'center',
+		backgroundColor: colors.inputBg,
 		borderRadius: 3,
-    marginTop: 8,
-    marginLeft: 5,
-		color: colors.purple,
-		backgroundColor: colors.white
-	}
+		marginTop: 8,
+		marginLeft: 4
+	},
+	itemText: {
+		paddingLeft: 10
+	},
+	dropdownContainer: {
+		paddingHorizontal: 10,
+		paddingBottom: 15
+	},
+	dropdownInputContainer: {
+		borderBottomColor: 'transparent'
+	},
 });
 
 const PersonalAddressForm = (props: PersonalAddressProps): ReactElement => {
@@ -52,7 +66,7 @@ const PersonalAddressForm = (props: PersonalAddressProps): ReactElement => {
 		useContext(AuthContext);
 
   const onValueChange = (name: string, change: string) => {
-    setCustomerBasicVerificationDetails((pv: any) => ({
+    setCustomerBasicVerificationDetails((pv: IMap) => ({
       ...pv,
       [name]: change,
     }));
@@ -92,22 +106,21 @@ const PersonalAddressForm = (props: PersonalAddressProps): ReactElement => {
 						style={props.style}
 					/>
 				</View>
-				<View style={styles.stateView}>
+				<View style={styles.stateContent}>
 					<Text style={styles.label}>{Translation.LABEL.STATE}</Text>
-					<Picker
-						selectedValue={customerBasicVerificationDetails.state}
-						style={styles.picker}
-						onValueChange={(itemValue) =>
-							onValueChange("country", itemValue)
-						}>
-						{countries.map((country: string, idx: number) => (
-							<Picker.Item
-								label={country}
-								value={country}
-								key={idx}
-							/>
-						))}
-					</Picker>
+					<View style={{...styles.stateView, ...props.style}} >
+						<Dropdown
+							value={customerBasicVerificationDetails.state}
+							data={countries}
+							selectedItemColor={props.userType === UserType.Customer ? colors.darkGreen : colors.purple}
+							itemColor={props.userType === UserType.Customer ? colors.lightGreen : colors.greyedPurple}
+							textColor={props.userType === UserType.Customer ? colors.darkGreen : colors.purple}
+							itemTextStyle={styles.itemText}
+							containerStyle={styles.dropdownContainer}
+							inputContainerStyle={styles.dropdownInputContainer}
+							onChangeText={(itemValue) => onValueChange("country", itemValue)}
+						/> 
+					</View>
 				</View>
 			</View>
 

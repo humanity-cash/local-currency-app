@@ -2,13 +2,13 @@ import { useNavigation } from "@react-navigation/native";
 import React, { ReactElement, useContext } from "react";
 import {
 	KeyboardAvoidingView,
-	Picker,
 	Platform,
 	ScrollView,
 	StyleSheet,
 	View
 } from "react-native";
 import { Text } from "react-native-elements";
+import { Dropdown } from 'react-native-material-dropdown';
 import { AuthContext } from "src/auth";
 import * as Routes from "src/navigation/constants";
 import {
@@ -27,14 +27,14 @@ import {
 import Translation from "src/translation/en.json";
 import { Industry } from "src/utils/types";
 
-const Industries: Industry[] = [
-	Industry.ARTS_ENTERTAINMENT,
-	Industry.COMMUNICATION_EDUCATION,
-	Industry.FOOD_DRINK,
-	Industry.HEALTH_WELLNESS,
-	Industry.LODGING,
-	Industry.SHOPPING,
-	Industry.SERVICES,
+const Industries = [
+	{value: Industry.ARTS_ENTERTAINMENT},
+	{value: Industry.COMMUNICATION_EDUCATION},
+	{value: Industry.FOOD_DRINK},
+	{value: Industry.HEALTH_WELLNESS},
+	{value: Industry.LODGING},
+	{value: Industry.SHOPPING},
+	{value: Industry.SERVICES}
 ];
 
 const styles = StyleSheet.create({
@@ -56,11 +56,21 @@ const styles = StyleSheet.create({
 	},
 	picker: {
 		height: 55,
+		justifyContent: 'center',
 		borderRadius: 3,
-		color: colors.purple,
 		backgroundColor: colors.white,
 		marginBottom: 10,
 	},
+	itemText: {
+        paddingLeft: 10
+    },
+    dropdownContainer: {
+        paddingHorizontal: 20, 
+        paddingBottom: 20
+    },
+    dropdownInputContainer: {
+        borderBottomColor: 'transparent'
+    },
 	formView: {
 		paddingBottom: 40,
 	},
@@ -119,17 +129,19 @@ const BusinessInfo = (): ReactElement => {
 					<Text style={styles.label}>
 						{Translation.LABEL.INDUSTRY}
 					</Text>
-					<Picker
-						selectedValue={buisnessBasicVerification.industry}
-						style={styles.picker}
-						onValueChange={(itemValue: Industry) =>
-							onValueChange("industry", itemValue)
-						}>
-						{Industries.map((type: Industry, idx: number) => (
-							<Picker.Item label={type} value={type} key={idx} />
-						))}
-					</Picker>
-
+					<View style={styles.picker}>
+						<Dropdown
+							value={buisnessBasicVerification.industry}
+							data={Industries}
+							selectedItemColor={colors.purple}
+							itemColor={colors.greyedPurple}
+							textColor={colors.purple}
+							itemTextStyle={styles.itemText}
+							containerStyle={styles.dropdownContainer}
+							inputContainerStyle={styles.dropdownInputContainer}
+							onChangeText={(itemValue) => onValueChange("industry", itemValue)}
+						/>
+					</View>
 					<Text style={styles.label}>{Translation.LABEL.EIN}</Text>
 					<BlockInput
 						name="ein"

@@ -1,59 +1,81 @@
 import React, { useContext } from "react";
-import { Picker, StyleSheet, View } from "react-native";
+import { StyleSheet, View } from "react-native";
 import { Text } from "react-native-elements";
+import { Dropdown } from 'react-native-material-dropdown';
 import { AuthContext } from "src/auth";
-import countries from "src/mocks/countries";
+import { BusinessBasicVerification } from "src/auth/types";
 import { colors } from "src/theme/colors";
 import BlockInput from "../BlockInput";
+import { IMap } from 'src/utils/types'
+import countries from "src/mocks/countries";
 
 interface BusinessAddressProps {
-  style?: any;
+  style?: IMap;
 }
 
 const styles = StyleSheet.create({
-  container: {
-    marginBottom: 20
-  },
-  bodyText: {
-    color: colors.bodyText
-  },
-  label: {
-    color: colors.bodyText,
-    fontSize: 10
-  },
-  errorLabel: {
-    color: colors.bodyText,
-    fontSize: 10,
-    marginTop: 5
-  },
-  inlineView: {
-    flex: 1,
-    flexDirection: 'row'
-  },
-  cityView: {
-    width: '70%'
-  },
-  stateView: {
-    width: '30%'
-  },
-  picker: {
+	container: {
+		marginBottom: 20
+	},
+	bodyText: {
+		color: colors.bodyText
+	},
+	label: {
+		color: colors.bodyText,
+		fontSize: 10
+	},
+	errorLabel: {
+		color: colors.bodyText,
+		fontSize: 10,
+		marginTop: 5
+	},
+	inlineView: {
+		flex: 1,
+		flexDirection: 'row'
+	},
+	cityView: {
+		width: '70%'
+	},
+	stateContent: {
+		width: '30%'
+	},
+	stateView: {
+		height: 55,
+		justifyContent: 'center',
+		backgroundColor: colors.white,
+		borderRadius: 3,
+		marginTop: 8,
+		marginLeft: 4
+	},
+	itemText: {
+		paddingLeft: 10
+	},
+	dropdownContainer: {
+		paddingHorizontal: 10, 
+		paddingBottom: 15
+	},
+	dropdownInputContainer: {
+		borderBottomColor: 'transparent'
+	},
+	picker: {
 		height: 55,
 		borderRadius: 3,
-    marginTop: 8,
-    marginLeft: 5,
-		color: colors.purple,
+		justifyContent: 'center',
 		backgroundColor: colors.white
 	}
 });
 
-const BusinessAddressForm = (props: BusinessAddressProps) => {
-  const { buisnessBasicVerification, setBuisnessBasicVerification } = useContext(AuthContext);
+const BusinessAddressForm = (props: BusinessAddressProps): JSX.Element => {
+	const { buisnessBasicVerification, setBuisnessBasicVerification } = useContext(AuthContext);
 
-  const onValueChange = (name: any, change: any) => {
-    // setBuisnessBasicVerification({ [name]: change });
-  };
+	const onValueChange = (name: string, change: string) => {
+		setBuisnessBasicVerification((pv: BusinessBasicVerification) => ({
+			...pv,
+			[name]: change,
+		}));
+	};
 
-  return (
+  	return (
 		<View>
 			<View style={styles.container}>
 				<Text style={styles.bodyText}>
@@ -88,22 +110,21 @@ const BusinessAddressForm = (props: BusinessAddressProps) => {
 						style={props.style}
 					/>
 				</View>
-				<View style={styles.stateView}>
+				<View style={styles.stateContent}>
 					<Text style={styles.label}>STATE</Text>
-					<Picker
-						value={buisnessBasicVerification.country}
-						style={styles.picker}
-						onValueChange={(itemValue) =>
-							onValueChange("country", itemValue)
-						}>
-						{countries.map((country: string, idx: number) => (
-							<Picker.Item
-								label={country}
-								value={country}
-								key={idx}
-							/>
-						))}
-					</Picker>
+					<View style={styles.stateView}>
+						<Dropdown
+							value={buisnessBasicVerification.country}
+							data={countries}
+							selectedItemColor={colors.purple}
+							itemColor={colors.greyedPurple}
+							textColor={colors.purple}
+							itemTextStyle={styles.itemText}
+							containerStyle={styles.dropdownContainer}
+							inputContainerStyle={styles.dropdownInputContainer}
+							onChangeText={(itemValue) => onValueChange("country", itemValue)}
+						/> 
+					</View>
 				</View>
 			</View>
 
@@ -126,7 +147,7 @@ const BusinessAddressForm = (props: BusinessAddressProps) => {
 				style={props.style}
 			/>
 		</View>
-  );
+  	);
 };
 
 export default BusinessAddressForm;

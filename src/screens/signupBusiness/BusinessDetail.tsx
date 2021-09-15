@@ -2,13 +2,13 @@ import { useNavigation } from "@react-navigation/native";
 import React, { ReactElement, useContext, useState } from "react";
 import {
 	KeyboardAvoidingView,
-	Picker,
 	Platform,
 	ScrollView,
 	StyleSheet,
 	View
 } from "react-native";
 import { Text } from "react-native-elements";
+import { Dropdown } from 'react-native-material-dropdown';
 import { AuthContext } from "src/auth";
 import * as Routes from "src/navigation/constants";
 import { BackBtn, Button, CancelBtn, Header } from "src/shared/uielements";
@@ -21,12 +21,12 @@ import {
 import Translation from "src/translation/en.json";
 import { BusinessType } from "src/utils/types";
 
-const BusinessTypes: BusinessType[] = [
-	BusinessType.SOLE_PROPRIETORSHIP,
-	BusinessType.CORPORATION,
-	BusinessType.LLC,
-	BusinessType.PARTNERSHIP,
-	BusinessType.NON_PROFIT,
+const businessTypes = [
+	{ value: BusinessType.SOLE_PROPRIETORSHIP },
+	{ value: BusinessType.CORPORATION },
+	{ value: BusinessType.LLC },
+	{ value:  BusinessType.PARTNERSHIP },
+	{ value: BusinessType.NON_PROFIT }
 ];
 
 const styles = StyleSheet.create({
@@ -47,12 +47,23 @@ const styles = StyleSheet.create({
 		color: colors.bodyText,
 		fontSize: 10,
 	},
-	picker: {
+	dropdownView: {
 		height: 55,
+		justifyContent: 'center',
 		borderRadius: 3,
 		color: colors.purple,
 		backgroundColor: colors.white,
 	},
+	itemText: {
+        paddingLeft: 10
+    },
+    dropdownContainer: {
+        paddingHorizontal: 20, 
+        paddingBottom: 15
+    },
+    dropdownInputContainer: {
+        borderBottomColor: 'transparent'
+    },
 	bottomView: {
 		paddingHorizontal: 20,
 		paddingBottom: 50,
@@ -97,16 +108,19 @@ const BusinessDetail = (): ReactElement => {
 				<Text style={styles.label}>
 					{Translation.LABEL.BUSINESS_TYPE}
 				</Text>
-				<Picker
-					selectedValue={businessType}
-					style={styles.picker}
-					onValueChange={(itemValue: BusinessType) =>
-						setBusinessType(itemValue)
-					}>
-					{BusinessTypes.map((type: BusinessType, idx: number) => (
-						<Picker.Item label={type} value={type} key={idx} />
-					))}
-				</Picker>
+				<View style={styles.dropdownView}>
+					<Dropdown
+						value={businessType}
+						data={businessTypes}
+						selectedItemColor={colors.purple}
+						itemColor={colors.greyedPurple}
+						textColor={colors.purple}
+						itemTextStyle={styles.itemText}
+						containerStyle={styles.dropdownContainer}
+						inputContainerStyle={styles.dropdownInputContainer}
+						onChangeText={(itemValue: BusinessType) => setBusinessType(itemValue)}
+					/> 
+				</View>
 			</ScrollView>
 			<KeyboardAvoidingView
 				behavior={Platform.OS == "ios" ? "padding" : "height"}>
