@@ -27,9 +27,10 @@ const styles = StyleSheet.create({
 });
 
 const LinkBankAccount = (): JSX.Element => {
-	const { updateUserType } = useContext(AuthContext)
+	const { updateUserType, completeCustomerBasicVerification } = useContext(AuthContext)
 	const navigation = useNavigation();
 
+	console.log(completeCustomerBasicVerification)
 	return (
 		<View style={viewBase}>
 			<Header />
