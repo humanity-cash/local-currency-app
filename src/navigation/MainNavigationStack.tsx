@@ -305,10 +305,10 @@ const PrimaryStackScreen = () => {
 						name={Routes.MERCHANT_REDEMPTION_IN_PROGRESS}
 						component={MerchantRedemptionInProgress}
 					/>
-					<PrimaryStack.Screen
-						name="MerchantBankAccount"
+					{/* <PrimaryStack.Screen
+						name="SelectMerchantBank"
 						component={MerchantBankAccountNavigator}
-					/>
+					/> */}
 					<PrimaryStack.Screen
 						name={Routes.REPORT_SUCCESS}
 						component={ReportSuccess}
@@ -413,6 +413,10 @@ const PrimaryStackScreen = () => {
 					<PrimaryStack.Screen
 						name={Routes.SIGNUP_BUSINESS}
 						component={SignupBusinessNavigator}
+					/>
+					<PrimaryStack.Screen
+						name={Routes.MERCHANT_BANK_ACCOUNT}
+						component={MerchantBankAccountNavigator}
 					/>
 				</>
 			) : (

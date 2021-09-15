@@ -2,11 +2,18 @@ import React, {useState} from 'react';
 import { StyleSheet, View, TouchableOpacity, Platform } from 'react-native';
 import { Text } from 'react-native-elements';
 import DateTimePicker from '@react-native-community/datetimepicker';
-import {Picker} from '@react-native-picker/picker';
+import { Dropdown } from 'react-native-material-dropdown';
 import moment from 'moment';
 import { colors } from "src/theme/colors";
-import { consumerTransactions } from 'src/mocks/transactionTypes';
 import Translation from 'src/translation/en.json';
+
+const consumerTransactions = [
+    { value: 'All' },
+    { value: 'Incoming transactions' },
+    { value: 'Outgoing transactions' },
+    { value: 'Load ups B$' },
+    { value: 'Cash out to USD' }
+];
 
 const styles = StyleSheet.create({
     container: {
@@ -52,6 +59,16 @@ const styles = StyleSheet.create({
     pickerView: {
         color: colors.darkGreen
     },
+    itemText: {
+        paddingLeft: 10
+    },
+    dropdownContainer: {
+        paddingHorizontal: 20, 
+        paddingBottom: 20
+    },
+    dropdownInputContainer: {
+        borderBottomColor: 'transparent'
+    },
     placeholder: {
         color: colors.lightGreen
     },
@@ -70,14 +87,16 @@ const MyTransactionFilter = (): JSX.Element => {
     const [endDate, setEndDate] = useState<Date | null>(null);
     const [isStartDate, setIsStartDate] = useState<boolean>(false);
     const [isEndDate, setIsEndDate] = useState<boolean>(false);
-    const [selectedType, setSelectedType] = useState<string>("");
+    const [selectedType, setSelectedType] = useState<string>("All");
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const onStartDateChange = (event: any, selectedDate?: Date) => {
         const currentDate = selectedDate || startDate;
         setIsStartDate(Platform.OS === 'ios');
         setStartDate(currentDate);
     };
 
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const onEndDateChange = (event: any, selectedDate?: Date) => {
         const currentDate = selectedDate || startDate;
         setIsEndDate(Platform.OS === 'ios');
@@ -85,7 +104,7 @@ const MyTransactionFilter = (): JSX.Element => {
     };
 
     const clearFilter = () => {
-        setSelectedType("");
+        setSelectedType("All");
         setStartDate(null);
         setEndDate(null);
     }
@@ -113,16 +132,17 @@ const MyTransactionFilter = (): JSX.Element => {
             </View>
             <Text style={styles.label}>{Translation.LABEL.TRANSACTION_TYPE}</Text>
             <View style={styles.typeView}>
-                <Picker
-                    selectedValue={selectedType}
-                    style={styles.pickerView} 
-                    onValueChange={(itemValue) =>
-                        setSelectedType(itemValue)
-                    }
-                >
-                    <Picker.Item label="All" value="" />
-                    {consumerTransactions.map((u:string) => <Picker.Item label={u} value={u} key={u} />)}
-                </Picker>
+                <Dropdown
+                    value={selectedType}
+                    data={consumerTransactions}
+                    selectedItemColor={colors.darkGreen}
+                    itemColor={colors.lightGreen}
+                    textColor={colors.darkGreen}
+                    itemTextStyle={styles.itemText}
+                    containerStyle={styles.dropdownContainer}
+                    inputContainerStyle={styles.dropdownInputContainer}
+                    onChangeText={(itemValue) => setSelectedType(itemValue)}
+                /> 
             </View>
             <TouchableOpacity style={styles.clearFilter} onPress={clearFilter}>
                 <Text style={styles.clearText}>{Translation.PAYMENT.CLEAR_FILTER}</Text>

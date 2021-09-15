@@ -9,50 +9,51 @@ import { colors } from "src/theme/colors";
 import BlockInput from "../BlockInput";
 
 const styles = StyleSheet.create({
-  inputBg: {
-    backgroundColor: colors.white
-  },
-  container: {
-    flex: 1,
-    paddingBottom: 40
-  },
-  bodyText: {
+	inputBg: {
+		color: colors.purple,
+			backgroundColor: colors.white
+	},
+	container: {
+		flex: 1,
+		paddingBottom: 40
+	},
+	bodyText: {
+			color: colors.bodyText
+		},
+	pickImageView: {
+		paddingTop: 50,
+		paddingBottom: 30,
+		justifyContent: 'center',
+		alignItems: 'center'
+	},
+	label: {
 		color: colors.bodyText
 	},
-  pickImageView: {
-    paddingTop: 50,
-    paddingBottom: 30,
-    justifyContent: 'center',
-    alignItems: 'center'
-  },
-  label: {
-    color: colors.bodyText
-  },
-  smallLabel: {
-    color: colors.bodyText,
-    fontSize: 10
-  },
-  storyText: {
-    backgroundColor: colors.white,
-    borderRadius: 3,
-    paddingHorizontal: 15,
-    paddingVertical: 8,
-    marginVertical: 8,
-    borderWidth: 0,
-    color: colors.text,
-  },
-  imageView: {
-    width: 80, 
-    height: 80,
-    borderRadius: 40,
-    justifyContent: 'center',
-    alignItems: 'center'
-  },
-  image: {
-    width: 80,
-    height: 80,
-    borderRadius: 40
-  }
+	smallLabel: {
+		color: colors.bodyText,
+		fontSize: 10
+	},
+	storyText: {
+		backgroundColor: colors.white,
+		borderRadius: 3,
+		paddingHorizontal: 15,
+		paddingVertical: 8,
+		marginVertical: 8,
+		borderWidth: 0,
+		color: colors.purple,
+	},
+	imageView: {
+		width: 80, 
+		height: 80,
+		borderRadius: 40,
+		justifyContent: 'center',
+		alignItems: 'center'
+	},
+	image: {
+		width: 80,
+		height: 80,
+		borderRadius: 40
+	}
 });
 
 const BusinessProfileForm = (): ReactElement => {
@@ -61,7 +62,7 @@ const BusinessProfileForm = (): ReactElement => {
 
   useMediaLibraryPermission();
 
-  const onValueChange = (name: any, change: any) => {
+  const onValueChange = (name: string, change: string) => {
     setBuisnessBasicVerification((pv: IAuth) => ({ ...pv, [name]: change }));
   };
 
@@ -74,7 +75,7 @@ const BusinessProfileForm = (): ReactElement => {
 		});
 	
 		if (!result.cancelled) {
-		  	onValueChange('profilePicture', result.uri);
+		  	onValueChange('avatar', result.uri);
 		}
 	};
 
@@ -83,7 +84,7 @@ const BusinessProfileForm = (): ReactElement => {
 			<Text style={styles.bodyText}>*Required fields</Text>
 			<View style={styles.pickImageView}>
 				<TouchableOpacity onPress={pickImage}>
-					{buisnessBasicVerification.profilePicture === "" && (
+					{buisnessBasicVerification.avatar === "" && (
 						<View style={styles.imageView}>
 							<Image
 								source={require("../../../../assets/images/placeholder4.png")}
@@ -91,9 +92,9 @@ const BusinessProfileForm = (): ReactElement => {
 							/>
 						</View>
 					)}
-					{buisnessBasicVerification.profilePicture !== "" && (
+					{buisnessBasicVerification.avatar !== "" && (
 						<Image
-							source={{ uri: buisnessBasicVerification.profilePicture }}
+							source={{ uri: buisnessBasicVerification.avatar }}
 							style={styles.imageView}
 						/>
 					)}
@@ -109,6 +110,7 @@ const BusinessProfileForm = (): ReactElement => {
 			<BlockInput
 				name="businessname"
 				placeholder="Business name"
+				placeholderTextColor={colors.greyedPurple}
 				value={buisnessBasicVerification.tag}
 				onChange={onValueChange}
 				style={styles.inputBg}

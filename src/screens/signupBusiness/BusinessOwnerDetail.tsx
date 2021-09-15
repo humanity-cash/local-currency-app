@@ -11,7 +11,7 @@ import { underlineHeaderB, viewBaseB, wrappingContainerBase } from "src/theme/el
 import { colors } from "src/theme/colors";
 import Translation from 'src/translation/en.json';
 import * as Routes from 'src/navigation/constants';
-import { BusinessOwnerAddressForm } from 'src/shared/uielements/reusable';
+import { BusinessOwnerDetailsForm } from 'src/shared/uielements/reusable';
 import { useNavigation } from '@react-navigation/native';
 
 const styles = StyleSheet.create({
@@ -76,7 +76,7 @@ const BusinessOwnerDetail = (): ReactElement => {
 					</Text>
 				</View>
 				<View style={styles.formView}>
-					<BusinessOwnerAddressForm style={styles.input} />
+					<BusinessOwnerDetailsForm style={styles.input} />
 				</View>
 			</ScrollView>
 			<KeyboardAvoidingView

@@ -2,12 +2,13 @@ import { StyleSheet, View, ScrollView } from 'react-native';
 import React, { ReactElement, useContext } from 'react';
 import { Text } from 'react-native-elements';
 import { AuthContext } from 'src/auth';
-import { Header, Button, CancelBtn, BackBtn, PersonalAddressForm } from "src/shared/uielements";
+import { Header, Button, CancelBtn, BackBtn } from "src/shared/uielements";
 import { underlineHeaderB, viewBaseB, wrappingContainerBase } from "src/theme/elements";
 import { colors } from "src/theme/colors";
 import Translation from 'src/translation/en.json';
 import * as Routes from 'src/navigation/constants';
 import { useNavigation } from '@react-navigation/native';
+import { BusinessOwnerAddressForm } from 'src/shared/uielements/reusable';
 
 const styles = StyleSheet.create({
     headerText: {
@@ -47,7 +48,7 @@ const BusinessOwnerAddress = (): ReactElement => {
 	const { signOut } = useContext(AuthContext);
 
 	const onNextPress = () => {
-			navigation.navigate(Routes.BUSINESS_INFO)
+		navigation.navigate(Routes.BUSINESS_INFO)
 	}
 
 	return (
@@ -61,7 +62,7 @@ const BusinessOwnerAddress = (): ReactElement => {
                     <Text style={styles.headerText}>{Translation.PROFILE.BUSINESS_OWNER}</Text>
                 </View>
 				<View style={styles.formView}>
-					<PersonalAddressForm style={styles.input}/>
+					<BusinessOwnerAddressForm style={styles.input} />
 				</View>
 				
 			</ScrollView>
