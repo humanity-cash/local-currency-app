@@ -39,7 +39,7 @@ export const TERMS_EMAIL = 'TermsEmail';
 export const CASHOUT = "CashOut";
 
 export const MERCHANT_QRCODE_SCAN = "MerchantQRCodeScan";
-export const MERCHANT_BANK_ACCOUNT = "MerchantBankAccount";
+export const MERCHANT_BANK_ACCOUNT = "SelectMerchantBank";
 export const SELECT_MERCHANT_BANK_ACCOUNT = "SelectMerchantBankAccount";
 export const LOGIN_MERCHANT_BANK = "LoginToMerchantBank";
 export const MERCHANT_CASHOUT_PASSWORD = "MerchantCashoutPassword";

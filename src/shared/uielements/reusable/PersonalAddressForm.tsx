@@ -8,16 +8,12 @@ import Translation from 'src/translation/en.json';
 import BlockInput from "../BlockInput";
 import { IMap } from "src/utils/types";
 import { UserType } from "src/auth/types";
+import countries from "src/mocks/countries";
 
 interface PersonalAddressProps {
 	userType: UserType,
   	style?: IMap;
 }
-
-const countries = [
-	{ value: 'MA' },
-	{ value: 'MA2' }
-];
 
 const styles = StyleSheet.create({
 	container: {

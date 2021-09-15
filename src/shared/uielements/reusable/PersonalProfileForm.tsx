@@ -83,7 +83,7 @@ const PersonalProfileForm = (): ReactElement => {
 		if (!result.cancelled) {
 			setCustomerBasicVerificationDetails((pv: any) => ({
 				...pv,
-				profilePicture: result.uri,
+				avatar: result.uri,
 			}));
 		}
 	};
@@ -101,18 +101,18 @@ const PersonalProfileForm = (): ReactElement => {
 			<View style={styles.pickImageView}>
 				<TouchableOpacity onPress={pickImage}>
 					<View style={styles.imageView}>
-						{customerBasicVerificationDetails?.profilePicture ===
+						{customerBasicVerificationDetails?.avatar ===
 							"" && (
 							<Image
 								source={require("../../../../assets/images/placeholder5.png")}
 								containerStyle={styles.image}
 							/>
 						)}
-						{customerBasicVerificationDetails?.profilePicture !==
+						{customerBasicVerificationDetails?.avatar !==
 							"" && (
 							<Image
 								source={{
-									uri: customerBasicVerificationDetails?.profilePicture,
+									uri: customerBasicVerificationDetails?.avatar,
 								}}
 								style={styles.image}
 							/>
@@ -136,12 +136,3 @@ const PersonalProfileForm = (): ReactElement => {
 };
 
 export default PersonalProfileForm;
-
-// useEffect(() => {
-//   const validation = validateDetailsForm(personalDetails);
-//   setValidationErrors(validation.errors);
-// }, [personalDetails]);
-
-// useEffect(() => {
-//   props.isValid(state.username !== "");
-// }, [state]);

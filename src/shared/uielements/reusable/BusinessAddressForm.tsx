@@ -3,13 +3,11 @@ import { StyleSheet, View } from "react-native";
 import { Text } from "react-native-elements";
 import { Dropdown } from 'react-native-material-dropdown';
 import { AuthContext } from "src/auth";
+import { BusinessBasicVerification } from "src/auth/types";
 import { colors } from "src/theme/colors";
 import BlockInput from "../BlockInput";
 import { IMap } from 'src/utils/types'
-
-const countries = [
-	{value: "MA"}
-];
+import countries from "src/mocks/countries";
 
 interface BusinessAddressProps {
   style?: IMap;
@@ -68,13 +66,16 @@ const styles = StyleSheet.create({
 });
 
 const BusinessAddressForm = (props: BusinessAddressProps): JSX.Element => {
-  const { buisnessBasicVerification, setBuisnessBasicVerification } = useContext(AuthContext);
+	const { buisnessBasicVerification, setBuisnessBasicVerification } = useContext(AuthContext);
 
-  const onValueChange = (name: string, change: string) => {
-    // setBuisnessBasicVerification({ [name]: change });
-  };
+	const onValueChange = (name: string, change: string) => {
+		setBuisnessBasicVerification((pv: BusinessBasicVerification) => ({
+			...pv,
+			[name]: change,
+		}));
+	};
 
-  return (
+  	return (
 		<View>
 			<View style={styles.container}>
 				<Text style={styles.bodyText}>
@@ -146,7 +147,7 @@ const BusinessAddressForm = (props: BusinessAddressProps): JSX.Element => {
 				style={props.style}
 			/>
 		</View>
-  );
+  	);
 };
 
 export default BusinessAddressForm;
