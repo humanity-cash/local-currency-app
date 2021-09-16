@@ -59,16 +59,18 @@ const AuthProvider: React.FunctionComponent = ({ children }) => {
 	const [completedCustomerVerification, setCompletedCustomerVerification] = useState<boolean>(false);
 	const [completedBusinessVerification, setCompletedBusinessVerification] = useState<boolean>(false);
 	const [cognitoId, setCognitoId] = useState<string>("");
+	const [dwollaId, setDwollaId] = useState<string>("");
 
 	useEffect(() => {
 		const isVerifiedCustomer =
 			userAttributes?.["custom:basicCustomerV"] === "true";
 		const isVerifiedBusiness =
 			userAttributes?.["custom:basicBusinessV"] === "true";
-		const identity = userAttributes?.["sub"];
+		
 		setCompletedCustomerVerification(isVerifiedCustomer);
 		setCompletedBusinessVerification(isVerifiedBusiness);
-		setCognitoId(identity);
+		setCognitoId(userAttributes?.["sub"]);
+		setDwollaId(userAttributes?.["custom:personal.dwollaId"]);
 	}, [userAttributes, authStatus, userType]);
 
 	const [
@@ -217,6 +219,7 @@ const AuthProvider: React.FunctionComponent = ({ children }) => {
 			| CognitoSharedUserAttributes
 	) => {
 		const response = await userController.updateUserAttributes(update);
+
 		return response;
 	};
 
@@ -236,6 +239,7 @@ const AuthProvider: React.FunctionComponent = ({ children }) => {
 		completedCustomerVerification,
 		completedBusinessVerification,
 		cognitoId,
+		dwollaId,
 		signIn,
 		setAuthStatus,
 		signOut,

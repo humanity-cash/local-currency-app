@@ -146,17 +146,11 @@ export type WithdrawPaymentDetails = {
 };
 
 export type Wallet = {
-  amount: number;
-  reservationAmount: number;
-  transactions: Transaction[];
-  reservations: Transaction[];
-  minimum: WalletMinimum;
-  details: WalletDetails;
-};
-
-export type WalletDetails = {
-  walletId: string;
-  iban: string;
+  totalBalance: number;
+  availableBalance: number;
+  userId: string;
+  address: string;
+  createdBlock: string;
 };
 
 export type Route = {
