@@ -16,8 +16,10 @@ export interface CognitoCustomerAttributes {
 	'custom:personal.city': string,
 	'custom:personal.state': string,
 	'custom:personal.postalCode': string,
-	'custom:personal.firstName': string
-	'custom:personal.lastName': string
+	'custom:personal.firstName': string,
+	'custom:personal.lastName': string,
+	'custom:personal.dwollaId'?: string
+	'custom:personal.resourceUri'?: string
 }
 
 /**Business */
@@ -35,6 +37,8 @@ export interface CognitoBusinessAttributes {
 	"custom:business.state": string,
 	"custom:business.postalCode": string,
 	"custom:business.phoneNumber"?: string,
+	'custom:business.dwollaId'?: string
+	'custom:business.resourceUri'?: string
 	"custom:owner.firstName": string,
 	"custom:owner.lastName": string,
 	"custom:owner.address1": string,

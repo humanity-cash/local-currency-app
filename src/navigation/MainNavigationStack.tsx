@@ -188,6 +188,26 @@ const PrimaryStackScreen = () => {
 						name={Routes.SETTING_DELETE_ACCOUNT}
 						component={SettingsDeleteAccount}
 					/>
+					<PrimaryStack.Screen
+						name={Routes.LINK_BANK_ACCOUNT}
+						component={LinkBankAccount}
+					/>
+					<PrimaryStack.Screen
+						name={Routes.SELECT_BANK}
+						component={SelectBank}
+					/>
+					<PrimaryStack.Screen
+						name={Routes.LOGIN_BANK}
+						component={LoginToBank}
+					/>
+					<PrimaryStack.Screen
+						name={Routes.SELECT_BANK_ACCOUNT}
+						component={SelectBankAccount}
+					/>
+					<PrimaryStack.Screen
+						name={Routes.BANK_LINK_SUCCESS}
+						component={BankLinkSuccess}
+					/>
 					{!completedBusinessVerification && (
 						<PrimaryStack.Screen
 							name={Routes.SIGNUP_BUSINESS}
@@ -305,10 +325,10 @@ const PrimaryStackScreen = () => {
 						name={Routes.MERCHANT_REDEMPTION_IN_PROGRESS}
 						component={MerchantRedemptionInProgress}
 					/>
-					{/* <PrimaryStack.Screen
-						name="SelectMerchantBank"
+					<PrimaryStack.Screen
+						name={Routes.MERCHANT_BANK_ACCOUNT}
 						component={MerchantBankAccountNavigator}
-					/> */}
+					/>
 					<PrimaryStack.Screen
 						name={Routes.REPORT_SUCCESS}
 						component={ReportSuccess}
@@ -346,26 +366,6 @@ const PrimaryStackScreen = () => {
 							<PrimaryStack.Screen
 								name={Routes.PERSONAL_ADDRESS}
 								component={PersonalAddress}
-							/>
-							<PrimaryStack.Screen
-								name={Routes.LINK_BANK_ACCOUNT}
-								component={LinkBankAccount}
-							/>
-							<PrimaryStack.Screen
-								name={Routes.SELECT_BANK}
-								component={SelectBank}
-							/>
-							<PrimaryStack.Screen
-								name={Routes.LOGIN_BANK}
-								component={LoginToBank}
-							/>
-							<PrimaryStack.Screen
-								name={Routes.SELECT_BANK_ACCOUNT}
-								component={SelectBankAccount}
-							/>
-							<PrimaryStack.Screen
-								name={Routes.BANK_LINK_SUCCESS}
-								component={BankLinkSuccess}
 							/>
 						</>
 					)}
@@ -413,10 +413,6 @@ const PrimaryStackScreen = () => {
 					<PrimaryStack.Screen
 						name={Routes.SIGNUP_BUSINESS}
 						component={SignupBusinessNavigator}
-					/>
-					<PrimaryStack.Screen
-						name={Routes.MERCHANT_BANK_ACCOUNT}
-						component={MerchantBankAccountNavigator}
 					/>
 				</>
 			) : (

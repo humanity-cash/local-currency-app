@@ -16,8 +16,6 @@ import { colors } from 'src/theme/colors';
 import { baseHeader, viewBase, wrappingContainerBase } from 'src/theme/elements';
 import Translation from 'src/translation/en.json';
 import DwollaDialog from './DwollaDialog';
-import { UserAPI } from 'src/api';
-import { IUserRequest, IUserResponse } from 'src/api/formatters';
 
 const styles = StyleSheet.create({
 	content: { paddingBottom: 40 },
@@ -123,19 +121,14 @@ const Dashboard = (): JSX.Element => {
 	const [isVisible, setIsVisible] = useState<boolean>(false);
 
 	useEffect(() => {
-		// const getHealth = async () => {
-		// 	if (cognitoId) {
-		// 		UserAPI.getUser("582de663-38ab-40e8-b5df-3fd850749f4f");
-		// 	}
-		// }
-		// getHealth();
+		console.log(cognitoId);
 	}, [cognitoId]);
 
 	const onClose = () => {
 		setIsVisible(false);
 	};
 
-	const alert = false;
+	const alert = true;
 
 	return (
 		<View style={viewBase}>
