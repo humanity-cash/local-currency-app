@@ -4,6 +4,7 @@ import { StyleSheet, View } from 'react-native';
 import { Text } from 'react-native-elements';
 import { Button, Dialog } from "src/shared/uielements";
 import { dialogViewBase } from "src/theme/elements";
+import * as Routes from 'src/navigation/constants';
 
 const styles = StyleSheet.create({
     dialog: {
@@ -29,11 +30,11 @@ type DwollaDialogProps = {
 	onClose: ()=>void,
 }
 
-const DwollaDialog = (props: DwollaDialogProps) => {
+const DwollaDialog = (props: DwollaDialogProps): JSX.Element => {
     const navigation = useNavigation();
 
     const selectBank = () => {
-        navigation.navigate("SelectBank");
+        navigation.navigate(Routes.SELECT_BANK);
         props.onClose();
     }
 

@@ -26,6 +26,8 @@ export const buildCompleteBusinessVerificationObject = (
 		"custom:business.state": update.state,
 		"custom:business.postalCode": update.postalCode,
 		"custom:business.phoneNumber": update.phoneNumber,
+		"custom:business.dwollaId": update.dwollaId,
+		"custom:business.resourceUri": update.resourceUri,
 	});
 };
 
@@ -42,6 +44,8 @@ export const buildCompleteCustomerVerificationObject = (
 		"custom:personal.city": update.city,
 		"custom:personal.state": update.state,
 		"custom:personal.postalCode": update.postalCode,
+		"custom:personal.dwollaId": update.dwollaId,
+		"custom:personal.resourceUri": update.resourceUri,
 	});
 };
 

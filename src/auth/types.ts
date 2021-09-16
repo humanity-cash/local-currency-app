@@ -11,7 +11,9 @@ export interface CustomerBasicVerification {
 	postalCode: string
 	firstName: string
 	lastName: string
-	type: string
+	type: string,
+	dwollaId?: string,
+	resourceUri?: string,
 };
 
 export interface BusinessBasicVerification {
@@ -37,6 +39,8 @@ export interface BusinessBasicVerification {
 	state: string,
 	postalCode: string,
 	phoneNumber?: string,
+	dwollaId?: string,
+	resourceUri?: string,
 }
 
 /**Shared Update attributes input between Customer and Business */
