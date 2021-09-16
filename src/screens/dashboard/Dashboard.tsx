@@ -16,6 +16,8 @@ import { colors } from 'src/theme/colors';
 import { baseHeader, viewBase, wrappingContainerBase } from 'src/theme/elements';
 import Translation from 'src/translation/en.json';
 import DwollaDialog from './DwollaDialog';
+import { UserAPI } from 'src/api';
+import { useWallet } from 'src/hooks';
 
 const styles = StyleSheet.create({
 	content: { paddingBottom: 40 },
@@ -117,18 +119,24 @@ const feedData = {
 
 const Dashboard = (): JSX.Element => {
 	const navigation = useNavigation();
-	const { cognitoId } = useContext(AuthContext);
+	const { wallet, update } = useWallet();
+	const { cognitoId, dwollaId } = useContext(AuthContext);
 	const [isVisible, setIsVisible] = useState<boolean>(false);
+	const [hasBank, setHasBank] = useState<boolean>(false);
 
 	useEffect(() => {
-		console.log(cognitoId);
-	}, [cognitoId]);
+		if (dwollaId) {
+			setHasBank(true);
+			(async () => {
+				const response = await UserAPI.getUser(dwollaId);
+				update(response);
+			})();
+		}
+	}, [cognitoId, dwollaId]);
 
 	const onClose = () => {
 		setIsVisible(false);
 	};
-
-	const alert = true;
 
 	return (
 		<View style={viewBase}>
@@ -157,14 +165,14 @@ const Dashboard = (): JSX.Element => {
 						</Text>
 					</View>
 					<View style={styles.amountView}>
-						<Text style={styles.text}>B$ -</Text>
+						<Text style={styles.text}>B$ {wallet.totalBalance === 0 ? '-' : wallet.totalBalance}</Text>
 						<TouchableOpacity
 							style={styles.topupButton}
-							onPress={() => navigation.navigate(Routes.LOAD_UP)}>
+							onPress={() => hasBank ? navigation.navigate(Routes.LOAD_UP) : alert("Please link your bank account")}>
 							<Text style={styles.topupText}>Load up B$</Text>
 						</TouchableOpacity>
 					</View>
-					{alert && (
+					{!hasBank && (
 						<View style={styles.alertView}>
 							<AntDesign
 								name='exclamationcircleo'
@@ -197,7 +205,7 @@ const Dashboard = (): JSX.Element => {
 					</View>
 				</View>
 			</ScrollView>
-			<TouchableOpacity onPress={()=>navigation.navigate(Routes.QRCODE_SCAN)} style={styles.scanButton}>
+			<TouchableOpacity onPress={() => hasBank ? navigation.navigate(Routes.QRCODE_SCAN) : alert("Please link your bank account")} style={styles.scanButton}>
 				<Image
 					source={require('../../../assets/images/qr_code_consumer.png')}
 					containerStyle={styles.qrIcon}

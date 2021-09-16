@@ -93,6 +93,7 @@ export interface IAuth {
 	completedCustomerVerification: boolean,
 	completedBusinessVerification: boolean,
 	cognitoId?: string,
+	dwollaId?: string,
 	userAttributes?: any,
 	completeCustomerBasicVerification?: any,
 	updateAttributes?: any;
