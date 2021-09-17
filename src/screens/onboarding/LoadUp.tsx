@@ -1,11 +1,14 @@
 import { useNavigation } from "@react-navigation/native";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import {
     KeyboardAvoidingView,
-    Platform, ScrollView, StyleSheet, View
+    Platform, ScrollView,
+    StyleSheet,
+    View,
+    TouchableOpacity
 } from "react-native";
 import { Text } from "react-native-elements";
-import { TouchableOpacity } from "react-native-gesture-handler";
+import { AuthContext } from 'src/auth';
 import { usePaymentDetails } from "src/hooks";
 import { BackBtn, BorderedInput, Button, Header, CancelBtn } from "src/shared/uielements";
 import { colors } from "src/theme/colors";
@@ -17,6 +20,7 @@ import {
 import Translation from 'src/translation/en.json';
 import * as Routes from 'src/navigation/constants';
 import { BUTTON_TYPES } from 'src/constants';
+import { UserAPI } from 'src/api';
 
 const styles = StyleSheet.create({
   container: { 
@@ -81,6 +85,7 @@ const styles = StyleSheet.create({
 
 const LoadUp = (): JSX.Element => {
   const navigation = useNavigation();
+  const { dwollaId } = useContext(AuthContext);
   const {update} = usePaymentDetails();
   const [amount, setAmount] = useState<string>("");
   const [goNext, setGoNext] = useState(false);
@@ -97,6 +102,20 @@ const LoadUp = (): JSX.Element => {
     setAmount(change);
     update({ amount: change });
   };
+
+  const onLoadUp = async () => {
+    if (!dwollaId || parseFloat(amount) > 2000) {
+      return;
+    }
+
+    const response = await UserAPI.deposit(
+      dwollaId,
+      {amount: amount}
+    );
+    console.log(response);
+    
+    navigation.navigate(Routes.LOADUP_SUCCESS);
+  }
 
   return (
     <View style={viewBase}>
@@ -171,12 +190,7 @@ const LoadUp = (): JSX.Element => {
             type={BUTTON_TYPES.DARK_GREEN}
             title={Translation.BUTTON.LOAD_UP}
             disabled={!goNext}
-            onPress={() => {
-              if (parseFloat(amount) > 2000) {
-                return;
-              }
-              navigation.navigate(Routes.LOADUP_SUCCESS);
-            }}
+            onPress={onLoadUp}
           />
         </View>
       </KeyboardAvoidingView>

@@ -165,7 +165,7 @@ const Dashboard = (): JSX.Element => {
 						</Text>
 					</View>
 					<View style={styles.amountView}>
-						<Text style={styles.text}>B$ {wallet.totalBalance === 0 ? '-' : wallet.totalBalance}</Text>
+						<Text style={styles.text}>B$ {hasBank ? '-' : wallet.totalBalance}</Text>
 						<TouchableOpacity
 							style={styles.topupButton}
 							onPress={() => hasBank ? navigation.navigate(Routes.LOAD_UP) : alert("Please link your bank account")}>
