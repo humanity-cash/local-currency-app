@@ -16,6 +16,9 @@ import { colors } from 'src/theme/colors';
 import { baseHeader, viewBase, wrappingContainerBase } from 'src/theme/elements';
 import Translation from 'src/translation/en.json';
 import DwollaDialog from './DwollaDialog';
+import { Button, Dialog } from "src/shared/uielements";
+import { dialogViewBase } from "src/theme/elements";
+import { BUTTON_TYPES } from "src/constants";
 import { UserAPI } from 'src/api';
 import { useWallet } from 'src/hooks';
 
@@ -108,6 +111,22 @@ const styles = StyleSheet.create({
 		backgroundColor: colors.darkGreen,
 	},
 	topupText: { color: colors.white, fontSize: 16 },
+	dialog: {
+        height: 320
+    },
+	dialogWrap: {
+		paddingHorizontal: 10,
+		flex: 1
+	},
+	dialogHeader: {
+		fontSize: 30,
+		lineHeight: 32,
+		marginTop: 20,
+		marginBottom: 10,
+	},
+	dialogBottom: {
+		paddingTop: 20,
+	}
 });
 
 const feedData = {
@@ -122,6 +141,8 @@ const Dashboard = (): JSX.Element => {
 	const { wallet, update } = useWallet();
 	const { cognitoId, dwollaId } = useContext(AuthContext);
 	const [isVisible, setIsVisible] = useState<boolean>(false);
+	const [isLoadup, setIsLoadup] = useState<boolean>(false);
+	const [isPayment, setIsPayment] = useState<boolean>(false);
 	const [hasBank, setHasBank] = useState<boolean>(false);
 
 	useEffect(() => {
@@ -134,8 +155,15 @@ const Dashboard = (): JSX.Element => {
 		}
 	}, [cognitoId, dwollaId]);
 
+	const selectBank = () => {
+		navigation.navigate(Routes.SELECT_BANK);
+		onClose();
+	}
+
 	const onClose = () => {
 		setIsVisible(false);
+		setIsPayment(false);
+		setIsLoadup(false);
 	};
 
 	return (
@@ -168,7 +196,7 @@ const Dashboard = (): JSX.Element => {
 						<Text style={styles.text}>B$ {hasBank ? '-' : wallet.totalBalance}</Text>
 						<TouchableOpacity
 							style={styles.topupButton}
-							onPress={() => hasBank ? navigation.navigate(Routes.LOAD_UP) : alert("Please link your bank account")}>
+							onPress={() => hasBank ? navigation.navigate(Routes.LOAD_UP) : setIsLoadup(true)}>
 							<Text style={styles.topupText}>Load up B$</Text>
 						</TouchableOpacity>
 					</View>
@@ -205,7 +233,7 @@ const Dashboard = (): JSX.Element => {
 					</View>
 				</View>
 			</ScrollView>
-			<TouchableOpacity onPress={() => hasBank ? navigation.navigate(Routes.QRCODE_SCAN) : alert("Please link your bank account")} style={styles.scanButton}>
+			<TouchableOpacity onPress={() => hasBank ? navigation.navigate(Routes.QRCODE_SCAN) : setIsPayment(true)} style={styles.scanButton}>
 				<Image
 					source={require('../../../assets/images/qr_code_consumer.png')}
 					containerStyle={styles.qrIcon}
@@ -214,6 +242,31 @@ const Dashboard = (): JSX.Element => {
 			</TouchableOpacity>
 			{isVisible && (
 				<DwollaDialog visible={isVisible} onClose={onClose} />
+			)}
+			{(isLoadup || isPayment) && (
+				<Dialog visible={isLoadup || isPayment} onClose={onClose} style={styles.dialog}>
+					<View style={dialogViewBase}>
+						{isLoadup && (
+							<View style={styles.dialogWrap}>
+								<Text style={styles.dialogHeader}>{Translation.LOAD_UP.LOAD_UP_NO_BANK_TITLE}</Text>
+								<Text>{Translation.LOAD_UP.LOAD_UP_NO_BANK_DETAIL}</Text>
+							</View>
+						)}
+						{isPayment && (
+							<View style={styles.dialogWrap}>
+								<Text style={styles.dialogHeader}>{Translation.PAYMENT.PAYMENT_NO_BANK_TITLE}</Text>
+								<Text>{Translation.PAYMENT.PAYMENT_NO_BANK_DETAIL}</Text>
+							</View>
+						)}
+						<View style={styles.dialogBottom}>
+							<Button
+								type={BUTTON_TYPES.DARK_GREEN}
+								title={Translation.BUTTON.LINK_BANK}
+								onPress={selectBank}
+							/>
+						</View>
+					</View>
+				</Dialog>
 			)}
 		</View>
 	);

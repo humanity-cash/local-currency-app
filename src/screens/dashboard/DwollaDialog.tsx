@@ -1,14 +1,16 @@
+import { Entypo } from '@expo/vector-icons';
 import { useNavigation } from "@react-navigation/native";
 import React from 'react';
 import { StyleSheet, View } from 'react-native';
 import { Text } from 'react-native-elements';
 import { Button, Dialog } from "src/shared/uielements";
 import { dialogViewBase } from "src/theme/elements";
+import { colors } from 'src/theme/colors';
 import * as Routes from 'src/navigation/constants';
 
 const styles = StyleSheet.create({
     dialog: {
-        height: 370
+        height: 480
     },
 	dialogWrap: {
 		paddingHorizontal: 10,
@@ -22,7 +24,15 @@ const styles = StyleSheet.create({
 	},
 	dialogBottom: {
 		paddingTop: 20,
-	}
+	},
+    icon: {
+        paddingRight: 5,
+        paddingTop: 4
+    },
+    inlineView: {
+        flexDirection: 'row',
+        paddingBottom: 10
+    }
 });
 
 type DwollaDialogProps = {
@@ -43,8 +53,21 @@ const DwollaDialog = (props: DwollaDialogProps): JSX.Element => {
             <View style={dialogViewBase}>
                 <View style={styles.dialogWrap}>
                     <Text style={styles.dialogHeader}>BerkShares uses Dwolla to link your business bank account.</Text>
-                    <Text>Encryption helps protect your personal financial data</Text>
-                    <Text>Your credencials will never be made access to BerkShares.</Text>
+                    <View style={styles.inlineView}>
+                        <Entypo name="check" size={16} color={colors.darkGreen} style={styles.icon} />
+                        <View>
+                            <Text h2>Secure</Text>
+                            <Text>Secure Encryption helps protect your personal financial data</Text>
+                        </View>
+                    </View>
+                    <View style={styles.inlineView}>
+                        <Entypo name="check" size={16} color={colors.darkGreen} style={styles.icon} />
+                        <View>
+                            <Text h2>Private</Text>
+                            <Text>Your credentials will never be made access to BerkShares.</Text>
+                        </View>
+                    </View>
+                    <Text>By selecting "continue" you agree to the Dwolla Privacy Policy</Text>
                 </View>
                 <View style={styles.dialogBottom}>
                     <Button
