@@ -139,7 +139,7 @@ const feedData = {
 const Dashboard = (): JSX.Element => {
 	const navigation = useNavigation();
 	const { wallet, update } = useWallet();
-	const { cognitoId, dwollaId } = useContext(AuthContext);
+	const { dwollaId } = useContext(AuthContext);
 	const [isVisible, setIsVisible] = useState<boolean>(false);
 	const [isLoadup, setIsLoadup] = useState<boolean>(false);
 	const [isPayment, setIsPayment] = useState<boolean>(false);
@@ -150,10 +150,24 @@ const Dashboard = (): JSX.Element => {
 			setHasBank(true);
 			(async () => {
 				const response = await UserAPI.getUser(dwollaId);
-				update(response);
+				if (response.data) {
+					update(response.data[0]);
+				}
 			})();
 		}
-	}, [cognitoId, dwollaId]);
+	}, [dwollaId]);
+
+	// useEffect(() => {
+	// 	setTimeout(() => {
+	// 		(async () => {
+	// 			setCustomerDwollaInfo({
+	// 				dwollaId: "d9044dbb-ef9e-411a-a8a1-a710918ef569",
+	// 				resourceUri: ""
+	// 			});
+	// 			await completeCustomerDwollaInfo();
+	// 		})();
+	// 	}, 1000);
+	// }, []);
 
 	const selectBank = () => {
 		navigation.navigate(Routes.SELECT_BANK);
@@ -193,7 +207,7 @@ const Dashboard = (): JSX.Element => {
 						</Text>
 					</View>
 					<View style={styles.amountView}>
-						<Text style={styles.text}>B$ {hasBank ? '-' : wallet.totalBalance}</Text>
+						<Text style={styles.text}>B$ {hasBank ? wallet.totalBalance : '-'}</Text>
 						<TouchableOpacity
 							style={styles.topupButton}
 							onPress={() => hasBank ? navigation.navigate(Routes.LOAD_UP) : setIsLoadup(true)}>

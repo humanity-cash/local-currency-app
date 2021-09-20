@@ -5,7 +5,7 @@
  */
 import { AuthenticationDetails, CognitoUserAttribute, CognitoUserSession, ISignUpResult } from 'amazon-cognito-identity-js';
 import { BusinessBasicVerification, CustomerBasicVerification } from 'src/auth/types';
-import { CognitoCustomerAttributes, CognitoBusinessAttributes, CognitoSharedUserAttributes, CognitoResponse } from 'src/auth/cognito/types';
+import { CognitoCustomerAttributes, CognitoBusinessAttributes, CognitoSharedUserAttributes, CognitoBusinessDwollaAttributes, CognitoCustomerDwollaAttributes, CognitoResponse } from 'src/auth/cognito/types';
 import { SignInInput } from '../types';
 import * as Core from './core';
 import { CognitoUser, CognitoUserPool } from 'amazon-cognito-identity-js';
@@ -91,9 +91,10 @@ export const deleteUser = async (): CognitoResponse<string | undefined> => {
 };
 
 /**Update users properties we save in AWS */
-export const updateUserAttributes = async (update: CognitoBusinessAttributes | CognitoCustomerAttributes | CognitoSharedUserAttributes)
+export const updateUserAttributes = async (update: CognitoBusinessAttributes | CognitoCustomerAttributes | CognitoSharedUserAttributes | CognitoBusinessDwollaAttributes | CognitoCustomerDwollaAttributes)
 	: CognitoResponse<string | undefined> => {
 	const attributesList = Utils.buildUpdateUserAttributes(update);
+	console.log("-----------> .........._", attributesList)
 	const response = await Core.updateUserAttributes(currentUser, attributesList);
 
 	return response;

@@ -3,7 +3,7 @@ import { IMap } from "../utils/types";
 
 /** CORE_API_URL should be stored as ENV variable
 https://docs.expo.io/guides/environment-variables/ */
-const CORE_API_URL = "http://198.18.6.38:3000";
+const CORE_API_URL = "http://192.168.0.100:3000";
 
 const httpRequest = axios.create({
   baseURL: CORE_API_URL,

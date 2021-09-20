@@ -43,6 +43,11 @@ export interface BusinessBasicVerification {
 	resourceUri?: string,
 }
 
+export interface DwollaInfo {
+	dwollaId: string,
+	resourceUri: string,
+};
+
 /**Shared Update attributes input between Customer and Business */
 export interface UpdateUserAttributesInput {
 	user: CognitoUser
@@ -116,7 +121,9 @@ export interface IAuth {
 	setCustomerBasicVerificationDetails?: any;
 	customerBasicVerificationDetails?: any;
 	buisnessBasicVerification?: any,
-	setBuisnessBasicVerification?: any
+	setBuisnessBasicVerification?: any,
+	setCustomerDwollaInfo?: any,
+	completeCustomerDwollaInfo?: any
 }
 
 export const defaultState: IAuth = {
