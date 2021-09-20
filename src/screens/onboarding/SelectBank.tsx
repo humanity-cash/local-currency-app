@@ -20,7 +20,7 @@ const styles = StyleSheet.create({
         paddingHorizontal: 17
     },
 	bankItem: {
-		width: '48%',
+		width: '49%',
 		height: 100,
 		marginBottom: 10,
 		backgroundColor: colors.card,
@@ -33,12 +33,15 @@ const styles = StyleSheet.create({
 		flexDirection: 'row',
 		flexWrap: 'wrap',
 		justifyContent: 'space-between',
+		paddingBottom: 10
 	},
 	image: {
 		width: '50%',
 		height: 80
 	},
 });
+
+const defaultBankCount = 10;
 
 const SelectBank = (): JSX.Element => {
 	const navigation = useNavigation();
@@ -65,16 +68,18 @@ const SelectBank = (): JSX.Element => {
 			found = listOfBanks;
 		}
 
-		return found.map((entry, i) => (
+		const retVal = [...Array(defaultBankCount).keys()];
+		return retVal.map((entry, i) => (
 			<View style={styles.bankItem} key={i}>
-				<TouchableWithoutFeedback onPress={() => setBank(entry.id)} >
-					<Image
-						source={require('../../../assets/images/bank2.png')}
-						containerStyle={styles.image}
-					/>
-				</TouchableWithoutFeedback>
+				{found.length > i && (
+					<TouchableWithoutFeedback onPress={() => setBank(found[i].id)} >
+						<Image
+							source={require('../../../assets/images/bank2.png')}
+							containerStyle={styles.image}
+						/>
+					</TouchableWithoutFeedback>
+				)}
 			</View>
-			
 		))
 	}
 
@@ -94,7 +99,7 @@ const SelectBank = (): JSX.Element => {
 						label="Search"
 						name="searchText"
 						keyboardType="default"
-						placeholder="Search help"
+						placeholder="Search"
 						value={searchPhrase}
 						onChange={onValueChange}
 					/>
