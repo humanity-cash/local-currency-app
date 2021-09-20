@@ -1,4 +1,4 @@
-import { BusinessBasicVerification, CustomerBasicVerification } from './types';
+import { BusinessBasicVerification, CustomerBasicVerification, DwollaInfo } from './types';
 
 export const buisnessBasicVerificationInitialState: BusinessBasicVerification = {
 	story: "tell a story story",
@@ -35,6 +35,11 @@ export const customerBasicVerificationInitialState: CustomerBasicVerification = 
 	city: "Sato",
 	state: "a",
 	postalCode: "2100000000",
+}
+
+export const dwollaInfoInitialState: DwollaInfo = {
+	dwollaId: "d9044dbb-ef9e-411a-a8a1-a710918ef569",
+	resourceUri: "",
 }
 
 export const signInInitialState = {

@@ -17,9 +17,7 @@ export interface CognitoCustomerAttributes {
 	'custom:personal.state': string,
 	'custom:personal.postalCode': string,
 	'custom:personal.firstName': string,
-	'custom:personal.lastName': string,
-	'custom:personal.dwollaId'?: string
-	'custom:personal.resourceUri'?: string
+	'custom:personal.lastName': string
 }
 
 /**Business */
@@ -37,8 +35,6 @@ export interface CognitoBusinessAttributes {
 	"custom:business.state": string,
 	"custom:business.postalCode": string,
 	"custom:business.phoneNumber"?: string,
-	'custom:business.dwollaId'?: string
-	'custom:business.resourceUri'?: string
 	"custom:owner.firstName": string,
 	"custom:owner.lastName": string,
 	"custom:owner.address1": string,
@@ -46,6 +42,16 @@ export interface CognitoBusinessAttributes {
 	"custom:owner.city": string,
 	"custom:owner.state": string,
 	"custom:owner.postalCode": string
+}
+
+export interface CognitoCustomerDwollaAttributes {
+	'custom:personal.dwollaId'?: string,
+	'custom:personal.resourceUri'?: string
+}
+
+export interface CognitoBusinessDwollaAttributes {
+	'custom:business.dwollaId': string,
+	'custom:business.resourceUri': string
 }
 
 export type CognitoError = any

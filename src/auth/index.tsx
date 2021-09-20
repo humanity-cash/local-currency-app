@@ -9,6 +9,7 @@ import { BaseResponse, CognitoBusinessAttributes, CognitoCustomerAttributes, Cog
 import {
 	buisnessBasicVerificationInitialState,
 	customerBasicVerificationInitialState,
+	dwollaInfoInitialState,
 	signInInitialState,
 	signUpInitialState
 } from "./consts";
@@ -16,6 +17,7 @@ import {
 	AuthStatus,
 	BusinessBasicVerification,
 	CustomerBasicVerification,
+	DwollaInfo,
 	defaultState,
 	IAuth, UserType
 } from "./types";
@@ -83,6 +85,16 @@ const AuthProvider: React.FunctionComponent = ({ children }) => {
 	const [buisnessBasicVerification, setBuisnessBasicVerification] =
 		useState<BusinessBasicVerification>(
 			buisnessBasicVerificationInitialState
+		);
+
+	const [customerDwollaInfo, setCustomerDwollaInfo] =
+		useState<DwollaInfo>(
+			dwollaInfoInitialState
+		);
+
+	const [businessDwollaInfo, setBusinessDwollaInfo] =
+		useState<DwollaInfo>(
+			dwollaInfoInitialState
 		);
 
 	const updateUserType = (newType: UserType): void => {
@@ -212,6 +224,17 @@ const AuthProvider: React.FunctionComponent = ({ children }) => {
 		return response;
 	};
 
+	const completeCustomerDwollaInfo = async (
+		update = customerDwollaInfo
+	): CognitoResponse<string | undefined> => {
+		const response = await userController.updateUserAttributes({
+			"custom:personal.dwollaId": update.dwollaId,
+		});
+
+		console.log("-----------> completeCDwolla", response)
+		return response;
+	};
+
 	const updateAttributes = async (
 		update:
 			| CognitoBusinessAttributes
@@ -219,7 +242,6 @@ const AuthProvider: React.FunctionComponent = ({ children }) => {
 			| CognitoSharedUserAttributes
 	) => {
 		const response = await userController.updateUserAttributes(update);
-
 		return response;
 	};
 
@@ -257,6 +279,8 @@ const AuthProvider: React.FunctionComponent = ({ children }) => {
 		completeCustomerBasicVerification,
 		emailVerification,
 		resendEmailVerificationCode,
+		setCustomerDwollaInfo,
+		completeCustomerDwollaInfo,
 	};
 
 	return (
