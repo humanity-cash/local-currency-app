@@ -3454,6 +3454,11 @@ bindings@^1.5.0:
   dependencies:
     file-uri-to-path "1.0.0"
 
+bluebird@^3.5.1:
+  version "3.7.2"
+  resolved "https://registry.yarnpkg.com/bluebird/-/bluebird-3.7.2.tgz#9f229c15be272454ffa973ace0dbee79a1b0c36f"
+  integrity sha512-XpNj6GDQzdfW+r2Wnn7xiSAd7TM3jzkxGXBGTtWKuSXv1xUV+azxAm8jdWZN06QTQk+2N2XB9jRDkvbmQmcRtg==
+
 blueimp-md5@^2.10.0:
   version "2.18.0"
   resolved "https://registry.yarnpkg.com/blueimp-md5/-/blueimp-md5-2.18.0.tgz#1152be1335f0c6b3911ed9e36db54f3e6ac52935"
@@ -4426,6 +4431,19 @@ domutils@^1.7.0:
   dependencies:
     dom-serializer "0"
     domelementtype "1"
+
+dwolla-v2@^3.2.0:
+  version "3.2.0"
+  resolved "https://registry.yarnpkg.com/dwolla-v2/-/dwolla-v2-3.2.0.tgz#e3dc2e771877e0b9734949588848bc238309e20b"
+  integrity sha512-cVwXzzRPb1ebf9udLeRVXnxRVFhX5OFKCNzVFAH3p3TxxK6bwlDIKRLfYnXWsjZnSHAy1g2jjGeINsdlfO8qPg==
+  dependencies:
+    bluebird "^3.5.1"
+    form-urlencoded "^3.0.1"
+    invariant "^2.2.4"
+    is-stream "^1.1.0"
+    lodash "^4.17.14"
+    lodash.snakecase "^4.1.1"
+    node-fetch "^2.2.0"
 
 ecc-jsbn@~0.1.1:
   version "0.1.2"
@@ -5426,6 +5444,11 @@ form-data@~2.3.2:
     asynckit "^0.4.0"
     combined-stream "^1.0.6"
     mime-types "^2.1.12"
+
+form-urlencoded@^3.0.1:
+  version "3.0.2"
+  resolved "https://registry.yarnpkg.com/form-urlencoded/-/form-urlencoded-3.0.2.tgz#28181fabc31b263662d6fc9c2e9700af35b2a860"
+  integrity sha512-FurPsZ7yfmbX+Vl9ibn/PK5EkeScj/inKtCqx9vc9EOlzh6p6VhanfeIjtDk/kCGrWVbCVW8M3GA7zX3udmgHw==
 
 fragment-cache@^0.2.1:
   version "0.2.1"
@@ -7582,6 +7605,11 @@ lodash.pick@^4.4.0:
   version "4.4.0"
   resolved "https://registry.yarnpkg.com/lodash.pick/-/lodash.pick-4.4.0.tgz#52f05610fff9ded422611441ed1fc123a03001b3"
   integrity sha1-UvBWEP/53tQiYRRB7R/BI6AwAbM=
+
+lodash.snakecase@^4.1.1:
+  version "4.1.1"
+  resolved "https://registry.yarnpkg.com/lodash.snakecase/-/lodash.snakecase-4.1.1.tgz#39d714a35357147837aefd64b5dcbb16becd8f8d"
+  integrity sha1-OdcUo1NXFHg3rv1ktdy7Fr7Nj40=
 
 lodash.sortby@^4.7.0:
   version "4.7.0"

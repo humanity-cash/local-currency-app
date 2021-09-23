@@ -139,23 +139,22 @@ const feedData = {
 const Dashboard = (): JSX.Element => {
 	const navigation = useNavigation();
 	const { wallet, update } = useWallet();
-	const { dwollaId } = useContext(AuthContext);
+	const { customerDwollaId } = useContext(AuthContext);
 	const [isVisible, setIsVisible] = useState<boolean>(false);
 	const [isLoadup, setIsLoadup] = useState<boolean>(false);
 	const [isPayment, setIsPayment] = useState<boolean>(false);
 	const [hasBank, setHasBank] = useState<boolean>(false);
 
 	useEffect(() => {
-		if (dwollaId) {
-			setHasBank(true);
+		if (customerDwollaId) {
 			(async () => {
-				const response = await UserAPI.getUser(dwollaId);
+				const response = await UserAPI.getUser(customerDwollaId);
 				if (response.data) {
 					update(response.data[0]);
 				}
 			})();
 		}
-	}, [dwollaId]);
+	}, [customerDwollaId]);
 
 	// useEffect(() => {
 	// 	setTimeout(() => {

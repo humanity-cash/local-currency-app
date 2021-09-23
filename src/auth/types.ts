@@ -98,7 +98,8 @@ export interface IAuth {
 	completedCustomerVerification: boolean,
 	completedBusinessVerification: boolean,
 	cognitoId?: string,
-	dwollaId?: string,
+	customerDwollaId?: string,
+	businessDwollaId?: string,
 	userAttributes?: any,
 	completeCustomerBasicVerification?: any,
 	updateAttributes?: any;
@@ -123,7 +124,9 @@ export interface IAuth {
 	buisnessBasicVerification?: any,
 	setBuisnessBasicVerification?: any,
 	setCustomerDwollaInfo?: any,
-	completeCustomerDwollaInfo?: any
+	completeCustomerDwollaInfo?: any,
+	setBusinessDwollaInfo?: any,
+	completeBusinessDwollaInfo?: any,
 }
 
 export const defaultState: IAuth = {

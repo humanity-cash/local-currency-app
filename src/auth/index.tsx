@@ -61,7 +61,8 @@ const AuthProvider: React.FunctionComponent = ({ children }) => {
 	const [completedCustomerVerification, setCompletedCustomerVerification] = useState<boolean>(false);
 	const [completedBusinessVerification, setCompletedBusinessVerification] = useState<boolean>(false);
 	const [cognitoId, setCognitoId] = useState<string>("");
-	const [dwollaId, setDwollaId] = useState<string>("");
+	const [customerDwollaId, setCustomerDwollaId] = useState<string>("");
+	const [businessDwollaId, setBusinessDwollaId] = useState<string>("");
 
 	useEffect(() => {
 		const isVerifiedCustomer =
@@ -72,7 +73,8 @@ const AuthProvider: React.FunctionComponent = ({ children }) => {
 		setCompletedCustomerVerification(isVerifiedCustomer);
 		setCompletedBusinessVerification(isVerifiedBusiness);
 		setCognitoId(userAttributes?.["sub"]);
-		setDwollaId(userAttributes?.["custom:personal.dwollaId"]);
+		setCustomerDwollaId(userAttributes?.["custom:personal.dwollaId"]);
+		setBusinessDwollaId(userAttributes?.["custom:business.dwollaId"]);
 	}, [userAttributes, authStatus, userType]);
 
 	const [
@@ -231,7 +233,16 @@ const AuthProvider: React.FunctionComponent = ({ children }) => {
 			"custom:personal.dwollaId": update.dwollaId,
 		});
 
-		console.log("-----------> completeCDwolla", response)
+		return response;
+	};
+
+	const completeBusinessDwollaInfo = async (
+		update = businessDwollaInfo
+	): CognitoResponse<string | undefined> => {
+		const response = await userController.updateUserAttributes({
+			"custom:business.dwollaId": update.dwollaId,
+		});
+
 		return response;
 	};
 
@@ -261,7 +272,8 @@ const AuthProvider: React.FunctionComponent = ({ children }) => {
 		completedCustomerVerification,
 		completedBusinessVerification,
 		cognitoId,
-		dwollaId,
+		customerDwollaId,
+		businessDwollaId,
 		signIn,
 		setAuthStatus,
 		signOut,
@@ -281,6 +293,8 @@ const AuthProvider: React.FunctionComponent = ({ children }) => {
 		resendEmailVerificationCode,
 		setCustomerDwollaInfo,
 		completeCustomerDwollaInfo,
+		setBusinessDwollaInfo,
+		completeBusinessDwollaInfo,
 	};
 
 	return (
