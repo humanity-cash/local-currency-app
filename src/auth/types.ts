@@ -85,6 +85,8 @@ export interface IAuth {
 	userType?: any,
 	updateUserType?: any,
 	setAuthStatus?: any,
+	startForgotPasswordFlow?: any,
+	completeForgotPasswordFlow?: any,
 	completeBusniessBasicVerification?: any,
 	completedCustomerVerification: boolean,
 	completedBusinessVerification: boolean,

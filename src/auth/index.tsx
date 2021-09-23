@@ -5,7 +5,7 @@ import {
 } from "amazon-cognito-identity-js";
 import React, { useEffect, useState } from "react";
 import { userController } from "./cognito";
-import { BaseResponse, CognitoBusinessAttributes, CognitoCustomerAttributes, CognitoResponse, CognitoSharedUserAttributes } from "./cognito/types";
+import { BaseResponse, CognitoBusinessAttributes, CognitoCustomerAttributes, CognitoResponse, CognitoSharedUserAttributes, CompleteForgotPasswordInput, StartForgotPasswordInput } from "./cognito/types";
 import {
 	buisnessBasicVerificationInitialState,
 	customerBasicVerificationInitialState,
@@ -207,6 +207,27 @@ const AuthProvider: React.FunctionComponent = ({ children }) => {
 		return response;
 	};
 
+	const startForgotPasswordFlow = async (i: StartForgotPasswordInput) => {
+		const { email } = i;
+		const response: BaseResponse<unknown> = await userController.startForgotPasswordFlow({ email });
+
+		return response;
+	};
+
+	const completeForgotPasswordFlow = async (
+		i: CompleteForgotPasswordInput
+	) => {
+		const { email, verificationCode, newPassword } = i;
+		const response: BaseResponse<unknown> =
+			await userController.completeForgotPasswordFlow({
+				email,
+				verificationCode,
+				newPassword,
+			});
+
+		return response;
+	};
+
 	const updateAttributes = async (
 		update:
 			| CognitoBusinessAttributes
@@ -248,6 +269,8 @@ const AuthProvider: React.FunctionComponent = ({ children }) => {
 		completeBusniessBasicVerification,
 		completeCustomerBasicVerification,
 		emailVerification,
+		startForgotPasswordFlow,
+		completeForgotPasswordFlow,
 		resendEmailVerificationCode,
 	};
 
