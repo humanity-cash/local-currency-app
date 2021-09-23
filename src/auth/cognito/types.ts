@@ -50,8 +50,8 @@ export interface CognitoCustomerDwollaAttributes {
 }
 
 export interface CognitoBusinessDwollaAttributes {
-	'custom:business.dwollaId': string,
-	'custom:business.resourceUri': string
+	'custom:business.dwollaId'?: string,
+	'custom:business.resourceUri'?: string
 }
 
 export type CognitoError = any

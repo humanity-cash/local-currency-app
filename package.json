@@ -30,6 +30,7 @@
     "@types/react-native-svg-charts": "^5.0.3",
     "amazon-cognito-identity-js": "^5.0.6",
     "axios": "^0.21.1",
+    "dwolla-v2": "^3.2.0",
     "eslint-plugin-jest": "^24.3.6",
     "expo-asset": "~8.3.3",
     "expo-barcode-scanner": "~10.2.2",
