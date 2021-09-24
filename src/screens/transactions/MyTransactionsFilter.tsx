@@ -1,4 +1,4 @@
-import { AntDesign, Entypo } from '@expo/vector-icons';
+import { AntDesign } from '@expo/vector-icons';
 import React, {useState} from 'react';
 import { StyleSheet, View, TouchableOpacity, Platform } from 'react-native';
 import { Text } from 'react-native-elements';
