@@ -52,6 +52,7 @@
     "react-native": "0.63.4",
     "react-native-camera": "^4.0.0",
     "react-native-chart-kit": "^6.5.0",
+    "react-native-dropdown-picker": "^5.1.27",
     "react-native-elements": "^2.1.0",
     "react-native-gesture-handler": "~1.10.2",
     "react-native-material-dropdown": "^0.11.1",
