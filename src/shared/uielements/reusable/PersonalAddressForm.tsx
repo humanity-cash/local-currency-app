@@ -1,8 +1,9 @@
+import { AntDesign } from '@expo/vector-icons';
 import React, { ReactElement, useContext } from "react";
 import { StyleSheet, View } from "react-native";
 import { Text } from "react-native-elements";
 import { AuthContext } from "src/auth";
-import { Dropdown } from 'react-native-material-dropdown';
+import SelectDropdown from 'react-native-select-dropdown';
 import { colors } from "src/theme/colors";
 import Translation from 'src/translation/en.json';
 import BlockInput from "../BlockInput";
@@ -42,23 +43,18 @@ const styles = StyleSheet.create({
 		width: '30%'
 	},
 	stateView: {
-		height: 55,
-		justifyContent: 'center',
-		backgroundColor: colors.inputBg,
-		borderRadius: 3,
 		marginTop: 8,
-		marginLeft: 4
+		marginLeft: 5
 	},
-	itemText: {
-		paddingLeft: 10
-	},
-	dropdownContainer: {
-		paddingHorizontal: 10,
-		paddingBottom: 15
-	},
-	dropdownInputContainer: {
-		borderBottomColor: 'transparent'
-	},
+	pickerText: {
+        color: colors.darkGreen
+    },
+    selectItem: {
+        width: '100%',
+        height: 55,
+        backgroundColor: colors.inputBg,
+    },
+    dropdownContainer: {marginTop: -20},
 });
 
 const PersonalAddressForm = (props: PersonalAddressProps): ReactElement => {
@@ -109,17 +105,29 @@ const PersonalAddressForm = (props: PersonalAddressProps): ReactElement => {
 				<View style={styles.stateContent}>
 					<Text style={styles.label}>{Translation.LABEL.STATE}</Text>
 					<View style={{...styles.stateView, ...props.style}} >
-						<Dropdown
-							value={customerBasicVerificationDetails.state}
+						<SelectDropdown
 							data={countries}
-							selectedItemColor={props.userType === UserType.Customer ? colors.darkGreen : colors.purple}
-							itemColor={props.userType === UserType.Customer ? colors.lightGreen : colors.greyedPurple}
-							textColor={props.userType === UserType.Customer ? colors.darkGreen : colors.purple}
-							itemTextStyle={styles.itemText}
-							containerStyle={styles.dropdownContainer}
-							inputContainerStyle={styles.dropdownInputContainer}
-							onChangeText={(itemValue) => onValueChange("country", itemValue)}
-						/> 
+							defaultValueByIndex={0}
+							onSelect={(selectedItem) => {
+								onValueChange("country", selectedItem)
+							}}
+							buttonTextAfterSelection={(selectedItem) => {
+								return selectedItem
+							}}
+							rowTextForSelection={(item) => {
+								return item
+							}}
+							buttonStyle={styles.selectItem}
+							buttonTextStyle={styles.pickerText}
+							rowStyle={styles.selectItem}
+							dropdownStyle={styles.dropdownContainer}
+							renderCustomizedRowChild={(item) => (
+								<Text style={styles.pickerText}>{item}</Text>
+							)}
+							renderDropdownIcon={() => (
+								<AntDesign name="down" size={18} color={colors.darkGreen} />
+							)}
+						/>
 					</View>
 				</View>
 			</View>
