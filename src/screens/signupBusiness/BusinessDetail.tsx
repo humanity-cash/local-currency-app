@@ -1,3 +1,4 @@
+import { AntDesign } from '@expo/vector-icons';
 import { useNavigation } from "@react-navigation/native";
 import React, { ReactElement, useContext, useState } from "react";
 import {
@@ -8,7 +9,7 @@ import {
 	View
 } from "react-native";
 import { Text } from "react-native-elements";
-import { Dropdown } from 'react-native-material-dropdown';
+import SelectDropdown from 'react-native-select-dropdown';
 import { AuthContext } from "src/auth";
 import * as Routes from "src/navigation/constants";
 import { BackBtn, Button, CancelBtn, Header } from "src/shared/uielements";
@@ -22,11 +23,11 @@ import Translation from "src/translation/en.json";
 import { BusinessType } from "src/utils/types";
 
 const businessTypes = [
-	{ value: BusinessType.SOLE_PROPRIETORSHIP },
-	{ value: BusinessType.CORPORATION },
-	{ value: BusinessType.LLC },
-	{ value:  BusinessType.PARTNERSHIP },
-	{ value: BusinessType.NON_PROFIT }
+	BusinessType.SOLE_PROPRIETORSHIP,
+	BusinessType.CORPORATION,
+	BusinessType.LLC,
+	BusinessType.PARTNERSHIP,
+	BusinessType.NON_PROFIT
 ];
 
 const styles = StyleSheet.create({
@@ -54,16 +55,15 @@ const styles = StyleSheet.create({
 		color: colors.purple,
 		backgroundColor: colors.white,
 	},
-	itemText: {
-        paddingLeft: 10
+	pickerText: {
+        color: colors.purple
     },
-    dropdownContainer: {
-        paddingHorizontal: 20, 
-        paddingBottom: 15
+    selectItem: {
+        width: '100%',
+        height: 55,
+        backgroundColor: colors.white,
     },
-    dropdownInputContainer: {
-        borderBottomColor: 'transparent'
-    },
+    dropdownContainer: {marginTop: -22},
 	bottomView: {
 		paddingHorizontal: 20,
 		paddingBottom: 50,
@@ -109,17 +109,29 @@ const BusinessDetail = (): ReactElement => {
 					{Translation.LABEL.BUSINESS_TYPE}
 				</Text>
 				<View style={styles.dropdownView}>
-					<Dropdown
-						value={businessType}
+					<SelectDropdown
 						data={businessTypes}
-						selectedItemColor={colors.purple}
-						itemColor={colors.greyedPurple}
-						textColor={colors.purple}
-						itemTextStyle={styles.itemText}
-						containerStyle={styles.dropdownContainer}
-						inputContainerStyle={styles.dropdownInputContainer}
-						onChangeText={(itemValue: BusinessType) => setBusinessType(itemValue)}
-					/> 
+						defaultValueByIndex={0}
+						onSelect={(selectedItem) => {
+							setBusinessType(selectedItem)
+						}}
+						buttonTextAfterSelection={(selectedItem) => {
+							return selectedItem
+						}}
+						rowTextForSelection={(item) => {
+							return item
+						}}
+						buttonStyle={styles.selectItem}
+						buttonTextStyle={styles.pickerText}
+						rowStyle={styles.selectItem}
+						dropdownStyle={styles.dropdownContainer}
+						renderCustomizedRowChild={(item) => (
+							<Text style={styles.pickerText}>{item}</Text>
+						)}
+						renderDropdownIcon={() => (
+							<AntDesign name="down" size={18} color={colors.purple} />
+						)}
+					/>
 				</View>
 			</ScrollView>
 			<KeyboardAvoidingView

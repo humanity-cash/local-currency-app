@@ -1,10 +1,11 @@
+import { AntDesign } from '@expo/vector-icons';
 import React, { ReactElement, useContext } from "react";
 import { StyleSheet, View } from "react-native";
 import { Text } from "react-native-elements";
 import { BusinessBasicVerification } from "src/auth/types";
 import { AuthContext } from "src/auth";
 import countries from "src/mocks/countries";
-import { Dropdown } from 'react-native-material-dropdown';
+import SelectDropdown from 'react-native-select-dropdown';
 import { colors } from "src/theme/colors";
 import Translation from "src/translation/en.json";
 import BlockInput from "../BlockInput";
@@ -48,16 +49,15 @@ const styles = StyleSheet.create({
 		marginTop: 8,
 		marginLeft: 4
 	},
-	itemText: {
-		paddingLeft: 10
-	},
-	dropdownContainer: {
-		paddingHorizontal: 10,
-		paddingBottom: 15
-	},
-	dropdownInputContainer: {
-		borderBottomColor: 'transparent'
-	},
+	pickerText: {
+        color: colors.purple
+    },
+    selectItem: {
+        width: '100%',
+        height: 55,
+        backgroundColor: colors.white,
+    },
+    dropdownContainer: {marginTop: -22},
 });
 
 const BusinessOwnerAddressForm = (
@@ -113,17 +113,29 @@ const BusinessOwnerAddressForm = (
 				<View style={styles.stateContent}>
 					<Text style={styles.label}>{Translation.LABEL.STATE}</Text>
 					<View style={styles.stateView} >
-						<Dropdown
-							value={buisnessBasicVerification?.owner?.state}
+						<SelectDropdown
 							data={countries}
-							selectedItemColor={colors.purple}
-							itemColor={colors.greyedPurple}
-							textColor={colors.purple}
-							itemTextStyle={styles.itemText}
-							containerStyle={styles.dropdownContainer}
-							inputContainerStyle={styles.dropdownInputContainer}
-							onChangeText={(itemValue) => onValueChange("country", itemValue)}
-						/> 
+							defaultValueByIndex={0}
+							onSelect={(selectedItem) => {
+								onValueChange("country", selectedItem)
+							}}
+							buttonTextAfterSelection={(selectedItem) => {
+								return selectedItem
+							}}
+							rowTextForSelection={(item) => {
+								return item
+							}}
+							buttonStyle={styles.selectItem}
+							buttonTextStyle={styles.pickerText}
+							rowStyle={styles.selectItem}
+							dropdownStyle={styles.dropdownContainer}
+							renderCustomizedRowChild={(item) => (
+								<Text style={styles.pickerText}>{item}</Text>
+							)}
+							renderDropdownIcon={() => (
+								<AntDesign name="down" size={18} color={colors.purple} />
+							)}
+						/>
 					</View>
 				</View>
 			</View>
