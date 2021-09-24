@@ -1,15 +1,17 @@
 import {} from 'src/utils/types';
 
 export interface IUserRequest {
-    userId: string;
     firstName: string;
     lastName: string;
     email: string;
     address1: string;
-    address2: string;
+    address2?: string;
     city: string;
     state: string;
     postalCode: string;
+    businessName?: string;
+    ipAddress?: string;
+    authUserId: string;
 }
 
 export interface IUserResponse {

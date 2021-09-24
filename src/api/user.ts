@@ -8,7 +8,7 @@ type AxiosPromiseResponse = AxiosResponse<any>;
 
 // create local currency user
 export const user = async (request: IUserRequest): Promise<AxiosPromiseResponse> => {
-  const response = await postRequest(`/users`, {request});
+  const response = await postRequest(`/users`, request);
   return response;
 };
 

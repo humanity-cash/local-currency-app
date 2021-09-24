@@ -26,6 +26,8 @@ import {
 	wrappingContainerBase
 } from "src/theme/elements";
 import Translation from "src/translation/en.json";
+import { UserAPI } from 'src/api';
+import { IUserRequest } from 'src/api/formatters';
 
 const styles = StyleSheet.create({
 	content: {
@@ -43,14 +45,41 @@ const styles = StyleSheet.create({
 });
 
 const PersonalAddress = (): React.ReactElement => {
-	const { completeCustomerBasicVerification, signOut } =
-		useContext(AuthContext);
+	const { customerBasicVerificationDetails, 
+		completeCustomerBasicVerification, 
+		signOut, 
+		cognitoId, 
+		completeCustomerDwollaInfo ,
+		signInDetails
+	} = useContext(AuthContext);
 	const navigation = useNavigation();
 
 	const onNextPress = async () => {
 		const response = await completeCustomerBasicVerification();
-		if (response.success) {
-			navigation.navigate(Routes.LINK_BANK_ACCOUNT);
+		if (response.success && cognitoId && signInDetails) {
+			const request: IUserRequest = {
+				firstName: customerBasicVerificationDetails.firstName,
+				lastName: customerBasicVerificationDetails.lastName,
+				email: signInDetails.email,
+				address1: customerBasicVerificationDetails.address1,
+				address2: customerBasicVerificationDetails.address2,
+				city: customerBasicVerificationDetails.city,
+				state: customerBasicVerificationDetails.state,
+				postalCode: customerBasicVerificationDetails.postalCode,
+				authUserId: "p_" + cognitoId
+			};
+
+			const resApi = await UserAPI.user(request);
+			console.log("==> resApi", resApi);
+
+			if (resApi.data) {
+				await completeCustomerDwollaInfo({
+					dwollaId: resApi.data.userId,
+					resourceUri: ""
+				});
+
+				navigation.navigate(Routes.LINK_BANK_ACCOUNT);
+			}
 		} else {
 			console.log("something went wrong in finalising customer signup");
 		}
