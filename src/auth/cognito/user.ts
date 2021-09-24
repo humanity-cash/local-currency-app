@@ -94,7 +94,6 @@ export const deleteUser = async (): CognitoResponse<string | undefined> => {
 export const updateUserAttributes = async (update: CognitoBusinessAttributes | CognitoCustomerAttributes | CognitoSharedUserAttributes | CognitoBusinessDwollaAttributes | CognitoCustomerDwollaAttributes)
 	: CognitoResponse<string | undefined> => {
 	const attributesList = Utils.buildUpdateUserAttributes(update);
-	console.log("-----------> .........._", attributesList)
 	const response = await Core.updateUserAttributes(currentUser, attributesList);
 
 	return response;

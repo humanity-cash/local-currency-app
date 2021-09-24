@@ -156,18 +156,6 @@ const Dashboard = (): JSX.Element => {
 		}
 	}, [customerDwollaId]);
 
-	// useEffect(() => {
-	// 	setTimeout(() => {
-	// 		(async () => {
-	// 			setCustomerDwollaInfo({
-	// 				dwollaId: "d9044dbb-ef9e-411a-a8a1-a710918ef569",
-	// 				resourceUri: ""
-	// 			});
-	// 			await completeCustomerDwollaInfo();
-	// 		})();
-	// 	}, 1000);
-	// }, []);
-
 	const selectBank = () => {
 		navigation.navigate(Routes.SELECT_BANK);
 		onClose();
