@@ -9,7 +9,7 @@ import {
     StyleSheet, TouchableOpacity, View, SafeAreaView 
 } from "react-native";
 import { Text } from "react-native-elements";
-import DropDownPicker from 'react-native-dropdown-picker';
+import DropDownPicker, { RenderBadgeItemPropsInterface } from 'react-native-dropdown-picker';
 import { AuthContext } from "src/auth";
 import { BUTTON_TYPES } from "src/constants";
 import * as Routes from "src/navigation/constants";
@@ -120,8 +120,14 @@ const styles = StyleSheet.create({
 		marginTop: 7,
 		zIndex: 10
 	},
+	picker: {
+		backgroundColor: colors.white,
+		borderWidth: 0,
+		height: 55
+	},
 	pickerView: {
 		color: colors.purple,
+		fontSize: 16
 	},
 	bottomView: {
 		padding: 20,
@@ -132,6 +138,16 @@ const styles = StyleSheet.create({
 		textAlign: "center",
 		paddingTop: 40,
 	},
+	badgeView: {
+		padding: 5,
+		borderWidth: 1,
+		borderRadius: 8,
+		borderColor: colors.purple
+	},
+	selectedItemLabel: {
+		fontWeight: "bold",
+		color: colors.purple
+	}
 });
 
 const enum ReportType {
@@ -139,6 +155,14 @@ const enum ReportType {
 	TODAY = "Today",
 	WEEK = "Week",
 	MONTH = "Month",
+}
+
+const Badge = (props: RenderBadgeItemPropsInterface): JSX.Element => {
+	return (
+		<View style={styles.badgeView}>
+			<Text style={styles.pickerView}>{props.label}</Text>
+		</View>
+	)
 }
 
 const Report = (): JSX.Element => {
@@ -152,7 +176,7 @@ const Report = (): JSX.Element => {
 	const { userType } = useContext(AuthContext);
 
 	const [open, setOpen] = useState(false);
-	const [value, setValue] = useState(null);
+	const [value, setValue] = useState([]);
 	const [items, setItems] = useState([
 		{label: 'Sales', value: 'sales'},
 		{label: 'Returns', value: 'returns'},
@@ -163,8 +187,6 @@ const Report = (): JSX.Element => {
 	useEffect(() => {
 		setGoNext(true);
 	}, []);
-
-	DropDownPicker.setListMode("SCROLLVIEW");
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
 	const onStartDateChange = (event: any, selectedDate?: Date) => {
@@ -329,7 +351,14 @@ const Report = (): JSX.Element => {
 								setOpen={setOpen}
 								setValue={setValue}
 								setItems={setItems}
-								zIndex={30}
+								placeholder="Select"
+								placeholderStyle={styles.pickerView}
+								listMode="MODAL"
+								mode="BADGE"
+								renderBadgeItem={(props) => <Badge {...props} />}
+								selectedItemLabelStyle={styles.selectedItemLabel}
+								listItemLabelStyle={styles.pickerView}
+								style={styles.picker}
 							/>
 						</View>
 					</>	
