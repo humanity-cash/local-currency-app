@@ -38,8 +38,8 @@ export const customerBasicVerificationInitialState: CustomerBasicVerification = 
 }
 
 export const signInInitialState = {
-	email: "esraa@humanity.cash",
-	password: "Esraa@keyko1",
+	email: "dev.s.ly813@gmail.com",
+	password: "Password123!@#",
 }
 
 export const signUpInitialState = {

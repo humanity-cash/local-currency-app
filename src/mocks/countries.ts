@@ -1,6 +1,3 @@
-const list = [
-	{ value: 'MA' },
-	{ value: 'MA2' }
-];
+const list = ['MA1', 'MA2'];
 
 export default list;

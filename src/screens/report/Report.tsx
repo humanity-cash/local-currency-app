@@ -1,5 +1,4 @@
 import DateTimePicker from "@react-native-community/datetimepicker";
-import { Picker } from "@react-native-picker/picker";
 import { useNavigation } from "@react-navigation/native";
 import moment from "moment";
 import React, { useContext, useEffect, useState } from "react";
@@ -7,12 +6,12 @@ import {
     KeyboardAvoidingView,
     Platform,
     ScrollView,
-    StyleSheet, TouchableOpacity, View
+    StyleSheet, TouchableOpacity, View, SafeAreaView 
 } from "react-native";
 import { Text } from "react-native-elements";
+import DropDownPicker, { RenderBadgeItemPropsInterface } from 'react-native-dropdown-picker';
 import { AuthContext } from "src/auth";
 import { BUTTON_TYPES } from "src/constants";
-import { merchantTransactions } from "src/mocks/transactionTypes";
 import * as Routes from "src/navigation/constants";
 import { BackBtn, Button, CancelBtn, Header } from "src/shared/uielements";
 import { colors } from "src/theme/colors";
@@ -42,7 +41,7 @@ const styles = StyleSheet.create({
 		borderBottomWidth: 1,
 	},
 	bodyView: {
-		marginBottom: 30,
+		marginBottom: 15,
 	},
 	bodyText: {
 		color: colors.bodyText,
@@ -55,7 +54,7 @@ const styles = StyleSheet.create({
 	defaultAmountView: {
 		flexDirection: "row",
 		flexWrap: "wrap",
-		paddingVertical: 5,
+		paddingTop: 5,
 	},
 	defaultAmountItem: {
 		width: 100,
@@ -116,13 +115,19 @@ const styles = StyleSheet.create({
 		color: colors.bodyText,
 	},
 	typeView: {
-		height: 55,
+		position: 'relative',
 		justifyContent: "center",
 		marginTop: 7,
+		zIndex: 10
+	},
+	picker: {
 		backgroundColor: colors.white,
+		borderWidth: 0,
+		height: 55
 	},
 	pickerView: {
 		color: colors.purple,
+		fontSize: 16
 	},
 	bottomView: {
 		padding: 20,
@@ -133,6 +138,16 @@ const styles = StyleSheet.create({
 		textAlign: "center",
 		paddingTop: 40,
 	},
+	badgeView: {
+		padding: 5,
+		borderWidth: 1,
+		borderRadius: 8,
+		borderColor: colors.purple
+	},
+	selectedItemLabel: {
+		fontWeight: "bold",
+		color: colors.purple
+	}
 });
 
 const enum ReportType {
@@ -142,16 +157,32 @@ const enum ReportType {
 	MONTH = "Month",
 }
 
+const Badge = (props: RenderBadgeItemPropsInterface): JSX.Element => {
+	return (
+		<View style={styles.badgeView}>
+			<Text style={styles.pickerView}>{props.label}</Text>
+		</View>
+	)
+}
+
 const Report = (): JSX.Element => {
 	const navigation = useNavigation();
 	const [startDate, setStartDate] = useState<Date | null>(null);
 	const [endDate, setEndDate] = useState<Date | null>();
 	const [isStartDate, setIsStartDate] = useState<boolean>(false);
 	const [isEndDate, setIsEndDate] = useState<boolean>(false);
-	const [selectedType, setSelectedType] = useState<string>("");
 	const [goNext, setGoNext] = useState(false);
 	const [reportType, setReportType] = useState<ReportType>(ReportType.ALL);
 	const { userType } = useContext(AuthContext);
+
+	const [open, setOpen] = useState(false);
+	const [value, setValue] = useState([]);
+	const [items, setItems] = useState([
+		{label: 'Sales', value: 'sales'},
+		{label: 'Returns', value: 'returns'},
+		{label: 'Cash outs', value: 'cashouts'},
+		{label: 'Transfers', value: 'transfers'},
+	]);
 
 	useEffect(() => {
 		setGoNext(true);
@@ -174,7 +205,7 @@ const Report = (): JSX.Element => {
 	};
 
 	const onConfirm = () => {
-		navigation.navigate(Routes.CASHIER_DASHBOARD);
+		userType === UserType.Business ? navigation.navigate(Routes.MERCHANT_DASHBOARD) : navigation.navigate(Routes.CASHIER_DASHBOARD);
 	};
 
 	return (
@@ -195,156 +226,149 @@ const Report = (): JSX.Element => {
 				}
 			/>
 
-			<ScrollView style={wrappingContainerBase}>
-				<View style={styles.container}>
-					<View style={underlineHeaderB}>
-						<Text style={styles.headerText}>
-							{Translation.REPORT.MAKE_REPORT}
-						</Text>
-					</View>
-					<View style={styles.content}>
-						<View style={styles.bodyView}>
-							<Text style={styles.bodyText}>
-								{Translation.REPORT.SELECT_TIME_TYPE}
-							</Text>
-						</View>
+			<SafeAreaView style={wrappingContainerBase}>
+				<View style={underlineHeaderB}>
+					<Text style={styles.headerText}>
+						{Translation.REPORT.MAKE_REPORT}
+					</Text>
+				</View>
+				<View style={styles.bodyView}>
+					<Text style={styles.bodyText}>
+						{Translation.REPORT.SELECT_TIME_TYPE}
+					</Text>
+				</View>
 
-						<Text style={styles.text}>
-							{Translation.LABEL.TIME_PERIOD}
+				<Text style={styles.text}>
+					{Translation.LABEL.TIME_PERIOD}
+				</Text>
+				<View style={styles.defaultAmountView}>
+					<TouchableOpacity
+						style={
+							reportType === ReportType.TODAY
+								? styles.selectedAmountItem
+								: styles.defaultAmountItem
+						}
+						onPress={() => setReportType(ReportType.TODAY)}>
+						<Text
+							style={
+								reportType == ReportType.TODAY
+									? styles.selectedAmountText
+									: styles.amountText
+							}>
+							Today
 						</Text>
-						<View style={styles.defaultAmountView}>
-							<TouchableOpacity
-								style={
-									reportType === ReportType.TODAY
-										? styles.selectedAmountItem
-										: styles.defaultAmountItem
-								}
-								onPress={() => setReportType(ReportType.TODAY)}>
-								<Text
-									style={
-										reportType == ReportType.TODAY
-											? styles.selectedAmountText
-											: styles.amountText
-									}>
-									Today
-								</Text>
-							</TouchableOpacity>
-							<TouchableOpacity
-								style={
-									reportType === ReportType.WEEK
-										? styles.selectedAmountItem
-										: styles.defaultAmountItem
-								}
-								onPress={() => setReportType(ReportType.WEEK)}>
-								<Text
-									style={
-										reportType === ReportType.WEEK
-											? styles.selectedAmountText
-											: styles.amountText
-									}>
-									Week
-								</Text>
-							</TouchableOpacity>
-							<TouchableOpacity
-								style={
-									reportType === ReportType.MONTH
-										? styles.selectedAmountItem
-										: styles.defaultAmountItem
-								}
-								onPress={() => setReportType(ReportType.MONTH)}>
-								<Text
-									style={
-										reportType === ReportType.MONTH
-											? styles.selectedAmountText
-											: styles.amountText
-									}>
-									Month
-								</Text>
-							</TouchableOpacity>
-						</View>
+					</TouchableOpacity>
+					<TouchableOpacity
+						style={
+							reportType === ReportType.WEEK
+								? styles.selectedAmountItem
+								: styles.defaultAmountItem
+						}
+						onPress={() => setReportType(ReportType.WEEK)}>
+						<Text
+							style={
+								reportType === ReportType.WEEK
+									? styles.selectedAmountText
+									: styles.amountText
+							}>
+							Week
+						</Text>
+					</TouchableOpacity>
+					<TouchableOpacity
+						style={
+							reportType === ReportType.MONTH
+								? styles.selectedAmountItem
+								: styles.defaultAmountItem
+						}
+						onPress={() => setReportType(ReportType.MONTH)}>
+						<Text
+							style={
+								reportType === ReportType.MONTH
+									? styles.selectedAmountText
+									: styles.amountText
+							}>
+							Month
+						</Text>
+					</TouchableOpacity>
+				</View>
 
-						<View style={styles.inlineView}>
-							<View style={styles.dateView}>
-								<Text style={styles.label}>
-									{Translation.LABEL.START_DATE}
-								</Text>
-								<TouchableOpacity
-									onPress={() => setIsStartDate(true)}
-									style={styles.date}>
-									<Text
-										style={
-											startDate == null
-												? styles.placeholder
-												: styles.amountText
-										}>
-										{startDate == null
-											? "DD/MM/YY"
-											: moment(startDate).format(
-													"DD/MM/yyyy"
-											  )}
-									</Text>
-								</TouchableOpacity>
-							</View>
-							<View style={styles.separator}></View>
-							<View style={styles.dateView}>
-								<Text style={styles.label}>
-									{Translation.LABEL.END_DATE}
-								</Text>
-								<TouchableOpacity
-									onPress={() => setIsEndDate(true)}
-									style={styles.date}>
-									<Text
-										style={
-											endDate == null
-												? styles.placeholder
-												: styles.amountText
-										}>
-										{endDate == null
-											? "DD/MM/YY"
-											: moment(endDate).format(
-													"DD/MM/yyyy"
-											  )}
-									</Text>
-								</TouchableOpacity>
-							</View>
-						</View>
-						{userType === UserType.Business && (
-							<View>
-								<Text style={styles.label}>
-									{Translation.LABEL.TRANSACTION_TYPE}
-								</Text>
-								<View style={styles.typeView}>
-									<Picker
-										selectedValue={selectedType}
-										style={styles.pickerView}
-										onValueChange={(itemValue) =>
-											setSelectedType(itemValue)
-										}>
-										<Picker.Item
-											label="All"
-											value=""
-											style={styles.amountText}
-										/>
-										{merchantTransactions.map(
-											(u: string) => (
-												<Picker.Item
-													label={u}
-													value={u}
-													key={u}
-													style={styles.amountText}
-												/>
-											)
+				<View style={styles.inlineView}>
+					<View style={styles.dateView}>
+						<Text style={styles.label}>
+							{Translation.LABEL.START_DATE}
+						</Text>
+						<TouchableOpacity
+							onPress={() => setIsStartDate(true)}
+							style={styles.date}>
+							<Text
+								style={
+									startDate == null
+										? styles.placeholder
+										: styles.amountText
+								}>
+								{startDate == null
+									? "DD/MM/YY"
+									: moment(startDate).format(
+											"DD/MM/yyyy"
 										)}
-									</Picker>
-								</View>
-							</View>
-						)}
+							</Text>
+						</TouchableOpacity>
 					</View>
+					<View style={styles.separator}></View>
+					<View style={styles.dateView}>
+						<Text style={styles.label}>
+							{Translation.LABEL.END_DATE}
+						</Text>
+						<TouchableOpacity
+							onPress={() => setIsEndDate(true)}
+							style={styles.date}>
+							<Text
+								style={
+									endDate == null
+										? styles.placeholder
+										: styles.amountText
+								}>
+								{endDate == null
+									? "DD/MM/YY"
+									: moment(endDate).format(
+											"DD/MM/yyyy"
+										)}
+							</Text>
+						</TouchableOpacity>
+					</View>
+				</View>
+				{userType === UserType.Business && (
+					<>
+						<Text style={styles.label}>
+							{Translation.LABEL.TRANSACTION_TYPE}
+						</Text>
+						<View style={styles.typeView}>
+							<DropDownPicker
+								multiple={true}
+								open={open}
+								value={value}
+								items={items}
+								setOpen={setOpen}
+								setValue={setValue}
+								setItems={setItems}
+								placeholder="Select"
+								placeholderStyle={styles.pickerView}
+								listMode="MODAL"
+								mode="BADGE"
+								renderBadgeItem={(props) => <Badge {...props} />}
+								selectedItemLabelStyle={styles.selectedItemLabel}
+								listItemLabelStyle={styles.pickerView}
+								style={styles.picker}
+							/>
+						</View>
+					</>	
+				)}
+				<ScrollView style={styles.container}>
 					<Text style={styles.specifySearch}>
 						{Translation.REPORT.SPECIFY_TIME_PERIOD}
 					</Text>
-				</View>
-			</ScrollView>
+				</ScrollView>
+			</SafeAreaView>
 			<KeyboardAvoidingView
 				behavior={Platform.OS == "ios" ? "padding" : "height"}>
 				<View style={styles.bottomView}>
