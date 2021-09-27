@@ -1,19 +1,14 @@
+import { AntDesign } from '@expo/vector-icons';
 import React, {useState, ReactElement} from 'react';
 import { StyleSheet, View, TouchableOpacity, Platform } from 'react-native';
 import { Text } from 'react-native-elements';
+import SelectDropdown from 'react-native-select-dropdown';
 import DateTimePicker from '@react-native-community/datetimepicker';
-import { Dropdown } from 'react-native-material-dropdown';
 import moment from 'moment';
 import Translation from 'src/translation/en.json';
 import { colors } from "src/theme/colors";
 
-const merchantTransactions = [
-    { value: 'All' },
-    { value: 'Sales' },
-    { value: 'Returns' },
-    { value: 'Cash outs' },
-    { value: 'Expenses' }
-]
+const merchantTransactionTypes = ["All", "Sales", "Returns", "Cash outs", "Expenses"];
 
 const styles = StyleSheet.create({
     container: {
@@ -57,22 +52,17 @@ const styles = StyleSheet.create({
 		color: colors.bodyText
 	},
     typeView: {
+        marginTop: 7
+    },
+    pickerText: {
+        color: colors.purple
+    },
+    selectItem: {
+        width: '100%',
         height: 55,
-        justifyContent: 'center',
-        borderRadius: 3,
-        marginTop: 7,
-        backgroundColor: colors.white
+        backgroundColor: colors.white,
     },
-    itemText: {
-        paddingLeft: 10
-    },
-    dropdownContainer: {
-        paddingHorizontal: 20, 
-        paddingBottom: 20
-    },
-    dropdownInputContainer: {
-        borderBottomColor: 'transparent'
-    },
+    dropdownContainer: {marginTop: -20},
     clearFilter: {
 		paddingVertical: 15,
 		borderBottomWidth: 1,
@@ -134,17 +124,29 @@ const MerchantTransactionsFilter = (): ReactElement => {
             </View>
             <Text style={styles.label}>{Translation.LABEL.TRANSACTION_TYPE}</Text>
             <View style={styles.typeView}>
-                <Dropdown
-                    value={selectedType}
-                    data={merchantTransactions}
-                    selectedItemColor={colors.purple}
-                    itemColor={colors.greyedPurple}
-                    textColor={colors.purple}
-                    itemTextStyle={styles.itemText}
-                    containerStyle={styles.dropdownContainer}
-                    inputContainerStyle={styles.dropdownInputContainer}
-                    onChangeText={(itemValue) => setSelectedType(itemValue)}
-                /> 
+                <SelectDropdown
+                    data={merchantTransactionTypes}
+                    defaultValueByIndex={0}
+                    onSelect={(selectedItem) => {
+                        setSelectedType(selectedItem)
+                    }}
+                    buttonTextAfterSelection={(selectedItem) => {
+                        return selectedItem
+                    }}
+                    rowTextForSelection={(item) => {
+                        return item
+                    }}
+                    buttonStyle={styles.selectItem}
+                    buttonTextStyle={styles.pickerText}
+                    rowStyle={styles.selectItem}
+                    dropdownStyle={styles.dropdownContainer}
+                    renderCustomizedRowChild={(item) => (
+                        <Text style={styles.pickerText}>{item}</Text>
+                    )}
+                    renderDropdownIcon={() => (
+                        <AntDesign name="down" size={18} color={colors.purple} />
+                    )}
+                />
             </View>
             <TouchableOpacity style={styles.clearFilter} onPress={clearFilter}>
                 <Text style={styles.clearText}>{Translation.PAYMENT.CLEAR_FILTER}</Text>

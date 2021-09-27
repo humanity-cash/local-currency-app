@@ -1,3 +1,4 @@
+import { AntDesign } from '@expo/vector-icons';
 import { useNavigation } from "@react-navigation/native";
 import React, { ReactElement, useContext } from "react";
 import {
@@ -8,7 +9,7 @@ import {
 	View
 } from "react-native";
 import { Text } from "react-native-elements";
-import { Dropdown } from 'react-native-material-dropdown';
+import SelectDropdown from 'react-native-select-dropdown';
 import { AuthContext } from "src/auth";
 import * as Routes from "src/navigation/constants";
 import {
@@ -28,13 +29,13 @@ import Translation from "src/translation/en.json";
 import { Industry } from "src/utils/types";
 
 const Industries = [
-	{value: Industry.ARTS_ENTERTAINMENT},
-	{value: Industry.COMMUNICATION_EDUCATION},
-	{value: Industry.FOOD_DRINK},
-	{value: Industry.HEALTH_WELLNESS},
-	{value: Industry.LODGING},
-	{value: Industry.SHOPPING},
-	{value: Industry.SERVICES}
+	Industry.ARTS_ENTERTAINMENT,
+	Industry.COMMUNICATION_EDUCATION,
+	Industry.FOOD_DRINK,
+	Industry.HEALTH_WELLNESS,
+	Industry.LODGING,
+	Industry.SHOPPING,
+	Industry.SERVICES
 ];
 
 const styles = StyleSheet.create({
@@ -61,16 +62,15 @@ const styles = StyleSheet.create({
 		backgroundColor: colors.white,
 		marginBottom: 10,
 	},
-	itemText: {
-        paddingLeft: 10
+	pickerText: {
+        color: colors.purple
     },
-    dropdownContainer: {
-        paddingHorizontal: 20, 
-        paddingBottom: 20
+    selectItem: {
+        width: '100%',
+        height: 55,
+        backgroundColor: colors.white,
     },
-    dropdownInputContainer: {
-        borderBottomColor: 'transparent'
-    },
+    dropdownContainer: {marginTop: -22},
 	formView: {
 		paddingBottom: 40,
 	},
@@ -81,10 +81,11 @@ const styles = StyleSheet.create({
 });
 
 const BusinessInfo = (): ReactElement => {
-	const { buisnessBasicVerification, setBuisnessBasicVerification, signOut } =
+	const { buisnessBasicVerification, signOut } =
 		useContext(AuthContext);
 	const navigation = useNavigation();
 
+	// eslint-disable-next-line @typescript-eslint/no-unused-vars
 	const onValueChange = (name: string, change: string) => {
 		// setBuisnessBasicVerification({ [name]: change });
 	};
@@ -130,16 +131,28 @@ const BusinessInfo = (): ReactElement => {
 						{Translation.LABEL.INDUSTRY}
 					</Text>
 					<View style={styles.picker}>
-						<Dropdown
-							value={buisnessBasicVerification.industry}
+						<SelectDropdown
 							data={Industries}
-							selectedItemColor={colors.purple}
-							itemColor={colors.greyedPurple}
-							textColor={colors.purple}
-							itemTextStyle={styles.itemText}
-							containerStyle={styles.dropdownContainer}
-							inputContainerStyle={styles.dropdownInputContainer}
-							onChangeText={(itemValue) => onValueChange("industry", itemValue)}
+							defaultValueByIndex={0}
+							onSelect={(selectedItem) => {
+								onValueChange("country", selectedItem)
+							}}
+							buttonTextAfterSelection={(selectedItem) => {
+								return selectedItem
+							}}
+							rowTextForSelection={(item) => {
+								return item
+							}}
+							buttonStyle={styles.selectItem}
+							buttonTextStyle={styles.pickerText}
+							rowStyle={styles.selectItem}
+							dropdownStyle={styles.dropdownContainer}
+							renderCustomizedRowChild={(item) => (
+								<Text style={styles.pickerText}>{item}</Text>
+							)}
+							renderDropdownIcon={() => (
+								<AntDesign name="down" size={18} color={colors.purple} />
+							)}
 						/>
 					</View>
 					<Text style={styles.label}>{Translation.LABEL.EIN}</Text>
