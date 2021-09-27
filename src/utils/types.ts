@@ -379,7 +379,7 @@ export enum PaymentMode {
   SELECT_AMOUNT = "select"
 }
 
-export interface QRCodeEntity {
+export interface QRCodeEntry {
   to: string,
   amount: number,
   mode: PaymentMode

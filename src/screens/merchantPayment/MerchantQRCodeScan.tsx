@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { useNavigation } from '@react-navigation/core';
 import { Text } from 'react-native-elements';
@@ -10,6 +10,7 @@ import { BarCodeScanner } from 'expo-barcode-scanner';
 import Translation from 'src/translation/en.json';
 import * as Routes from 'src/navigation/constants';
 import { BUTTON_TYPES } from 'src/constants';
+import { QRCodeEntry, PaymentMode } from 'src/utils/types';
 
 type HandleScaned = {
 	type: string,
@@ -81,7 +82,7 @@ const styles = StyleSheet.create({
 type PaymentConfirmProps = {
 	visible: boolean,
 	onConfirm: () => void,
-	amount: number,
+	payInfo: QRCodeEntry,
 }
 
 const PaymentConfirm = (props: PaymentConfirmProps) => {
@@ -91,7 +92,7 @@ const PaymentConfirm = (props: PaymentConfirmProps) => {
 			<View style={dialogViewBase}>
 				<View style={wrappingContainerBase}>
 					<View style={ baseHeader }>
-						<Text h1 style={styles.headerText}> B$ { props.amount } </Text>
+						<Text h1 style={styles.headerText}> B$ { props.payInfo.amount } </Text>
 					</View>
 					<View>
 						<Text style={styles.detailText}>or</Text>
@@ -101,13 +102,13 @@ const PaymentConfirm = (props: PaymentConfirmProps) => {
 				<View>
 					<Button
 						type={BUTTON_TYPES.TRANSPARENT}
-						title="Pay B$14.34"
+						title={`Pay B$ ${props.payInfo.amount.toFixed(2)}`}
 						style={styles.roundBtn}
 						onPress={() => props.onConfirm()}
 					/>
 					<Button
 						type={BUTTON_TYPES.PURPLE}
-						title="Round up to B$ 15.00"
+						title={`Round up to B$ ${props.payInfo.amount.toFixed(2)}`}
 						onPress={() => props.onConfirm()}
 					/>
 					<Text style={styles.description}>{Translation.PAYMENT.NOT_REFUNABLE_DONATION}</Text>
@@ -122,15 +123,15 @@ const MerchantQRCodeScan = (): JSX.Element => {
 	const hasPermission = useCameraPermission();
 	const [isScanned, setIsScanned] = useState<boolean>(false);
 	const [isPaymentDialogOpen, setIsPaymentDialogOpen] = useState<boolean>(false);
+	const [state, setState] = useState<QRCodeEntry>({
+		to: "",
+		amount: 0,
+		mode: PaymentMode.SELECT_AMOUNT
+	})
 
-	useEffect(() => {
-		setTimeout(() => {
-			setIsPaymentDialogOpen(true);
-		}, 2000);
-	}, []);
-	
 	const handleBarCodeScanned = (data: HandleScaned) => {
-		console.log(data);
+		console.log(JSON.parse(data.data));
+		setState(JSON.parse(data.data));
 		setIsScanned(true);
 		setIsPaymentDialogOpen(true);
 	}
@@ -168,7 +169,7 @@ const MerchantQRCodeScan = (): JSX.Element => {
 					/>
 				</View>
 			</View>
-			{ isPaymentDialogOpen && <PaymentConfirm visible={isPaymentDialogOpen} amount={14.34} onConfirm={onPayConfirm} /> }
+			{ isPaymentDialogOpen && <PaymentConfirm visible={isPaymentDialogOpen} payInfo={state} onConfirm={onPayConfirm} /> }
 		</View>
 	);
 }
