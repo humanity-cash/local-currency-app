@@ -171,7 +171,7 @@ const QRCodeScan = (): JSX.Element => {
 	const [isFeeDialogOpen, setIsFeeDialogOpen] = useState<boolean>(false);
 
 	const handleBarCodeScanned = (data: HandleScaned) => {
-		console.log(data);
+		console.log(JSON.parse(data.data));
 		setIsScanned(true);
 		setIsPaymentDialogOpen(true);
 	}

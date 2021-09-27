@@ -135,7 +135,7 @@ const PaymentRequest = (): JSX.Element => {
 					/>
 				</View>
 			</KeyboardAvoidingView>
-			{ isVisible && <QRCodeGen visible={isVisible} onClose={onClose} isOpenAmount={isOpenAmount} amount={state.amount} /> }
+			{ isVisible && <QRCodeGen visible={isVisible} onClose={onClose} isOpenAmount={isOpenAmount} amount={Number(state.amount)} /> }
 		</View>
 	);
 }
