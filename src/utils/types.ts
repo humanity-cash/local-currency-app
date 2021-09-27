@@ -373,3 +373,14 @@ export interface AccordionEntry {
 export interface FaqData extends AccordionEntry {
   type?: string
 }
+
+export enum PaymentMode {
+  OPEN_AMOUNT = 'open',
+  SELECT_AMOUNT = "select"
+}
+
+export interface QRCodeEntity {
+  to: string,
+  amount: number,
+  mode: PaymentMode
+}
