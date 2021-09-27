@@ -51,15 +51,15 @@ const styles = StyleSheet.create({
 const PaymentRequest = (): JSX.Element => {
 	const navigation = useNavigation();
 	const [state, setState] = useState<AmountState>({
-		amount: "1",
-		cost: "1"
+		amount: "",
+		cost: ""
 	});
 	const [goNext, setGoNext] = useState<boolean>(false);
 	const [isVisible, setIsVisible] = useState<boolean>(false);
 	const [isOpenAmount, setIsOpenAmount] = useState<boolean>(false);
 
 	useEffect(() => {
-		setGoNext(state.cost !== "");
+		setGoNext(Number(state.amount) > 0);
 	}, [state]);
 
 	const onValueChange = (name: string, change: string) => {

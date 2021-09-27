@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useEffect, useContext } from 'react';
 import { StyleSheet, View } from 'react-native';
 import QRCode from 'react-native-qrcode-svg';
 import { AuthContext } from 'src/auth';
@@ -7,6 +7,7 @@ import { Dialog } from "src/shared/uielements";
 import { dialogViewBase } from "src/theme/elements";
 import { PaymentMode } from "src/utils/types";
 import { colors } from "src/theme/colors";
+import { useBrightness } from "src/hooks";
 
 const styles = StyleSheet.create({
 	dialogWrap: {
@@ -37,15 +38,27 @@ type QRCodeGenProps = {
 }
 
 const QRCodeGen = (props: QRCodeGenProps): JSX.Element => {
-    const { userAttributes } = useContext(AuthContext);
+    // const { userAttributes } = useContext(AuthContext);
+    const { hasPermission, setMaxBrightness, setDefaultBrightness} = useBrightness();
     const addressStr = JSON.stringify({
         to: "",
         amount: props.amount,
         mode: props.isOpenAmount ? PaymentMode.OPEN_AMOUNT : PaymentMode.SELECT_AMOUNT
     });
 
+    useEffect(() => {
+        if (hasPermission) {
+            setMaxBrightness();
+        }
+    }, [hasPermission]);
+
+    const onClose = () => {
+        setDefaultBrightness();
+        props.onClose();
+    }
+
     return (
-        <Dialog visible={props.visible} onClose={()=>props.onClose()}>
+        <Dialog visible={props.visible} onClose={onClose}>
             <View style={dialogViewBase}>
                 <View style={styles.dialogWrap}>
                     <View style={styles.ownerInfo}>
