@@ -10,6 +10,7 @@ import { BarCodeScanner } from 'expo-barcode-scanner';
 import Translation from 'src/translation/en.json';
 import * as Routes from 'src/navigation/constants';
 import { BUTTON_TYPES } from 'src/constants';
+import { QRCodeEntry, PaymentMode } from 'src/utils/types';
 
 type HandleScaned = {
 	type: string,
@@ -73,7 +74,7 @@ const styles = StyleSheet.create({
 type PaymentConfirmProps = {
 	visible: boolean,
 	onConfirm: ()=>void,
-	amount: number,
+	payInfo: QRCodeEntry
 }
 
 const PaymentConfirm = (props: PaymentConfirmProps) => {
@@ -83,12 +84,12 @@ const PaymentConfirm = (props: PaymentConfirmProps) => {
 			<View style={dialogViewBase}>
 				<View style={wrappingContainerBase}>
 					<View style={ baseHeader }>
-						<Text h1 style={styles.headerText}> B$ { props.amount } </Text>
+						<Text h1 style={styles.headerText}> {`B$ ${props.payInfo.amount.toFixed(2)}`} </Text>
 					</View>
 					<View style={styles.view}>
 						<View style={styles.detailView}>
 							<Text style={styles.detailText}>{Translation.LABEL.TRANSACTION_ID}</Text>
-							<Text style={styles.infoText}>05636826HDI934</Text>
+							<Text style={styles.infoText}>{props.payInfo.to}</Text>
 						</View>
 						<View style={styles.detailView}>
 							<Text style={styles.detailText}>{Translation.COMMON.TYPE}</Text>
@@ -116,7 +117,7 @@ type FeeConfirmProps = {
 	visible: boolean,
 	onConfirm: () => void,
 	onCancel: () => void,
-	amount: number,
+	payInfo: QRCodeEntry
 }
 
 const FeeConfirm = (props: FeeConfirmProps) => {
@@ -126,7 +127,7 @@ const FeeConfirm = (props: FeeConfirmProps) => {
 			<View style={dialogViewBase }>
 				<ScrollView style={wrappingContainerBase}>
 					<View style={ baseHeader }>
-						<Text h1> B$ { props.amount } </Text>
+						<Text h1> B$ { props.payInfo.amount } </Text>
 					</View>
 					<View style={styles.view}>
 						<View style={styles.detailView}>
@@ -135,12 +136,12 @@ const FeeConfirm = (props: FeeConfirmProps) => {
 						</View>
 						<View style={styles.detailView}>
 							<Text style={styles.detailText}>DORY & GINGER</Text>
-							<Text style={styles.infoText}>B$ 14.34</Text>
+							<Text style={styles.infoText}>{`B$ ${props.payInfo.amount.toFixed(2)}`}</Text>
 						</View>
 						<View style={styles.separator}></View>
 						<View style={styles.detailView}>
 							<Text style={styles.detailText}>TOTAL</Text>
-							<Text style={styles.infoText}>B$ 15.00</Text>
+							<Text style={styles.infoText}>{`B$ ${props.payInfo.amount.toFixed(2)}`}</Text>
 						</View>
 					</View>
 				</ScrollView>
@@ -169,9 +170,15 @@ const QRCodeScan = (): JSX.Element => {
 	const [isScanned, setIsScanned] = useState<boolean>(false);
 	const [isPaymentDialogOpen, setIsPaymentDialogOpen] = useState<boolean>(false);
 	const [isFeeDialogOpen, setIsFeeDialogOpen] = useState<boolean>(false);
+	const [state, setState] = useState<QRCodeEntry>({
+		to: "",
+		amount: 0,
+		mode: PaymentMode.SELECT_AMOUNT
+	});
 
 	const handleBarCodeScanned = (data: HandleScaned) => {
 		console.log(JSON.parse(data.data));
+		setState(JSON.parse(data.data));
 		setIsScanned(true);
 		setIsPaymentDialogOpen(true);
 	}
@@ -218,8 +225,8 @@ const QRCodeScan = (): JSX.Element => {
 					/>
 				</View>
 			</View>
-			{ isPaymentDialogOpen && <PaymentConfirm visible={isPaymentDialogOpen} amount={14.34} onConfirm={onPayConfirm} /> }
-			{ isFeeDialogOpen && <FeeConfirm visible={isFeeDialogOpen} amount={0.66} onConfirm={onFeeConfirm} onCancel={onCancle} /> }
+			{ isPaymentDialogOpen && <PaymentConfirm visible={isPaymentDialogOpen} payInfo={state} onConfirm={onPayConfirm} /> }
+			{ isFeeDialogOpen && <FeeConfirm visible={isFeeDialogOpen} payInfo={state} onConfirm={onFeeConfirm} onCancel={onCancle} /> }
 		</View>
 	);
 }
