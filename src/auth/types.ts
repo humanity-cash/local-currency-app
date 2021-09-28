@@ -1,5 +1,5 @@
 import { CognitoUser, CognitoUserAttribute } from "amazon-cognito-identity-js";
-import { CognitoBusinessAttributes, CognitoCustomerAttributes } from 'src/auth/cognito/types';
+import { BaseResponse, CognitoBusinessAttributes, CognitoCustomerAttributes, CognitoCustomerAttributesUpdate, CognitoSharedUserAttributes } from 'src/auth/cognito/types';
 
 export interface CustomerBasicVerification {
 	avatar: string
@@ -92,7 +92,7 @@ export interface IAuth {
 	completedBusinessVerification: boolean,
 	userAttributes?: any,
 	completeCustomerBasicVerification?: any,
-	updateAttributes?: any;
+	updateAttributes: (update: CognitoBusinessAttributes | CognitoCustomerAttributesUpdate | CognitoSharedUserAttributes) => Promise<BaseResponse<string | undefined>>;
 	sessionInfo?: Session;
 	resendEmailVerificationCode?: any;
 	authStatus?: AuthStatus;
