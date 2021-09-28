@@ -4,16 +4,12 @@ import React, { useContext, useEffect, useState } from 'react';
 import { Image, KeyboardAvoidingView, Platform, ScrollView, StyleSheet, TouchableOpacity, View } from "react-native";
 import { Text } from "react-native-elements";
 import { AuthContext } from 'src/auth';
+import { CognitoCustomerAttributesUpdate } from "src/auth/cognito/types";
 import { BUTTON_TYPES } from 'src/constants';
 import { BackBtn, BlockInput, Button, Header } from "src/shared/uielements";
 import { colors } from "src/theme/colors";
 import { underlineHeader, viewBase } from "src/theme/elements";
 import Translation from 'src/translation/en.json';
-
-interface PersonalProfileState {
-	avatar: string;
-	username: string;
-}
 
 const styles = StyleSheet.create({
 	container: {
@@ -57,13 +53,14 @@ const styles = StyleSheet.create({
 });
 
 export const SettingsPersonalDetails = (): JSX.Element => {
-	const { userAttributes } = useContext(AuthContext);
+	const { userAttributes, updateAttributes } = useContext(AuthContext);
 	const navigation = useNavigation();
+	const username =  userAttributes['custom:personal.tag']
 	const [state, setState] = useState({
 		avatar: '',
+		username
 	});
 
-	const username =  userAttributes['custom:personal.tag']
 
 	useEffect(() => {
 		(async () => {
@@ -125,7 +122,7 @@ export const SettingsPersonalDetails = (): JSX.Element => {
 					<BlockInput
 						name='username'
 						placeholder='@username'
-						value={username}
+						value={state.username}
 						onChange={onValueChange}
 					/>
 				</View>
@@ -136,9 +133,13 @@ export const SettingsPersonalDetails = (): JSX.Element => {
 					<Button
 						type={BUTTON_TYPES.DARK_GREEN}
 						title={Translation.BUTTON.SAVE_CHANGE}
-						disabled={true}
+						disabled={state.username === username}
 						onPress={async () => {
-							// console.log('should update username)
+							const attr: CognitoCustomerAttributesUpdate = {
+								"custom:personal.tag": state.username,
+							};
+							const _response = await updateAttributes(attr)
+							//:TODO Show Success Message
 						}}
 					/>
 				</View>
