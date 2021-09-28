@@ -5,7 +5,7 @@ import {
 } from "amazon-cognito-identity-js";
 import React, { useEffect, useState } from "react";
 import { userController } from "./cognito";
-import { BaseResponse, CognitoBusinessAttributes, CognitoCustomerAttributesUpdate, CognitoResponse, CognitoSharedUserAttributes, CompleteForgotPasswordInput, StartForgotPasswordInput } from "./cognito/types";
+import { BaseResponse, CognitoBusinessAttributes, CognitoCustomerAttributesUpdate, CognitoResponse, CognitoSharedUserAttributes } from "./cognito/types";
 import {
 	buisnessBasicVerificationInitialState,
 	customerBasicVerificationInitialState,
@@ -16,8 +16,7 @@ import {
 	AuthStatus,
 	BusinessBasicVerification,
 	CustomerBasicVerification,
-	defaultState,
-	IAuth, UserType
+	defaultState, ForgotPassword, IAuth, UserType
 } from "./types";
 
 export const AuthContext = React.createContext(defaultState);
@@ -56,6 +55,11 @@ const AuthProvider: React.FunctionComponent = ({ children }) => {
 	const [update, setUpdate] = useState(false);
 	const [signInDetails, setSignInDetails] = useState(signInInitialState);
 	const [signUpDetails, setSignUpDetails] = useState(signUpInitialState);
+	const [forgotPasswordDetails, setForgotPasswordDetails] = useState<ForgotPassword>({
+		email: "esraa@humanity.cash",
+		verificationCode: "",
+		newPassword: "",
+	});
 	const [userAttributes, setUserAttributes] = useState<any>({});
 	const [completedCustomerVerification, setCompletedCustomerVerification] = useState<boolean>(false);
 	const [completedBusinessVerification, setCompletedBusinessVerification] = useState<boolean>(false);
@@ -93,7 +97,7 @@ const AuthProvider: React.FunctionComponent = ({ children }) => {
 		}
 	};
 
-	async function getSessionInfo() {
+	const getSessionInfo = async () => {
 		try {
 			const response: BaseResponse<CognitoUserSession | undefined> =
 				await userController.getSession();
@@ -118,6 +122,22 @@ const AuthProvider: React.FunctionComponent = ({ children }) => {
 	useEffect(() => {
 		getSessionInfo();
 	}, [authStatus, userType]);
+
+	useEffect(() => {
+		const initialTypeState = async () => {
+			const latestType = await getLatestSelectedAccountType();
+			if (!latestType) {
+				updateUserType(UserType.Customer);
+			} else if (latestType === "2") {
+				updateUserType(UserType.Business);
+			} else if (latestType === "0") {
+				updateUserType(UserType.Customer);
+			} else if (latestType === "1") {
+				updateUserType(UserType.Business);
+			}
+		};
+		initialTypeState();
+	}, []);
 
 	const emailVerification = (verificationCode: string) =>
 		userController.confirmEmailVerificationCode(
@@ -153,22 +173,6 @@ const AuthProvider: React.FunctionComponent = ({ children }) => {
 
 		return response;
 	};
-
-	useEffect(() => {
-		const initialTypeState = async () => {
-			const latestType = await getLatestSelectedAccountType();
-			if (!latestType) {
-				updateUserType(UserType.Customer);
-			} else if (latestType === "2") {
-				updateUserType(UserType.Business);
-			} else if (latestType === "0") {
-				updateUserType(UserType.Customer);
-			} else if (latestType === "1") {
-				updateUserType(UserType.Business);
-			}
-		};
-		initialTypeState();
-	}, []);
 
 	const getAttributes = async (): CognitoResponse<
 		CognitoUserAttribute[] | undefined
@@ -215,17 +219,18 @@ const AuthProvider: React.FunctionComponent = ({ children }) => {
 		return response;
 	};
 
-	const startForgotPasswordFlow = async (i: StartForgotPasswordInput) => {
-		const { email } = i;
-		const response: BaseResponse<unknown> = await userController.startForgotPasswordFlow({ email });
+	const startForgotPasswordFlow = async (): Promise<BaseResponse<unknown>> => {
+		const { email } = forgotPasswordDetails;
+		const response: BaseResponse<unknown> =
+			await userController.startForgotPasswordFlow({ email });
 
 		return response;
 	};
 
-	const completeForgotPasswordFlow = async (
-		i: CompleteForgotPasswordInput
-	) => {
-		const { email, verificationCode, newPassword } = i;
+	const completeForgotPasswordFlow = async (): Promise<
+		BaseResponse<unknown>
+	> => {
+		const { email, newPassword, verificationCode } = forgotPasswordDetails;
 		const response: BaseResponse<unknown> =
 			await userController.completeForgotPasswordFlow({
 				email,
@@ -257,6 +262,8 @@ const AuthProvider: React.FunctionComponent = ({ children }) => {
 
 	const state: IAuth = {
 		userType,
+		forgotPasswordDetails, 
+		setForgotPasswordDetails,
 		userAttributes,
 		updateAttributes,
 		authStatus,

@@ -81,12 +81,20 @@ export interface Session {
 	refreshToken?: string;
 }
 
+export interface ForgotPassword {
+	email: string,
+	verificationCode: string,
+	newPassword: string
+}
+
 export interface IAuth {
+	forgotPasswordDetails: ForgotPassword, 
+	setForgotPasswordDetails?: any,
 	userType?: any,
 	updateUserType?: any,
 	setAuthStatus?: any,
-	startForgotPasswordFlow?: any,
-	completeForgotPasswordFlow?: any,
+	startForgotPasswordFlow: () => Promise<BaseResponse<unknown>>,
+	completeForgotPasswordFlow: (code: string) => Promise<BaseResponse<unknown>>,
 	completeBusniessBasicVerification?: any,
 	completedCustomerVerification: boolean,
 	completedBusinessVerification: boolean,
