@@ -5,7 +5,7 @@ import {
 } from "amazon-cognito-identity-js";
 import React, { useEffect, useState } from "react";
 import { userController } from "./cognito";
-import { BaseResponse, CognitoBusinessAttributes, CognitoCustomerAttributes, CognitoResponse, CognitoSharedUserAttributes, CompleteForgotPasswordInput, StartForgotPasswordInput } from "./cognito/types";
+import { BaseResponse, CognitoBusinessAttributes, CognitoCustomerAttributesUpdate, CognitoResponse, CognitoSharedUserAttributes, CompleteForgotPasswordInput, StartForgotPasswordInput } from "./cognito/types";
 import {
 	buisnessBasicVerificationInitialState,
 	customerBasicVerificationInitialState,
@@ -53,6 +53,7 @@ const getLatestSelectedAccountType = async () => {
 const AuthProvider: React.FunctionComponent = ({ children }) => {
 	const [userType, setUserType] = useState<UserType | undefined>(undefined);
 	const [authStatus, setAuthStatus] = useState(AuthStatus.SignedOut);
+	const [update, setUpdate] = useState(false);
 	const [signInDetails, setSignInDetails] = useState(signInInitialState);
 	const [signUpDetails, setSignUpDetails] = useState(signUpInitialState);
 	const [userAttributes, setUserAttributes] = useState<any>({});
@@ -106,6 +107,13 @@ const AuthProvider: React.FunctionComponent = ({ children }) => {
 			setAuthStatus(AuthStatus.SignedOut);
 		}
 	}
+
+	useEffect(() => {
+		if(update){  
+			getSessionInfo(); 
+			setUpdate(false);
+		}
+	}, [update]);
 
 	useEffect(() => {
 		getSessionInfo();
@@ -231,10 +239,11 @@ const AuthProvider: React.FunctionComponent = ({ children }) => {
 	const updateAttributes = async (
 		update:
 			| CognitoBusinessAttributes
-			| CognitoCustomerAttributes
+			| CognitoCustomerAttributesUpdate
 			| CognitoSharedUserAttributes
-	) => {
-		const response = await userController.updateUserAttributes(update);
+	): Promise<BaseResponse<string | undefined>> => {
+		const response: BaseResponse<string | undefined> = await userController.updateUserAttributes(update);
+		setUpdate(true);
 		return response;
 	};
 
