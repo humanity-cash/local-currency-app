@@ -2605,14 +2605,6 @@
   dependencies:
     "@types/react" "^16"
 
-"@types/react-native-material-dropdown@^0.11.5":
-  version "0.11.5"
-  resolved "https://registry.yarnpkg.com/@types/react-native-material-dropdown/-/react-native-material-dropdown-0.11.5.tgz#72424466d2175727eb8d8b370eb7e761d252bb1c"
-  integrity sha512-bjpQQg2ZIuRGlwMcFXQouh2oc0nmjcYh1WPW+RJbb8QUxF/KHovV2cfnJ9W0qNv1hRUfTx4xptyJFiJ9NM75fw==
-  dependencies:
-    "@types/react" "*"
-    "@types/react-native" "*"
-
 "@types/react-native-svg-charts@^5.0.3":
   version "5.0.9"
   resolved "https://registry.yarnpkg.com/@types/react-native-svg-charts/-/react-native-svg-charts-5.0.9.tgz#e867aac5f73b3dea8bdc3bfba32d52d098d5e4d5"

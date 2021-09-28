@@ -7,7 +7,7 @@ import { BackBtn, Header, CancelBtn } from "src/shared/uielements";
 import { viewBaseWhite, wrappingContainerBase } from "src/theme/elements";
 import * as Routes from 'src/navigation/constants';
 import { colors } from "src/theme/colors";
-import { DwollaAPI } from 'src/api';
+import { UserAPI } from 'src/api';
 
 export const WEBVIEW_SCREEN = Dimensions.get('screen').height - 150;
 
@@ -35,9 +35,9 @@ const SelectBank = (): JSX.Element => {
 	useEffect(() => {
 		if (customerDwollaId) {
 			(async () => {
-				const response = await DwollaAPI.getIAVToken(customerDwollaId);
-				if (response) {
-					setIAVToken(response);
+				const response = await UserAPI.iavToken(customerDwollaId);
+				if (response.data) {
+					setIAVToken(response.data.iavToken);
 					webview?.reload();
 				}
 			})();

@@ -70,7 +70,7 @@ const BusinessAddress = (): ReactElement => {
 				firstName: buisnessBasicVerification.owner?.firstName,
 				lastName: buisnessBasicVerification.owner?.lastName,
 				businessName: buisnessBasicVerification.tag,
-				email: "m." + cognitoId + "@test.com",
+				email: cognitoId + "@humanity.cash",
 				address1: buisnessBasicVerification.address1,
 				address2: buisnessBasicVerification.address2,
 				city: buisnessBasicVerification.city,

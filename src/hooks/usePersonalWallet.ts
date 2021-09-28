@@ -4,7 +4,7 @@ import AsyncStorage  from "@react-native-async-storage/async-storage";
 import { Wallet } from "src/utils/types";
 import { IMap } from 'src/utils/types';
 
-const storeId = "WALLET_RECORD";
+const storeId = "PERSONAL_WALLET_RECORD";
 
 type WalletState = Wallet;
 
@@ -19,7 +19,7 @@ const defaultState: WalletState = {
 const store = createStore<WalletState>(storeId, defaultState);
 let loaded = false;
 
-const useWallet = (): IMap => {
+const usePersonalWallet = (): IMap => {
 	const [ wallet ] = useStore<WalletState>(storeId);
 	useEffect(() => {
 		async function readStorage() {
@@ -99,4 +99,4 @@ const useWallet = (): IMap => {
 	}
 };
 
-export default useWallet;
+export default usePersonalWallet;

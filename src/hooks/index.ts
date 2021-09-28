@@ -10,7 +10,8 @@ import useRouteTracking from "./useRouteTracking";
 import useShares from "./useShares";
 import useTransaction from "./useTransaction";
 import useUserDetails from "./useUserDetails";
-import useWallet from "./useWallet";
+import usePersonalWallet from "./usePersonalWallet";
+import useBusinessWallet from "./useBusinessWallet";
 
 export {
 	useMediaLibraryPermission,
@@ -24,6 +25,7 @@ export {
 	useShares,
 	useTransaction,
 	useUserDetails,
-	useWallet,
+	usePersonalWallet,
+	useBusinessWallet,
 	useCameraPermission
 };

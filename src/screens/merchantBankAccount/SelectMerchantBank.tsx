@@ -8,7 +8,7 @@ import { colors } from "src/theme/colors";
 import { viewBaseWhite, wrappingContainerBase } from "src/theme/elements";
 import Translation from 'src/translation/en.json';
 import * as Routes from 'src/navigation/constants';
-import { DwollaAPI } from 'src/api';
+import { UserAPI } from 'src/api';
 
 export const WEBVIEW_SCREEN = Dimensions.get('screen').height - 150;
 
@@ -37,14 +37,14 @@ const SelectMerchantBank = (): JSX.Element => {
 	useEffect(() => {
 		if (businessDwollaId) {
 			(async () => {
-				const response = await DwollaAPI.getIAVToken(businessDwollaId);
-				if (response) {
-					setIAVToken(response);
+				const response = await UserAPI.iavToken(businessDwollaId);
+				if (response.data) {
+					setIAVToken(response.data.iavToken);
 					webview?.reload();
 				}
 			})();
 		}
-	}, [businessDwollaId])
+	}, [businessDwollaId]);
 
 	return (
 		<View style={viewBaseWhite}>
@@ -64,7 +64,7 @@ const SelectMerchantBank = (): JSX.Element => {
 			</ScrollView>
 			{iavToken === "" && (
 				<View style={styles.bottomView}>
-					<ActivityIndicator size="large" color={colors.darkGreen} />
+					<ActivityIndicator size="large" color={colors.purple} />
 				</View>
 			)}
 		</View>

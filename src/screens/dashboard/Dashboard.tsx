@@ -20,7 +20,7 @@ import { Button, Dialog } from "src/shared/uielements";
 import { dialogViewBase } from "src/theme/elements";
 import { BUTTON_TYPES } from "src/constants";
 import { UserAPI } from 'src/api';
-import { useWallet } from 'src/hooks';
+import { usePersonalWallet } from 'src/hooks';
 
 const styles = StyleSheet.create({
 	content: { paddingBottom: 40 },
@@ -138,21 +138,32 @@ const feedData = {
 
 const Dashboard = (): JSX.Element => {
 	const navigation = useNavigation();
-	const { wallet, update } = useWallet();
+	const { wallet, update } = usePersonalWallet();
 	const { customerDwollaId } = useContext(AuthContext);
 	const [isVisible, setIsVisible] = useState<boolean>(false);
 	const [isLoadup, setIsLoadup] = useState<boolean>(false);
 	const [isPayment, setIsPayment] = useState<boolean>(false);
-	const [hasBank, setHasBank] = useState<boolean>(false);
+	const [hasBank, setHasBank] = useState<boolean>(true);
 
 	useEffect(() => {
 		if (customerDwollaId) {
+			(async () => {
+				const response = await UserAPI.getFundingSources(customerDwollaId);
+				if (response.data && response.data.body._embedded["funding-sources"].length > 0) {
+					setHasBank(true);
+				} else {
+					setHasBank(false);
+				}
+			})();
+
 			(async () => {
 				const response = await UserAPI.getUser(customerDwollaId);
 				if (response.data) {
 					update(response.data[0]);
 				}
 			})();
+		} else {
+			setHasBank(false);
 		}
 	}, [customerDwollaId]);
 

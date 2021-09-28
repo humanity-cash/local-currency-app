@@ -14,17 +14,27 @@ export const user = async (request: IUserRequest): Promise<AxiosPromiseResponse>
 
 // create deposit
 export const deposit = async (userId: UserId, request: IDepositRequest): Promise<AxiosPromiseResponse> => {
-  const response = await postRequest(`/users/${userId}/deposit`, {request});
+  const response = await postRequest(`/users/${userId}/deposit`, request);
   return response;
 };
 
 export const withdrawal = async (userId: UserId, request: IWithdrawalRequest): Promise<AxiosPromiseResponse> => {
-  const response = await postRequest(`/users/${userId}/withdrawal`, {request});
+  const response = await postRequest(`/users/${userId}/withdrawal`, request);
+  return response;
+};
+
+export const iavToken = async (userId: UserId): Promise<AxiosPromiseResponse> => {
+  const response = await postRequest(`/users/${userId}/iav-token`, {});
+  return response;
+};
+
+export const getFundingSources = async (userId: UserId): Promise<AxiosPromiseResponse> => {
+  const response = await getRequest(`/users/${userId}/funding-sources`);
   return response;
 };
 
 export const transferTo = async (userId: UserId, request: ITransactionRequest): Promise<AxiosPromiseResponse> => {
-  const response = await postRequest(`/users/${userId}/transfer`, {request});
+  const response = await postRequest(`/users/${userId}/transfer`, request);
   return response;
 };
 

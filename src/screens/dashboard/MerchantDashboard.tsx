@@ -1,6 +1,6 @@
 import { AntDesign, Entypo, Octicons } from "@expo/vector-icons";
 import { useNavigation, DrawerActions } from "@react-navigation/native";
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { StyleSheet, TouchableWithoutFeedback, View, ScrollView, TouchableOpacity } from 'react-native';
 import { Text, Image } from "react-native-elements";
 import { AuthContext } from "src/auth";
@@ -16,6 +16,9 @@ import * as Routes from 'src/navigation/constants';
 import { getBerksharePrefix } from "src/utils/common";
 import DwollaDialog from './DwollaDialog';
 import { BUTTON_TYPES } from "src/constants";
+import { UserAPI } from 'src/api';
+import { IMap } from 'src/utils/types';
+import { useBusinessWallet } from 'src/hooks';
 
 const styles = StyleSheet.create({
 	mainTextColor: {
@@ -211,7 +214,8 @@ const TransactionDetail = (props: TransactionDetailProps) => {
 
 const MerchantDashboard = (): JSX.Element => {
 	const navigation = useNavigation();
-	const { completedCustomerVerification } = useContext(AuthContext);
+	const { completedCustomerVerification, businessDwollaId, setCustomerBasicVerificationDetails } = useContext(AuthContext);
+	const { wallet, update } = useBusinessWallet();
 	const [isFilterVisible, setIsFilterVisible] = useState<boolean>(false);
 	const [searchText, setSearchText] = useState<string>("");
 	const [isDetailViewOpen, setIsDetailViewOpen] = useState<boolean>(false);
@@ -224,6 +228,28 @@ const MerchantDashboard = (): JSX.Element => {
 	const [hasBank, setHasBank] = useState<boolean>(false);
 	const [isDwollaVisible, setIsDwollaVisible] = useState<boolean>(false);
 	const [isPayment, setIsPayment] = useState<boolean>(false);
+
+	useEffect(() => {
+		if (businessDwollaId) {
+			(async () => {
+				const response = await UserAPI.getFundingSources(businessDwollaId);
+				if (response.data && response.data.body._embedded["funding-sources"].length > 0) {
+					setHasBank(true);
+				} else {
+					setHasBank(false);
+				}
+			})();
+
+			(async () => {
+				const response = await UserAPI.getUser(businessDwollaId);
+				if (response.data) {
+					update(response.data[0]);
+				}
+			})();
+		} else {
+			setHasBank(false);
+		}
+	}, [businessDwollaId]);
 
 	const onSearchChange = (name: string, change: string) => {
 		setSearchText(change);
@@ -248,6 +274,14 @@ const MerchantDashboard = (): JSX.Element => {
 		onClose();
 	}
 
+	const handlePersonalProfile = () => {
+		setCustomerBasicVerificationDetails((pv: IMap) => ({
+			...pv,
+			type: "personal",
+		}));
+		navigation.navigate(Routes.PERSONAL_PROFILE);
+	}
+
 	return (
 		<View style={viewBaseB}>
 			<Header
@@ -270,14 +304,14 @@ const MerchantDashboard = (): JSX.Element => {
 						<Text style={styles.headerText}>{Translation.LANDING_PAGE.TITLE}</Text>
 					</View>
 					<View style={styles.amountView}>
-						<Text style={styles.text}>B$ 382.91</Text>
+						<Text style={styles.text}>B$ {hasBank ? wallet.totalBalance : '-'}</Text>
 					</View>
 
 					{!completedCustomerVerification && <View style={styles.alertView}>
 						<AntDesign name="exclamationcircleo" size={18} style={styles.alertIcon} />
 						<Text style={styles.alertText}>
 							{Translation.PROFILE.PERSONAL_PROFILE_ALERT} &nbsp;
-							<Text style={styles.alertIcon} onPress={()=>navigation.navigate(Routes.PERSONAL_PROFILE)}>{Translation.BUTTON.GOTO_SETUP} &gt;</Text>
+							<Text style={styles.alertIcon} onPress={handlePersonalProfile}>{Translation.BUTTON.GOTO_SETUP} &gt;</Text>
 						</Text>
 					</View>}
 
