@@ -49,3 +49,13 @@ export type CognitoError = any
 export type BaseResponse<T> = { user?: CognitoUser | null, success: boolean, data: { error: string } | T }
 
 export type CognitoResponse<T> = Promise<BaseResponse<T>>
+
+export interface StartForgotPasswordInput {
+ email: string,
+}
+
+export interface CompleteForgotPasswordInput {
+ email: string,
+ verificationCode: string,
+ newPassword: string 
+}
