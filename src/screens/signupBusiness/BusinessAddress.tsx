@@ -30,6 +30,7 @@ const styles = StyleSheet.create({
 	},
 	bodyText: {
 		color: colors.bodyText,
+		marginBottom: 20
 	},
 	label: {
 		marginTop: 30,
@@ -86,6 +87,9 @@ const BusinessAddress = (): ReactElement => {
 					</Text>
 				</View>
 				<View style={styles.formView}>
+					<Text style={styles.bodyText}>
+						Where can customers find you?
+					</Text>
 					<BusinessAddressForm style={styles.input} />
 				</View>
 			</ScrollView>

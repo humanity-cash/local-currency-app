@@ -29,6 +29,7 @@ export interface BusinessBasicVerification {
 		postalCode: string,
 	},
 	registeredBusinessName: string,
+	website?: string,
 	industry: string,
 	ein: string,
 	address1: string,
