@@ -30,7 +30,6 @@
     "amazon-cognito-identity-js": "^5.0.6",
     "axios": "^0.21.1",
     "eslint-plugin-jest": "^24.3.6",
-    "ethereum-qr-code": "^0.3.0",
     "expo-asset": "~8.3.3",
     "expo-barcode-scanner": "~10.2.2",
     "expo-brightness": "^9.2.2",

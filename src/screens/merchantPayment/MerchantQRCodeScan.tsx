@@ -1,11 +1,12 @@
-import React, { useState } from 'react';
-import { StyleSheet, View } from 'react-native';
+import React, { useState, useContext } from 'react';
+import { StyleSheet, View, Image } from 'react-native';
 import { useNavigation } from '@react-navigation/core';
 import { Text } from 'react-native-elements';
 import { useCameraPermission } from 'src/hooks';
+import { AuthContext } from 'src/auth';
 import { Header, CancelBtn, Dialog, Button, ToggleButton } from "src/shared/uielements";
 import { colors } from "src/theme/colors";
-import { baseHeader, wrappingContainerBase, viewBase, dialogViewBase } from "src/theme/elements";
+import { viewBase, dialogViewBase } from "src/theme/elements";
 import { BarCodeScanner } from 'expo-barcode-scanner';
 import Translation from 'src/translation/en.json';
 import * as Routes from 'src/navigation/constants';
@@ -16,6 +17,8 @@ type HandleScaned = {
 	type: string,
 	data: string,
 }
+
+const FEE = 0.15;
 
 const styles = StyleSheet.create({
 	container: {
@@ -31,21 +34,58 @@ const styles = StyleSheet.create({
 		height: 200,
 		backgroundColor: 'rgba(0,0,0,0.8)'
 	},
-	bottomView: {
-		position: 'absolute',
-		bottom: 0,
-		left: 0,
-		width: '100%',
-		height: 200,
-		backgroundColor: 'rgba(0,0,0,0.8)'
-	},
-	headerText: {
-		fontSize: 25,
-		color: colors.purple,
-		textAlign: 'center'
-	},
 	dialog: {
 		height: 450
+	},
+	dialogBg: {
+        backgroundColor: colors.overlayPurple
+    },
+	dialogWrap: {
+        position: 'relative',
+		paddingHorizontal: 10,
+        paddingTop: 70,
+		height: "100%",
+		flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center'
+	},
+	ownerInfo: {
+        position: 'absolute',
+        top: -60,
+        borderRadius: 40,
+        alignItems: 'center'
+    },
+    image: {
+        width: 80,
+        height: 80,
+        borderRadius: 40
+    },
+    ownerName: {
+        fontWeight: 'bold',
+        fontSize: 18,
+        paddingVertical: 10,
+		color: colors.purple
+    },
+	headerText: {
+        alignSelf: 'center',
+        marginTop: 10,
+        fontWeight: 'bold',
+        fontSize: 32,
+        lineHeight: 32,
+        paddingTop: 20,
+		color: colors.purple
+    },
+	view: {
+		paddingVertical: 10,
+		alignItems: 'center'
+	},
+	transparentBtn: {
+		backgroundColor: colors.white,
+		color: colors.purple,
+		borderWidth: 1, 
+		marginTop: 20,
+		marginBottom: 10,
+		borderColor: colors.purple
 	},
 	detailText: {
 		fontSize: 14,
@@ -82,28 +122,41 @@ const styles = StyleSheet.create({
 type PaymentConfirmProps = {
 	visible: boolean,
 	onConfirm: () => void,
+	onCancel: () => void,
 	payInfo: QRCodeEntry,
 }
 
 const PaymentConfirm = (props: PaymentConfirmProps) => {
+	const { userAttributes } = useContext(AuthContext);
+
+	const firstName = userAttributes?.["custom:owner.firstName"];
+    const lastName = userAttributes?.["custom:owner.lastName"];
+	const amountCalcedFee = props.payInfo.amount - props.payInfo.amount * FEE;
 
 	return (
-		<Dialog visible={props.visible} onClose={()=>props.onConfirm()} style={styles.dialog}>
+		<Dialog visible={props.visible} onClose={props.onCancel} backgroundStyle={styles.dialogBg} style={styles.dialog}>
 			<View style={dialogViewBase}>
-				<View style={wrappingContainerBase}>
-					<View style={ baseHeader }>
-						<Text h1 style={styles.headerText}> B$ { props.payInfo.amount } </Text>
-					</View>
-					<View>
+				<View style={styles.dialogWrap}>
+                    <View style={styles.ownerInfo}>
+                        <Image
+                            source={require("../../../assets/images/feed1.png")}
+                            style={styles.image}
+                        />
+                        <Text style={styles.ownerName}>{firstName + ' ' + lastName}</Text>
+                    </View>
+
+					<Text style={styles.headerText}>B$ {props.payInfo.amount?.toFixed(2)}</Text>
+					<View style={styles.view}>
 						<Text style={styles.detailText}>or</Text>
 						<Text style={styles.detailText}>{Translation.PAYMENT.CHOOSE_ROUND_UP}</Text>
 					</View>
-				</View>
+                </View>
+				
 				<View>
 					<Button
 						type={BUTTON_TYPES.TRANSPARENT}
-						title={`Pay B$ ${props.payInfo.amount.toFixed(2)}`}
-						style={styles.roundBtn}
+						style={styles.transparentBtn}
+						title={`Pay B$ ${amountCalcedFee.toFixed(2)}`}
 						onPress={() => props.onConfirm()}
 					/>
 					<Button
@@ -127,14 +180,13 @@ const MerchantQRCodeScan = (): JSX.Element => {
 		to: "",
 		amount: 0,
 		mode: PaymentMode.SELECT_AMOUNT
-	})
+	});
 
 	const handleBarCodeScanned = (data: HandleScaned) => {
-		console.log(JSON.parse(data.data));
-		setState(JSON.parse(data.data));
+		setState(JSON.parse(data.data) as QRCodeEntry);
 		setIsScanned(true);
 		setIsPaymentDialogOpen(true);
-	}
+	};
 
 	if (hasPermission === false) {
 		return <Text>No access to camera</Text>;
@@ -142,8 +194,15 @@ const MerchantQRCodeScan = (): JSX.Element => {
 
 	const onPayConfirm = () => {
 		setIsPaymentDialogOpen(false);
+		setIsScanned(false);
 		navigation.navigate(Routes.MERCHANT_PAYMENT_PENDING);
-	}
+	};
+
+	const onClose = () => {
+		setIsPaymentDialogOpen(false);
+		setIsScanned(false);
+		navigation.navigate(Routes.MERCHANT_DASHBOARD);
+	};
 
 	return (
 		<View style={viewBase}>
@@ -169,7 +228,7 @@ const MerchantQRCodeScan = (): JSX.Element => {
 					/>
 				</View>
 			</View>
-			{ isPaymentDialogOpen && <PaymentConfirm visible={isPaymentDialogOpen} payInfo={state} onConfirm={onPayConfirm} /> }
+			{ isPaymentDialogOpen && <PaymentConfirm visible={isPaymentDialogOpen} payInfo={state} onConfirm={onPayConfirm} onCancel={onClose} /> }
 		</View>
 	);
 }

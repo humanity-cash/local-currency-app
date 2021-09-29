@@ -1,5 +1,5 @@
 import React, { useEffect, useContext } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, View, Image } from 'react-native';
 import QRCode from 'react-native-qrcode-svg';
 import { AuthContext } from 'src/auth';
 import { Text } from 'react-native-elements';
@@ -10,11 +10,15 @@ import { PaymentMode } from "src/utils/types";
 import { useBrightness } from "src/hooks";
 
 const styles = StyleSheet.create({
+    dialog: {
+		height: 420
+	},
     dialogBg: {
         backgroundColor: colors.overlayPurple
     },
 	dialogWrap: {
 		paddingHorizontal: 10,
+        paddingTop: 70,
 		height: "100%",
 		flex: 1,
         justifyContent: 'center',
@@ -23,6 +27,27 @@ const styles = StyleSheet.create({
     amount: {
         alignSelf: 'center',
         marginTop: 10,
+        fontWeight: 'bold',
+        fontSize: 32,
+        lineHeight: 32,
+        paddingTop: 20,
+        color: colors.purple
+    },
+    ownerInfo: {
+        position: 'absolute',
+        top: -60,
+        borderRadius: 40,
+        alignItems: 'center'
+    },
+    image: {
+        width: 80,
+        height: 80,
+        borderRadius: 40
+    },
+    ownerName: {
+        fontWeight: 'bold',
+        fontSize: 18,
+        paddingVertical: 10,
         color: colors.purple
     }
 });
@@ -34,7 +59,7 @@ type MerchantQRCodeGenProps = {
 }
 
 const MerchantQRCodeGen = (props: MerchantQRCodeGenProps): JSX.Element => {
-    // const { userAttributes } = useContext(AuthContext);
+    const { userAttributes } = useContext(AuthContext);
     const { hasPermission, setMaxBrightness, setDefaultBrightness} = useBrightness();
     const addressStr = JSON.stringify({
         to: "",
@@ -53,15 +78,25 @@ const MerchantQRCodeGen = (props: MerchantQRCodeGenProps): JSX.Element => {
         props.onClose();
     }
 
+    const firstName = userAttributes?.["custom:owner.firstName"];
+    const lastName = userAttributes?.["custom:owner.lastName"];
+
     return (
-        <Dialog visible={props.visible} onClose={onClose} backgroundStyle={styles.dialogBg}>
+        <Dialog visible={props.visible} onClose={onClose} backgroundStyle={styles.dialogBg} style={styles.dialog}>
             <View style={dialogViewBase}>
                 <View style={styles.dialogWrap}>
+                    <View style={styles.ownerInfo}>
+                        <Image
+                            source={require("../../../assets/images/feed1.png")}
+                            style={styles.image}
+                        />
+                        <Text style={styles.ownerName}>{firstName + ' ' + lastName}</Text>
+                    </View>
                     <QRCode
                         value={addressStr}
                         size={200}
                     />
-                    <Text h1 style={styles.amount}>B$ {props.amount}.00</Text>
+                    <Text style={styles.amount}>B$ {props.amount?.toFixed(2)}</Text>
                 </View>
             </View>
         </Dialog>
