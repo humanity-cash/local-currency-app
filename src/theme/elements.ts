@@ -26,8 +26,7 @@ export const dialogViewBase: any = {
 	...viewBase,
 	padding: 20,
 	backgroundColor: colors.background,
-	borderTopStartRadius: 20,
-	borderTopEndRadius: 20,
+	borderRadius: 20
 }
 
 export const viewDashboardBase: any = {

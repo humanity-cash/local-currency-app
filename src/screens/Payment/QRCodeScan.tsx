@@ -1,11 +1,12 @@
 import { useNavigation } from '@react-navigation/native';
-import React, { useState } from 'react';
-import { StyleSheet, View, ScrollView } from 'react-native';
+import React, { useState, useContext } from 'react';
+import { StyleSheet, View, Image } from 'react-native';
 import { Text } from 'react-native-elements';
 import { useCameraPermission } from 'src/hooks';
+import { AuthContext } from 'src/auth';
 import { Header, CancelBtn, Dialog, Button, ToggleButton } from "src/shared/uielements";
 import { colors } from "src/theme/colors";
-import { baseHeader, wrappingContainerBase, viewBase, dialogViewBase } from "src/theme/elements";
+import { baseHeader, viewBase, dialogViewBase } from "src/theme/elements";
 import { BarCodeScanner } from 'expo-barcode-scanner';
 import Translation from 'src/translation/en.json';
 import * as Routes from 'src/navigation/constants';
@@ -31,15 +32,58 @@ const styles = StyleSheet.create({
 		height: 200,
 		backgroundColor: 'rgba(0,0,0,0.8)'
 	},
-	dialogFooter: {
-		padding: 20,
+	dialog: {
+		height: 450
 	},
+	dialogWrap: {
+        position: 'relative',
+		paddingHorizontal: 10,
+        paddingTop: 70,
+		height: "100%",
+		flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center'
+	},
+	ownerInfo: {
+        position: 'absolute',
+        top: -60,
+        borderRadius: 40,
+        alignItems: 'center'
+    },
+    image: {
+        width: 80,
+        height: 80,
+        borderRadius: 40
+    },
+    ownerName: {
+        fontWeight: 'bold',
+        fontSize: 18,
+        paddingVertical: 10
+    },
 	headerText: {
-		fontSize: 25,
-		color: colors.darkRed,
+        alignSelf: 'center',
+        marginTop: 10,
+        fontWeight: 'bold',
+        fontSize: 32,
+        lineHeight: 32,
+        paddingTop: 20
+    },
+	description: {
+		color: colors.bodyText,
+		fontSize: 10,
+		textAlign: 'center',
+		marginTop: 10
 	},
 	view: {
-		padding: 10,
+		paddingVertical: 10,
+		alignItems: 'center'
+	},
+	transparentBtn: {
+		backgroundColor: 
+		colors.white, 
+		borderWidth: 1, 
+		marginTop: 20,
+		marginBottom: 10
 	},
 	detailView: {
 		flexDirection: 'row', 
@@ -47,16 +91,6 @@ const styles = StyleSheet.create({
 	},
 	detailText: {
 		fontSize: 14,
-	},
-	infoText: {
-		fontWeight: 'bold',
-		fontSize: 14
-	},
-	separator: {
-		borderTopWidth: 1, 
-		borderTopColor: colors.darkGreen, 
-		marginBottom: 10, 
-		marginTop: 10
 	},
 	switchView: {
 		flex: 1, 
@@ -73,89 +107,80 @@ const styles = StyleSheet.create({
 
 type PaymentConfirmProps = {
 	visible: boolean,
-	onConfirm: ()=>void,
+	onConfirm: () => void,
+	onCancel: () => void,
 	payInfo: QRCodeEntry
 }
 
 const PaymentConfirm = (props: PaymentConfirmProps) => {
+	const { userAttributes } = useContext(AuthContext);
+
+	const firstName = userAttributes?.["custom:personal.firstName"];
+    const lastName = userAttributes?.["custom:personal.lastName"];
+	const amountCalcedFee = props.payInfo.amount - props.payInfo.amount * 0.15;
 
 	return (
-		<Dialog visible={props.visible} onClose={()=>props.onConfirm()}>
+		<Dialog visible={props.visible} onClose={props.onCancel} style={styles.dialog}>
 			<View style={dialogViewBase}>
-				<View style={wrappingContainerBase}>
-					<View style={ baseHeader }>
-						<Text h1 style={styles.headerText}> {`B$ ${props.payInfo.amount.toFixed(2)}`} </Text>
-					</View>
+				<View style={styles.dialogWrap}>
+                    <View style={styles.ownerInfo}>
+                        <Image
+                            source={require("../../../assets/images/feed1.png")}
+                            style={styles.image}
+                        />
+                        <Text style={styles.ownerName}>{firstName + ' ' + lastName}</Text>
+                    </View>
+
+					<Text style={styles.headerText}>B$ {props.payInfo.amount?.toFixed(2)}</Text>
 					<View style={styles.view}>
-						<View style={styles.detailView}>
-							<Text style={styles.detailText}>{Translation.LABEL.TRANSACTION_ID}</Text>
-							<Text style={styles.infoText}>{props.payInfo.to}</Text>
-						</View>
-						<View style={styles.detailView}>
-							<Text style={styles.detailText}>{Translation.COMMON.TYPE}</Text>
-							<Text style={styles.infoText}>PURCHASE</Text>
-						</View>
-						<View style={styles.detailView}>
-							<Text style={styles.detailText}>{Translation.COMMON.DATE}</Text>
-							<Text style={styles.infoText}>4:22, JUN 17, 2021</Text>
-						</View>
+						<Text style={styles.detailText}>or</Text>
+						<Text style={styles.detailText}>{Translation.PAYMENT.CHOOSE_ROUND_UP}</Text>
 					</View>
-				</View>
-				<View style={styles.dialogFooter}>
+                </View>
+				
+				<View>
 					<Button
-						type={BUTTON_TYPES.DARK_GREEN}
-						title={Translation.BUTTON.CONFIRM}
+						type={BUTTON_TYPES.TRANSPARENT}
+						style={styles.transparentBtn}
+						title={`Pay B$ ${amountCalcedFee.toFixed(2)}`}
 						onPress={() => props.onConfirm()}
 					/>
+					<Button
+						type={BUTTON_TYPES.DARK_GREEN}
+						title={`Round up to B$ ${props.payInfo.amount.toFixed(2)}`}
+						onPress={() => props.onConfirm()}
+					/>
+					<Text style={styles.description}>{Translation.PAYMENT.NOT_REFUNABLE_DONATION}</Text>
 				</View>
 			</View>
 		</Dialog>
 	)
 }
 
-type FeeConfirmProps = {
+type LowAmountProps = {
 	visible: boolean,
 	onConfirm: () => void,
-	onCancel: () => void,
-	payInfo: QRCodeEntry
+	onCancel: () => void
 }
 
-const FeeConfirm = (props: FeeConfirmProps) => {
+const LowAmount = (props: LowAmountProps) => {
 
 	return (
 		<Dialog visible={props.visible} onClose={() => props.onCancel()}>
 			<View style={dialogViewBase }>
-				<ScrollView style={wrappingContainerBase}>
+				<View>
 					<View style={ baseHeader }>
-						<Text h1> B$ { props.payInfo.amount } </Text>
+						<Text style={styles.headerText}> Whoooops. You cannot the payment. </Text>
 					</View>
 					<View style={styles.view}>
-						<View style={styles.detailView}>
-							<Text style={styles.detailText}>COMMUNITY CHEST</Text>
-							<Text style={styles.infoText}>B$ 0.66</Text>
-						</View>
-						<View style={styles.detailView}>
-							<Text style={styles.detailText}>DORY & GINGER</Text>
-							<Text style={styles.infoText}>{`B$ ${props.payInfo.amount.toFixed(2)}`}</Text>
-						</View>
-						<View style={styles.separator}></View>
-						<View style={styles.detailView}>
-							<Text style={styles.detailText}>TOTAL</Text>
-							<Text style={styles.infoText}>{`B$ ${props.payInfo.amount.toFixed(2)}`}</Text>
-						</View>
+						<Text style={styles.detailText}>You have too little funds available. Please load up your balance first.</Text>
 					</View>
-				</ScrollView>
+				</View>
 
-				<View style={{...styles.dialogFooter, flexDirection: 'row'}}>
+				<View>
 					<Button
 						type={BUTTON_TYPES.DARK_GREEN}
-						style={{backgroundColor: colors.white, borderWidth: 1, flex: 1, marginRight: 10}}
-						title="No, thanks"
-						onPress={() => props.onCancel()}
-					/>
-					<Button
-						type={BUTTON_TYPES.DARK_GREEN}
-						title={Translation.BUTTON.CONFIRM}
+						title={Translation.BUTTON.LOAD_UP}
 						onPress={() => props.onConfirm()}
 					/>
 				</View>
@@ -169,7 +194,7 @@ const QRCodeScan = (): JSX.Element => {
 	const hasPermission = useCameraPermission();
 	const [isScanned, setIsScanned] = useState<boolean>(false);
 	const [isPaymentDialogOpen, setIsPaymentDialogOpen] = useState<boolean>(false);
-	const [isFeeDialogOpen, setIsFeeDialogOpen] = useState<boolean>(false);
+	const [isLowAmountDialogOpen, setIsLowAmountDialogOpen] = useState<boolean>(false);
 	const [state, setState] = useState<QRCodeEntry>({
 		to: "",
 		amount: 0,
@@ -177,8 +202,7 @@ const QRCodeScan = (): JSX.Element => {
 	});
 
 	const handleBarCodeScanned = (data: HandleScaned) => {
-		console.log(JSON.parse(data.data));
-		setState(JSON.parse(data.data));
+		setState(JSON.parse(data.data) as QRCodeEntry);
 		setIsScanned(true);
 		setIsPaymentDialogOpen(true);
 	}
@@ -189,16 +213,21 @@ const QRCodeScan = (): JSX.Element => {
 
 	const onPayConfirm = () => {
 		setIsPaymentDialogOpen(false);
-		setIsFeeDialogOpen(true);
+		
+		// check balance
+		setIsLowAmountDialogOpen(true);
 	}
 
-	const onFeeConfirm = () => {
-		setIsFeeDialogOpen(false);
-		navigation.navigate(Routes.PAYMENT_PENDING);
+	const onLoadUp = () => {
+		setIsLowAmountDialogOpen(false);
+		setIsScanned(false);
+		navigation.navigate(Routes.LOAD_UP);
 	}
 
 	const onCancle = () => {
-		setIsFeeDialogOpen(false);
+		setIsPaymentDialogOpen(false);
+		setIsLowAmountDialogOpen(false);
+		setIsScanned(false);
 		navigation.navigate(Routes.DASHBOARD);
 	}
 
@@ -225,8 +254,8 @@ const QRCodeScan = (): JSX.Element => {
 					/>
 				</View>
 			</View>
-			{ isPaymentDialogOpen && <PaymentConfirm visible={isPaymentDialogOpen} payInfo={state} onConfirm={onPayConfirm} /> }
-			{ isFeeDialogOpen && <FeeConfirm visible={isFeeDialogOpen} payInfo={state} onConfirm={onFeeConfirm} onCancel={onCancle} /> }
+			{ isPaymentDialogOpen && <PaymentConfirm visible={isPaymentDialogOpen} payInfo={state} onConfirm={onPayConfirm} onCancel={onCancle} /> }
+			{ isLowAmountDialogOpen && <LowAmount visible={isLowAmountDialogOpen} onConfirm={onLoadUp} onCancel={onCancle} /> }
 		</View>
 	);
 }
