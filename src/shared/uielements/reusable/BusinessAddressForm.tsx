@@ -15,9 +15,6 @@ interface BusinessAddressProps {
 }
 
 const styles = StyleSheet.create({
-	container: {
-		marginBottom: 20
-	},
 	bodyText: {
 		color: colors.bodyText
 	},
@@ -71,11 +68,6 @@ const BusinessAddressForm = (props: BusinessAddressProps): JSX.Element => {
 
   	return (
 		<View>
-			<View style={styles.container}>
-				<Text style={styles.bodyText}>
-					Where can customers find you?
-				</Text>
-			</View>
 			<Text style={styles.label}>ADDRESS 1</Text>
 			<BlockInput
 				name="addressLine"
