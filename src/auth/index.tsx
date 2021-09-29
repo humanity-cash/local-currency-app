@@ -56,7 +56,7 @@ const AuthProvider: React.FunctionComponent = ({ children }) => {
 	const [signInDetails, setSignInDetails] = useState(signInInitialState);
 	const [signUpDetails, setSignUpDetails] = useState(signUpInitialState);
 	const [forgotPasswordDetails, setForgotPasswordDetails] = useState<ForgotPassword>({
-		email: "esraa@humanity.cash",
+		email: "esraa@keyko.io",
 		verificationCode: "",
 		newPassword: "",
 	});
@@ -150,7 +150,7 @@ const AuthProvider: React.FunctionComponent = ({ children }) => {
 
 	const signUp = async () => {
 		const response = await userController.signUp(
-			signUpDetails.email,
+			signUpDetails.email.toLowerCase(),
 			signUpDetails.password
 		);
 		if (!response?.success) setAuthStatus(AuthStatus.SignedOut);
@@ -202,7 +202,6 @@ const AuthProvider: React.FunctionComponent = ({ children }) => {
 				"custom:basicBusinessV": "true",
 			});
 		}
-
 		return response;
 	};
 
