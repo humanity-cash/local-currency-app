@@ -5,7 +5,7 @@ import {
 } from "amazon-cognito-identity-js";
 import React, { useEffect, useState } from "react";
 import { userController } from "./cognito";
-import { BaseResponse, CognitoBusinessAttributes, CognitoCustomerAttributesUpdate, CognitoResponse, CognitoSharedUserAttributes } from "./cognito/types";
+import { BaseResponse, CognitoResponse } from "./cognito/types";
 import {
 	buisnessBasicVerificationInitialState,
 	customerBasicVerificationInitialState,
@@ -13,6 +13,7 @@ import {
 	signUpInitialState
 } from "./consts";
 import {
+	AccountUpdate,
 	AuthStatus,
 	BusinessBasicVerification,
 	CustomerBasicVerification,
@@ -197,6 +198,7 @@ const AuthProvider: React.FunctionComponent = ({ children }) => {
 		const response = await userController.completeBusinessBasicVerification(
 			update
 		);
+    console.log("🚀 ~ file: index.tsx ~ line 200 ~ response", response)
 		if (response.success) {
 			await userController.updateUserAttributes({
 				"custom:basicBusinessV": "true",
@@ -241,12 +243,10 @@ const AuthProvider: React.FunctionComponent = ({ children }) => {
 	};
 
 	const updateAttributes = async (
-		update:
-			| CognitoBusinessAttributes
-			| CognitoCustomerAttributesUpdate
-			| CognitoSharedUserAttributes
+		update: AccountUpdate
 	): Promise<BaseResponse<string | undefined>> => {
-		const response: BaseResponse<string | undefined> = await userController.updateUserAttributes(update);
+		const response: BaseResponse<string | undefined> =
+			await userController.updateUserAttributes(update);
 		setUpdate(true);
 		return response;
 	};
