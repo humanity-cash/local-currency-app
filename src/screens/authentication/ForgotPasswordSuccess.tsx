@@ -1,14 +1,10 @@
 import { useNavigation } from '@react-navigation/native';
-import React, { ReactElement } from 'react';
+import React, { useContext } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { Text } from 'react-native-elements';
-import { Button, Header, CancelBtn, BackBtn } from "src/shared/uielements";
+import { AuthContext } from 'src/auth';
+import { BackBtn, Button, CancelBtn, Header } from "src/shared/uielements";
 import { baseHeader, viewBase, wrappingContainerBase } from "src/theme/elements";
-
-type ForgotPasswordSuccessProps = {
-	navigation?: any
-	route?: any
-}
 
 const styles = StyleSheet.create({
 	modalHeader: {
@@ -22,12 +18,15 @@ const styles = StyleSheet.create({
 	}
 });
 
-const ForgotPasswordSuccessView = (props: ForgotPasswordSuccessProps) => {
+const ForgotPasswordSuccess = () => {
+	const navigation = useNavigation()
+	const { signIn, forgotPasswordDetails } = useContext(AuthContext);
+
 	return (
 		<View style={viewBase}>
 			<Header
-				leftComponent={<BackBtn onClick={() => props.navigation.goBack()} />}
-				rightComponent={<CancelBtn text="Close" onClick={() => props.navigation.navigate('Login')} />}
+				leftComponent={<BackBtn onClick={() => navigation.goBack()} />}
+				rightComponent={<CancelBtn text="Close" onClick={() => navigation.navigate('Login')} />}
 			/>
 			<View style={wrappingContainerBase}>
 				<View style={ baseHeader }>
@@ -38,7 +37,12 @@ const ForgotPasswordSuccessView = (props: ForgotPasswordSuccessProps) => {
 				<Button
 					type="darkGreen"
 					title="DONE"
-					onPress={props.route.params.onClose}
+					onPress={() => {
+						signIn({
+							email: forgotPasswordDetails.email,
+							password: forgotPasswordDetails.newPassword,
+						});
+					}}
 				/>
 			</View>
 			
@@ -46,8 +50,4 @@ const ForgotPasswordSuccessView = (props: ForgotPasswordSuccessProps) => {
 	);
 }
 
-const ForgotPasswordSuccess = (props:ForgotPasswordSuccessProps): ReactElement => {
-	const navigation = useNavigation();
-	return <ForgotPasswordSuccessView {...props} navigation={navigation} />;
-}
 export default ForgotPasswordSuccess
