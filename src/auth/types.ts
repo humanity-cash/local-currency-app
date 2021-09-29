@@ -1,5 +1,5 @@
 import { CognitoUser, CognitoUserAttribute } from "amazon-cognito-identity-js";
-import { BaseResponse, CognitoBusinessAttributes, CognitoCustomerAttributes, CognitoCustomerAttributesUpdate, CognitoSharedUserAttributes } from 'src/auth/cognito/types';
+import { BaseResponse, CognitoBusinessAttributes, CognitoBusinessUpdateAttributes, CognitoCustomerAttributes, CognitoCustomerAttributesUpdate, CognitoSharedUserAttributes } from 'src/auth/cognito/types';
 
 export interface CustomerBasicVerification {
 	avatar: string
@@ -13,6 +13,8 @@ export interface CustomerBasicVerification {
 	lastName: string
 	type: string
 };
+
+export type AccountUpdate = CognitoCustomerAttributesUpdate | CognitoBusinessUpdateAttributes | CognitoSharedUserAttributes
 
 export interface BusinessBasicVerification {
 	story: string,
@@ -91,7 +93,7 @@ export interface ForgotPassword {
 export interface IAuth {
 	forgotPasswordDetails: ForgotPassword, 
 	setForgotPasswordDetails?: any,
-	userType?: any,
+	userType?: UserType | undefined,
 	updateUserType?: any,
 	setAuthStatus?: any,
 	startForgotPasswordFlow: () => Promise<BaseResponse<unknown>>,
@@ -124,6 +126,7 @@ export interface IAuth {
 	setBuisnessBasicVerification?: any
 }
 
+//@ts-ignore
 export const defaultState: IAuth = {
 	completedCustomerVerification: false,
 	completedBusinessVerification: false,

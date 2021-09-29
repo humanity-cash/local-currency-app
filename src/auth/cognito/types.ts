@@ -33,6 +33,21 @@ export interface CognitoCustomerAttributes {
 	'custom:personal.lastName': string
 }
 
+/**Business Update*/
+export interface CognitoBusinessUpdateAttributes {
+	"custom:business.story"?: string,
+	"custom:business.tag"?: string,
+	"custom:business.avatar"?: string,
+	"custom:business.type"?: string,
+	"custom:business.industry"?: string,
+	"custom:business.address1"?: string,
+	"custom:business.address2"?: string,
+	"custom:business.city"?: string,
+	"custom:business.state"?: string,
+	"custom:business.postalCode"?: string,
+	"custom:business.phoneNumber"?: string,
+}
+
 /**Business */
 export interface CognitoBusinessAttributes {
 	"custom:business.story": string,
