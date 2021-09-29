@@ -19,8 +19,8 @@ import DwollaDialog from './DwollaDialog';
 import { Button, Dialog } from "src/shared/uielements";
 import { dialogViewBase } from "src/theme/elements";
 import { BUTTON_TYPES } from "src/constants";
+import { usePersonalWallet, useBanks } from 'src/hooks';
 import { UserAPI } from 'src/api';
-import { usePersonalWallet } from 'src/hooks';
 
 const styles = StyleSheet.create({
 	content: { paddingBottom: 40 },
@@ -139,22 +139,15 @@ const feedData = {
 const Dashboard = (): JSX.Element => {
 	const navigation = useNavigation();
 	const { wallet, update } = usePersonalWallet();
+	const { details, getBankStatus } = useBanks();
 	const { customerDwollaId } = useContext(AuthContext);
 	const [isVisible, setIsVisible] = useState<boolean>(false);
 	const [isLoadup, setIsLoadup] = useState<boolean>(false);
 	const [isPayment, setIsPayment] = useState<boolean>(false);
-	const [hasBank, setHasBank] = useState<boolean>(true);
 
 	useEffect(() => {
 		if (customerDwollaId) {
-			(async () => {
-				const response = await UserAPI.getFundingSources(customerDwollaId);
-				if (response.data && response.data.body._embedded["funding-sources"].length > 0) {
-					setHasBank(true);
-				} else {
-					setHasBank(false);
-				}
-			})();
+			getBankStatus(customerDwollaId, false);
 
 			(async () => {
 				const response = await UserAPI.getUser(customerDwollaId);
@@ -162,10 +155,8 @@ const Dashboard = (): JSX.Element => {
 					update(response.data[0]);
 				}
 			})();
-		} else {
-			setHasBank(false);
 		}
-	}, [customerDwollaId]);
+	}, []);
 
 	const selectBank = () => {
 		navigation.navigate(Routes.SELECT_BANK);
@@ -205,14 +196,14 @@ const Dashboard = (): JSX.Element => {
 						</Text>
 					</View>
 					<View style={styles.amountView}>
-						<Text style={styles.text}>B$ {hasBank ? wallet.totalBalance : '-'}</Text>
+						<Text style={styles.text}>B$ {details.hasPersonalBank ? wallet.totalBalance : '-'}</Text>
 						<TouchableOpacity
 							style={styles.topupButton}
-							onPress={() => hasBank ? navigation.navigate(Routes.LOAD_UP) : setIsLoadup(true)}>
+							onPress={() => details.hasPersonalBank ? navigation.navigate(Routes.LOAD_UP) : setIsLoadup(true)}>
 							<Text style={styles.topupText}>Load up B$</Text>
 						</TouchableOpacity>
 					</View>
-					{!hasBank && (
+					{!details.hasPersonalBank && (
 						<View style={styles.alertView}>
 							<AntDesign
 								name='exclamationcircleo'
@@ -245,7 +236,7 @@ const Dashboard = (): JSX.Element => {
 					</View>
 				</View>
 			</ScrollView>
-			<TouchableOpacity onPress={() => hasBank ? navigation.navigate(Routes.QRCODE_SCAN) : setIsPayment(true)} style={styles.scanButton}>
+			<TouchableOpacity onPress={() => details.hasPersonalBank ? navigation.navigate(Routes.QRCODE_SCAN) : setIsPayment(true)} style={styles.scanButton}>
 				<Image
 					source={require('../../../assets/images/qr_code_consumer.png')}
 					containerStyle={styles.qrIcon}

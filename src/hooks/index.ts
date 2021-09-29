@@ -12,6 +12,7 @@ import useTransaction from "./useTransaction";
 import useUserDetails from "./useUserDetails";
 import usePersonalWallet from "./usePersonalWallet";
 import useBusinessWallet from "./useBusinessWallet";
+import useBanks from "./useBanks";
 
 export {
 	useMediaLibraryPermission,
@@ -27,5 +28,6 @@ export {
 	useUserDetails,
 	usePersonalWallet,
 	useBusinessWallet,
-	useCameraPermission
+	useCameraPermission,
+	useBanks
 };

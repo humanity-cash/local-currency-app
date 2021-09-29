@@ -18,7 +18,7 @@ import DwollaDialog from './DwollaDialog';
 import { BUTTON_TYPES } from "src/constants";
 import { UserAPI } from 'src/api';
 import { IMap } from 'src/utils/types';
-import { useBusinessWallet } from 'src/hooks';
+import { useBusinessWallet, useBanks } from 'src/hooks';
 
 const styles = StyleSheet.create({
 	mainTextColor: {
@@ -216,6 +216,7 @@ const MerchantDashboard = (): JSX.Element => {
 	const navigation = useNavigation();
 	const { completedCustomerVerification, businessDwollaId, setCustomerBasicVerificationDetails } = useContext(AuthContext);
 	const { wallet, update } = useBusinessWallet();
+	const { details, getBankStatus } = useBanks();
 	const [isFilterVisible, setIsFilterVisible] = useState<boolean>(false);
 	const [searchText, setSearchText] = useState<string>("");
 	const [isDetailViewOpen, setIsDetailViewOpen] = useState<boolean>(false);
@@ -225,20 +226,12 @@ const MerchantDashboard = (): JSX.Element => {
 		amount: 0,
 		date: "2021-01-01"
 	});
-	const [hasBank, setHasBank] = useState<boolean>(false);
 	const [isDwollaVisible, setIsDwollaVisible] = useState<boolean>(false);
 	const [isPayment, setIsPayment] = useState<boolean>(false);
 
 	useEffect(() => {
 		if (businessDwollaId) {
-			(async () => {
-				const response = await UserAPI.getFundingSources(businessDwollaId);
-				if (response.data && response.data.body._embedded["funding-sources"].length > 0) {
-					setHasBank(true);
-				} else {
-					setHasBank(false);
-				}
-			})();
+			getBankStatus(businessDwollaId, true);
 
 			(async () => {
 				const response = await UserAPI.getUser(businessDwollaId);
@@ -246,10 +239,8 @@ const MerchantDashboard = (): JSX.Element => {
 					update(response.data[0]);
 				}
 			})();
-		} else {
-			setHasBank(false);
 		}
-	}, [businessDwollaId]);
+	}, []);
 
 	const onSearchChange = (name: string, change: string) => {
 		setSearchText(change);
@@ -304,7 +295,7 @@ const MerchantDashboard = (): JSX.Element => {
 						<Text style={styles.headerText}>{Translation.LANDING_PAGE.TITLE}</Text>
 					</View>
 					<View style={styles.amountView}>
-						<Text style={styles.text}>B$ {hasBank ? wallet.totalBalance : '-'}</Text>
+						<Text style={styles.text}>B$ {details.hasBusinessBank ? wallet.totalBalance : '-'}</Text>
 					</View>
 
 					{!completedCustomerVerification && <View style={styles.alertView}>
@@ -315,7 +306,7 @@ const MerchantDashboard = (): JSX.Element => {
 						</Text>
 					</View>}
 
-					{!hasBank && (
+					{!details.hasBusinessBank && (
 						<View style={styles.alertView}>
 							<AntDesign
 								name='exclamationcircleo'
@@ -359,7 +350,7 @@ const MerchantDashboard = (): JSX.Element => {
 					<MerchantTransactionList data={merchantTransactions} onSelect={viewDetail} />
 				</View>
 			</ScrollView>
-			<TouchableOpacity onPress={() => hasBank ? navigation.navigate(Routes.MERCHANT_QRCODE_SCAN) : setIsPayment(true)} style={styles.scanButton}>
+			<TouchableOpacity onPress={() => details.hasBusinessBank ? navigation.navigate(Routes.MERCHANT_QRCODE_SCAN) : setIsPayment(true)} style={styles.scanButton}>
 				<Image
 					source={require('../../../assets/images/qr_code_merchant.png')}
 					containerStyle={styles.qrIcon}
