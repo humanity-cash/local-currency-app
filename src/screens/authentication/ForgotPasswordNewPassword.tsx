@@ -55,7 +55,7 @@ const styles = StyleSheet.create({
 const strongRegex = new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#\$%\^&\*])(?=.{8,})");
 
 const ForgotPasswordNewPassword = (): React.ReactElement => {
-	const { forgotPasswordDetails, setForgotPasswordDetails }  = useContext(AuthContext);
+	const { forgotPasswordDetails, setForgotPasswordDetails, completeForgotPasswordFlow }  = useContext(AuthContext);
 	const navigation = useNavigation();
 	const [isMatch, setIsMatch] = useState<boolean>(false);
 	const [state, setState] = useState<PasswordForm>({
@@ -64,7 +64,7 @@ const ForgotPasswordNewPassword = (): React.ReactElement => {
 
 	useEffect(() => {
 		setIsMatch(forgotPasswordDetails.newPassword === state.confirmPassword);
-	}, [state]);
+	}, [state, forgotPasswordDetails.newPassword]);
 
 	const onValueChange = (name: string, change: string) => {
 		setForgotPasswordDetails((pv: ForgotPassword) => ({
@@ -72,6 +72,15 @@ const ForgotPasswordNewPassword = (): React.ReactElement => {
 			newPassword: change
 		}));
 	};
+	
+	const onPress = async () => {
+		const response = await completeForgotPasswordFlow();
+		if(response.success){
+			navigation.navigate("ForgotPasswordSuccess");
+		} else {
+			console.log('something went wrong in forgot password flow');
+		}
+	}
 
 	return (
 		<View style={viewBase}>
@@ -135,9 +144,7 @@ const ForgotPasswordNewPassword = (): React.ReactElement => {
 							forgotPasswordDetails.newPassword !==
 								state.confirmPassword || !state.confirmPassword
 						}
-						onPress={() =>
-							navigation.navigate("ForgotPasswordSuccess")
-						}
+						onPress={onPress}
 					/>
 				</View>
 			</KeyboardAvoidingView>
