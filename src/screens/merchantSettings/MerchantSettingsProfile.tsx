@@ -6,10 +6,12 @@ import * as ImagePicker from 'expo-image-picker';
 import { AuthContext } from "src/auth";
 import { IAuth } from "src/auth/types";
 import { useMediaLibraryPermission } from "src/hooks";
-import { Header, BackBtn, BlockInput, BusinessAddressForm } from "src/shared/uielements";
+import { Header, BackBtn, BlockInput, BusinessAddressForm, Dialog, Button } from "src/shared/uielements";
 import { colors } from "src/theme/colors";
-import { viewBaseB, underlineHeaderB } from "src/theme/elements";
+import { viewBaseB, underlineHeaderB, dialogViewBase } from "src/theme/elements";
 import Translation from 'src/translation/en.json';
+import { BUTTON_TYPES } from 'src/constants';
+import * as Routes from 'src/navigation/constants';
 
 const styles = StyleSheet.create({
 	container: { 
@@ -93,6 +95,24 @@ const styles = StyleSheet.create({
 	},
 	scanBtnText: {
 		color: colors.white
+	},
+	dialogBg: {
+		backgroundColor: colors.overlayPurple
+	},
+	dialogWrap: {
+		paddingHorizontal: 10,
+		height: "100%",
+		flex: 1,
+	},
+	dialogHeader: {
+		fontSize: 30,
+		lineHeight: 35,
+		marginTop: 20,
+		marginBottom: 10,
+		color: colors.purple
+	},
+	dialogBottom: {
+		marginTop: 20,
 	}
 });
 
@@ -102,6 +122,7 @@ export const MerchantSettingsProfile = (): JSX.Element => {
 	const { buisnessBasicVerification, setBuisnessBasicVerification } =
 		useContext(AuthContext);
 	const [bannerImage, setBannerImage] = useState<string>("");
+	const [isVisible, setIsVisible] = useState<boolean>(false);
 
 	useMediaLibraryPermission();
 
@@ -110,7 +131,13 @@ export const MerchantSettingsProfile = (): JSX.Element => {
 	};
 
 	const handleSave = () => {
+		setIsVisible(false);
 		navigation.goBack();
+	}
+
+	const handleBakcHome = () => {
+		setIsVisible(false);
+		navigation.navigate(Routes.MERCHANT_DASHBOARD);
 	}
 
 	const pickImage = async (name: string) => {
@@ -213,9 +240,31 @@ export const MerchantSettingsProfile = (): JSX.Element => {
 					<BusinessAddressForm  style={styles.inputBg} />
 				</View>
 			</ScrollView>
-			<TouchableOpacity onPress={handleSave} style={styles.scanButton}>
+			<TouchableOpacity onPress={()=>setIsVisible(true)} style={styles.scanButton}>
 				<Text style={styles.scanBtnText}>{Translation.BUTTON.SAVE_CHANGE}</Text>
 			</TouchableOpacity>
+			{isVisible && (
+				<Dialog visible={isVisible} onClose={()=>setIsVisible(false)} backgroundStyle={styles.dialogBg}>
+					<View style={dialogViewBase}>
+						<View style={styles.dialogWrap}>
+							<Text style={styles.dialogHeader}>{Translation.OTHER.CONFIRM_SAVE}</Text>
+						</View>
+						<View style={styles.dialogBottom}>
+							<Button
+								type={BUTTON_TYPES.TRANSPARENT}
+								title="Yes, go back to home"
+								textStyle={styles.inputBg}
+								onPress={handleBakcHome}
+							/>
+							<Button
+								type={BUTTON_TYPES.PURPLE}
+								title="Save changes"
+								onPress={handleSave}
+							/>
+						</View>
+					</View>
+				</Dialog>
+			)}
 		</View>
 	);
 }
