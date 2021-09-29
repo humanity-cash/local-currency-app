@@ -94,7 +94,7 @@ export interface IAuth {
 	updateUserType?: any,
 	setAuthStatus?: any,
 	startForgotPasswordFlow: () => Promise<BaseResponse<unknown>>,
-	completeForgotPasswordFlow: (code: string) => Promise<BaseResponse<unknown>>,
+	completeForgotPasswordFlow: () => Promise<BaseResponse<unknown>>,
 	completeBusniessBasicVerification?: any,
 	completedCustomerVerification: boolean,
 	completedBusinessVerification: boolean,
