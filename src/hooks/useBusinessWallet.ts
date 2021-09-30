@@ -11,9 +11,9 @@ type WalletState = Wallet;
 const defaultState: WalletState = {
 	totalBalance: 0,
 	availableBalance: 0,
-	address: '0x337f05a447e47bD5e3c8670775F1bD3d971843ea',
-	userId: '0xce1f96143cf58b35c8788d6fcb7cb891fd40456abbb37af139cb3c40144c0285',
-	createdBlock: '7287048'
+	address: '',
+	userId: '',
+	createdBlock: ''
 };
 
 const store = createStore<WalletState>(storeId, defaultState);

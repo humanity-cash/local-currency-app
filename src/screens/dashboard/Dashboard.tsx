@@ -21,6 +21,7 @@ import { dialogViewBase } from "src/theme/elements";
 import { BUTTON_TYPES } from "src/constants";
 import { usePersonalWallet, useBanks } from 'src/hooks';
 import { UserAPI } from 'src/api';
+import { Wallet } from "src/utils/types";
 
 const styles = StyleSheet.create({
 	content: { paddingBottom: 40 },
@@ -151,8 +152,9 @@ const Dashboard = (): JSX.Element => {
 
 			(async () => {
 				const response = await UserAPI.getUser(customerDwollaId);
-				if (response.data) {
-					update(response.data[0]);
+				if (response?.data) {
+					const wallets  = response?.data as Wallet[];
+					update(wallets[0]);
 				}
 			})();
 		}

@@ -367,3 +367,7 @@ export interface AccordionEntry {
 export interface FaqData extends AccordionEntry {
   type?: string
 }
+
+export interface EnvData {
+  coreApiUrl: string
+}

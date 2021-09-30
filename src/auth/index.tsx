@@ -229,7 +229,7 @@ const AuthProvider: React.FunctionComponent = ({ children }) => {
 	const completeCustomerDwollaInfo = async (
 		update = customerDwollaInfo
 	): CognitoResponse<string | undefined> => {
-		const response = await userController.updateUserAttributes({
+		const response = await userController.updateCustomerDowllaData({
 			"custom:personal.dwollaId": update.dwollaId,
 		});
 
@@ -246,7 +246,7 @@ const AuthProvider: React.FunctionComponent = ({ children }) => {
 	const completeBusinessDwollaInfo = async (
 		update = businessDwollaInfo
 	): CognitoResponse<string | undefined> => {
-		const response = await userController.updateUserAttributes({
+		const response = await userController.updateBusinessDowllaData({
 			"custom:business.dwollaId": update.dwollaId,
 		});
 

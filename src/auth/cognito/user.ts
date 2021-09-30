@@ -115,13 +115,27 @@ export const deleteUser = async (): CognitoResponse<string | undefined> => {
 };
 
 /**Update users properties we save in AWS */
-export const updateUserAttributes = async (update: CognitoBusinessAttributes | CognitoCustomerAttributes | CognitoSharedUserAttributes | CognitoBusinessDwollaAttributes | CognitoCustomerDwollaAttributes)
+export const updateUserAttributes = async (update: CognitoBusinessAttributes | CognitoCustomerAttributes | CognitoSharedUserAttributes)
 	: CognitoResponse<string | undefined> => {
 	const attributesList = Utils.buildUpdateUserAttributes(update);
 	const response = await Core.updateUserAttributes(currentUser, attributesList);
 
 	return response;
 };
+
+export const updateCustomerDowllaData = async (update: CognitoCustomerDwollaAttributes): CognitoResponse<string | undefined> => {
+	const attributesList = Utils.buildUpdateUserAttributes(update);
+	const response = await Core.updateUserAttributes(currentUser, attributesList);
+
+	return response;
+}
+
+export const updateBusinessDowllaData = async (update: CognitoBusinessDwollaAttributes): CognitoResponse<string | undefined> => {
+	const attributesList = Utils.buildUpdateUserAttributes(update);
+	const response = await Core.updateUserAttributes(currentUser, attributesList);
+
+	return response;
+}
 
 /**Completes basic customer verifications */
 export const completeCustomerBasicVerification = async (data: CustomerBasicVerification)

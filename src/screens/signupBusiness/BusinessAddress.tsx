@@ -17,7 +17,7 @@ import {
 	wrappingContainerBase
 } from "src/theme/elements";
 import Translation from "src/translation/en.json";
-import { IUserRequest } from 'src/api/formatters';
+import { IUserRequest } from 'src/api/types';
 import { UserAPI } from 'src/api';
 
 const styles = StyleSheet.create({

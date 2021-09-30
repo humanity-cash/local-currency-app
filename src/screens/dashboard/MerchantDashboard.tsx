@@ -17,7 +17,7 @@ import { getBerksharePrefix } from "src/utils/common";
 import DwollaDialog from './DwollaDialog';
 import { BUTTON_TYPES } from "src/constants";
 import { UserAPI } from 'src/api';
-import { IMap } from 'src/utils/types';
+import { Wallet } from "src/utils/types";
 import { useBusinessWallet, useBanks } from 'src/hooks';
 
 const styles = StyleSheet.create({
@@ -214,7 +214,7 @@ const TransactionDetail = (props: TransactionDetailProps) => {
 
 const MerchantDashboard = (): JSX.Element => {
 	const navigation = useNavigation();
-	const { completedCustomerVerification, businessDwollaId, setCustomerBasicVerificationDetails } = useContext(AuthContext);
+	const { completedCustomerVerification, businessDwollaId } = useContext(AuthContext);
 	const { wallet, update } = useBusinessWallet();
 	const { details, getBankStatus } = useBanks();
 	const [isFilterVisible, setIsFilterVisible] = useState<boolean>(false);
@@ -235,8 +235,9 @@ const MerchantDashboard = (): JSX.Element => {
 
 			(async () => {
 				const response = await UserAPI.getUser(businessDwollaId);
-				if (response.data) {
-					update(response.data[0]);
+				if (response?.data) {
+					const wallets  = response?.data as Wallet[];
+					update(wallets[0]);
 				}
 			})();
 		}
@@ -263,14 +264,6 @@ const MerchantDashboard = (): JSX.Element => {
 	const selectBank = () => {
 		navigation.navigate(Routes.MERCHANT_BANK_ACCOUNT);
 		onClose();
-	}
-
-	const handlePersonalProfile = () => {
-		setCustomerBasicVerificationDetails((pv: IMap) => ({
-			...pv,
-			type: "personal",
-		}));
-		navigation.navigate(Routes.PERSONAL_PROFILE);
 	}
 
 	return (
@@ -302,7 +295,7 @@ const MerchantDashboard = (): JSX.Element => {
 						<AntDesign name="exclamationcircleo" size={18} style={styles.alertIcon} />
 						<Text style={styles.alertText}>
 							{Translation.PROFILE.PERSONAL_PROFILE_ALERT} &nbsp;
-							<Text style={styles.alertIcon} onPress={handlePersonalProfile}>{Translation.BUTTON.GOTO_SETUP} &gt;</Text>
+							<Text style={styles.alertIcon} onPress={() => navigation.navigate(Routes.PERSONAL_PROFILE)}>{Translation.BUTTON.GOTO_SETUP} &gt;</Text>
 						</Text>
 					</View>}
 

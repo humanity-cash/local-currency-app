@@ -22,7 +22,7 @@ const useBankStatus = (): IMap => {
 		if (response.data && response.data.body._embedded["funding-sources"].length > 0) {
 			mode ? setBusinessBankStatus(true) : setPersonalBankStatus(true);
 		} else {
-			mode ? setPersonalBankStatus(false) : setPersonalBankStatus(false);
+			mode ? setBusinessBankStatus(false) : setPersonalBankStatus(false);
 		}
 	}
 

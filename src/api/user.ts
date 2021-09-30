@@ -1,10 +1,6 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import { AxiosResponse } from 'axios';
+import { UserId, AxiosPromiseResponse} from './types';
 import { getRequest, postRequest } from './base';
-import { IUserRequest, IDepositRequest, IWithdrawalRequest, ITransactionRequest } from './formatters';
-
-type UserId = string;
-type AxiosPromiseResponse = AxiosResponse<any>;
+import { IUserRequest, IDepositRequest, IWithdrawalRequest, ITransactionRequest } from './types';
 
 // create local currency user
 export const user = async (request: IUserRequest): Promise<AxiosPromiseResponse> => {

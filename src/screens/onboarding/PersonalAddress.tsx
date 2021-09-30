@@ -27,7 +27,7 @@ import {
 } from "src/theme/elements";
 import Translation from "src/translation/en.json";
 import { UserAPI } from 'src/api';
-import { IUserRequest } from 'src/api/formatters';
+import { IUserRequest } from 'src/api/types';
 
 const styles = StyleSheet.create({
 	content: {

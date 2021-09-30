@@ -1,5 +1,6 @@
 import { CognitoUser, CognitoUserAttribute } from "amazon-cognito-identity-js";
-import { CognitoBusinessAttributes, CognitoCustomerAttributes } from 'src/auth/cognito/types';
+import { Dispatch, SetStateAction } from "react";
+import { CognitoBusinessAttributes, CognitoCustomerAttributes, CognitoResponse } from 'src/auth/cognito/types';
 
 export interface CustomerBasicVerification {
 	avatar: string
@@ -126,10 +127,10 @@ export interface IAuth {
 	customerBasicVerificationDetails?: any;
 	buisnessBasicVerification?: any,
 	setBuisnessBasicVerification?: any,
-	setCustomerDwollaInfo?: any,
-	completeCustomerDwollaInfo?: any,
-	setBusinessDwollaInfo?: any,
-	completeBusinessDwollaInfo?: any,
+	setCustomerDwollaInfo?: Dispatch<SetStateAction<DwollaInfo>>,
+	completeCustomerDwollaInfo?: (update: DwollaInfo) => CognitoResponse<string | undefined>,
+	setBusinessDwollaInfo?: Dispatch<SetStateAction<DwollaInfo>>,
+	completeBusinessDwollaInfo?: (update: DwollaInfo) => CognitoResponse<string | undefined>,
 }
 
 export const defaultState: IAuth = {
