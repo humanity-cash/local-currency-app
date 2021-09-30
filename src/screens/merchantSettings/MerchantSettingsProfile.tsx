@@ -13,6 +13,7 @@ import {
 import { Image, Text } from "react-native-elements";
 import SelectDropdown from "react-native-select-dropdown";
 import { AuthContext } from "src/auth";
+import { CognitoBusinessUpdateAttributes } from "src/auth/cognito/types";
 import { BUTTON_TYPES } from "src/constants";
 import { useMediaLibraryPermission } from "src/hooks";
 import countries from "src/mocks/countries";
@@ -193,13 +194,6 @@ enum BusinessUpdate {
 	Website = "custom:business.website",
 }
 
-// const formatBeforeUpdate = (update) => {
-// 	const keys = Object.keys(update);
-// 	const result = keys.map((k) => {
-// 		const 
-// 	})
-// }
-
 export const MerchantSettingsProfile = (): JSX.Element => {
 	const navigation = useNavigation();
 	const { userAttributes, updateAttributes } = useContext(AuthContext);
@@ -217,9 +211,52 @@ export const MerchantSettingsProfile = (): JSX.Element => {
 	});
 	const [isVisible, setIsVisible] = useState<boolean>(false);
 
-	// const handleSave = async () => {
-	// 	const response = await updateAttributes(state);
-	// };
+	const handleSave = async () => {
+
+		// Only add dirty inputs
+		const changedData: CognitoBusinessUpdateAttributes = {
+			...(state.businessStory !==
+				userAttributes[BusinessUpdate.Story] && {
+				"custom:business.story": state.businessStory,
+			}),
+			...(state.businessAddress1 !==
+				userAttributes[BusinessUpdate.Address1] && {
+				"custom:business.address1": state.businessAddress1,
+			}),
+			...(state.businessAddress2 !==
+				userAttributes[BusinessUpdate.Address2] && {
+				"custom:business.address2": state.businessAddress2,
+			}),
+			...(state.businessPostalCode !==
+				userAttributes[BusinessUpdate.PostalCode] && {
+				"custom:business.postalCode": state.businessPostalCode,
+			}),
+			...(state.businessTag !==
+				userAttributes[BusinessUpdate.Tag] && {
+				"custom:business.tag": state.businessTag,
+			}),
+			...(state.businessState !==
+				userAttributes[BusinessUpdate.State] && {
+				"custom:business.state": state.businessState,
+			}),
+			...(state.businessCity !==
+				userAttributes[BusinessUpdate.City] && {
+				"custom:business.city": state.businessCity,
+			}),
+			...(state.businessPhonenumber !==
+				userAttributes[BusinessUpdate.PhoneNumber] && {
+				"custom:business.phoneNumber": state.businessPhonenumber,
+			}),
+			...(state.businessWebsite !==
+				userAttributes[BusinessUpdate.Website] && {
+				"custom:business.website": state.businessWebsite,
+			}),
+		};
+
+    console.log("🚀 ~ file: MerchantSettingsProfile.tsx ~ line 257 ~ handleSave ~ changedData", changedData)
+		const response = await updateAttributes(changedData);
+    console.log("🚀  handleSave ~ response", response)
+	};
 
 	useMediaLibraryPermission();
 
@@ -351,7 +388,10 @@ export const MerchantSettingsProfile = (): JSX.Element => {
 							placeholder="Street number, street name"
 							value={state.businessAddress1}
 							onChange={(_name: string, newValue: string) => {
-								setState((pv) => ({...pv, businessAddress1: newValue}))
+								setState((pv) => ({
+									...pv,
+									businessAddress1: newValue,
+								}));
 							}}
 							style={businessAddressFormStyles.inputBg}
 						/>
@@ -363,7 +403,10 @@ export const MerchantSettingsProfile = (): JSX.Element => {
 							placeholder="Apt."
 							value={state.businessAddress2}
 							onChange={(_name: string, newValue: string) => {
-								setState((pv) => ({...pv, businessAddress2: newValue}))
+								setState((pv) => ({
+									...pv,
+									businessAddress2: newValue,
+								}));
 							}}
 							style={businessAddressFormStyles.inputBg}
 						/>
@@ -377,8 +420,14 @@ export const MerchantSettingsProfile = (): JSX.Element => {
 									name="city"
 									placeholder="City"
 									value={state.businessCity}
-									onChange={(_name: string, newValue: string) => {
-										setState((pv) => ({...pv, businessCity: newValue}))
+									onChange={(
+										_name: string,
+										newValue: string
+									) => {
+										setState((pv) => ({
+											...pv,
+											businessCity: newValue,
+										}));
 									}}
 									style={businessAddressFormStyles.inputBg}
 								/>
@@ -394,7 +443,10 @@ export const MerchantSettingsProfile = (): JSX.Element => {
 										data={countries}
 										defaultValueByIndex={0}
 										onSelect={(selectedItem) => {
-											setState((pv) => ({ ...pv, businessState: selectedItem }))
+											setState((pv) => ({
+												...pv,
+												businessState: selectedItem,
+											}));
 										}}
 										buttonTextAfterSelection={(
 											selectedItem
@@ -445,7 +497,10 @@ export const MerchantSettingsProfile = (): JSX.Element => {
 							keyboardType="number-pad"
 							value={state.businessPostalCode}
 							onChange={(_name: string, newValue: string) => {
-								setState((pv) => ({...pv, businessPostalCode: newValue}))
+								setState((pv) => ({
+									...pv,
+									businessPostalCode: newValue,
+								}));
 							}}
 							style={businessAddressFormStyles.inputBg}
 						/>
@@ -457,7 +512,10 @@ export const MerchantSettingsProfile = (): JSX.Element => {
 							placeholder="+00 0987 6543 21"
 							value={state.businessPhonenumber}
 							onChange={(_name: string, newValue: string) => {
-								setState((pv) => ({...pv, businessPhoneNumber: newValue}))
+								setState((pv) => ({
+									...pv,
+									businessPhoneNumber: newValue,
+								}));
 							}}
 							style={businessAddressFormStyles.inputBg}
 						/>
@@ -465,7 +523,7 @@ export const MerchantSettingsProfile = (): JSX.Element => {
 				</View>
 			</ScrollView>
 			<TouchableOpacity
-				onPress={() => setIsVisible(true)}
+				onPress={handleSave} 
 				style={styles.scanButton}>
 				<Text style={styles.scanBtnText}>
 					{Translation.BUTTON.SAVE_CHANGE}
@@ -492,9 +550,7 @@ export const MerchantSettingsProfile = (): JSX.Element => {
 							<Button
 								type={BUTTON_TYPES.PURPLE}
 								title="Save changes"
-								onPress={() => {
-									console.log("try saving");
-								}}
+								onPress={handleSave}
 							/>
 						</View>
 					</View>
