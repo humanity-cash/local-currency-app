@@ -16,8 +16,6 @@ import * as Routes from 'src/navigation/constants';
 import { getBerksharePrefix } from "src/utils/common";
 import DwollaDialog from './DwollaDialog';
 import { BUTTON_TYPES } from "src/constants";
-import { UserAPI } from 'src/api';
-import { Wallet } from "src/utils/types";
 import { useBusinessWallet, useBanks } from 'src/hooks';
 
 const styles = StyleSheet.create({
@@ -215,7 +213,7 @@ const TransactionDetail = (props: TransactionDetailProps) => {
 const MerchantDashboard = (): JSX.Element => {
 	const navigation = useNavigation();
 	const { completedCustomerVerification, businessDwollaId } = useContext(AuthContext);
-	const { wallet, update } = useBusinessWallet();
+	const { wallet, getWallet } = useBusinessWallet();
 	const { details, getBankStatus } = useBanks();
 	const [isFilterVisible, setIsFilterVisible] = useState<boolean>(false);
 	const [searchText, setSearchText] = useState<string>("");
@@ -232,14 +230,7 @@ const MerchantDashboard = (): JSX.Element => {
 	useEffect(() => {
 		if (businessDwollaId) {
 			getBankStatus(businessDwollaId, true);
-
-			(async () => {
-				const response = await UserAPI.getUser(businessDwollaId);
-				if (response?.data) {
-					const wallets  = response?.data as Wallet[];
-					update(wallets[0]);
-				}
-			})();
+			getWallet(businessDwollaId);
 		}
 	}, []);
 

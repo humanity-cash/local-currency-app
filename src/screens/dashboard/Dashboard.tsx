@@ -20,8 +20,6 @@ import { Button, Dialog } from "src/shared/uielements";
 import { dialogViewBase } from "src/theme/elements";
 import { BUTTON_TYPES } from "src/constants";
 import { usePersonalWallet, useBanks } from 'src/hooks';
-import { UserAPI } from 'src/api';
-import { Wallet } from "src/utils/types";
 
 const styles = StyleSheet.create({
 	content: { paddingBottom: 40 },
@@ -139,7 +137,7 @@ const feedData = {
 
 const Dashboard = (): JSX.Element => {
 	const navigation = useNavigation();
-	const { wallet, update } = usePersonalWallet();
+	const { wallet, getWallet } = usePersonalWallet();
 	const { details, getBankStatus } = useBanks();
 	const { customerDwollaId } = useContext(AuthContext);
 	const [isVisible, setIsVisible] = useState<boolean>(false);
@@ -149,14 +147,7 @@ const Dashboard = (): JSX.Element => {
 	useEffect(() => {
 		if (customerDwollaId) {
 			getBankStatus(customerDwollaId, false);
-
-			(async () => {
-				const response = await UserAPI.getUser(customerDwollaId);
-				if (response?.data) {
-					const wallets  = response?.data as Wallet[];
-					update(wallets[0]);
-				}
-			})();
+			getWallet(customerDwollaId);
 		}
 	}, []);
 

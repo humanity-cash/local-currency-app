@@ -1,101 +1,40 @@
-import { useCallback, useEffect } from "react";
-import { createStore, useStore } from "react-hookstore";
-import AsyncStorage  from "@react-native-async-storage/async-storage";
+import { useState, useEffect, useContext } from "react";
+import { AuthContext } from 'src/auth';
 import { Wallet } from "src/utils/types";
+import { UserAPI } from "src/api";
 import { IMap } from 'src/utils/types';
-
-const storeId = "PERSONAL_WALLET_RECORD";
 
 type WalletState = Wallet;
 
-const defaultState: WalletState = {
-	totalBalance: 0,
-	availableBalance: 0,
+const walletInitialState: WalletState = {
+	totalBalance: 10,
+	availableBalance: 10,
 	address: '0x337f05a447e47bD5e3c8670775F1bD3d971843ea',
 	userId: '0xce1f96143cf58b35c8788d6fcb7cb891fd40456abbb37af139cb3c40144c0285',
 	createdBlock: '7287048'
 };
 
-const store = createStore<WalletState>(storeId, defaultState);
-let loaded = false;
-
 const usePersonalWallet = (): IMap => {
-	const [ wallet ] = useStore<WalletState>(storeId);
+	const { customerDwollaId } = useContext(AuthContext);
+	const [ wallet, setWallet ] = useState<WalletState>(walletInitialState);
+
 	useEffect(() => {
-		async function readStorage() {
-			if (!loaded) {
-				try {
-					const data: string | null = await AsyncStorage.getItem(storeId);
-					if (data) {
-						store.setState({
-							...defaultState,
-							...JSON.parse(data)
-						} as WalletState);
-					}
-				} catch (error) {
-					// Error saving data
-				}
-				loaded = true;
-			}
+		if (customerDwollaId) {
+			getWallet(customerDwollaId);
 		}
+	}, [customerDwollaId]);
 
-		readStorage();
-	}, []);
-
-	const storeInMemory = async (newState: WalletState) => {
-		try {
-			await AsyncStorage.setItem(storeId, JSON.stringify(newState));
-		} catch (error) {
-			// Error saving data
+	const getWallet = async (dwollaId: string) => {
+		const response = await UserAPI.getUser(dwollaId);
+		if (response?.data) {
+			const wallets  = response?.data as WalletState[];
+			setWallet(wallets[0]);
 		}
 	}
 
-	const update = useCallback(
-		async (data: Partial<WalletState>) => {
-			const currentState = store.getState();
-			const newState: WalletState = {
-				...currentState,
-				...data
-			};
-			store.setState(newState);
-			await storeInMemory(newState);
-	}, []);
-
-	const updateTotalBalance = useCallback(
-		async (balance: number) => {
-			const currentState = store.getState();
-			try {
-				const newState = {
-					...currentState,
-					totalBalance: balance
-				}
-				store.setState(newState);
-				await storeInMemory(newState);
-			} catch (error) {
-				// todo handle error
-			}
-		}, []);
-
-	const updateAvailableBalance = useCallback(
-		async (balance: number) => {
-			const currentState = store.getState();
-			try {
-				const newState = {
-					...currentState,
-					availableBalance: balance
-				}
-				store.setState(newState);
-				await storeInMemory(newState);
-			} catch (error) {
-				// todo handle error
-			}
-		}, []);
-
 	return {
 		wallet: wallet,
-		update,
-		updateTotalBalance,
-		updateAvailableBalance
+		getWallet,
 	}
 };
 
