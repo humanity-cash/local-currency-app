@@ -103,7 +103,7 @@ export interface IAuth {
 	completedBusinessVerification: boolean,
 	userAttributes?: any,
 	completeCustomerBasicVerification?: any,
-	updateAttributes: (update: CognitoBusinessAttributes | CognitoCustomerAttributesUpdate | CognitoSharedUserAttributes) => Promise<BaseResponse<string | undefined>>;
+	updateAttributes: (update: AccountUpdate) => Promise<BaseResponse<string | undefined>>;
 	sessionInfo?: Session;
 	resendEmailVerificationCode?: any;
 	authStatus?: AuthStatus;
