@@ -12,6 +12,8 @@ import Translation from 'src/translation/en.json';
 import { BUTTON_TYPES } from 'src/constants';
 import * as Routes from 'src/navigation/constants';
 import { isPasswordValid } from 'src/utils/validation';
+import { showToast } from 'src/utils/common';
+import { ToastType } from 'src/utils/types';
 
 interface SecurityProps extends IMap {
 	password: string;
@@ -126,10 +128,10 @@ export const MerchantSettingsSecurity = (): JSX.Element => {
 		});
 		
 		if (!response?.success) {
-			alert(Translation.OTHER.CHANGE_PASSWORD_FAILED);
+			showToast(ToastType.ERROR, 'FAILED', Translation.OTHER.CHANGE_PASSWORD_FAILED);
 			return;
 		}
-		alert(Translation.OTHER.CHANGE_PASSWORD_SUCCESS);
+		showToast(ToastType.SUCCESS, 'SUCCESS', Translation.OTHER.CHANGE_PASSWORD_SUCCESS);
 		navigation.navigate(Routes.MERCHANT_DASHBOARD);
 	}
 

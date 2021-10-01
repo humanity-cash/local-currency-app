@@ -374,3 +374,9 @@ export interface AccordionEntry {
 export interface FaqData extends AccordionEntry {
   type?: string
 }
+
+export enum ToastType {
+  SUCCESS = "success",
+  ERROR = "error",
+  INFO = "info"
+}
