@@ -64,7 +64,7 @@ const styles = StyleSheet.create({
 
 export const SettingsSecurity = (): JSX.Element => {
 	const navigation = useNavigation();
-	const { signInDetails, changePassword } = useContext(AuthContext);
+	const { changePassword } = useContext(AuthContext);
 	const { authorization, updateAuthorization } = useUserDetails();
 	const [switchToggle, setSwitchToggle] = useState<boolean>(false);
 	const [canSave, setCanSave] = useState<boolean>(false);
@@ -105,7 +105,6 @@ export const SettingsSecurity = (): JSX.Element => {
 
 	const handleSave = async () => {
 		const response = await changePassword({
-			email: signInDetails?.email, 
 			oldPassword: state.password, 
 			newPassword: state.newPassword
 		});
