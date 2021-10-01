@@ -185,7 +185,7 @@ const MyTransactions = (): JSX.Element => {
 	return (
 		<View style={viewBase}>
 			<Header
-				leftComponent={<BackBtn onClick={() => navigation.goBack()} />}
+				leftComponent={<BackBtn text="Home" onClick={() => navigation.goBack()} />}
 			/>
 			<ScrollView style={wrappingContainerBase}>
 				<View style={styles.content}>
