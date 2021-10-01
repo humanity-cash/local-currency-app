@@ -1,7 +1,7 @@
 import React from 'react';
 import { StyleSheet, View, KeyboardAvoidingView, ScrollView, Platform } from 'react-native';
 import { Text } from 'react-native-elements';
-import { Header, Button, BackBtn, CancelBtn } from "src/shared/uielements";
+import { Header, Button, BackBtn } from "src/shared/uielements";
 import { underlineHeaderB, viewBase, wrappingContainerBase } from "src/theme/elements";
 import { colors } from "src/theme/colors";
 import Translation from 'src/translation/en.json';
@@ -35,7 +35,6 @@ const MerchantSettingsStaticQr = (): JSX.Element => {
 		<View style={viewBase}>
 			<Header
 				leftComponent={<BackBtn onClick={() => navigation.goBack()} color={colors.purple} />}
-				rightComponent={<CancelBtn text={Translation.BUTTON.CLOSE} color={colors.purple} onClick={() => navigation.navigate(Routes.MERCHANT_DASHBOARD)} />}
 			/>
 			<ScrollView style={wrappingContainerBase}>
 				<View style={ underlineHeaderB }>

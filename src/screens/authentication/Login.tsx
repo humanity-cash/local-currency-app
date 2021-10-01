@@ -61,14 +61,14 @@ const Login = (): JSX.Element => {
 					<BlockInput
 						name='email'
 						placeholder='Email'
-						value={signInDetails.email}
+						value={signInDetails?.email}
 						onChange={onValueChange}
 					/>
 					<Text style={styles.label}>{Translation.LABEL.PASSWORD}</Text>
 					<BlockInput
 						name='password'
 						placeholder='Password'
-						value={signInDetails.password}
+						value={signInDetails?.password}
 						secureTextEntry={true}
 						onChange={onValueChange}
 					/>
