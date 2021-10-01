@@ -118,8 +118,10 @@ const AuthProvider: React.FunctionComponent = ({ children }) => {
 			verificationCode
 		);
 
-	const resendEmailVerificationCode = async () =>
-		userController.resendEmailVerificationCode(signUpDetails.email);
+	const resendEmailVerificationCode = async (
+		email = signUpDetails.email
+	) =>
+		userController.resendEmailVerificationCode(email);
 
 	const signUp = async () => {
 		const response = await userController.signUp(

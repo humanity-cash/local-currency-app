@@ -31,7 +31,7 @@ const styles = StyleSheet.create({
 
 const ForgotPasswordVerification = (): JSX.Element => {
 	const navigation = useNavigation();
-	const { forgotPasswordDetails, setForgotPasswordDetails } = useContext(AuthContext);
+	const { forgotPasswordDetails, setForgotPasswordDetails, resendEmailVerificationCode } = useContext(AuthContext);
 
 	const onComplete = (text: string) => {
 		setForgotPasswordDetails({
@@ -59,9 +59,7 @@ const ForgotPasswordVerification = (): JSX.Element => {
 				behavior={Platform.OS == "ios" ? "padding" : "height"}
 			>
 				<View style={styles.bottomView}>
-					<TouchableOpacity style={styles.sendCodeBtn} onPress={() => {
-						Keyboard.dismiss();
-					}}>
+					<TouchableOpacity style={styles.sendCodeBtn} onPress={() => resendEmailVerificationCode(forgotPasswordDetails.email)}>
 						<Text style={styles.bottomNavigation}>{Translation.EMAIL_VERIFICATION.SEND_CODE}</Text>
 					</TouchableOpacity>
 				</View>
