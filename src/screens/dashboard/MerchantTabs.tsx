@@ -5,6 +5,7 @@ import { Image, StyleSheet, Text, TouchableWithoutFeedback, View } from 'react-n
 import { Drawer } from 'react-native-paper';
 import { AuthContext } from 'src/auth';
 import { UserType } from 'src/auth/types';
+import { useUserDetails } from "src/hooks";
 import { BUTTON_TYPES } from 'src/constants';
 import * as Routes from 'src/navigation/constants';
 import MerchantCashoutAmount from "src/screens/merchantCashout/MerchantCashoutAmount";
@@ -145,6 +146,7 @@ const CashierViewDialogDialog = (props: CashierViewDialogProps) => {
 const DrawerContent = (props: DrawerContentComponentProps) => {
 	const { userAttributes } = useContext(AuthContext);
 	const { signOut, updateUserType } = useContext(AuthContext);
+	const { authorization } = useUserDetails();
 	const [isExpanded, setIsExpanded] = useState<boolean>(false);
 	const [isVisible, setIsVisible] = useState<boolean>(false);
 	const [isCashierView, setIsCashierView] = useState<boolean>(false);
@@ -221,7 +223,7 @@ const DrawerContent = (props: DrawerContentComponentProps) => {
 										</View>
 									</TouchableWithoutFeedback>
 								) : null}
-								<TouchableWithoutFeedback
+								{authorization.cashierView ? (<TouchableWithoutFeedback
 									onPress={() => setIsCashierView(true)}>
 									<View style={styles.userInfo}>
 										<View style={styles.imageView}>
@@ -235,6 +237,7 @@ const DrawerContent = (props: DrawerContentComponentProps) => {
 										</View>
 									</View>
 								</TouchableWithoutFeedback>
+								) : null}
 							</View>
 						)}
 					</View>

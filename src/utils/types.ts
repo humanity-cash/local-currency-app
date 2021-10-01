@@ -17,6 +17,7 @@ export type AuthorizationDetails = {
   pin: string;
   pinInput: string;
   touchID: boolean;
+  cashierView: boolean;
 };
 
 export type PersonalDetails = {

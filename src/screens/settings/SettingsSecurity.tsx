@@ -1,5 +1,5 @@
 import { useNavigation } from '@react-navigation/native';
-import React, { useState, useEffect, ReactElement } from 'react';
+import React, { useState, useEffect } from 'react';
 import { ScrollView, StyleSheet, Switch, View } from "react-native";
 import { Text } from "react-native-elements";
 import { useUserDetails } from "src/hooks";
@@ -9,6 +9,7 @@ import { viewBase, underlineHeader } from "src/theme/elements";
 import { IMap } from "src/utils/types";
 import Translation from 'src/translation/en.json';
 import * as Routes from 'src/navigation/constants';
+import { BUTTON_TYPES } from 'src/constants';
 
 interface SecurityProps extends IMap {
 	password: string;
@@ -54,7 +55,7 @@ const styles = StyleSheet.create({
 	}
 });
 
-export const SettingsSecurity = (): ReactElement => {
+export const SettingsSecurity = (): JSX.Element => {
 	const navigation = useNavigation();
 	const { authorization, updateAuthorization } = useUserDetails();
 	const [switchToggle, setSwitchToggle] = useState<boolean>(false);
@@ -136,7 +137,7 @@ export const SettingsSecurity = (): ReactElement => {
 			</ScrollView>
 			<View style={styles.bottomView}>
 				<Button
-					type="darkGreen"
+					type={BUTTON_TYPES.DARK_GREEN}
 					title={Translation.BUTTON.SAVE_CHANGE}
 					disabled={!canSave}
 					onPress={()=>navigation.navigate(Routes.SETTING_PERSONAL_PROFILE)}

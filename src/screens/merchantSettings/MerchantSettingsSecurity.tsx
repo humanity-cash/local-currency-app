@@ -76,6 +76,7 @@ export const MerchantSettingsSecurity = (): ReactElement => {
 
 	useEffect(() => {
 		setIsTouchId(authorization.touchID);
+		setIsCashierView(authorization.cashierView);
 	}, [authorization]);
 
 	useEffect(() => {
@@ -84,6 +85,10 @@ export const MerchantSettingsSecurity = (): ReactElement => {
 
 	const onTouchIdOption = (value: boolean) => {
 		updateAuthorization({ touchID: value });
+	}
+
+	const onCashierViewOption = (value: boolean) => {
+		updateAuthorization({ cashierView: value });
 	}
 
 	const onValueChange = (name: string, value: string) => {
@@ -105,7 +110,7 @@ export const MerchantSettingsSecurity = (): ReactElement => {
 				<View style={styles.view}>
 					<Text style={styles.text}>{Translation.COMMUNITY_CHEST.ALLOW_TOUCH}</Text>
 					<Switch
-						trackColor={{ false: colors.purple, true: colors.green }}
+						trackColor={{ false: colors.green, true: colors.green }}
 						thumbColor={colors.white}
 						ios_backgroundColor={colors.white}
 						onValueChange={onTouchIdOption}
@@ -115,10 +120,10 @@ export const MerchantSettingsSecurity = (): ReactElement => {
 				<View style={styles.view}>
 					<Text style={styles.text}>{Translation.OTHER.ENABLE_CASHIER_VIEW}</Text>
 					<Switch
-						trackColor={{ false: colors.white, true: colors.green }}
+						trackColor={{ false: colors.green, true: colors.green }}
 						thumbColor={colors.white}
 						ios_backgroundColor={colors.white}
-						onValueChange={(value)=>setIsCashierView(value)}
+						onValueChange={onCashierViewOption}
 						value={isCashierView}
 					/>
 				</View>
