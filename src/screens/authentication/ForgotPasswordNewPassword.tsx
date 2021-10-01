@@ -1,16 +1,15 @@
 import { useNavigation } from '@react-navigation/native';
-import React, { ReactElement, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { StyleSheet, View, KeyboardAvoidingView, Platform } from 'react-native';
 import { Text } from 'react-native-elements';
-import { BackBtn, CancelBtn, Header, BlockInput, Button } from "src/shared/uielements";
+import { BackBtn, Header, BlockInput, Button } from "src/shared/uielements";
 import { baseHeader, viewBase, wrappingContainerBase } from "src/theme/elements";
 import { IMap } from "src/utils/types";
 import { colors } from "src/theme/colors";
-
-type ForgotPasswordNewPasswordProps = {
-	navigation?: any
-	route?: any
-}
+import { isPasswordValid } from "src/utils/validation"
+import * as Routes from 'src/navigation/constants';
+import Translation from 'src/translation/en.json';
+import { BUTTON_TYPES } from 'src/constants';
 
 interface PasswordForm extends IMap {
 	password: string
@@ -58,7 +57,8 @@ const styles = StyleSheet.create({
 //eslint-disable-next-line
 const strongRegex = new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#\$%\^&\*])(?=.{8,})");
 
-const ForgotPasswordNewPasswordView = (props: ForgotPasswordNewPasswordProps) => {
+const ForgotPasswordNewPassword = (): JSX.Element => {
+	const navigation = useNavigation();
 	const [goNext, setGoNext] = useState<boolean>(false);
 	const [isMatch, setIsMatch] = useState<boolean>(true);
 	const [state, setState] = useState<PasswordForm>({
@@ -68,8 +68,13 @@ const ForgotPasswordNewPasswordView = (props: ForgotPasswordNewPasswordProps) =>
 
 	useEffect(() => {
 		setIsMatch(state.password === state.confirmPassword);
-		setGoNext(Object.keys(state).every((key) => state[key] !== "") && strongRegex.test(state.password));
-	},[state]);
+		setGoNext(
+			Object.keys(state).every((key) => state[key] !== "") && 
+			strongRegex.test(state.password) && 
+			isPasswordValid(state.password) && 
+			isPasswordValid(state.confirmPassword)
+		);
+	},[state.password, state.confirmPassword]);
 
 	const onValueChange = (name: string, change: string) => {
 		setState({
@@ -81,18 +86,17 @@ const ForgotPasswordNewPasswordView = (props: ForgotPasswordNewPasswordProps) =>
 	return (
 		<View style={viewBase}>
 			<Header
-				leftComponent={<BackBtn onClick={() => props.navigation.goBack()} />}
-				rightComponent={<CancelBtn text="Close" onClick={() => props.navigation.navigate('Login')} />}
+				leftComponent={<BackBtn onClick={() => navigation.goBack()} />}
 			/>
 			<View style={wrappingContainerBase}>
 				<View style={ baseHeader }>
-					<Text style={styles.modalHeader}>Create a new password</Text>
+					<Text style={styles.modalHeader}>{Translation.FORGOT_PASSWORD.CREATE_NEW_PASSWORD}</Text>
 				</View>
 				<View>
-					<Text style={styles.bodyText}>Create a password to secure your account</Text>
+					<Text style={styles.bodyText}>{Translation.FORGOT_PASSWORD.CREATE_NEW_PASSWORD_DETAIL}</Text>
 					<View style={styles.form}>
-						<Text style={styles.label}>PASSWORD</Text>
-						<Text style={styles.label}>(min.8 characters, 1 capitical, 1 lower and 1 symbol)</Text>
+						<Text style={styles.label}>{Translation.LABEL.PASSWORD}</Text>
+						<Text style={styles.label}>({Translation.LABEL.PASSWORD_REG})</Text>
 						<BlockInput
 							name="password"
 							placeholder="Password"
@@ -102,7 +106,7 @@ const ForgotPasswordNewPasswordView = (props: ForgotPasswordNewPasswordProps) =>
 						/>
 
 						<View style={styles.inlineView}>
-							<Text style={styles.label}>Confirm password</Text>
+							<Text style={styles.label}>{Translation.LABEL.CONFIRM_PASSWORD}</Text>
 							{!isMatch && <Text style={styles.errorText}>No match</Text>}
 						</View>
 						<BlockInput
@@ -120,10 +124,10 @@ const ForgotPasswordNewPasswordView = (props: ForgotPasswordNewPasswordProps) =>
 			>
 				<View style={styles.bottomView}>
 					<Button
-						type="darkGreen"
-						title="NEXT"
+						type={BUTTON_TYPES.DARK_GREEN}
+						title={Translation.BUTTON.NEXT}
 						disabled={!goNext || !isMatch}
-						onPress={() => props.navigation.navigate("ForgotPasswordSuccess")}
+						onPress={() => navigation.navigate(Routes.FORGOT_PASSWORD_SUCCESS)}
 					/>
 				</View>
 			</KeyboardAvoidingView>
@@ -131,8 +135,4 @@ const ForgotPasswordNewPasswordView = (props: ForgotPasswordNewPasswordProps) =>
 	);
 }
 
-const ForgotPasswordNewPassword = (props:ForgotPasswordNewPasswordProps): ReactElement => {
-	const navigation = useNavigation();
-	return <ForgotPasswordNewPasswordView {...props} navigation={navigation} />;
-}
 export default ForgotPasswordNewPassword

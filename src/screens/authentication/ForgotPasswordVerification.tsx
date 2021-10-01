@@ -1,15 +1,12 @@
 import { useNavigation } from '@react-navigation/native';
-import React, { ReactElement } from 'react';
+import React from 'react';
 import { Keyboard, KeyboardAvoidingView, Platform, StyleSheet, TouchableOpacity, View } from 'react-native';
 import { Text } from 'react-native-elements';
 import { useUserDetails } from "src/hooks";
-import { BackBtn, CancelBtn, ConfirmationCode, Header } from "src/shared/uielements";
+import { BackBtn, ConfirmationCode, Header } from "src/shared/uielements";
 import { baseHeader, viewBase, wrappingContainerBase } from "src/theme/elements";
-
-type ForgotPasswordVerificationProps = {
-	navigation?: any,
-	route?: any
-}
+import * as Routes from 'src/navigation/constants';
+import Translation from 'src/translation/en.json';
 
 const styles = StyleSheet.create({
 	modalHeader: {
@@ -34,28 +31,27 @@ const styles = StyleSheet.create({
 
 const VALID_CODE = '123456';
 
-const ForgotPasswordVerificationView = (props: ForgotPasswordVerificationProps) => {
+const ForgotPasswordVerification = (): JSX.Element => {
+	const navigation = useNavigation();
 	const { personalDetails: { email } } = useUserDetails();
 
 	const onComplete = (text: string) => {
 		if (text === VALID_CODE) {
-			props.navigation.navigate('ForgotPasswordNewCode')
-			return;
+			navigation.navigate(Routes.FORGOT_PASSWORD_NEW_PASSWORD);
 		}
 	}
 
 	return (
 		<View style={viewBase}>
 			<Header
-				leftComponent={<BackBtn onClick={() => props.navigation.goBack()} />}
-				rightComponent={<CancelBtn text="Close" onClick={() => props.navigation.navigate('Login')} />}
+				leftComponent={<BackBtn onClick={() => navigation.goBack()} />}
 			/>
 			<View style={wrappingContainerBase}>
 				<View style={ baseHeader }>
 					<Text style={styles.modalHeader}>Verify your mail address</Text>
 				</View>
 				<View style={styles.modalDescription}>
-					<Text>We have sent an email with a verification code to {email}.</Text>
+					<Text>{Translation.EMAIL_VERIFICATION.SENT_VERIFICATION_CODE} {email}.</Text>
 					<ConfirmationCode onComplete={onComplete} />
 				</View>
 			</View>
@@ -66,7 +62,7 @@ const ForgotPasswordVerificationView = (props: ForgotPasswordVerificationProps) 
 					<TouchableOpacity style={styles.sendCodeBtn} onPress={() => {
 						Keyboard.dismiss();
 					}}>
-						<Text style={styles.bottomNavigation}>Send code again</Text>
+						<Text style={styles.bottomNavigation}>{Translation.EMAIL_VERIFICATION.SEND_CODE}</Text>
 					</TouchableOpacity>
 				</View>
 			</KeyboardAvoidingView>
@@ -74,8 +70,4 @@ const ForgotPasswordVerificationView = (props: ForgotPasswordVerificationProps) 
 	);
 }
 
-const ForgotPasswordVerification = (props:ForgotPasswordVerificationProps): ReactElement => {
-	const navigation = useNavigation();
-	return <ForgotPasswordVerificationView navigation={navigation} {...props} />;
-}
 export default ForgotPasswordVerification

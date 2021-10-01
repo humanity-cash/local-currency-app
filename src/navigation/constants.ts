@@ -1,7 +1,6 @@
 export const LOGIN = 'Login';
 export const CREATE_ACCOUNT = 'CreateAccount';
 export const MERCHANT_DASHBOARD = 'MerchantDashboard';
-export const FORGOT_PASSWORD = 'ForgotPassword';
 export const SELECT_ACCOUNT_TYPE = 'SelectAccountType';
 export const PERSONAL_PROFILE = 'PersonalProfile';
 export const BUSINESS_ACCOUNT = 'BusinessAccount';
@@ -93,3 +92,9 @@ export const SIGNUP_YOUR_BUSINESS = "SignUpYourBusiness";
 export const SETTINGS = "Settings";
 export const HELP_CONTACT = "HelpAndContact";
 export const BUSINESS_DETAIL = "BusinessDetail";
+
+export const FORGOT_PASSWORD = 'ForgotPassword';
+export const FORGOT_PASSOWRD_EMAIL = "ForgotPasswordEmail";
+export const FORGOT_PASSWORD_VERIFICATION = "ForgotPasswordVerification";
+export const FORGOT_PASSWORD_NEW_PASSWORD = "ForgotPasswordNewPassword";
+export const FORGOT_PASSWORD_SUCCESS = "ForgotPasswordSuccess";

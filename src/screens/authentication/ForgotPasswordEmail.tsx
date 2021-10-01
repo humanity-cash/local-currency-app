@@ -1,17 +1,15 @@
 import { useNavigation } from "@react-navigation/native";
-import React, { ReactElement, useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   KeyboardAvoidingView, Platform, ScrollView, StyleSheet, View
 } from "react-native";
 import { Text } from "react-native-elements";
 import { useUserDetails } from "src/hooks";
-import { BlockInput, Button, CancelBtn, Header, BackBtn } from "src/shared/uielements";
+import { BlockInput, Button, Header, BackBtn } from "src/shared/uielements";
 import { viewBase, baseHeader } from "src/theme/elements";
-
-type ForgotPasswordEmailProps = {
-  navigation?: any;
-  route?: any;
-};
+import Translation from 'src/translation/en.json';
+import * as Routes from 'src/navigation/constants';
+import { BUTTON_TYPES } from "src/constants";
 
 const styles = StyleSheet.create({
   container: { 
@@ -25,13 +23,17 @@ const styles = StyleSheet.create({
   modalDescription: {
     paddingBottom: 30,
   },
+  label: {
+    fontSize: 10
+  },
   bottomView: {
 		padding: 20,
 		paddingBottom: 45
 	},
 });
 
-const ForgotPasswordEmailView = (props: ForgotPasswordEmailProps) => {
+const ForgotPasswordEmail = (): JSX.Element => {
+  const navigation = useNavigation();
   const { personalDetails, updatePersonalDetails } = useUserDetails();
   const [email, setEmail] = useState<string>("");
   const [goNext, setGoNext] = useState(false);
@@ -52,19 +54,17 @@ const ForgotPasswordEmailView = (props: ForgotPasswordEmailProps) => {
   return (
     <View style={viewBase}>
       <Header
-				leftComponent={<BackBtn onClick={() => props.navigation.goBack()} />}
-				rightComponent={<CancelBtn text="Close" onClick={() => props.navigation.navigate('Login')} />}
+				leftComponent={<BackBtn onClick={() => navigation.goBack()} />}
 			/>
 
       <ScrollView style={styles.container}>
         <View style={ baseHeader }>
-					<Text style={styles.modalHeader}>Forgot password</Text>
+					<Text style={styles.modalHeader}>{Translation.FORGOT_PASSWORD.FORGOT_PASSWORD}</Text>
 				</View>
         <Text style={styles.modalDescription}>
-          Enter phone number of the account you would like to change the
-          passcode of.
+          {Translation.FORGOT_PASSWORD.FORGOT_PASSWORD_DETAIL}
         </Text>
-        <Text h3>EMAIL ADDRESS</Text>
+        <Text style={styles.label}>{Translation.LABEL.EMAIL_ADDR}</Text>
         <View>
           <BlockInput
             placeholder="Email"
@@ -79,11 +79,11 @@ const ForgotPasswordEmailView = (props: ForgotPasswordEmailProps) => {
       >
         <View style={styles.bottomView}>
           <Button
-            type="darkGreen"
-            title="NEXT"
+            type={BUTTON_TYPES.DARK_GREEN}
+            title={Translation.BUTTON.NEXT}
             disabled={!goNext}
             onPress={() =>
-              props.navigation.navigate("ForgotPasswordVerification")
+              navigation.navigate(Routes.FORGOT_PASSWORD_VERIFICATION)
             }
           />
         </View>
@@ -92,8 +92,4 @@ const ForgotPasswordEmailView = (props: ForgotPasswordEmailProps) => {
   );
 };
 
-const ForgotPasswordEmail = (props: ForgotPasswordEmailProps): ReactElement => {
-  const navigation = useNavigation();
-  return <ForgotPasswordEmailView navigation={navigation} {...props} />;
-};
 export default ForgotPasswordEmail;
