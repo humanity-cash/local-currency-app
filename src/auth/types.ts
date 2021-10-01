@@ -113,7 +113,8 @@ export interface IAuth {
 	setCustomerBasicVerificationDetails?: any;
 	customerBasicVerificationDetails?: any;
 	buisnessBasicVerification?: any,
-	setBuisnessBasicVerification?: any
+	setBuisnessBasicVerification?: any,
+	changePassword?: any
 }
 
 export const defaultState: IAuth = {

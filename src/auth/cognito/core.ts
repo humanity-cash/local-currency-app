@@ -131,3 +131,14 @@ export const resendEmailVerificationCode = (user: CognitoUser): CognitoResponse<
 			else resolve({ user, success: true, data: {} });
 		});
 	})
+
+export const changePassword = (user: CognitoUser | null, oldPassword: string, newPassword: string)
+	: CognitoResponse<unknown> => {
+	return new Promise(function (resolve) {
+		if (!user) resolve({ user, success: false, data: { error: 'Email not registered!' } })
+		else return user.changePassword(oldPassword, newPassword, function (err) {
+			if (err) resolve({ user, success: false, data: {} });
+			else resolve({ user, success: true, data: {} });
+		});
+	})
+}

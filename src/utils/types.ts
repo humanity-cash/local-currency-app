@@ -17,6 +17,7 @@ export type AuthorizationDetails = {
   pin: string;
   pinInput: string;
   touchID: boolean;
+  cashierView: boolean;
 };
 
 export type PersonalDetails = {
@@ -372,4 +373,10 @@ export interface AccordionEntry {
 
 export interface FaqData extends AccordionEntry {
   type?: string
+}
+
+export enum ToastType {
+  SUCCESS = "success",
+  ERROR = "error",
+  INFO = "info"
 }
