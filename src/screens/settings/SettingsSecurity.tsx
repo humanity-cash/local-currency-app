@@ -1,7 +1,8 @@
 import { useNavigation } from '@react-navigation/native';
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { ScrollView, StyleSheet, Switch, View } from "react-native";
 import { Text } from "react-native-elements";
+import { AuthContext } from "src/auth";
 import { useUserDetails } from "src/hooks";
 import { Header, BlockInput, Button, BackBtn } from "src/shared/uielements";
 import { colors } from "src/theme/colors";
@@ -10,6 +11,7 @@ import { IMap } from "src/utils/types";
 import Translation from 'src/translation/en.json';
 import * as Routes from 'src/navigation/constants';
 import { BUTTON_TYPES } from 'src/constants';
+import { isPasswordValid } from 'src/utils/validation';
 
 interface SecurityProps extends IMap {
 	password: string;
@@ -39,11 +41,16 @@ const styles = StyleSheet.create({
 		marginTop: 10,
 		borderRadius: 3
 	},
-	text: {
-		fontSize: 16
-	},
 	label : {
-		marginTop: 10
+		fontSize: 10
+	},
+	inlineView: {
+		flexDirection: 'row',
+		justifyContent: 'space-between',
+	},
+	errorText: {
+		color: colors.mistakeRed,
+		fontSize: 10,
 	},
 	bottomView: {
 		marginBottom: 40,
@@ -57,9 +64,11 @@ const styles = StyleSheet.create({
 
 export const SettingsSecurity = (): JSX.Element => {
 	const navigation = useNavigation();
+	const { signInDetails, changePassword } = useContext(AuthContext);
 	const { authorization, updateAuthorization } = useUserDetails();
 	const [switchToggle, setSwitchToggle] = useState<boolean>(false);
 	const [canSave, setCanSave] = useState<boolean>(false);
+	const [isValidPassword, setIsValidPassword] = useState<boolean>(false);
 	const [state, setState] = useState<SecurityProps>({
 		password: "",
 		newPassword: "",
@@ -71,8 +80,17 @@ export const SettingsSecurity = (): JSX.Element => {
 	}, [authorization]);
 
 	useEffect(() => {
-		setCanSave(Object.keys(state).every((key) => state[key] !== "") && state.newPassword === state.newPassowrdConfirm);
+		setCanSave(
+			Object.keys(state).every((key) => state[key] !== "") && 
+			state.newPassword === state.newPassowrdConfirm && 
+			isPasswordValid(state.newPassword) && 
+			isPasswordValid(state.password)
+		);
 	}, [state]);
+
+	useEffect(() => {
+		setIsValidPassword(state.newPassword === state.newPassowrdConfirm);
+	}, [state.newPassowrdConfirm, state.newPassword]);
 
 	const onTouchIdOption = (value: boolean) => {
 		updateAuthorization({ touchID: value });
@@ -85,6 +103,21 @@ export const SettingsSecurity = (): JSX.Element => {
 		});
 	}
 
+	const handleSave = async () => {
+		const response = await changePassword({
+			email: signInDetails?.email, 
+			oldPassword: state.password, 
+			newPassword: state.newPassword
+		});
+		
+		if (!response?.success) {
+			alert(Translation.OTHER.CHANGE_PASSWORD_FAILED);
+			return;
+		}
+		alert(Translation.OTHER.CHANGE_PASSWORD_SUCCESS);
+		navigation.navigate(Routes.DASHBOARD);
+	}
+
 	return (
 		<View style={viewBase}>
 			<Header
@@ -95,7 +128,7 @@ export const SettingsSecurity = (): JSX.Element => {
 					<Text style={styles.headerText}>{Translation.COMMUNITY_CHEST.SECURITY}</Text>
 				</View>
 				<View style={styles.view}>
-					<Text style={styles.text}>{Translation.COMMUNITY_CHEST.ALLOW_TOUCH}</Text>
+					<Text>{Translation.COMMUNITY_CHEST.ALLOW_TOUCH}</Text>
 					<Switch
 						trackColor={{ false: colors.white, true: colors.green }}
 						thumbColor={colors.white}
@@ -106,7 +139,7 @@ export const SettingsSecurity = (): JSX.Element => {
 				</View>
 				<View style={ underlineHeader }></View>
 				<View>
-					<Text h3 style={styles.label}>{Translation.LABEL.OLD_PASSWORD}</Text>
+					<Text style={styles.label}>{Translation.LABEL.OLD_PASSWORD}</Text>
 					<BlockInput
 						name="password"
 						placeholder="password"
@@ -115,8 +148,8 @@ export const SettingsSecurity = (): JSX.Element => {
 						onChange={onValueChange}
 					/>
 
-					<Text h3 style={styles.label}>{Translation.LABEL.NEW_PASSWORD}</Text>
-					<Text h3>({Translation.LABEL.PASSWORD_REG})</Text>
+					<Text style={styles.label}>{Translation.LABEL.NEW_PASSWORD}</Text>
+					<Text style={styles.label}>({Translation.LABEL.PASSWORD_REG})</Text>
 					<BlockInput
 						name="newPassword"
 						placeholder="new password"
@@ -125,7 +158,12 @@ export const SettingsSecurity = (): JSX.Element => {
 						onChange={onValueChange}
 					/>
 
-					<Text h3 style={styles.label}>{Translation.LABEL.CONFIRM_NEW_PASSWORD}</Text>
+					<View style={styles.inlineView}>
+						<Text style={styles.label}>{Translation.LABEL.CONFIRM_NEW_PASSWORD}</Text>
+						{!isValidPassword && (
+							<Text style={styles.errorText}>REPEAT NEW PASSWORD</Text>
+						)}
+					</View>
 					<BlockInput
 						name="newPassowrdConfirm"
 						placeholder="new password confirm"
@@ -140,7 +178,7 @@ export const SettingsSecurity = (): JSX.Element => {
 					type={BUTTON_TYPES.DARK_GREEN}
 					title={Translation.BUTTON.SAVE_CHANGE}
 					disabled={!canSave}
-					onPress={()=>navigation.navigate(Routes.SETTING_PERSONAL_PROFILE)}
+					onPress={handleSave}
 				/>
 			</View>
 		</View>

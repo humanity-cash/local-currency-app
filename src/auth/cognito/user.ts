@@ -4,7 +4,7 @@
  * communicate directly with AWS.
  */
 import { AuthenticationDetails, CognitoUser, CognitoUserAttribute, CognitoUserPool, CognitoUserSession, ISignUpResult } from 'amazon-cognito-identity-js';
-import { CognitoBusinessAttributes, CognitoCustomerAttributes, CognitoResponse, CognitoSharedUserAttributes, CompleteForgotPasswordInput, StartForgotPasswordInput } from 'src/auth/cognito/types';
+import { CognitoBusinessAttributes, CognitoCustomerAttributes, CognitoResponse, CognitoSharedUserAttributes, CompleteForgotPasswordInput, StartForgotPasswordInput, ChangePasswordInput } from 'src/auth/cognito/types';
 import { BusinessBasicVerification, CustomerBasicVerification } from 'src/auth/types';
 import { SignInInput } from '../types';
 import * as Core from './core';
@@ -131,3 +131,13 @@ export const completeBusinessBasicVerification = async (data: BusinessBasicVerif
 
 	return response;
 }
+
+export const changePassword = async ({ oldPassword, newPassword }: ChangePasswordInput): CognitoResponse<unknown> => {
+	const sessionResponse = await getSession();
+	if (sessionResponse?.success) {
+		const response = await Core.changePassword(currentUser, oldPassword, newPassword);
+		return response;
+	}
+
+	return sessionResponse;
+};
