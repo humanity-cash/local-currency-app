@@ -1,12 +1,13 @@
 import { useNavigation } from '@react-navigation/native';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { StyleSheet, View, KeyboardAvoidingView, Platform } from 'react-native';
 import { Text } from 'react-native-elements';
+import { AuthContext } from 'src/auth';
 import { BackBtn, Header, BlockInput, Button } from "src/shared/uielements";
 import { baseHeader, viewBase, wrappingContainerBase } from "src/theme/elements";
 import { IMap } from "src/utils/types";
 import { colors } from "src/theme/colors";
-import { isPasswordValid } from "src/utils/validation"
+import { isPasswordValid } from "src/utils/validation";
 import * as Routes from 'src/navigation/constants';
 import Translation from 'src/translation/en.json';
 import { BUTTON_TYPES } from 'src/constants';
@@ -54,11 +55,9 @@ const styles = StyleSheet.create({
 	}
 });
 
-//eslint-disable-next-line
-const strongRegex = new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#\$%\^&\*])(?=.{8,})");
-
 const ForgotPasswordNewPassword = (): JSX.Element => {
 	const navigation = useNavigation();
+	const { forgotPasswordDetails, setForgotPasswordDetails, completeForgotPasswordFlow } = useContext(AuthContext);
 	const [goNext, setGoNext] = useState<boolean>(false);
 	const [isMatch, setIsMatch] = useState<boolean>(true);
 	const [state, setState] = useState<PasswordForm>({
@@ -69,8 +68,6 @@ const ForgotPasswordNewPassword = (): JSX.Element => {
 	useEffect(() => {
 		setIsMatch(state.password === state.confirmPassword);
 		setGoNext(
-			Object.keys(state).every((key) => state[key] !== "") && 
-			strongRegex.test(state.password) && 
 			isPasswordValid(state.password) && 
 			isPasswordValid(state.confirmPassword)
 		);
@@ -82,6 +79,23 @@ const ForgotPasswordNewPassword = (): JSX.Element => {
 			[name]: change
 		});
 	};
+
+	const handleNext = async () => {
+		setForgotPasswordDetails({
+			...forgotPasswordDetails,
+			newPassword: state.password
+		});
+		
+		const response = await completeForgotPasswordFlow({
+			...forgotPasswordDetails,
+			newPassword: state.password
+		});
+
+		if (!response?.success) {
+			navigation.navigate(Routes.FORGOT_PASSWORD);
+		}
+		navigation.navigate(Routes.FORGOT_PASSWORD_SUCCESS);
+	}
 
 	return (
 		<View style={viewBase}>
@@ -127,7 +141,7 @@ const ForgotPasswordNewPassword = (): JSX.Element => {
 						type={BUTTON_TYPES.DARK_GREEN}
 						title={Translation.BUTTON.NEXT}
 						disabled={!goNext || !isMatch}
-						onPress={() => navigation.navigate(Routes.FORGOT_PASSWORD_SUCCESS)}
+						onPress={handleNext}
 					/>
 				</View>
 			</KeyboardAvoidingView>

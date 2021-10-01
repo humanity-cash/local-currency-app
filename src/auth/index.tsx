@@ -55,6 +55,7 @@ const AuthProvider: React.FunctionComponent = ({ children }) => {
 	const [authStatus, setAuthStatus] = useState(AuthStatus.SignedOut);
 	const [signInDetails, setSignInDetails] = useState(signInInitialState);
 	const [signUpDetails, setSignUpDetails] = useState(signUpInitialState);
+	const [forgotPasswordDetails, setForgotPasswordDetails] = useState(signUpInitialState);
 	const [userAttributes, setUserAttributes] = useState<any>({});
 	const [completedCustomerVerification, setCompletedCustomerVerification] = useState<boolean>(false);
 	const [completedBusinessVerification, setCompletedBusinessVerification] = useState<boolean>(false);
@@ -264,6 +265,8 @@ const AuthProvider: React.FunctionComponent = ({ children }) => {
 		signInDetails,
 		signUpDetails,
 		setSignUpDetails,
+		forgotPasswordDetails,
+		setForgotPasswordDetails,
 		customerBasicVerificationDetails,
 		setCustomerBasicVerificationDetails,
 		completeBusniessBasicVerification,

@@ -1,15 +1,16 @@
 import { useNavigation } from "@react-navigation/native";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import {
   KeyboardAvoidingView, Platform, ScrollView, StyleSheet, View
 } from "react-native";
 import { Text } from "react-native-elements";
-import { useUserDetails } from "src/hooks";
+import { AuthContext } from "src/auth";
 import { BlockInput, Button, Header, BackBtn } from "src/shared/uielements";
 import { viewBase, baseHeader } from "src/theme/elements";
 import Translation from 'src/translation/en.json';
 import * as Routes from 'src/navigation/constants';
 import { BUTTON_TYPES } from "src/constants";
+import { isEmailValid } from "src/utils/validation";
 
 const styles = StyleSheet.create({
   container: { 
@@ -34,22 +35,25 @@ const styles = StyleSheet.create({
 
 const ForgotPasswordEmail = (): JSX.Element => {
   const navigation = useNavigation();
-  const { personalDetails, updatePersonalDetails } = useUserDetails();
-  const [email, setEmail] = useState<string>("");
+  const { forgotPasswordDetails, setForgotPasswordDetails, startForgotPasswordFlow } = useContext(AuthContext);
   const [goNext, setGoNext] = useState(false);
 
   useEffect(() => {
-    setGoNext(email !== "");
-  }, [email]);
-
-  useEffect(() => {
-    setEmail(personalDetails.email);
-  }, [personalDetails]);
+    setGoNext(forgotPasswordDetails.email !== "" && isEmailValid(forgotPasswordDetails.email));
+  }, [forgotPasswordDetails.email]);
 
   const onValueChange = (name: string, change: string) => {
-    setEmail(change)
-    updatePersonalDetails({ email: change });
+    setForgotPasswordDetails({ email: change });
   };
+
+  const handleNext = async () => {
+    const response = await startForgotPasswordFlow({email: forgotPasswordDetails.email});
+    if (!response?.success) {
+      alert("something went wrong!");
+      return;
+    }
+    navigation.navigate(Routes.FORGOT_PASSWORD_VERIFICATION);
+  }
 
   return (
     <View style={viewBase}>
@@ -69,7 +73,7 @@ const ForgotPasswordEmail = (): JSX.Element => {
           <BlockInput
             placeholder="Email"
             name="email"
-            value={email}
+            value={forgotPasswordDetails.email}
             onChange={onValueChange}
           />
         </View>
@@ -82,9 +86,7 @@ const ForgotPasswordEmail = (): JSX.Element => {
             type={BUTTON_TYPES.DARK_GREEN}
             title={Translation.BUTTON.NEXT}
             disabled={!goNext}
-            onPress={() =>
-              navigation.navigate(Routes.FORGOT_PASSWORD_VERIFICATION)
-            }
+            onPress={handleNext}
           />
         </View>
       </KeyboardAvoidingView>

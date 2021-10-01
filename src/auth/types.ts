@@ -105,6 +105,8 @@ export interface IAuth {
 	getAttributes?: any;
 	signUpDetails?: any;
 	setSignUpDetails?: any;
+	forgotPasswordDetails?: any;
+	setForgotPasswordDetails?: any;
 	emailVerification?: any;
 	updateAttributeAfterSignUp?: any;
 	signUp?: any;

@@ -1,8 +1,8 @@
 import { useNavigation } from '@react-navigation/native';
-import React from 'react';
+import React, { useContext } from 'react';
 import { Keyboard, KeyboardAvoidingView, Platform, StyleSheet, TouchableOpacity, View } from 'react-native';
 import { Text } from 'react-native-elements';
-import { useUserDetails } from "src/hooks";
+import { AuthContext } from "src/auth";
 import { BackBtn, ConfirmationCode, Header } from "src/shared/uielements";
 import { baseHeader, viewBase, wrappingContainerBase } from "src/theme/elements";
 import * as Routes from 'src/navigation/constants';
@@ -29,16 +29,16 @@ const styles = StyleSheet.create({
 	}
 });
 
-const VALID_CODE = '123456';
-
 const ForgotPasswordVerification = (): JSX.Element => {
 	const navigation = useNavigation();
-	const { personalDetails: { email } } = useUserDetails();
+	const { forgotPasswordDetails, setForgotPasswordDetails } = useContext(AuthContext);
 
 	const onComplete = (text: string) => {
-		if (text === VALID_CODE) {
-			navigation.navigate(Routes.FORGOT_PASSWORD_NEW_PASSWORD);
-		}
+		setForgotPasswordDetails({
+			...forgotPasswordDetails,
+			verificationCode: text
+		});
+		navigation.navigate(Routes.FORGOT_PASSWORD_NEW_PASSWORD);
 	}
 
 	return (
@@ -51,7 +51,7 @@ const ForgotPasswordVerification = (): JSX.Element => {
 					<Text style={styles.modalHeader}>Verify your mail address</Text>
 				</View>
 				<View style={styles.modalDescription}>
-					<Text>{Translation.EMAIL_VERIFICATION.SENT_VERIFICATION_CODE} {email}.</Text>
+					<Text>{Translation.EMAIL_VERIFICATION.SENT_VERIFICATION_CODE} {forgotPasswordDetails.email}.</Text>
 					<ConfirmationCode onComplete={onComplete} />
 				</View>
 			</View>
