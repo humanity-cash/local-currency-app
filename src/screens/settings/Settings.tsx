@@ -65,7 +65,7 @@ export const Settings = (): ReactElement => {
 	return (
 		<View style={viewBase}>
 			<Header
-				leftComponent={<BackBtn onClick={() => navigation.goBack()} />}
+				leftComponent={<BackBtn text="Home" onClick={() => navigation.goBack()} />}
 			/>
 			<ScrollView style={styles.container}>
 				<View style={ underlineHeader }>
