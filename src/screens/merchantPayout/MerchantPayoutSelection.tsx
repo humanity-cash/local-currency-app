@@ -3,7 +3,7 @@ import React from "react";
 import { ScrollView, View, StyleSheet } from "react-native";
 import { Text } from "react-native-elements";
 import Button from "src/shared/uielements/Button";
-import { BackBtn, CancelBtn } from "src/shared/uielements/header";
+import { CancelBtn } from "src/shared/uielements/header";
 import Header from "src/shared/uielements/header/Header";
 import { underlineHeaderB, viewBaseB, wrappingContainerBase } from "src/theme/elements";
 import { colors } from "src/theme/colors";
@@ -41,7 +41,6 @@ const MerchantPayoutSelection = (): JSX.Element => {
 	return (
 		<View style={viewBaseB}>
 			<Header
-				leftComponent={<BackBtn color={colors.purple} onClick={() => navigation.goBack()} />}
 				rightComponent={<CancelBtn text="Close" color={colors.purple} onClick={() => navigation.navigate(Routes.MERCHANT_DASHBOARD)} />}
 			/>
 

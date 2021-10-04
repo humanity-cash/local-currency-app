@@ -69,3 +69,8 @@ export interface CompleteForgotPasswordInput {
  verificationCode: string,
  newPassword: string 
 }
+
+export interface ChangePasswordInput {
+	oldPassword: string,
+	newPassword: string 
+}

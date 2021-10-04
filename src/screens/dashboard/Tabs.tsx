@@ -17,6 +17,7 @@ import {
 import { Drawer } from "react-native-paper";
 import { AuthContext } from "src/auth";
 import { UserType } from "src/auth/types";
+import { useUserDetails } from "src/hooks";
 import * as Routes from "src/navigation/constants";
 import { colors } from "src/theme/colors";
 import Translation from "src/translation/en.json";
@@ -123,6 +124,7 @@ const DrawerContent = (
 	const { signOut, updateUserType, userAttributes } = useContext(AuthContext);
 	const { details } = useBanks();
 	const { wallet } = usePersonalWallet();
+	const { authorization } = useUserDetails();
 	const [isExpanded, setIsExpanded] = useState<boolean>(false);
 	const [isBankDialog, setIsBankDialog] = useState<boolean>(false);
 
@@ -197,24 +199,26 @@ const DrawerContent = (
 										</View>
 									) : null}
 								</TouchableWithoutFeedback>
-								<TouchableWithoutFeedback
-									onPress={() =>
-										businessTag ? onCashier() : null
-									}>
-									{businessTag ? (
-										<View style={styles.userInfo}>
-											<View style={styles.imageView}>
-												<Image
-													source={require("../../../assets/images/placeholder5.png")}
-													style={styles.image}
-												/>
+								{authorization.cashierView ? (
+									<TouchableWithoutFeedback
+										onPress={() =>
+											businessTag ? onCashier() : null
+										}>
+										{businessTag ? (
+											<View style={styles.userInfo}>
+												<View style={styles.imageView}>
+													<Image
+														source={require("../../../assets/images/placeholder5.png")}
+														style={styles.image}
+													/>
+												</View>
+												<View style={styles.usernameView}>
+													<Text>Cashier</Text>
+												</View>
 											</View>
-											<View style={styles.usernameView}>
-												<Text>Cashier</Text>
-											</View>
-										</View>
-									) : null}
-								</TouchableWithoutFeedback>
+										) : null}
+									</TouchableWithoutFeedback>
+								) : null}
 							</View>
 						)}
 					</View>

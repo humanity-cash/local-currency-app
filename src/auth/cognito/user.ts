@@ -13,7 +13,8 @@ import {
 	CognitoCustomerDwollaAttributes,
 	CognitoResponse,
 	CompleteForgotPasswordInput,
-	StartForgotPasswordInput
+	StartForgotPasswordInput,
+	ChangePasswordInput
 } from 'src/auth/cognito/types';
 import { SignInInput } from '../types';
 import * as Core from './core';
@@ -154,3 +155,13 @@ export const completeBusinessBasicVerification = async (data: BusinessBasicVerif
 
 	return response;
 }
+
+export const changePassword = async ({ oldPassword, newPassword }: ChangePasswordInput): CognitoResponse<unknown> => {
+	const sessionResponse = await getSession();
+	if (sessionResponse?.success) {
+		const response = await Core.changePassword(currentUser, oldPassword, newPassword);
+		return response;
+	}
+
+	return sessionResponse;
+};

@@ -131,6 +131,7 @@ export interface IAuth {
 	completeCustomerDwollaInfo?: (update: DwollaInfo) => CognitoResponse<string | undefined>,
 	setBusinessDwollaInfo?: Dispatch<SetStateAction<DwollaInfo>>,
 	completeBusinessDwollaInfo?: (update: DwollaInfo) => CognitoResponse<string | undefined>,
+	changePassword?: any
 }
 
 export const defaultState: IAuth = {
