@@ -232,7 +232,8 @@
         "CHOOSE_ROUND_UP": "choose to round up and directly donate to the Community Chest Fund which provides scholarships & grants to people in the area.",
         "NOT_REFUNABLE_DONATION": "*THE ROUND UP IS A NON REFUNABLE DONATION.",
         "PAYMENT_NO_BANK_TITLE": "Whoooops. You cannot make a payment yet.",
-        "PAYMENT_NO_BANK_DETAIL": "First link your bank account and load up B$ to make sute you have enough B$ for your purchasement."
+        "PAYMENT_NO_BANK_DETAIL": "First link your bank account and load up B$ to make sute you have enough B$ for your purchasement.",
+        "WRONG": "Whooops, something went wrong."
     },
     "OTHER": {
         "SETTING": "Setting",
