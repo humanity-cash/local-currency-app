@@ -1,8 +1,9 @@
 import { useNavigation } from '@react-navigation/native';
-import React, { useState, useEffect, ReactElement } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { ScrollView, StyleSheet, Switch, View } from "react-native";
 import { Text } from "react-native-elements";
 import { useUserDetails } from "src/hooks";
+import { AuthContext } from "src/auth";
 import { Header, BlockInput, Button, BackBtn } from "src/shared/uielements";
 import { colors } from "src/theme/colors";
 import { viewBaseB, underlineHeaderB } from "src/theme/elements";
@@ -10,6 +11,9 @@ import { IMap } from "src/utils/types";
 import Translation from 'src/translation/en.json';
 import { BUTTON_TYPES } from 'src/constants';
 import * as Routes from 'src/navigation/constants';
+import { isPasswordValid } from 'src/utils/validation';
+import { showToast } from 'src/utils/common';
+import { ToastType } from 'src/utils/types';
 
 interface SecurityProps extends IMap {
 	password: string;
@@ -48,6 +52,14 @@ const styles = StyleSheet.create({
 		fontSize: 10,
 		color: colors.bodyText
 	},
+	inlineView: {
+		flexDirection: 'row',
+		justifyContent: 'space-between',
+	},
+	errorText: {
+		color: colors.mistakeRed,
+		fontSize: 10,
+	},
 	input: {
 		color: colors.purple,
 		backgroundColor: colors.white
@@ -62,12 +74,14 @@ const styles = StyleSheet.create({
 	}
 });
 
-export const MerchantSettingsSecurity = (): ReactElement => {
+export const MerchantSettingsSecurity = (): JSX.Element => {
 	const navigation = useNavigation();
 	const {authorization, updateAuthorization} = useUserDetails();
+	const { changePassword } = useContext(AuthContext);
 	const [isTouchId, setIsTouchId] = useState<boolean>(true);
 	const [isCashierView, setIsCashierView] = useState<boolean>(true);
 	const [canSave, setCanSave] = useState<boolean>(false);
+	const [isValidPassword, setIsValidPassword] = useState<boolean>(false);
 	const [state, setState] = useState<SecurityProps>({
 		password: "",
 		newPassword: "",
@@ -76,14 +90,28 @@ export const MerchantSettingsSecurity = (): ReactElement => {
 
 	useEffect(() => {
 		setIsTouchId(authorization.touchID);
+		setIsCashierView(authorization.cashierView);
 	}, [authorization]);
 
 	useEffect(() => {
-		setCanSave(Object.keys(state).every((key) => state[key] !== "") && state.newPassword === state.newPassowrdConfirm);
+		setIsValidPassword(state.newPassword === state.newPassowrdConfirm);
+	}, [state.newPassowrdConfirm, state.newPassword]);
+
+	useEffect(() => {
+		setCanSave(
+			Object.keys(state).every((key) => state[key] !== "") && 
+			state.newPassword === state.newPassowrdConfirm && 
+			isPasswordValid(state.newPassword) && 
+			isPasswordValid(state.password)
+		);
 	}, [state]);
 
 	const onTouchIdOption = (value: boolean) => {
 		updateAuthorization({ touchID: value });
+	}
+
+	const onCashierViewOption = (value: boolean) => {
+		updateAuthorization({ cashierView: value });
 	}
 
 	const onValueChange = (name: string, value: string) => {
@@ -91,6 +119,20 @@ export const MerchantSettingsSecurity = (): ReactElement => {
 			...state,
 			[name]: value
 		});
+	}
+
+	const handleSave = async () => {
+		const response = await changePassword({
+			oldPassword: state.password, 
+			newPassword: state.newPassword
+		});
+		
+		if (!response?.success) {
+			showToast(ToastType.ERROR, 'FAILED', Translation.OTHER.CHANGE_PASSWORD_FAILED);
+			return;
+		}
+		showToast(ToastType.SUCCESS, 'SUCCESS', Translation.OTHER.CHANGE_PASSWORD_SUCCESS);
+		navigation.navigate(Routes.MERCHANT_DASHBOARD);
 	}
 
 	return (
@@ -105,7 +147,7 @@ export const MerchantSettingsSecurity = (): ReactElement => {
 				<View style={styles.view}>
 					<Text style={styles.text}>{Translation.COMMUNITY_CHEST.ALLOW_TOUCH}</Text>
 					<Switch
-						trackColor={{ false: colors.purple, true: colors.green }}
+						trackColor={{ false: colors.green, true: colors.green }}
 						thumbColor={colors.white}
 						ios_backgroundColor={colors.white}
 						onValueChange={onTouchIdOption}
@@ -115,10 +157,10 @@ export const MerchantSettingsSecurity = (): ReactElement => {
 				<View style={styles.view}>
 					<Text style={styles.text}>{Translation.OTHER.ENABLE_CASHIER_VIEW}</Text>
 					<Switch
-						trackColor={{ false: colors.white, true: colors.green }}
+						trackColor={{ false: colors.green, true: colors.green }}
 						thumbColor={colors.white}
 						ios_backgroundColor={colors.white}
-						onValueChange={(value)=>setIsCashierView(value)}
+						onValueChange={onCashierViewOption}
 						value={isCashierView}
 					/>
 				</View>
@@ -146,7 +188,12 @@ export const MerchantSettingsSecurity = (): ReactElement => {
 						onChange={onValueChange}
 					/>
 
-					<Text style={styles.label}>{Translation.LABEL.CONFIRM_NEW_PASSWORD}</Text>
+					<View style={styles.inlineView}>
+						<Text style={styles.label}>{Translation.LABEL.CONFIRM_NEW_PASSWORD}</Text>
+						{!isValidPassword && (
+							<Text style={styles.errorText}>REPEAT NEW PASSWORD</Text>
+						)}
+					</View>
 					<BlockInput
 						name="newPassowrdConfirm"
 						placeholder="new password confirm"
@@ -162,7 +209,7 @@ export const MerchantSettingsSecurity = (): ReactElement => {
 					type={BUTTON_TYPES.PURPLE}
 					title={Translation.BUTTON.SAVE_CHANGE}
 					disabled={!canSave}
-					onPress={()=>navigation.navigate(Routes.MERCHANT_DASHBOARD)}
+					onPress={handleSave}
 				/>
 			</View>
 		</View>

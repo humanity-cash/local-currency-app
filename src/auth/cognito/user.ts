@@ -4,8 +4,18 @@
  * communicate directly with AWS.
  */
 import { AuthenticationDetails, CognitoUser, CognitoUserAttribute, CognitoUserPool, CognitoUserSession, ISignUpResult } from 'amazon-cognito-identity-js';
-import { CognitoBusinessAttributes, CognitoCustomerAttributes, CognitoResponse, CognitoSharedUserAttributes, CompleteForgotPasswordInput, StartForgotPasswordInput } from 'src/auth/cognito/types';
 import { BusinessBasicVerification, CustomerBasicVerification } from 'src/auth/types';
+import { 
+	CognitoCustomerAttributes,
+	CognitoBusinessAttributes,
+	CognitoSharedUserAttributes,
+	CognitoBusinessDwollaAttributes,
+	CognitoCustomerDwollaAttributes,
+	CognitoResponse,
+	CompleteForgotPasswordInput,
+	StartForgotPasswordInput,
+	ChangePasswordInput
+} from 'src/auth/cognito/types';
 import { SignInInput } from '../types';
 import * as Core from './core';
 import * as Utils from './utils';
@@ -114,6 +124,20 @@ export const updateUserAttributes = async (update: CognitoBusinessAttributes | C
 	return response;
 };
 
+export const updateCustomerDowllaData = async (update: CognitoCustomerDwollaAttributes): CognitoResponse<string | undefined> => {
+	const attributesList = Utils.buildUpdateUserAttributes(update);
+	const response = await Core.updateUserAttributes(currentUser, attributesList);
+
+	return response;
+}
+
+export const updateBusinessDowllaData = async (update: CognitoBusinessDwollaAttributes): CognitoResponse<string | undefined> => {
+	const attributesList = Utils.buildUpdateUserAttributes(update);
+	const response = await Core.updateUserAttributes(currentUser, attributesList);
+
+	return response;
+}
+
 /**Completes basic customer verifications */
 export const completeCustomerBasicVerification = async (data: CustomerBasicVerification)
 	: CognitoResponse<string | undefined> => {
@@ -131,3 +155,13 @@ export const completeBusinessBasicVerification = async (data: BusinessBasicVerif
 
 	return response;
 }
+
+export const changePassword = async ({ oldPassword, newPassword }: ChangePasswordInput): CognitoResponse<unknown> => {
+	const sessionResponse = await getSession();
+	if (sessionResponse?.success) {
+		const response = await Core.changePassword(currentUser, oldPassword, newPassword);
+		return response;
+	}
+
+	return sessionResponse;
+};

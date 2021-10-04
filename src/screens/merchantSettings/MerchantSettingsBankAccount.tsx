@@ -2,7 +2,7 @@ import { useNavigation } from '@react-navigation/native';
 import React, { ReactElement, useState } from 'react';
 import { ScrollView, StyleSheet, View } from "react-native";
 import { Text, Image } from 'react-native-elements';
-import { Header, Dialog, CancelBtn, Button } from "src/shared/uielements";
+import { Header, Dialog, BackBtn, Button } from "src/shared/uielements";
 import { underlineHeaderB, viewBaseB, dialogViewBase } from "src/theme/elements";
 import { colors } from "src/theme/colors";
 import Translation from 'src/translation/en.json';
@@ -95,7 +95,7 @@ export const MerchantSettingsBankAccount = (): ReactElement => {
 	return (
 		<View style={viewBaseB}>
 			<Header
-				rightComponent={<CancelBtn text={Translation.BUTTON.CLOSE} color={colors.purple} onClick={() => navigation.navigate(Routes.MERCHANT_DASHBOARD)} />}
+				leftComponent={<BackBtn onClick={() => navigation.goBack()} color={colors.purple} />}
 			/>
 			<ScrollView style={styles.content}>
 				<View style={ underlineHeaderB }>

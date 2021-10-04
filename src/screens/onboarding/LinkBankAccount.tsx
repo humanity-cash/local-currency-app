@@ -27,10 +27,13 @@ const styles = StyleSheet.create({
 });
 
 const LinkBankAccount = (): JSX.Element => {
-	const { updateUserType, completeCustomerBasicVerification } = useContext(AuthContext)
+	const { updateUserType } = useContext(AuthContext)
 	const navigation = useNavigation();
 
-	console.log(completeCustomerBasicVerification)
+	const selectBank = () => {
+		updateUserType(UserType.Customer);
+		navigation.navigate(Routes.SELECT_BANK);
+	}
 	return (
 		<View style={viewBase}>
 			<Header />
@@ -48,13 +51,13 @@ const LinkBankAccount = (): JSX.Element => {
 					title={Translation.BUTTON.SKIP_NOW}
 					style={styles.skipBtn}
 					onPress={() =>
-					updateUserType(UserType.Customer)
+						updateUserType(UserType.Customer)
 					}
 				/>
 				<Button
 					type={BUTTON_TYPES.DARK_GREEN}
 					title={Routes.LINK_BANK_ACCOUNT}
-					onPress={() => navigation.navigate(Routes.SELECT_BANK)}
+					onPress={selectBank}
 				/>
 			</View>
 		</View>

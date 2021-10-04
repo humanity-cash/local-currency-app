@@ -13,7 +13,7 @@ import DropDownPicker, { RenderBadgeItemPropsInterface } from 'react-native-drop
 import { AuthContext } from "src/auth";
 import { BUTTON_TYPES } from "src/constants";
 import * as Routes from "src/navigation/constants";
-import { BackBtn, Button, CancelBtn, Header } from "src/shared/uielements";
+import { BackBtn, Button, Header } from "src/shared/uielements";
 import { colors } from "src/theme/colors";
 import {
     underlineHeaderB,
@@ -204,24 +204,14 @@ const Report = (): JSX.Element => {
 		setReportType(ReportType.ALL);
 	};
 
-	const onConfirm = () => {
-		userType === UserType.Business ? navigation.navigate(Routes.MERCHANT_DASHBOARD) : navigation.navigate(Routes.CASHIER_DASHBOARD);
-	};
-
 	return (
 		<View style={viewBaseB}>
 			<Header
 				leftComponent={
 					<BackBtn
+						text="Home"
 						color={colors.purple}
 						onClick={() => navigation.goBack()}
-					/>
-				}
-				rightComponent={
-					<CancelBtn
-						color={colors.purple}
-						text={Translation.BUTTON.CLOSE}
-						onClick={onConfirm}
 					/>
 				}
 			/>

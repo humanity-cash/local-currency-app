@@ -52,7 +52,8 @@ const defaultState: OnboardingState = {
 	authorization: {
 		pin: '',
 		pinInput: '',
-		touchID: true
+		touchID: true,
+		cashierView: true
 	},
 	statuses: {
 		personalDetails: false,

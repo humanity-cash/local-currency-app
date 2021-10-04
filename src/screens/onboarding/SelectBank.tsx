@@ -1,108 +1,70 @@
 import { useNavigation } from '@react-navigation/native';
-import React, { useState, useEffect } from 'react';
-import { StyleSheet, TouchableWithoutFeedback, View, ScrollView } from 'react-native';
-import { Text, Image } from 'react-native-elements';
-import { BackBtn, Header, CancelBtn, SearchInput } from "src/shared/uielements";
-import { colors } from "src/theme/colors";
-import { baseHeader, viewBase, wrappingContainerBase, underlineHeader } from "src/theme/elements";
-import listOfBanks from "src/mocks/banks";
-import { Bank } from "src/utils/types";
-import Translation from 'src/translation/en.json';
+import React, { useState, useEffect, useContext } from 'react';
+import { StyleSheet, View, ScrollView, Dimensions, ActivityIndicator } from 'react-native';
+import { WebView } from 'react-native-webview';
+import { AuthContext } from 'src/auth';
+import { BackBtn, Header, CancelBtn } from "src/shared/uielements";
+import { viewBaseWhite, wrappingContainerBase } from "src/theme/elements";
 import * as Routes from 'src/navigation/constants';
+import { colors } from "src/theme/colors";
+import { UserAPI } from 'src/api';
+
+export const WEBVIEW_SCREEN = Dimensions.get('screen').height - 150;
 
 const styles = StyleSheet.create({
 	headerText: {
 		fontSize: 32,
         lineHeight: 32
 	},
-    bodyView: {
-        paddingTop: 50,
-        paddingHorizontal: 17
-    },
-	bankItem: {
-		width: '48%',
-		height: 100,
-		marginBottom: 10,
-		backgroundColor: colors.card,
-		justifyContent: 'center',
-		alignItems: 'center'
-	},
 	bankView: {
 		flex: 1,
-		display: 'flex',
-		flexDirection: 'row',
-		flexWrap: 'wrap',
-		justifyContent: 'space-between',
+		height: WEBVIEW_SCREEN,
+		paddingBottom: 10
 	},
-	image: {
-		width: '50%',
-		height: 80
+	bottomView: {
+		paddingBottom: 45
 	},
 });
 
 const SelectBank = (): JSX.Element => {
 	const navigation = useNavigation();
-	const [searchPhrase, setSearchPhrase] = useState('');
-	const [bank, setBank] = useState('');
+	const { customerDwollaId } = useContext(AuthContext);
+	const [iavToken, setIAVToken] = useState<string>("");
+	let webview: WebView<{ ref: unknown; style: { flex: number; height: number; paddingBottom: number; }; source: { uri: string; }; }> | null = null;
 
 	useEffect(() => {
-		if (bank !== '') {
-			navigation.navigate(Routes.LOGIN_BANK)
+		if (customerDwollaId) {
+			(async () => {
+				const response = await UserAPI.iavToken(customerDwollaId);
+				if (response.data) {
+					setIAVToken(response.data.iavToken);
+					webview?.reload();
+				}
+			})();
 		}
-	},[bank]);
-
-	const onValueChange = (name: string, change: string) => {
-		setSearchPhrase(change);
-	}
-
-	const renderBanks = () => {
-		let found: Bank[] = [];
-		if (searchPhrase !== '') {
-			found = listOfBanks.filter(entry => entry.name.toLowerCase().includes(searchPhrase.toLowerCase()));
-		}
-
-		if (searchPhrase === '') {
-			found = listOfBanks;
-		}
-
-		return found.map((entry, i) => (
-			<View style={styles.bankItem} key={i}>
-				<TouchableWithoutFeedback onPress={() => setBank(entry.id)} >
-					<Image
-						source={require('../../../assets/images/bank2.png')}
-						containerStyle={styles.image}
-					/>
-				</TouchableWithoutFeedback>
-			</View>
-			
-		))
-	}
+	}, [customerDwollaId])
 
 	return (
-		<View style={viewBase}>
+		<View style={viewBaseWhite}>
 			<Header
 				leftComponent={<BackBtn onClick={() => navigation.goBack()} />}
 				rightComponent={<CancelBtn text="Close" onClick={() => navigation.navigate(Routes.TABS)} />}
 			/>
 
 			<ScrollView style={wrappingContainerBase}>
-				<View style={ baseHeader }>
-					<View style={underlineHeader}>
-						<Text style={styles.headerText}>{Translation.BANK_ACCOUNT.SELECT_BANK}</Text>
-					</View>
-					<SearchInput
-						label="Search"
-						name="searchText"
-						keyboardType="default"
-						placeholder="Search help"
-						value={searchPhrase}
-						onChange={onValueChange}
+				{iavToken !== "" && (
+					<WebView
+						ref={(ref) => (webview = ref)}
+						style={styles.bankView}
+						source={{ uri: `https://testdwolla.s3.ap-northeast-2.amazonaws.com/index.html?iavToken=${iavToken}` }}
 					/>
-				</View>
-				<View style={styles.bankView}>
-					{renderBanks()}
-				</View>
+				)}
 			</ScrollView>
+			{iavToken === "" && (
+				<View style={styles.bottomView}>
+					<ActivityIndicator size="large" color={colors.darkGreen} />
+				</View>
+			)}
 		</View>
 	);
 }
