@@ -32,8 +32,7 @@ import {
 	BackBtn,
 	Header,
 	ModalHeader,
-	NextBtn,
-	WalletBtn } from "./header";
+	NextBtn } from "./header";
 import { 
 	CreditCardForm, 
 	DepositView, 
@@ -76,7 +75,6 @@ export {
 	Header,
 	ModalHeader,
 	NextBtn,
-	WalletBtn,
 	CreditCardForm, 
 	DepositView, 
 	PersonalAddressForm, 

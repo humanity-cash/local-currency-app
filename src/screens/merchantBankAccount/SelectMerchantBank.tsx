@@ -1,19 +1,16 @@
 import { useNavigation } from '@react-navigation/native';
-import React, { useState, useEffect, ReactElement } from 'react';
-import { StyleSheet, TouchableWithoutFeedback, View, ScrollView } from 'react-native';
-import { Text, Image } from 'react-native-elements';
-import { BackBtn, Header, CancelBtn, SearchInput } from "src/shared/uielements";
+import React, { useState, useEffect, useContext } from 'react';
+import { StyleSheet, View, ScrollView, Dimensions, ActivityIndicator } from 'react-native';
+import { WebView } from 'react-native-webview';
+import { AuthContext } from 'src/auth';
+import { BackBtn, Header, CancelBtn } from "src/shared/uielements";
 import { colors } from "src/theme/colors";
-import { baseHeader, viewBaseB, wrappingContainerBase, underlineHeaderB } from "src/theme/elements";
-import listOfBanks from "src/mocks/banks";
-import { Bank } from "src/utils/types";
+import { viewBaseWhite, wrappingContainerBase } from "src/theme/elements";
 import Translation from 'src/translation/en.json';
 import * as Routes from 'src/navigation/constants';
+import { UserAPI } from 'src/api';
 
-type SelectMerchantBankProps = {
-	navigation?: any
-	route?: any
-}
+export const WEBVIEW_SCREEN = Dimensions.get('screen').height - 150;
 
 const styles = StyleSheet.create({
 	headerText: {
@@ -21,105 +18,57 @@ const styles = StyleSheet.create({
         lineHeight: 32,
 		color: colors.purple
 	},
-    bodyView: {
-        paddingTop: 50,
-        paddingHorizontal: 17
-    },
-	input: {
-		backgroundColor: colors.white,
-		color: colors.purple
-	},
-	bankItem: {
-		width: '48%',
-		height: 100,
-		marginBottom: 10,
-		backgroundColor: colors.white,
-		justifyContent: 'center',
-		alignItems: 'center'
-	},
-	bankView: {
+    bankView: {
 		flex: 1,
-		display: 'flex',
-		flexDirection: 'row',
-		flexWrap: 'wrap',
-		justifyContent: 'space-between',
+		height: WEBVIEW_SCREEN,
+		paddingBottom: 10
 	},
-	image: {
-		width: '50%',
-		height: 80
+	bottomView: {
+		paddingBottom: 45
 	},
 });
 
-const SelectMerchantBankView = (props: SelectMerchantBankProps) => {
-	const [searchPhrase, setSearchPhrase] = useState('');
-	const [bank, setBank] = useState('');
+const SelectMerchantBank = (): JSX.Element => {
+	const navigation = useNavigation();
+	const { businessDwollaId } = useContext(AuthContext);
+	const [iavToken, setIAVToken] = useState<string>("");
+	let webview: WebView<{ ref: unknown; style: { flex: number; height: number; paddingBottom: number; }; source: { uri: string; }; }> | null = null;
 
 	useEffect(() => {
-		if (bank !== '') {
-			props.navigation.navigate(Routes.LOGIN_MERCHANT_BANK)
+		if (businessDwollaId) {
+			(async () => {
+				const response = await UserAPI.iavToken(businessDwollaId);
+				if (response.data) {
+					setIAVToken(response.data.iavToken);
+					webview?.reload();
+				}
+			})();
 		}
-	},[bank]);
-
-	const onValueChange = (name: string, change: string) => {
-		setSearchPhrase(change);
-	}
-
-	const renderBanks = () => {
-		let found: Bank[] = [];
-		if (searchPhrase !== '') {
-			found = listOfBanks.filter(entry => entry.name.toLowerCase().includes(searchPhrase.toLowerCase()));
-		}
-
-		if (searchPhrase === '') {
-			found = listOfBanks;
-		}
-
-		return found.map((entry, i) => (
-			<View style={styles.bankItem} key={i}>
-				<TouchableWithoutFeedback onPress={() => setBank(entry.id)} >
-					<Image
-						source={require('../../../assets/images/bank2.png')}
-						containerStyle={styles.image}
-					/>
-				</TouchableWithoutFeedback>
-			</View>
-			
-		))
-	}
+	}, [businessDwollaId]);
 
 	return (
-		<View style={viewBaseB}>
+		<View style={viewBaseWhite}>
 			<Header
-				leftComponent={<BackBtn color={colors.purple} onClick={() => props.navigation.goBack()} />}
-				rightComponent={<CancelBtn text={Translation.BUTTON.CLOSE} color={colors.purple} onClick={() => props.navigation.navigate(Routes.MERCHANT_TABS)} />}
+				leftComponent={<BackBtn color={colors.purple} onClick={() => navigation.goBack()} />}
+				rightComponent={<CancelBtn text={Translation.BUTTON.CLOSE} color={colors.purple} onClick={() => navigation.navigate(Routes.MERCHANT_TABS)} />}
 			/>
 
 			<ScrollView style={wrappingContainerBase}>
-				<View style={ baseHeader }>
-					<View style={underlineHeaderB}>
-						<Text style={styles.headerText}>{Translation.BANK_ACCOUNT.SELECT_BANK}</Text>
-					</View>
-					<SearchInput
-						label="Search"
-						name="searchText"
-						keyboardType="default"
-						placeholder="Search help"
-						style={styles.input}
-						textColor={colors.greyedPurple}
-						value={searchPhrase}
-						onChange={onValueChange}
+				{iavToken !== "" && (
+					<WebView
+						ref={(ref) => (webview = ref)}
+						style={styles.bankView}
+						source={{ uri: `https://testdwolla.s3.ap-northeast-2.amazonaws.com/index.html?iavToken=${iavToken}` }}
 					/>
-				</View>
-				<View style={styles.bankView}>
-					{renderBanks()}
-				</View>
+				)}
 			</ScrollView>
+			{iavToken === "" && (
+				<View style={styles.bottomView}>
+					<ActivityIndicator size="large" color={colors.purple} />
+				</View>
+			)}
 		</View>
 	);
 }
 
-const SelectMerchantBank = (props: SelectMerchantBankProps): ReactElement => {
-	const navigation = useNavigation();
-	return <SelectMerchantBankView {...props} navigation={navigation} />;
-}
 export default SelectMerchantBank

@@ -1,12 +1,9 @@
 import axios, { AxiosResponse } from "axios";
 import { IMap } from "../utils/types";
-
-/** CORE_API_URL should be stored as ENV variable
-https://docs.expo.io/guides/environment-variables/ */
-const CORE_API_URL = "https://baklava.berkshares-api.keyko.rocks";
+import envs from "./../config/env";
 
 const httpRequest = axios.create({
-  baseURL: CORE_API_URL,
+  baseURL: envs.CORE_API_URL,
 });
 
 type Body = IMap;

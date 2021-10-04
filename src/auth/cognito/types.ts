@@ -16,7 +16,7 @@ export interface CognitoCustomerAttributes {
 	'custom:personal.city': string,
 	'custom:personal.state': string,
 	'custom:personal.postalCode': string,
-	'custom:personal.firstName': string
+	'custom:personal.firstName': string,
 	'custom:personal.lastName': string
 }
 
@@ -44,6 +44,16 @@ export interface CognitoBusinessAttributes {
 	"custom:owner.postalCode": string
 }
 
+export interface CognitoCustomerDwollaAttributes {
+	'custom:personal.dwollaId'?: string,
+	'custom:personal.resourceUri'?: string
+}
+
+export interface CognitoBusinessDwollaAttributes {
+	'custom:business.dwollaId'?: string,
+	'custom:business.resourceUri'?: string
+}
+
 export type CognitoError = any
 
 export type BaseResponse<T> = { user?: CognitoUser | null, success: boolean, data: { error: string } | T }
@@ -58,4 +68,9 @@ export interface CompleteForgotPasswordInput {
  email: string,
  verificationCode: string,
  newPassword: string 
+}
+
+export interface ChangePasswordInput {
+	oldPassword: string,
+	newPassword: string 
 }

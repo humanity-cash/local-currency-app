@@ -105,7 +105,7 @@
         "WHERE_CAN_FIND": "Where can customers fine you?",
         "QUESTIONS_FREQUENTLY": "FREQUENTLY ASKED QUESTIONS",
         "NEW_PASSWORD": "NEW PASSWORD",
-        "CONFIRM_NEW_PASSWORD": "Confirm new password",
+        "CONFIRM_NEW_PASSWORD": "CONFIRM NEW PASSWORD",
         "OLD_PASSWORD": "OLD PASSWORD",
         "RETURN_AMOUNT": "RETURN AMOUNT",
         "TIME_PERIOD": "TIME PERIOD",
@@ -176,6 +176,8 @@
     "LOAD_UP": {
         "TITLE": "Load up B$",
         "LOAD_UP_BERKSHARES": "Load up BerkShares",
+        "LOAD_UP_NO_BANK_TITLE": "Whoooops. You have to link your bank account first",
+        "LOAD_UP_NO_BANK_DETAIL": "Before you can Load up B$ you have to link your bank account first.",
         "LOAD_UP_DETAIL": "Specify the amount of BerkShares (B$1 = USD 1) you would like to load up.",
         "TOTAL_COSTS": "Total costs",
         "LOAD_UP_SUCCESS": "Congratulations! You have topped up",
@@ -228,7 +230,9 @@
         "SCAN_RECIPIENTS_QR_DETAIL": "The customer needs to generate QR code via the inital transaction in their transactioin overview. There they generate a QR code which needs to be scanned by you.",
         "SCAN_TO_PAY_REQUEST": "Scan to Pay or Request",
         "CHOOSE_ROUND_UP": "choose to round up and directly donate to the Community Chest Fund which provides scholarships & grants to people in the area.",
-        "NOT_REFUNABLE_DONATION": "*THE ROUND UP IS A NON REFUNABLE DONATION."
+        "NOT_REFUNABLE_DONATION": "*THE ROUND UP IS A NON REFUNABLE DONATION.",
+        "PAYMENT_NO_BANK_TITLE": "Whoooops. You cannot make a payment yet.",
+        "PAYMENT_NO_BANK_DETAIL": "First link your bank account and load up B$ to make sute you have enough B$ for your purchasement."
     },
     "OTHER": {
         "SETTING": "Setting",
@@ -245,7 +249,9 @@
         "STATIC_QR_DETAIL2": "However, the customer then determines the amount. Therefore we recommend to only use this QR code for exceptions. For daily use of the app, you can use the ‘Receive or Scan to pay’ button on the home screen of the app.",
         "STATIC_QR_DETAIL3": "If you encounter any issue, don’t hesitate to contact us via info@berkshare.com. In the meantime you can use the back up QR code to receive payment. But when you do, please make sure the customer sends the correct amount!",
         "ENABLE_CASHIER_VIEW" :"Enable cashier view",
-        "CONFIRM_SAVE": "Are you sure you want to go back without saving changes?"
+        "CONFIRM_SAVE": "Are you sure you want to go back without saving changes?",
+        "CHANGE_PASSWORD_FAILED": "Whoops something went wrong. Your action did not succeed.",
+        "CHANGE_PASSWORD_SUCCESS": "Password changed successfully."
     },
     "COMMUNITY_CHEST": {
         "CONTENT": "The BerkShares community want to support the lcal community. Therefor, we ask you at each transaction if you are willing to make a donation. This donation will go to a local project. On this page you will find the current project and its status.",

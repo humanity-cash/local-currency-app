@@ -3,12 +3,13 @@ import { Dimensions, View, StyleSheet } from "react-native";
 import { Overlay } from 'react-native-elements';
 import { CancelBtn } from "src/shared/uielements/header";
 import { colors } from "src/theme/colors";
+import { IMap } from 'src/utils/types';
 
 type DialogProps = {
 	visible: boolean,
 	children: ReactElement,
-	backgroundStyle?: any,
-	style?: any,
+	backgroundStyle?: IMap,
+	style?: IMap,
 	onShow?: () => void,
 	onClose?: () => void
 }
@@ -35,7 +36,7 @@ const styles = StyleSheet.create({
 		alignItems: 'center'
 	},
 	dialogWrap: {
-		width: '85%',
+		width: '90%',
 		height: 350,
 		alignSelf: 'center',
 		borderRadius: 20,
@@ -58,7 +59,7 @@ const styles = StyleSheet.create({
 	},
 });
 
-const Dialog = ({visible = false, onClose, backgroundStyle={}, style = {}, children, onShow }: DialogProps) => {
+const Dialog = ({visible = false, onClose, backgroundStyle={}, style = {}, children, onShow }: DialogProps): JSX.Element => {
 
 	return (
 		<Overlay
