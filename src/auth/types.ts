@@ -1,5 +1,6 @@
 import { CognitoUser, CognitoUserAttribute } from "amazon-cognito-identity-js";
-import { CognitoBusinessAttributes, CognitoCustomerAttributes } from 'src/auth/cognito/types';
+import { Dispatch, SetStateAction } from "react";
+import { CognitoBusinessAttributes, CognitoCustomerAttributes, CognitoResponse } from 'src/auth/cognito/types';
 
 export interface CustomerBasicVerification {
 	avatar: string
@@ -11,7 +12,9 @@ export interface CustomerBasicVerification {
 	postalCode: string
 	firstName: string
 	lastName: string
-	type: string
+	type: string,
+	dwollaId?: string,
+	resourceUri?: string,
 };
 
 export interface BusinessBasicVerification {
@@ -38,7 +41,14 @@ export interface BusinessBasicVerification {
 	state: string,
 	postalCode: string,
 	phoneNumber?: string,
+	dwollaId?: string,
+	resourceUri?: string,
 }
+
+export interface DwollaInfo {
+	dwollaId: string,
+	resourceUri: string,
+};
 
 /**Shared Update attributes input between Customer and Business */
 export interface UpdateUserAttributesInput {
@@ -91,6 +101,9 @@ export interface IAuth {
 	completeBusniessBasicVerification?: any,
 	completedCustomerVerification: boolean,
 	completedBusinessVerification: boolean,
+	cognitoId?: string,
+	customerDwollaId?: string,
+	businessDwollaId?: string,
 	userAttributes?: any,
 	completeCustomerBasicVerification?: any,
 	updateAttributes?: any;
@@ -114,6 +127,10 @@ export interface IAuth {
 	customerBasicVerificationDetails?: any;
 	buisnessBasicVerification?: any,
 	setBuisnessBasicVerification?: any,
+	setCustomerDwollaInfo?: Dispatch<SetStateAction<DwollaInfo>>,
+	completeCustomerDwollaInfo?: (update: DwollaInfo) => CognitoResponse<string | undefined>,
+	setBusinessDwollaInfo?: Dispatch<SetStateAction<DwollaInfo>>,
+	completeBusinessDwollaInfo?: (update: DwollaInfo) => CognitoResponse<string | undefined>,
 	changePassword?: any
 }
 

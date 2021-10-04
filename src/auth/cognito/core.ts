@@ -57,6 +57,7 @@ export const authenticateUser = (user: CognitoUser | null, authenticationDetails
 		if (!user) resolve({ user, success: false, data: { error: 'Email not registered!' } })
 		else return user.authenticateUser(authenticationDetails, {
 			onSuccess: async function (response: CognitoUserSession) {
+				
 				resolve({ user, success: true, data: response });
 			},
 			onFailure: function (error: CognitoError) {

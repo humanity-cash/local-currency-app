@@ -1,12 +1,12 @@
 import { AntDesign, Entypo, Octicons } from "@expo/vector-icons";
 import { useNavigation, DrawerActions } from "@react-navigation/native";
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { StyleSheet, TouchableWithoutFeedback, View, ScrollView, TouchableOpacity } from 'react-native';
 import { Text, Image } from "react-native-elements";
 import { AuthContext } from "src/auth";
 import { colors } from "src/theme/colors";
 import { viewBaseB, wrappingContainerBase, baseHeader, dialogViewBase } from "src/theme/elements";
-import { SearchInput, Header, Dialog } from "src/shared/uielements";
+import { SearchInput, Header, Dialog, Button } from "src/shared/uielements";
 import MerchantTransactionList from "./MerchantTransactionList";
 import MerchantTransactionsFilter from "./MerchantTransactionsFilter";
 import { MerchantTransactionItem, MerchantTransactionType, TransactionTypes } from "src/utils/types";
@@ -14,6 +14,9 @@ import { merchantTransactions } from "src/mocks/transactions";
 import Translation from 'src/translation/en.json';
 import * as Routes from 'src/navigation/constants';
 import { getBerksharePrefix } from "src/utils/common";
+import DwollaDialog from './DwollaDialog';
+import { BUTTON_TYPES } from "src/constants";
+import { useBusinessWallet, useBanks } from 'src/hooks';
 
 const styles = StyleSheet.create({
 	mainTextColor: {
@@ -28,7 +31,7 @@ const styles = StyleSheet.create({
 		lineHeight: 40
 	},
 	amountView: {
-		borderBottomColor: colors.darkGreen,
+		borderBottomColor: colors.purple,
 		borderBottomWidth: 1,
 		flexDirection: 'row',
 		justifyContent: 'space-between',
@@ -78,6 +81,20 @@ const styles = StyleSheet.create({
 	},
 	dialog: {
 		backgroundColor: colors.overlayPurple
+	},
+	dialogWrap: {
+		paddingHorizontal: 10,
+		flex: 1
+	},
+	dialogHeader: {
+		fontSize: 30,
+		lineHeight: 32,
+		marginTop: 20,
+		marginBottom: 10,
+		color: colors.purple
+	},
+	dialogBottom: {
+		paddingTop: 20,
 	},
 	filterBtn: {
 		width: 55,
@@ -141,7 +158,7 @@ const styles = StyleSheet.create({
 	amountText: {
 		fontWeight: 'bold',
 		fontSize: 18
-	}
+	},
 });
 
 type TransactionDetailProps = {
@@ -195,7 +212,9 @@ const TransactionDetail = (props: TransactionDetailProps) => {
 
 const MerchantDashboard = (): JSX.Element => {
 	const navigation = useNavigation();
-	const { completedCustomerVerification } = useContext(AuthContext);
+	const { completedCustomerVerification, businessDwollaId } = useContext(AuthContext);
+	const { wallet, getWallet } = useBusinessWallet();
+	const { details, getBankStatus } = useBanks();
 	const [isFilterVisible, setIsFilterVisible] = useState<boolean>(false);
 	const [searchText, setSearchText] = useState<string>("");
 	const [isDetailViewOpen, setIsDetailViewOpen] = useState<boolean>(false);
@@ -205,6 +224,15 @@ const MerchantDashboard = (): JSX.Element => {
 		amount: 0,
 		date: "2021-01-01"
 	});
+	const [isDwollaVisible, setIsDwollaVisible] = useState<boolean>(false);
+	const [isPayment, setIsPayment] = useState<boolean>(false);
+
+	useEffect(() => {
+		if (businessDwollaId) {
+			getBankStatus(businessDwollaId, true);
+			getWallet(businessDwollaId);
+		}
+	}, []);
 
 	const onSearchChange = (name: string, change: string) => {
 		setSearchText(change);
@@ -217,6 +245,16 @@ const MerchantDashboard = (): JSX.Element => {
 
 	const onConfirm = () => {
 		setIsDetailViewOpen(false);
+	}
+
+	const onClose = () => {
+		setIsDwollaVisible(false);
+		setIsPayment(false);
+	};
+
+	const selectBank = () => {
+		navigation.navigate(Routes.MERCHANT_BANK_ACCOUNT);
+		onClose();
 	}
 
 	return (
@@ -241,16 +279,35 @@ const MerchantDashboard = (): JSX.Element => {
 						<Text style={styles.headerText}>{Translation.LANDING_PAGE.TITLE}</Text>
 					</View>
 					<View style={styles.amountView}>
-						<Text style={styles.text}>B$ 382.91</Text>
+						<Text style={styles.text}>B$ {details.hasBusinessBank ? wallet.totalBalance : '-'}</Text>
 					</View>
 
 					{!completedCustomerVerification && <View style={styles.alertView}>
 						<AntDesign name="exclamationcircleo" size={18} style={styles.alertIcon} />
 						<Text style={styles.alertText}>
 							{Translation.PROFILE.PERSONAL_PROFILE_ALERT} &nbsp;
-							<Text style={styles.alertIcon} onPress={()=>navigation.navigate(Routes.PERSONAL_PROFILE)}>{Translation.BUTTON.GOTO_SETUP} &gt;</Text>
+							<Text style={styles.alertIcon} onPress={() => navigation.navigate(Routes.PERSONAL_PROFILE)}>{Translation.BUTTON.GOTO_SETUP} &gt;</Text>
 						</Text>
 					</View>}
+
+					{!details.hasBusinessBank && (
+						<View style={styles.alertView}>
+							<AntDesign
+								name='exclamationcircleo'
+								size={18}
+								style={styles.alertIcon}
+							/>
+							<Text style={styles.alertText}>
+								{Translation.BANK_ACCOUNT.ACCOUNT_ALERT} &nbsp;
+								<Text
+									style={styles.alertIcon}
+									onPress={() => setIsDwollaVisible(true)}>
+									{Translation.BANK_ACCOUNT.ACCOUNT_LINK_TEXT}{' '}
+									&gt;
+								</Text>
+							</Text>
+						</View>
+					)}
 
 					<View style={styles.filterView}>
 						<View style={styles.filterInput}>
@@ -277,7 +334,7 @@ const MerchantDashboard = (): JSX.Element => {
 					<MerchantTransactionList data={merchantTransactions} onSelect={viewDetail} />
 				</View>
 			</ScrollView>
-			<TouchableOpacity onPress={()=>navigation.navigate(Routes.MERCHANT_QRCODE_SCAN)} style={styles.scanButton}>
+			<TouchableOpacity onPress={() => details.hasBusinessBank ? navigation.navigate(Routes.MERCHANT_QRCODE_SCAN) : setIsPayment(true)} style={styles.scanButton}>
 				<Image
 					source={require('../../../assets/images/qr_code_merchant.png')}
 					containerStyle={styles.qrIcon}
@@ -285,6 +342,26 @@ const MerchantDashboard = (): JSX.Element => {
 				<Text style={styles.scanBtnText}>{Translation.BUTTON.RECEIVE_OR_SCAN}</Text>
 			</TouchableOpacity>
 			{isDetailViewOpen && <TransactionDetail visible={isDetailViewOpen} data={selectedItem} onConfirm={onConfirm} />}
+			{isDwollaVisible && (
+				<DwollaDialog visible={isDwollaVisible} onClose={onClose} />
+			)}
+			{(isPayment) && (
+				<Dialog visible={isPayment} onClose={onClose} backgroundStyle={styles.dialog}>
+					<View style={dialogViewBase}>
+						<View style={styles.dialogWrap}>
+							<Text style={styles.dialogHeader}>{Translation.PAYMENT.PAYMENT_NO_BANK_TITLE}</Text>
+							<Text style={styles.mainTextColor}>{Translation.PAYMENT.PAYMENT_NO_BANK_DETAIL}</Text>
+						</View>
+						<View style={styles.dialogBottom}>
+							<Button
+								type={BUTTON_TYPES.PURPLE}
+								title={Translation.BUTTON.LINK_BANK}
+								onPress={selectBank}
+							/>
+						</View>
+					</View>
+				</Dialog>
+			)}
 		</View>
 	);
 }
