@@ -1,5 +1,6 @@
 import useCachedResources from "./useCachedResources";
 import useCameraPermission from "./useCameraPermission";
+import useBrightness from "./useBrightness";
 import useDialogStatus from "./useDialogStatus";
 import useMediaLibraryPermission from "./useMediaLibraryPermission";
 import useMessages from "./useMessages";
@@ -26,8 +27,9 @@ export {
 	useShares,
 	useTransaction,
 	useUserDetails,
+	useCameraPermission,
+	useBrightness,
 	usePersonalWallet,
 	useBusinessWallet,
-	useCameraPermission,
 	useBanks
 };

@@ -240,6 +240,8 @@ const DrawerContent = (
 							label="Cash out to USD"
 							onPress={() => details.hasPersonalBank ? props.navigation.navigate(Routes.CASHOUT_AMOUNT) : setIsBankDialog(true)}
 						/>
+					</Drawer.Section>
+					<Drawer.Section>
 						<DrawerItem
 							label="My Transactions"
 							onPress={() => {
@@ -248,8 +250,6 @@ const DrawerContent = (
 								);
 							}}
 						/>
-					</Drawer.Section>
-					<Drawer.Section>
 						<DrawerItem
 							label="Where to spend"
 							onPress={() => {

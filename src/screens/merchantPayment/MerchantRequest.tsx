@@ -59,21 +59,14 @@ const styles = StyleSheet.create({
 const MerchantRequest = (): JSX.Element => {
 	const navigation = useNavigation();
 	const [state, setState] = useState<AmountState>({
-		amount: "1",
-		costs: "1"
+		amount: "",
+		costs: ""
 	});
 	const [goNext, setGoNext] = useState<boolean>(false);
 	const [isVisible, setIsVisible] = useState<boolean>(false);
 
 	useEffect(() => {
-		isVisible && setTimeout(() => {
-			setIsVisible(false);
-			navigation.navigate(Routes.MERCHANT_PAYMENT_SUCCESS);
-		}, 2000);
-	}, [isVisible]);
-
-	useEffect(() => {
-		setGoNext(state.costs !== "");
+		setGoNext(Number(state.costs) > 0);
 	}, [state]);
 
 	const onValueChange = (name: string, change: string) => {
@@ -139,7 +132,7 @@ const MerchantRequest = (): JSX.Element => {
 					/>
 				</View>
 			</KeyboardAvoidingView>
-			{ isVisible && <MerchantQRCodeGen visible={isVisible} onClose={onClose} amount={state.amount} /> }
+			{ isVisible && <MerchantQRCodeGen visible={isVisible} onClose={onClose} amount={Number(state.amount)} /> }
 		</View>
 	);
 }
