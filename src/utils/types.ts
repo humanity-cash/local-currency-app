@@ -369,6 +369,16 @@ export interface FaqData extends AccordionEntry {
   type?: string
 }
 
+export enum PaymentMode {
+  OPEN_AMOUNT = 'open',
+  SELECT_AMOUNT = "select"
+}
+
+export interface QRCodeEntry {
+  to: string,
+  amount: number,
+  mode: PaymentMode
+}
 export interface EnvData {
   coreApiUrl: string
 }

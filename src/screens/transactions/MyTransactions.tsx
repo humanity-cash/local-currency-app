@@ -228,7 +228,7 @@ const MyTransactions = (): JSX.Element => {
 			</TouchableOpacity>
 
 			{isDetailViewOpen && <TransactionDetail visible={isDetailViewOpen} data={selectedItem} onReturn={onReturn} onConfirm={onConfirm} />}
-			{isReturnViewOpen && <QRCodeGen visible={isReturnViewOpen} onClose={onConfirm} isOpenAmount={true} amount={"10"} /> }
+			{isReturnViewOpen && <QRCodeGen visible={isReturnViewOpen} onClose={onConfirm} isOpenAmount={true} amount={Number(selectedItem.amount)} /> }
 		</View>
 	);
 }
