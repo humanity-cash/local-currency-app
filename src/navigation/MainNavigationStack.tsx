@@ -39,21 +39,18 @@ import MerchantSettingsBankAccount from "src/screens/merchantSettings/MerchantSe
 import MerchantSettingsStaticQr from "src/screens/merchantSettings/MerchantSettingsStaticQr";
 import MerchantSettingsTermsAndConditions from "src/screens/merchantSettings/MerchantSettingsTermsAndConditions";
 import MerchantSettingsSecurity from "src/screens/merchantSettings/MerchantSettingsSecurity";
-import BankLinkSuccess from "src/screens/onboarding/BankLinkSuccess";
 import ConfirmEmail from "src/screens/onboarding/ConfirmEmail";
 import CreateAccount from "src/screens/onboarding/CreateAccount";
 import EmailConfirmed from "src/screens/onboarding/EmailConfirmed";
 import LinkBankAccount from "src/screens/onboarding/LinkBankAccount";
 import LoadUp from "src/screens/onboarding/LoadUp";
 import LoadUpSuccess from "src/screens/onboarding/LoadUpSuccess";
-import LoginToBank from "src/screens/onboarding/LoginToBank";
 import Password from "src/screens/onboarding/Password";
 import PersonalAddress from "src/screens/onboarding/PersonalAddress";
 import PersonalDetails from "src/screens/onboarding/PersonalDetails";
 import PersonalProfile from "src/screens/onboarding/PersonalProfile";
 import SelectAccountType from "src/screens/onboarding/SelectAccountType";
 import SelectBank from "src/screens/onboarding/SelectBank";
-import SelectBankAccount from "src/screens/onboarding/SelectBankAccount";
 import Teaser from "src/screens/onboarding/Teaser";
 import TermsEmail from "src/screens/onboarding/TermsEmail";
 import Verification from "src/screens/onboarding/Verification";
@@ -188,6 +185,14 @@ const PrimaryStackScreen = () => {
 						name={Routes.SETTING_DELETE_ACCOUNT}
 						component={SettingsDeleteAccount}
 					/>
+					<PrimaryStack.Screen
+						name={Routes.LINK_BANK_ACCOUNT}
+						component={LinkBankAccount}
+					/>
+					<PrimaryStack.Screen
+						name={Routes.SELECT_BANK}
+						component={SelectBank}
+					/>
 					{!completedBusinessVerification && (
 						<PrimaryStack.Screen
 							name={Routes.SIGNUP_BUSINESS}
@@ -305,10 +310,10 @@ const PrimaryStackScreen = () => {
 						name={Routes.MERCHANT_REDEMPTION_IN_PROGRESS}
 						component={MerchantRedemptionInProgress}
 					/>
-					{/* <PrimaryStack.Screen
-						name="SelectMerchantBank"
+					<PrimaryStack.Screen
+						name={Routes.MERCHANT_BANK_ACCOUNT}
 						component={MerchantBankAccountNavigator}
-					/> */}
+					/>
 					<PrimaryStack.Screen
 						name={Routes.REPORT_SUCCESS}
 						component={ReportSuccess}
@@ -347,26 +352,6 @@ const PrimaryStackScreen = () => {
 								name={Routes.PERSONAL_ADDRESS}
 								component={PersonalAddress}
 							/>
-							<PrimaryStack.Screen
-								name={Routes.LINK_BANK_ACCOUNT}
-								component={LinkBankAccount}
-							/>
-							<PrimaryStack.Screen
-								name={Routes.SELECT_BANK}
-								component={SelectBank}
-							/>
-							<PrimaryStack.Screen
-								name={Routes.LOGIN_BANK}
-								component={LoginToBank}
-							/>
-							<PrimaryStack.Screen
-								name={Routes.SELECT_BANK_ACCOUNT}
-								component={SelectBankAccount}
-							/>
-							<PrimaryStack.Screen
-								name={Routes.BANK_LINK_SUCCESS}
-								component={BankLinkSuccess}
-							/>
 						</>
 					)}
 				</>
@@ -399,24 +384,8 @@ const PrimaryStackScreen = () => {
 						component={SelectBank}
 					/>
 					<PrimaryStack.Screen
-						name={Routes.LOGIN_BANK}
-						component={LoginToBank}
-					/>
-					<PrimaryStack.Screen
-						name={Routes.SELECT_BANK_ACCOUNT}
-						component={SelectBankAccount}
-					/>
-					<PrimaryStack.Screen
-						name={Routes.BANK_LINK_SUCCESS}
-						component={BankLinkSuccess}
-					/>
-					<PrimaryStack.Screen
 						name={Routes.SIGNUP_BUSINESS}
 						component={SignupBusinessNavigator}
-					/>
-					<PrimaryStack.Screen
-						name={Routes.MERCHANT_BANK_ACCOUNT}
-						component={MerchantBankAccountNavigator}
 					/>
 				</>
 			) : (

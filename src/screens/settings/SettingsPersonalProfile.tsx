@@ -59,8 +59,9 @@ const styles = StyleSheet.create({
 export const SettingsPersonalDetails = (): JSX.Element => {
 	const { userAttributes } = useContext(AuthContext);
 	const navigation = useNavigation();
-	const [state, setState] = useState({
+	const [state, setState] = useState<PersonalProfileState>({
 		avatar: '',
+		username: ''
 	});
 
 	const username =  userAttributes['custom:personal.tag']

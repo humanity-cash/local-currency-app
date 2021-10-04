@@ -176,6 +176,8 @@
     "LOAD_UP": {
         "TITLE": "Load up B$",
         "LOAD_UP_BERKSHARES": "Load up BerkShares",
+        "LOAD_UP_NO_BANK_TITLE": "Whoooops. You have to link your bank account first",
+        "LOAD_UP_NO_BANK_DETAIL": "Before you can Load up B$ you have to link your bank account first.",
         "LOAD_UP_DETAIL": "Specify the amount of BerkShares (B$1 = USD 1) you would like to load up.",
         "TOTAL_COSTS": "Total costs",
         "LOAD_UP_SUCCESS": "Congratulations! You have topped up",
@@ -228,7 +230,9 @@
         "SCAN_RECIPIENTS_QR_DETAIL": "The customer needs to generate QR code via the inital transaction in their transactioin overview. There they generate a QR code which needs to be scanned by you.",
         "SCAN_TO_PAY_REQUEST": "Scan to Pay or Request",
         "CHOOSE_ROUND_UP": "choose to round up and directly donate to the Community Chest Fund which provides scholarships & grants to people in the area.",
-        "NOT_REFUNABLE_DONATION": "*THE ROUND UP IS A NON REFUNABLE DONATION."
+        "NOT_REFUNABLE_DONATION": "*THE ROUND UP IS A NON REFUNABLE DONATION.",
+        "PAYMENT_NO_BANK_TITLE": "Whoooops. You cannot make a payment yet.",
+        "PAYMENT_NO_BANK_DETAIL": "First link your bank account and load up B$ to make sute you have enough B$ for your purchasement."
     },
     "OTHER": {
         "SETTING": "Setting",

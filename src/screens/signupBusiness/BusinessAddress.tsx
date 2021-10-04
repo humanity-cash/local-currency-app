@@ -17,6 +17,8 @@ import {
 	wrappingContainerBase
 } from "src/theme/elements";
 import Translation from "src/translation/en.json";
+import { IUserRequest } from 'src/api/types';
+import { UserAPI } from 'src/api';
 
 const styles = StyleSheet.create({
 	headerText: {
@@ -53,13 +55,42 @@ const styles = StyleSheet.create({
 });
 
 const BusinessAddress = (): ReactElement => {
-	const { completeBusniessBasicVerification, signOut } = useContext(AuthContext);
+	const {
+		buisnessBasicVerification,
+		completeBusniessBasicVerification,
+		signOut,
+		cognitoId,
+		completeBusinessDwollaInfo
+	} = useContext(AuthContext);
 	const navigation = useNavigation();
 	const onNextPress = async () => {
 		const response: BaseResponse<string | undefined> =
 			await completeBusniessBasicVerification();
-		if (response.success) {
-			navigation.navigate(Routes.BUSINESS_WELCOME);
+		if (response.success && cognitoId) {
+			const request: IUserRequest = {
+				firstName: buisnessBasicVerification.owner?.firstName,
+				lastName: buisnessBasicVerification.owner?.lastName,
+				businessName: buisnessBasicVerification.tag,
+				email: cognitoId + "@humanity.cash",
+				address1: buisnessBasicVerification.address1,
+				address2: buisnessBasicVerification.address2,
+				city: buisnessBasicVerification.city,
+				state: buisnessBasicVerification.state,
+				postalCode: buisnessBasicVerification.postalCode,
+				authUserId: "m_" + cognitoId
+			};
+
+			const resApi = await UserAPI.user(request);
+			console.log("==> resApi", resApi);
+
+			if (resApi.data) {
+				await completeBusinessDwollaInfo({
+					dwollaId: resApi.data.userId,
+					resourceUri: ""
+				});
+
+				navigation.navigate(Routes.BUSINESS_WELCOME);
+			}
 		}
 	};
 
