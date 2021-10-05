@@ -7,6 +7,19 @@ export interface CognitoSharedUserAttributes {
 	'custom:consent'?: string
 }
 
+/**CustomerUpdate */
+export interface CognitoCustomerAttributesUpdate {
+	'custom:personal.avatar'?: string,
+	'custom:personal.tag': string,
+	'custom:personal.address1'?: string,
+	'custom:personal.address2'?: string,
+	'custom:personal.city'?: string,
+	'custom:personal.state'?: string,
+	'custom:personal.postalCode'?: string,
+	'custom:personal.firstName'?: string
+	'custom:personal.lastName'?: string
+}
+
 /**Customer */
 export interface CognitoCustomerAttributes {
 	'custom:personal.avatar': string,
@@ -18,6 +31,21 @@ export interface CognitoCustomerAttributes {
 	'custom:personal.postalCode': string,
 	'custom:personal.firstName': string,
 	'custom:personal.lastName': string
+}
+
+/**Business Update*/
+export interface CognitoBusinessUpdateAttributes {
+	"custom:business.story"?: string,
+	"custom:business.tag"?: string,
+	"custom:business.avatar"?: string,
+	"custom:business.type"?: string,
+	"custom:business.industry"?: string,
+	"custom:business.address1"?: string,
+	"custom:business.address2"?: string,
+	"custom:business.city"?: string,
+	"custom:business.state"?: string,
+	"custom:business.postalCode"?: string,
+	"custom:business.phoneNumber"?: string,
 }
 
 /**Business */
@@ -58,6 +86,7 @@ export type CognitoError = any
 
 export type BaseResponse<T> = { user?: CognitoUser | null, success: boolean, data: { error: string } | T }
 
+export const CognitoResponse = Promise
 export type CognitoResponse<T> = Promise<BaseResponse<T>>
 
 export interface StartForgotPasswordInput {

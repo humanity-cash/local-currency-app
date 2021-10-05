@@ -1,17 +1,14 @@
 import { useNavigation } from "@react-navigation/native";
-import React, { ReactElement, useEffect, useState } from "react";
+import React, { useContext } from "react";
 import {
   KeyboardAvoidingView, Platform, ScrollView, StyleSheet, View
 } from "react-native";
 import { Text } from "react-native-elements";
-import { useUserDetails } from "src/hooks";
-import { BlockInput, Button, CancelBtn, Header, BackBtn } from "src/shared/uielements";
-import { viewBase, baseHeader } from "src/theme/elements";
-
-type ForgotPasswordEmailProps = {
-  navigation?: any;
-  route?: any;
-};
+import { AuthContext } from 'src/auth';
+import { ForgotPassword } from "src/auth/types";
+import { BackBtn, BlockInput, Button, CancelBtn, Header } from "src/shared/uielements";
+import { baseHeader, viewBase } from "src/theme/elements";
+import { isEmailValid } from "src/utils/validation";
 
 const styles = StyleSheet.create({
   container: { 
@@ -31,69 +28,65 @@ const styles = StyleSheet.create({
 	},
 });
 
-const ForgotPasswordEmailView = (props: ForgotPasswordEmailProps) => {
-  const { personalDetails, updatePersonalDetails } = useUserDetails();
-  const [email, setEmail] = useState<string>("");
-  const [goNext, setGoNext] = useState(false);
-
-  useEffect(() => {
-    setGoNext(email !== "");
-  }, [email]);
-
-  useEffect(() => {
-    setEmail(personalDetails.email);
-  }, [personalDetails]);
+const ForgotPasswordEmail = (): React.ReactElement => {
+  const { forgotPasswordDetails, setForgotPasswordDetails, startForgotPasswordFlow } = useContext(AuthContext)
+  const navigation = useNavigation();
 
   const onValueChange = (name: string, change: string) => {
-    setEmail(change)
-    updatePersonalDetails({ email: change });
+    setForgotPasswordDetails((pv: ForgotPassword) => ({ ...pv, email: change }));
   };
 
+  const handleNext = async () => {
+    const response = await startForgotPasswordFlow();
+    if(response.success) {
+      /**Email exist and a verification code was sent */
+      navigation.navigate("ForgotPasswordVerification")
+    }
+  }
+
   return (
-    <View style={viewBase}>
-      <Header
-				leftComponent={<BackBtn onClick={() => props.navigation.goBack()} />}
-				rightComponent={<CancelBtn text="Close" onClick={() => props.navigation.navigate('Login')} />}
+		<View style={viewBase}>
+			<Header
+				leftComponent={<BackBtn onClick={() => navigation.goBack()} />}
+				rightComponent={
+					<CancelBtn
+						text="Close"
+						onClick={() => navigation.navigate("Login")}
+					/>
+				}
 			/>
 
-      <ScrollView style={styles.container}>
-        <View style={ baseHeader }>
+			<ScrollView style={styles.container}>
+				<View style={baseHeader}>
 					<Text style={styles.modalHeader}>Forgot password</Text>
 				</View>
-        <Text style={styles.modalDescription}>
-          Enter phone number of the account you would like to change the
-          passcode of.
-        </Text>
-        <Text h3>EMAIL ADDRESS</Text>
-        <View>
-          <BlockInput
-            placeholder="Email"
-            name="email"
-            value={email}
-            onChange={onValueChange}
-          />
-        </View>
-      </ScrollView>
-      <KeyboardAvoidingView
-        behavior={Platform.OS == "ios" ? "padding" : "height"}
-      >
-        <View style={styles.bottomView}>
-          <Button
-            type="darkGreen"
-            title="NEXT"
-            disabled={!goNext}
-            onPress={() =>
-              props.navigation.navigate("ForgotPasswordVerification")
-            }
-          />
-        </View>
-      </KeyboardAvoidingView>
-    </View>
+				<Text style={styles.modalDescription}>
+					Enter phone number of the account you would like to change
+					the passcode of.
+				</Text>
+				<Text h3>EMAIL ADDRESS</Text>
+				<View>
+					<BlockInput
+						placeholder="Email"
+						name="email"
+						value={forgotPasswordDetails.email}
+						onChange={onValueChange}
+					/>
+				</View>
+			</ScrollView>
+			<KeyboardAvoidingView
+				behavior={Platform.OS == "ios" ? "padding" : "height"}>
+				<View style={styles.bottomView}>
+					<Button
+						type="darkGreen"
+						title="NEXT"
+						disabled={!isEmailValid(forgotPasswordDetails.email)}
+						onPress={handleNext}
+					/>
+				</View>
+			</KeyboardAvoidingView>
+		</View>
   );
 };
 
-const ForgotPasswordEmail = (props: ForgotPasswordEmailProps): ReactElement => {
-  const navigation = useNavigation();
-  return <ForgotPasswordEmailView navigation={navigation} {...props} />;
-};
 export default ForgotPasswordEmail;

@@ -5,16 +5,7 @@ import {
 } from "amazon-cognito-identity-js";
 import React, { useEffect, useState } from "react";
 import { userController } from "./cognito";
-import { 
-	BaseResponse, 
-	CognitoBusinessAttributes, 
-	CognitoCustomerAttributes, 
-	CognitoResponse, 
-	CognitoSharedUserAttributes, 
-	CompleteForgotPasswordInput, 
-	StartForgotPasswordInput, 
-	ChangePasswordInput 
-} from "./cognito/types";
+import { BaseResponse, CognitoResponse, ChangePasswordInput } from "./cognito/types";
 import {
 	buisnessBasicVerificationInitialState,
 	customerBasicVerificationInitialState,
@@ -23,9 +14,11 @@ import {
 	signUpInitialState
 } from "./consts";
 import {
+	AccountUpdate,
 	AuthStatus,
 	BusinessBasicVerification,
 	CustomerBasicVerification,
+	ForgotPassword,
 	DwollaInfo,
 	defaultState,
 	IAuth, UserType
@@ -64,8 +57,14 @@ const getLatestSelectedAccountType = async () => {
 const AuthProvider: React.FunctionComponent = ({ children }) => {
 	const [userType, setUserType] = useState<UserType | undefined>(undefined);
 	const [authStatus, setAuthStatus] = useState(AuthStatus.SignedOut);
+	const [update, setUpdate] = useState(false);
 	const [signInDetails, setSignInDetails] = useState(signInInitialState);
 	const [signUpDetails, setSignUpDetails] = useState(signUpInitialState);
+	const [forgotPasswordDetails, setForgotPasswordDetails] = useState<ForgotPassword>({
+		email: "esraa@keyko.io",
+		verificationCode: "",
+		newPassword: "",
+	});
 	const [userAttributes, setUserAttributes] = useState<any>({});
 	const [completedCustomerVerification, setCompletedCustomerVerification] = useState<boolean>(false);
 	const [completedBusinessVerification, setCompletedBusinessVerification] = useState<boolean>(false);
@@ -120,7 +119,7 @@ const AuthProvider: React.FunctionComponent = ({ children }) => {
 		}
 	};
 
-	async function getSessionInfo() {
+	const getSessionInfo = async () => {
 		try {
 			const response: BaseResponse<CognitoUserSession | undefined> =
 				await userController.getSession();
@@ -136,8 +135,31 @@ const AuthProvider: React.FunctionComponent = ({ children }) => {
 	}
 
 	useEffect(() => {
+		if(update){  
+			getSessionInfo(); 
+			setUpdate(false);
+		}
+	}, [update]);
+
+	useEffect(() => {
 		getSessionInfo();
 	}, [authStatus, userType]);
+
+	useEffect(() => {
+		const initialTypeState = async () => {
+			const latestType = await getLatestSelectedAccountType();
+			if (!latestType) {
+				updateUserType(UserType.Customer);
+			} else if (latestType === "2") {
+				updateUserType(UserType.Business);
+			} else if (latestType === "0") {
+				updateUserType(UserType.Customer);
+			} else if (latestType === "1") {
+				updateUserType(UserType.Business);
+			}
+		};
+		initialTypeState();
+	}, []);
 
 	const emailVerification = (verificationCode: string) =>
 		userController.confirmEmailVerificationCode(
@@ -150,7 +172,7 @@ const AuthProvider: React.FunctionComponent = ({ children }) => {
 
 	const signUp = async () => {
 		const response = await userController.signUp(
-			signUpDetails.email,
+			signUpDetails.email.toLowerCase(),
 			signUpDetails.password
 		);
 		if (!response?.success) setAuthStatus(AuthStatus.SignedOut);
@@ -173,22 +195,6 @@ const AuthProvider: React.FunctionComponent = ({ children }) => {
 
 		return response;
 	};
-
-	useEffect(() => {
-		const initialTypeState = async () => {
-			const latestType = await getLatestSelectedAccountType();
-			if (!latestType) {
-				updateUserType(UserType.Customer);
-			} else if (latestType === "2") {
-				updateUserType(UserType.Business);
-			} else if (latestType === "0") {
-				updateUserType(UserType.Customer);
-			} else if (latestType === "1") {
-				updateUserType(UserType.Business);
-			}
-		};
-		initialTypeState();
-	}, []);
 
 	const getAttributes = async (): CognitoResponse<
 		CognitoUserAttribute[] | undefined
@@ -213,12 +219,12 @@ const AuthProvider: React.FunctionComponent = ({ children }) => {
 		const response = await userController.completeBusinessBasicVerification(
 			update
 		);
+    console.log("🚀 ~ file: index.tsx ~ line 200 ~ response", response)
 		if (response.success) {
 			await userController.updateUserAttributes({
 				"custom:basicBusinessV": "true",
 			});
 		}
-
 		return response;
 	};
 
@@ -235,6 +241,14 @@ const AuthProvider: React.FunctionComponent = ({ children }) => {
 		return response;
 	};
 
+	const startForgotPasswordFlow = async (): Promise<BaseResponse<unknown>> => {
+		const { email } = forgotPasswordDetails;
+		const response: BaseResponse<unknown> =
+			await userController.startForgotPasswordFlow({ email });
+
+		return response;
+	};
+	
 	const completeCustomerDwollaInfo = async (
 		update = customerDwollaInfo
 	): CognitoResponse<string | undefined> => {
@@ -245,9 +259,17 @@ const AuthProvider: React.FunctionComponent = ({ children }) => {
 		return response;
 	};
 
-	const startForgotPasswordFlow = async (i: StartForgotPasswordInput) => {
-		const { email } = i;
-		const response: BaseResponse<unknown> = await userController.startForgotPasswordFlow({ email });
+	const completeForgotPasswordFlow = async (): Promise<
+		BaseResponse<unknown>
+	> => {
+		const { email, newPassword, verificationCode } = forgotPasswordDetails;
+	
+		const response: BaseResponse<unknown> =
+			await userController.completeForgotPasswordFlow({
+				email,
+				verificationCode,
+				newPassword,
+			});
 
 		return response;
 	};
@@ -258,20 +280,6 @@ const AuthProvider: React.FunctionComponent = ({ children }) => {
 		const response = await userController.updateBusinessDowllaData({
 			"custom:business.dwollaId": update.dwollaId,
 		});
-
-		return response;
-	};
-	
-	const completeForgotPasswordFlow = async (
-		i: CompleteForgotPasswordInput
-	) => {
-		const { email, verificationCode, newPassword } = i;
-		const response: BaseResponse<unknown> =
-			await userController.completeForgotPasswordFlow({
-				email,
-				verificationCode,
-				newPassword,
-			});
 
 		return response;
 	};
@@ -290,12 +298,11 @@ const AuthProvider: React.FunctionComponent = ({ children }) => {
 	};
 
 	const updateAttributes = async (
-		update:
-			| CognitoBusinessAttributes
-			| CognitoCustomerAttributes
-			| CognitoSharedUserAttributes
-	) => {
-		const response = await userController.updateUserAttributes(update);
+		update: AccountUpdate
+	): Promise<BaseResponse<string | undefined>> => {
+		const response: BaseResponse<string | undefined> =
+			await userController.updateUserAttributes(update);
+		setUpdate(true);
 		return response;
 	};
 
@@ -309,6 +316,8 @@ const AuthProvider: React.FunctionComponent = ({ children }) => {
 
 	const state: IAuth = {
 		userType,
+		forgotPasswordDetails, 
+		setForgotPasswordDetails,
 		userAttributes,
 		updateAttributes,
 		authStatus,
