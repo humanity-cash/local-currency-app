@@ -1,5 +1,14 @@
 import { CognitoUser, CognitoUserAttribute } from "amazon-cognito-identity-js";
-import { BaseResponse, CognitoBusinessAttributes, CognitoBusinessUpdateAttributes, CognitoCustomerAttributes, CognitoCustomerAttributesUpdate, CognitoSharedUserAttributes } from 'src/auth/cognito/types';
+import { 
+	BaseResponse, 
+	CognitoBusinessAttributes, 
+	CognitoBusinessUpdateAttributes, 
+	CognitoCustomerAttributes, 
+	CognitoCustomerAttributesUpdate, 
+	CognitoSharedUserAttributes, 
+	CognitoResponse
+} from 'src/auth/cognito/types';
+import { Dispatch, SetStateAction } from "react";
 
 export interface CustomerBasicVerification {
 	avatar: string
@@ -11,7 +20,9 @@ export interface CustomerBasicVerification {
 	postalCode: string
 	firstName: string
 	lastName: string
-	type: string
+	type: string,
+	dwollaId?: string,
+	resourceUri?: string,
 };
 
 export type AccountUpdate = CognitoCustomerAttributesUpdate | CognitoBusinessUpdateAttributes | CognitoSharedUserAttributes
@@ -40,7 +51,14 @@ export interface BusinessBasicVerification {
 	state: string,
 	postalCode: string,
 	phoneNumber?: string,
+	dwollaId?: string,
+	resourceUri?: string,
 }
+
+export interface DwollaInfo {
+	dwollaId: string,
+	resourceUri: string,
+};
 
 /**Shared Update attributes input between Customer and Business */
 export interface UpdateUserAttributesInput {
@@ -101,6 +119,9 @@ export interface IAuth {
 	completeBusniessBasicVerification?: any,
 	completedCustomerVerification: boolean,
 	completedBusinessVerification: boolean,
+	cognitoId?: string,
+	customerDwollaId?: string,
+	businessDwollaId?: string,
 	userAttributes?: any,
 	completeCustomerBasicVerification?: any,
 	updateAttributes: (update: AccountUpdate) => Promise<BaseResponse<string | undefined>>;
@@ -123,7 +144,12 @@ export interface IAuth {
 	setCustomerBasicVerificationDetails?: any;
 	customerBasicVerificationDetails?: any;
 	buisnessBasicVerification?: any,
-	setBuisnessBasicVerification?: any
+	setBuisnessBasicVerification?: any,
+	setCustomerDwollaInfo?: Dispatch<SetStateAction<DwollaInfo>>,
+	completeCustomerDwollaInfo?: (update: DwollaInfo) => CognitoResponse<string | undefined>,
+	setBusinessDwollaInfo?: Dispatch<SetStateAction<DwollaInfo>>,
+	completeBusinessDwollaInfo?: (update: DwollaInfo) => CognitoResponse<string | undefined>,
+	changePassword?: any
 }
 
 //@ts-ignore

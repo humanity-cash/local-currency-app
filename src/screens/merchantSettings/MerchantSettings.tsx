@@ -76,7 +76,7 @@ export const MerchantSettings = (): JSX.Element => {
 	return (
 		<View style={viewBaseB}>
 			<Header
-				leftComponent={<BackBtn onClick={() => navigation.goBack()} color={colors.purple} />}
+				leftComponent={<BackBtn text="Home" onClick={() => navigation.goBack()} color={colors.purple} />}
 			/>
 			<ScrollView style={styles.container}>
 				<View style={ underlineHeaderB }>

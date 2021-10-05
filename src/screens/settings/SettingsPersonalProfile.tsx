@@ -61,7 +61,6 @@ export const SettingsPersonalDetails = (): JSX.Element => {
 		username
 	});
 
-
 	useEffect(() => {
 		(async () => {
 		  if (Platform.OS !== 'web') {

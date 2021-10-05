@@ -1,4 +1,4 @@
-import React, {ReactElement, useState} from 'react';
+import React, { useState } from 'react';
 import { StyleSheet, View, ScrollView } from 'react-native';
 import { Text, Image } from 'react-native-elements';
 import { Modal, ModalHeader, Header, CancelBtn, BackBtn } from "src/shared/uielements";
@@ -7,11 +7,7 @@ import { colors } from "src/theme/colors";
 import list from "src/mocks/merchants";
 import { MerchantCategory, MerchantEntry } from "src/utils/types";
 import { TouchableOpacity } from 'react-native-gesture-handler';
-
-type MerchantDictionaryProps = {
-	navigation?: any,
-	route?: any,
-}
+import { useNavigation } from '@react-navigation/core';
 
 type CategoryViewProps = {
 	category: MerchantCategory,
@@ -137,7 +133,8 @@ const CategoryView = (props: CategoryViewProps) => {
 	)
 }
 
-const MerchantDictionary = (props: MerchantDictionaryProps): ReactElement => {
+const MerchantDictionary = (): JSX.Element => {
+	const navigation = useNavigation();
 	const [isVisible, setIsVisible] = useState<boolean>(false);
 	const [selected, setSelected] = useState<MerchantEntry>({
 		title: "",
@@ -169,8 +166,7 @@ const MerchantDictionary = (props: MerchantDictionaryProps): ReactElement => {
 	return (
 		<View style={viewBase}>
 			<Header
-				leftComponent={<BackBtn onClick={() => props.navigation.goBack()} />}
-				rightComponent={<CancelBtn text={"Close"} onClick={() => props.navigation.goBack()} />}
+				leftComponent={<BackBtn text="Home" onClick={() => navigation.goBack()} />}
 			/>
 			<ScrollView style={wrappingContainerBase}>
 				<View style={ underlineHeader }>

@@ -17,6 +17,7 @@ export type AuthorizationDetails = {
   pin: string;
   pinInput: string;
   touchID: boolean;
+  cashierView: boolean;
 };
 
 export type PersonalDetails = {
@@ -146,17 +147,11 @@ export type WithdrawPaymentDetails = {
 };
 
 export type Wallet = {
-  amount: number;
-  reservationAmount: number;
-  transactions: Transaction[];
-  reservations: Transaction[];
-  minimum: WalletMinimum;
-  details: WalletDetails;
-};
-
-export type WalletDetails = {
-  walletId: string;
-  iban: string;
+  totalBalance: number;
+  availableBalance: number;
+  userId: string;
+  address: string;
+  createdBlock: string;
 };
 
 export type Route = {
@@ -372,4 +367,24 @@ export interface AccordionEntry {
 
 export interface FaqData extends AccordionEntry {
   type?: string
+}
+
+export enum PaymentMode {
+  OPEN_AMOUNT = 'open',
+  SELECT_AMOUNT = "select"
+}
+
+export interface QRCodeEntry {
+  to: string,
+  amount: number,
+  mode: PaymentMode
+}
+export interface EnvData {
+  coreApiUrl: string
+}
+
+export enum ToastType {
+  SUCCESS = "success",
+  ERROR = "error",
+  INFO = "info"
 }

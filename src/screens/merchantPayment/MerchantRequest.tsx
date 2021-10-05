@@ -2,7 +2,7 @@ import React, {useState, useEffect} from 'react';
 import { StyleSheet, View, KeyboardAvoidingView, ScrollView, Platform } from 'react-native';
 import { useNavigation } from '@react-navigation/core';
 import { Text } from 'react-native-elements';
-import { Header, Button, CancelBtn, BackBtn, BorderedInput, ToggleButton } from "src/shared/uielements";
+import { Header, Button, CancelBtn, BorderedInput, ToggleButton } from "src/shared/uielements";
 import { baseHeader, viewBaseB, wrappingContainerBase } from "src/theme/elements";
 import { colors } from "src/theme/colors";
 import MerchantQRCodeGen from "./MerchantQRCodeGen";
@@ -59,21 +59,14 @@ const styles = StyleSheet.create({
 const MerchantRequest = (): JSX.Element => {
 	const navigation = useNavigation();
 	const [state, setState] = useState<AmountState>({
-		amount: "1",
-		costs: "1"
+		amount: "",
+		costs: ""
 	});
 	const [goNext, setGoNext] = useState<boolean>(false);
 	const [isVisible, setIsVisible] = useState<boolean>(false);
 
 	useEffect(() => {
-		isVisible && setTimeout(() => {
-			setIsVisible(false);
-			navigation.navigate(Routes.MERCHANT_PAYMENT_SUCCESS);
-		}, 2000);
-	}, [isVisible]);
-
-	useEffect(() => {
-		setGoNext(state.costs !== "");
+		setGoNext(Number(state.costs) > 0);
 	}, [state]);
 
 	const onValueChange = (name: string, change: string) => {
@@ -96,7 +89,6 @@ const MerchantRequest = (): JSX.Element => {
 	return (
 		<View style={viewBaseB}>
 			<Header
-				leftComponent={<BackBtn color={colors.purple} onClick={() => navigation.goBack()} />}
 				rightComponent={<CancelBtn color={colors.purple} text={Translation.BUTTON.CLOSE} onClick={() => navigation.navigate(Routes.MERCHANT_DASHBOARD)} />}
 			/>
 			<ScrollView style={wrappingContainerBase}>
@@ -140,7 +132,7 @@ const MerchantRequest = (): JSX.Element => {
 					/>
 				</View>
 			</KeyboardAvoidingView>
-			{ isVisible && <MerchantQRCodeGen visible={isVisible} onClose={onClose} amount={state.amount} /> }
+			{ isVisible && <MerchantQRCodeGen visible={isVisible} onClose={onClose} amount={Number(state.amount)} /> }
 		</View>
 	);
 }

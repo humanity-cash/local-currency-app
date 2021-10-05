@@ -28,6 +28,7 @@ export const SETTING_BANK_ACCOUNT = "SettingsBankAccount";
 export const SETTING_SECURITY = "SettingsSecurity";
 export const SETTING_TERMS_CONDITIONS = "SettingsTermsAndConditions";
 export const PAYMENT_SUCCESS = "PaymentSuccess";
+export const PAYMENT_FAILED = "PaymentFailed";
 export const PAYMENT_REQUEST = "PaymentRequest";
 export const PAYMENT_PENDING = "PaymentPending";
 export const PASSWORD = 'Password';
