@@ -1,11 +1,14 @@
 import { useNavigation } from "@react-navigation/native";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import {
     KeyboardAvoidingView,
-    Platform, ScrollView, StyleSheet, View
+    Platform, ScrollView,
+    StyleSheet,
+    View,
+    TouchableOpacity
 } from "react-native";
 import { Text } from "react-native-elements";
-import { TouchableOpacity } from "react-native-gesture-handler";
+import { AuthContext } from 'src/auth';
 import { usePaymentDetails } from "src/hooks";
 import { BackBtn, BorderedInput, Button, Header, CancelBtn } from "src/shared/uielements";
 import { colors } from "src/theme/colors";
@@ -17,6 +20,9 @@ import {
 import Translation from 'src/translation/en.json';
 import * as Routes from 'src/navigation/constants';
 import { BUTTON_TYPES } from 'src/constants';
+import { UserAPI } from 'src/api';
+import { showToast } from 'src/utils/common';
+import { ToastType } from 'src/utils/types';
 
 const styles = StyleSheet.create({
   container: { 
@@ -79,8 +85,12 @@ const styles = StyleSheet.create({
 	},
 });
 
+const MAX_AMOUNT = 2000;
+const MIN_AMOUNT = 1;
+
 const LoadUp = (): JSX.Element => {
   const navigation = useNavigation();
+  const { customerDwollaId } = useContext(AuthContext);
   const {update} = usePaymentDetails();
   const [amount, setAmount] = useState<string>("");
   const [goNext, setGoNext] = useState(false);
@@ -90,13 +100,32 @@ const LoadUp = (): JSX.Element => {
   }, []);
 
   useEffect(() => {
-    setGoNext(Number(amount) > 0);
+    setGoNext(Number(amount) >= MIN_AMOUNT && Number(amount) <= MAX_AMOUNT);
   }, [amount]);
 
   const onValueChange = (name: string, change: string) => {
     setAmount(change);
     update({ amount: change });
   };
+
+  const onLoadUp = async () => {
+    if (!customerDwollaId) {
+      showToast(ToastType.ERROR, "Whoops, something went wrong.", "Connection failed.");
+      return;
+    }
+
+    const response = await UserAPI.deposit(
+      customerDwollaId,
+      {amount: amount}
+    );
+
+    if (response.data) {
+      navigation.navigate(Routes.LOADUP_SUCCESS);
+    } else {
+      showToast(ToastType.ERROR, "Whoops, something went wrong.", "Connection failed.");
+      navigation.navigate(Routes.DASHBOARD);
+    }
+  }
 
   return (
     <View style={viewBase}>
@@ -171,12 +200,7 @@ const LoadUp = (): JSX.Element => {
             type={BUTTON_TYPES.DARK_GREEN}
             title={Translation.BUTTON.LOAD_UP}
             disabled={!goNext}
-            onPress={() => {
-              if (parseFloat(amount) > 2000) {
-                return;
-              }
-              navigation.navigate(Routes.LOADUP_SUCCESS);
-            }}
+            onPress={onLoadUp}
           />
         </View>
       </KeyboardAvoidingView>

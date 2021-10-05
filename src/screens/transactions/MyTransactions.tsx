@@ -185,7 +185,7 @@ const MyTransactions = (): JSX.Element => {
 	return (
 		<View style={viewBase}>
 			<Header
-				leftComponent={<BackBtn onClick={() => navigation.goBack()} />}
+				leftComponent={<BackBtn text="Home" onClick={() => navigation.goBack()} />}
 			/>
 			<ScrollView style={wrappingContainerBase}>
 				<View style={styles.content}>
@@ -228,7 +228,7 @@ const MyTransactions = (): JSX.Element => {
 			</TouchableOpacity>
 
 			{isDetailViewOpen && <TransactionDetail visible={isDetailViewOpen} data={selectedItem} onReturn={onReturn} onConfirm={onConfirm} />}
-			{isReturnViewOpen && <QRCodeGen visible={isReturnViewOpen} onClose={onConfirm} isOpenAmount={true} amount={"10"} /> }
+			{isReturnViewOpen && <QRCodeGen visible={isReturnViewOpen} onClose={onConfirm} isOpenAmount={true} amount={Number(selectedItem.amount)} /> }
 		</View>
 	);
 }

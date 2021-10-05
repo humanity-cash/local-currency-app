@@ -19,8 +19,8 @@ const styles = StyleSheet.create({
 		padding: 20,
 		paddingBottom: 45
 	},
-	bodyText: {
-		color: colors.bodyText
+	errorText: {
+		color: colors.errorText
 	}
 });
 
@@ -33,17 +33,16 @@ const PaymentSuccess = (): JSX.Element => {
 			/>
 			<ScrollView style={wrappingContainerBase}>
 				<View style={ baseHeader }>
-					<Text style={styles.headerText}>{Translation.COMMON.SUCCEEDED}</Text>
-					<Text style={styles.headerText}>{Translation.COMMON.THANK_YOU}</Text>
+					<Text style={styles.headerText}>{Translation.PAYMENT.WRONG}</Text>
 				</View>
-				<Text style={styles.bodyText}>Your receipt can be found in your transaction overview.</Text>
+				<Text style={styles.errorText}>Connection failed</Text>
 			</ScrollView>
 			<KeyboardAvoidingView
 				behavior={Platform.OS == "ios" ? "padding" : "height"} >
 				<View style={styles.bottomView}>
 					<Button
 						type={BUTTON_TYPES.DARK_GREEN}
-						title={Translation.BUTTON.CLOSE}
+						title={Translation.BUTTON.TRY_AGAIN}
 						onPress={() => navigation.navigate(Routes.DASHBOARD)}
 					/>
 				</View>

@@ -1,6 +1,6 @@
+import { CognitoCustomerAttributes, CognitoBusinessAttributes, CognitoSharedUserAttributes, CognitoBusinessDwollaAttributes, CognitoCustomerDwollaAttributes } from './types';
 import { CognitoUserAttribute } from 'amazon-cognito-identity-js';
 import { AccountUpdate, BusinessBasicVerification, CustomerBasicVerification } from '../types';
-import { CognitoBusinessAttributes, CognitoCustomerAttributes } from './types';
 
 export const buildCompleteBusinessVerificationObject = (
 	update: BusinessBasicVerification
@@ -53,7 +53,14 @@ export const buildSignUpAttributeList = (email: string): CognitoUserAttribute[] 
 	return [attributeEmail];
 }
 
-export const buildUpdateUserAttributes = (update: AccountUpdate): CognitoUserAttribute[] => {
+export const buildUpdateUserAttributes = (
+	update: CognitoCustomerAttributes | 
+			CognitoBusinessAttributes | 
+			CognitoSharedUserAttributes | 
+			CognitoBusinessDwollaAttributes | 
+			CognitoCustomerDwollaAttributes | 
+			AccountUpdate
+): CognitoUserAttribute[] => {
 	if (!Object?.keys(update)?.length) return [];
 	return Object.keys(update).map((name: string) =>
 		//@ts-ignore

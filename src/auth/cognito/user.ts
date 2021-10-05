@@ -4,8 +4,15 @@
  * communicate directly with AWS.
  */
 import { AuthenticationDetails, CognitoUser, CognitoUserAttribute, CognitoUserPool, CognitoUserSession, ISignUpResult } from 'amazon-cognito-identity-js';
-import { CognitoResponse, CompleteForgotPasswordInput, StartForgotPasswordInput } from 'src/auth/cognito/types';
 import { AccountUpdate, BusinessBasicVerification, CustomerBasicVerification } from 'src/auth/types';
+import { 
+	CognitoBusinessDwollaAttributes,
+	CognitoCustomerDwollaAttributes,
+	CognitoResponse,
+	CompleteForgotPasswordInput,
+	StartForgotPasswordInput,
+	ChangePasswordInput
+} from 'src/auth/cognito/types';
 import { SignInInput } from '../types';
 import * as Core from './core';
 import * as Utils from './utils';
@@ -114,6 +121,20 @@ export const updateUserAttributes = async (update: AccountUpdate)
 	return response;
 };
 
+export const updateCustomerDowllaData = async (update: CognitoCustomerDwollaAttributes): CognitoResponse<string | undefined> => {
+	const attributesList = Utils.buildUpdateUserAttributes(update);
+	const response = await Core.updateUserAttributes(currentUser, attributesList);
+
+	return response;
+}
+
+export const updateBusinessDowllaData = async (update: CognitoBusinessDwollaAttributes): CognitoResponse<string | undefined> => {
+	const attributesList = Utils.buildUpdateUserAttributes(update);
+	const response = await Core.updateUserAttributes(currentUser, attributesList);
+
+	return response;
+}
+
 /**Completes basic customer verifications */
 export const completeCustomerBasicVerification = async (data: CustomerBasicVerification)
 	: CognitoResponse<string | undefined> => {
@@ -131,3 +152,13 @@ export const completeBusinessBasicVerification = async (data: BusinessBasicVerif
 
 	return response;
 }
+
+export const changePassword = async ({ oldPassword, newPassword }: ChangePasswordInput): CognitoResponse<unknown> => {
+	const sessionResponse = await getSession();
+	if (sessionResponse?.success) {
+		const response = await Core.changePassword(currentUser, oldPassword, newPassword);
+		return response;
+	}
+
+	return sessionResponse;
+};

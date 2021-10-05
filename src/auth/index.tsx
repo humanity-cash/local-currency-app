@@ -5,10 +5,11 @@ import {
 } from "amazon-cognito-identity-js";
 import React, { useEffect, useState } from "react";
 import { userController } from "./cognito";
-import { BaseResponse, CognitoResponse } from "./cognito/types";
+import { BaseResponse, CognitoResponse, ChangePasswordInput } from "./cognito/types";
 import {
 	buisnessBasicVerificationInitialState,
 	customerBasicVerificationInitialState,
+	dwollaInfoInitialState,
 	signInInitialState,
 	signUpInitialState
 } from "./consts";
@@ -17,7 +18,10 @@ import {
 	AuthStatus,
 	BusinessBasicVerification,
 	CustomerBasicVerification,
-	defaultState, ForgotPassword, IAuth, UserType
+	ForgotPassword,
+	DwollaInfo,
+	defaultState,
+	IAuth, UserType
 } from "./types";
 
 export const AuthContext = React.createContext(defaultState);
@@ -64,14 +68,21 @@ const AuthProvider: React.FunctionComponent = ({ children }) => {
 	const [userAttributes, setUserAttributes] = useState<any>({});
 	const [completedCustomerVerification, setCompletedCustomerVerification] = useState<boolean>(false);
 	const [completedBusinessVerification, setCompletedBusinessVerification] = useState<boolean>(false);
+	const [cognitoId, setCognitoId] = useState<string>("");
+	const [customerDwollaId, setCustomerDwollaId] = useState<string>("");
+	const [businessDwollaId, setBusinessDwollaId] = useState<string>("");
 
 	useEffect(() => {
 		const isVerifiedCustomer =
 			userAttributes?.["custom:basicCustomerV"] === "true";
 		const isVerifiedBusiness =
 			userAttributes?.["custom:basicBusinessV"] === "true";
+		
 		setCompletedCustomerVerification(isVerifiedCustomer);
 		setCompletedBusinessVerification(isVerifiedBusiness);
+		setCognitoId(userAttributes?.["sub"]);
+		setCustomerDwollaId(userAttributes?.["custom:personal.dwollaId"]);
+		setBusinessDwollaId(userAttributes?.["custom:business.dwollaId"]);
 	}, [userAttributes, authStatus, userType]);
 
 	const [
@@ -84,6 +95,16 @@ const AuthProvider: React.FunctionComponent = ({ children }) => {
 	const [buisnessBasicVerification, setBuisnessBasicVerification] =
 		useState<BusinessBasicVerification>(
 			buisnessBasicVerificationInitialState
+		);
+
+	const [customerDwollaInfo, setCustomerDwollaInfo] =
+		useState<DwollaInfo>(
+			dwollaInfoInitialState
+		);
+
+	const [businessDwollaInfo, setBusinessDwollaInfo] =
+		useState<DwollaInfo>(
+			dwollaInfoInitialState
 		);
 
 	const updateUserType = (newType: UserType): void => {
@@ -227,15 +248,49 @@ const AuthProvider: React.FunctionComponent = ({ children }) => {
 
 		return response;
 	};
+	
+	const completeCustomerDwollaInfo = async (
+		update = customerDwollaInfo
+	): CognitoResponse<string | undefined> => {
+		const response = await userController.updateCustomerDowllaData({
+			"custom:personal.dwollaId": update.dwollaId,
+		});
+
+		return response;
+	};
 
 	const completeForgotPasswordFlow = async (): Promise<
 		BaseResponse<unknown>
 	> => {
 		const { email, newPassword, verificationCode } = forgotPasswordDetails;
+	
 		const response: BaseResponse<unknown> =
 			await userController.completeForgotPasswordFlow({
 				email,
 				verificationCode,
+				newPassword,
+			});
+
+		return response;
+	};
+
+	const completeBusinessDwollaInfo = async (
+		update = businessDwollaInfo
+	): CognitoResponse<string | undefined> => {
+		const response = await userController.updateBusinessDowllaData({
+			"custom:business.dwollaId": update.dwollaId,
+		});
+
+		return response;
+	};
+
+	const changePassword = async (
+		i: ChangePasswordInput
+	) => {
+		const { oldPassword, newPassword } = i;
+		const response: BaseResponse<unknown> =
+			await userController.changePassword({
+				oldPassword,
 				newPassword,
 			});
 
@@ -268,6 +323,9 @@ const AuthProvider: React.FunctionComponent = ({ children }) => {
 		authStatus,
 		completedCustomerVerification,
 		completedBusinessVerification,
+		cognitoId,
+		customerDwollaId,
+		businessDwollaId,
 		signIn,
 		setAuthStatus,
 		signOut,
@@ -287,6 +345,11 @@ const AuthProvider: React.FunctionComponent = ({ children }) => {
 		startForgotPasswordFlow,
 		completeForgotPasswordFlow,
 		resendEmailVerificationCode,
+		setCustomerDwollaInfo,
+		completeCustomerDwollaInfo,
+		setBusinessDwollaInfo,
+		completeBusinessDwollaInfo,
+		changePassword,
 	};
 
 	return (

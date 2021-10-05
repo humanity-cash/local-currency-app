@@ -4,7 +4,7 @@ import { KeyboardAvoidingView, Platform, ScrollView, StyleSheet, View } from "re
 import { Text } from "react-native-elements";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { usePaymentDetails } from "src/hooks";
-import { BackBtn, BorderedInput, Button, Header, CancelBtn } from "src/shared/uielements";
+import { BorderedInput, Button, Header, CancelBtn } from "src/shared/uielements";
 import { colors } from "src/theme/colors";
 import { underlineHeaderB, viewBaseB, wrappingContainerBase } from "src/theme/elements";
 import Translation from 'src/translation/en.json';
@@ -107,7 +107,6 @@ const MerchantLoadup = (): JSX.Element => {
   return (
     <View style={viewBaseB}>
       <Header
-        leftComponent={<BackBtn color={colors.purple} onClick={() => navigation.goBack()} />}
         rightComponent={<CancelBtn color={colors.purple} text={Translation.BUTTON.CLOSE} onClick={() => navigation.navigate(Routes.MERCHANT_DASHBOARD)}/>}
       />
 
