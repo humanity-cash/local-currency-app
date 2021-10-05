@@ -43,8 +43,6 @@ const PersonalProfile = (): ReactElement => {
 					<Text style={styles.headerText}>{Translation.PROFILE.SETUP_PROFILE}</Text>
 				</View>
 				<PersonalProfileForm
-					// isValid={setGoNext}
-					// showValidation={isShowValidation}
 				/>
 			</ScrollView>
 			<KeyboardAvoidingView

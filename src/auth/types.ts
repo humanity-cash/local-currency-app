@@ -1,6 +1,14 @@
 import { CognitoUser, CognitoUserAttribute } from "amazon-cognito-identity-js";
+import { 
+	BaseResponse, 
+	CognitoBusinessAttributes, 
+	CognitoBusinessUpdateAttributes, 
+	CognitoCustomerAttributes, 
+	CognitoCustomerAttributesUpdate, 
+	CognitoSharedUserAttributes, 
+	CognitoResponse
+} from 'src/auth/cognito/types';
 import { Dispatch, SetStateAction } from "react";
-import { CognitoBusinessAttributes, CognitoCustomerAttributes, CognitoResponse } from 'src/auth/cognito/types';
 
 export interface CustomerBasicVerification {
 	avatar: string
@@ -16,6 +24,8 @@ export interface CustomerBasicVerification {
 	dwollaId?: string,
 	resourceUri?: string,
 };
+
+export type AccountUpdate = CognitoCustomerAttributesUpdate | CognitoBusinessUpdateAttributes | CognitoSharedUserAttributes
 
 export interface BusinessBasicVerification {
 	story: string,
@@ -92,12 +102,20 @@ export interface Session {
 	refreshToken?: string;
 }
 
+export interface ForgotPassword {
+	email: string,
+	verificationCode: string,
+	newPassword: string
+}
+
 export interface IAuth {
-	userType?: any,
+	forgotPasswordDetails: ForgotPassword, 
+	setForgotPasswordDetails?: any,
+	userType?: UserType | undefined,
 	updateUserType?: any,
 	setAuthStatus?: any,
-	startForgotPasswordFlow?: any,
-	completeForgotPasswordFlow?: any,
+	startForgotPasswordFlow: () => Promise<BaseResponse<unknown>>,
+	completeForgotPasswordFlow: () => Promise<BaseResponse<unknown>>,
 	completeBusniessBasicVerification?: any,
 	completedCustomerVerification: boolean,
 	completedBusinessVerification: boolean,
@@ -106,7 +124,7 @@ export interface IAuth {
 	businessDwollaId?: string,
 	userAttributes?: any,
 	completeCustomerBasicVerification?: any,
-	updateAttributes?: any;
+	updateAttributes: (update: AccountUpdate) => Promise<BaseResponse<string | undefined>>;
 	sessionInfo?: Session;
 	resendEmailVerificationCode?: any;
 	authStatus?: AuthStatus;
@@ -134,6 +152,7 @@ export interface IAuth {
 	changePassword?: any
 }
 
+//@ts-ignore
 export const defaultState: IAuth = {
 	completedCustomerVerification: false,
 	completedBusinessVerification: false,

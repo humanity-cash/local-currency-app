@@ -1,16 +1,10 @@
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/core';
 import React, { useEffect, useState } from 'react';
 import { KeyboardAvoidingView, Platform, StyleSheet, TouchableOpacity, View } from 'react-native';
 import { Text } from 'react-native-elements';
 import { useUserDetails } from "src/hooks";
 import { BackBtn, Header, NextBtn } from "src/shared/uielements";
 import { baseHeader, viewBase, wrappingContainerBase } from "src/theme/elements";
-
-
-type ConfirmEmailProps = {
-	navigation?: any
-	route?: any
-}
 
 const styles = StyleSheet.create({
 	codeView: {
@@ -26,7 +20,8 @@ const styles = StyleSheet.create({
 	}
 });
 
-const ConfirmEmailView = (props: ConfirmEmailProps) => {
+const ConfirmEmail = (): React.ReactElement => {
+	const navigation = useNavigation();
 	const [noCodeReceived, setNoCodeReceived] = useState(false);
 	const { personalDetails: { email, emailVerified }, updatePersonalDetails } = useUserDetails();
 
@@ -44,14 +39,14 @@ const ConfirmEmailView = (props: ConfirmEmailProps) => {
 
 	useEffect(() => {
 		if (emailVerified) {
-			props.navigation.navigate("EmailConfirmed");
+			navigation.navigate("EmailConfirmed");
 		}
 	}, [emailVerified]);
 	return (
 		<View style={viewBase}>
 			<Header
-				leftComponent={<BackBtn onClick={() => props.navigation.goBack()} />}
-				rightComponent={<NextBtn text="Skip" onClick={() => props.navigation.navigate('OnboardingSteps', { step: 4 })} />}
+				leftComponent={<BackBtn onClick={() => navigation.goBack()} />}
+				rightComponent={<NextBtn text="Skip" onClick={() => navigation.navigate('OnboardingSteps', { step: 4 })} />}
 			/>
 
 			<View style={{ ...wrappingContainerBase, flex: 1 }}>
@@ -81,7 +76,7 @@ const ConfirmEmailView = (props: ConfirmEmailProps) => {
 					behavior={Platform.OS == "ios" ? "padding" : "height"}
 				>
 					<View style={styles.bottomView}>
-						<TouchableOpacity onPress={() => props.navigation.navigate('VerificationHelp')}>
+						<TouchableOpacity onPress={() => navigation.navigate('VerificationHelp')}>
 							<Text style={styles.bottomNavigation}>Need help?</Text>
 						</TouchableOpacity>
 					</View>
@@ -91,8 +86,4 @@ const ConfirmEmailView = (props: ConfirmEmailProps) => {
 	);
 }
 
-const ConfirmEmail = (props:ConfirmEmailProps) => {
-	const navigation = useNavigation();
-	return <ConfirmEmailView {...props} navigation={navigation} />;
-}
 export default ConfirmEmail

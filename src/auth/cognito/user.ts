@@ -4,11 +4,8 @@
  * communicate directly with AWS.
  */
 import { AuthenticationDetails, CognitoUser, CognitoUserAttribute, CognitoUserPool, CognitoUserSession, ISignUpResult } from 'amazon-cognito-identity-js';
-import { BusinessBasicVerification, CustomerBasicVerification } from 'src/auth/types';
+import { AccountUpdate, BusinessBasicVerification, CustomerBasicVerification } from 'src/auth/types';
 import { 
-	CognitoCustomerAttributes,
-	CognitoBusinessAttributes,
-	CognitoSharedUserAttributes,
 	CognitoBusinessDwollaAttributes,
 	CognitoCustomerDwollaAttributes,
 	CognitoResponse,
@@ -116,7 +113,7 @@ export const deleteUser = async (): CognitoResponse<string | undefined> => {
 };
 
 /**Update users properties we save in AWS */
-export const updateUserAttributes = async (update: CognitoBusinessAttributes | CognitoCustomerAttributes | CognitoSharedUserAttributes)
+export const updateUserAttributes = async (update: AccountUpdate)
 	: CognitoResponse<string | undefined> => {
 	const attributesList = Utils.buildUpdateUserAttributes(update);
 	const response = await Core.updateUserAttributes(currentUser, attributesList);

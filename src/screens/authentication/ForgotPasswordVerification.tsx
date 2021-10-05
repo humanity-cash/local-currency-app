@@ -1,81 +1,106 @@
-import { useNavigation } from '@react-navigation/native';
-import React, { ReactElement } from 'react';
-import { Keyboard, KeyboardAvoidingView, Platform, StyleSheet, TouchableOpacity, View } from 'react-native';
-import { Text } from 'react-native-elements';
-import { useUserDetails } from "src/hooks";
-import { BackBtn, CancelBtn, ConfirmationCode, Header } from "src/shared/uielements";
-import { baseHeader, viewBase, wrappingContainerBase } from "src/theme/elements";
-
-type ForgotPasswordVerificationProps = {
-	navigation?: any,
-	route?: any
-}
+import { useNavigation } from "@react-navigation/native";
+import React, { useContext } from "react";
+import {
+	Keyboard,
+	KeyboardAvoidingView,
+	Platform,
+	StyleSheet,
+	TouchableOpacity,
+	View
+} from "react-native";
+import { Text } from "react-native-elements";
+import { AuthContext } from "src/auth";
+import { ForgotPassword } from "src/auth/types";
+import {
+	BackBtn,
+	CancelBtn,
+	ConfirmationCode,
+	Header
+} from "src/shared/uielements";
+import {
+	baseHeader,
+	viewBase,
+	wrappingContainerBase
+} from "src/theme/elements";
 
 const styles = StyleSheet.create({
 	modalHeader: {
 		fontSize: 32,
-		fontWeight: '400',
-		lineHeight: 40
+		fontWeight: "400",
+		lineHeight: 40,
 	},
 	modalDescription: {
 		paddingBottom: 30,
 	},
 	bottomView: {
 		padding: 20,
-		paddingBottom: 45
+		paddingBottom: 45,
 	},
 	bottomNavigation: {
-		alignSelf: "center"
+		alignSelf: "center",
 	},
 	sendCodeBtn: {
-		marginBottom: 30
-	}
+		marginBottom: 30,
+	},
 });
 
-const VALID_CODE = '123456';
+const ForgotPasswordVerification = () => {
+	const navigation = useNavigation();
+	const {
+		forgotPasswordDetails: { email },
+		setForgotPasswordDetails,
+	} = useContext(AuthContext);
 
-const ForgotPasswordVerificationView = (props: ForgotPasswordVerificationProps) => {
-	const { personalDetails: { email } } = useUserDetails();
-
-	const onComplete = (text: string) => {
-		if (text === VALID_CODE) {
-			props.navigation.navigate('ForgotPasswordNewCode')
-			return;
-		}
-	}
+	const onComplete = async (text: string) => {
+		setForgotPasswordDetails((pv: ForgotPassword) => ({
+			...pv,
+			verificationCode: text,
+		}));
+		navigation.navigate("ForgotPasswordNewCode");
+		return;
+	};
 
 	return (
 		<View style={viewBase}>
 			<Header
-				leftComponent={<BackBtn onClick={() => props.navigation.goBack()} />}
-				rightComponent={<CancelBtn text="Close" onClick={() => props.navigation.navigate('Login')} />}
+				leftComponent={<BackBtn onClick={() => navigation.goBack()} />}
+				rightComponent={
+					<CancelBtn
+						text="Close"
+						onClick={() => navigation.navigate("Login")}
+					/>
+				}
 			/>
 			<View style={wrappingContainerBase}>
-				<View style={ baseHeader }>
-					<Text style={styles.modalHeader}>Verify your mail address</Text>
+				<View style={baseHeader}>
+					<Text style={styles.modalHeader}>
+						Verify your mail address
+					</Text>
 				</View>
 				<View style={styles.modalDescription}>
-					<Text>We have sent an email with a verification code to {email}.</Text>
+					<Text>
+						We have sent an email with a verification code to{" "}
+						{email}.
+					</Text>
 					<ConfirmationCode onComplete={onComplete} />
 				</View>
 			</View>
 			<KeyboardAvoidingView
-				behavior={Platform.OS == "ios" ? "padding" : "height"}
-			>
+				behavior={Platform.OS == "ios" ? "padding" : "height"}>
 				<View style={styles.bottomView}>
-					<TouchableOpacity style={styles.sendCodeBtn} onPress={() => {
-						Keyboard.dismiss();
-					}}>
-						<Text style={styles.bottomNavigation}>Send code again</Text>
+					<TouchableOpacity
+						style={styles.sendCodeBtn}
+						onPress={() => {
+							Keyboard.dismiss();
+						}}>
+						<Text style={styles.bottomNavigation}>
+							Send code again
+						</Text>
 					</TouchableOpacity>
 				</View>
 			</KeyboardAvoidingView>
 		</View>
 	);
-}
+};
 
-const ForgotPasswordVerification = (props:ForgotPasswordVerificationProps): ReactElement => {
-	const navigation = useNavigation();
-	return <ForgotPasswordVerificationView navigation={navigation} {...props} />;
-}
-export default ForgotPasswordVerification
+export default ForgotPasswordVerification;

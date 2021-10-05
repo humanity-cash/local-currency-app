@@ -1,63 +1,129 @@
-import { useNavigation } from '@react-navigation/native';
-import React, { useContext, useState } from 'react';
-import { ScrollView, StyleSheet, View, TouchableOpacity, TextInput, Dimensions } from "react-native";
-import { Text, Image } from "react-native-elements";
-import * as ImagePicker from 'expo-image-picker';
+import { AntDesign } from "@expo/vector-icons";
+import { useNavigation } from "@react-navigation/native";
+import * as ImagePicker from "expo-image-picker";
+import React, { useContext, useState } from "react";
+import {
+	Dimensions,
+	ScrollView,
+	StyleSheet,
+	TextInput,
+	TouchableOpacity,
+	View
+} from "react-native";
+import { Image, Text } from "react-native-elements";
+import SelectDropdown from "react-native-select-dropdown";
 import { AuthContext } from "src/auth";
-import { IAuth } from "src/auth/types";
+import { CognitoBusinessUpdateAttributes } from "src/auth/cognito/types";
+import { BUTTON_TYPES } from "src/constants";
 import { useMediaLibraryPermission } from "src/hooks";
-import { Header, BackBtn, BlockInput, BusinessAddressForm, Dialog, Button } from "src/shared/uielements";
+import countries from "src/mocks/countries";
+import * as Routes from "src/navigation/constants";
+import {
+	BackBtn,
+	BlockInput,
+	Button,
+	Dialog,
+	Header
+} from "src/shared/uielements";
 import { colors } from "src/theme/colors";
-import { viewBaseB, underlineHeaderB, dialogViewBase } from "src/theme/elements";
-import Translation from 'src/translation/en.json';
-import { BUTTON_TYPES } from 'src/constants';
-import * as Routes from 'src/navigation/constants';
+import {
+	dialogViewBase,
+	underlineHeaderB,
+	viewBaseB
+} from "src/theme/elements";
+import Translation from "src/translation/en.json";
+
+const businessAddressFormStyles = StyleSheet.create({
+	bodyText: {
+		color: colors.bodyText,
+	},
+	label: {
+		color: colors.bodyText,
+		fontSize: 10,
+	},
+	errorLabel: {
+		color: colors.bodyText,
+		fontSize: 10,
+		marginTop: 5,
+	},
+	inlineView: {
+		flex: 1,
+		flexDirection: "row",
+	},
+	cityView: {
+		width: "70%",
+	},
+	stateContent: {
+		width: "30%",
+	},
+	stateView: {
+		height: 55,
+		justifyContent: "center",
+		backgroundColor: colors.white,
+		borderRadius: 3,
+		marginTop: 8,
+		marginLeft: 4,
+	},
+	pickerText: {
+		color: colors.purple,
+	},
+	selectItem: {
+		width: "100%",
+		height: 55,
+		backgroundColor: colors.white,
+	},
+	dropdownContainer: { marginTop: -22 },
+	inputBg: {
+		color: colors.purple,
+		backgroundColor: colors.white,
+	},
+});
 
 const styles = StyleSheet.create({
-	container: { 
-		flex: 1, 
-		padding: 10 ,
+	container: {
+		flex: 1,
+		padding: 10,
 	},
 	headerText: {
 		fontSize: 32,
-		fontWeight: '400',
+		fontWeight: "400",
 		lineHeight: 40,
-		color: colors.purple
+		color: colors.purple,
 	},
 	contentView: {
 		marginTop: 50,
-		paddingBottom: 140
+		paddingBottom: 140,
 	},
 	bannerImageView: {
-		position: 'relative',
+		position: "relative",
 		borderRadius: 3,
 		backgroundColor: colors.white,
 		height: 220,
-		marginBottom: 60
+		marginBottom: 60,
 	},
 	bannerImage: {
-		width: '100%',
-		height: 220
+		width: "100%",
+		height: 220,
 	},
 	pickImageView: {
-		position: 'absolute',
+		position: "absolute",
 		bottom: -65,
-		left: (Dimensions.get('window').width / 2) - 40,
+		left: Dimensions.get("window").width / 2 - 40,
 		paddingTop: 30,
 		paddingBottom: 30,
-		justifyContent: 'center',
-		alignItems: 'center'
+		justifyContent: "center",
+		alignItems: "center",
 	},
 	label: {
-		color: colors.bodyText
+		color: colors.bodyText,
 	},
 	smallLabel: {
 		color: colors.bodyText,
-		fontSize: 10
+		fontSize: 10,
 	},
 	inputBg: {
 		color: colors.purple,
-		backgroundColor: colors.white
+		backgroundColor: colors.white,
 	},
 	storyText: {
 		backgroundColor: colors.white,
@@ -69,35 +135,35 @@ const styles = StyleSheet.create({
 		color: colors.purple,
 	},
 	imageView: {
-		width: 80, 
+		width: 80,
 		height: 80,
 		borderRadius: 40,
-		justifyContent: 'center',
-		alignItems: 'center'
+		justifyContent: "center",
+		alignItems: "center",
 	},
 	image: {
 		width: 80,
 		height: 80,
-		borderRadius: 40
+		borderRadius: 40,
 	},
 	scanButton: {
-		flexDirection: 'row',
-		justifyContent: 'center',
-		alignItems: 'center',
-		width: '90%',
+		flexDirection: "row",
+		justifyContent: "center",
+		alignItems: "center",
+		width: "90%",
 		height: 55,
-		position: 'absolute',
+		position: "absolute",
 		bottom: 45,
 		color: colors.white,
 		backgroundColor: colors.purple,
-		alignSelf: 'center',
-		borderRadius: 30
+		alignSelf: "center",
+		borderRadius: 30,
 	},
 	scanBtnText: {
-		color: colors.white
+		color: colors.white,
 	},
 	dialogBg: {
-		backgroundColor: colors.overlayPurple
+		backgroundColor: colors.overlayPurple,
 	},
 	dialogWrap: {
 		paddingHorizontal: 10,
@@ -109,36 +175,95 @@ const styles = StyleSheet.create({
 		lineHeight: 35,
 		marginTop: 20,
 		marginBottom: 10,
-		color: colors.purple
+		color: colors.purple,
 	},
 	dialogBottom: {
 		marginTop: 20,
-	}
+	},
 });
+
+enum BusinessUpdate {
+	Story = "custom:business.story",
+	Address1 = "custom:business.address1",
+	Address2 = "custom:business.address2",
+	PostalCode = "custom:business.postalCode",
+	Tag = "custom:business.tag",
+	State = "custom:business.state",
+	City = "custom:business.city",
+	PhoneNumber = "custom:business.phoneNumber",
+	Website = "custom:business.website",
+}
 
 export const MerchantSettingsProfile = (): JSX.Element => {
 	const navigation = useNavigation();
-
-	const { buisnessBasicVerification, setBuisnessBasicVerification } =
-		useContext(AuthContext);
+	const { userAttributes, updateAttributes } = useContext(AuthContext);
 	const [bannerImage, setBannerImage] = useState<string>("");
+	const [state, setState] = useState({
+		businessStory: userAttributes[BusinessUpdate.Story],
+		businessAddress1: userAttributes[BusinessUpdate.Address1],
+		businessAddress2: userAttributes[BusinessUpdate.Address2],
+		businessPostalCode: userAttributes[BusinessUpdate.PostalCode],
+		businessTag: userAttributes[BusinessUpdate.Tag],
+		businessState: userAttributes[BusinessUpdate.State],
+		businessCity: userAttributes[BusinessUpdate.City],
+		businessPhonenumber: userAttributes[BusinessUpdate.PhoneNumber],
+		businessWebsite: userAttributes[BusinessUpdate.Website],
+	});
 	const [isVisible, setIsVisible] = useState<boolean>(false);
 
-	useMediaLibraryPermission();
+	const handleSave = async () => {
 
-	const onValueChange = (name: string, change: string) => {
-		setBuisnessBasicVerification((pv: IAuth) => ({ ...pv, [name]: change }));
+		// Only add dirty inputs
+		const changedData: CognitoBusinessUpdateAttributes = {
+			...(state.businessStory !==
+				userAttributes[BusinessUpdate.Story] && {
+				"custom:business.story": state.businessStory,
+			}),
+			...(state.businessAddress1 !==
+				userAttributes[BusinessUpdate.Address1] && {
+				"custom:business.address1": state.businessAddress1,
+			}),
+			...(state.businessAddress2 !==
+				userAttributes[BusinessUpdate.Address2] && {
+				"custom:business.address2": state.businessAddress2,
+			}),
+			...(state.businessPostalCode !==
+				userAttributes[BusinessUpdate.PostalCode] && {
+				"custom:business.postalCode": state.businessPostalCode,
+			}),
+			...(state.businessTag !==
+				userAttributes[BusinessUpdate.Tag] && {
+				"custom:business.tag": state.businessTag,
+			}),
+			...(state.businessState !==
+				userAttributes[BusinessUpdate.State] && {
+				"custom:business.state": state.businessState,
+			}),
+			...(state.businessCity !==
+				userAttributes[BusinessUpdate.City] && {
+				"custom:business.city": state.businessCity,
+			}),
+			...(state.businessPhonenumber !==
+				userAttributes[BusinessUpdate.PhoneNumber] && {
+				"custom:business.phoneNumber": state.businessPhonenumber,
+			}),
+			...(state.businessWebsite !==
+				userAttributes[BusinessUpdate.Website] && {
+				"custom:business.website": state.businessWebsite,
+			}),
+		};
+
+    console.log("🚀 ~ file: MerchantSettingsProfile.tsx ~ line 257 ~ handleSave ~ changedData", changedData)
+		const response = await updateAttributes(changedData);
+    console.log("🚀  handleSave ~ response", response)
 	};
 
-	const handleSave = () => {
-		setIsVisible(false);
-		navigation.goBack();
-	}
+	useMediaLibraryPermission();
 
 	const handleBakcHome = () => {
 		setIsVisible(false);
 		navigation.navigate(Routes.MERCHANT_DASHBOARD);
-	}
+	};
 
 	const pickImage = async (name: string) => {
 		const result = await ImagePicker.launchImageLibraryAsync({
@@ -147,25 +272,34 @@ export const MerchantSettingsProfile = (): JSX.Element => {
 			aspect: [4, 3],
 			quality: 1,
 		});
-	
+
 		if (!result.cancelled) {
-			name === 'banner' ? setBannerImage(result.uri) : onValueChange('avatar', result.uri);
+			name === "banner" ? setBannerImage(result.uri) : null;
 		}
 	};
 
 	return (
 		<View style={viewBaseB}>
 			<Header
-				leftComponent={<BackBtn color={colors.purple} onClick={() => navigation.goBack()} />}
+				leftComponent={
+					<BackBtn
+						color={colors.purple}
+						onClick={() => navigation.goBack()}
+					/>
+				}
 			/>
 			<ScrollView style={styles.container}>
-				<View style={ underlineHeaderB }>
-					<Text style={styles.headerText}>{Translation.PROFILE.MY_PROFILE}</Text>
+				<View style={underlineHeaderB}>
+					<Text style={styles.headerText}>
+						{Translation.PROFILE.MY_PROFILE}
+					</Text>
 				</View>
-				<Text style={styles.label}>{Translation.COMMUNITY_CHEST.INFORMATION_SHARE}</Text>
+				<Text style={styles.label}>
+					{Translation.COMMUNITY_CHEST.INFORMATION_SHARE}
+				</Text>
 				<View style={styles.contentView}>
 					<View style={styles.bannerImageView}>
-						<TouchableOpacity onPress={()=>pickImage('banner')}>
+						<TouchableOpacity onPress={() => pickImage("banner")}>
 							{bannerImage === "" && (
 								<Image
 									source={require("../../../assets/images/profile-banner.png")}
@@ -181,8 +315,9 @@ export const MerchantSettingsProfile = (): JSX.Element => {
 						</TouchableOpacity>
 
 						<View style={styles.pickImageView}>
-							<TouchableOpacity onPress={()=>pickImage('avatar')}>
-								{buisnessBasicVerification.avatar === "" && (
+							<TouchableOpacity
+								onPress={() => pickImage("avatar")}>
+								{userAttributes.avatar === "" && (
 									<View style={styles.imageView}>
 										<Image
 											source={require("../../../assets/images/placeholder4.png")}
@@ -190,9 +325,9 @@ export const MerchantSettingsProfile = (): JSX.Element => {
 										/>
 									</View>
 								)}
-								{buisnessBasicVerification.avatar !== "" && (
+								{userAttributes.avatar !== "" && (
 									<Image
-										source={{ uri: buisnessBasicVerification.avatar }}
+										source={{ uri: userAttributes.avatar }}
 										style={styles.imageView}
 									/>
 								)}
@@ -206,48 +341,204 @@ export const MerchantSettingsProfile = (): JSX.Element => {
 						name="businessname"
 						placeholder="Business name"
 						placeholderTextColor={colors.greyedPurple}
-						value={buisnessBasicVerification.tag}
-						onChange={onValueChange}
+						value={state.businessTag}
+						onChange={(_: string, newValue: string) =>
+							setState((pv) => ({ ...pv, businessTag: newValue }))
+						}
 						style={styles.inputBg}
 					/>
-
 					<Text style={styles.smallLabel}>
 						TELL US YOUR STORY (50 WORDS MAX)
 					</Text>
 					<TextInput
 						placeholder="Tell the world about your business. What gives you joy as an entrepreneur? What do you love about the Berkshires?"
-						value={buisnessBasicVerification.story}
+						value={state.businessStory}
 						multiline={true}
-						onChangeText={(newValue) =>
-							onValueChange("story", newValue)
+						onChangeText={(newValue: string) =>
+							setState((pv) => ({
+								...pv,
+								businessStory: newValue,
+							}))
 						}
 						style={styles.storyText}
 						numberOfLines={4}
 					/>
 
-					<Text style={styles.smallLabel}>
-						WEBSITE - OPTIONAL
-					</Text>
+					<Text style={styles.smallLabel}>WEBSITE - OPTIONAL</Text>
 					<BlockInput
 						name="website"
 						placeholder="www.shop.com"
 						placeholderTextColor={colors.greyedPurple}
-						value={buisnessBasicVerification.website}
-						onChange={onValueChange}
+						value={state.businessWebsite}
+						onChange={(_: string, newValue: string) =>
+							setState((pv) => ({
+								...pv,
+								businessWebsite: newValue,
+							}))
+						}
 						style={styles.inputBg}
 					/>
 
-					<BusinessAddressForm  style={styles.inputBg} />
+					<View>
+						<Text style={businessAddressFormStyles.label}>
+							ADDRESS 1
+						</Text>
+						<BlockInput
+							name="addressLine"
+							placeholder="Street number, street name"
+							value={state.businessAddress1}
+							onChange={(_name: string, newValue: string) => {
+								setState((pv) => ({
+									...pv,
+									businessAddress1: newValue,
+								}));
+							}}
+							style={businessAddressFormStyles.inputBg}
+						/>
+						<Text style={businessAddressFormStyles.label}>
+							ADDRESS 2
+						</Text>
+						<BlockInput
+							name="addressLine2"
+							placeholder="Apt."
+							value={state.businessAddress2}
+							onChange={(_name: string, newValue: string) => {
+								setState((pv) => ({
+									...pv,
+									businessAddress2: newValue,
+								}));
+							}}
+							style={businessAddressFormStyles.inputBg}
+						/>
+
+						<View style={businessAddressFormStyles.inlineView}>
+							<View style={businessAddressFormStyles.cityView}>
+								<Text style={businessAddressFormStyles.label}>
+									CITY
+								</Text>
+								<BlockInput
+									name="city"
+									placeholder="City"
+									value={state.businessCity}
+									onChange={(
+										_name: string,
+										newValue: string
+									) => {
+										setState((pv) => ({
+											...pv,
+											businessCity: newValue,
+										}));
+									}}
+									style={businessAddressFormStyles.inputBg}
+								/>
+							</View>
+							<View
+								style={businessAddressFormStyles.stateContent}>
+								<Text style={businessAddressFormStyles.label}>
+									STATE
+								</Text>
+								<View
+									style={businessAddressFormStyles.stateView}>
+									<SelectDropdown
+										data={countries}
+										defaultValueByIndex={0}
+										onSelect={(selectedItem) => {
+											setState((pv) => ({
+												...pv,
+												businessState: selectedItem,
+											}));
+										}}
+										buttonTextAfterSelection={(
+											selectedItem
+										) => {
+											return selectedItem;
+										}}
+										rowTextForSelection={(item) => {
+											return item;
+										}}
+										buttonStyle={
+											businessAddressFormStyles.selectItem
+										}
+										buttonTextStyle={
+											businessAddressFormStyles.pickerText
+										}
+										rowStyle={
+											businessAddressFormStyles.selectItem
+										}
+										dropdownStyle={
+											businessAddressFormStyles.dropdownContainer
+										}
+										renderCustomizedRowChild={(item) => (
+											<Text
+												style={
+													businessAddressFormStyles.pickerText
+												}>
+												{item}
+											</Text>
+										)}
+										renderDropdownIcon={() => (
+											<AntDesign
+												name="down"
+												size={18}
+												color={colors.purple}
+											/>
+										)}
+									/>
+								</View>
+							</View>
+						</View>
+
+						<Text style={businessAddressFormStyles.label}>
+							POSTAL CODE
+						</Text>
+						<BlockInput
+							name="zipCode"
+							placeholder="00000"
+							keyboardType="number-pad"
+							value={state.businessPostalCode}
+							onChange={(_name: string, newValue: string) => {
+								setState((pv) => ({
+									...pv,
+									businessPostalCode: newValue,
+								}));
+							}}
+							style={businessAddressFormStyles.inputBg}
+						/>
+						<Text style={businessAddressFormStyles.label}>
+							PHONE NUMBER - OPTIONAL
+						</Text>
+						<BlockInput
+							name="phoneNumber"
+							placeholder="+00 0987 6543 21"
+							value={state.businessPhonenumber}
+							onChange={(_name: string, newValue: string) => {
+								setState((pv) => ({
+									...pv,
+									businessPhoneNumber: newValue,
+								}));
+							}}
+							style={businessAddressFormStyles.inputBg}
+						/>
+					</View>
 				</View>
 			</ScrollView>
-			<TouchableOpacity onPress={()=>setIsVisible(true)} style={styles.scanButton}>
-				<Text style={styles.scanBtnText}>{Translation.BUTTON.SAVE_CHANGE}</Text>
+			<TouchableOpacity
+				onPress={handleSave} 
+				style={styles.scanButton}>
+				<Text style={styles.scanBtnText}>
+					{Translation.BUTTON.SAVE_CHANGE}
+				</Text>
 			</TouchableOpacity>
 			{isVisible && (
-				<Dialog visible={isVisible} onClose={()=>setIsVisible(false)} backgroundStyle={styles.dialogBg}>
+				<Dialog
+					visible={isVisible}
+					onClose={() => setIsVisible(false)}
+					backgroundStyle={styles.dialogBg}>
 					<View style={dialogViewBase}>
 						<View style={styles.dialogWrap}>
-							<Text style={styles.dialogHeader}>{Translation.OTHER.CONFIRM_SAVE}</Text>
+							<Text style={styles.dialogHeader}>
+								{Translation.OTHER.CONFIRM_SAVE}
+							</Text>
 						</View>
 						<View style={styles.dialogBottom}>
 							<Button
@@ -267,6 +558,6 @@ export const MerchantSettingsProfile = (): JSX.Element => {
 			)}
 		</View>
 	);
-}
+};
 
 export default MerchantSettingsProfile;
