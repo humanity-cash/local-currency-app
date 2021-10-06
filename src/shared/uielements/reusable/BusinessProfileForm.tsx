@@ -41,6 +41,8 @@ const styles = StyleSheet.create({
 		marginVertical: 8,
 		borderWidth: 0,
 		color: colors.purple,
+		alignItems: 'flex-start',
+		textAlignVertical: 'top'
 	},
 	imageView: {
 		width: 80, 
