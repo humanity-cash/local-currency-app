@@ -65,6 +65,8 @@ const styles = StyleSheet.create({
 	feedView: {
 		backgroundColor: colors.card,
 		padding: 10,
+		marginVertical: 5,
+		borderRadius: 2
 	},
 	feedHeader: {
 		flexDirection: 'row',
@@ -128,12 +130,19 @@ const styles = StyleSheet.create({
 	}
 });
 
-const feedData = {
-	month: 'SEPTEMBER',
-	author: 'Dory & Ginger',
-	content:
-		'Our motto is Live and Give. We have treasures for your home and lifestyle, along with the perfect gift for that special someone or that occasion that begs for something unique.',
-};
+const feedData = [
+	{
+		month: 'SEPTEMBER',
+		author: 'Dory & Ginger',
+		content:
+			'Our motto is Live and Give. We have treasures for your home and lifestyle, along with the perfect gift for that special someone or that occasion that begs for something unique.',
+	}, {
+		month: 'SEPTEMBER',
+		author: 'The Mahican (Muh-he-ka-new)',
+		content:
+			'Native American clan lived in the territory that presently makes up Berkshire County.',
+	}
+];
 
 const Dashboard = (): JSX.Element => {
 	const navigation = useNavigation();
@@ -218,12 +227,25 @@ const Dashboard = (): JSX.Element => {
 					<View style={styles.feedView}>
 						<View style={styles.feedHeader}>
 							<Text h3>Merchant of the month</Text>
-							<Text h3>{feedData.month}</Text>
+							<Text h3>{feedData[0].month}</Text>
 						</View>
-						<Text h2>{feedData.author}</Text>
-						<Text style={styles.bodyText}>{feedData.content}</Text>
+						<Text h2>{feedData[0].author}</Text>
+						<Text style={styles.bodyText}>{feedData[0].content}</Text>
 						<Image
 							source={require('../../../assets/images/feed1.png')}
+							containerStyle={styles.image}
+						/>
+					</View>
+
+					<View style={styles.feedView}>
+						<View style={styles.feedHeader}>
+							<Text h3>Merchant of the month</Text>
+							<Text h3>{feedData[1].month}</Text>
+						</View>
+						<Text h2>{feedData[1].author}</Text>
+						<Text style={styles.bodyText}>{feedData[1].content}</Text>
+						<Image
+							source={require('../../../assets/images/feed2.png')}
 							containerStyle={styles.image}
 						/>
 					</View>
