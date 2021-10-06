@@ -101,6 +101,7 @@ const CreateAccount = (): JSX.Element => {
 						title="I've read and accept the Terms & Conditions and Privacy Policy"
 						textStyle={styles.checkboxView}
 						containerStyle={styles.checkboxContainer}
+						checkedColor={colors.darkGreen}
 						onPress={() => setSelection(!isSelected)}
 					/>
 					<Button
