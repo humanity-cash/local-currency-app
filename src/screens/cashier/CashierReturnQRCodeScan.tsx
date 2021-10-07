@@ -43,7 +43,6 @@ const CashierReturnQRCodeScan = (): JSX.Element => {
 	}, []);
 	
 	const handleBarCodeScanned = (data: HandleScaned) => {
-		console.log(data);
 		setIsScanned(true);
 		navigation.navigate(Routes.CASHIER_RETURN);
 	}

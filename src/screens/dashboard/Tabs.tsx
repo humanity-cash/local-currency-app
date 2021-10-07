@@ -222,7 +222,7 @@ const DrawerContent = (
 							</View>
 						)}
 					</View>
-					<Text style={styles.berkAmount}>B$ {wallet.totalBalance}</Text>
+					<Text style={styles.berkAmount}>B$ {wallet.availableBalance}</Text>
 					<Drawer.Section>
 						<DrawerItem
 							label="Scan to pay"
