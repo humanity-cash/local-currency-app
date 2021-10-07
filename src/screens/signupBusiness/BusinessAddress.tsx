@@ -81,7 +81,6 @@ const BusinessAddress = (): ReactElement => {
 			};
 
 			const resApi = await UserAPI.user(request);
-			console.log("==> resApi", resApi);
 
 			if (resApi.data) {
 				await completeBusinessDwollaInfo({

@@ -214,7 +214,7 @@ const MerchantDashboard = (): JSX.Element => {
 	const navigation = useNavigation();
 	const { completedCustomerVerification, businessDwollaId } = useContext(AuthContext);
 	const { wallet, getWallet } = useBusinessWallet();
-	const { details, getBankStatus } = useBanks();
+	const { hasBusinessBank, getBankStatus } = useBanks();
 	const [isFilterVisible, setIsFilterVisible] = useState<boolean>(false);
 	const [searchText, setSearchText] = useState<string>("");
 	const [isDetailViewOpen, setIsDetailViewOpen] = useState<boolean>(false);
@@ -232,7 +232,7 @@ const MerchantDashboard = (): JSX.Element => {
 			getBankStatus(businessDwollaId, true);
 			getWallet(businessDwollaId);
 		}
-	}, []);
+	}, [businessDwollaId]);
 
 	const onSearchChange = (name: string, change: string) => {
 		setSearchText(change);
@@ -279,7 +279,7 @@ const MerchantDashboard = (): JSX.Element => {
 						<Text style={styles.headerText}>{Translation.LANDING_PAGE.TITLE}</Text>
 					</View>
 					<View style={styles.amountView}>
-						<Text style={styles.text}>B$ {details.hasBusinessBank ? wallet.totalBalance : '-'}</Text>
+						<Text style={styles.text}>B$ {hasBusinessBank ? wallet.availableBalance : '-'}</Text>
 					</View>
 
 					{!completedCustomerVerification && <View style={styles.alertView}>
@@ -290,7 +290,7 @@ const MerchantDashboard = (): JSX.Element => {
 						</Text>
 					</View>}
 
-					{!details.hasBusinessBank && (
+					{!hasBusinessBank && (
 						<View style={styles.alertView}>
 							<AntDesign
 								name='exclamationcircleo'
@@ -334,7 +334,7 @@ const MerchantDashboard = (): JSX.Element => {
 					<MerchantTransactionList data={merchantTransactions} onSelect={viewDetail} />
 				</View>
 			</ScrollView>
-			<TouchableOpacity onPress={() => details.hasBusinessBank ? navigation.navigate(Routes.MERCHANT_QRCODE_SCAN) : setIsPayment(true)} style={styles.scanButton}>
+			<TouchableOpacity onPress={() => hasBusinessBank ? navigation.navigate(Routes.MERCHANT_QRCODE_SCAN) : setIsPayment(true)} style={styles.scanButton}>
 				<Image
 					source={require('../../../assets/images/qr_code_merchant.png')}
 					containerStyle={styles.qrIcon}

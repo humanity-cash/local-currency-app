@@ -282,7 +282,7 @@ const DrawerContent = (props: DrawerContentComponentProps) => {
 							</View>
 						)}
 					</View>
-					<Text style={styles.berkAmount}>B$ {wallet.totalBalance}</Text>
+					<Text style={styles.berkAmount}>B$ {wallet.availableBalance}</Text>
 					<Drawer.Section>
 						<DrawerItem
 							label={Translation.TABS.RECEIVE_PAYMENT}
