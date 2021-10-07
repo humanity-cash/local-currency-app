@@ -11,7 +11,10 @@ import { BarCodeScanner } from 'expo-barcode-scanner';
 import Translation from 'src/translation/en.json';
 import * as Routes from 'src/navigation/constants';
 import { BUTTON_TYPES } from 'src/constants';
-import { QRCodeEntry, PaymentMode } from 'src/utils/types';
+import { QRCodeEntry, PaymentMode, ToastType } from 'src/utils/types';
+import { UserAPI } from 'src/api';
+import { ITransactionRequest } from 'src/api/types';
+import { calcFee, showToast } from 'src/utils/common';
 
 type HandleScaned = {
 	type: string,
@@ -173,6 +176,7 @@ const PaymentConfirm = (props: PaymentConfirmProps) => {
 
 const MerchantQRCodeScan = (): JSX.Element => {
 	const navigation = useNavigation();
+	const { businessDwollaId } = useContext(AuthContext);
 	const hasPermission = useCameraPermission();
 	const [isScanned, setIsScanned] = useState<boolean>(false);
 	const [isPaymentDialogOpen, setIsPaymentDialogOpen] = useState<boolean>(false);
@@ -183,19 +187,38 @@ const MerchantQRCodeScan = (): JSX.Element => {
 	});
 
 	const handleBarCodeScanned = (data: HandleScaned) => {
-		setState(JSON.parse(data.data) as QRCodeEntry);
-		setIsScanned(true);
-		setIsPaymentDialogOpen(true);
+		try {
+			setState(JSON.parse(data.data) as QRCodeEntry);
+			setIsScanned(true);
+			setIsPaymentDialogOpen(true);
+		} catch (e) {
+			console.log("Something went wrong");
+		}
 	};
 
 	if (hasPermission === false) {
 		return <Text>No access to camera</Text>;
 	}
 
-	const onPayConfirm = () => {
+	const onPayConfirm = async () => {
 		setIsPaymentDialogOpen(false);
 		setIsScanned(false);
-		navigation.navigate(Routes.MERCHANT_PAYMENT_PENDING);
+		const amountCalcedFee = state.amount - calcFee(state.amount);
+
+		if (businessDwollaId) {
+			const request: ITransactionRequest = {
+				toUserId: businessDwollaId,
+				amount: amountCalcedFee.toString(),
+				comment: ''
+			};
+			const response = await UserAPI.transferTo(businessDwollaId, request);
+			if (response.data) {
+				navigation.navigate(Routes.MERCHANT_PAYMENT_SUCCESS);
+			} else {
+				showToast(ToastType.ERROR, "Failed", "Whooops, something went wrong.");
+				navigation.navigate(Routes.MERCHANT_DASHBOARD);
+			}
+		}
 	};
 
 	const onClose = () => {

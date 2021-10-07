@@ -212,8 +212,7 @@ const QRCodeScan = (): JSX.Element => {
 			setIsScanned(true);
 			setIsPaymentDialogOpen(true);
 		} catch (e) {
-			setIsScanned(false);
-			setIsPaymentDialogOpen(false);
+			console.log("Something went wrong");
 		}
 	}
 
