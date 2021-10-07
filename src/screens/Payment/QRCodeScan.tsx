@@ -212,7 +212,7 @@ const QRCodeScan = (): JSX.Element => {
 			setIsScanned(true);
 			setIsPaymentDialogOpen(true);
 		} catch (e) {
-			console.log("Something went wrong");
+			showToast(ToastType.ERROR, "Failed", "Whooops, something went wrong.");
 		}
 	}
 
