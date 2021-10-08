@@ -55,10 +55,10 @@ type QRCodeGenProps = {
 }
 
 const QRCodeGen = (props: QRCodeGenProps): JSX.Element => {
-    const { userAttributes } = useContext(AuthContext);
+    const { customerDwollaId, userAttributes } = useContext(AuthContext);
     const { hasPermission, setMaxBrightness, setDefaultBrightness} = useBrightness();
     const addressStr = JSON.stringify({
-        to: "",
+        to: customerDwollaId,
         amount: props.amount,
         mode: props.isOpenAmount ? PaymentMode.OPEN_AMOUNT : PaymentMode.SELECT_AMOUNT
     });

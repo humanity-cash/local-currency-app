@@ -374,7 +374,12 @@ export enum PaymentMode {
   SELECT_AMOUNT = "select"
 }
 
+export const SECURITY_ID = "berkShareSecurity";
+
 export interface QRCodeEntry {
+  securityId: string;
+  transactionId?: string;
+  transactionDate?: string;
   to: string,
   amount: number,
   mode: PaymentMode

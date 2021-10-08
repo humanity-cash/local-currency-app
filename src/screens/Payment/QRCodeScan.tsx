@@ -11,7 +11,7 @@ import { BarCodeScanner } from 'expo-barcode-scanner';
 import Translation from 'src/translation/en.json';
 import * as Routes from 'src/navigation/constants';
 import { BUTTON_TYPES } from 'src/constants';
-import { QRCodeEntry, PaymentMode, ToastType } from 'src/utils/types';
+import { QRCodeEntry, SECURITY_ID, PaymentMode, ToastType } from 'src/utils/types';
 import { UserAPI } from 'src/api';
 import { ITransactionRequest } from 'src/api/types';
 import { calcFee, showToast } from 'src/utils/common';
@@ -201,6 +201,7 @@ const QRCodeScan = (): JSX.Element => {
 	const [isPaymentDialogOpen, setIsPaymentDialogOpen] = useState<boolean>(false);
 	const [isLowAmountDialogOpen, setIsLowAmountDialogOpen] = useState<boolean>(false);
 	const [state, setState] = useState<QRCodeEntry>({
+		securityId: SECURITY_ID,
 		to: "",
 		amount: 0,
 		mode: PaymentMode.SELECT_AMOUNT
@@ -231,7 +232,7 @@ const QRCodeScan = (): JSX.Element => {
 		} else {
 			if (customerDwollaId) {
 				const request: ITransactionRequest = {
-					toUserId: customerDwollaId,
+					toUserId: state.to,
 					amount: mode ? amountCalcedFee.toString() : state.amount.toString(),
 					comment: ''
 				};
