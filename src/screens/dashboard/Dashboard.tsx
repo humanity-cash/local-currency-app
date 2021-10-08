@@ -147,7 +147,7 @@ const feedData = [
 const Dashboard = (): JSX.Element => {
 	const navigation = useNavigation();
 	const { wallet, getWallet } = usePersonalWallet();
-	const { details, getBankStatus } = useBanks();
+	const { hasPersonalBank, getBankStatus } = useBanks();
 	const { customerDwollaId } = useContext(AuthContext);
 	const [isVisible, setIsVisible] = useState<boolean>(false);
 	const [isLoadup, setIsLoadup] = useState<boolean>(false);
@@ -158,7 +158,7 @@ const Dashboard = (): JSX.Element => {
 			getBankStatus(customerDwollaId, false);
 			getWallet(customerDwollaId);
 		}
-	}, []);
+	}, [customerDwollaId]);
 
 	const selectBank = () => {
 		navigation.navigate(Routes.SELECT_BANK);
@@ -198,14 +198,14 @@ const Dashboard = (): JSX.Element => {
 						</Text>
 					</View>
 					<View style={styles.amountView}>
-						<Text style={styles.text}>B$ {details.hasPersonalBank ? wallet.totalBalance : '-'}</Text>
+						<Text style={styles.text}>B$ {hasPersonalBank ? wallet.availableBalance : '-'}</Text>
 						<TouchableOpacity
 							style={styles.topupButton}
-							onPress={() => details.hasPersonalBank ? navigation.navigate(Routes.LOAD_UP) : setIsLoadup(true)}>
+							onPress={() => hasPersonalBank ? navigation.navigate(Routes.LOAD_UP) : setIsLoadup(true)}>
 							<Text style={styles.topupText}>Load up B$</Text>
 						</TouchableOpacity>
 					</View>
-					{!details.hasPersonalBank && (
+					{!hasPersonalBank && (
 						<View style={styles.alertView}>
 							<AntDesign
 								name='exclamationcircleo'
@@ -251,7 +251,7 @@ const Dashboard = (): JSX.Element => {
 					</View>
 				</View>
 			</ScrollView>
-			<TouchableOpacity onPress={() => details.hasPersonalBank ? navigation.navigate(Routes.QRCODE_SCAN) : setIsPayment(true)} style={styles.scanButton}>
+			<TouchableOpacity onPress={() => hasPersonalBank ? navigation.navigate(Routes.QRCODE_SCAN) : setIsPayment(true)} style={styles.scanButton}>
 				<Image
 					source={require('../../../assets/images/qr_code_consumer.png')}
 					containerStyle={styles.qrIcon}

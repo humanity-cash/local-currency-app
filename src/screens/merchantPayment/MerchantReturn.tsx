@@ -42,7 +42,7 @@ const styles = StyleSheet.create({
 	}
 });
 
-const MerchantRequest = (): JSX.Element => {
+const MerchantReturn = (): JSX.Element => {
 	const navigation = useNavigation();
 	const [amount, setAmount] = useState<string>("");
 	const [goNext, setGoNext] = useState<boolean>(false);
@@ -101,4 +101,4 @@ const MerchantRequest = (): JSX.Element => {
 	);
 }
 
-export default MerchantRequest
+export default MerchantReturn

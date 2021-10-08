@@ -60,7 +60,6 @@ const MerchantCashoutPassword = (): JSX.Element => {
 					disableDeviceFallback: true,
 					cancelLabel: 'Close'
 				});
-				console.log(data);
 			}
 		}
 		askFingerprint();
