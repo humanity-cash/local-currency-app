@@ -122,7 +122,7 @@ const DrawerContent = (
 	props: DrawerContentComponentProps<DrawerContentOptions>
 ) => {
 	const { signOut, updateUserType, userAttributes } = useContext(AuthContext);
-	const { details } = useBanks();
+	const { hasPersonalBank } = useBanks();
 	const { wallet } = usePersonalWallet();
 	const { authorization } = useUserDetails();
 	const [isExpanded, setIsExpanded] = useState<boolean>(false);
@@ -226,19 +226,19 @@ const DrawerContent = (
 					<Drawer.Section>
 						<DrawerItem
 							label="Scan to pay"
-							onPress={() => details.hasPersonalBank ? props.navigation.navigate(Routes.QRCODE_SCAN) : setIsBankDialog(true)}
+							onPress={() => hasPersonalBank ? props.navigation.navigate(Routes.QRCODE_SCAN) : setIsBankDialog(true)}
 						/>
 						<DrawerItem
 							label="Receive payment"
-							onPress={() => details.hasPersonalBank ? props.navigation.navigate(Routes.RECEIVE_PAYMENT) : setIsBankDialog(true)}
+							onPress={() => hasPersonalBank ? props.navigation.navigate(Routes.RECEIVE_PAYMENT) : setIsBankDialog(true)}
 						/>
 						<DrawerItem
 							label="Load up B$"
-							onPress={() => details.hasPersonalBank ? props.navigation.navigate(Routes.LOAD_UP) : setIsBankDialog(true)}
+							onPress={() => hasPersonalBank ? props.navigation.navigate(Routes.LOAD_UP) : setIsBankDialog(true)}
 						/>
 						<DrawerItem
 							label="Cash out to USD"
-							onPress={() => details.hasPersonalBank ? props.navigation.navigate(Routes.CASHOUT_AMOUNT) : setIsBankDialog(true)}
+							onPress={() => hasPersonalBank ? props.navigation.navigate(Routes.CASHOUT_AMOUNT) : setIsBankDialog(true)}
 						/>
 					</Drawer.Section>
 					<Drawer.Section>

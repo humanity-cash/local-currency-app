@@ -2,8 +2,9 @@ import axios, { AxiosResponse } from "axios";
 import { IMap } from "../utils/types";
 import envs from "./../config/env";
 
+const CORE_API_URL = "https://alfajores.api.humanity.cash";
 const httpRequest = axios.create({
-  baseURL: envs.CORE_API_URL,
+  baseURL: CORE_API_URL,
 });
 
 type Body = IMap;

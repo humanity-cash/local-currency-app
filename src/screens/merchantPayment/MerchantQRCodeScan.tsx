@@ -11,7 +11,7 @@ import { BarCodeScanner } from 'expo-barcode-scanner';
 import Translation from 'src/translation/en.json';
 import * as Routes from 'src/navigation/constants';
 import { BUTTON_TYPES } from 'src/constants';
-import { QRCodeEntry, PaymentMode, ToastType } from 'src/utils/types';
+import { QRCodeEntry, SECURITY_ID, PaymentMode, ToastType } from 'src/utils/types';
 import { UserAPI } from 'src/api';
 import { ITransactionRequest } from 'src/api/types';
 import { calcFee, showToast } from 'src/utils/common';
@@ -181,6 +181,7 @@ const MerchantQRCodeScan = (): JSX.Element => {
 	const [isScanned, setIsScanned] = useState<boolean>(false);
 	const [isPaymentDialogOpen, setIsPaymentDialogOpen] = useState<boolean>(false);
 	const [state, setState] = useState<QRCodeEntry>({
+		securityId: SECURITY_ID,
 		to: "",
 		amount: 0,
 		mode: PaymentMode.SELECT_AMOUNT
@@ -207,7 +208,7 @@ const MerchantQRCodeScan = (): JSX.Element => {
 
 		if (businessDwollaId) {
 			const request: ITransactionRequest = {
-				toUserId: businessDwollaId,
+				toUserId: state.to,
 				amount: amountCalcedFee.toString(),
 				comment: ''
 			};
@@ -218,6 +219,8 @@ const MerchantQRCodeScan = (): JSX.Element => {
 				showToast(ToastType.ERROR, "Failed", "Whooops, something went wrong.");
 				navigation.navigate(Routes.MERCHANT_DASHBOARD);
 			}
+		} else {
+			showToast(ToastType.ERROR, "Failed", "Whooops, something went wrong.");
 		}
 	};
 

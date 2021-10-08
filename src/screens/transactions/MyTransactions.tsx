@@ -106,15 +106,15 @@ const transactionData = {
 type TransactionDetailProps = {
 	visible: boolean,
 	data: MyTransactionItem,
-	onConfirm: ()=>void,
+	onClose: ()=>void,
 	onReturn: ()=>void
 }
 
 const TransactionDetail = (props: TransactionDetailProps) => {
-	const {data, visible, onConfirm, onReturn} = props;
+	const {data, visible, onClose, onReturn} = props;
 
 	return (
-		<Dialog visible={visible} onClose={onConfirm}>
+		<Dialog visible={visible} onClose={onClose}>
 			<View style={dialogViewBase}>
 				<ScrollView style={wrappingContainerBase}>
 					<View style={ baseHeader }>
@@ -177,7 +177,7 @@ const MyTransactions = (): JSX.Element => {
 		setIsReturnViewOpen(true);
 	}
 
-	const onConfirm = () => {
+	const onClose = () => {
 		setIsDetailViewOpen(false);
 		setIsReturnViewOpen(false);
 	}
@@ -227,8 +227,8 @@ const MyTransactions = (): JSX.Element => {
 				<Text style={styles.scanBtnText}>{Translation.PAYMENT.SCAN_TO_PAY_REQUEST}</Text>
 			</TouchableOpacity>
 
-			{isDetailViewOpen && <TransactionDetail visible={isDetailViewOpen} data={selectedItem} onReturn={onReturn} onConfirm={onConfirm} />}
-			{isReturnViewOpen && <QRCodeGen visible={isReturnViewOpen} onClose={onConfirm} isOpenAmount={true} amount={Number(selectedItem.amount)} /> }
+			{isDetailViewOpen && <TransactionDetail visible={isDetailViewOpen} data={selectedItem} onReturn={onReturn} onClose={onClose} />}
+			{isReturnViewOpen && <QRCodeGen visible={isReturnViewOpen} onClose={onClose} isOpenAmount={true} amount={Number(selectedItem.amount)} /> }
 		</View>
 	);
 }
