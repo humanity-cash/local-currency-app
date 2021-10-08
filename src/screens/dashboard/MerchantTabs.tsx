@@ -175,7 +175,7 @@ const BankLinkDialog = (props: BankLinkDialogProps) => {
 const DrawerContent = (props: DrawerContentComponentProps) => {
 	const { userAttributes } = useContext(AuthContext);
 	const { signOut, updateUserType } = useContext(AuthContext);
-	const { details } = useBanks();
+	const { hasBusinessBank } = useBanks();
 	const { wallet } = useBusinessWallet();
 	const { authorization } = useUserDetails();
 	const [isExpanded, setIsExpanded] = useState<boolean>(false);
@@ -282,31 +282,31 @@ const DrawerContent = (props: DrawerContentComponentProps) => {
 							</View>
 						)}
 					</View>
-					<Text style={styles.berkAmount}>B$ {wallet.totalBalance}</Text>
+					<Text style={styles.berkAmount}>B$ {wallet.availableBalance}</Text>
 					<Drawer.Section>
 						<DrawerItem
 							label={Translation.TABS.RECEIVE_PAYMENT}
-							onPress={() => details.hasBusinessBank ?  props.navigation.navigate(Routes.MERCHANT_REQUEST) : setIsBankDialog(true)}
+							onPress={() => hasBusinessBank ?  props.navigation.navigate(Routes.MERCHANT_REQUEST) : setIsBankDialog(true)}
 						/>
 						<DrawerItem
 							label={Translation.TABS.SCAN_TO_PAY}
-							onPress={() => details.hasBusinessBank ?  props.navigation.navigate(Routes.MERCHANT_QRCODE_SCAN) : setIsBankDialog(true)}
+							onPress={() => hasBusinessBank ?  props.navigation.navigate(Routes.MERCHANT_QRCODE_SCAN) : setIsBankDialog(true)}
 						/>
 						<DrawerItem
 							label={Translation.TABS.MAKE_RETURN}
-							onPress={() => details.hasBusinessBank ?  setIsVisible(true) : setIsBankDialog(true)}
+							onPress={() => hasBusinessBank ?  setIsVisible(true) : setIsBankDialog(true)}
 						/>
 						<DrawerItem
 							label={Translation.TABS.LOADUP}
-							onPress={() => details.hasBusinessBank ?  props.navigation.navigate(Routes.MERCHANT_LOADUP) : setIsBankDialog(true)}
+							onPress={() => hasBusinessBank ?  props.navigation.navigate(Routes.MERCHANT_LOADUP) : setIsBankDialog(true)}
 						/>
 						<DrawerItem
 							label={Translation.TABS.SEND_TO_SOMEONE}
-							onPress={() => details.hasBusinessBank ?  props.navigation.navigate(Routes.MERCHANT_PAYOUT_SELECTION) : setIsBankDialog(true)}
+							onPress={() => hasBusinessBank ?  props.navigation.navigate(Routes.MERCHANT_PAYOUT_SELECTION) : setIsBankDialog(true)}
 						/>
 						<DrawerItem
 							label={Translation.TABS.CASHOUT}
-							onPress={() => details.hasBusinessBank ?  props.navigation.navigate(Routes.MERCHANT_CASHOUT_AMOUNT) : setIsBankDialog(true)}
+							onPress={() => hasBusinessBank ?  props.navigation.navigate(Routes.MERCHANT_CASHOUT_AMOUNT) : setIsBankDialog(true)}
 						/>
 					</Drawer.Section>
 					<Drawer.Section>

@@ -48,7 +48,6 @@ const MerchantPayoutQRCodeScan = (): JSX.Element => {
 	}, []);
 
 	const handleBarCodeScanned = (data: HandleScaned) => {
-		console.log(data);
 		setIsScanned(true);
 		navigation.navigate(Routes.MERCHANT_PAYOUT_PENDING);
 	}

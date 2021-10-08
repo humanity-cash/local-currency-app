@@ -5,18 +5,17 @@ import { AuthContext } from 'src/auth';
 import { Text } from 'react-native-elements';
 import { Dialog } from "src/shared/uielements";
 import { dialogViewBase } from "src/theme/elements";
-import { colors } from "src/theme/colors";
-import { PaymentMode } from "src/utils/types";
+import { PaymentMode, QRCodeEntry, SECURITY_ID } from "src/utils/types";
 import { useBrightness } from "src/hooks";
+import { ITransactionResponse } from "src/api/types";
+import { colors } from "src/theme/colors";
 
 const styles = StyleSheet.create({
     dialog: {
-		height: 420
-	},
-    dialogBg: {
-        backgroundColor: colors.overlayPurple
+        height: 400
     },
 	dialogWrap: {
+        position: 'relative',
 		paddingHorizontal: 10,
         paddingTop: 70,
 		height: "100%",
@@ -30,8 +29,7 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         fontSize: 32,
         lineHeight: 32,
-        paddingTop: 20,
-        color: colors.purple
+        paddingTop: 20
     },
     ownerInfo: {
         position: 'absolute',
@@ -47,25 +45,32 @@ const styles = StyleSheet.create({
     ownerName: {
         fontWeight: 'bold',
         fontSize: 18,
-        paddingVertical: 10,
-        color: colors.purple
+        paddingVertical: 10
+    },
+    errorText: {
+        color: colors.mistakeRed
     }
 });
 
-type MerchantQRCodeGenProps = {
+type ReturnQRCodeGenProps = {
 	visible: boolean,
 	onClose: ()=>void,
-    amount?: number
+    transactionInfo: ITransactionResponse
 }
 
-const MerchantQRCodeGen = (props: MerchantQRCodeGenProps): JSX.Element => {
-    const { businessDwollaId, userAttributes } = useContext(AuthContext);
+const ReturnQRCodeGen = (props: ReturnQRCodeGenProps): JSX.Element => {
+    const { customerDwollaId, userAttributes } = useContext(AuthContext);
     const { hasPermission, setMaxBrightness, setDefaultBrightness} = useBrightness();
-    const addressStr = JSON.stringify({
-        to: businessDwollaId,
-        amount: props.amount,
-        mode: PaymentMode.SELECT_AMOUNT
-    });
+
+    const requestData: QRCodeEntry = {
+        securityId: SECURITY_ID,
+        transactionId: props.transactionInfo.transactionHash,
+        transactionDate: props.transactionInfo.timestamp,
+        to: customerDwollaId ? customerDwollaId : "",
+        amount: Number(props.transactionInfo.value),
+        mode: PaymentMode.OPEN_AMOUNT
+    };
+    const addressStr = JSON.stringify(requestData);
 
     useEffect(() => {
         if (hasPermission) {
@@ -78,11 +83,11 @@ const MerchantQRCodeGen = (props: MerchantQRCodeGenProps): JSX.Element => {
         props.onClose();
     }
 
-    const firstName = userAttributes?.["custom:owner.firstName"];
-    const lastName = userAttributes?.["custom:owner.lastName"];
+    const firstName = userAttributes?.["custom:personal.firstName"];
+    const lastName = userAttributes?.["custom:personal.lastName"];
 
     return (
-        <Dialog visible={props.visible} onClose={onClose} backgroundStyle={styles.dialogBg} style={styles.dialog}>
+        <Dialog visible={props.visible} onClose={onClose} style={styles.dialog}>
             <View style={dialogViewBase}>
                 <View style={styles.dialogWrap}>
                     <View style={styles.ownerInfo}>
@@ -94,13 +99,13 @@ const MerchantQRCodeGen = (props: MerchantQRCodeGenProps): JSX.Element => {
                     </View>
                     <QRCode
                         value={addressStr}
-                        size={200}
+                        size={250}
                     />
-                    <Text style={styles.amount}>B$ {props.amount?.toFixed(2)}</Text>
+                    <Text style={styles.errorText}>Show QR code to the cashier </Text>
                 </View>
             </View>
         </Dialog>
     )
 }
 
-export default MerchantQRCodeGen;
+export default ReturnQRCodeGen;

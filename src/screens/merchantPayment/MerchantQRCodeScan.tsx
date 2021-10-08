@@ -11,7 +11,10 @@ import { BarCodeScanner } from 'expo-barcode-scanner';
 import Translation from 'src/translation/en.json';
 import * as Routes from 'src/navigation/constants';
 import { BUTTON_TYPES } from 'src/constants';
-import { QRCodeEntry, PaymentMode } from 'src/utils/types';
+import { QRCodeEntry, SECURITY_ID, PaymentMode, ToastType } from 'src/utils/types';
+import { UserAPI } from 'src/api';
+import { ITransactionRequest } from 'src/api/types';
+import { calcFee, showToast } from 'src/utils/common';
 
 type HandleScaned = {
 	type: string,
@@ -121,7 +124,7 @@ const styles = StyleSheet.create({
 
 type PaymentConfirmProps = {
 	visible: boolean,
-	onConfirm: () => void,
+	onConfirm: (isRoundUp: boolean) => void,
 	onCancel: () => void,
 	payInfo: QRCodeEntry,
 }
@@ -157,12 +160,12 @@ const PaymentConfirm = (props: PaymentConfirmProps) => {
 						type={BUTTON_TYPES.TRANSPARENT}
 						style={styles.transparentBtn}
 						title={`Pay B$ ${amountCalcedFee.toFixed(2)}`}
-						onPress={() => props.onConfirm()}
+						onPress={() => props.onConfirm(false)}
 					/>
 					<Button
 						type={BUTTON_TYPES.PURPLE}
 						title={`Round up to B$ ${props.payInfo.amount.toFixed(2)}`}
-						onPress={() => props.onConfirm()}
+						onPress={() => props.onConfirm(true)}
 					/>
 					<Text style={styles.description}>{Translation.PAYMENT.NOT_REFUNABLE_DONATION}</Text>
 				</View>
@@ -173,29 +176,52 @@ const PaymentConfirm = (props: PaymentConfirmProps) => {
 
 const MerchantQRCodeScan = (): JSX.Element => {
 	const navigation = useNavigation();
+	const { businessDwollaId } = useContext(AuthContext);
 	const hasPermission = useCameraPermission();
 	const [isScanned, setIsScanned] = useState<boolean>(false);
 	const [isPaymentDialogOpen, setIsPaymentDialogOpen] = useState<boolean>(false);
 	const [state, setState] = useState<QRCodeEntry>({
+		securityId: SECURITY_ID,
 		to: "",
 		amount: 0,
 		mode: PaymentMode.SELECT_AMOUNT
 	});
 
 	const handleBarCodeScanned = (data: HandleScaned) => {
-		setState(JSON.parse(data.data) as QRCodeEntry);
-		setIsScanned(true);
-		setIsPaymentDialogOpen(true);
+		try {
+			setState(JSON.parse(data.data) as QRCodeEntry);
+			setIsScanned(true);
+			setIsPaymentDialogOpen(true);
+		} catch (e) {
+			showToast(ToastType.ERROR, "Failed", "Whooops, something went wrong.");
+		}
 	};
 
 	if (hasPermission === false) {
 		return <Text>No access to camera</Text>;
 	}
 
-	const onPayConfirm = () => {
+	const onPayConfirm = async (isRoundUp: boolean) => {
 		setIsPaymentDialogOpen(false);
 		setIsScanned(false);
-		navigation.navigate(Routes.MERCHANT_PAYMENT_PENDING);
+		const amountCalcedFee = state.amount - calcFee(state.amount);
+
+		if (businessDwollaId) {
+			const request: ITransactionRequest = {
+				toUserId: state.to,
+				amount: isRoundUp ? state.amount.toString() : amountCalcedFee.toString(),
+				comment: ''
+			};
+			const response = await UserAPI.transferTo(businessDwollaId, request);
+			if (response.data) {
+				navigation.navigate(Routes.MERCHANT_PAYMENT_SUCCESS);
+			} else {
+				showToast(ToastType.ERROR, "Failed", "Whooops, something went wrong.");
+				navigation.navigate(Routes.MERCHANT_DASHBOARD);
+			}
+		} else {
+			showToast(ToastType.ERROR, "Failed", "Whooops, something went wrong.");
+		}
 	};
 
 	const onClose = () => {
