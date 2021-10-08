@@ -124,7 +124,7 @@ const styles = StyleSheet.create({
 
 type PaymentConfirmProps = {
 	visible: boolean,
-	onConfirm: () => void,
+	onConfirm: (isRoundUp: boolean) => void,
 	onCancel: () => void,
 	payInfo: QRCodeEntry,
 }
@@ -160,12 +160,12 @@ const PaymentConfirm = (props: PaymentConfirmProps) => {
 						type={BUTTON_TYPES.TRANSPARENT}
 						style={styles.transparentBtn}
 						title={`Pay B$ ${amountCalcedFee.toFixed(2)}`}
-						onPress={() => props.onConfirm()}
+						onPress={() => props.onConfirm(false)}
 					/>
 					<Button
 						type={BUTTON_TYPES.PURPLE}
 						title={`Round up to B$ ${props.payInfo.amount.toFixed(2)}`}
-						onPress={() => props.onConfirm()}
+						onPress={() => props.onConfirm(true)}
 					/>
 					<Text style={styles.description}>{Translation.PAYMENT.NOT_REFUNABLE_DONATION}</Text>
 				</View>
@@ -201,7 +201,7 @@ const MerchantQRCodeScan = (): JSX.Element => {
 		return <Text>No access to camera</Text>;
 	}
 
-	const onPayConfirm = async () => {
+	const onPayConfirm = async (isRoundUp: boolean) => {
 		setIsPaymentDialogOpen(false);
 		setIsScanned(false);
 		const amountCalcedFee = state.amount - calcFee(state.amount);
@@ -209,7 +209,7 @@ const MerchantQRCodeScan = (): JSX.Element => {
 		if (businessDwollaId) {
 			const request: ITransactionRequest = {
 				toUserId: state.to,
-				amount: amountCalcedFee.toString(),
+				amount: isRoundUp ? state.amount.toString() : amountCalcedFee.toString(),
 				comment: ''
 			};
 			const response = await UserAPI.transferTo(businessDwollaId, request);
