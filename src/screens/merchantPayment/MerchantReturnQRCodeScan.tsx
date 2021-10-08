@@ -101,7 +101,7 @@ const MerchantReturnQRCodeScan = (): JSX.Element => {
 	}, []);
 
 	useEffect(() => {
-		setGoNext(amount !== "");
+		setGoNext(Number(amount) > 0);
 	}, [amount]);
 
 	const handleBarCodeScanned = (data: HandleScaned) => {
