@@ -1,6 +1,6 @@
 import { createStore, useStore } from "react-hookstore";
 import { colors } from "src/theme/colors";
-import { ModalStatusBar } from "src/utils/types";
+import { ModalStatusBar, IMap } from "src/utils/types";
 
 const storeId = 'MODAL_STATUSBAR';
 
@@ -15,7 +15,7 @@ const store = createStore<ModalStatusBarState>(storeId, {
 	styles: {}
 });
 
-const useModalStatusBar = () => {
+const useModalStatusBar = (): IMap => {
 	const [details] = useStore<ModalStatusBarState>(storeId);
 
 	const setUseHeader = (value: boolean) => {
