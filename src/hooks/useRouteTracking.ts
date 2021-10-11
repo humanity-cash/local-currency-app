@@ -1,6 +1,6 @@
-import { createStore, useStore } from "react-hookstore";
 import { useCallback } from "react";
-import { Route } from "../utils/types";
+import { createStore, useStore } from "react-hookstore";
+import { Route } from "src/utils/types";
 
 const storeId = "ROUTE_TRACKING";
 
@@ -10,7 +10,7 @@ const store = createStore<RouteState>(storeId, {
 	current: ''
 });
 
-export const useRouteTracking = () => {
+const useRouteTracking = () => {
 	const [details] = useStore<RouteState>(storeId);
 
 	const update = useCallback(
@@ -27,3 +27,5 @@ export const useRouteTracking = () => {
 		update
 	}
 };
+
+export default useRouteTracking;

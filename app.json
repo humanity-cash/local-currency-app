@@ -1,23 +1,23 @@
 {
   "name": "berkshares",
-  "displayName": "DATE Trading",
+  "displayName": "BerkShares",
   "expo": {
-    "name": "DATE Trading",
-    "slug": "date-trading",
+    "name": "BerkShares",
+    "slug": "berkshares",
     "version": "1.0.13",
     "icon": "./assets/images/icon.png",
     "orientation": "portrait",
     "splash": {
       "image": "./assets/images/splash.png",
       "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "backgroundColor": "#cbd5cf"
     },
     "assetBundlePatterns": [
       "**/*"
     ],
     "ios": {
       "bundleIdentifier": "com.keyko.berkshares-app",
-      "buildNumber": "1.0.0"
+      "buildNumber": "1.0.1"
     },
     "packagerOpts": {
       "config": "metro.config.js",
@@ -32,7 +32,7 @@
       ]
     },
     "android": {
-      "package": "com.datetrading",
+      "package": "com.berkshares",
       "versionCode": 3,
       "permissions": [
         "CAMERA",

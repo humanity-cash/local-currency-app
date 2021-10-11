@@ -1,7 +1,7 @@
-import { createStore, useStore } from "react-hookstore";
 import { useCallback } from "react";
-import { Order, OrderType, StatusType } from "../utils/types";
-import { makeId } from "../utils/common";
+import { createStore, useStore } from "react-hookstore";
+import { makeId } from "src/utils/common";
+import { Order, OrderType, StatusType } from "src/utils/types";
 
 const storeId = "TRANSACTION_RECORD";
 
@@ -20,7 +20,7 @@ const defaultState = () => ({
 
 const store = createStore<TransactionState>(storeId, defaultState());
 
-export const useTransaction = () => {
+const useTransaction = () => {
 	const [transaction] = useStore<TransactionState>(storeId);
 
 	const update = useCallback(
@@ -42,3 +42,5 @@ export const useTransaction = () => {
 		update
 	}
 };
+
+export default useTransaction;

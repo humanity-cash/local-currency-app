@@ -1,15 +1,32 @@
 import { colors } from "./colors";
+import { Dimensions } from 'react-native';
 
 export const viewBase: any = {
 	flex: 1,
 	justifyContent: 'space-between',
-	backgroundColor: colors.lightBg
+	backgroundColor: colors.background
+}
+
+export const viewBaseWhite: any = {
+	...viewBase,
+	backgroundColor: colors.white
+}
+
+export const viewBaseB: any = {
+	...viewBase,
+	backgroundColor: colors.highlightPurple
 }
 
 export const modalViewBase: any = {
 	...viewBase,
-	borderTopStartRadius: 20,
-	borderTopEndRadius: 20,
+	backgroundColor: colors.lightBg
+}
+
+export const dialogViewBase: any = {
+	...viewBase,
+	padding: 20,
+	backgroundColor: colors.background,
+	borderRadius: 20
 }
 
 export const viewDashboardBase: any = {
@@ -33,6 +50,24 @@ export const baseHeader: any = {
 	marginTop: 0,
 	paddingTop: 10,
 	marginBottom: 10
+}
+
+export const underlineHeader: any = {
+	marginTop: 0,
+	paddingTop: 10,
+	paddingBottom: 10,
+	marginBottom: 10,
+	borderBottomWidth: 1,
+	borderBottomColor: colors.darkGreen,
+}
+
+export const underlineHeaderB: any = {
+	marginTop: 0,
+	paddingTop: 10,
+	paddingBottom: 10,
+	marginBottom: 10,
+	borderBottomWidth: 1,
+	borderBottomColor: colors.purple,
 }
 
 export const modalBaseHeader: any = {

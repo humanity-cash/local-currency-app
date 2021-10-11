@@ -8,6 +8,7 @@ export type OnboardingState = {
   authorization: AuthorizationDetails;
   statuses: Status;
   personalDetails: PersonalDetails;
+  businessDetails: BusinessDetails;
   terms: Terms;
   loggedIn: boolean;
 };
@@ -16,20 +17,19 @@ export type AuthorizationDetails = {
   pin: string;
   pinInput: string;
   touchID: boolean;
+  cashierView: boolean;
 };
 
 export type PersonalDetails = {
   countryOfResidence: string;
+  avatar: string;
   username: string;
   phoneCountry: string;
-  phoneNumber: string;
   password: string;
   firstname: string;
   lastname: string;
   email: string;
   emailVerified: boolean;
-  nationality: string;
-  dateOfBirth: BirthDate;
   addressLine: string;
   addressLine2: string;
   zipCode: string;
@@ -40,6 +40,7 @@ export type PersonalDetails = {
 export type PersonalDetailsErrors = {
   firstname?: string;
   lastname?: string;
+  username?: string;
   nationality?: string;
   dateOfBirth?: string;
 };
@@ -59,6 +60,56 @@ export type Status = {
   verifyId: boolean;
   notifications: boolean;
   serverVerified: boolean;
+};
+
+export enum BusinessType {
+  SOLE_PROPRIETORSHIP = "Sole Proprietorship",
+  CORPORATION = "Corporation",
+  LLC = "LLC",
+  PARTNERSHIP = "Partnership",
+  NON_PROFIT = "Non-profit"
+}
+
+export enum Industry {
+  ARTS_ENTERTAINMENT = "Arts & entertainment",
+  COMMUNICATION_EDUCATION = "Communication & education",
+  FOOD_DRINK = "Food & drink",
+  HEALTH_WELLNESS = "Health & wellness",
+  LODGING = "Lodging",
+  SHOPPING = "Shopping",
+  SERVICES = "Services"
+}
+
+export type BusinessDetails = {
+  avatar: string;
+  businessname: string;
+  businessStory: string;
+  businessType: BusinessType;
+  registeredBusinessname: string;
+  industry: Industry;
+  ein: string;
+  phoneNumber: string;
+  password: string;
+  email: string;
+  addressLine: string;
+  addressLine2: string;
+  zipCode: string;
+  city: string;
+  country: string;
+};
+
+export type BusinessDetailsErrors = {
+  businessname?: string;
+  businessType?: string;
+  ein?: string;
+};
+
+export type BusinessAddressErrors = {
+  addressLine?: string;
+  addressLine2?: string;
+  zipCode?: string;
+  city?: string;
+  country?: string;
 };
 
 export type Terms = {
@@ -96,17 +147,11 @@ export type WithdrawPaymentDetails = {
 };
 
 export type Wallet = {
-  amount: number;
-  reservationAmount: number;
-  transactions: Transaction[];
-  reservations: Transaction[];
-  minimum: WalletMinimum;
-  details: WalletDetails;
-};
-
-export type WalletDetails = {
-  walletId: string;
-  iban: string;
+  totalBalance: number;
+  availableBalance: number;
+  userId: string;
+  address: string;
+  createdBlock: string;
 };
 
 export type Route = {
@@ -248,6 +293,103 @@ export type ModalStatusBar = {
   bar?: "light-content";
 };
 
+export type DialogStatus = {
+  visible: boolean;
+};
+
 export interface IMap {
   [key: string]: any;
+}
+
+export interface Bank {
+  id: string;
+  name: string;
+  icon: string;
+}
+
+export type MyTransactionItem = {
+  transactionId: number,
+	avatar: string,
+	name: string,
+  type: string,
+	amount: string,
+	date: string
+}
+
+export enum MerchantTransactionType {
+  SALE = 'Sale',
+	RETURN = 'Return',
+	CASH_OUT = 'Cash out',
+	TRANSFER = 'Transfer',
+  DONATION = 'Donation',
+  CUSTOMER_RETURN = 'Customer return',
+  PURCHASEMENT = 'Purchasement'
+}
+
+export const TransactionTypes = {
+  'Sale': 'Customer sale',
+  'Return': 'Return',
+  'Cash out': 'Cash out',
+  'Transfer': 'Transfer',
+  'Donation': 'Donation',
+  'Customer return': 'Customer return',
+  'Purchasement': 'Purchasement'
+}
+
+export type MerchantTransactionItem = {
+  transactionId: string,
+  type: MerchantTransactionType,
+  amount: number,
+  date: string
+}
+
+export type MerchantCategory = {
+  id: string;
+  name: string;
+  merchants: MerchantEntry[];
+}
+
+export type MerchantEntry = {
+  title: string;
+  description: string;
+  image: string;
+  addressLine1: string;
+  addressLine2: string;
+  phone: string;
+}
+
+export interface AccordionEntry {
+	title: string,
+	content: string,
+  style?: IMap,
+  textColor?: string;
+}
+
+export interface FaqData extends AccordionEntry {
+  type?: string
+}
+
+export enum PaymentMode {
+  OPEN_AMOUNT = 'open',
+  SELECT_AMOUNT = "select"
+}
+
+export const SECURITY_ID = "berkShareSecurity";
+
+export interface QRCodeEntry {
+  securityId: string;
+  transactionId?: string;
+  transactionDate?: string;
+  to: string,
+  amount: number,
+  mode: PaymentMode
+}
+export interface EnvData {
+  coreApiUrl: string
+}
+
+export enum ToastType {
+  SUCCESS = "success",
+  ERROR = "error",
+  INFO = "info"
 }

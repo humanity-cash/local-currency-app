@@ -1,8 +1,8 @@
-import { createStore, useStore } from "react-hookstore";
 import { useCallback, useEffect } from "react";
-import { AsyncStorage } from "react-native";
-import { Message } from "../utils/types";
-import { makeId } from "../utils/common";
+import { createStore, useStore } from "react-hookstore";
+import AsyncStorage  from "@react-native-async-storage/async-storage";
+import { makeId } from "src/utils/common";
+import { Message } from "src/utils/types";
 
 const storeId = "MESSAGES_RECORD";
 
@@ -29,7 +29,7 @@ const defaultState = {
 const store = createStore<MessagesState>(storeId, defaultState);
 let loaded = false;
 
-export const useMessages = () => {
+const useMessages = () => {
 	const [details] = useStore<MessagesState>(storeId);
 
 	useEffect(() => {
@@ -69,3 +69,5 @@ export const useMessages = () => {
 		get
 	}
 };
+
+export default useMessages;

@@ -1,9 +1,9 @@
-import { createStore, useStore } from "react-hookstore";
-import { useCallback, useEffect } from "react";
-import { AsyncStorage } from "react-native";
-import { Share } from "../utils/types";
-import listOfShares from '../mocks/shares';
 import _ from "lodash";
+import { useCallback, useEffect } from "react";
+import { createStore, useStore } from "react-hookstore";
+import asyncStorage  from "@react-native-async-storage/async-storage";
+import listOfShares from 'src/mocks/shares';
+import { Share } from "src/utils/types";
 
 const storeId = "SHARES_RECORD";
 
@@ -16,7 +16,7 @@ const store = createStore<SharesState>(storeId, {
 });
 let loaded = false;
 
-export const useShares = () => {
+const useShares = () => {
 	const [details] = useStore<SharesState>(storeId);
 
 	useEffect(() => {
@@ -67,3 +67,5 @@ export const useShares = () => {
 		updateShare
 	}
 };
+
+export default useShares;
