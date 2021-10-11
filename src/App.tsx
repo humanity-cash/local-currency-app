@@ -6,6 +6,7 @@ import 'react-native-gesture-handler';
 import useCachedResources from "./hooks/useCachedResources";
 import { theme } from "./theme/theme";
 import AuthProvider from './auth';
+import PendingPage from './screens/pendings/PendingPage';
 
 export default function App(): ReactElement | null {
 	const resourceLoaded = useCachedResources();
@@ -18,6 +19,7 @@ export default function App(): ReactElement | null {
 			<ThemeProvider theme={theme}>
 				<MainNavigationStack />
 				<Toast ref={(ref) => Toast.setRef(ref)} />
+				<PendingPage />
 			</ThemeProvider>
 		</AuthProvider>
 	);
