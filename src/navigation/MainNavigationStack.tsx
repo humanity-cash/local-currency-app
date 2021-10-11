@@ -52,7 +52,6 @@ import PersonalProfile from "src/screens/onboarding/PersonalProfile";
 import SelectAccountType from "src/screens/onboarding/SelectAccountType";
 import SelectBank from "src/screens/onboarding/SelectBank";
 import Teaser from "src/screens/onboarding/Teaser";
-import TermsEmail from "src/screens/onboarding/TermsEmail";
 import Verification from "src/screens/onboarding/Verification";
 import VerificationHelp from "src/screens/onboarding/VerificationHelp";
 import PaymentPending from "src/screens/payment/PaymentPending";
@@ -115,10 +114,6 @@ const PrimaryStackScreen = () => {
 						component={VerificationHelp}
 					/>
 					{/* <PrimaryStack.Screen name={'TouchId'} component={TouchId} /> */}
-					<PrimaryStack.Screen
-						name={Routes.TERMS_EMAIL}
-						component={TermsEmail}
-					/>
 					<PrimaryStack.Screen
 						name={Routes.CONFIRM_EMAIL}
 						component={ConfirmEmail}

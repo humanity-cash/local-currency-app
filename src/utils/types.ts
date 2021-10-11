@@ -6,35 +6,17 @@ export type BirthDate = {
 
 export type OnboardingState = {
   authorization: AuthorizationDetails;
-  statuses: Status;
   personalDetails: PersonalDetails;
-  businessDetails: BusinessDetails;
-  terms: Terms;
-  loggedIn: boolean;
 };
 
 export type AuthorizationDetails = {
-  pin: string;
-  pinInput: string;
   touchID: boolean;
   cashierView: boolean;
 };
 
 export type PersonalDetails = {
-  countryOfResidence: string;
-  avatar: string;
-  username: string;
-  phoneCountry: string;
-  password: string;
-  firstname: string;
-  lastname: string;
   email: string;
   emailVerified: boolean;
-  addressLine: string;
-  addressLine2: string;
-  zipCode: string;
-  city: string;
-  country: string;
 };
 
 export type PersonalDetailsErrors = {
