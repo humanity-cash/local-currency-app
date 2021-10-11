@@ -1,12 +1,11 @@
 import {
-	CreditCardDetails, CreditCardDetailsErrors,
+	BusinessAddressErrors,
+	BusinessDetails,
+	BusinessDetailsErrors, CreditCardDetails, CreditCardDetailsErrors,
 	PersonalAddressErrors,
 	PersonalDetails,
 	PersonalDetailsErrors
 } from "./types";
-import moment from 'moment';
-import { err } from "react-native-svg/lib/typescript/xml";
-
 
 const creditCardNumberValidation = (number: string) => {
 	const aeCardNo = /^(?:3[47][0-9]{13})$/; // american express
@@ -47,6 +46,15 @@ export const validateCreditCard = (creditCardDetails: CreditCardDetails) => {
 
 }
 
+export const validateProfileForm = (personalDetails: PersonalDetails) => {
+	const { username } = personalDetails;
+	const errors: PersonalDetailsErrors = {};
+	if (username === '') {
+		errors.username = 'SORRY, THAT NAME IS ALREADY TAKEN';
+	}
+	return { errors, valid: Object.keys(errors).length === 0 };
+}
+
 export const validateAddressForm = (personalDetails: PersonalDetails) => {
 	const { addressLine, addressLine2, zipCode, city, country } = personalDetails;
 	const errors: PersonalAddressErrors = {};
@@ -55,7 +63,7 @@ export const validateAddressForm = (personalDetails: PersonalDetails) => {
 }
 
 export const validateDetailsForm = (personalDetails: PersonalDetails) => {
-	const { firstname, lastname, nationality, dateOfBirth: { day, month, year } } = personalDetails;
+	const { firstname, lastname } = personalDetails;
 	const errors: PersonalDetailsErrors = {};
 	if (firstname === '') {
 		errors.firstname = 'Firstname needs to be specified';
@@ -63,20 +71,42 @@ export const validateDetailsForm = (personalDetails: PersonalDetails) => {
 	if (lastname === '') {
 		errors.lastname = 'Lastname needs to be specified';
 	}
-	if (nationality === '') {
-		errors.nationality = 'Nationality needs to be specified';
-	}
+	return { errors, valid: Object.keys(errors).length === 0 };
+}
 
-	const date = moment(`${year}${month}${year}`, "YYYYMMDD");
-	if (!date.isValid()) {
-		errors.dateOfBirth = 'Date of birth is incorrect';
-	}
-
-	const currentDate = new Date();
-	const minDate = new Date(currentDate.getFullYear()+1900-18, parseInt(month), parseInt(day));
-
-	if (date.toDate().getTime() > minDate.getTime()) {
-		errors.dateOfBirth = 'You need to be over 18 years old to use this app';
+export const validateBusinessProfileForm = (businessDetails: BusinessDetails) => {
+	const { businessname } = businessDetails;
+	const errors: BusinessDetailsErrors = {};
+	if (businessname === '') {
+		errors.businessname = 'SORRY, THAT NAME IS ALREADY TAKEN';
 	}
 	return { errors, valid: Object.keys(errors).length === 0 };
 }
+
+export const validateBusinessAddressForm = (businessDetails: BusinessDetails) => {
+	const { addressLine, addressLine2, zipCode, city, country } = businessDetails;
+	const errors: BusinessAddressErrors = {};
+	// TODO: add eventual validation of address form
+	return { errors, valid: Object.keys(errors).length === 0 };
+}
+
+export const validateBusinessDetailsForm = (businessDetails: BusinessDetails) => {
+	const { registeredBusinessname, industry, businessType, ein } = businessDetails;
+	const errors: BusinessDetailsErrors = {};
+	if (registeredBusinessname === '') {
+		errors.businessname = 'Registered businessname needs to be specified';
+	}
+	if (ein === '') {
+		errors.ein = 'EIN needs to be specified';
+	}
+	return { errors, valid: Object.keys(errors).length === 0 };
+}
+
+// eslint-disable-next-line
+const passwordRegex = new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#\$%\^&\*])(?=.{8,})");
+// eslint-disable-next-line
+const emailValidation = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+
+export const isPasswordValid = (p: string): boolean => passwordRegex.test(p)
+
+export const isEmailValid = (e: string): boolean => emailValidation.test(e)

@@ -1,4 +1,4 @@
-import { SelectionProps } from "../uielements/SelectModal";
+import { SelectionProps } from "src/shared/uielements/SelectModal";
 
 const list: SelectionProps[] = [
   {
