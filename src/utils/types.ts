@@ -393,3 +393,8 @@ export enum ToastType {
   ERROR = "error",
   INFO = "info"
 }
+
+export interface LoadingState {
+  screen: string,
+  isLoading: boolean
+}
