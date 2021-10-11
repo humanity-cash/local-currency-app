@@ -14,6 +14,7 @@ import useUserDetails from "./useUserDetails";
 import usePersonalWallet from "./usePersonalWallet";
 import useBusinessWallet from "./useBusinessWallet";
 import useBanks from "./useBanks";
+import useLoadingModal from "./useLoadingModal";
 
 export {
 	useMediaLibraryPermission,
@@ -31,5 +32,6 @@ export {
 	useBrightness,
 	usePersonalWallet,
 	useBusinessWallet,
-	useBanks
+	useBanks,
+	useLoadingModal
 };
