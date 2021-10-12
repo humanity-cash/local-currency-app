@@ -8,8 +8,8 @@ import {
     TouchableOpacity
 } from "react-native";
 import { Text } from "react-native-elements";
-import { AuthContext } from 'src/auth';
 import { useLoadingModal } from "src/hooks";
+import { AuthContext } from 'src/auth';
 import { BackBtn, BorderedInput, Button, Header, CancelBtn } from "src/shared/uielements";
 import { colors } from "src/theme/colors";
 import {
