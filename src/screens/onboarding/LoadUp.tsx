@@ -9,6 +9,7 @@ import {
 } from "react-native";
 import { Text } from "react-native-elements";
 import { AuthContext } from 'src/auth';
+import { useLoadingModal } from "src/hooks";
 import { BackBtn, BorderedInput, Button, Header, CancelBtn } from "src/shared/uielements";
 import { colors } from "src/theme/colors";
 import {
@@ -90,6 +91,7 @@ const MIN_AMOUNT = 1;
 const LoadUp = (): JSX.Element => {
   const navigation = useNavigation();
   const { customerDwollaId } = useContext(AuthContext);
+  const { updateLoadingStatus } = useLoadingModal();
   const [amount, setAmount] = useState<string>("");
   const [goNext, setGoNext] = useState(false);
 
@@ -107,10 +109,13 @@ const LoadUp = (): JSX.Element => {
       return;
     }
 
+    updateLoadingStatus({ isLoading: true });
     const response = await UserAPI.deposit(
       customerDwollaId,
       {amount: amount}
     );
+
+    updateLoadingStatus({ isLoading: false });
 
     if (response.data) {
       navigation.navigate(Routes.LOADUP_SUCCESS);

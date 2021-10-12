@@ -1,4 +1,4 @@
-import { useCallback, useEffect } from "react";
+import { useCallback } from "react";
 import { createStore, useStore } from "react-hookstore";
 import AsyncStorage  from "@react-native-async-storage/async-storage";
 import { IMap, LoadingState } from "src/utils/types";
@@ -11,26 +11,9 @@ const defaultState = {
 };
 
 const store = createStore<LoadingState>(storeId, defaultState);
-let loaded = false;
 
 const useMessages = (): IMap => {
 	const [details] = useStore<LoadingState>(storeId);
-
-	useEffect(() => {
-		(async () => {
-			if (!loaded) {
-				try {
-					const data: string | null = await AsyncStorage.getItem(storeId);
-					if (data) {
-						store.setState(JSON.parse(data) as LoadingState);
-					}
-				} catch (error) {
-					// Error saving data
-				}
-				loaded = true;
-			}
-		})();
-	}, []);
 
 	const storeInMemory = async (newState: LoadingState) => {
 		try {
@@ -40,7 +23,7 @@ const useMessages = (): IMap => {
 		}
 	}
 
-	const update = useCallback(
+	const updateLoadingStatus = useCallback(
 		async (data: Partial<LoadingState>) => {
 			const currentState = store.getState();
 			const newState = {
@@ -56,7 +39,7 @@ const useMessages = (): IMap => {
 
 	return {
 		details,
-		update
+		updateLoadingStatus
 	}
 };
 
