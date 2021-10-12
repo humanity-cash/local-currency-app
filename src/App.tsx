@@ -18,8 +18,8 @@ export default function App(): ReactElement | null {
 		<AuthProvider>
 			<ThemeProvider theme={theme}>
 				<MainNavigationStack />
-				<Toast ref={(ref) => Toast.setRef(ref)} />
 				<PendingPage />
+				<Toast ref={(ref) => Toast.setRef(ref)} />
 			</ThemeProvider>
 		</AuthProvider>
 	);

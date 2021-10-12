@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import { StyleSheet, View, ScrollView, ActivityIndicator } from 'react-native';
 import { Text } from 'react-native-elements';
 import { Modal, ModalHeader } from "src/shared/uielements";
