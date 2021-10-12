@@ -72,8 +72,8 @@ const PaymentRequest = (): JSX.Element => {
 	};
 
 	const openAmount = () => {
-		// setIsOpenAmount(true);
-		// setIsVisible(true);
+		setIsOpenAmount(true);
+		setIsVisible(true);
 	}
 
 	const requestAmount = () => {
