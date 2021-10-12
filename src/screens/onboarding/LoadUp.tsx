@@ -8,8 +8,8 @@ import {
     TouchableOpacity
 } from "react-native";
 import { Text } from "react-native-elements";
+import { useLoadingModal } from "src/hooks";
 import { AuthContext } from 'src/auth';
-import { usePaymentDetails, useLoadingModal } from "src/hooks";
 import { BackBtn, BorderedInput, Button, Header, CancelBtn } from "src/shared/uielements";
 import { colors } from "src/theme/colors";
 import {
@@ -91,14 +91,9 @@ const MIN_AMOUNT = 1;
 const LoadUp = (): JSX.Element => {
   const navigation = useNavigation();
   const { customerDwollaId } = useContext(AuthContext);
-  const { update } = usePaymentDetails();
   const { updateLoadingStatus } = useLoadingModal();
   const [amount, setAmount] = useState<string>("");
   const [goNext, setGoNext] = useState(false);
-
-  useEffect(() => {
-    update({ amount: amount });
-  }, []);
 
   useEffect(() => {
     setGoNext(Number(amount) >= MIN_AMOUNT && Number(amount) <= MAX_AMOUNT);
@@ -106,7 +101,6 @@ const LoadUp = (): JSX.Element => {
 
   const onValueChange = (name: string, change: string) => {
     setAmount(change);
-    update({ amount: change });
   };
 
   const onLoadUp = async () => {

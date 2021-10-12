@@ -1,7 +1,7 @@
 import Toast from 'react-native-toast-message';
 import { MerchantTransactionType, ToastType } from "src/utils/types";
 
-const fee = 1.5;
+const fee = 0.015;
 
 export const makeId = (): string => Math.random().toString(36).substring(7);
 
