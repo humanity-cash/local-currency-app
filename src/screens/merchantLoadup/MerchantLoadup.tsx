@@ -1,15 +1,19 @@
 import { useNavigation } from "@react-navigation/native";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { KeyboardAvoidingView, Platform, ScrollView, StyleSheet, View } from "react-native";
 import { Text } from "react-native-elements";
 import { TouchableOpacity } from "react-native-gesture-handler";
-import { usePaymentDetails } from "src/hooks";
+import { AuthContext } from 'src/auth';
 import { BorderedInput, Button, Header, CancelBtn } from "src/shared/uielements";
 import { colors } from "src/theme/colors";
 import { underlineHeaderB, viewBaseB, wrappingContainerBase } from "src/theme/elements";
 import Translation from 'src/translation/en.json';
 import * as Routes from 'src/navigation/constants';
 import { BUTTON_TYPES } from "src/constants";
+import { useLoadingModal } from "src/hooks";
+import { UserAPI } from 'src/api';
+import { showToast } from 'src/utils/common';
+import { ToastType } from 'src/utils/types';
 
 const styles = StyleSheet.create({
   headerText: {
@@ -91,7 +95,8 @@ const MAX_AMOUNT = 2000;
 
 const MerchantLoadup = (): JSX.Element => {
   const navigation = useNavigation();
-  const { update } = usePaymentDetails();
+  const { businessDwollaId } = useContext(AuthContext);
+  const { updateLoadingStatus } = useLoadingModal();
   const [amount, setAmount] = useState<string>("");
   const [goNext, setGoNext] = useState<boolean>(false);
 
@@ -101,8 +106,27 @@ const MerchantLoadup = (): JSX.Element => {
 
   const onValueChange = (name: string, change: string) => {
     setAmount(change);
-    update({ [name]: change });
   };
+
+  const onLoadUp = async () => {
+    if (!businessDwollaId) {
+      showToast(ToastType.ERROR, "Whoops, something went wrong.", "Connection failed.");
+      return;
+    }
+
+    updateLoadingStatus({ isLoading: true });
+    const response = await UserAPI.deposit(
+      businessDwollaId,
+      {amount: amount}
+    );
+    updateLoadingStatus({ isLoading: false });
+    if (response.data) {
+      navigation.navigate(Routes.MERCHANT_LOADUP_SUCCESS);
+    } else {
+      showToast(ToastType.ERROR, "Whoops, something went wrong.", "Connection failed.");
+      navigation.navigate(Routes.MERCHANT_DASHBOARD);
+    }
+  }
 
   return (
     <View style={viewBaseB}>
@@ -174,7 +198,7 @@ const MerchantLoadup = (): JSX.Element => {
             type={BUTTON_TYPES.PURPLE}
             title={Translation.BUTTON.LOAD_UP}
             disabled={!goNext}
-            onPress={() => navigation.navigate(Routes.MERCHANT_LOADUP_PENDING)}
+            onPress={onLoadUp}
           />
         </View>
       </KeyboardAvoidingView>
