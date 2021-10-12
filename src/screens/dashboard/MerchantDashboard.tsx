@@ -232,7 +232,7 @@ const MerchantDashboard = (): JSX.Element => {
 			getBankStatus(businessDwollaId, true);
 			getWallet(businessDwollaId);
 		}
-	}, [businessDwollaId]);
+	});
 
 	const onSearchChange = (name: string, change: string) => {
 		setSearchText(change);
