@@ -158,7 +158,7 @@ const Dashboard = (): JSX.Element => {
 			getBankStatus(customerDwollaId, false);
 			getWallet(customerDwollaId);
 		}
-	}, [customerDwollaId]);
+	});
 
 	const selectBank = () => {
 		navigation.navigate(Routes.SELECT_BANK);
