@@ -1,4 +1,3 @@
-import CreditCardCard from "./CreditCardCard";
 import AccordionCard from "./AccordionCard";
 import FileCard from "./FileCard";
 import FilterCard from "./FilterCard";
@@ -21,5 +20,4 @@ export {
 	FilterCard,
 	FileCard,
 	AccordionCard,
-	CreditCardCard,
 }
