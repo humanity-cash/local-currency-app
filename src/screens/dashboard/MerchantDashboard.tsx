@@ -213,7 +213,7 @@ const TransactionDetail = (props: TransactionDetailProps) => {
 const MerchantDashboard = (): JSX.Element => {
 	const navigation = useNavigation();
 	const { completedCustomerVerification, businessDwollaId } = useContext(AuthContext);
-	const { wallet, getWallet } = useBusinessWallet();
+	const { wallet, updateWallet } = useBusinessWallet();
 	const { hasBusinessBank, getBankStatus } = useBanks();
 	const [isFilterVisible, setIsFilterVisible] = useState<boolean>(false);
 	const [searchText, setSearchText] = useState<string>("");
@@ -230,9 +230,9 @@ const MerchantDashboard = (): JSX.Element => {
 	useEffect(() => {
 		if (businessDwollaId) {
 			getBankStatus(businessDwollaId, true);
-			getWallet(businessDwollaId);
+			updateWallet(businessDwollaId);
 		}
-	});
+	}, [businessDwollaId]);
 
 	const onSearchChange = (name: string, change: string) => {
 		setSearchText(change);

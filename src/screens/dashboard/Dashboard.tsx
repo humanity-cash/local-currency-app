@@ -146,7 +146,7 @@ const feedData = [
 
 const Dashboard = (): JSX.Element => {
 	const navigation = useNavigation();
-	const { wallet, getWallet } = usePersonalWallet();
+	const { wallet, updateWallet } = usePersonalWallet();
 	const { hasPersonalBank, getBankStatus } = useBanks();
 	const { customerDwollaId } = useContext(AuthContext);
 	const [isVisible, setIsVisible] = useState<boolean>(false);
@@ -156,9 +156,9 @@ const Dashboard = (): JSX.Element => {
 	useEffect(() => {
 		if (customerDwollaId) {
 			getBankStatus(customerDwollaId, false);
-			getWallet(customerDwollaId);
+			updateWallet(customerDwollaId);
 		}
-	});
+	}, [customerDwollaId]);
 
 	const selectBank = () => {
 		navigation.navigate(Routes.SELECT_BANK);
