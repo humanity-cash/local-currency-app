@@ -1,4 +1,4 @@
-import React, { useEffect, useContext } from 'react';
+import React, { useEffect, useContext, useState } from 'react';
 import { StyleSheet, View, Image } from 'react-native';
 import QRCode from 'react-native-qrcode-svg';
 import { AuthContext } from 'src/auth';
@@ -6,7 +6,9 @@ import { Text } from 'react-native-elements';
 import { Dialog } from "src/shared/uielements";
 import { dialogViewBase } from "src/theme/elements";
 import { PaymentMode } from "src/utils/types";
-import { useBrightness } from "src/hooks";
+import { useBrightness, usePersonalWallet } from "src/hooks";
+import { useNavigation } from '@react-navigation/core';
+import * as Routes from 'src/navigation/constants';
 
 const styles = StyleSheet.create({
     dialog: {
@@ -55,13 +57,30 @@ type QRCodeGenProps = {
 }
 
 const QRCodeGen = (props: QRCodeGenProps): JSX.Element => {
+    const navigation = useNavigation();
     const { customerDwollaId, userAttributes } = useContext(AuthContext);
     const { hasPermission, setMaxBrightness, setDefaultBrightness} = useBrightness();
+    const { wallet, updateWallet } = usePersonalWallet();
+    const [intervalId, setIntervalId] = useState<NodeJS.Timer | null>(null);
     const addressStr = JSON.stringify({
         to: customerDwollaId,
         amount: props.amount,
         mode: props.isOpenAmount ? PaymentMode.OPEN_AMOUNT : PaymentMode.SELECT_AMOUNT
     });
+
+    useEffect(() => {
+        const id = setInterval(() => {
+            updateWallet()
+        }, 1500);
+
+        setIntervalId(id);
+    });
+
+    // For checking that we received the payment successfully.
+    useEffect(() => {
+        onClose();
+        navigation.navigate(Routes.PAYMENT_SUCCESS);
+    }, [wallet.availableBalance]);
 
     useEffect(() => {
         if (hasPermission) {
@@ -70,6 +89,9 @@ const QRCodeGen = (props: QRCodeGenProps): JSX.Element => {
     }, [hasPermission]);
 
     const onClose = () => {
+        if (intervalId) {
+            clearInterval(intervalId);
+        }
         setDefaultBrightness();
         props.onClose();
     }
