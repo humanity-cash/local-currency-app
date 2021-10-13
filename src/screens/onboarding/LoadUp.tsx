@@ -9,7 +9,6 @@ import {
 } from "react-native";
 import { Text } from "react-native-elements";
 import { AuthContext } from 'src/auth';
-import { usePaymentDetails } from "src/hooks";
 import { BackBtn, BorderedInput, Button, Header, CancelBtn } from "src/shared/uielements";
 import { colors } from "src/theme/colors";
 import {
@@ -91,13 +90,8 @@ const MIN_AMOUNT = 1;
 const LoadUp = (): JSX.Element => {
   const navigation = useNavigation();
   const { customerDwollaId } = useContext(AuthContext);
-  const {update} = usePaymentDetails();
   const [amount, setAmount] = useState<string>("");
   const [goNext, setGoNext] = useState(false);
-
-  useEffect(() => {
-    update({ amount: amount });
-  }, []);
 
   useEffect(() => {
     setGoNext(Number(amount) >= MIN_AMOUNT && Number(amount) <= MAX_AMOUNT);
@@ -105,7 +99,6 @@ const LoadUp = (): JSX.Element => {
 
   const onValueChange = (name: string, change: string) => {
     setAmount(change);
-    update({ amount: change });
   };
 
   const onLoadUp = async () => {
@@ -130,12 +123,12 @@ const LoadUp = (): JSX.Element => {
   return (
     <View style={viewBase}>
       <Header
-        leftComponent={<BackBtn onClick={() => navigation.goBack()} />}
+        leftComponent={<BackBtn text="Home" onClick={() => navigation.goBack()} />}
         rightComponent={
           <CancelBtn
             text={Translation.BUTTON.CLOSE}
             onClick={() =>
-              navigation.navigate(Routes.TABS)
+              navigation.navigate(Routes.DASHBOARD)
             }
           />
         }

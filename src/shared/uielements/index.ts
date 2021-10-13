@@ -26,21 +26,22 @@ import {
 	FilterCard,
 	FileCard,
 	AccordionCard,
-	CreditCardCard } from "./cards";
+} from "./cards";
 import {
 	CancelBtn,
 	BackBtn,
 	Header,
 	ModalHeader,
-	NextBtn } from "./header";
+	NextBtn 
+} from "./header";
 import { 
-	CreditCardForm, 
 	DepositView, 
 	PersonalAddressForm, 
 	PersonalDetailsForm, 
 	PersonalProfileForm,
 	BusinessProfileForm,
-	BusinessAddressForm } from "./reusable";
+	BusinessAddressForm 
+} from "./reusable";
 
 export {
 	BorderedInput,
@@ -69,13 +70,11 @@ export {
 	FilterCard,
 	FileCard,
 	AccordionCard,
-	CreditCardCard,
 	CancelBtn,
 	BackBtn,
 	Header,
 	ModalHeader,
 	NextBtn,
-	CreditCardForm, 
 	DepositView, 
 	PersonalAddressForm, 
 	PersonalDetailsForm, 

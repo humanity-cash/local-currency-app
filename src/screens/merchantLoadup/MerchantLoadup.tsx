@@ -3,7 +3,6 @@ import React, { useEffect, useState } from "react";
 import { KeyboardAvoidingView, Platform, ScrollView, StyleSheet, View } from "react-native";
 import { Text } from "react-native-elements";
 import { TouchableOpacity } from "react-native-gesture-handler";
-import { usePaymentDetails } from "src/hooks";
 import { BorderedInput, Button, Header, CancelBtn } from "src/shared/uielements";
 import { colors } from "src/theme/colors";
 import { underlineHeaderB, viewBaseB, wrappingContainerBase } from "src/theme/elements";
@@ -91,7 +90,6 @@ const MAX_AMOUNT = 2000;
 
 const MerchantLoadup = (): JSX.Element => {
   const navigation = useNavigation();
-  const { update } = usePaymentDetails();
   const [amount, setAmount] = useState<string>("");
   const [goNext, setGoNext] = useState<boolean>(false);
 
@@ -101,7 +99,6 @@ const MerchantLoadup = (): JSX.Element => {
 
   const onValueChange = (name: string, change: string) => {
     setAmount(change);
-    update({ [name]: change });
   };
 
   return (

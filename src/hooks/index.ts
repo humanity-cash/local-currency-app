@@ -1,7 +1,6 @@
 import useCachedResources from "./useCachedResources";
 import useCameraPermission from "./useCameraPermission";
 import useBrightness from "./useBrightness";
-import useDialogStatus from "./useDialogStatus";
 import useMediaLibraryPermission from "./useMediaLibraryPermission";
 import useModalStatusBar from "./useModalStatusBar";
 import useNotifications from "./useNotifications";
@@ -15,7 +14,6 @@ export {
 	useMediaLibraryPermission,
 	useCachedResources,
 	useModalStatusBar,
-	useDialogStatus,
 	useNotifications,
 	useRouteTracking,
 	useUserDetails,
