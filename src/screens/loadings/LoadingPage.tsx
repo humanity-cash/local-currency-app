@@ -45,11 +45,11 @@ const LoadingPage = (): JSX.Element => {
     const { userType } = useContext(AuthContext);
 
     const getBackgroundColorStyle = () => {
-        return userType === UserType.Customer ? {backgroundColor: colors.lightGreen} : {backgroundColor: colors.overlayPurple}
+        return userType === UserType.Business ? {backgroundColor: colors.overlayPurple} : {backgroundColor: colors.lightGreen};
     }
 
     const getColorStyle = () => {
-        return userType === UserType.Customer ? {color: colors.darkGreen} : {color: colors.purple}
+        return userType === UserType.Business ? {color: colors.purple} : {color: colors.darkGreen};
     }
 
     return details.screen === LoadingScreenTypes.PAYMENT_PENDING ? (
@@ -63,19 +63,19 @@ const LoadingPage = (): JSX.Element => {
                     </View>
                 </ScrollView>
                 <View style={styles.bottomView}>
-                    <ActivityIndicator size="large" color={userType === UserType.Customer ? colors.darkGreen : colors.purple} />
+                    <ActivityIndicator size="large" color={userType === UserType.Business ? colors.purple : colors.darkGreen} />
                 </View>
             </View>
         </Modal>
     ) : (
-        <Dialog visible={details?.isLoading} style={styles.dialog} backgroundStyle={getBackgroundColorStyle}>
+        <Dialog visible={details?.isLoading} style={styles.dialog} backgroundStyle={getBackgroundColorStyle} hiddenCloseBtn={true}>
             <View style={dialogViewBase}>
                 <View style={styles.dialogWrap}>
                     <Text style={{
                         ...styles.headerText,
                         ...getColorStyle
                     }}>Loading...</Text>
-                    <ActivityIndicator size="large" color={userType === UserType.Customer ? colors.darkGreen : colors.purple} />
+                    <ActivityIndicator size="large" color={userType === UserType.Business ? colors.purple : colors.darkGreen} />
                 </View>
             </View>
         </Dialog>
