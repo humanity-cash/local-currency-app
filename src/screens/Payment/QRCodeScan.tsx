@@ -11,7 +11,7 @@ import { BarCodeScanner } from 'expo-barcode-scanner';
 import Translation from 'src/translation/en.json';
 import * as Routes from 'src/navigation/constants';
 import { BUTTON_TYPES } from 'src/constants';
-import { QRCodeEntry, SECURITY_ID, PaymentMode, ToastType } from 'src/utils/types';
+import { QRCodeEntry, SECURITY_ID, PaymentMode, ToastType, LoadingScreenTypes } from 'src/utils/types';
 import { UserAPI } from 'src/api';
 import { ITransactionRequest } from 'src/api/types';
 import { calcFee, showToast } from 'src/utils/common';
@@ -261,9 +261,15 @@ const QRCodeScan = (): JSX.Element => {
 					comment: ''
 				};
 
-				updateLoadingStatus({ isLoading: true });
+				updateLoadingStatus({
+					isLoading: true,
+					screen: LoadingScreenTypes.PAYMENT_PENDING
+				});
 				const response = await UserAPI.transferTo(customerDwollaId, request);
-				updateLoadingStatus({ isLoading: false });
+				updateLoadingStatus({
+					isLoading: false,
+					screen: LoadingScreenTypes.PAYMENT_PENDING
+				});
 				if (response.data) {
 					navigation.navigate(Routes.PAYMENT_SUCCESS);
 				} else {
@@ -293,9 +299,15 @@ const QRCodeScan = (): JSX.Element => {
 					comment: ''
 				};
 
-				updateLoadingStatus({ isLoading: true });
+				updateLoadingStatus({
+					isLoading: true,
+					screen: LoadingScreenTypes.PAYMENT_PENDING
+				});
 				const response = await UserAPI.transferTo(customerDwollaId, request);
-				updateLoadingStatus({ isLoading: false });
+				updateLoadingStatus({
+					isLoading: false,
+					screen: LoadingScreenTypes.PAYMENT_PENDING
+				});
 				if (response.data) {
 					navigation.navigate(Routes.PAYMENT_SUCCESS);
 				} else {
