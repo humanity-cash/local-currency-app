@@ -88,7 +88,6 @@ const PaymentRequest = (): JSX.Element => {
 	return (
 		<View style={viewBase}>
 			<Header
-				leftComponent={<BackBtn onClick={() => navigation.goBack()} />}
 				rightComponent={<CancelBtn text={Translation.BUTTON.CLOSE} onClick={() => navigation.navigate(Routes.DASHBOARD)} />}
 			/>
 			<ScrollView style={wrappingContainerBase}>

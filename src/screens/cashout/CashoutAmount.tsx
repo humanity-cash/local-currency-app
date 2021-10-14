@@ -1,17 +1,13 @@
-import React, {useState, useEffect, ReactElement} from 'react';
+import React, {useState, useEffect} from 'react';
 import { StyleSheet, View, KeyboardAvoidingView, ScrollView, Platform } from 'react-native';
 import { Text } from 'react-native-elements';
-import { Header, Button, CancelBtn, BackBtn, BorderedInput, Dialog } from "src/shared/uielements";
+import { Header, Button, CancelBtn, BorderedInput, Dialog } from "src/shared/uielements";
 import { underlineHeader, viewBase, dialogViewBase, wrappingContainerBase } from "src/theme/elements";
 import { colors } from "src/theme/colors";
 import { IMap } from "src/utils/types";
 import Translation from 'src/translation/en.json';
 import * as Routes from 'src/navigation/constants';
-
-type CashoutAmountProps = {
-	navigation?: any,
-	route?: any,
-}
+import { useNavigation } from '@react-navigation/core';
 
 interface CashoutState extends IMap {
 	amount: string;
@@ -65,8 +61,8 @@ const styles = StyleSheet.create({
 	}
 });
 
-const CashoutAmount = (props: CashoutAmountProps): ReactElement => {
-
+const CashoutAmount = (): JSX.Element => {
+	const navigation = useNavigation();
 	const [state, setState] = useState<CashoutState>({
 		amount: "1",
 		costs: "1"
@@ -92,14 +88,13 @@ const CashoutAmount = (props: CashoutAmountProps): ReactElement => {
 
 	const doCashout = () => {
 		setIsVisible(false);
-		props.navigation.navigate(Routes.CASHOUT);
+		navigation.navigate(Routes.CASHOUT);
 	}
 
 	return (
 		<View style={viewBase}>
 			<Header
-				leftComponent={<BackBtn onClick={() => props.navigation.goBack()} />}
-				rightComponent={<CancelBtn text={"Close"} onClick={() => props.navigation.goBack()} />}
+				rightComponent={<CancelBtn text={"Close"} onClick={() => navigation.goBack()} />}
 			/>
 			<ScrollView style={wrappingContainerBase}>
 				<View style={ underlineHeader }>
