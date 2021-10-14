@@ -1,18 +1,18 @@
 import { useCallback } from "react";
 import { createStore, useStore } from "react-hookstore";
 import AsyncStorage  from "@react-native-async-storage/async-storage";
-import { IMap, LoadingState } from "src/utils/types";
+import { IMap, LoadingState, LoadingScreenTypes } from "src/utils/types";
 
 const storeId = "LOADING_SCREEN_RECORD";
 
 const defaultState = {
 	isLoading: false,
-	screen: ''
+	screen: LoadingScreenTypes.PAYMENT_PENDING
 };
 
 const store = createStore<LoadingState>(storeId, defaultState);
 
-const useMessages = (): IMap => {
+const useLoadingModal = (): IMap => {
 	const [details] = useStore<LoadingState>(storeId);
 
 	const storeInMemory = async (newState: LoadingState) => {
@@ -43,4 +43,4 @@ const useMessages = (): IMap => {
 	}
 };
 
-export default useMessages;
+export default useLoadingModal;
