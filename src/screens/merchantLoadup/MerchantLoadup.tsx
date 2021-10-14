@@ -13,7 +13,7 @@ import { BUTTON_TYPES } from "src/constants";
 import { useLoadingModal } from "src/hooks";
 import { UserAPI } from 'src/api';
 import { showToast } from 'src/utils/common';
-import { ToastType } from 'src/utils/types';
+import { ToastType, LoadingScreenTypes } from 'src/utils/types';
 
 const styles = StyleSheet.create({
   headerText: {
@@ -114,12 +114,18 @@ const MerchantLoadup = (): JSX.Element => {
       return;
     }
 
-    updateLoadingStatus({ isLoading: true });
+    updateLoadingStatus({
+      isLoading: true,
+      screen: LoadingScreenTypes.PAYMENT_PENDING
+    });
     const response = await UserAPI.deposit(
       businessDwollaId,
       {amount: amount}
     );
-    updateLoadingStatus({ isLoading: false });
+    updateLoadingStatus({
+      isLoading: false,
+      screen: LoadingScreenTypes.PAYMENT_PENDING
+    });
     if (response.data) {
       navigation.navigate(Routes.MERCHANT_LOADUP_SUCCESS);
     } else {
