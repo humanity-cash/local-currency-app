@@ -1,6 +1,6 @@
 import { useNavigation } from '@react-navigation/native';
 import * as ImagePicker from 'expo-image-picker';
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useState } from 'react';
 import { Image, KeyboardAvoidingView, Platform, ScrollView, StyleSheet, TouchableOpacity, View } from "react-native";
 import { Text } from "react-native-elements";
 import { AuthContext } from 'src/auth';
@@ -10,6 +10,9 @@ import { BackBtn, BlockInput, Button, Header } from "src/shared/uielements";
 import { colors } from "src/theme/colors";
 import { underlineHeader, viewBase } from "src/theme/elements";
 import Translation from 'src/translation/en.json';
+import { ToastType, LoadingScreenTypes } from 'src/utils/types';
+import { showToast } from 'src/utils/common';
+import { useLoadingModal, useMediaLibraryPermission } from 'src/hooks';
 
 const styles = StyleSheet.create({
 	container: {
@@ -55,21 +58,14 @@ const styles = StyleSheet.create({
 export const SettingsPersonalDetails = (): JSX.Element => {
 	const { userAttributes, updateAttributes } = useContext(AuthContext);
 	const navigation = useNavigation();
+	const { updateLoadingStatus } = useLoadingModal();
 	const username =  userAttributes['custom:personal.tag']
 	const [state, setState] = useState({
 		avatar: '',
 		username
 	});
 
-	useEffect(() => {
-		(async () => {
-		  if (Platform.OS !== 'web') {
-			const { status } = await ImagePicker.requestMediaLibraryPermissionsAsync();
-			if (status !== 'granted') {
-			  alert(Translation.OTHER.NO_CAMERA_PERMISSION);
-			}
-		}})();
-	}, []);
+	useMediaLibraryPermission();
 
 	const onValueChange = (name: string, change: string) => {
 		setState({
@@ -90,6 +86,28 @@ export const SettingsPersonalDetails = (): JSX.Element => {
 			onValueChange('avatar', result.uri);
 		}
 	};
+
+	const handleSave = async () => {
+		const attr: CognitoCustomerAttributesUpdate = {
+			"custom:personal.tag": state.username,
+		};
+
+		updateLoadingStatus({
+			isLoading: true,
+			screen: LoadingScreenTypes.LOADING_DATA
+		});
+		const response = await updateAttributes(attr);
+		updateLoadingStatus({
+			isLoading: false,
+			screen: LoadingScreenTypes.LOADING_DATA
+		});
+
+		if (response.success) {
+			navigation.goBack();
+		} else {
+			showToast(ToastType.ERROR, "Whooops, something went wrong.", "Connection failed.");
+		}
+	}
 
 	return (
 		<View style={viewBase}>
@@ -133,13 +151,7 @@ export const SettingsPersonalDetails = (): JSX.Element => {
 						type={BUTTON_TYPES.DARK_GREEN}
 						title={Translation.BUTTON.SAVE_CHANGE}
 						disabled={state.username === username}
-						onPress={async () => {
-							const attr: CognitoCustomerAttributesUpdate = {
-								"custom:personal.tag": state.username,
-							};
-							const _response = await updateAttributes(attr)
-							//:TODO Show Success Message
-						}}
+						onPress={handleSave}
 					/>
 				</View>
 			</KeyboardAvoidingView>
