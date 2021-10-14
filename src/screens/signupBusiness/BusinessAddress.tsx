@@ -19,6 +19,9 @@ import {
 import Translation from "src/translation/en.json";
 import { IUserRequest } from 'src/api/types';
 import { UserAPI } from 'src/api';
+import { ToastType, LoadingScreenTypes } from 'src/utils/types';
+import { showToast } from 'src/utils/common';
+import { useLoadingModal } from 'src/hooks';
 
 const styles = StyleSheet.create({
 	headerText: {
@@ -63,6 +66,8 @@ const BusinessAddress = (): ReactElement => {
 		completeBusinessDwollaInfo
 	} = useContext(AuthContext);
 	const navigation = useNavigation();
+	const { updateLoadingStatus } = useLoadingModal();
+	
 	const onNextPress = async () => {
 		const response: BaseResponse<string | undefined> =
 			await completeBusniessBasicVerification();
@@ -80,6 +85,10 @@ const BusinessAddress = (): ReactElement => {
 				authUserId: "m_" + cognitoId
 			};
 
+			updateLoadingStatus({
+				isLoading: true,
+				screen: LoadingScreenTypes.LOADING_DATA
+			});
 			const resApi = await UserAPI.user(request);
 
 			if (resApi.data) {
@@ -88,8 +97,19 @@ const BusinessAddress = (): ReactElement => {
 					resourceUri: ""
 				});
 
+				updateLoadingStatus({
+					isLoading: false,
+					screen: LoadingScreenTypes.LOADING_DATA
+				});
 				navigation.navigate(Routes.BUSINESS_WELCOME);
 			}
+
+			updateLoadingStatus({
+				isLoading: false,
+				screen: LoadingScreenTypes.LOADING_DATA
+			});
+		} else {
+			showToast(ToastType.ERROR, "Whooops, something went wrong.", "Connection failed.");
 		}
 	};
 
