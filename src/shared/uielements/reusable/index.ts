@@ -1,4 +1,3 @@
-import CreditCardForm from "./CreditCardForm";
 import DepositView from "./DepositView";
 import PersonalAddressForm from "./PersonalAddressForm";
 import PersonalDetailsForm from "./PersonalDetailsForm";
@@ -8,8 +7,7 @@ import BusinessAddressForm from "./BusinessAddressForm";
 import BusinessOwnerDetailsForm from "./BusinessOwnerDetailForm";
 import BusinessOwnerAddressForm from "./BusinessOwnerAddressForm";
 
-export { 
-    CreditCardForm, 
+export {
     BusinessOwnerAddressForm,
     BusinessOwnerDetailsForm,
     DepositView, 
