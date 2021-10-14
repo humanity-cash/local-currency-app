@@ -19,7 +19,8 @@ import DwollaDialog from './DwollaDialog';
 import { Button, Dialog } from "src/shared/uielements";
 import { dialogViewBase } from "src/theme/elements";
 import { BUTTON_TYPES } from "src/constants";
-import { usePersonalWallet, useBanks } from 'src/hooks';
+import { usePersonalWallet, useBanks, useLoadingModal } from 'src/hooks';
+import { LoadingScreenTypes } from 'src/utils/types';
 
 const styles = StyleSheet.create({
 	content: { paddingBottom: 40 },
@@ -147,6 +148,7 @@ const feedData = [
 const Dashboard = (): JSX.Element => {
 	const navigation = useNavigation();
 	const { wallet, updateWallet } = usePersonalWallet();
+	const { updateLoadingStatus } = useLoadingModal();
 	const { hasPersonalBank, getBankStatus } = useBanks();
 	const { customerDwollaId } = useContext(AuthContext);
 	const [isVisible, setIsVisible] = useState<boolean>(false);
@@ -154,11 +156,23 @@ const Dashboard = (): JSX.Element => {
 	const [isPayment, setIsPayment] = useState<boolean>(false);
 
 	useEffect(() => {
-		if (customerDwollaId) {
-			getBankStatus(customerDwollaId, false);
-			updateWallet(customerDwollaId);
-		}
-	}, [customerDwollaId]);
+		const unsubscribe = navigation.addListener("focus", async () => {
+			if (customerDwollaId) {
+				updateLoadingStatus({
+					isLoading: true,
+					screen: LoadingScreenTypes.LOADING_DATA
+				});
+				await getBankStatus(customerDwollaId, false);
+				await updateWallet(customerDwollaId);
+				updateLoadingStatus({
+					isLoading: false,
+					screen: LoadingScreenTypes.LOADING_DATA
+				});
+			}
+		});
+
+		return unsubscribe;
+	}, [navigation]);
 
 	const selectBank = () => {
 		navigation.navigate(Routes.SELECT_BANK);
