@@ -158,11 +158,11 @@ const Dashboard = (): JSX.Element => {
 	useEffect(() => {
 		const unsubscribe = navigation.addListener("focus", async () => {
 			if (customerDwollaId) {
+				getBankStatus(customerDwollaId, false);
 				updateLoadingStatus({
 					isLoading: true,
 					screen: LoadingScreenTypes.LOADING_DATA
 				});
-				await getBankStatus(customerDwollaId, false);
 				await updateWallet(customerDwollaId);
 				updateLoadingStatus({
 					isLoading: false,
