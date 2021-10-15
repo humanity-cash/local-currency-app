@@ -3,6 +3,9 @@ import { AuthenticationDetails, CognitoUser, CognitoUserAttribute, CognitoUserPo
 import { SignUpInput } from '../types';
 import { NOT_AUTHENTICATED } from './consts';
 import { CognitoError, CognitoResponse } from './types';
+import { showToast } from 'src/utils/common';
+import { ToastType } from 'src/utils/types';
+import Translation from 'src/translation/en.json';
 
 /**Authenticated Account*/
 
@@ -32,7 +35,10 @@ export const updateUserAttributes = (user: CognitoUser | null, attributesList: (
 		if (!user) resolve(NOT_AUTHENTICATED)
 		else {
 			user.updateAttributes(attributesList, (err: CognitoError, result: string | undefined) => {
-				if (err) resolve({ user, success: false, data: { error: err.code } })
+				if (err) {
+					showToast(ToastType.ERROR, err.code, err.message);
+					resolve({ user, success: false, data: { error: err.code } })
+				}
 				else resolve({ user, success: true, data: result })
 			});
 		}
@@ -54,14 +60,16 @@ export const deleteUser = async (user: CognitoUser | null): Promise<CognitoRespo
 export const authenticateUser = (user: CognitoUser | null, authenticationDetails: AuthenticationDetails)
 	: CognitoResponse<CognitoUserSession> => {
 	return new Promise(function (resolve) {
-		if (!user) resolve({ user, success: false, data: { error: 'Email not registered!' } })
+		if (!user) {
+			showToast(ToastType.ERROR, Translation.NOTIFICATIONS.ERROR, Translation.NOTIFICATIONS.EMAIL_NOT_REGISTERED)
+			resolve({ user, success: false, data: { error: Translation.NOTIFICATIONS.EMAIL_NOT_REGISTERED } })
+		}
 		else return user.authenticateUser(authenticationDetails, {
 			onSuccess: async function (response: CognitoUserSession) {
-				
 				resolve({ user, success: true, data: response });
 			},
 			onFailure: function (error: CognitoError) {
-				console.log("error", error);
+				showToast(ToastType.ERROR, error.code, error.message);
 				resolve({ user, success: false, data: { error: error.code } });
 			},
 		})
@@ -74,12 +82,15 @@ export const authenticateUser = (user: CognitoUser | null, authenticationDetails
 export const forgotPassword = (user: CognitoUser | null)
 	: CognitoResponse<unknown> => {
 	return new Promise(function (resolve) {
-		if (!user) resolve({ user, success: false, data: { error: 'Email not registered!' } })
-		else return user.forgotPassword({
+		if (!user) {
+			showToast(ToastType.ERROR, Translation.NOTIFICATIONS.ERROR, Translation.NOTIFICATIONS.EMAIL_NOT_REGISTERED);
+			resolve({ user, success: false, data: { error: Translation.NOTIFICATIONS.EMAIL_NOT_REGISTERED } })
+		} else return user.forgotPassword({
 			onSuccess: function () {
 				resolve({ user, success: true, data: {} });
 			},
 			onFailure: function (error: CognitoError) {
+				showToast(ToastType.ERROR, error.code, error.message);
 				resolve({ user, success: false, data: { error: error.code } });
 			},
 		})
@@ -93,12 +104,16 @@ export const forgotPassword = (user: CognitoUser | null)
 export const setNewPassword = (user: CognitoUser | null, verificationCode: string, newPassword: string)
 	: CognitoResponse<unknown> => {
 	return new Promise(function (resolve) {
-		if (!user) resolve({ user, success: false, data: { error: 'Email not registered!' } })
+		if (!user) {
+			showToast(ToastType.ERROR, Translation.NOTIFICATIONS.ERROR, Translation.NOTIFICATIONS.EMAIL_NOT_REGISTERED);
+			resolve({ user, success: false, data: { error: Translation.NOTIFICATIONS.EMAIL_NOT_REGISTERED } })
+		}
 		else return user.confirmPassword(verificationCode, newPassword, {
 			onSuccess: function () {
 				resolve({ user, success: true, data: {} });
 			},
 			onFailure: function (error: CognitoError) {
+				showToast(ToastType.ERROR, error.code, error.message);
 				resolve({ user, success: false, data: { error: error.code } });
 			},
 		});
@@ -110,7 +125,10 @@ export const signUp = async (userPool: CognitoUserPool, { email, password, attri
 	new Promise((resolve) => {
 		userPool.signUp(email, password, attributeList, attributeList,
 			(err: CognitoError, result: ISignUpResult | undefined) => {
-				if (err) resolve({ success: false, data: { error: err.code } })
+				if (err) {
+					showToast(ToastType.ERROR, err.code, err.message);
+					resolve({ success: false, data: { error: err.code } })
+				}
 				else resolve({ success: true, data: result })
 			})
 	});
@@ -119,7 +137,10 @@ export const confirmEmailVerificationCode = (user: CognitoUser, code: string)
 	: CognitoResponse<unknown> =>
 	new Promise((resolve) => {
 		user.confirmRegistration(code, true, (err: CognitoError, result) => {
-			if (err) resolve({ user, success: false, data: { error: err.code } });
+			if (err) {
+				showToast(ToastType.ERROR, err.code, err.message);
+				resolve({ user, success: false, data: { error: err.code } });
+			}
 			else resolve({ user, success: true, data: result })
 		});
 	})
@@ -136,7 +157,10 @@ export const resendEmailVerificationCode = (user: CognitoUser): CognitoResponse<
 export const changePassword = (user: CognitoUser | null, oldPassword: string, newPassword: string)
 	: CognitoResponse<unknown> => {
 	return new Promise(function (resolve) {
-		if (!user) resolve({ user, success: false, data: { error: 'Email not registered!' } })
+		if (!user) {
+			showToast(ToastType.ERROR, Translation.NOTIFICATIONS.ERROR, Translation.NOTIFICATIONS.EMAIL_NOT_REGISTERED);
+			resolve({ user, success: false, data: { error: Translation.NOTIFICATIONS.EMAIL_NOT_REGISTERED } })
+		}
 		else return user.changePassword(oldPassword, newPassword, function (err) {
 			if (err) resolve({ user, success: false, data: {} });
 			else resolve({ user, success: true, data: {} });

@@ -309,5 +309,10 @@
         "SETTINGS": "Settings",
         "HELP_AND_CONTACT": "Help and Contact",
         "SIGN_OUT": "Sign out"
+    },
+    "NOTIFICATIONS": {
+        "EMAIL_NOT_REGISTERED": "Email not registered!",
+        "NOT_AUTHORIZED": "NotAuthorizedException",
+        "ERROR": "Error"
     }
 }
