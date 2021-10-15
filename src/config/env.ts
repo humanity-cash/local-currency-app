@@ -1,6 +1,6 @@
-import { DEV_CORE_API_URL, PROD_CORE_API_URL } from '@env';
+const DEV_CORE_API_URL = "https://alfajores.api.humanity.cash";
+const PROD_CORE_API_URL = "https://alfajores.api.humanity.cash";
 
-console.log(DEV_CORE_API_URL, PROD_CORE_API_URL);
 const devEnvironmentVariables = {
     CORE_API_URL: DEV_CORE_API_URL,
 }
