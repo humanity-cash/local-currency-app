@@ -4,20 +4,21 @@ import { Theme } from "react-native-elements";
 export const theme: Theme = {
 	Text: {
 		style: {
-			fontFamily: 'IBMPlexSans',
+			fontFamily: 'GothamBook',
 			color: colors.text,
 			fontSize: 16,
 			lineHeight: 24
 		},
 		h1Style: {
-			fontFamily: 'IBMPlexSansBold',
+			fontFamily: 'GothamBook',
 			fontSize: 40,
+			color: colors.darkGreen1,
 			lineHeight: 36,
 			paddingTop: 20,
 			marginBottom: 10
 		},
 		h2Style: {
-			fontFamily: 'IBMPlexSans',
+			fontFamily: 'GothamBook',
 			fontSize: 20,
 			lineHeight: 24
 		},

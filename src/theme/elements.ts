@@ -1,5 +1,4 @@
 import { colors } from "./colors";
-import { Dimensions } from 'react-native';
 
 export const viewBase: any = {
 	flex: 1,
@@ -71,7 +70,7 @@ export const underlineHeaderB: any = {
 }
 
 export const modalBaseHeader: any = {
-	fontFamily: 'IBMPlexSansBold',
+	fontFamily: 'GothamBold',
 	fontSize: 20,
 	paddingBottom: 10
 }
