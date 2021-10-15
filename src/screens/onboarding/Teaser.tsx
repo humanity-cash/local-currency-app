@@ -23,13 +23,17 @@ const styles = StyleSheet.create({
 		paddingLeft: 35
 	},
 	titleText: {
+		fontFamily: 'GothamLight',
 		fontSize: 50,
 		lineHeight: 50,
-		color: colors.black
+		color: colors.darkGreen1,
+		marginBottom: 10
 	},
 	description: {
-		fontSize: 18,
-		color: colors.white
+		fontSize: 16,
+		color: colors.white,
+		paddingLeft: 5,
+		fontWeight: '500'
 	},
 	bottomView: {
 		position: "absolute",

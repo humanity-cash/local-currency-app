@@ -33,7 +33,6 @@ const styles = StyleSheet.create({
 	inputText: {
 		textAlign: 'left',
 		fontSize: 20,
-		fontFamily: 'IBMPlexSansSemiBold',
 		paddingLeft: 15,
 		borderWidth: 0,
 		color: colors.text,

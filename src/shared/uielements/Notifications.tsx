@@ -29,7 +29,7 @@ const styles = StyleSheet.create({
 		zIndex: 2
 	},
 	title: {
-		fontFamily: 'IBMPlexSansSemiBold',
+		fontFamily: 'GothamBold',
 	},
 	link: {
 		color: colors.gold

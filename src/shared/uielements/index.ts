@@ -5,7 +5,6 @@ import BottomSheet from "./BottomSheet";
 import Button from "./Button";
 import ChartView from "./ChartView";
 import ConfirmationCode from "./ConfirmationCode";
-import DocumentModal from "./DocumentModal";
 import Dots from "./Dots";
 import Modal from "./Modal";
 import Dialog from "./Dialog";
@@ -51,7 +50,6 @@ export {
 	Button,
 	ChartView,
 	ConfirmationCode,
-	DocumentModal,
 	Dots,
 	Modal,
 	Dialog,

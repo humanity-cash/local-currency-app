@@ -24,7 +24,7 @@ const styles = StyleSheet.create({
 		}
 	},
 	boldText: {
-		fontFamily: 'IBMPlexSansSemiBold',
+		fontFamily: 'GothamBold',
 	},
 	detailsView: {
 		flexDirection: "row",
