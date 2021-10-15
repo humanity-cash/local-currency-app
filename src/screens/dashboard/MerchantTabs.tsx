@@ -174,7 +174,7 @@ const BankLinkDialog = (props: BankLinkDialogProps) => {
 
 const DrawerContent = (props: DrawerContentComponentProps) => {
 	const { userAttributes } = useContext(AuthContext);
-	const { signOut, updateUserType } = useContext(AuthContext);
+	const { signOut, updateUserType, completedCustomerVerification } = useContext(AuthContext);
 	const { hasBusinessBank } = useBanks();
 	const { wallet } = useBusinessWallet();
 	const { authorization } = useUserDetails();
@@ -233,7 +233,7 @@ const DrawerContent = (props: DrawerContentComponentProps) => {
 								</View>
 								<View style={styles.usernameView}>
 									<Text>{businessTag}</Text>
-									<View style={styles.inlineView}>
+									{(completedCustomerVerification || isCashierView) && <View style={styles.inlineView}>
 										<Text style={styles.fadeText}>
 											Switch account
 										</Text>
@@ -242,7 +242,7 @@ const DrawerContent = (props: DrawerContentComponentProps) => {
 											size={26}
 											color={colors.purple}
 										/>
-									</View>
+									</View>}
 								</View>
 							</View>
 						</TouchableWithoutFeedback>

@@ -29,7 +29,6 @@ const LoadUpSuccess = (): JSX.Element => {
 			<ScrollView style={wrappingContainerBase}>
 				<View style={ baseHeader }>
 					<Text style={styles.headerText}>{Translation.LOAD_UP.LOAD_UP_SUCCESS}</Text>
-					<Text style={styles.headerText}>B$ 50.00</Text>
 				</View>
 				<Text>{Translation.LOAD_UP.LOAD_UP_SUCCESS_DETAIL}</Text>
 			</ScrollView>

@@ -20,11 +20,11 @@ const useBusinessWallet = (): IMap => {
 
 	useEffect(() => {
 		if (businessDwollaId) {
-			getWallet(businessDwollaId);
+			updateWallet(businessDwollaId);
 		}
 	}, [businessDwollaId]);
 
-	const getWallet = async (dwollaId: string) => {
+	const updateWallet = async (dwollaId: string) => {
 		const response = await UserAPI.getUser(dwollaId);
 		if (response?.data) {
 			const wallets  = response?.data as WalletState[];
@@ -34,7 +34,7 @@ const useBusinessWallet = (): IMap => {
 
 	return {
 		wallet: wallet,
-		getWallet,
+		updateWallet,
 	}
 };
 

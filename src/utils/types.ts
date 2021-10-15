@@ -375,3 +375,14 @@ export enum ToastType {
   ERROR = "error",
   INFO = "info"
 }
+
+/* LOADING SCREENS	*/
+export const enum LoadingScreenTypes {
+	PAYMENT_PENDING = 'paymentPending',
+	LOADING_DATA = 'loadingData'
+}
+
+export interface LoadingState {
+  screen: LoadingScreenTypes,
+  isLoading: boolean
+}

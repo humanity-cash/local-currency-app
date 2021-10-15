@@ -2,6 +2,7 @@ import { useNavigation } from '@react-navigation/native';
 import React, { useContext } from 'react';
 import { KeyboardAvoidingView, Platform, ScrollView, StyleSheet, View } from 'react-native';
 import { Text } from 'react-native-elements';
+import { useLoadingModal } from 'src/hooks';
 import { AuthContext } from 'src/auth';
 import { SignInInput } from 'src/auth/types';
 import { BUTTON_TYPES } from 'src/constants';
@@ -10,6 +11,7 @@ import { BackBtn, BlockInput, Button, Header } from "src/shared/uielements";
 import { colors } from "src/theme/colors";
 import { baseHeader, viewBase, wrappingContainerBase } from "src/theme/elements";
 import Translation from 'src/translation/en.json';
+import { LoadingScreenTypes } from 'src/utils/types';
 
 const styles = StyleSheet.create({
 	headerText: {
@@ -37,6 +39,7 @@ const styles = StyleSheet.create({
 const Login = (): JSX.Element => {
 	const navigation = useNavigation();
 	const { signIn, signInDetails, setSignInDetails } = useContext(AuthContext);
+	const { updateLoadingStatus } = useLoadingModal();
 
 	const onValueChange = (name: 'email' | 'password', change: string) => {
 		setSignInDetails((pv: SignInInput) => ({
@@ -44,6 +47,20 @@ const Login = (): JSX.Element => {
 			[name]: change,
 		}));
 	};
+
+	const handleSignin = async () => {
+		updateLoadingStatus({
+			isLoading: true,
+			screen: LoadingScreenTypes.LOADING_DATA
+		});
+
+		await signIn();
+
+		updateLoadingStatus({
+			isLoading: false,
+			screen: LoadingScreenTypes.LOADING_DATA
+		});
+	}
 
 	return (
 		<View style={viewBase}>
@@ -89,7 +106,7 @@ const Login = (): JSX.Element => {
 						type={BUTTON_TYPES.DARK_GREEN}
 						title='Log in'
 						disabled={false}
-						onPress={signIn}
+						onPress={handleSignin}
 					/>
 				</View>
 			</KeyboardAvoidingView>

@@ -9,14 +9,14 @@ import { viewBaseB, wrappingContainerBase, baseHeader, dialogViewBase } from "sr
 import { SearchInput, Header, Dialog, Button } from "src/shared/uielements";
 import MerchantTransactionList from "./MerchantTransactionList";
 import MerchantTransactionsFilter from "./MerchantTransactionsFilter";
-import { MerchantTransactionItem, MerchantTransactionType, TransactionTypes } from "src/utils/types";
+import { MerchantTransactionItem, MerchantTransactionType, TransactionTypes, LoadingScreenTypes } from "src/utils/types";
 import { merchantTransactions } from "src/mocks/transactions";
 import Translation from 'src/translation/en.json';
 import * as Routes from 'src/navigation/constants';
 import { getBerksharePrefix } from "src/utils/common";
 import DwollaDialog from './DwollaDialog';
 import { BUTTON_TYPES } from "src/constants";
-import { useBusinessWallet, useBanks } from 'src/hooks';
+import { useBusinessWallet, useBanks, useLoadingModal } from 'src/hooks';
 
 const styles = StyleSheet.create({
 	mainTextColor: {
@@ -213,8 +213,9 @@ const TransactionDetail = (props: TransactionDetailProps) => {
 const MerchantDashboard = (): JSX.Element => {
 	const navigation = useNavigation();
 	const { completedCustomerVerification, businessDwollaId } = useContext(AuthContext);
-	const { wallet, getWallet } = useBusinessWallet();
+	const { wallet, updateWallet } = useBusinessWallet();
 	const { hasBusinessBank, getBankStatus } = useBanks();
+	const { updateLoadingStatus } = useLoadingModal();
 	const [isFilterVisible, setIsFilterVisible] = useState<boolean>(false);
 	const [searchText, setSearchText] = useState<string>("");
 	const [isDetailViewOpen, setIsDetailViewOpen] = useState<boolean>(false);
@@ -228,11 +229,23 @@ const MerchantDashboard = (): JSX.Element => {
 	const [isPayment, setIsPayment] = useState<boolean>(false);
 
 	useEffect(() => {
-		if (businessDwollaId) {
-			getBankStatus(businessDwollaId, true);
-			getWallet(businessDwollaId);
-		}
-	}, [businessDwollaId]);
+		const unsubscribe = navigation.addListener("focus", async () => {
+			if (businessDwollaId) {
+				getBankStatus(businessDwollaId, true);
+				updateLoadingStatus({
+					isLoading: true,
+					screen: LoadingScreenTypes.LOADING_DATA
+				});
+				await updateWallet(businessDwollaId);
+				updateLoadingStatus({
+					isLoading: false,
+					screen: LoadingScreenTypes.LOADING_DATA
+				});
+			}
+		});
+
+		return unsubscribe;
+	}, [navigation]);
 
 	const onSearchChange = (name: string, change: string) => {
 		setSearchText(change);

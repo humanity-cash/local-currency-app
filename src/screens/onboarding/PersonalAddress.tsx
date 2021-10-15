@@ -28,6 +28,9 @@ import {
 import Translation from "src/translation/en.json";
 import { UserAPI } from 'src/api';
 import { IUserRequest } from 'src/api/types';
+import { ToastType, LoadingScreenTypes } from 'src/utils/types';
+import { showToast } from 'src/utils/common';
+import { useLoadingModal } from 'src/hooks';
 
 const styles = StyleSheet.create({
 	content: {
@@ -49,9 +52,10 @@ const PersonalAddress = (): React.ReactElement => {
 		completeCustomerBasicVerification, 
 		signOut, 
 		cognitoId, 
-		completeCustomerDwollaInfo ,
+		completeCustomerDwollaInfo,
 		signInDetails
 	} = useContext(AuthContext);
+	const { updateLoadingStatus } = useLoadingModal();
 	const navigation = useNavigation();
 
 	const onNextPress = async () => {
@@ -69,6 +73,10 @@ const PersonalAddress = (): React.ReactElement => {
 				authUserId: "p_" + cognitoId
 			};
 
+			updateLoadingStatus({
+				isLoading: true,
+				screen: LoadingScreenTypes.LOADING_DATA
+			});
 			const resApi = await UserAPI.user(request);
 			if (resApi.data) {
 				await completeCustomerDwollaInfo({
@@ -76,10 +84,20 @@ const PersonalAddress = (): React.ReactElement => {
 					resourceUri: ""
 				});
 
+				updateLoadingStatus({
+					isLoading: false,
+					screen: LoadingScreenTypes.LOADING_DATA
+				});
+
 				navigation.navigate(Routes.LINK_BANK_ACCOUNT);
 			}
+
+			updateLoadingStatus({
+				isLoading: false,
+				screen: LoadingScreenTypes.LOADING_DATA
+			});
 		} else {
-			console.log("something went wrong in finalising customer signup");
+			showToast(ToastType.ERROR, "Whooops, something went wrong.", "Connection failed.");
 		}
 	};
 
