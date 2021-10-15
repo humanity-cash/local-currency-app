@@ -1,5 +1,5 @@
 import { useNavigation } from '@react-navigation/native';
-import React, { useContext } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { KeyboardAvoidingView, Platform, ScrollView, StyleSheet, View } from 'react-native';
 import { Text } from 'react-native-elements';
 import { useLoadingModal } from 'src/hooks';
@@ -12,6 +12,7 @@ import { colors } from "src/theme/colors";
 import { baseHeader, viewBase, wrappingContainerBase } from "src/theme/elements";
 import Translation from 'src/translation/en.json';
 import { LoadingScreenTypes } from 'src/utils/types';
+import { isPasswordValid } from 'src/utils/validation';
 
 const styles = StyleSheet.create({
 	headerText: {
@@ -29,6 +30,7 @@ const styles = StyleSheet.create({
 		fontSize: 12,
 		lineHeight: 14,
 		color: colors.bodyText,
+		paddingTop: 10
 	},
 	bottomView: {
 		paddingHorizontal: 20,
@@ -40,6 +42,11 @@ const Login = (): JSX.Element => {
 	const navigation = useNavigation();
 	const { signIn, signInDetails, setSignInDetails } = useContext(AuthContext);
 	const { updateLoadingStatus } = useLoadingModal();
+	const [goNext, setGoNext] = useState<boolean>(false);
+
+	useEffect(() => {
+		setGoNext(isPasswordValid(signInDetails ? signInDetails.password : ""));
+	});
 
 	const onValueChange = (name: 'email' | 'password', change: string) => {
 		setSignInDetails((pv: SignInInput) => ({
@@ -81,7 +88,7 @@ const Login = (): JSX.Element => {
 						value={signInDetails?.email}
 						onChange={onValueChange}
 					/>
-					<Text style={styles.label}>{Translation.LABEL.PASSWORD}</Text>
+					<Text style={styles.label}>{Translation.LABEL.CONFIRM_PASSWORD}</Text>
 					<BlockInput
 						name='password'
 						placeholder='Password'
@@ -97,7 +104,7 @@ const Login = (): JSX.Element => {
 				<View style={styles.bottomView}>
 					<Button
 						type={BUTTON_TYPES.TRANSPARENT}
-						title='Forgot Passowrd?'
+						title='Forgot Passowrd'
 						onPress={() =>
 							navigation.navigate(Routes.FORGOT_PASSWORD)
 						}
@@ -105,7 +112,7 @@ const Login = (): JSX.Element => {
 					<Button
 						type={BUTTON_TYPES.DARK_GREEN}
 						title='Log in'
-						disabled={false}
+						disabled={!goNext}
 						onPress={handleSignin}
 					/>
 				</View>

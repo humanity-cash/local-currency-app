@@ -5,7 +5,8 @@ import {
 	Platform,
 	ScrollView,
 	StyleSheet,
-	View
+	View,
+	Linking
 } from 'react-native';
 import { CheckBox, Text } from 'react-native-elements';
 import { AuthContext } from 'src/auth';
@@ -22,6 +23,7 @@ import {
 	wrappingContainerBase
 } from 'src/theme/elements';
 import { isEmailValid } from 'src/utils/validation';
+import Translation from 'src/translation/en.json';
 
 const styles = StyleSheet.create({
 	container: {
@@ -45,16 +47,28 @@ const styles = StyleSheet.create({
 		paddingHorizontal: 20,
 		paddingBottom: 50,
 	},
-	checkboxView: {
+	checkboxTextView: {
 		fontWeight: '400',
-		color: colors.darkGreen,
-		fontSize: 14,
+		paddingTop: 10,
+		flexDirection: 'row',
+		flexWrap: 'wrap'
 	},
 	checkboxContainer: {
 		borderWidth: 0,
 		backgroundColor: 'transparent',
 	},
+	terms: {
+		flexDirection: 'row',
+		paddingBottom: 30,
+		width: '80%'
+	},
+	underlineText: {
+		textDecorationLine: 'underline'
+	}
 });
+
+const privacyUrl = "https://rib.ogg.mybluehost.me/wp-content/uploads/2021/08/Privacy-Form-Neighborly.pdf";;
+const termsUrl = "https://berkshares.org/about/terms-and-conditions/";
 
 const CreateAccount = (): JSX.Element => {
 	const navigation = useNavigation();
@@ -82,7 +96,7 @@ const CreateAccount = (): JSX.Element => {
 						Verification code to your email.
 					</Text>
 					<View style={styles.form}>
-						<Text style={styles.label}>Email Address</Text>
+						<Text style={styles.label}>{Translation.LABEL.EMAIL_ADDR}</Text>
 						<BlockInput
 							name='email'
 							placeholder='myname@mail.com'
@@ -96,14 +110,21 @@ const CreateAccount = (): JSX.Element => {
 			<KeyboardAvoidingView
 				behavior={Platform.OS == 'ios' ? 'padding' : 'height'}>
 				<View style={styles.bottomView}>
-					<CheckBox
-						checked={isSelected}
-						title="I've read and accept the Terms & Conditions and Privacy Policy"
-						textStyle={styles.checkboxView}
-						containerStyle={styles.checkboxContainer}
-						checkedColor={colors.darkGreen}
-						onPress={() => setSelection(!isSelected)}
-					/>
+					<View style={styles.terms}>
+						<CheckBox
+							checked={isSelected}
+							title=""
+							containerStyle={styles.checkboxContainer}
+							checkedColor={colors.darkGreen}
+							onPress={() => setSelection(!isSelected)}
+						/>
+						<View style={styles.checkboxTextView}>
+							<Text style={styles.bodyText}>I've read and accept the </Text>
+							<Text style={styles.underlineText} onPress={()=>Linking.openURL(privacyUrl)}>Terms & Conditions </Text>
+							<Text style={styles.bodyText}>and </Text>
+							<Text style={styles.underlineText} onPress={()=>Linking.openURL(termsUrl)}>Privacy Policy</Text>
+						</View>
+					</View>
 					<Button
 						type={BUTTON_TYPES.DARK_GREEN}
 						title='NEXT'

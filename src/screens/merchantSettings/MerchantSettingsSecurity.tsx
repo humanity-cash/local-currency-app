@@ -69,7 +69,7 @@ const styles = StyleSheet.create({
 		marginHorizontal: 20
 	},
 	saveButton: {
-		fontFamily: 'IBMPlexSansSemiBold',
+		fontFamily: 'GothamBold',
 		color: colors.darkRed
 	}
 });

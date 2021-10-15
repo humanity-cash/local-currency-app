@@ -27,7 +27,7 @@ export type SelectionProps = {
 
 const styles = StyleSheet.create({
 	modalHeader: {
-		fontFamily: 'IBMPlexSansSemiBold',
+		fontFamily: 'GothamBold',
 		fontSize: 20,
 		paddingBottom: 10
 	},
