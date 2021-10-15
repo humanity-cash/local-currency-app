@@ -3,17 +3,17 @@ import React, { useState, useEffect, useContext } from 'react';
 import { ScrollView, StyleSheet, Switch, View } from "react-native";
 import { Text } from "react-native-elements";
 import { AuthContext } from "src/auth";
-import { useUserDetails } from "src/hooks";
+import { useUserDetails, useLoadingModal } from "src/hooks";
 import { Header, BlockInput, Button, BackBtn } from "src/shared/uielements";
 import { colors } from "src/theme/colors";
 import { viewBase, underlineHeader } from "src/theme/elements";
 import { IMap } from "src/utils/types";
 import Translation from 'src/translation/en.json';
-import * as Routes from 'src/navigation/constants';
 import { BUTTON_TYPES } from 'src/constants';
 import { isPasswordValid } from 'src/utils/validation';
 import { showToast } from 'src/utils/common';
 import { ToastType } from 'src/utils/types';
+import { LoadingScreenTypes } from 'src/utils/types';
 
 interface SecurityProps extends IMap {
 	password: string;
@@ -68,6 +68,7 @@ export const SettingsSecurity = (): JSX.Element => {
 	const navigation = useNavigation();
 	const { changePassword } = useContext(AuthContext);
 	const { authorization, updateAuthorization } = useUserDetails();
+	const { updateLoadingStatus } = useLoadingModal();
 	const [switchToggle, setSwitchToggle] = useState<boolean>(false);
 	const [canSave, setCanSave] = useState<boolean>(false);
 	const [isValidPassword, setIsValidPassword] = useState<boolean>(false);
@@ -106,9 +107,17 @@ export const SettingsSecurity = (): JSX.Element => {
 	}
 
 	const handleSave = async () => {
+		updateLoadingStatus({
+			isLoading: true,
+			screen: LoadingScreenTypes.LOADING_DATA
+		});
 		const response = await changePassword({
 			oldPassword: state.password, 
 			newPassword: state.newPassword
+		});
+		updateLoadingStatus({
+			isLoading: false,
+			screen: LoadingScreenTypes.LOADING_DATA
 		});
 		
 		if (!response?.success) {
@@ -117,7 +126,7 @@ export const SettingsSecurity = (): JSX.Element => {
 		}
 		
 		showToast(ToastType.SUCCESS, 'SUCCESS', Translation.OTHER.CHANGE_PASSWORD_SUCCESS);
-		navigation.navigate(Routes.DASHBOARD);
+		navigation.goBack();
 	}
 
 	return (

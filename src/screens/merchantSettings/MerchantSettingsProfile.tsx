@@ -15,7 +15,7 @@ import SelectDropdown from "react-native-select-dropdown";
 import { AuthContext } from "src/auth";
 import { CognitoBusinessUpdateAttributes } from "src/auth/cognito/types";
 import { BUTTON_TYPES } from "src/constants";
-import { useMediaLibraryPermission } from "src/hooks";
+import { useMediaLibraryPermission, useLoadingModal } from "src/hooks";
 import countries from "src/mocks/countries";
 import * as Routes from "src/navigation/constants";
 import {
@@ -32,6 +32,8 @@ import {
 	viewBaseB
 } from "src/theme/elements";
 import Translation from "src/translation/en.json";
+import { ToastType, LoadingScreenTypes } from 'src/utils/types';
+import { showToast } from 'src/utils/common';
 
 const businessAddressFormStyles = StyleSheet.create({
 	bodyText: {
@@ -197,6 +199,7 @@ enum BusinessUpdate {
 export const MerchantSettingsProfile = (): JSX.Element => {
 	const navigation = useNavigation();
 	const { userAttributes, updateAttributes } = useContext(AuthContext);
+	const { updateLoadingStatus } = useLoadingModal();
 	const [bannerImage, setBannerImage] = useState<string>("");
 	const [state, setState] = useState({
 		businessStory: userAttributes[BusinessUpdate.Story],
@@ -253,9 +256,21 @@ export const MerchantSettingsProfile = (): JSX.Element => {
 			}),
 		};
 
-    console.log("🚀 ~ file: MerchantSettingsProfile.tsx ~ line 257 ~ handleSave ~ changedData", changedData)
+		updateLoadingStatus({
+			isLoading: true,
+			screen: LoadingScreenTypes.LOADING_DATA
+		});
 		const response = await updateAttributes(changedData);
-    console.log("🚀  handleSave ~ response", response)
+		updateLoadingStatus({
+			isLoading: false,
+			screen: LoadingScreenTypes.LOADING_DATA
+		});
+
+		if (response.success) {
+			navigation.goBack();
+		} else {
+			showToast(ToastType.ERROR, "Whooops, something went wrong.", "Connection failed.");
+		}
 	};
 
 	useMediaLibraryPermission();

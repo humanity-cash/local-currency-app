@@ -8,6 +8,7 @@ import {
     TouchableOpacity
 } from "react-native";
 import { Text } from "react-native-elements";
+import { useLoadingModal, usePersonalWallet } from "src/hooks";
 import { AuthContext } from 'src/auth';
 import { BackBtn, BorderedInput, Button, Header, CancelBtn } from "src/shared/uielements";
 import { colors } from "src/theme/colors";
@@ -21,7 +22,7 @@ import * as Routes from 'src/navigation/constants';
 import { BUTTON_TYPES } from 'src/constants';
 import { UserAPI } from 'src/api';
 import { showToast } from 'src/utils/common';
-import { ToastType } from 'src/utils/types';
+import { ToastType, LoadingScreenTypes } from 'src/utils/types';
 
 const styles = StyleSheet.create({
   container: { 
@@ -90,6 +91,8 @@ const MIN_AMOUNT = 1;
 const LoadUp = (): JSX.Element => {
   const navigation = useNavigation();
   const { customerDwollaId } = useContext(AuthContext);
+  const { updateWallet } = usePersonalWallet();
+  const { updateLoadingStatus } = useLoadingModal();
   const [amount, setAmount] = useState<string>("");
   const [goNext, setGoNext] = useState(false);
 
@@ -107,14 +110,27 @@ const LoadUp = (): JSX.Element => {
       return;
     }
 
+    updateLoadingStatus({
+      isLoading: true,
+      screen: LoadingScreenTypes.PAYMENT_PENDING
+    });
     const response = await UserAPI.deposit(
       customerDwollaId,
       {amount: amount}
     );
 
     if (response.data) {
+      updateWallet(customerDwollaId);
+      updateLoadingStatus({
+        isLoading: false,
+        screen: LoadingScreenTypes.PAYMENT_PENDING
+      });
       navigation.navigate(Routes.LOADUP_SUCCESS);
     } else {
+      updateLoadingStatus({
+        isLoading: false,
+        screen: LoadingScreenTypes.PAYMENT_PENDING
+      });
       showToast(ToastType.ERROR, "Whoops, something went wrong.", "Connection failed.");
       navigation.navigate(Routes.DASHBOARD);
     }

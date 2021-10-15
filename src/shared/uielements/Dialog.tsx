@@ -10,6 +10,7 @@ type DialogProps = {
 	children: ReactElement,
 	backgroundStyle?: IMap,
 	style?: IMap,
+	hiddenCloseBtn?: boolean,
 	onShow?: () => void,
 	onClose?: () => void
 }
@@ -59,7 +60,7 @@ const styles = StyleSheet.create({
 	},
 });
 
-const Dialog = ({visible = false, onClose, backgroundStyle={}, style = {}, children, onShow }: DialogProps): JSX.Element => {
+const Dialog = ({visible = false, onClose, backgroundStyle={}, style = {}, children, hiddenCloseBtn=false, onShow }: DialogProps): JSX.Element => {
 
 	return (
 		<Overlay
@@ -72,9 +73,9 @@ const Dialog = ({visible = false, onClose, backgroundStyle={}, style = {}, child
 			onShow={() => onShow && onShow()}
 		>
 			<View style={styles.container}>
-				<View style={styles.closeBtn}>
+				{!hiddenCloseBtn && <View style={styles.closeBtn}>
 					<CancelBtn text="Close" color={colors.white} onClick={() => onClose && onClose()} />
-				</View>
+				</View>}
 				<View style={{
 					...styles.dialogWrap,
 					...style

@@ -9,14 +9,15 @@ const useBankStatus = (): IMap => {
 	const [hasBusinessBank, setHasBusinessBank] = useState<boolean>(false);
 
 	useEffect(() => {
+		let isSubscribed = true;
 		if (customerDwollaId) {
 			getBankStatus(customerDwollaId, false);
 		}
-
 		if (businessDwollaId) {
 			getBankStatus(businessDwollaId, true);
 		}
-	}, [customerDwollaId, businessDwollaId]);
+		return () => isSubscribed = false;
+	}, []);
 
 	const getBankStatus = async (dwollaId: string, mode: boolean) => {
 		const response = await UserAPI.getFundingSources(dwollaId);
