@@ -42,7 +42,7 @@ const styles = StyleSheet.create({
 		marginBottom: 10
 	},
 	modalHeader: {
-		fontFamily: "IBMPlexSansSemiBold",
+		fontFamily: "GothamBold",
 		fontSize: 26,
 		lineHeight: 45,
 		paddingBottom: 10,
