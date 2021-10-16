@@ -9,14 +9,20 @@ import { viewBaseB, wrappingContainerBase, baseHeader, dialogViewBase } from "sr
 import { SearchInput, Header, Dialog, Button } from "src/shared/uielements";
 import MerchantTransactionList from "./MerchantTransactionList";
 import MerchantTransactionsFilter from "./MerchantTransactionsFilter";
-import { MerchantTransactionItem, TransactionType, TransactionTypes, LoadingScreenTypes } from "src/utils/types";
-import { merchantTransactions } from "src/mocks/transactions";
+import { TransactionType, LoadingScreenTypes } from "src/utils/types";
 import Translation from 'src/translation/en.json';
 import * as Routes from 'src/navigation/constants';
 import { getBerksharePrefix } from "src/utils/common";
 import DwollaDialog from './DwollaDialog';
 import { BUTTON_TYPES } from "src/constants";
 import { useBusinessWallet, useBanks, useLoadingModal } from 'src/hooks';
+import moment from "moment";
+
+import { ITransaction } from 'src/api/types';
+import { loadBusinessTransactions } from 'src/store/transaction/transaction.actions';
+import { TransactionState } from 'src/store/transaction/transaction.reducer';
+import { useSelector, useDispatch } from 'react-redux';
+import { AppState } from 'src/store';
 
 const styles = StyleSheet.create({
 	mainTextColor: {
@@ -27,7 +33,7 @@ const styles = StyleSheet.create({
 	headerText: {
 		color: colors.purple,
 		fontSize: 40,
-		fontWeight: '400',
+		fontFamily: 'GothamBook',
 		lineHeight: 40
 	},
 	amountView: {
@@ -38,10 +44,10 @@ const styles = StyleSheet.create({
 		paddingBottom: 2,
 		marginBottom: 10
 	},
-	text: {
+	amountTxt: {
 		color: colors.purple,
 		fontSize: 18,
-		fontWeight: 'bold',
+		fontFamily: 'GothamBold',
 		paddingLeft: 5,
 		paddingRight: 5
 	},
@@ -137,7 +143,7 @@ const styles = StyleSheet.create({
 	},
 	infoView: {
 		paddingHorizontal: 5,
-		paddingTop: 20
+		paddingTop: 30
 	},
 	detailView: {
 		flexDirection: 'row', 
@@ -145,33 +151,40 @@ const styles = StyleSheet.create({
 	},
 	detailText: {
 		fontSize: 10,
+		marginHorizontal: 10,
 		color: colors.bodyText
 	},
 	minusText: {
 		color: colors.darkRed,
-		textAlign: 'center'
+		textAlign: 'center',
+		fontSize: 10
 	},
 	plusText: {
 		color: colors.purple,
-		textAlign: 'center'
+		textAlign: 'center',
+		fontSize: 10
 	},
 	amountText: {
-		fontWeight: 'bold',
-		fontSize: 18
+		fontFamily: 'GothamBold',
+		fontSize: 32,
+		lineHeight: 35
 	},
+	dialogHeight: {
+		height: 270
+	}
 });
 
 type TransactionDetailProps = {
 	visible: boolean,
-	data: MerchantTransactionItem,
+	data: ITransaction,
 	onConfirm: () => void
 }
 
 const TransactionDetail = (props: TransactionDetailProps) => {
 	const {data, visible, onConfirm} = props;
 
-	const getStyle = (type: TransactionType) => {
-		if (type === TransactionType.SALE || type === TransactionType.RETURN) {
+	const getStyle = (type: string) => {
+		if (type === TransactionType.SALE || type === TransactionType.RETURN || type === TransactionType.IN) {
 			return styles.plusText;
 		} else {
 			return styles.minusText;
@@ -179,29 +192,29 @@ const TransactionDetail = (props: TransactionDetailProps) => {
 	}
 
 	return (
-		<Dialog visible={visible} onClose={onConfirm} backgroundStyle={styles.dialog}>
+		<Dialog visible={visible} onClose={onConfirm} backgroundStyle={styles.dialog} style={styles.dialogHeight}>
 			<View style={dialogViewBase}>
 				<ScrollView style={wrappingContainerBase}>
 					<View style={ baseHeader }>
 						<Text style={getStyle(data.type)}>
-							{TransactionTypes[data.type]}
+							{data.type}
 						</Text>
-						<Text h1 style={{...styles.amountText, ...getStyle(data.type)}}>
-							{getBerksharePrefix(data.type)} { data.amount.toFixed(2) } 
+						<Text style={{...getStyle(data.type), ...styles.amountText}}>
+							{getBerksharePrefix(data.type)} { data.value } 
 						</Text>
 					</View>
 					<View style={styles.infoView}>
 						<View style={styles.detailView}>
 							<Text style={styles.detailText}>{Translation.PAYMENT.TRANSACTION_ID}</Text>
-							<Text style={{...styles.detailText, fontWeight: 'bold'}}>{data.transactionId}</Text>
+							<Text style={styles.detailText}>{data.transactionHash}</Text>
 						</View>
 						<View style={styles.detailView}>
 							<Text style={styles.detailText}>TYPE</Text>
-							<Text style={{...styles.detailText, fontWeight: 'bold'}}>{data.type}</Text>
+							<Text style={styles.detailText}>{data.type}</Text>
 						</View>
 						<View style={styles.detailView}>
 							<Text style={styles.detailText}>DATE</Text>
-							<Text style={{...styles.detailText, fontWeight: 'bold'}}>{data.date}</Text>
+							<Text style={styles.detailText}>{moment(data.timestamp).format('HH:mm, MM dd, YYYY')}</Text>
 						</View>
 					</View>
 				</ScrollView>
@@ -210,8 +223,21 @@ const TransactionDetail = (props: TransactionDetailProps) => {
 	)
 }
 
+const defaultTransaction = {
+	transactionHash: "",
+	toUserId: "",
+	toAddress: "",
+	fromAddress: "",
+	fromUserId: "",
+	type: "",
+	value: "",
+	timestamp: "",
+	blockNumber: 0
+};
+
 const MerchantDashboard = (): JSX.Element => {
 	const navigation = useNavigation();
+	const dispatch = useDispatch();
 	const { completedCustomerVerification, businessDwollaId } = useContext(AuthContext);
 	const { wallet, updateWallet } = useBusinessWallet();
 	const { hasBusinessBank, getBankStatus } = useBanks();
@@ -219,39 +245,35 @@ const MerchantDashboard = (): JSX.Element => {
 	const [isFilterVisible, setIsFilterVisible] = useState<boolean>(false);
 	const [searchText, setSearchText] = useState<string>("");
 	const [isDetailViewOpen, setIsDetailViewOpen] = useState<boolean>(false);
-	const [selectedItem, setSelectedItem] = useState<MerchantTransactionItem>({
-		transactionId: "123457899",
-		type: TransactionType.SALE,
-		amount: 0,
-		date: "2021-01-01"
-	});
+	const [selectedItem, setSelectedItem] = useState<ITransaction>(defaultTransaction);
 	const [isDwollaVisible, setIsDwollaVisible] = useState<boolean>(false);
 	const [isPayment, setIsPayment] = useState<boolean>(false);
 
+	const { businessTransactions } = useSelector((state: AppState) => state.transactionReducer) as TransactionState;
+
 	useEffect(() => {
-		const unsubscribe = navigation.addListener("focus", async () => {
+		(async () => {
 			if (businessDwollaId) {
-				getBankStatus(businessDwollaId, true);
 				updateLoadingStatus({
 					isLoading: true,
 					screen: LoadingScreenTypes.LOADING_DATA
 				});
-				await updateWallet(businessDwollaId);
+				getBankStatus(businessDwollaId, true);
+				updateWallet(businessDwollaId);
+				await dispatch(loadBusinessTransactions(businessDwollaId));
 				updateLoadingStatus({
 					isLoading: false,
 					screen: LoadingScreenTypes.LOADING_DATA
 				});
 			}
-		});
-
-		return unsubscribe;
-	}, [navigation]);
+		})();
+	}, []);
 
 	const onSearchChange = (name: string, change: string) => {
 		setSearchText(change);
 	}
 
-	const viewDetail = (item: MerchantTransactionItem) => {
+	const viewDetail = (item: ITransaction) => {
 		setSelectedItem(item);
 		setIsDetailViewOpen(true);
 	}
@@ -286,67 +308,69 @@ const MerchantDashboard = (): JSX.Element => {
 					</TouchableWithoutFeedback>
 				}
 			/>
-			<ScrollView style={wrappingContainerBase}>
+			<View style={wrappingContainerBase}>
 				<View style={styles.content}>
 					<View style={baseHeader}>
 						<Text style={styles.headerText}>{Translation.LANDING_PAGE.TITLE}</Text>
 					</View>
 					<View style={styles.amountView}>
-						<Text style={styles.text}>B$ {hasBusinessBank ? wallet.availableBalance : '-'}</Text>
+						<Text style={styles.amountTxt}>B$ {hasBusinessBank ? wallet.availableBalance : '-'}</Text>
 					</View>
 
-					{!completedCustomerVerification && <View style={styles.alertView}>
-						<AntDesign name="exclamationcircleo" size={18} style={styles.alertIcon} />
-						<Text style={styles.alertText}>
-							{Translation.PROFILE.PERSONAL_PROFILE_ALERT} &nbsp;
-							<Text style={styles.alertIcon} onPress={() => navigation.navigate(Routes.PERSONAL_PROFILE)}>{Translation.BUTTON.GOTO_SETUP} &gt;</Text>
-						</Text>
-					</View>}
-
-					{!hasBusinessBank && (
-						<View style={styles.alertView}>
-							<AntDesign
-								name='exclamationcircleo'
-								size={18}
-								style={styles.alertIcon}
-							/>
+					<ScrollView>
+						{!completedCustomerVerification && <View style={styles.alertView}>
+							<AntDesign name="exclamationcircleo" size={18} style={styles.alertIcon} />
 							<Text style={styles.alertText}>
-								{Translation.BANK_ACCOUNT.ACCOUNT_ALERT} &nbsp;
-								<Text
-									style={styles.alertIcon}
-									onPress={() => setIsDwollaVisible(true)}>
-									{Translation.BANK_ACCOUNT.ACCOUNT_LINK_TEXT}{' '}
-									&gt;
-								</Text>
+								{Translation.PROFILE.PERSONAL_PROFILE_ALERT} &nbsp;
+								<Text style={styles.alertIcon} onPress={() => navigation.navigate(Routes.PERSONAL_PROFILE)}>{Translation.BUTTON.GOTO_SETUP} &gt;</Text>
 							</Text>
-						</View>
-					)}
+						</View>}
 
-					<View style={styles.filterView}>
-						<View style={styles.filterInput}>
-							<SearchInput
-								label="Search"
-								name="searchText"
-								keyboardType="default"
-								placeholder="Search"
-								style={styles.input}
-								textColor={colors.greyedPurple}
-								value={searchText}
-								onChange={onSearchChange}
-							/>
+						{!hasBusinessBank && (
+							<View style={styles.alertView}>
+								<AntDesign
+									name='exclamationcircleo'
+									size={18}
+									style={styles.alertIcon}
+								/>
+								<Text style={styles.alertText}>
+									{Translation.BANK_ACCOUNT.ACCOUNT_ALERT} &nbsp;
+									<Text
+										style={styles.alertIcon}
+										onPress={() => setIsDwollaVisible(true)}>
+										{Translation.BANK_ACCOUNT.ACCOUNT_LINK_TEXT}{' '}
+										&gt;
+									</Text>
+								</Text>
+							</View>
+						)}
+
+						<View style={styles.filterView}>
+							<View style={styles.filterInput}>
+								<SearchInput
+									label="Search"
+									name="searchText"
+									keyboardType="default"
+									placeholder="Search"
+									style={styles.input}
+									textColor={colors.greyedPurple}
+									value={searchText}
+									onChange={onSearchChange}
+								/>
+							</View>
+							<TouchableOpacity style={isFilterVisible ? styles.selectedFilterBtn : styles.filterBtn} onPress={()=>setIsFilterVisible(!isFilterVisible)}>
+								<Octicons 
+									name="settings"
+									size={24}
+									color={isFilterVisible ? colors.white : colors.purple}
+								/>
+							</TouchableOpacity>
 						</View>
-						<TouchableOpacity style={isFilterVisible ? styles.selectedFilterBtn : styles.filterBtn} onPress={()=>setIsFilterVisible(!isFilterVisible)}>
-							<Octicons 
-								name="settings"
-								size={24}
-								color={isFilterVisible ? colors.white : colors.purple}
-							/>
-						</TouchableOpacity>
-					</View>
-					{isFilterVisible && <MerchantTransactionsFilter></MerchantTransactionsFilter>}
-					<MerchantTransactionList data={merchantTransactions} onSelect={viewDetail} />
+						{isFilterVisible && <MerchantTransactionsFilter></MerchantTransactionsFilter>}
+						<MerchantTransactionList data={businessTransactions} onSelect={viewDetail} />
+					</ScrollView>
 				</View>
-			</ScrollView>
+			</View>
 			<TouchableOpacity onPress={() => hasBusinessBank ? navigation.navigate(Routes.MERCHANT_QRCODE_SCAN) : setIsPayment(true)} style={styles.scanButton}>
 				<Image
 					source={require('../../../assets/images/qr_code_merchant.png')}
