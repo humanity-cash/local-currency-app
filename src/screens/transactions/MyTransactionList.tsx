@@ -3,11 +3,12 @@ import { StyleSheet, View } from 'react-native';
 import { Text, Image } from 'react-native-elements';
 import { colors } from "src/theme/colors";
 import { TouchableOpacity } from 'react-native-gesture-handler';
-import { MyTransactionItem } from "src/utils/types";
+import { ITransactionResponse } from "src/api/types";
+import moment from 'moment';
 
 type MyTransactionListProps = {
-	data: MyTransactionItem[],
-	onSelect: (item: MyTransactionItem) => void
+	data: ITransactionResponse[],
+	onSelect: (item: ITransactionResponse) => void
 }
 
 const styles = StyleSheet.create({
@@ -50,59 +51,59 @@ const styles = StyleSheet.create({
 });
 
 type MyTransactionItemProps = {
-	item: MyTransactionItem,
-	selected: number
+	item: ITransactionResponse,
+	selected: string
 }
 
 const TransactionItem = (props: MyTransactionItemProps) => {
 	const {item, selected} = props;
 	return (
-		<View style={ selected===item.transactionId? styles.selectedItem : styles.item }>
+		<View style={ selected===item.transactionHash? styles.selectedItem : styles.item }>
 			<View style={styles.imageContainer}>
 				<Image
 					source={require("../../../assets/images/placeholder2.png")}
 					containerStyle={styles.image}
 				/>
 				<View>
-					<Text>{item.name}</Text>
-					<Text style={styles.timeText}>2:51, JUN 16, 2021</Text>
+					<Text>name</Text>
+					<Text style={styles.timeText}>{item.timestamp}</Text>
 				</View>
 			</View>
-			<Text style={styles.amountText}>-B$ {item.amount}</Text>
+			<Text style={styles.amountText}>-B$ {item.value}</Text>
 		</View>
 	);
 }
 
 const MyTransactionList = (props: MyTransactionListProps): JSX.Element => {
 
-	const [list, setList] = useState<MyTransactionItem[]>([]);
-	const [selected, setSelected] = useState<number>(0);
+	const [list, setList] = useState<ITransactionResponse[]>([]);
+	const [selected, setSelected] = useState<string>("");
 
 	useEffect(() => {
-		const data: MyTransactionItem[] = props.data;
+		const data: ITransactionResponse[] = props.data;
 
 		if (!data) {
 			return;
 		}
 
-		data.sort(function(a: MyTransactionItem, b: MyTransactionItem) {
-			if (a.date > b.date) return -1;
-			if (a.date < b.date) return 1;
-			return 0;
+		data.sort(function(a: ITransactionResponse, b: ITransactionResponse) {
+			if (moment(a.timestamp).isAfter(b.timestamp)) return -1;
+			else if (moment(a.timestamp).isBefore(b.timestamp)) return 1;
+			else return 0;
 		});
 
 		setList(data);
 	}, [props.data]);
 
-	const handleSelect = (item: MyTransactionItem) => {
-		setSelected(item.transactionId);
+	const handleSelect = (item: ITransactionResponse) => {
+		setSelected(item.transactionHash);
 		props.onSelect(item);
 	}
 
 	return (
 		<View style={styles.listView}>
 		{
-			list.map((item: MyTransactionItem, i: number) => 
+			list.map((item: ITransactionResponse, i: number) => 
 				<TouchableOpacity onPress={()=>handleSelect(item)} key={i}>
 					<TransactionItem item={item} selected={selected} />
 				</TouchableOpacity>
