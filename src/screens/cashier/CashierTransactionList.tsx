@@ -3,7 +3,7 @@ import { StyleSheet, View } from 'react-native';
 import { Text } from 'react-native-elements';
 import { colors } from "src/theme/colors";
 import { TouchableOpacity } from 'react-native-gesture-handler';
-import { MerchantTransactionItem, MerchantTransactionType, TransactionTypes } from "src/utils/types";
+import { MerchantTransactionItem, TransactionType, TransactionTypes } from "src/utils/types";
 import { getBerksharePrefix } from "src/utils/common";
 
 type CashierTransactionListProps = {
@@ -62,8 +62,8 @@ type TransactionItemProps = {
 const TransactionItem = (props: TransactionItemProps) => {
 	const {item, selected} = props;
 
-	const getStyle = (type: MerchantTransactionType) => {
-		if (type === MerchantTransactionType.SALE || type === MerchantTransactionType.RETURN) {
+	const getStyle = (type: TransactionType) => {
+		if (type === TransactionType.SALE || type === TransactionType.RETURN) {
 			return styles.plusText;
 		} else {
 			return styles.amountText;

@@ -1,4 +1,4 @@
-import { UserId, AxiosPromiseResponse, IUserRequest, IDepositRequest, IWithdrawalRequest, ITransactionRequest, ITransactionResponse} from './types';
+import { UserId, AxiosPromiseResponse, IUserRequest, IDepositRequest, IWithdrawalRequest, ITransactionRequest, ITransaction} from './types';
 import { getRequest, postRequest } from './base';
 import { transactionDatas } from './formatters';
 
@@ -64,7 +64,7 @@ export const getWithdrawals = async (userId: UserId): Promise<AxiosPromiseRespon
 };
 
 // Retrieve transactions for a user
-export const getTransactions = async (userId: UserId): Promise<ITransactionResponse[]> => {
+export const getTransactions = async (userId: UserId): Promise<ITransaction[]> => {
   const response = await getRequest(`/users/${userId}/transfer`);
   return transactionDatas(response);
 };

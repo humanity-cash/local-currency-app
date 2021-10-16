@@ -66,7 +66,7 @@ export interface IWithdrawalResponse {
     operator: string;
 }
 
-export interface ITransactionResponse {
+export interface ITransaction {
     transactionHash: string;
     blockNumber: number,
     timestamp: string;

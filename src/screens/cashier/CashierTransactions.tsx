@@ -9,7 +9,7 @@ import { SearchInput, Dialog, BackBtn } from "src/shared/uielements";
 import CashierTransactionList from "./CashierTransactionList";
 import { merchantTransactions } from "src/mocks/transactions";
 import Translation from 'src/translation/en.json';
-import { MerchantTransactionItem, MerchantTransactionType, TransactionTypes } from "src/utils/types";
+import { MerchantTransactionItem, TransactionType, TransactionTypes } from "src/utils/types";
 import { getBerksharePrefix } from "src/utils/common";
 
 const styles = StyleSheet.create({
@@ -82,8 +82,8 @@ type TransactionDetailProps = {
 const TransactionDetail = (props: TransactionDetailProps) => {
 	const {data, visible, onConfirm} = props;
 
-	const getStyle = (type: MerchantTransactionType) => {
-		if (type === MerchantTransactionType.SALE || type === MerchantTransactionType.RETURN) {
+	const getStyle = (type: TransactionType) => {
+		if (type === TransactionType.SALE || type === TransactionType.RETURN) {
 			return styles.plusText;
 		} else {
 			return styles.minusText;
@@ -128,7 +128,7 @@ const CashierTransactions = (): JSX.Element => {
 	const [isDetailViewOpen, setIsDetailViewOpen] = useState<boolean>(false);
 	const [selectedItem, setSelectedItem] = useState<MerchantTransactionItem>({
 		transactionId: "123457899",
-		type: MerchantTransactionType.SALE,
+		type: TransactionType.SALE,
 		amount: 0,
 		date: "2021-01-01"
 	});

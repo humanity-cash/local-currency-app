@@ -9,7 +9,7 @@ import { viewBaseB, wrappingContainerBase, baseHeader, dialogViewBase } from "sr
 import { SearchInput, Header, Dialog, Button } from "src/shared/uielements";
 import MerchantTransactionList from "./MerchantTransactionList";
 import MerchantTransactionsFilter from "./MerchantTransactionsFilter";
-import { MerchantTransactionItem, MerchantTransactionType, TransactionTypes, LoadingScreenTypes } from "src/utils/types";
+import { MerchantTransactionItem, TransactionType, TransactionTypes, LoadingScreenTypes } from "src/utils/types";
 import { merchantTransactions } from "src/mocks/transactions";
 import Translation from 'src/translation/en.json';
 import * as Routes from 'src/navigation/constants';
@@ -170,8 +170,8 @@ type TransactionDetailProps = {
 const TransactionDetail = (props: TransactionDetailProps) => {
 	const {data, visible, onConfirm} = props;
 
-	const getStyle = (type: MerchantTransactionType) => {
-		if (type === MerchantTransactionType.SALE || type === MerchantTransactionType.RETURN) {
+	const getStyle = (type: TransactionType) => {
+		if (type === TransactionType.SALE || type === TransactionType.RETURN) {
 			return styles.plusText;
 		} else {
 			return styles.minusText;
@@ -221,7 +221,7 @@ const MerchantDashboard = (): JSX.Element => {
 	const [isDetailViewOpen, setIsDetailViewOpen] = useState<boolean>(false);
 	const [selectedItem, setSelectedItem] = useState<MerchantTransactionItem>({
 		transactionId: "123457899",
-		type: MerchantTransactionType.SALE,
+		type: TransactionType.SALE,
 		amount: 0,
 		date: "2021-01-01"
 	});

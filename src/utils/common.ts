@@ -1,5 +1,5 @@
 import Toast from 'react-native-toast-message';
-import { MerchantTransactionType, ToastType } from "src/utils/types";
+import { TransactionType, ToastType } from "src/utils/types";
 
 const fee = 0.015;
 
@@ -11,8 +11,8 @@ export const formatValue = (value: number): string => {
 	return firstPart.replace(/\B(?=(\d{3})+(?!\d))/g, "'") + (secondPart ? "," + secondPart : "");
 }
 
-export const getBerksharePrefix = (type: MerchantTransactionType): string => {
-	if (type === MerchantTransactionType.SALE || type === MerchantTransactionType.RETURN) {
+export const getBerksharePrefix = (type: TransactionType | string): string => {
+	if (type === TransactionType.SALE || type === TransactionType.RETURN || type === TransactionType.IN) {
 		return "+ B$";
 	} else {
 		return "- B$";
