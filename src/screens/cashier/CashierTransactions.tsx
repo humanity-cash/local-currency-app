@@ -4,13 +4,19 @@ import { StyleSheet, View, ScrollView } from 'react-native';
 import { Text } from "react-native-elements";
 import { Header } from "src/shared/uielements";
 import { colors } from "src/theme/colors";
+import { useBusinessWallet } from "src/hooks";
 import { viewBaseB, wrappingContainerBase, baseHeader, dialogViewBase } from "src/theme/elements";
-import { SearchInput, Dialog, BackBtn } from "src/shared/uielements";
+import { SearchInput, Dialog, CancelBtn } from "src/shared/uielements";
 import CashierTransactionList from "./CashierTransactionList";
-import { merchantTransactions } from "src/mocks/transactions";
 import Translation from 'src/translation/en.json';
-import { MerchantTransactionItem, TransactionType, TransactionTypes } from "src/utils/types";
+import { TransactionType } from "src/utils/types";
 import { getBerksharePrefix } from "src/utils/common";
+import moment from "moment";
+
+import { ITransaction } from 'src/api/types';
+import { TransactionState } from 'src/store/transaction/transaction.reducer';
+import { useSelector } from 'react-redux';
+import { AppState } from 'src/store';
 
 const styles = StyleSheet.create({
 	mainTextColor: {
@@ -27,10 +33,10 @@ const styles = StyleSheet.create({
 		flexDirection: 'row',
 		justifyContent: 'space-between',
 	},
-	text: {
+	balanceText: {
 		color: colors.purple,
 		fontSize: 18,
-		fontWeight: 'bold',
+		fontFamily: 'GothamBold',
 		paddingLeft: 5,
 		paddingRight: 5
 	},
@@ -57,32 +63,39 @@ const styles = StyleSheet.create({
 	},
 	detailText: {
 		fontSize: 10,
+		marginHorizontal: 10,
 		color: colors.bodyText
 	},
 	minusText: {
 		color: colors.darkRed,
-		textAlign: 'center'
+		textAlign: 'center',
+		fontSize: 10
 	},
 	plusText: {
 		color: colors.purple,
-		textAlign: 'center'
+		textAlign: 'center',
+		fontSize: 10
 	},
 	amountText: {
-		fontWeight: 'bold',
-		fontSize: 18
+		fontFamily: 'GothamBold',
+		fontSize: 32,
+		lineHeight: 35
+	},
+	dialogHeight: {
+		height: 270
 	}
 });
 
 type TransactionDetailProps = {
 	visible: boolean,
-	data: MerchantTransactionItem,
+	data: ITransaction,
 	onConfirm: () => void
 }
 
 const TransactionDetail = (props: TransactionDetailProps) => {
 	const {data, visible, onConfirm} = props;
 
-	const getStyle = (type: TransactionType) => {
+	const getStyle = (type: string) => {
 		if (type === TransactionType.SALE || type === TransactionType.RETURN) {
 			return styles.plusText;
 		} else {
@@ -91,29 +104,33 @@ const TransactionDetail = (props: TransactionDetailProps) => {
 	}
 
 	return (
-		<Dialog visible={visible} onClose={onConfirm} backgroundStyle={styles.dialog}>
+		<Dialog visible={visible} onClose={onConfirm} backgroundStyle={styles.dialog} style={styles.dialogHeight}>
 			<View style={dialogViewBase}>
 				<ScrollView style={wrappingContainerBase}>
 					<View style={ baseHeader }>
 						<Text style={getStyle(data.type)}>
-							{TransactionTypes[data.type]}
+							{data.type}
 						</Text>
-						<Text h1 style={{...styles.amountText, ...getStyle(data.type)}}>
-							{getBerksharePrefix(data.type)} { data.amount.toFixed(2) } 
+						<Text style={{...getStyle(data.type), ...styles.amountText}}>
+							{getBerksharePrefix(data.type)} { data.value } 
 						</Text>
 					</View>
 					<View style={styles.infoView}>
 						<View style={styles.detailView}>
 							<Text style={styles.detailText}>{Translation.PAYMENT.TRANSACTION_ID}</Text>
-							<Text style={{...styles.detailText, fontWeight: 'bold'}}>{data.transactionId}</Text>
+							<Text style={styles.detailText}>{data.transactionHash}</Text>
 						</View>
 						<View style={styles.detailView}>
 							<Text style={styles.detailText}>TYPE</Text>
-							<Text style={{...styles.detailText, fontWeight: 'bold'}}>{data.type}</Text>
+							<Text style={styles.detailText}>
+								{data.type}
+							</Text>
 						</View>
 						<View style={styles.detailView}>
 							<Text style={styles.detailText}>DATE</Text>
-							<Text style={{...styles.detailText, fontWeight: 'bold'}}>{data.date}</Text>
+							<Text style={styles.detailText}>
+								{moment(data.timestamp).format('HH:mm, MM dd, YYYY')}
+							</Text>
 						</View>
 					</View>
 				</ScrollView>
@@ -122,22 +139,32 @@ const TransactionDetail = (props: TransactionDetailProps) => {
 	)
 }
 
+const defaultTransaction = {
+	transactionHash: "",
+	toUserId: "",
+	toAddress: "",
+	fromAddress: "",
+	fromUserId: "",
+	type: "",
+	value: "",
+	timestamp: "",
+	blockNumber: 0
+};
+
 const CashierTransactions = (): JSX.Element => {
 	const navigation = useNavigation();
+	const { wallet } = useBusinessWallet();
 	const [searchText, setSearchText] = useState<string>("");
 	const [isDetailViewOpen, setIsDetailViewOpen] = useState<boolean>(false);
-	const [selectedItem, setSelectedItem] = useState<MerchantTransactionItem>({
-		transactionId: "123457899",
-		type: TransactionType.SALE,
-		amount: 0,
-		date: "2021-01-01"
-	});
+	const [selectedItem, setSelectedItem] = useState<ITransaction>(defaultTransaction);
+
+	const { businessTransactions } = useSelector((state: AppState) => state.transactionReducer) as TransactionState;
 
 	const onSearchChange = (name: string, change: string) => {
 		setSearchText(change);
 	}
 
-	const viewDetail = (item: MerchantTransactionItem) => {
+	const viewDetail = (item: ITransaction) => {
 		setSelectedItem(item);
 		setIsDetailViewOpen(true);
 	}
@@ -149,7 +176,7 @@ const CashierTransactions = (): JSX.Element => {
 	return (
 		<View style={viewBaseB}>
 			<Header
-				leftComponent={<BackBtn color={colors.purple} onClick={() => navigation.goBack()} />}
+				rightComponent={<CancelBtn text={Translation.BUTTON.CLOSE} color={colors.purple} onClick={() => navigation.goBack()} />}
 			/>
 			<ScrollView style={wrappingContainerBase}>
 				<View>
@@ -160,7 +187,7 @@ const CashierTransactions = (): JSX.Element => {
 						<View></View>
 						<View>
 							<Text style={styles.alignRight}>{Translation.CASHIER.BALANCE}</Text>
-							<Text style={styles.text}>B$ 382.91</Text>
+							<Text style={styles.balanceText}>B$ {wallet.availableBalance}</Text>
 						</View>
 					</View>
 
@@ -175,7 +202,7 @@ const CashierTransactions = (): JSX.Element => {
 						onChange={onSearchChange}
 					/>
 				</View>
-				<CashierTransactionList data={merchantTransactions} onSelect={viewDetail} />
+				<CashierTransactionList data={businessTransactions} onSelect={viewDetail} />
 			</ScrollView>
 			{isDetailViewOpen && <TransactionDetail visible={isDetailViewOpen} data={selectedItem} onConfirm={onConfirm} />}
 		</View>
