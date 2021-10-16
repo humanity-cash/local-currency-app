@@ -3,12 +3,14 @@ import { StyleSheet, View } from 'react-native';
 import { Text, Image } from 'react-native-elements';
 import { colors } from "src/theme/colors";
 import { TouchableOpacity } from 'react-native-gesture-handler';
-import { ITransactionResponse } from "src/api/types";
+import { ITransaction } from "src/api/types";
 import moment from 'moment';
+import { getBerksharePrefix } from "src/utils/common";
+import { TransactionType } from "src/utils/types";
 
 type MyTransactionListProps = {
-	data: ITransactionResponse[],
-	onSelect: (item: ITransactionResponse) => void
+	data: ITransaction[],
+	onSelect: (item: ITransaction) => void
 }
 
 const styles = StyleSheet.create({
@@ -43,50 +45,64 @@ const styles = StyleSheet.create({
 		fontSize: 10,
 		color: colors.darkGreen
 	},
-	amountText: {
-		fontWeight: 'bold',
+	minusText: {
+		fontFamily: 'GothamBold',
 		fontSize: 18,
 		color: colors.darkRed
+	},
+	plusText: {
+		fontFamily: 'GothamBold',
+		fontSize: 18,
+		color: colors.darkGreen
 	},
 });
 
 type MyTransactionItemProps = {
-	item: ITransactionResponse,
+	item: ITransaction,
 	selected: string
 }
 
 const TransactionItem = (props: MyTransactionItemProps) => {
 	const {item, selected} = props;
+	
+	const getStyle = (type: string) => {
+		if (type === TransactionType.SALE || type === TransactionType.RETURN || type === TransactionType.IN) {
+			return styles.plusText;
+		} else {
+			return styles.minusText;
+		}
+	}
+
 	return (
 		<View style={ selected===item.transactionHash? styles.selectedItem : styles.item }>
 			<View style={styles.imageContainer}>
 				<Image
-					source={require("../../../assets/images/placeholder2.png")}
+					source={require("../../../assets/images/placeholder5.png")}
 					containerStyle={styles.image}
 				/>
 				<View>
 					<Text>name</Text>
-					<Text style={styles.timeText}>{item.timestamp}</Text>
+					<Text style={styles.timeText}>{moment(item.timestamp).format('HH:mm, MM dd, YYYY')}</Text>
 				</View>
 			</View>
-			<Text style={styles.amountText}>-B$ {item.value}</Text>
+			<Text style={getStyle(item.type)}>{getBerksharePrefix(item.type)} {item.value}</Text>
 		</View>
 	);
 }
 
 const MyTransactionList = (props: MyTransactionListProps): JSX.Element => {
 
-	const [list, setList] = useState<ITransactionResponse[]>([]);
+	const [list, setList] = useState<ITransaction[]>([]);
 	const [selected, setSelected] = useState<string>("");
 
 	useEffect(() => {
-		const data: ITransactionResponse[] = props.data;
+		const data: ITransaction[] = props.data;
 
 		if (!data) {
 			return;
 		}
 
-		data.sort(function(a: ITransactionResponse, b: ITransactionResponse) {
+		data.sort(function(a: ITransaction, b: ITransaction) {
 			if (moment(a.timestamp).isAfter(b.timestamp)) return -1;
 			else if (moment(a.timestamp).isBefore(b.timestamp)) return 1;
 			else return 0;
@@ -95,7 +111,7 @@ const MyTransactionList = (props: MyTransactionListProps): JSX.Element => {
 		setList(data);
 	}, [props.data]);
 
-	const handleSelect = (item: ITransactionResponse) => {
+	const handleSelect = (item: ITransaction) => {
 		setSelected(item.transactionHash);
 		props.onSelect(item);
 	}
@@ -103,7 +119,7 @@ const MyTransactionList = (props: MyTransactionListProps): JSX.Element => {
 	return (
 		<View style={styles.listView}>
 		{
-			list.map((item: ITransactionResponse, i: number) => 
+			list.map((item: ITransaction, i: number) => 
 				<TouchableOpacity onPress={()=>handleSelect(item)} key={i}>
 					<TransactionItem item={item} selected={selected} />
 				</TouchableOpacity>
