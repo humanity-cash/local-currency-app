@@ -1,6 +1,6 @@
-import { UserId, AxiosPromiseResponse} from './types';
+import { UserId, AxiosPromiseResponse, IUserRequest, IDepositRequest, IWithdrawalRequest, ITransactionRequest, ITransactionResponse} from './types';
 import { getRequest, postRequest } from './base';
-import { IUserRequest, IDepositRequest, IWithdrawalRequest, ITransactionRequest } from './types';
+import { transactionDatas } from './formatters';
 
 // create local currency user
 export const user = async (request: IUserRequest): Promise<AxiosPromiseResponse> => {
@@ -64,7 +64,7 @@ export const getWithdrawals = async (userId: UserId): Promise<AxiosPromiseRespon
 };
 
 // Retrieve transactions for a user
-export const getTransactions = async (userId: UserId): Promise<AxiosPromiseResponse> => {
+export const getTransactions = async (userId: UserId): Promise<ITransactionResponse[]> => {
   const response = await getRequest(`/users/${userId}/transfer`);
-  return response;
+  return transactionDatas(response);
 };

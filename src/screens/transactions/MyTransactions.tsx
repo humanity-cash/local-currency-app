@@ -1,5 +1,6 @@
 import { useNavigation } from '@react-navigation/native';
-import React, {useState} from 'react';
+import React, { useState, useEffect, useContext } from 'react';
+import { AuthContext } from 'src/auth';
 import { StyleSheet, View, ScrollView, TouchableOpacity } from 'react-native';
 import { Text, Image } from 'react-native-elements';
 import { Octicons } from '@expo/vector-icons';
@@ -7,13 +8,13 @@ import { Header, Button, BackBtn, SearchInput, Dialog } from "src/shared/uieleme
 import { baseHeader, viewBase, dialogViewBase, wrappingContainerBase } from "src/theme/elements";
 import { colors } from "src/theme/colors";
 import MyTransactionList from './MyTransactionList';
-import { MyTransactionItem } from "src/utils/types";
 import MyTransactionFilter from './MyTransactionsFilter';
-import { consumerTransactions } from "src/mocks/transactions";
 import QRCodeGen from "src/screens/payment/QRCodeGen";
 import Translation from 'src/translation/en.json';
 import * as Routes from 'src/navigation/constants';
 import { BUTTON_TYPES } from 'src/constants';
+import { UserAPI } from 'src/api';
+import { ITransactionResponse } from 'src/api/types';
 
 const styles = StyleSheet.create({
 	content: {
@@ -32,6 +33,7 @@ const styles = StyleSheet.create({
 		borderBottomColor: colors.darkGreen
 	},
 	amountText: {
+		fontFamily: 'GothamBold',
 		fontWeight: 'bold',
 		fontSize: 18
 	},
@@ -105,7 +107,7 @@ const transactionData = {
 
 type TransactionDetailProps = {
 	visible: boolean,
-	data: MyTransactionItem,
+	data: ITransactionResponse,
 	onClose: ()=>void,
 	onReturn: ()=>void
 }
@@ -118,7 +120,7 @@ const TransactionDetail = (props: TransactionDetailProps) => {
 			<View style={dialogViewBase}>
 				<ScrollView style={wrappingContainerBase}>
 					<View style={ baseHeader }>
-						<Text h1 style={styles.returnText}> - B$ {data.amount} </Text>
+						<Text h1 style={styles.returnText}> - B$ {data.value} </Text>
 					</View>
 					<View style={styles.view}>
 						<View style={styles.detailView}>
@@ -148,26 +150,46 @@ const TransactionDetail = (props: TransactionDetailProps) => {
 	)
 }
 
+const defaultTransaction = {
+	transactionHash: "",
+	toUserId: "",
+	toAddress: "",
+	fromAddress: "",
+	fromUserId: "",
+	type: "",
+	value: "",
+	timestamp: "",
+	blockNumber: 0
+};
+
 const MyTransactions = (): JSX.Element => {
 	const navigation = useNavigation();
+	const { customerDwollaId } = useContext(AuthContext);
 	const [isFilterVisible, setIsFilterVisible] = useState<boolean>(false);
 	const [searchText, setSearchText] = useState<string>("");
-	const [selectedItem, setSelectedItem] = useState<MyTransactionItem>({
-		transactionId: 0,
-		avatar: "",
-		name: "",
-		type: "",
-		amount: "",
-		date: ""
-	});
 	const [isDetailViewOpen, setIsDetailViewOpen] = useState<boolean>(false);
 	const [isReturnViewOpen, setIsReturnViewOpen] = useState<boolean>(false);
+	const [transactions, setTransactions] = useState<ITransactionResponse[]>([]);
+	const [selectedItem, setSelectedItem] = useState<ITransactionResponse>(defaultTransaction);
+
+	useEffect(() => {
+		const unsubscribe = navigation.addListener("focus", async () => {
+			if (customerDwollaId) {
+				(async () => {
+					const result = await UserAPI.getTransactions(customerDwollaId);
+					setTransactions(result)
+				})();
+			}
+		});
+
+		return unsubscribe;
+	}, [navigation]);
 
 	const onSearchChange = (name: string, change: string) => {
 		setSearchText(change);
 	}
 
-	const viewDetail = (item: MyTransactionItem) => {
+	const viewDetail = (item: ITransactionResponse) => {
 		setSelectedItem(item);
 		setIsDetailViewOpen(true);
 	}
@@ -215,7 +237,7 @@ const MyTransactions = (): JSX.Element => {
 						</TouchableOpacity>
 					</View>
 					{isFilterVisible && <MyTransactionFilter></MyTransactionFilter>}
-					<MyTransactionList data={consumerTransactions} onSelect={viewDetail} />
+					<MyTransactionList data={transactions} onSelect={viewDetail} />
 				</View>
 			</ScrollView>
 
@@ -228,7 +250,7 @@ const MyTransactions = (): JSX.Element => {
 			</TouchableOpacity>
 
 			{isDetailViewOpen && <TransactionDetail visible={isDetailViewOpen} data={selectedItem} onReturn={onReturn} onClose={onClose} />}
-			{isReturnViewOpen && <QRCodeGen visible={isReturnViewOpen} onClose={onClose} isOpenAmount={true} amount={Number(selectedItem.amount)} /> }
+			{isReturnViewOpen && <QRCodeGen visible={isReturnViewOpen} onClose={onClose} isOpenAmount={true} amount={Number(selectedItem.value)} /> }
 		</View>
 	);
 }

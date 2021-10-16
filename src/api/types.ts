@@ -74,6 +74,7 @@ export interface ITransactionResponse {
     fromAddress: string;
     toUserId: string;
     toAddress: string;
+    type: string;
     value: string;
 }
 
