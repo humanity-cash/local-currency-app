@@ -17,7 +17,7 @@ import { getBerksharePrefix } from "src/utils/common";
 import { TransactionType, LoadingScreenTypes } from "src/utils/types";
 
 import { ITransaction } from 'src/api/types';
-import { loadTransactions } from 'src/store/transaction/transaction.actions';
+import { loadPersonalTransactions } from 'src/store/transaction/transaction.actions';
 import { TransactionState } from 'src/store/transaction/transaction.reducer';
 import { useSelector, useDispatch } from 'react-redux';
 import { AppState } from 'src/store';
@@ -102,7 +102,8 @@ const styles = StyleSheet.create({
 	},
 	detailText: {
 		fontSize: 10,
-		marginHorizontal: 10
+		marginHorizontal: 10,
+		color: colors.bodyText
 	},
 	returnText: {
 		color: colors.darkRed
@@ -201,7 +202,7 @@ const MyTransactions = (): JSX.Element => {
 	const [isReturnViewOpen, setIsReturnViewOpen] = useState<boolean>(false);
 	const [selectedItem, setSelectedItem] = useState<ITransaction>(defaultTransaction);
 
-	const { transactions } = useSelector((state: AppState) => state.transactionReducer) as TransactionState;
+	const { personalTransactions } = useSelector((state: AppState) => state.transactionReducer) as TransactionState;
 	
 
 	useEffect(() => {
@@ -211,7 +212,7 @@ const MyTransactions = (): JSX.Element => {
 					isLoading: true,
 					screen: LoadingScreenTypes.LOADING_DATA
 				});
-				await dispatch(loadTransactions(customerDwollaId));
+				await dispatch(loadPersonalTransactions(customerDwollaId));
 				updateLoadingStatus({
 					isLoading: false,
 					screen: LoadingScreenTypes.LOADING_DATA
@@ -274,7 +275,7 @@ const MyTransactions = (): JSX.Element => {
 							</TouchableOpacity>
 						</View>
 						{isFilterVisible && <MyTransactionFilter></MyTransactionFilter>}
-						<MyTransactionList data={transactions} onSelect={viewDetail} />
+						<MyTransactionList data={personalTransactions} onSelect={viewDetail} />
 					</ScrollView>
 				</View>
 			</View>
