@@ -1,5 +1,6 @@
 import { useNavigation } from "@react-navigation/native";
 import React, { useEffect, useState, useContext } from "react";
+import { useDispatch } from 'react-redux';
 import {
     KeyboardAvoidingView,
     Platform, ScrollView,
@@ -23,6 +24,7 @@ import { BUTTON_TYPES } from 'src/constants';
 import { UserAPI } from 'src/api';
 import { showToast } from 'src/utils/common';
 import { ToastType, LoadingScreenTypes } from 'src/utils/types';
+import { loadPersonalWallet } from 'src/store/wallet/wallet.actions';
 
 const styles = StyleSheet.create({
   container: { 
@@ -90,8 +92,8 @@ const MIN_AMOUNT = 1;
 
 const LoadUp = (): JSX.Element => {
   const navigation = useNavigation();
+  const dispatch = useDispatch();
   const { customerDwollaId } = useContext(AuthContext);
-  const { updateWallet } = usePersonalWallet();
   const { updateLoadingStatus } = useLoadingModal();
   const [amount, setAmount] = useState<string>("");
   const [goNext, setGoNext] = useState(false);
@@ -120,7 +122,7 @@ const LoadUp = (): JSX.Element => {
     );
 
     if (response.data) {
-      updateWallet(customerDwollaId);
+      await dispatch(loadPersonalWallet(customerDwollaId));
       updateLoadingStatus({
         isLoading: false,
         screen: LoadingScreenTypes.PAYMENT_PENDING

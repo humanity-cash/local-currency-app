@@ -1,5 +1,6 @@
 import { useNavigation } from '@react-navigation/native';
 import React, { useState, useContext, useEffect } from 'react';
+import { useDispatch } from 'react-redux';
 import { StyleSheet, View, Image, KeyboardAvoidingView, ScrollView, Platform } from 'react-native';
 import { Text } from 'react-native-elements';
 import { useCameraPermission, usePersonalWallet, useLoadingModal } from 'src/hooks';
@@ -15,6 +16,8 @@ import { QRCodeEntry, SECURITY_ID, PaymentMode, ToastType, LoadingScreenTypes } 
 import { UserAPI } from 'src/api';
 import { ITransactionRequest } from 'src/api/types';
 import { calcFee, showToast } from 'src/utils/common';
+
+import { loadPersonalWallet } from 'src/store/wallet/wallet.actions';
 
 type HandleScaned = {
 	type: string,
@@ -202,6 +205,7 @@ const LowAmount = (props: LowAmountProps) => {
 
 const QRCodeScan = (): JSX.Element => {
 	const navigation = useNavigation();
+	const dispatch = useDispatch();
 	const { customerDwollaId } = useContext(AuthContext);
 	const hasPermission = useCameraPermission();
 	const { wallet } = usePersonalWallet();
@@ -266,15 +270,17 @@ const QRCodeScan = (): JSX.Element => {
 					screen: LoadingScreenTypes.PAYMENT_PENDING
 				});
 				const response = await UserAPI.transferTo(customerDwollaId, request);
+				
+				if (response.data) {
+					// Update user info
+					await dispatch(loadPersonalWallet(customerDwollaId));
+					navigation.navigate(Routes.PAYMENT_SUCCESS);
+				}
 				updateLoadingStatus({
 					isLoading: false,
 					screen: LoadingScreenTypes.PAYMENT_PENDING
 				});
-				if (response.data) {
-					navigation.navigate(Routes.PAYMENT_SUCCESS);
-				} else {
-					navigation.navigate(Routes.PAYMENT_FAILED);
-				}
+				navigation.navigate(Routes.PAYMENT_FAILED);
 			} else {
 				showToast(ToastType.ERROR, "Failed", "Whooops, something went wrong.");
 			}
@@ -304,15 +310,15 @@ const QRCodeScan = (): JSX.Element => {
 					screen: LoadingScreenTypes.PAYMENT_PENDING
 				});
 				const response = await UserAPI.transferTo(customerDwollaId, request);
+				if (response.data) {
+					await dispatch(loadPersonalWallet(customerDwollaId));
+					navigation.navigate(Routes.PAYMENT_SUCCESS);
+				}
 				updateLoadingStatus({
 					isLoading: false,
 					screen: LoadingScreenTypes.PAYMENT_PENDING
 				});
-				if (response.data) {
-					navigation.navigate(Routes.PAYMENT_SUCCESS);
-				} else {
-					navigation.navigate(Routes.PAYMENT_FAILED);
-				}
+				navigation.navigate(Routes.PAYMENT_FAILED);
 			} else {
 				showToast(ToastType.ERROR, "Failed", "Whooops, something went wrong.");
 			}

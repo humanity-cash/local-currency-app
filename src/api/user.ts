@@ -1,6 +1,6 @@
-import { UserId, AxiosPromiseResponse, IUserRequest, IDepositRequest, IWithdrawalRequest, ITransactionRequest, ITransaction} from './types';
+import { UserId, AxiosPromiseResponse, IUserRequest, IDepositRequest, IWithdrawalRequest, ITransactionRequest, ITransaction, IUser} from './types';
 import { getRequest, postRequest } from './base';
-import { transactionDatas } from './formatters';
+import { userData, transactionDatas } from './formatters';
 
 // create local currency user
 export const user = async (request: IUserRequest): Promise<AxiosPromiseResponse> => {
@@ -46,9 +46,9 @@ export const health = async (): Promise<AxiosPromiseResponse> => {
 };
 
 // Retrieve user information and balances
-export const getUser = async (userId: UserId): Promise<AxiosPromiseResponse> => {
+export const getUser = async (userId: UserId): Promise<IUser> => {
   const response = await getRequest(`/users/${userId}`);
-  return response;
+  return userData(response);
 };
 
 // Get all deposits for a single user
