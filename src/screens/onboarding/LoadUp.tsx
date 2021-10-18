@@ -9,7 +9,7 @@ import {
     TouchableOpacity
 } from "react-native";
 import { Text } from "react-native-elements";
-import { useLoadingModal, usePersonalWallet } from "src/hooks";
+import { useLoadingModal } from "src/hooks";
 import { AuthContext } from 'src/auth';
 import { BackBtn, BorderedInput, Button, Header, CancelBtn } from "src/shared/uielements";
 import { colors } from "src/theme/colors";
