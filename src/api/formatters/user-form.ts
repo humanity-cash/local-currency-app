@@ -11,7 +11,8 @@ export const transactionDatas = (res: AxiosPromiseResponse): ITransaction[] => {
     return list.map((transaction) => {
         return {
             ...transaction,
-            value: (Number(transaction.value) / 1000000000000000000).toFixed(2)
+            timestamp: transaction.timestamp * 1000,
+            value: (Number(transaction.value) / 1000000000000000000).toFixed(2),
         };
     });
 }

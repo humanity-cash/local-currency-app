@@ -129,7 +129,7 @@ const TransactionDetail = (props: TransactionDetailProps) => {
 						<View style={styles.detailView}>
 							<Text style={styles.detailText}>DATE</Text>
 							<Text style={styles.detailText}>
-								{moment(data.timestamp).format('HH:mm, MM dd, YYYY')}
+								{moment(data.timestamp).format('HH:mm, MMM D, YYYY')}
 							</Text>
 						</View>
 					</View>
@@ -147,7 +147,7 @@ const defaultTransaction = {
 	fromUserId: "",
 	type: "",
 	value: "",
-	timestamp: "",
+	timestamp: new Date().getTime(),
 	blockNumber: 0
 };
 

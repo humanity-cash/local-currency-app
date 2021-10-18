@@ -363,7 +363,7 @@ export const SECURITY_ID = "berkShareSecurity";
 export interface QRCodeEntry {
   securityId: string;
   transactionId?: string;
-  transactionDate?: string;
+  transactionDate?: number;
   to: string,
   amount: number,
   mode: PaymentMode

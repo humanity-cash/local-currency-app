@@ -72,7 +72,7 @@ const TransactionItem = (props: TransactionItemProps) => {
 				<Text style={styles.transactionType}>
 					{item.type}
 				</Text>
-				<Text style={styles.timeText}>{moment(item.timestamp).format('HH:mm, MM dd, YYYY')}</Text>
+				<Text style={styles.timeText}>{moment(item.timestamp).format('HH:mm, MMM D, YYYY')}</Text>
 			</View>
 			<Text style={getStyle(item.type)}>{getBerksharePrefix(item.type)}  {item.value}</Text>
 		</View>

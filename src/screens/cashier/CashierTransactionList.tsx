@@ -74,7 +74,7 @@ const TransactionItem = (props: TransactionItemProps) => {
 					{item.type}
 				</Text>
 				<Text style={styles.timeText}>
-					{moment(item.timestamp).format('HH:mm, MM dd, YYYY')}
+					{moment(item.timestamp).format('HH:mm, MMM D, YYYY')}
 				</Text>
 			</View>
 			<Text style={getStyle(item.type)}>
