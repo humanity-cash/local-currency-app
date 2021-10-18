@@ -19,8 +19,13 @@ import DwollaDialog from './DwollaDialog';
 import { Button, Dialog } from "src/shared/uielements";
 import { dialogViewBase } from "src/theme/elements";
 import { BUTTON_TYPES } from "src/constants";
-import { usePersonalWallet, useBanks, useLoadingModal } from 'src/hooks';
+import { useBanks, useLoadingModal } from 'src/hooks';
 import { LoadingScreenTypes } from 'src/utils/types';
+
+import { loadPersonalWallet } from 'src/store/wallet/wallet.actions';
+import { WalletState } from 'src/store/wallet/wallet.reducer';
+import { useSelector, useDispatch } from 'react-redux';
+import { AppState } from 'src/store';
 
 const styles = StyleSheet.create({
 	content: { paddingBottom: 40 },
@@ -147,7 +152,7 @@ const feedData = [
 
 const Dashboard = (): JSX.Element => {
 	const navigation = useNavigation();
-	const { wallet, updateWallet } = usePersonalWallet();
+	const dispatch = useDispatch();
 	const { updateLoadingStatus } = useLoadingModal();
 	const { hasPersonalBank, getBankStatus } = useBanks();
 	const { customerDwollaId } = useContext(AuthContext);
@@ -155,19 +160,28 @@ const Dashboard = (): JSX.Element => {
 	const [isLoadup, setIsLoadup] = useState<boolean>(false);
 	const [isPayment, setIsPayment] = useState<boolean>(false);
 
+	const { personalWallet } = useSelector((state: AppState) => state.walletReducer) as WalletState;
+
 	useEffect(() => {
-		const unsubscribe = navigation.addListener("focus", async () => {
-			if (customerDwollaId) {
-				getBankStatus(customerDwollaId, false);
+		if (customerDwollaId) {
+			(async () => {
 				updateLoadingStatus({
 					isLoading: true,
 					screen: LoadingScreenTypes.LOADING_DATA
 				});
-				await updateWallet(customerDwollaId);
+				await dispatch(loadPersonalWallet(customerDwollaId));
 				updateLoadingStatus({
 					isLoading: false,
 					screen: LoadingScreenTypes.LOADING_DATA
 				});
+			})();
+		}
+	}, []);
+
+	useEffect(() => {
+		const unsubscribe = navigation.addListener("focus", async () => {
+			if (customerDwollaId) {
+				getBankStatus(customerDwollaId, false);
 			}
 		});
 
@@ -212,7 +226,7 @@ const Dashboard = (): JSX.Element => {
 						</Text>
 					</View>
 					<View style={styles.amountView}>
-						<Text style={styles.text}>B$ {hasPersonalBank ? wallet.availableBalance : '-'}</Text>
+						<Text style={styles.text}>B$ {hasPersonalBank ? personalWallet.availableBalance : '-'}</Text>
 						<TouchableOpacity
 							style={styles.topupButton}
 							onPress={() => hasPersonalBank ? navigation.navigate(Routes.LOAD_UP) : setIsLoadup(true)}>
