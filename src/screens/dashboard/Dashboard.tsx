@@ -19,9 +19,9 @@ import DwollaDialog from './DwollaDialog';
 import { Button, Dialog } from "src/shared/uielements";
 import { dialogViewBase } from "src/theme/elements";
 import { BUTTON_TYPES } from "src/constants";
-import { useBanks, useLoadingModal } from 'src/hooks';
+import { useBanks } from 'src/hooks';
 import { LoadingScreenTypes } from 'src/utils/types';
-
+import { updateLoadingStatus } from 'src/store/loading/loading.actions';
 import { loadPersonalWallet } from 'src/store/wallet/wallet.actions';
 import { WalletState } from 'src/store/wallet/wallet.reducer';
 import { useSelector, useDispatch } from 'react-redux';
@@ -153,7 +153,6 @@ const feedData = [
 const Dashboard = (): JSX.Element => {
 	const navigation = useNavigation();
 	const dispatch = useDispatch();
-	const { updateLoadingStatus } = useLoadingModal();
 	const { hasPersonalBank, getBankStatus } = useBanks();
 	const { customerDwollaId } = useContext(AuthContext);
 	const [isVisible, setIsVisible] = useState<boolean>(false);
@@ -165,15 +164,15 @@ const Dashboard = (): JSX.Element => {
 	useEffect(() => {
 		if (customerDwollaId) {
 			(async () => {
-				updateLoadingStatus({
+				dispatch(updateLoadingStatus({
 					isLoading: true,
 					screen: LoadingScreenTypes.LOADING_DATA
-				});
+				}));
 				await dispatch(loadPersonalWallet(customerDwollaId));
-				updateLoadingStatus({
+				dispatch(updateLoadingStatus({
 					isLoading: false,
 					screen: LoadingScreenTypes.LOADING_DATA
-				});
+				}));
 			})();
 		}
 	}, []);

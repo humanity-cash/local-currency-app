@@ -1,16 +1,18 @@
 import React from 'react';
-import { useLoadingModal } from "src/hooks";
 import { LoadingScreenTypes } from "src/utils/types";
 import DataLoading from './DataLoading';
 import PaymentPending from './PaymentPending';
+import { LoadingPageState } from 'src/store/loading/loading.reducer';
+import { useSelector } from 'react-redux';
+import { AppState } from 'src/store';
 
 const LoadingPage = (): JSX.Element => {
-    const { details } = useLoadingModal();
+    const { loadingState } = useSelector((state: AppState) => state.loadingReducer) as LoadingPageState;
 
-    return details.screen === LoadingScreenTypes.PAYMENT_PENDING ? (
-        <PaymentPending visible={details?.isLoading} />
+    return loadingState.screen === LoadingScreenTypes.PAYMENT_PENDING ? (
+        <PaymentPending visible={loadingState?.isLoading} />
     ) : (
-        <DataLoading visible={details?.isLoading} />
+        <DataLoading visible={loadingState?.isLoading} />
     )
 }
 

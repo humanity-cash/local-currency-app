@@ -10,11 +10,10 @@ import { underlineHeaderB, viewBaseB, wrappingContainerBase } from "src/theme/el
 import Translation from 'src/translation/en.json';
 import * as Routes from 'src/navigation/constants';
 import { BUTTON_TYPES } from "src/constants";
-import { useLoadingModal } from "src/hooks";
 import { UserAPI } from 'src/api';
 import { showToast } from 'src/utils/common';
 import { ToastType, LoadingScreenTypes } from 'src/utils/types';
-
+import { updateLoadingStatus } from 'src/store/loading/loading.actions';
 import { loadBusinessWallet } from 'src/store/wallet/wallet.actions';
 import { useDispatch } from 'react-redux';
 
@@ -100,7 +99,6 @@ const MerchantLoadup = (): JSX.Element => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
   const { businessDwollaId } = useContext(AuthContext);
-  const { updateLoadingStatus } = useLoadingModal();
   const [amount, setAmount] = useState<string>("");
   const [goNext, setGoNext] = useState<boolean>(false);
 
@@ -118,10 +116,10 @@ const MerchantLoadup = (): JSX.Element => {
       return;
     }
 
-    updateLoadingStatus({
-      isLoading: true,
-      screen: LoadingScreenTypes.PAYMENT_PENDING
-    });
+    dispatch(updateLoadingStatus({
+			isLoading: true,
+			screen: LoadingScreenTypes.PAYMENT_PENDING
+		}));
     const response = await UserAPI.deposit(
       businessDwollaId,
       {amount: amount}
@@ -134,10 +132,10 @@ const MerchantLoadup = (): JSX.Element => {
       showToast(ToastType.ERROR, "Whoops, something went wrong.", "Connection failed.");
       navigation.navigate(Routes.MERCHANT_DASHBOARD);
     }
-    updateLoadingStatus({
-      isLoading: false,
-      screen: LoadingScreenTypes.PAYMENT_PENDING
-    });
+    dispatch(updateLoadingStatus({
+			isLoading: false,
+			screen: LoadingScreenTypes.PAYMENT_PENDING
+		}));
   }
 
   return (

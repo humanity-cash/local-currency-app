@@ -9,7 +9,6 @@ import {
     TouchableOpacity
 } from "react-native";
 import { Text } from "react-native-elements";
-import { useLoadingModal } from "src/hooks";
 import { AuthContext } from 'src/auth';
 import { BackBtn, BorderedInput, Button, Header, CancelBtn } from "src/shared/uielements";
 import { colors } from "src/theme/colors";
@@ -25,6 +24,7 @@ import { UserAPI } from 'src/api';
 import { showToast } from 'src/utils/common';
 import { ToastType, LoadingScreenTypes } from 'src/utils/types';
 import { loadPersonalWallet } from 'src/store/wallet/wallet.actions';
+import { updateLoadingStatus } from 'src/store/loading/loading.actions';
 
 const styles = StyleSheet.create({
   container: { 
@@ -94,7 +94,6 @@ const LoadUp = (): JSX.Element => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
   const { customerDwollaId } = useContext(AuthContext);
-  const { updateLoadingStatus } = useLoadingModal();
   const [amount, setAmount] = useState<string>("");
   const [goNext, setGoNext] = useState(false);
 
@@ -112,10 +111,10 @@ const LoadUp = (): JSX.Element => {
       return;
     }
 
-    updateLoadingStatus({
+    dispatch(updateLoadingStatus({
       isLoading: true,
       screen: LoadingScreenTypes.PAYMENT_PENDING
-    });
+    }));
     const response = await UserAPI.deposit(
       customerDwollaId,
       {amount: amount}
@@ -123,19 +122,15 @@ const LoadUp = (): JSX.Element => {
 
     if (response.data) {
       await dispatch(loadPersonalWallet(customerDwollaId));
-      updateLoadingStatus({
-        isLoading: false,
-        screen: LoadingScreenTypes.PAYMENT_PENDING
-      });
       navigation.navigate(Routes.LOADUP_SUCCESS);
     } else {
-      updateLoadingStatus({
-        isLoading: false,
-        screen: LoadingScreenTypes.PAYMENT_PENDING
-      });
       showToast(ToastType.ERROR, "Whoops, something went wrong.", "Connection failed.");
       navigation.navigate(Routes.DASHBOARD);
     }
+    dispatch(updateLoadingStatus({
+      isLoading: false,
+      screen: LoadingScreenTypes.PAYMENT_PENDING
+    }));
   }
 
   return (
