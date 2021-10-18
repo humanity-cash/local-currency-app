@@ -1,5 +1,7 @@
 import { useNavigation } from '@react-navigation/native';
-import React, {useState} from 'react';
+import React, { useState, useEffect, useContext } from 'react';
+import { AuthContext } from 'src/auth';
+import { useLoadingModal, usePersonalWallet } from 'src/hooks';
 import { StyleSheet, View, ScrollView, TouchableOpacity } from 'react-native';
 import { Text, Image } from 'react-native-elements';
 import { Octicons } from '@expo/vector-icons';
@@ -7,17 +9,24 @@ import { Header, Button, BackBtn, SearchInput, Dialog } from "src/shared/uieleme
 import { baseHeader, viewBase, dialogViewBase, wrappingContainerBase } from "src/theme/elements";
 import { colors } from "src/theme/colors";
 import MyTransactionList from './MyTransactionList';
-import { MyTransactionItem } from "src/utils/types";
 import MyTransactionFilter from './MyTransactionsFilter';
-import { consumerTransactions } from "src/mocks/transactions";
 import QRCodeGen from "src/screens/payment/QRCodeGen";
 import Translation from 'src/translation/en.json';
 import * as Routes from 'src/navigation/constants';
-import { BUTTON_TYPES } from 'src/constants';
+import { getBerksharePrefix } from "src/utils/common";
+import { TransactionType, LoadingScreenTypes } from "src/utils/types";
+
+import { ITransaction } from 'src/api/types';
+import { loadPersonalTransactions } from 'src/store/transaction/transaction.actions';
+import { TransactionState } from 'src/store/transaction/transaction.reducer';
+import { useSelector, useDispatch } from 'react-redux';
+import { AppState } from 'src/store';
+import moment from 'moment';
 
 const styles = StyleSheet.create({
 	content: {
-		paddingBottom: 120
+		flex: 1,
+		paddingBottom: 100
 	},
 	headerText: {
 		fontSize: 32,
@@ -27,11 +36,13 @@ const styles = StyleSheet.create({
 	totalAmountView: {
 		flexDirection: 'row',
 		justifyContent: 'space-between',
-		paddingVertical: 10,
+		marginVertical: 10,
+		paddingBottom: 10,
 		borderBottomWidth: 1,
 		borderBottomColor: colors.darkGreen
 	},
 	amountText: {
+		fontFamily: 'GothamBold',
 		fontWeight: 'bold',
 		fontSize: 18
 	},
@@ -82,8 +93,9 @@ const styles = StyleSheet.create({
 		height: 24,
 		marginRight: 20
 	},
-	view: {
-		padding: 10,
+	headerView: {
+		marginTop: 20,
+		marginBottom: 40
 	},
 	detailView: {
 		flexDirection: 'row', 
@@ -91,83 +103,131 @@ const styles = StyleSheet.create({
 	},
 	detailText: {
 		fontSize: 10,
+		marginHorizontal: 10,
+		color: colors.bodyText
 	},
 	returnText: {
 		color: colors.darkRed
+	},
+	minusText: {
+		fontFamily: 'GothamBold',
+		fontSize: 32,
+		lineHeight: 32,
+		color: colors.darkRed,
+		textAlign: 'center'
+	},
+	plusText: {
+		fontFamily: 'GothamBold',
+		fontSize: 32,
+		lineHeight: 32,
+		color: colors.darkGreen,
+		textAlign: 'center'
+	},
+	dialogHeight: {
+		height: 250
 	}
 });
 
-const transactionData = {
-	transactionId: "05636826HDI934",
-	type: "PURCHASE",
-	date: "4:22, JUN 17, 2021"
-}
-
 type TransactionDetailProps = {
 	visible: boolean,
-	data: MyTransactionItem,
+	data: ITransaction,
 	onClose: ()=>void,
 	onReturn: ()=>void
 }
 
 const TransactionDetail = (props: TransactionDetailProps) => {
-	const {data, visible, onClose, onReturn} = props;
+	const {data, visible, onClose } = props;
+
+	const getStyle = (type: string) => {
+		if (type === TransactionType.SALE || type === TransactionType.RETURN || type === TransactionType.IN) {
+			return styles.plusText;
+		} else {
+			return styles.minusText;
+		}
+	}
 
 	return (
-		<Dialog visible={visible} onClose={onClose}>
+		<Dialog visible={visible} onClose={onClose} style={styles.dialogHeight}>
 			<View style={dialogViewBase}>
 				<ScrollView style={wrappingContainerBase}>
-					<View style={ baseHeader }>
-						<Text h1 style={styles.returnText}> - B$ {data.amount} </Text>
+					<View style={styles.headerView}>
+						<Text style={getStyle(data.type)}> {getBerksharePrefix(data.type)} {data.value} </Text>
 					</View>
-					<View style={styles.view}>
-						<View style={styles.detailView}>
-							<Text style={styles.detailText}>{Translation.PAYMENT.TRANSACTION_ID}</Text>
-							<Text style={{...styles.detailText, fontWeight: 'bold'}}>{transactionData.transactionId}</Text>
-						</View>
-						<View style={styles.detailView}>
-							<Text style={styles.detailText}>TYPE</Text>
-							<Text style={{...styles.detailText, fontWeight: 'bold'}}>{transactionData.type}</Text>
-						</View>
-						<View style={styles.detailView}>
-							<Text style={styles.detailText}>DATE</Text>
-							<Text style={{...styles.detailText, fontWeight: 'bold'}}>{transactionData.date}</Text>
-						</View>
+
+					<View style={styles.detailView}>
+						<Text style={styles.detailText}>{Translation.PAYMENT.TRANSACTION_ID}</Text>
+						<Text style={styles.detailText}>{data.transactionHash}</Text>
+					</View>
+					<View style={styles.detailView}>
+						<Text style={styles.detailText}>TYPE</Text>
+						<Text style={styles.detailText}>{data.type}</Text>
+					</View>
+					<View style={styles.detailView}>
+						<Text style={styles.detailText}>DATE</Text>
+						<Text style={styles.detailText}>{moment(data.timestamp).format('HH:mm, MMM D, YYYY')}</Text>
 					</View>
 				</ScrollView>
-				<View>
+				{/* <View>
 					<Button
 						type={BUTTON_TYPES.TRANSPARENT}
 						title={Translation.BUTTON.WANT_RETURN}
 						textStyle={styles.returnText}
 						onPress={onReturn}
 					/>
-				</View>
+				</View> */}
 			</View>
 		</Dialog>
 	)
 }
 
+const defaultTransaction = {
+	transactionHash: "",
+	toUserId: "",
+	toAddress: "",
+	fromAddress: "",
+	fromUserId: "",
+	type: "",
+	value: "",
+	timestamp: new Date().getTime(),
+	blockNumber: 0
+};
+
 const MyTransactions = (): JSX.Element => {
+	const dispatch = useDispatch();
 	const navigation = useNavigation();
+	const { customerDwollaId } = useContext(AuthContext);
+	const { updateLoadingStatus } = useLoadingModal();
+	const { wallet } = usePersonalWallet();
 	const [isFilterVisible, setIsFilterVisible] = useState<boolean>(false);
 	const [searchText, setSearchText] = useState<string>("");
-	const [selectedItem, setSelectedItem] = useState<MyTransactionItem>({
-		transactionId: 0,
-		avatar: "",
-		name: "",
-		type: "",
-		amount: "",
-		date: ""
-	});
 	const [isDetailViewOpen, setIsDetailViewOpen] = useState<boolean>(false);
 	const [isReturnViewOpen, setIsReturnViewOpen] = useState<boolean>(false);
+	const [selectedItem, setSelectedItem] = useState<ITransaction>(defaultTransaction);
+
+	const { personalTransactions } = useSelector((state: AppState) => state.transactionReducer) as TransactionState;
+	
+
+	useEffect(() => {
+		if (customerDwollaId) {
+			(async () => {
+				updateLoadingStatus({
+					isLoading: true,
+					screen: LoadingScreenTypes.LOADING_DATA
+				});
+				await dispatch(loadPersonalTransactions(customerDwollaId));
+				updateLoadingStatus({
+					isLoading: false,
+					screen: LoadingScreenTypes.LOADING_DATA
+				});
+			})();
+		}
+	}, []);
 
 	const onSearchChange = (name: string, change: string) => {
 		setSearchText(change);
 	}
 
-	const viewDetail = (item: MyTransactionItem) => {
+	const viewDetail = (item: ITransaction) => {
 		setSelectedItem(item);
 		setIsDetailViewOpen(true);
 	}
@@ -187,37 +247,40 @@ const MyTransactions = (): JSX.Element => {
 			<Header
 				leftComponent={<BackBtn text="Home" onClick={() => navigation.goBack()} />}
 			/>
-			<ScrollView style={wrappingContainerBase}>
+			<View style={wrappingContainerBase}>
 				<View style={styles.content}>
 					<View style={baseHeader}>
 						<Text style={styles.headerText}>{Translation.PAYMENT.MY_TRANSACTIONS}</Text>
 					</View>
 					<View style={styles.totalAmountView}>
-						<Text style={styles.amountText}>B$ 382.91</Text>
+						<Text style={styles.amountText}>B$ {wallet.availableBalance}</Text>
 					</View>
-					<View style={styles.filterView}>
-						<View style={styles.filterInput}>
-							<SearchInput
-								label="Search"
-								name="searchText"
-								keyboardType="default"
-								placeholder="Search"
-								value={searchText}
-								onChange={onSearchChange}
-							/>
+					
+					<ScrollView>
+						<View style={styles.filterView}>
+							<View style={styles.filterInput}>
+								<SearchInput
+									label="Search"
+									name="searchText"
+									keyboardType="default"
+									placeholder="Search"
+									value={searchText}
+									onChange={onSearchChange}
+								/>
+							</View>
+							<TouchableOpacity style={isFilterVisible ? styles.selectedFilterBtn : styles.filterBtn} onPress={()=>setIsFilterVisible(!isFilterVisible)}>
+								<Octicons 
+									name="settings"
+									size={24}
+									color={isFilterVisible ? colors.white : colors.text}
+								/>
+							</TouchableOpacity>
 						</View>
-						<TouchableOpacity style={isFilterVisible ? styles.selectedFilterBtn : styles.filterBtn} onPress={()=>setIsFilterVisible(!isFilterVisible)}>
-							<Octicons 
-								name="settings"
-								size={24}
-								color={isFilterVisible ? colors.white : colors.text}
-							/>
-						</TouchableOpacity>
-					</View>
-					{isFilterVisible && <MyTransactionFilter></MyTransactionFilter>}
-					<MyTransactionList data={consumerTransactions} onSelect={viewDetail} />
+						{isFilterVisible && <MyTransactionFilter></MyTransactionFilter>}
+						<MyTransactionList data={personalTransactions} onSelect={viewDetail} />
+					</ScrollView>
 				</View>
-			</ScrollView>
+			</View>
 
 			<TouchableOpacity onPress={()=>navigation.navigate(Routes.QRCODE_SCAN)} style={styles.scanButton}>
 				<Image
@@ -228,7 +291,7 @@ const MyTransactions = (): JSX.Element => {
 			</TouchableOpacity>
 
 			{isDetailViewOpen && <TransactionDetail visible={isDetailViewOpen} data={selectedItem} onReturn={onReturn} onClose={onClose} />}
-			{isReturnViewOpen && <QRCodeGen visible={isReturnViewOpen} onClose={onClose} isOpenAmount={true} amount={Number(selectedItem.amount)} /> }
+			{isReturnViewOpen && <QRCodeGen visible={isReturnViewOpen} onClose={onClose} isOpenAmount={true} amount={Number(selectedItem.value)} /> }
 		</View>
 	);
 }

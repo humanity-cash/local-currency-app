@@ -298,14 +298,16 @@ export type MyTransactionItem = {
 	date: string
 }
 
-export enum MerchantTransactionType {
+export enum TransactionType {
   SALE = 'Sale',
 	RETURN = 'Return',
 	CASH_OUT = 'Cash out',
 	TRANSFER = 'Transfer',
   DONATION = 'Donation',
   CUSTOMER_RETURN = 'Customer return',
-  PURCHASEMENT = 'Purchasement'
+  PURCHASEMENT = 'Purchasement',
+  IN = "IN",
+  OUT = "OUT"
 }
 
 export const TransactionTypes = {
@@ -320,7 +322,7 @@ export const TransactionTypes = {
 
 export type MerchantTransactionItem = {
   transactionId: string,
-  type: MerchantTransactionType,
+  type: TransactionType,
   amount: number,
   date: string
 }
@@ -361,7 +363,7 @@ export const SECURITY_ID = "berkShareSecurity";
 export interface QRCodeEntry {
   securityId: string;
   transactionId?: string;
-  transactionDate?: string;
+  transactionDate?: number;
   to: string,
   amount: number,
   mode: PaymentMode
