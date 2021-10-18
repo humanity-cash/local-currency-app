@@ -15,6 +15,9 @@ import { QRCodeEntry, SECURITY_ID, PaymentMode, ToastType, LoadingScreenTypes } 
 import { UserAPI } from 'src/api';
 import { ITransactionRequest } from 'src/api/types';
 import { calcFee, showToast } from 'src/utils/common';
+import { loadBusinessWallet } from 'src/store/wallet/wallet.actions';
+import { loadBusinessTransactions } from 'src/store/transaction/transaction.actions';
+import { useDispatch } from 'react-redux';
 
 type HandleScaned = {
 	type: string,
@@ -190,6 +193,7 @@ const PaymentConfirm = (props: PaymentConfirmProps) => {
 const MerchantQRCodeScan = (): JSX.Element => {
 	const navigation = useNavigation();
 	const { businessDwollaId } = useContext(AuthContext);
+	const dispatch = useDispatch();
 	const { updateLoadingStatus } = useLoadingModal();
 	const { wallet } = useBusinessWallet();
 	const hasPermission = useCameraPermission();
@@ -257,16 +261,18 @@ const MerchantQRCodeScan = (): JSX.Element => {
 				screen: LoadingScreenTypes.PAYMENT_PENDING
 			});
 			const response = await UserAPI.transferTo(businessDwollaId, request);
-			updateLoadingStatus({
-				isLoading: false,
-				screen: LoadingScreenTypes.PAYMENT_PENDING
-			});
 			if (response.data) {
+				await dispatch(loadBusinessWallet(businessDwollaId));
+				await dispatch(loadBusinessTransactions(businessDwollaId));
 				navigation.navigate(Routes.MERCHANT_PAYMENT_SUCCESS);
 			} else {
 				showToast(ToastType.ERROR, "Failed", "Whooops, something went wrong.");
 				navigation.navigate(Routes.MERCHANT_DASHBOARD);
 			}
+			updateLoadingStatus({
+				isLoading: false,
+				screen: LoadingScreenTypes.PAYMENT_PENDING
+			});
 		} else {
 			showToast(ToastType.ERROR, "Failed", "Whooops, something went wrong.");
 		}
@@ -292,15 +298,17 @@ const MerchantQRCodeScan = (): JSX.Element => {
 				screen: LoadingScreenTypes.PAYMENT_PENDING
 			});
 			const response = await UserAPI.transferTo(businessDwollaId, request);
-			updateLoadingStatus({
-				isLoading: false,
-				screen: LoadingScreenTypes.PAYMENT_PENDING
-			});
 			if (response.data) {
+				await dispatch(loadBusinessWallet(businessDwollaId));
+				await dispatch(loadBusinessTransactions(businessDwollaId));
 				navigation.navigate(Routes.MERCHANT_PAYMENT_SUCCESS);
 			} else {
 				showToast(ToastType.ERROR, "Whooops, something went wrong.", "Connection failed");
 			}
+			updateLoadingStatus({
+				isLoading: false,
+				screen: LoadingScreenTypes.PAYMENT_PENDING
+			});
 		} else {
 			showToast(ToastType.ERROR, "Whooops, something went wrong.", "Connection failed");
 		}
