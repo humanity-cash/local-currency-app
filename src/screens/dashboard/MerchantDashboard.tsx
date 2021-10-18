@@ -28,7 +28,7 @@ const styles = StyleSheet.create({
 	mainTextColor: {
 		color: colors.purple,
 	},
-	content: { paddingBottom: 40 },
+	content: { paddingBottom: 100 },
 	inlineView: {flexDirection: 'row'},
 	headerText: {
 		color: colors.purple,
@@ -214,7 +214,7 @@ const TransactionDetail = (props: TransactionDetailProps) => {
 						</View>
 						<View style={styles.detailView}>
 							<Text style={styles.detailText}>DATE</Text>
-							<Text style={styles.detailText}>{moment(data.timestamp).format('HH:mm, MM dd, YYYY')}</Text>
+							<Text style={styles.detailText}>{moment(data.timestamp).format('HH:mm, MMM D, YYYY')}</Text>
 						</View>
 					</View>
 				</ScrollView>
@@ -231,7 +231,7 @@ const defaultTransaction = {
 	fromUserId: "",
 	type: "",
 	value: "",
-	timestamp: "",
+	timestamp: new Date().getTime(),
 	blockNumber: 0
 };
 

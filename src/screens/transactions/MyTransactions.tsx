@@ -1,7 +1,7 @@
 import { useNavigation } from '@react-navigation/native';
 import React, { useState, useEffect, useContext } from 'react';
 import { AuthContext } from 'src/auth';
-import { useLoadingModal } from 'src/hooks';
+import { useLoadingModal, usePersonalWallet } from 'src/hooks';
 import { StyleSheet, View, ScrollView, TouchableOpacity } from 'react-native';
 import { Text, Image } from 'react-native-elements';
 import { Octicons } from '@expo/vector-icons';
@@ -25,7 +25,8 @@ import moment from 'moment';
 
 const styles = StyleSheet.create({
 	content: {
-		paddingBottom: 120
+		flex: 1,
+		paddingBottom: 100
 	},
 	headerText: {
 		fontSize: 32,
@@ -163,7 +164,7 @@ const TransactionDetail = (props: TransactionDetailProps) => {
 					</View>
 					<View style={styles.detailView}>
 						<Text style={styles.detailText}>DATE</Text>
-						<Text style={styles.detailText}>{moment(data.timestamp).format('HH:mm, MM dd, YYYY')}</Text>
+						<Text style={styles.detailText}>{moment(data.timestamp).format('HH:mm, MMM D, YYYY')}</Text>
 					</View>
 				</ScrollView>
 				{/* <View>
@@ -187,7 +188,7 @@ const defaultTransaction = {
 	fromUserId: "",
 	type: "",
 	value: "",
-	timestamp: "",
+	timestamp: new Date().getTime(),
 	blockNumber: 0
 };
 
@@ -196,6 +197,7 @@ const MyTransactions = (): JSX.Element => {
 	const navigation = useNavigation();
 	const { customerDwollaId } = useContext(AuthContext);
 	const { updateLoadingStatus } = useLoadingModal();
+	const { wallet } = usePersonalWallet();
 	const [isFilterVisible, setIsFilterVisible] = useState<boolean>(false);
 	const [searchText, setSearchText] = useState<string>("");
 	const [isDetailViewOpen, setIsDetailViewOpen] = useState<boolean>(false);
@@ -251,7 +253,7 @@ const MyTransactions = (): JSX.Element => {
 						<Text style={styles.headerText}>{Translation.PAYMENT.MY_TRANSACTIONS}</Text>
 					</View>
 					<View style={styles.totalAmountView}>
-						<Text style={styles.amountText}>B$ 382.91</Text>
+						<Text style={styles.amountText}>B$ {wallet.availableBalance}</Text>
 					</View>
 					
 					<ScrollView>
