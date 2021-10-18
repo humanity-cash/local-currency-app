@@ -13,6 +13,7 @@ import {
 	wrappingContainerBase
 } from 'src/theme/elements';
 import { isPasswordValid } from 'src/utils/validation';
+import Translation from 'src/translation/en.json';
 
 const styles = StyleSheet.create({
 	headerText: {
@@ -79,17 +80,16 @@ const Password = (): JSX.Element => {
 			/>
 			<View style={wrappingContainerBase}>
 				<View style={baseHeader}>
-					<Text style={styles.headerText}>Create a password</Text>
+					<Text style={styles.headerText}>{Translation.EMAIL_VERIFICATION.CREATE_PASSWORD}</Text>
 				</View>
 				<View>
 					<Text style={styles.bodyText}>
-						Create a password to secure your account
+						{Translation.EMAIL_VERIFICATION.CREATE_PASSWORD_DETAIL}
 					</Text>
 					<View style={styles.form}>
 						<Text style={styles.label}>PASSWORD</Text>
 						<Text style={styles.label}>
-							(min.8 characters, 1 capitical, 1 lower and 1
-							symbol)
+							{Translation.LABEL.PASSWORD_REG}
 						</Text>
 						<BlockInput
 							name='password'

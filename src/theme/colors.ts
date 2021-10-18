@@ -33,5 +33,6 @@ export const colors: any = {
 	overlayPurple: 'rgba(68,46,136,0.9)',
 	greyedPurple: 'rgba(68,46,136,0.4)',
 	highlightPurple: '#F0EEF5',
+	lightPurple: '#e9e7f4',
 	alert: "#D2A824"
 }

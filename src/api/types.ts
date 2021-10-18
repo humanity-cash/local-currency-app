@@ -51,7 +51,7 @@ export interface IHealthResponse {
 export interface IDepositResponse {
     transactionHash: string;
     blockNumber: number
-    timestamp: string;
+    timestamp: number;
     userId: string;
     value: string;
     operator: string;
@@ -60,20 +60,21 @@ export interface IDepositResponse {
 export interface IWithdrawalResponse {
     transactionHash: string;
     blockNumber: number,
-    timestamp: string,
+    timestamp: number,
     userId: string;
     value: string;
     operator: string;
 }
 
-export interface ITransactionResponse {
+export interface ITransaction {
     transactionHash: string;
     blockNumber: number,
-    timestamp: string;
+    timestamp: number;
     fromUserId: string;
     fromAddress: string;
     toUserId: string;
     toAddress: string;
+    type: string;
     value: string;
 }
 

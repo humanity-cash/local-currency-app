@@ -8,7 +8,7 @@ import moment from 'moment';
 import Translation from 'src/translation/en.json';
 import { colors } from "src/theme/colors";
 
-const merchantTransactionTypes = ["All", "Sales", "Returns", "Cash outs", "Expenses"];
+const TransactionTypes = ["All", "Sales", "Returns", "Cash outs", "Expenses"];
 
 const styles = StyleSheet.create({
     container: {
@@ -125,7 +125,7 @@ const MerchantTransactionsFilter = (): ReactElement => {
             <Text style={styles.label}>{Translation.LABEL.TRANSACTION_TYPE}</Text>
             <View style={styles.typeView}>
                 <SelectDropdown
-                    data={merchantTransactionTypes}
+                    data={TransactionTypes}
                     defaultValueByIndex={0}
                     onSelect={(selectedItem) => {
                         setSelectedType(selectedItem)

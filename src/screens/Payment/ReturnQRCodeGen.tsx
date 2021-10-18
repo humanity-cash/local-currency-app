@@ -7,7 +7,7 @@ import { Dialog } from "src/shared/uielements";
 import { dialogViewBase } from "src/theme/elements";
 import { PaymentMode, QRCodeEntry, SECURITY_ID } from "src/utils/types";
 import { useBrightness } from "src/hooks";
-import { ITransactionResponse } from "src/api/types";
+import { ITransaction } from "src/api/types";
 import { colors } from "src/theme/colors";
 
 const styles = StyleSheet.create({
@@ -55,7 +55,7 @@ const styles = StyleSheet.create({
 type ReturnQRCodeGenProps = {
 	visible: boolean,
 	onClose: ()=>void,
-    transactionInfo: ITransactionResponse
+    transactionInfo: ITransaction
 }
 
 const ReturnQRCodeGen = (props: ReturnQRCodeGenProps): JSX.Element => {
