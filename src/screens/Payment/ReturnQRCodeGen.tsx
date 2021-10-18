@@ -64,7 +64,7 @@ const ReturnQRCodeGen = (props: ReturnQRCodeGenProps): JSX.Element => {
 
     const requestData: QRCodeEntry = {
         securityId: SECURITY_ID,
-        transactionId: props.transactionInfo.transactionHash,
+        transactionHash: props.transactionInfo.transactionHash,
         transactionDate: props.transactionInfo.timestamp,
         to: customerDwollaId ? customerDwollaId : "",
         amount: Number(props.transactionInfo.value),
