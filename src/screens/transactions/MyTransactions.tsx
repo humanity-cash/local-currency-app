@@ -1,7 +1,6 @@
 import { useNavigation } from '@react-navigation/native';
 import React, { useState, useEffect, useContext } from 'react';
 import { AuthContext } from 'src/auth';
-import { useLoadingModal } from 'src/hooks';
 import { StyleSheet, View, ScrollView, TouchableOpacity } from 'react-native';
 import { Text, Image } from 'react-native-elements';
 import { Octicons } from '@expo/vector-icons';
@@ -23,6 +22,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { AppState } from 'src/store';
 import moment from 'moment';
 import { WalletState } from 'src/store/wallet/wallet.reducer';
+import { updateLoadingStatus } from 'src/store/loading/loading.actions';
 
 const styles = StyleSheet.create({
 	content: {
@@ -197,28 +197,26 @@ const MyTransactions = (): JSX.Element => {
 	const dispatch = useDispatch();
 	const navigation = useNavigation();
 	const { customerDwollaId } = useContext(AuthContext);
-	const { updateLoadingStatus } = useLoadingModal();
 	const [isFilterVisible, setIsFilterVisible] = useState<boolean>(false);
 	const [searchText, setSearchText] = useState<string>("");
 	const [isDetailViewOpen, setIsDetailViewOpen] = useState<boolean>(false);
 	const [isReturnViewOpen, setIsReturnViewOpen] = useState<boolean>(false);
 	const [selectedItem, setSelectedItem] = useState<ITransaction>(defaultTransaction);
-
 	const { personalTransactions } = useSelector((state: AppState) => state.transactionReducer) as TransactionState;
 	const { personalWallet } = useSelector((state: AppState) => state.walletReducer) as WalletState;
 
 	useEffect(() => {
 		if (customerDwollaId) {
 			(async () => {
-				updateLoadingStatus({
+				dispatch(updateLoadingStatus({
 					isLoading: true,
 					screen: LoadingScreenTypes.LOADING_DATA
-				});
+				}));
 				await dispatch(loadPersonalTransactions(customerDwollaId));
-				updateLoadingStatus({
+				dispatch(updateLoadingStatus({
 					isLoading: false,
 					screen: LoadingScreenTypes.LOADING_DATA
-				});
+				}));
 			})();
 		}
 	}, []);
