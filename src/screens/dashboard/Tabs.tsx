@@ -33,7 +33,10 @@ import Dashboard from "./Dashboard";
 import { Button, Dialog } from "src/shared/uielements";
 import { baseHeader, dialogViewBase, wrappingContainerBase } from "src/theme/elements";
 import { BUTTON_TYPES } from "src/constants";
-import { usePersonalWallet, useBanks } from 'src/hooks';
+import { useBanks } from 'src/hooks';
+import { WalletState } from 'src/store/wallet/wallet.reducer';
+import { useSelector } from 'react-redux';
+import { AppState } from 'src/store';
 
 const styles = StyleSheet.create({
 	headerText: {
@@ -123,10 +126,11 @@ const DrawerContent = (
 ) => {
 	const { signOut, updateUserType, userAttributes, completedBusinessVerification } = useContext(AuthContext);
 	const { hasPersonalBank } = useBanks();
-	const { wallet } = usePersonalWallet();
 	const { authorization } = useUserDetails();
 	const [isExpanded, setIsExpanded] = useState<boolean>(false);
 	const [isBankDialog, setIsBankDialog] = useState<boolean>(false);
+
+	const { personalWallet } = useSelector((state: AppState) => state.walletReducer) as WalletState;
 
 	const onMerchant = () => {
 		updateUserType(UserType.Business);
@@ -222,7 +226,7 @@ const DrawerContent = (
 							</View>
 						)}
 					</View>
-					<Text style={styles.berkAmount}>B$ {wallet.availableBalance}</Text>
+					<Text style={styles.berkAmount}>B$ {personalWallet.availableBalance}</Text>
 					<Drawer.Section>
 						<DrawerItem
 							label="Scan to pay"

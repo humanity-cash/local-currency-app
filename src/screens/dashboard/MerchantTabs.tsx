@@ -22,7 +22,10 @@ import MerchantReturnQRCodeScan from "../merchantPayment/MerchantReturnQRCodeSca
 import MerchantDashboard from "./MerchantDashboard";
 import MerchantSettings from "src/screens/merchantSettings/MerchantSettings";
 import MerchantSettingsHelpAndContact from 'src/screens/merchantSettings/MerchantSettingsHelpAndContact';
-import { useBusinessWallet, useBanks } from 'src/hooks';
+import { useBanks } from 'src/hooks';
+import { WalletState } from 'src/store/wallet/wallet.reducer';
+import { useSelector } from 'react-redux';
+import { AppState } from 'src/store';
 
 const styles = StyleSheet.create({
 	headerText: {
@@ -176,12 +179,13 @@ const DrawerContent = (props: DrawerContentComponentProps) => {
 	const { userAttributes } = useContext(AuthContext);
 	const { signOut, updateUserType, completedCustomerVerification } = useContext(AuthContext);
 	const { hasBusinessBank } = useBanks();
-	const { wallet } = useBusinessWallet();
 	const { authorization } = useUserDetails();
 	const [isExpanded, setIsExpanded] = useState<boolean>(false);
 	const [isVisible, setIsVisible] = useState<boolean>(false);
 	const [isCashierView, setIsCashierView] = useState<boolean>(false);
 	const [isBankDialog, setIsBankDialog] = useState<boolean>(false);
+
+	const { businessWallet } = useSelector((state: AppState) => state.walletReducer) as WalletState;
 
 	const onScanConfirm = () => {
 		setIsVisible(false);
@@ -282,7 +286,7 @@ const DrawerContent = (props: DrawerContentComponentProps) => {
 							</View>
 						)}
 					</View>
-					<Text style={styles.berkAmount}>B$ {wallet.availableBalance}</Text>
+					<Text style={styles.berkAmount}>B$ {businessWallet.availableBalance}</Text>
 					<Drawer.Section>
 						<DrawerItem
 							label={Translation.TABS.RECEIVE_PAYMENT}
