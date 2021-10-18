@@ -275,12 +275,13 @@ const QRCodeScan = (): JSX.Element => {
 					// Update user info
 					await dispatch(loadPersonalWallet(customerDwollaId));
 					navigation.navigate(Routes.PAYMENT_SUCCESS);
+				} else {
+					navigation.navigate(Routes.PAYMENT_FAILED);
 				}
 				updateLoadingStatus({
 					isLoading: false,
 					screen: LoadingScreenTypes.PAYMENT_PENDING
 				});
-				navigation.navigate(Routes.PAYMENT_FAILED);
 			} else {
 				showToast(ToastType.ERROR, "Failed", "Whooops, something went wrong.");
 			}
@@ -313,12 +314,13 @@ const QRCodeScan = (): JSX.Element => {
 				if (response.data) {
 					await dispatch(loadPersonalWallet(customerDwollaId));
 					navigation.navigate(Routes.PAYMENT_SUCCESS);
+				} else {
+					navigation.navigate(Routes.PAYMENT_FAILED);
 				}
 				updateLoadingStatus({
 					isLoading: false,
 					screen: LoadingScreenTypes.PAYMENT_PENDING
 				});
-				navigation.navigate(Routes.PAYMENT_FAILED);
 			} else {
 				showToast(ToastType.ERROR, "Failed", "Whooops, something went wrong.");
 			}
