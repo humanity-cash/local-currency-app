@@ -176,7 +176,7 @@ const CashierDashboard = (): JSX.Element => {
                         />
                         <Button
                             type={BUTTON_TYPES.PURPLE}
-                            title={Translation.BUTTON.TAKE_ME_BACK}
+                            title={Translation.BUTTON.CANCEL}
                             onPress={()=>onCancel()}
                         />
                     </View>

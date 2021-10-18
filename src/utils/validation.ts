@@ -4,7 +4,9 @@ import {
 	BusinessDetailsErrors, CreditCardDetails, CreditCardDetailsErrors,
 	PersonalAddressErrors,
 	PersonalDetails,
-	PersonalDetailsErrors
+	PersonalDetailsErrors,
+	QRCodeEntry,
+	SECURITY_ID
 } from "./types";
 
 const creditCardNumberValidation = (number: string) => {
@@ -110,3 +112,16 @@ const emailValidation = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".
 export const isPasswordValid = (p: string): boolean => passwordRegex.test(p)
 
 export const isEmailValid = (e: string): boolean => emailValidation.test(e)
+
+export const isQRCodeValid = (data: string): boolean => {
+	try {
+		const qrcodeData = JSON.parse(data) as QRCodeEntry;
+		if (qrcodeData.securityId == SECURITY_ID) {
+			return true;
+		} else {
+			return false;
+		}
+	} catch (e) {
+		return false;
+	}
+}

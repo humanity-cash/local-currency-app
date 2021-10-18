@@ -15,6 +15,9 @@ import { UserAPI } from 'src/api';
 import { showToast } from 'src/utils/common';
 import { ToastType, LoadingScreenTypes } from 'src/utils/types';
 
+import { loadBusinessWallet } from 'src/store/wallet/wallet.actions';
+import { useDispatch } from 'react-redux';
+
 const styles = StyleSheet.create({
   headerText: {
     paddingBottom: 10,
@@ -95,6 +98,7 @@ const MAX_AMOUNT = 2000;
 
 const MerchantLoadup = (): JSX.Element => {
   const navigation = useNavigation();
+  const dispatch = useDispatch();
   const { businessDwollaId } = useContext(AuthContext);
   const { updateLoadingStatus } = useLoadingModal();
   const [amount, setAmount] = useState<string>("");
@@ -122,16 +126,18 @@ const MerchantLoadup = (): JSX.Element => {
       businessDwollaId,
       {amount: amount}
     );
-    updateLoadingStatus({
-      isLoading: false,
-      screen: LoadingScreenTypes.PAYMENT_PENDING
-    });
+    
     if (response.data) {
+      await dispatch(loadBusinessWallet(businessDwollaId));
       navigation.navigate(Routes.MERCHANT_LOADUP_SUCCESS);
     } else {
       showToast(ToastType.ERROR, "Whoops, something went wrong.", "Connection failed.");
       navigation.navigate(Routes.MERCHANT_DASHBOARD);
     }
+    updateLoadingStatus({
+      isLoading: false,
+      screen: LoadingScreenTypes.PAYMENT_PENDING
+    });
   }
 
   return (
