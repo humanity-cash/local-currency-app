@@ -2,7 +2,6 @@ import { useNavigation } from '@react-navigation/native';
 import React, { useContext, useEffect, useState } from 'react';
 import { KeyboardAvoidingView, Platform, ScrollView, StyleSheet, View } from 'react-native';
 import { Text } from 'react-native-elements';
-import { useLoadingModal } from 'src/hooks';
 import { AuthContext } from 'src/auth';
 import { SignInInput } from 'src/auth/types';
 import { BUTTON_TYPES } from 'src/constants';
@@ -13,6 +12,9 @@ import { baseHeader, viewBase, wrappingContainerBase } from "src/theme/elements"
 import Translation from 'src/translation/en.json';
 import { LoadingScreenTypes } from 'src/utils/types';
 import { isPasswordValid } from 'src/utils/validation';
+
+import { updateLoadingStatus } from 'src/store/loading/loading.actions';
+import { useDispatch } from 'react-redux';
 
 const styles = StyleSheet.create({
 	headerText: {
@@ -40,13 +42,13 @@ const styles = StyleSheet.create({
 
 const Login = (): JSX.Element => {
 	const navigation = useNavigation();
+	const dispatch = useDispatch();
 	const { signIn, signInDetails, setSignInDetails } = useContext(AuthContext);
-	const { updateLoadingStatus } = useLoadingModal();
 	const [goNext, setGoNext] = useState<boolean>(false);
 
 	useEffect(() => {
 		setGoNext(isPasswordValid(signInDetails ? signInDetails.password : ""));
-	});
+	}, [signInDetails]);
 
 	const onValueChange = (name: 'email' | 'password', change: string) => {
 		setSignInDetails((pv: SignInInput) => ({
@@ -56,17 +58,17 @@ const Login = (): JSX.Element => {
 	};
 
 	const handleSignin = async () => {
-		updateLoadingStatus({
+		dispatch(updateLoadingStatus({
 			isLoading: true,
 			screen: LoadingScreenTypes.LOADING_DATA
-		});
+		}));
 
 		await signIn();
 
-		updateLoadingStatus({
+		dispatch(updateLoadingStatus({
 			isLoading: false,
 			screen: LoadingScreenTypes.LOADING_DATA
-		});
+		}));
 	}
 
 	return (

@@ -6,10 +6,7 @@ import useModalStatusBar from "./useModalStatusBar";
 import useNotifications from "./useNotifications";
 import useRouteTracking from "./useRouteTracking";
 import useUserDetails from "./useUserDetails";
-import usePersonalWallet from "./usePersonalWallet";
-import useBusinessWallet from "./useBusinessWallet";
 import useBanks from "./useBanks";
-import useLoadingModal from "./useLoadingModal";
 
 export {
 	useMediaLibraryPermission,
@@ -20,8 +17,5 @@ export {
 	useUserDetails,
 	useCameraPermission,
 	useBrightness,
-	usePersonalWallet,
-	useBusinessWallet,
 	useBanks,
-	useLoadingModal
 };
