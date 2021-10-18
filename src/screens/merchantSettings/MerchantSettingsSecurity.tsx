@@ -2,7 +2,7 @@ import { useNavigation } from '@react-navigation/native';
 import React, { useState, useEffect, useContext } from 'react';
 import { ScrollView, StyleSheet, Switch, View } from "react-native";
 import { Text } from "react-native-elements";
-import { useUserDetails, useLoadingModal } from "src/hooks";
+import { useUserDetails } from "src/hooks";
 import { AuthContext } from "src/auth";
 import { Header, BlockInput, Button, BackBtn } from "src/shared/uielements";
 import { colors } from "src/theme/colors";
@@ -14,6 +14,8 @@ import { isPasswordValid } from 'src/utils/validation';
 import { showToast } from 'src/utils/common';
 import { ToastType } from 'src/utils/types';
 import { LoadingScreenTypes } from 'src/utils/types';
+import { updateLoadingStatus } from 'src/store/loading/loading.actions';
+import { useDispatch } from 'react-redux';
 
 interface SecurityProps extends IMap {
 	password: string;
@@ -78,11 +80,11 @@ export const MerchantSettingsSecurity = (): JSX.Element => {
 	const navigation = useNavigation();
 	const {authorization, updateAuthorization} = useUserDetails();
 	const { changePassword } = useContext(AuthContext);
+	const dispatch = useDispatch();
 	const [isTouchId, setIsTouchId] = useState<boolean>(true);
 	const [isCashierView, setIsCashierView] = useState<boolean>(true);
 	const [canSave, setCanSave] = useState<boolean>(false);
 	const [isValidPassword, setIsValidPassword] = useState<boolean>(false);
-	const { updateLoadingStatus } = useLoadingModal();
 	const [state, setState] = useState<SecurityProps>({
 		password: "",
 		newPassword: "",
@@ -123,18 +125,18 @@ export const MerchantSettingsSecurity = (): JSX.Element => {
 	}
 
 	const handleSave = async () => {
-		updateLoadingStatus({
+		dispatch(updateLoadingStatus({
 			isLoading: true,
 			screen: LoadingScreenTypes.LOADING_DATA
-		});
+		}));
 		const response = await changePassword({
 			oldPassword: state.password, 
 			newPassword: state.newPassword
 		});
-		updateLoadingStatus({
+		dispatch(updateLoadingStatus({
 			isLoading: false,
 			screen: LoadingScreenTypes.LOADING_DATA
-		});
+		}));
 		
 		if (!response?.success) {
 			showToast(ToastType.ERROR, 'FAILED', Translation.OTHER.CHANGE_PASSWORD_FAILED);

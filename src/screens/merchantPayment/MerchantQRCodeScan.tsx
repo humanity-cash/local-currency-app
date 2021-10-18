@@ -2,7 +2,7 @@ import React, { useState, useContext, useEffect } from 'react';
 import { StyleSheet, View, Image, ScrollView, KeyboardAvoidingView, Platform } from 'react-native';
 import { useNavigation } from '@react-navigation/core';
 import { Text } from 'react-native-elements';
-import { useCameraPermission, useLoadingModal, useBusinessWallet } from 'src/hooks';
+import { useCameraPermission } from 'src/hooks';
 import { AuthContext } from 'src/auth';
 import { Header, CancelBtn, Dialog, Button, ToggleButton, Modal, ModalHeader, BorderedInput, BackBtn } from "src/shared/uielements";
 import { colors } from "src/theme/colors";
@@ -17,8 +17,12 @@ import { ITransactionRequest } from 'src/api/types';
 import { calcFee, showToast } from 'src/utils/common';
 import { isQRCodeValid } from 'src/utils/validation';
 import { loadBusinessWallet } from 'src/store/wallet/wallet.actions';
+import { updateLoadingStatus } from 'src/store/loading/loading.actions';
 import { loadBusinessTransactions } from 'src/store/transaction/transaction.actions';
 import { useDispatch } from 'react-redux';
+import { WalletState } from 'src/store/wallet/wallet.reducer';
+import { useSelector } from 'react-redux';
+import { AppState } from 'src/store';
 
 type HandleScaned = {
 	type: string,
@@ -193,8 +197,6 @@ const MerchantQRCodeScan = (): JSX.Element => {
 	const navigation = useNavigation();
 	const { businessDwollaId } = useContext(AuthContext);
 	const dispatch = useDispatch();
-	const { updateLoadingStatus } = useLoadingModal();
-	const { wallet } = useBusinessWallet();
 	const hasPermission = useCameraPermission();
 	const [isScanned, setIsScanned] = useState<boolean>(false);
 	const [isPaymentDialog, setIsPaymentDialog] = useState<boolean>(false);
@@ -207,6 +209,8 @@ const MerchantQRCodeScan = (): JSX.Element => {
 		mode: PaymentMode.SELECT_AMOUNT
 	});
 	const [goNext, setGoNext] = useState<boolean>(false);
+
+	const { businessWallet } = useSelector((state: AppState) => state.walletReducer) as WalletState;
 
 	useEffect(() => {
 		setIsScanned(false);
@@ -241,7 +245,7 @@ const MerchantQRCodeScan = (): JSX.Element => {
 		setIsScanned(false);
 		const amountCalcedFee = state.amount + calcFee(state.amount);
 
-		if (wallet.availableBalance <= state.amount) {
+		if (businessWallet.availableBalance <= state.amount) {
 			showToast(ToastType.ERROR, "Whoooops. You cannot the payment.", "You have too little funds available. Please load up your balance first.");
 			return;
 		}
@@ -253,10 +257,10 @@ const MerchantQRCodeScan = (): JSX.Element => {
 				comment: ''
 			};
 
-			updateLoadingStatus({
+			dispatch(updateLoadingStatus({
 				isLoading: true,
 				screen: LoadingScreenTypes.PAYMENT_PENDING
-			});
+			}));
 			const response = await UserAPI.transferTo(businessDwollaId, request);
 			if (response.data) {
 				await dispatch(loadBusinessWallet(businessDwollaId));
@@ -266,10 +270,10 @@ const MerchantQRCodeScan = (): JSX.Element => {
 				showToast(ToastType.ERROR, "Failed", "Whooops, something went wrong.");
 				navigation.navigate(Routes.MERCHANT_DASHBOARD);
 			}
-			updateLoadingStatus({
+			dispatch(updateLoadingStatus({
 				isLoading: false,
 				screen: LoadingScreenTypes.PAYMENT_PENDING
-			});
+			}));
 		} else {
 			showToast(ToastType.ERROR, "Failed", "Whooops, something went wrong.");
 		}
@@ -278,7 +282,7 @@ const MerchantQRCodeScan = (): JSX.Element => {
 	const handleOpenPay = async () => {
 		setIsOpenPayment(false);
 		// check balance
-		if (wallet.availableBalance <= state.amount) {
+		if (businessWallet.availableBalance <= state.amount) {
 			showToast(ToastType.ERROR, "Whoooops. You cannot the payment.", "You have too little funds available. Please load up your balance first.");
 			return;
 		}
@@ -290,10 +294,10 @@ const MerchantQRCodeScan = (): JSX.Element => {
 				comment: ''
 			};
 
-			updateLoadingStatus({
+			dispatch(updateLoadingStatus({
 				isLoading: true,
 				screen: LoadingScreenTypes.PAYMENT_PENDING
-			});
+			}));
 			const response = await UserAPI.transferTo(businessDwollaId, request);
 			if (response.data) {
 				await dispatch(loadBusinessWallet(businessDwollaId));
@@ -302,10 +306,10 @@ const MerchantQRCodeScan = (): JSX.Element => {
 			} else {
 				showToast(ToastType.ERROR, "Whooops, something went wrong.", "Connection failed");
 			}
-			updateLoadingStatus({
+			dispatch(updateLoadingStatus({
 				isLoading: false,
 				screen: LoadingScreenTypes.PAYMENT_PENDING
-			});
+			}));
 		} else {
 			showToast(ToastType.ERROR, "Whooops, something went wrong.", "Connection failed");
 		}

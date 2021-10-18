@@ -21,7 +21,8 @@ import { IUserRequest } from 'src/api/types';
 import { UserAPI } from 'src/api';
 import { ToastType, LoadingScreenTypes } from 'src/utils/types';
 import { showToast } from 'src/utils/common';
-import { useLoadingModal } from 'src/hooks';
+import { updateLoadingStatus } from 'src/store/loading/loading.actions';
+import { useDispatch } from 'react-redux';
 
 const styles = StyleSheet.create({
 	headerText: {
@@ -66,7 +67,7 @@ const BusinessAddress = (): ReactElement => {
 		completeBusinessDwollaInfo
 	} = useContext(AuthContext);
 	const navigation = useNavigation();
-	const { updateLoadingStatus } = useLoadingModal();
+	const dispatch = useDispatch();
 	
 	const onNextPress = async () => {
 		const response: BaseResponse<string | undefined> =
@@ -85,10 +86,10 @@ const BusinessAddress = (): ReactElement => {
 				authUserId: "m_" + cognitoId
 			};
 
-			updateLoadingStatus({
+			dispatch(updateLoadingStatus({
 				isLoading: true,
 				screen: LoadingScreenTypes.LOADING_DATA
-			});
+			}));
 			const resApi = await UserAPI.user(request);
 
 			if (resApi.data) {
@@ -97,17 +98,13 @@ const BusinessAddress = (): ReactElement => {
 					resourceUri: ""
 				});
 
-				updateLoadingStatus({
-					isLoading: false,
-					screen: LoadingScreenTypes.LOADING_DATA
-				});
 				navigation.navigate(Routes.BUSINESS_WELCOME);
 			}
 
-			updateLoadingStatus({
+			dispatch(updateLoadingStatus({
 				isLoading: false,
 				screen: LoadingScreenTypes.LOADING_DATA
-			});
+			}));
 		} else {
 			showToast(ToastType.ERROR, "Whooops, something went wrong.", "Connection failed.");
 		}

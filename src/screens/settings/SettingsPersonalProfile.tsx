@@ -12,7 +12,9 @@ import { underlineHeader, viewBase } from "src/theme/elements";
 import Translation from 'src/translation/en.json';
 import { ToastType, LoadingScreenTypes } from 'src/utils/types';
 import { showToast } from 'src/utils/common';
-import { useLoadingModal, useMediaLibraryPermission } from 'src/hooks';
+import { useMediaLibraryPermission } from 'src/hooks';
+import { updateLoadingStatus } from 'src/store/loading/loading.actions';
+import { useDispatch } from 'react-redux';
 
 const styles = StyleSheet.create({
 	container: {
@@ -58,7 +60,7 @@ const styles = StyleSheet.create({
 export const SettingsPersonalDetails = (): JSX.Element => {
 	const { userAttributes, updateAttributes } = useContext(AuthContext);
 	const navigation = useNavigation();
-	const { updateLoadingStatus } = useLoadingModal();
+	const dispatch = useDispatch();
 	const username =  userAttributes['custom:personal.tag']
 	const [state, setState] = useState({
 		avatar: '',
@@ -92,15 +94,15 @@ export const SettingsPersonalDetails = (): JSX.Element => {
 			"custom:personal.tag": state.username,
 		};
 
-		updateLoadingStatus({
+		dispatch(updateLoadingStatus({
 			isLoading: true,
 			screen: LoadingScreenTypes.LOADING_DATA
-		});
+		}));
 		const response = await updateAttributes(attr);
-		updateLoadingStatus({
+		dispatch(updateLoadingStatus({
 			isLoading: false,
 			screen: LoadingScreenTypes.LOADING_DATA
-		});
+		}));
 
 		if (response.success) {
 			navigation.goBack();

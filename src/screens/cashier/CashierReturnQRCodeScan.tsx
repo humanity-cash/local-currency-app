@@ -2,7 +2,7 @@ import React, { useEffect, useState, useContext } from 'react';
 import { StyleSheet, View, ScrollView, KeyboardAvoidingView, Platform } from 'react-native';
 import { Text } from 'react-native-elements';
 import { AuthContext } from 'src/auth';
-import { useCameraPermission, useLoadingModal } from 'src/hooks';
+import { useCameraPermission } from 'src/hooks';
 import { colors } from "src/theme/colors";
 import { BarCodeScanner } from 'expo-barcode-scanner';
 import Translation from 'src/translation/en.json';
@@ -20,6 +20,7 @@ import { BUTTON_TYPES } from 'src/constants';
 import { loadBusinessWallet } from 'src/store/wallet/wallet.actions';
 import { loadBusinessTransactions } from 'src/store/transaction/transaction.actions';
 import { useDispatch } from 'react-redux';
+import { updateLoadingStatus } from 'src/store/loading/loading.actions';
 
 type HandleScaned = {
 	type: string,
@@ -87,7 +88,6 @@ const styles = StyleSheet.create({
 const CashierReturnQRCodeScan = (): JSX.Element => {
 	const navigation = useNavigation();
 	const hasPermission = useCameraPermission();
-	const { updateLoadingStatus } = useLoadingModal();
 	const { businessDwollaId } = useContext(AuthContext);
 	const [isScanned, setIsScanned] = useState<boolean>(false);
 	const [isReturnModal, setIsReturnModal] = useState<boolean>(false);
@@ -142,10 +142,11 @@ const CashierReturnQRCodeScan = (): JSX.Element => {
 				amount: amountCalcedFee.toString(),
 				comment: ''
 			};
-			updateLoadingStatus({
+
+			dispatch(updateLoadingStatus({
 				isLoading: true,
 				screen: LoadingScreenTypes.PAYMENT_PENDING
-			});
+			}));
 			const response = await UserAPI.transferTo(businessDwollaId, request);
 			if (response.data) {
 				await dispatch(loadBusinessWallet(businessDwollaId));
@@ -155,10 +156,10 @@ const CashierReturnQRCodeScan = (): JSX.Element => {
 				showToast(ToastType.ERROR, "Failed", "Whooops, something went wrong.");
 				navigation.navigate(Routes.CASHIER_DASHBOARD);
 			}
-			updateLoadingStatus({
+			dispatch(updateLoadingStatus({
 				isLoading: false,
 				screen: LoadingScreenTypes.PAYMENT_PENDING
-			});
+			}));
 		} else {
 			showToast(ToastType.ERROR, "Failed", "Whooops, something went wrong.");
 		}

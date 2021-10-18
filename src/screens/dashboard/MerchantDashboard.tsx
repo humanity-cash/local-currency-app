@@ -15,10 +15,10 @@ import * as Routes from 'src/navigation/constants';
 import { getBerksharePrefix } from "src/utils/common";
 import DwollaDialog from './DwollaDialog';
 import { BUTTON_TYPES } from "src/constants";
-import { useBanks, useLoadingModal } from 'src/hooks';
+import { useBanks } from 'src/hooks';
 import moment from "moment";
-
 import { ITransaction } from 'src/api/types';
+import { updateLoadingStatus } from 'src/store/loading/loading.actions';
 import { loadBusinessTransactions } from 'src/store/transaction/transaction.actions';
 import { loadBusinessWallet } from 'src/store/wallet/wallet.actions';
 import { TransactionState } from 'src/store/transaction/transaction.reducer';
@@ -242,7 +242,6 @@ const MerchantDashboard = (): JSX.Element => {
 	const dispatch = useDispatch();
 	const { completedCustomerVerification, businessDwollaId } = useContext(AuthContext);
 	const { hasBusinessBank, getBankStatus } = useBanks();
-	const { updateLoadingStatus } = useLoadingModal();
 	const [isFilterVisible, setIsFilterVisible] = useState<boolean>(false);
 	const [searchText, setSearchText] = useState<string>("");
 	const [isDetailViewOpen, setIsDetailViewOpen] = useState<boolean>(false);
@@ -256,16 +255,16 @@ const MerchantDashboard = (): JSX.Element => {
 	useEffect(() => {
 		if (businessDwollaId) {
 			(async () => {
-				updateLoadingStatus({
+				dispatch(updateLoadingStatus({
 					isLoading: true,
 					screen: LoadingScreenTypes.LOADING_DATA
-				});
+				}));
 				await dispatch(loadBusinessWallet(businessDwollaId));
 				await dispatch(loadBusinessTransactions(businessDwollaId));
-				updateLoadingStatus({
+				dispatch(updateLoadingStatus({
 					isLoading: false,
 					screen: LoadingScreenTypes.LOADING_DATA
-				});
+				}));
 			})();
 		}
 	}, []);

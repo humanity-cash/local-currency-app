@@ -3,7 +3,7 @@ import React, { useState, useContext, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { StyleSheet, View, Image, KeyboardAvoidingView, ScrollView, Platform } from 'react-native';
 import { Text } from 'react-native-elements';
-import { useCameraPermission, usePersonalWallet, useLoadingModal } from 'src/hooks';
+import { useCameraPermission } from 'src/hooks';
 import { AuthContext } from 'src/auth';
 import { Header, CancelBtn, Dialog, Button, ToggleButton, Modal, ModalHeader, BorderedInput, BackBtn } from "src/shared/uielements";
 import { colors } from "src/theme/colors";
@@ -18,6 +18,10 @@ import { ITransactionRequest } from 'src/api/types';
 import { calcFee, showToast } from 'src/utils/common';
 
 import { loadPersonalWallet } from 'src/store/wallet/wallet.actions';
+import { updateLoadingStatus } from 'src/store/loading/loading.actions';
+import { WalletState } from 'src/store/wallet/wallet.reducer';
+import { useSelector } from 'react-redux';
+import { AppState } from 'src/store';
 
 type HandleScaned = {
 	type: string,
@@ -208,8 +212,6 @@ const QRCodeScan = (): JSX.Element => {
 	const dispatch = useDispatch();
 	const { customerDwollaId } = useContext(AuthContext);
 	const hasPermission = useCameraPermission();
-	const { wallet } = usePersonalWallet();
-	const { updateLoadingStatus } = useLoadingModal();
 	const [isScanned, setIsScanned] = useState<boolean>(false);
 	const [isPaymentDialog, setIsPaymentDialog] = useState<boolean>(false);
 	const [isLowAmountDialog, setIsLowAmountDialog] = useState<boolean>(false);
@@ -222,6 +224,8 @@ const QRCodeScan = (): JSX.Element => {
 		amount: 0,
 		mode: PaymentMode.SELECT_AMOUNT
 	});
+
+	const { personalWallet } = useSelector((state: AppState) => state.walletReducer) as WalletState;
 
 	useEffect(() => {
 		setIsScanned(false);
@@ -255,7 +259,7 @@ const QRCodeScan = (): JSX.Element => {
 		setIsPaymentDialog(false);
 		
 		// check balance
-		if (wallet.availableBalance <= state.amount) {
+		if (personalWallet.availableBalance <= state.amount) {
 			setIsLowAmountDialog(true);
 		} else {
 			if (customerDwollaId) {
@@ -265,10 +269,10 @@ const QRCodeScan = (): JSX.Element => {
 					comment: ''
 				};
 
-				updateLoadingStatus({
+				dispatch(updateLoadingStatus({
 					isLoading: true,
 					screen: LoadingScreenTypes.PAYMENT_PENDING
-				});
+				}));
 				const response = await UserAPI.transferTo(customerDwollaId, request);
 				
 				if (response.data) {
@@ -278,10 +282,10 @@ const QRCodeScan = (): JSX.Element => {
 				} else {
 					navigation.navigate(Routes.PAYMENT_FAILED);
 				}
-				updateLoadingStatus({
+				dispatch(updateLoadingStatus({
 					isLoading: false,
 					screen: LoadingScreenTypes.PAYMENT_PENDING
-				});
+				}));
 			} else {
 				showToast(ToastType.ERROR, "Failed", "Whooops, something went wrong.");
 			}
@@ -296,7 +300,7 @@ const QRCodeScan = (): JSX.Element => {
 	const handleOpenPay = async () => {
 		setIsOpenPayment(false);
 		// check balance
-		if (wallet.availableBalance <= state.amount) {
+		if (personalWallet.availableBalance <= state.amount) {
 			setIsLowAmountDialog(true);
 		} else {
 			if (customerDwollaId) {
@@ -306,10 +310,10 @@ const QRCodeScan = (): JSX.Element => {
 					comment: ''
 				};
 
-				updateLoadingStatus({
+				dispatch(updateLoadingStatus({
 					isLoading: true,
 					screen: LoadingScreenTypes.PAYMENT_PENDING
-				});
+				}));
 				const response = await UserAPI.transferTo(customerDwollaId, request);
 				if (response.data) {
 					await dispatch(loadPersonalWallet(customerDwollaId));
@@ -317,10 +321,10 @@ const QRCodeScan = (): JSX.Element => {
 				} else {
 					navigation.navigate(Routes.PAYMENT_FAILED);
 				}
-				updateLoadingStatus({
+				dispatch(updateLoadingStatus({
 					isLoading: false,
 					screen: LoadingScreenTypes.PAYMENT_PENDING
-				});
+				}));
 			} else {
 				showToast(ToastType.ERROR, "Failed", "Whooops, something went wrong.");
 			}
