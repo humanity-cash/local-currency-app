@@ -15,13 +15,15 @@ import { QRCodeEntry, SECURITY_ID, PaymentMode, ToastType, LoadingScreenTypes } 
 import { UserAPI } from 'src/api';
 import { ITransactionRequest } from 'src/api/types';
 import { calcFee, showToast } from 'src/utils/common';
+import { isQRCodeValid } from 'src/utils/validation';
+import { loadBusinessWallet } from 'src/store/wallet/wallet.actions';
+import { loadBusinessTransactions } from 'src/store/transaction/transaction.actions';
+import { useDispatch } from 'react-redux';
 
 type HandleScaned = {
 	type: string,
 	data: string,
 }
-
-const FEE = 0.15;
 
 const styles = StyleSheet.create({
 	container: {
@@ -147,7 +149,7 @@ const PaymentConfirm = (props: PaymentConfirmProps) => {
 
 	const firstName = userAttributes?.["custom:owner.firstName"];
     const lastName = userAttributes?.["custom:owner.lastName"];
-	const amountCalcedFee = props.payInfo.amount - props.payInfo.amount * FEE;
+	const amountCalcedFee = props.payInfo.amount + calcFee(props.payInfo.amount);
 
 	return (
 		<Dialog visible={props.visible} onClose={props.onCancel} backgroundStyle={styles.dialogBg} style={styles.dialog}>
@@ -190,6 +192,7 @@ const PaymentConfirm = (props: PaymentConfirmProps) => {
 const MerchantQRCodeScan = (): JSX.Element => {
 	const navigation = useNavigation();
 	const { businessDwollaId } = useContext(AuthContext);
+	const dispatch = useDispatch();
 	const { updateLoadingStatus } = useLoadingModal();
 	const { wallet } = useBusinessWallet();
 	const hasPermission = useCameraPermission();
@@ -214,20 +217,18 @@ const MerchantQRCodeScan = (): JSX.Element => {
 	}, [openAmount]);
 
 	const handleBarCodeScanned = (data: HandleScaned) => {
-		try {
-			setState(JSON.parse(data.data) as QRCodeEntry);
-			setIsScanned(true);
-
+		if (isQRCodeValid(data.data)) {
 			const qrcodeData = JSON.parse(data.data) as QRCodeEntry;
 			setState(qrcodeData);
 			setIsScanned(true);
+
 			if (qrcodeData.mode == PaymentMode.OPEN_AMOUNT) {
 				setIsOpenPayment(true);
 			} else {
 				setIsPaymentDialog(true);
 			}
-		} catch (e) {
-			showToast(ToastType.ERROR, "Failed", "Whooops, something went wrong.");
+		} else {
+			showToast(ToastType.ERROR, "Whooops, something went wrong.", "Invalide QRCode");
 		}
 	};
 
@@ -238,7 +239,7 @@ const MerchantQRCodeScan = (): JSX.Element => {
 	const onPayConfirm = async (isRoundUp: boolean) => {
 		setIsPaymentDialog(false);
 		setIsScanned(false);
-		const amountCalcedFee = state.amount - calcFee(state.amount);
+		const amountCalcedFee = state.amount + calcFee(state.amount);
 
 		if (wallet.availableBalance <= state.amount) {
 			showToast(ToastType.ERROR, "Whoooops. You cannot the payment.", "You have too little funds available. Please load up your balance first.");
@@ -257,16 +258,18 @@ const MerchantQRCodeScan = (): JSX.Element => {
 				screen: LoadingScreenTypes.PAYMENT_PENDING
 			});
 			const response = await UserAPI.transferTo(businessDwollaId, request);
-			updateLoadingStatus({
-				isLoading: false,
-				screen: LoadingScreenTypes.PAYMENT_PENDING
-			});
 			if (response.data) {
+				await dispatch(loadBusinessWallet(businessDwollaId));
+				await dispatch(loadBusinessTransactions(businessDwollaId));
 				navigation.navigate(Routes.MERCHANT_PAYMENT_SUCCESS);
 			} else {
 				showToast(ToastType.ERROR, "Failed", "Whooops, something went wrong.");
 				navigation.navigate(Routes.MERCHANT_DASHBOARD);
 			}
+			updateLoadingStatus({
+				isLoading: false,
+				screen: LoadingScreenTypes.PAYMENT_PENDING
+			});
 		} else {
 			showToast(ToastType.ERROR, "Failed", "Whooops, something went wrong.");
 		}
@@ -292,15 +295,17 @@ const MerchantQRCodeScan = (): JSX.Element => {
 				screen: LoadingScreenTypes.PAYMENT_PENDING
 			});
 			const response = await UserAPI.transferTo(businessDwollaId, request);
-			updateLoadingStatus({
-				isLoading: false,
-				screen: LoadingScreenTypes.PAYMENT_PENDING
-			});
 			if (response.data) {
+				await dispatch(loadBusinessWallet(businessDwollaId));
+				await dispatch(loadBusinessTransactions(businessDwollaId));
 				navigation.navigate(Routes.MERCHANT_PAYMENT_SUCCESS);
 			} else {
 				showToast(ToastType.ERROR, "Whooops, something went wrong.", "Connection failed");
 			}
+			updateLoadingStatus({
+				isLoading: false,
+				screen: LoadingScreenTypes.PAYMENT_PENDING
+			});
 		} else {
 			showToast(ToastType.ERROR, "Whooops, something went wrong.", "Connection failed");
 		}

@@ -15,12 +15,14 @@ import * as Routes from 'src/navigation/constants';
 import { getBerksharePrefix } from "src/utils/common";
 import DwollaDialog from './DwollaDialog';
 import { BUTTON_TYPES } from "src/constants";
-import { useBusinessWallet, useBanks, useLoadingModal } from 'src/hooks';
+import { useBanks, useLoadingModal } from 'src/hooks';
 import moment from "moment";
 
 import { ITransaction } from 'src/api/types';
 import { loadBusinessTransactions } from 'src/store/transaction/transaction.actions';
+import { loadBusinessWallet } from 'src/store/wallet/wallet.actions';
 import { TransactionState } from 'src/store/transaction/transaction.reducer';
+import { WalletState } from 'src/store/wallet/wallet.reducer';
 import { useSelector, useDispatch } from 'react-redux';
 import { AppState } from 'src/store';
 
@@ -239,7 +241,6 @@ const MerchantDashboard = (): JSX.Element => {
 	const navigation = useNavigation();
 	const dispatch = useDispatch();
 	const { completedCustomerVerification, businessDwollaId } = useContext(AuthContext);
-	const { wallet, updateWallet } = useBusinessWallet();
 	const { hasBusinessBank, getBankStatus } = useBanks();
 	const { updateLoadingStatus } = useLoadingModal();
 	const [isFilterVisible, setIsFilterVisible] = useState<boolean>(false);
@@ -250,24 +251,34 @@ const MerchantDashboard = (): JSX.Element => {
 	const [isPayment, setIsPayment] = useState<boolean>(false);
 
 	const { businessTransactions } = useSelector((state: AppState) => state.transactionReducer) as TransactionState;
+	const { businessWallet } = useSelector((state: AppState) => state.walletReducer) as WalletState;
 
 	useEffect(() => {
-		(async () => {
-			if (businessDwollaId) {
+		if (businessDwollaId) {
+			(async () => {
 				updateLoadingStatus({
 					isLoading: true,
 					screen: LoadingScreenTypes.LOADING_DATA
 				});
-				getBankStatus(businessDwollaId, true);
-				updateWallet(businessDwollaId);
+				await dispatch(loadBusinessWallet(businessDwollaId));
 				await dispatch(loadBusinessTransactions(businessDwollaId));
 				updateLoadingStatus({
 					isLoading: false,
 					screen: LoadingScreenTypes.LOADING_DATA
 				});
-			}
-		})();
+			})();
+		}
 	}, []);
+
+	useEffect(() => {
+		const unsubscribe = navigation.addListener("focus", async () => {
+			if (businessDwollaId) {
+				getBankStatus(businessDwollaId, false);
+			}
+		});
+
+		return unsubscribe;
+	}, [navigation]);
 
 	const onSearchChange = (name: string, change: string) => {
 		setSearchText(change);
@@ -314,7 +325,7 @@ const MerchantDashboard = (): JSX.Element => {
 						<Text style={styles.headerText}>{Translation.LANDING_PAGE.TITLE}</Text>
 					</View>
 					<View style={styles.amountView}>
-						<Text style={styles.amountTxt}>B$ {hasBusinessBank ? wallet.availableBalance : '-'}</Text>
+						<Text style={styles.amountTxt}>B$ {hasBusinessBank ? businessWallet.availableBalance : '-'}</Text>
 					</View>
 
 					<ScrollView>

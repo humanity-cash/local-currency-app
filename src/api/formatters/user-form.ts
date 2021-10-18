@@ -1,7 +1,16 @@
-import { IUserResponse, AxiosPromiseResponse, ITransaction } from "src/api/types";
+import { IUser, AxiosPromiseResponse, ITransaction } from "src/api/types";
 
-export const userData = (res: AxiosPromiseResponse): IUserResponse => {
-    return res.data as IUserResponse;
+export const userData = (res: AxiosPromiseResponse): IUser => {
+    if (!res.data) return {
+        totalBalance: 0,
+        availableBalance: 0,
+        userId: "",
+        address: "",
+        createdBlock: ""
+    }
+
+    const list = res.data as IUser[]
+    return list[0];
 }
 
 export const transactionDatas = (res: AxiosPromiseResponse): ITransaction[] => {

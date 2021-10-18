@@ -17,10 +17,11 @@ export interface IUserRequest {
     authUserId: string;
 }
 
-export interface IUserResponse {
+export interface IUser {
+    totalBalance: number;
+    availableBalance: number;
     userId: string;
     address: string;
-    balance: number;
     createdBlock: string;
 }
 
