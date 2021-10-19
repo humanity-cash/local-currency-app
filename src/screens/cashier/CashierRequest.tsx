@@ -8,6 +8,7 @@ import { colors } from "src/theme/colors";
 import Translation from 'src/translation/en.json';
 import * as Routes from 'src/navigation/constants';
 import CashierQRCodeGen from 'src/screens/cashier/CashierQRCodeGen';
+import CashierRequestSuccess from './CashierRequestSuccess';
 import { BUTTON_TYPES } from 'src/constants';
 
 const styles = StyleSheet.create({
@@ -48,6 +49,8 @@ const CashierRequest = (): JSX.Element => {
 	const [amount, setAmount] = useState<string>("");
 	const [goNext, setGoNext] = useState<boolean>(false);
 	const [isVisible, setIsVisible] = useState<boolean>(false);
+	const [receivedAmount, setReceivedAmount] = useState<number>(0);
+	const [isRequestSuccess, setIsRequestSuccess] = useState<boolean>(false);
 
 	useEffect(() => {
 		setGoNext(Number(amount) > 0);
@@ -59,6 +62,17 @@ const CashierRequest = (): JSX.Element => {
 
 	const requestAmount = () => {
 		setIsVisible(true);
+	}
+
+	const onSuccess = (amount: number) => {
+		setReceivedAmount(amount);
+		setIsVisible(false);
+		setIsRequestSuccess(true);
+	}
+
+	const onConfirm = () => {
+		setIsRequestSuccess(false);
+		navigation.navigate(Routes.CASHIER_DASHBOARD);
 	}
 
 	const onClose = () => {
@@ -108,7 +122,8 @@ const CashierRequest = (): JSX.Element => {
 					/>
 				</View>
 			</KeyboardAvoidingView>
-			{ isVisible && <CashierQRCodeGen visible={isVisible} onClose={onClose} amount={Number(amount)} /> }
+			{ isVisible && <CashierQRCodeGen visible={isVisible} onSuccess={onSuccess} onClose={onClose} amount={Number(amount)} /> }
+			{ isRequestSuccess && <CashierRequestSuccess visible={isRequestSuccess} onClose={onConfirm} amount={receivedAmount} /> }
 		</View>
 	);
 }
