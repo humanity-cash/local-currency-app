@@ -6,7 +6,7 @@ import { Text } from 'react-native-elements';
 import { Dialog } from "src/shared/uielements";
 import { dialogViewBase } from "src/theme/elements";
 import { colors } from "src/theme/colors";
-import { PaymentMode } from "src/utils/types";
+import { PaymentMode, SECURITY_ID } from "src/utils/types";
 import { useBrightness } from "src/hooks";
 
 const styles = StyleSheet.create({
@@ -62,6 +62,7 @@ const MerchantQRCodeGen = (props: MerchantQRCodeGenProps): JSX.Element => {
     const { businessDwollaId, userAttributes } = useContext(AuthContext);
     const { hasPermission, setMaxBrightness, setDefaultBrightness} = useBrightness();
     const addressStr = JSON.stringify({
+        securityId: SECURITY_ID,
         to: businessDwollaId,
         amount: props.amount,
         mode: PaymentMode.SELECT_AMOUNT
