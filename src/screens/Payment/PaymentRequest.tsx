@@ -6,7 +6,7 @@ import { Header, Button, CancelBtn, BorderedInput, ToggleButton } from "src/shar
 import { baseHeader, viewBase, wrappingContainerBase } from "src/theme/elements";
 import { colors } from "src/theme/colors";
 import QRCodeGen from "./QRCodeGen";
-import PaymentRequestSuccessProps from "./PaymentRequestSuccess";
+import PaymentRequestSuccess from "./PaymentRequestSuccess";
 import Translation from 'src/translation/en.json';
 import * as Routes from 'src/navigation/constants';
 
@@ -148,7 +148,7 @@ const PaymentRequest = (): JSX.Element => {
 				</View>
 			</KeyboardAvoidingView>
 			{ isVisible && <QRCodeGen visible={isVisible} onSuccess={onSuccess} onClose={onClose} isOpenAmount={isOpenAmount} amount={Number(state.amount)} /> }
-			{ isRequestSuccess && <PaymentRequestSuccessProps visible={isRequestSuccess} onClose={onConfirm} amount={receivedAmount} /> }
+			{ isRequestSuccess && <PaymentRequestSuccess visible={isRequestSuccess} onClose={onConfirm} amount={receivedAmount} /> }
 		</View>
 	);
 }

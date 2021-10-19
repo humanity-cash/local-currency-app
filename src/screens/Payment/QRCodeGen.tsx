@@ -65,6 +65,7 @@ const QRCodeGen = (props: QRCodeGenProps): JSX.Element => {
     const dispatch = useDispatch();
     const { customerDwollaId, userAttributes } = useContext(AuthContext);
     const { hasPermission, setMaxBrightness, setDefaultBrightness} = useBrightness();
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const [initBalance, setInitBalance] = useState<number>(personalWallet.availableBalance);
     const [isSuccess, setIsSuccess] = useState<boolean>(false);
     const addressStr = JSON.stringify({
