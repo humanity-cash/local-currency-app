@@ -2,10 +2,11 @@ import React, { useState, useEffect } from 'react';
 import { StyleSheet, View, KeyboardAvoidingView, ScrollView, Platform } from 'react-native';
 import { useNavigation } from '@react-navigation/core';
 import { Text } from 'react-native-elements';
-import { Header, Button, CancelBtn, BackBtn, BorderedInput, ToggleButton } from "src/shared/uielements";
+import { Header, Button, CancelBtn, BorderedInput, ToggleButton } from "src/shared/uielements";
 import { baseHeader, viewBase, wrappingContainerBase } from "src/theme/elements";
 import { colors } from "src/theme/colors";
 import QRCodeGen from "./QRCodeGen";
+import PaymentRequestSuccess from "./PaymentRequestSuccess";
 import Translation from 'src/translation/en.json';
 import * as Routes from 'src/navigation/constants';
 
@@ -55,7 +56,9 @@ const PaymentRequest = (): JSX.Element => {
 		cost: ""
 	});
 	const [goNext, setGoNext] = useState<boolean>(false);
+	const [receivedAmount, setReceivedAmount] = useState<number>(0);
 	const [isVisible, setIsVisible] = useState<boolean>(false);
+	const [isRequestSuccess, setIsRequestSuccess] = useState<boolean>(false);
 	const [isOpenAmount, setIsOpenAmount] = useState<boolean>(false);
 
 	useEffect(() => {
@@ -79,6 +82,17 @@ const PaymentRequest = (): JSX.Element => {
 	const requestAmount = () => {
 		setIsOpenAmount(false);
 		setIsVisible(true);
+	}
+
+	const onSuccess = (amount: number) => {
+		setReceivedAmount(amount);
+		setIsVisible(false);
+		setIsRequestSuccess(true);
+	}
+
+	const onConfirm = () => {
+		setIsRequestSuccess(false);
+		navigation.navigate(Routes.DASHBOARD);
 	}
 
 	const onClose = () => {
@@ -121,7 +135,6 @@ const PaymentRequest = (): JSX.Element => {
 				<View style={styles.bottomView}>
 					<Button
 						type="transparent"
-						disabled={!goNext}
 						title={Translation.BUTTON.OPEN_AMOUNT}
 						style={styles.openBtn}
 						onPress={openAmount}
@@ -134,7 +147,8 @@ const PaymentRequest = (): JSX.Element => {
 					/>
 				</View>
 			</KeyboardAvoidingView>
-			{ isVisible && <QRCodeGen visible={isVisible} onClose={onClose} isOpenAmount={isOpenAmount} amount={Number(state.amount)} /> }
+			{ isVisible && <QRCodeGen visible={isVisible} onSuccess={onSuccess} onClose={onClose} isOpenAmount={isOpenAmount} amount={Number(state.amount)} /> }
+			{ isRequestSuccess && <PaymentRequestSuccess visible={isRequestSuccess} onClose={onConfirm} amount={receivedAmount} /> }
 		</View>
 	);
 }

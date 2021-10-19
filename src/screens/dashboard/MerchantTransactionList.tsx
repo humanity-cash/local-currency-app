@@ -59,7 +59,7 @@ const TransactionItem = (props: TransactionItemProps) => {
 	const {item, selected} = props;
 
 	const getStyle = (type: string) => {
-		if (type === TransactionType.SALE || type === TransactionType.RETURN) {
+		if (type === TransactionType.SALE || type === TransactionType.RETURN || type === TransactionType.IN) {
 			return styles.plusText;
 		} else {
 			return styles.amountText;

@@ -13,9 +13,6 @@ const styles = StyleSheet.create({
         lineHeight: 40,
         color: colors.purple
     },
-	bodyText: {
-		color: colors.bodyText
-	},
     bottomView: {
 		padding: 20,
 		paddingBottom: 45
@@ -28,7 +25,7 @@ type MerchantRequestSuccessProps = {
     amount: number
 }
 
-const CashierRequestSuccess = (props: MerchantRequestSuccessProps): JSX.Element => {
+const MerchantRequestSuccess = (props: MerchantRequestSuccessProps): JSX.Element => {
     return (
         <Modal visible={props.visible}>
             <View style={ modalViewBase }>
@@ -38,10 +35,9 @@ const CashierRequestSuccess = (props: MerchantRequestSuccessProps): JSX.Element 
                 <ScrollView style={wrappingContainerBase}>
                     <View style={baseHeader}>
                         <Text style={styles.headerText}>
-                            {Translation.CASHIER.PAYMENT_SUCCESS} {props.amount.toFixed(2)}.
+                            Succeeded! You have received B$ {props.amount.toFixed(2)}.
                         </Text>
                     </View>
-					<Text style={styles.bodyText}> {Translation.CASHIER.PAYMENT_SUCCESS_DETAIL} </Text>
                 </ScrollView>
                 <KeyboardAvoidingView
                     behavior={Platform.OS == "ios" ? "padding" : "height"} >
@@ -58,4 +54,4 @@ const CashierRequestSuccess = (props: MerchantRequestSuccessProps): JSX.Element 
     )
 }
 
-export default CashierRequestSuccess;
+export default MerchantRequestSuccess;

@@ -16,8 +16,10 @@ import { QRCodeEntry, SECURITY_ID, PaymentMode, ToastType, LoadingScreenTypes } 
 import { UserAPI } from 'src/api';
 import { ITransactionRequest } from 'src/api/types';
 import { calcFee, showToast } from 'src/utils/common';
+import { isQRCodeValid } from 'src/utils/validation';
 
 import { loadPersonalWallet } from 'src/store/wallet/wallet.actions';
+import { loadPersonalTransactions } from 'src/store/transaction/transaction.actions';
 import { updateLoadingStatus } from 'src/store/loading/loading.actions';
 import { WalletState } from 'src/store/wallet/wallet.reducer';
 import { useSelector } from 'react-redux';
@@ -72,9 +74,8 @@ const styles = StyleSheet.create({
     },
 	headerText: {
         marginTop: 10,
-        fontWeight: 'bold',
         fontSize: 32,
-        lineHeight: 32,
+        lineHeight: 40,
         paddingTop: 20
     },
 	description: {
@@ -165,7 +166,7 @@ const PaymentConfirm = (props: PaymentConfirmProps) => {
 					/>
 					<Button
 						type={BUTTON_TYPES.DARK_GREEN}
-						title={`Round up to B$ ${props.payInfo.amount.toFixed(2)}`}
+						title={`Round up to B$ ${Math.ceil(amountCalcedFee).toFixed(2)}`}
 						onPress={() => props.onConfirm(true)}
 					/>
 					<Text style={styles.description}>{Translation.PAYMENT.NOT_REFUNABLE_DONATION}</Text>
@@ -236,7 +237,7 @@ const QRCodeScan = (): JSX.Element => {
 	}, [openAmount]);
 
 	const handleBarCodeScanned = (data: HandleScaned) => {
-		try {
+		if (isQRCodeValid(data.data)) {
 			const qrcodeData = JSON.parse(data.data) as QRCodeEntry;
 			setState(qrcodeData);
 			setIsScanned(true);
@@ -245,8 +246,8 @@ const QRCodeScan = (): JSX.Element => {
 			} else {
 				setIsPaymentDialog(true);
 			}
-		} catch (e) {
-			showToast(ToastType.ERROR, "Failed", "Whooops, something went wrong.");
+		} else {
+			showToast(ToastType.ERROR, "Whooops, something went wrong.", "Invalid QRCode!");
 		}
 	}
 
@@ -265,7 +266,7 @@ const QRCodeScan = (): JSX.Element => {
 			if (customerDwollaId) {
 				const request: ITransactionRequest = {
 					toUserId: state.to,
-					amount: isRoundUp ? state.amount.toString() : amountCalcedFee.toString(),
+					amount: isRoundUp ? Math.ceil(amountCalcedFee).toString() : amountCalcedFee.toString(),
 					comment: ''
 				};
 
@@ -278,6 +279,7 @@ const QRCodeScan = (): JSX.Element => {
 				if (response.data) {
 					// Update user info
 					await dispatch(loadPersonalWallet(customerDwollaId));
+					await dispatch(loadPersonalTransactions(customerDwollaId));
 					navigation.navigate(Routes.PAYMENT_SUCCESS);
 				} else {
 					navigation.navigate(Routes.PAYMENT_FAILED);
@@ -317,6 +319,7 @@ const QRCodeScan = (): JSX.Element => {
 				const response = await UserAPI.transferTo(customerDwollaId, request);
 				if (response.data) {
 					await dispatch(loadPersonalWallet(customerDwollaId));
+					await dispatch(loadPersonalTransactions(customerDwollaId));
 					navigation.navigate(Routes.PAYMENT_SUCCESS);
 				} else {
 					navigation.navigate(Routes.PAYMENT_FAILED);
