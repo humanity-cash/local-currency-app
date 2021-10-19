@@ -1,5 +1,4 @@
 import React, { useEffect, useContext } from 'react';
-// import { useNavigation } from '@react-navigation/native';
 import { StyleSheet, View, Image } from 'react-native';
 import QRCode from 'react-native-qrcode-svg';
 import { Text } from 'react-native-elements';
@@ -7,9 +6,8 @@ import { AuthContext } from 'src/auth';
 import { Dialog } from "src/shared/uielements";
 import { dialogViewBase } from "src/theme/elements";
 import { colors } from "src/theme/colors";
-// import * as Routes from 'src/navigation/constants';
 import { useBrightness } from "src/hooks";
-import { PaymentMode } from "src/utils/types";
+import { PaymentMode, SECURITY_ID } from "src/utils/types";
 
 const styles = StyleSheet.create({
     dialog: {
@@ -61,10 +59,10 @@ type CashierQRCodeGenProps = {
 }
 
 const CashierQRCodeGen = (props: CashierQRCodeGenProps): JSX.Element => {
-    // const navigation = useNavigation();
     const { businessDwollaId, userAttributes } = useContext(AuthContext);
     const { hasPermission, setMaxBrightness, setDefaultBrightness} = useBrightness();
     const addressStr = JSON.stringify({
+        securityId: SECURITY_ID,
         to: businessDwollaId,
         amount: props.amount,
         mode: PaymentMode.SELECT_AMOUNT
