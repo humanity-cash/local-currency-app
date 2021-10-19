@@ -1,5 +1,4 @@
-import React, { useEffect, useContext } from 'react';
-// import { useNavigation } from '@react-navigation/native';
+import React, { useEffect, useContext, useState } from 'react';
 import { StyleSheet, View, Image } from 'react-native';
 import QRCode from 'react-native-qrcode-svg';
 import { Text } from 'react-native-elements';
@@ -7,9 +6,13 @@ import { AuthContext } from 'src/auth';
 import { Dialog } from "src/shared/uielements";
 import { dialogViewBase } from "src/theme/elements";
 import { colors } from "src/theme/colors";
-// import * as Routes from 'src/navigation/constants';
 import { useBrightness } from "src/hooks";
-import { PaymentMode } from "src/utils/types";
+import { PaymentMode, SECURITY_ID } from "src/utils/types";
+import { loadBusinessWallet } from 'src/store/wallet/wallet.actions';
+import { WalletState } from 'src/store/wallet/wallet.reducer';
+import { useSelector, useDispatch } from 'react-redux';
+import { AppState } from 'src/store';
+import { loadBusinessTransactions } from 'src/store/transaction/transaction.actions';
 
 const styles = StyleSheet.create({
     dialog: {
@@ -57,18 +60,33 @@ const styles = StyleSheet.create({
 type CashierQRCodeGenProps = {
 	visible: boolean,
 	onClose: () => void,
+    onSuccess: (amount: number) => void,
     amount?: number
 }
 
 const CashierQRCodeGen = (props: CashierQRCodeGenProps): JSX.Element => {
-    // const navigation = useNavigation();
+    const { businessWallet } = useSelector((state: AppState) => state.walletReducer) as WalletState;
     const { businessDwollaId, userAttributes } = useContext(AuthContext);
+    const dispatch = useDispatch();
     const { hasPermission, setMaxBrightness, setDefaultBrightness} = useBrightness();
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
+    const [initBalance, setInitBalance] = useState<number>(businessWallet.availableBalance);
+    const [isSuccess, setIsSuccess] = useState<boolean>(false);
     const addressStr = JSON.stringify({
+        securityId: SECURITY_ID,
         to: businessDwollaId,
         amount: props.amount,
         mode: PaymentMode.SELECT_AMOUNT
     });
+
+    useEffect(() => {
+        const timerId = setInterval(async () => {
+            if (businessDwollaId) {
+                await dispatch(loadBusinessWallet(businessDwollaId));
+            }
+        }, 1500);
+        return () => clearInterval(timerId);
+	}, [props.visible]);
 
     useEffect(() => {
         if (hasPermission) {
@@ -79,6 +97,21 @@ const CashierQRCodeGen = (props: CashierQRCodeGenProps): JSX.Element => {
     const onClose = () => {
         setDefaultBrightness();
         props.onClose();
+    }
+
+    const onSuccess = async() => {
+        if (!isSuccess) {
+            setIsSuccess(true);
+            if (businessDwollaId) {
+                await dispatch(loadBusinessTransactions(businessDwollaId));
+            }
+            setDefaultBrightness();
+            props.onSuccess(businessWallet.availableBalance - initBalance);
+        }
+    }
+
+    if (businessWallet.availableBalance > initBalance) {
+        onSuccess();
     }
 
     const firstName = userAttributes?.["custom:owner.firstName"];

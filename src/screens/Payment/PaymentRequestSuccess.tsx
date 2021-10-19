@@ -1,7 +1,6 @@
 import React from 'react';
 import { StyleSheet, View, KeyboardAvoidingView, ScrollView, Platform } from 'react-native';
 import { Text } from 'react-native-elements';
-import { colors } from "src/theme/colors";
 import { CancelBtn, Button, Modal, ModalHeader } from "src/shared/uielements";
 import { modalViewBase, wrappingContainerBase, baseHeader } from "src/theme/elements";
 import Translation from 'src/translation/en.json';
@@ -11,43 +10,38 @@ const styles = StyleSheet.create({
     headerText: {
         fontSize: 32,
         lineHeight: 40,
-        color: colors.purple
     },
-	bodyText: {
-		color: colors.bodyText
-	},
     bottomView: {
 		padding: 20,
 		paddingBottom: 45
 	}
 });
 
-type MerchantRequestSuccessProps = {
+type PaymentRequestSuccessProps = {
 	visible: boolean,
 	onClose: ()=>void,
     amount: number
 }
 
-const CashierRequestSuccess = (props: MerchantRequestSuccessProps): JSX.Element => {
+const PaymentRequestSuccess = (props: PaymentRequestSuccessProps): JSX.Element => {
     return (
         <Modal visible={props.visible}>
             <View style={ modalViewBase }>
                 <ModalHeader
-                    rightComponent={<CancelBtn text="Close" color={colors.purple} onClick={props.onClose} />}
+                    rightComponent={<CancelBtn text="Close" onClick={props.onClose} />}
                 />
                 <ScrollView style={wrappingContainerBase}>
                     <View style={baseHeader}>
                         <Text style={styles.headerText}>
-                            {Translation.CASHIER.PAYMENT_SUCCESS} {props.amount.toFixed(2)}.
+                            Succeeded! You have received B$ {props.amount.toFixed(2)}.
                         </Text>
                     </View>
-					<Text style={styles.bodyText}> {Translation.CASHIER.PAYMENT_SUCCESS_DETAIL} </Text>
                 </ScrollView>
                 <KeyboardAvoidingView
                     behavior={Platform.OS == "ios" ? "padding" : "height"} >
                     <View style={styles.bottomView}>
                         <Button
-                            type={BUTTON_TYPES.PURPLE}
+                            type={BUTTON_TYPES.DARK_GREEN}
                             title={Translation.BUTTON.CLOSE}
                             onPress={props.onClose}
                         />
@@ -58,4 +52,4 @@ const CashierRequestSuccess = (props: MerchantRequestSuccessProps): JSX.Element 
     )
 }
 
-export default CashierRequestSuccess;
+export default PaymentRequestSuccess;

@@ -6,6 +6,7 @@ import { Header, Button, CancelBtn, BorderedInput, ToggleButton } from "src/shar
 import { baseHeader, viewBaseB, wrappingContainerBase } from "src/theme/elements";
 import { colors } from "src/theme/colors";
 import MerchantQRCodeGen from "./MerchantQRCodeGen";
+import MerchantRequestSuccess from "./MerchantRequestSuccess";
 import Translation from 'src/translation/en.json';
 import * as Routes from 'src/navigation/constants';
 import { BUTTON_TYPES } from 'src/constants';
@@ -64,6 +65,8 @@ const MerchantRequest = (): JSX.Element => {
 	});
 	const [goNext, setGoNext] = useState<boolean>(false);
 	const [isVisible, setIsVisible] = useState<boolean>(false);
+	const [receivedAmount, setReceivedAmount] = useState<number>(0);
+	const [isRequestSuccess, setIsRequestSuccess] = useState<boolean>(false);
 
 	useEffect(() => {
 		setGoNext(Number(state.costs) > 0);
@@ -80,6 +83,17 @@ const MerchantRequest = (): JSX.Element => {
 
 	const requestAmount = () => {
 		setIsVisible(true);
+	}
+
+	const onSuccess = (amount: number) => {
+		setReceivedAmount(amount);
+		setIsVisible(false);
+		setIsRequestSuccess(true);
+	}
+
+	const onConfirm = () => {
+		setIsRequestSuccess(false);
+		navigation.navigate(Routes.MERCHANT_DASHBOARD);
 	}
 
 	const onClose = () => {
@@ -132,7 +146,8 @@ const MerchantRequest = (): JSX.Element => {
 					/>
 				</View>
 			</KeyboardAvoidingView>
-			{ isVisible && <MerchantQRCodeGen visible={isVisible} onClose={onClose} amount={Number(state.amount)} /> }
+			{ isVisible && <MerchantQRCodeGen visible={isVisible} onSuccess={onSuccess} onClose={onClose} amount={Number(state.amount)} /> }
+			{ isRequestSuccess && <MerchantRequestSuccess visible={isRequestSuccess} onClose={onConfirm} amount={receivedAmount} /> }
 		</View>
 	);
 }
