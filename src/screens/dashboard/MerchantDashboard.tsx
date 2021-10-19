@@ -36,7 +36,7 @@ const styles = StyleSheet.create({
 		color: colors.purple,
 		fontSize: 40,
 		fontFamily: 'GothamBook',
-		lineHeight: 40
+		lineHeight: 45
 	},
 	amountView: {
 		borderBottomColor: colors.purple,
@@ -319,15 +319,15 @@ const MerchantDashboard = (): JSX.Element => {
 				}
 			/>
 			<View style={wrappingContainerBase}>
-				<View style={styles.content}>
-					<View style={baseHeader}>
-						<Text style={styles.headerText}>{Translation.LANDING_PAGE.TITLE}</Text>
-					</View>
-					<View style={styles.amountView}>
-						<Text style={styles.amountTxt}>B$ {hasBusinessBank ? businessWallet.availableBalance : '-'}</Text>
-					</View>
+				<View style={baseHeader}>
+					<Text style={styles.headerText}>{Translation.LANDING_PAGE.TITLE}</Text>
+				</View>
+				<View style={styles.amountView}>
+					<Text style={styles.amountTxt}>B$ {hasBusinessBank ? businessWallet.availableBalance : '-'}</Text>
+				</View>
 
-					<ScrollView>
+				<ScrollView>
+					<View style={styles.content}>
 						{!completedCustomerVerification && <View style={styles.alertView}>
 							<AntDesign name="exclamationcircleo" size={18} style={styles.alertIcon} />
 							<Text style={styles.alertText}>
@@ -378,8 +378,8 @@ const MerchantDashboard = (): JSX.Element => {
 						</View>
 						{isFilterVisible && <MerchantTransactionsFilter></MerchantTransactionsFilter>}
 						<MerchantTransactionList data={businessTransactions} onSelect={viewDetail} />
-					</ScrollView>
-				</View>
+					</View>
+				</ScrollView>
 			</View>
 			<TouchableOpacity onPress={() => hasBusinessBank ? navigation.navigate(Routes.MERCHANT_QRCODE_SCAN) : setIsPayment(true)} style={styles.scanButton}>
 				<Image

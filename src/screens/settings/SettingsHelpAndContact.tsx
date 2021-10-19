@@ -42,8 +42,8 @@ const styles = StyleSheet.create({
 		marginBottom: 10
 	},
 	modalHeader: {
-		fontFamily: "GothamBold",
-		fontSize: 26,
+		fontFamily: "GothamBook",
+		fontSize: 32,
 		lineHeight: 45,
 		paddingBottom: 10,
 		borderBottomWidth: 1,
@@ -72,26 +72,28 @@ export const SettingsHelpAndContact = (): ReactElement => {
 			<Header
 				leftComponent={<BackBtn text="Home" onClick={() => navigation.goBack()} />}
 			/>
-			<ScrollView style={styles.container}>
+			<View style={styles.container}>
 				<View style={ underlineHeader }>
 					<Text style={styles.headerText}>{Translation.OTHER.HELP_CONTACT}</Text>
 				</View>
-				<Text style={styles.section}>{Translation.OTHER.HELP_CONTACT_DETAIL}</Text>
-				<SearchInput
-					label="Search"
-					name="searchText"
-					keyboardType="default"
-					placeholder="Search help"
-					value={searchText}
-					onChange={onSearchChange}
-				/>
-				<View style={styles.faqView}>
-					<Text style={styles.sectionHeader}>{Translation.LABEL.QUESTIONS_FREQUENTLY}</Text>
-					{faqData.map((faq: FaqData, index: number) => (
-						<AccordionCard key={`faq-card-${index}`} title={faq.title} content={faq.content} />
-					))}
-				</View>
-			</ScrollView>
+				<ScrollView>
+					<Text style={styles.section}>{Translation.OTHER.HELP_CONTACT_DETAIL}</Text>
+					<SearchInput
+						label="Search"
+						name="searchText"
+						keyboardType="default"
+						placeholder="Search help"
+						value={searchText}
+						onChange={onSearchChange}
+					/>
+					<View style={styles.faqView}>
+						<Text style={styles.sectionHeader}>{Translation.LABEL.QUESTIONS_FREQUENTLY}</Text>
+						{faqData.map((faq: FaqData, index: number) => (
+							<AccordionCard key={`faq-card-${index}`} title={faq.title} content={faq.content} />
+						))}
+					</View>
+				</ScrollView>
+			</View>
 			<Button
 				type="darkGreen"
 				title={Translation.BUTTON.CONTACT}

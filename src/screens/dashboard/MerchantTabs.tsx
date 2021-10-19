@@ -1,7 +1,8 @@
-import { EvilIcons, Feather } from '@expo/vector-icons';
+import { EvilIcons, Feather, AntDesign } from '@expo/vector-icons';
 import { createDrawerNavigator, DrawerContentComponentProps, DrawerContentScrollView, DrawerItem } from '@react-navigation/drawer';
 import React, { useContext, useState } from 'react';
-import { Image, StyleSheet, Text, TouchableWithoutFeedback, View } from 'react-native';
+import { Image, StyleSheet, Text, TouchableWithoutFeedback, View, TouchableOpacity } from 'react-native';
+import { DrawerActions } from '@react-navigation/native';
 import { Drawer } from 'react-native-paper';
 import { AuthContext } from 'src/auth';
 import { UserType } from 'src/auth/types';
@@ -37,6 +38,16 @@ const styles = StyleSheet.create({
 		flex: 1,
 		backgroundColor: colors.greyedPurple,
 		paddingVertical: 30
+	},
+	closeBtnView: {
+		paddingLeft: 15,
+		paddingBottom: 10,
+		flexDirection: 'row'
+	},
+	closeBtnText: {
+		fontSize: 18,
+		marginLeft: 10,
+		color: colors.bodyText
 	},
 	imageView: {
 		justifyContent: 'center',
@@ -225,6 +236,15 @@ const DrawerContent = (props: DrawerContentComponentProps) => {
 		<View style={styles.drawerWrap}>
 			<DrawerContentScrollView {...props}>
 				<View>
+					<TouchableOpacity 
+						onPress={() => 
+							props.navigation.dispatch(DrawerActions.toggleDrawer())
+						}>
+						<View style={styles.closeBtnView}>
+							<AntDesign name="close" size={24} color={colors.bodyText} />
+							<Text style={styles.closeBtnText}>Menu</Text>
+						</View>
+					</TouchableOpacity>
 					<View style={styles.infoView}>
 						<TouchableWithoutFeedback
 							onPress={() => setIsExpanded(!isExpanded)}>
