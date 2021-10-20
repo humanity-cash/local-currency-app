@@ -4,17 +4,16 @@ import { AuthContext } from 'src/auth';
 import { StyleSheet, View, ScrollView, TouchableOpacity } from 'react-native';
 import { Text, Image } from 'react-native-elements';
 import { Octicons } from '@expo/vector-icons';
-import { Header, BackBtn, SearchInput, Dialog } from "src/shared/uielements";
+import { Header, BackBtn, SearchInput, Dialog, Button } from "src/shared/uielements";
 import { baseHeader, viewBase, dialogViewBase, wrappingContainerBase } from "src/theme/elements";
 import { colors } from "src/theme/colors";
 import MyTransactionList from './MyTransactionList';
 import MyTransactionFilter from './MyTransactionsFilter';
-import QRCodeGen from "src/screens/payment/QRCodeGen";
+import ReturnQRCodeGen from './ReturnQRCodeGen';
 import Translation from 'src/translation/en.json';
 import * as Routes from 'src/navigation/constants';
 import { getBerksharePrefix } from "src/utils/common";
 import { TransactionType, LoadingScreenTypes } from "src/utils/types";
-
 import { ITransaction } from 'src/api/types';
 import { loadPersonalTransactions } from 'src/store/transaction/transaction.actions';
 import { TransactionState } from 'src/store/transaction/transaction.reducer';
@@ -23,6 +22,8 @@ import { AppState } from 'src/store';
 import moment from 'moment';
 import { WalletState } from 'src/store/wallet/wallet.reducer';
 import { updateLoadingStatus } from 'src/store/loading/loading.actions';
+import { BUTTON_TYPES } from 'src/constants';
+import PaymentRequestSuccess from 'src/screens/payment/PaymentRequestSuccess';
 
 const styles = StyleSheet.create({
 	content: {
@@ -125,7 +126,7 @@ const styles = StyleSheet.create({
 		textAlign: 'center'
 	},
 	dialogHeight: {
-		height: 250
+		height: 300
 	}
 });
 
@@ -168,14 +169,16 @@ const TransactionDetail = (props: TransactionDetailProps) => {
 						<Text style={styles.detailText}>{moment(data.timestamp).format('HH:mm, MMM D, YYYY')}</Text>
 					</View>
 				</ScrollView>
-				{/* <View>
-					<Button
-						type={BUTTON_TYPES.TRANSPARENT}
-						title={Translation.BUTTON.WANT_RETURN}
-						textStyle={styles.returnText}
-						onPress={onReturn}
-					/>
-				</View> */}
+				{TransactionType.OUT === data.type && (
+					<View>
+						<Button
+							type={BUTTON_TYPES.TRANSPARENT}
+							title={Translation.BUTTON.WANT_RETURN}
+							textStyle={styles.returnText}
+							onPress={props.onReturn}
+						/>
+					</View>
+				)}
 			</View>
 		</Dialog>
 	)
@@ -199,9 +202,12 @@ const MyTransactions = (): JSX.Element => {
 	const { customerDwollaId } = useContext(AuthContext);
 	const [isFilterVisible, setIsFilterVisible] = useState<boolean>(false);
 	const [searchText, setSearchText] = useState<string>("");
-	const [isDetailViewOpen, setIsDetailViewOpen] = useState<boolean>(false);
-	const [isReturnViewOpen, setIsReturnViewOpen] = useState<boolean>(false);
+	const [isDetailView, setIsDetailView] = useState<boolean>(false);
+	const [isReturnView, setIsReturnView] = useState<boolean>(false);
 	const [selectedItem, setSelectedItem] = useState<ITransaction>(defaultTransaction);
+	const [isRequestSuccess, setIsRequestSuccess] = useState<boolean>(false);
+	const [receivedAmount, setReceivedAmount] = useState<number>(0);
+
 	const { personalTransactions } = useSelector((state: AppState) => state.transactionReducer) as TransactionState;
 	const { personalWallet } = useSelector((state: AppState) => state.walletReducer) as WalletState;
 
@@ -227,21 +233,28 @@ const MyTransactions = (): JSX.Element => {
 
 	const viewDetail = (item: ITransaction) => {
 		setSelectedItem(item);
-		setIsDetailViewOpen(true);
+		setIsDetailView(true);
 	}
 
 	const onReturn = () => {
-		setIsDetailViewOpen(false);
-		setIsReturnViewOpen(true);
+		setIsDetailView(false);
+		setIsReturnView(true);
 	}
 
 	const onSuccess = (amount: number) => {
-		console.log(amount);
+		setReceivedAmount(amount);
+		setIsReturnView(false);
+		setIsRequestSuccess(true);
+	}
+
+	const onConfirm = () => {
+		setIsRequestSuccess(false);
 	}
 
 	const onClose = () => {
-		setIsDetailViewOpen(false);
-		setIsReturnViewOpen(false);
+		setIsDetailView(false);
+		setIsReturnView(false);
+		setIsRequestSuccess(false);
 	}
 
 	return (
@@ -292,8 +305,9 @@ const MyTransactions = (): JSX.Element => {
 				<Text style={styles.scanBtnText}>{Translation.PAYMENT.SCAN_TO_PAY_REQUEST}</Text>
 			</TouchableOpacity>
 
-			{isDetailViewOpen && <TransactionDetail visible={isDetailViewOpen} data={selectedItem} onReturn={onReturn} onClose={onClose} />}
-			{isReturnViewOpen && <QRCodeGen visible={isReturnViewOpen} onSuccess={onSuccess} onClose={onClose} isOpenAmount={true} amount={Number(selectedItem.value)} /> }
+			{isDetailView && <TransactionDetail visible={isDetailView} data={selectedItem} onReturn={onReturn} onClose={onClose} />}
+			{isReturnView && <ReturnQRCodeGen visible={isReturnView} onSuccess={onSuccess} onClose={onClose} transactionInfo={selectedItem} /> }
+			{isRequestSuccess && <PaymentRequestSuccess visible={isRequestSuccess} onClose={onConfirm} amount={receivedAmount} /> }
 		</View>
 	);
 }
