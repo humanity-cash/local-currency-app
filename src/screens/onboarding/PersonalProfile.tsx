@@ -1,5 +1,5 @@
 import { useNavigation } from '@react-navigation/native';
-import React, { ReactElement, useContext } from 'react';
+import React, { ReactElement, useContext, useState, useEffect } from 'react';
 import { KeyboardAvoidingView, Platform, ScrollView, StyleSheet, View } from 'react-native';
 import { Text } from 'react-native-elements';
 import { AuthContext } from 'src/auth';
@@ -24,11 +24,16 @@ const styles = StyleSheet.create({
 });
 
 const PersonalProfile = (): ReactElement => {
-	const navigation = useNavigation()
-	const { signOut } = useContext(AuthContext);
+	const navigation = useNavigation();
+	const [goNext, setGoNext] = useState<boolean>(false);
+	const { signOut, customerBasicVerificationDetails } = useContext(AuthContext);
+
+	useEffect(() => {
+		setGoNext(customerBasicVerificationDetails.tag !== "");
+	}, [customerBasicVerificationDetails.tag]);
 
 	const onNextPress = () => {
-			navigation.navigate(Routes.PERSONAL_DETAILS);
+		navigation.navigate(Routes.PERSONAL_DETAILS);
 	}
 
 	return (
@@ -38,13 +43,14 @@ const PersonalProfile = (): ReactElement => {
 				rightComponent={<CancelBtn text={Translation.BUTTON.LOGOUT} onClick={signOut} />}
 			/>
 
-			<ScrollView style={wrappingContainerBase}>
+			<View style={wrappingContainerBase}>
 				<View style={underlineHeader}>
 					<Text style={styles.headerText}>{Translation.PROFILE.SETUP_PROFILE}</Text>
 				</View>
-				<PersonalProfileForm
-				/>
-			</ScrollView>
+				<ScrollView>
+					<PersonalProfileForm />
+				</ScrollView>
+			</View>
 			<KeyboardAvoidingView
 				behavior={Platform.OS == "ios" ? "padding" : "height"}
 			>
@@ -52,7 +58,7 @@ const PersonalProfile = (): ReactElement => {
 					<Button
 						type={BUTTON_TYPES.DARK_GREEN}
 						title={Translation.BUTTON.NEXT}
-						disabled={false}
+						disabled={!goNext}
 						onPress={onNextPress}
 					/>
 				</View>

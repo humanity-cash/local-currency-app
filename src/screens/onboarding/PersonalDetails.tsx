@@ -1,5 +1,5 @@
 import { useNavigation } from "@react-navigation/native";
-import React, { useContext } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import {
 	KeyboardAvoidingView,
 	Platform,
@@ -41,8 +41,13 @@ const styles = StyleSheet.create({
 });
 
 const PersonalDetails = (): JSX.Element => {
-	const { signOut } = useContext(AuthContext);
+	const { signOut, customerBasicVerificationDetails } = useContext(AuthContext);
+	const [goNext, setGoNext] = useState<boolean>(false);
 	const navigation = useNavigation();
+
+	useEffect(() => {
+		setGoNext(customerBasicVerificationDetails.firstName !== "" && customerBasicVerificationDetails.lastName !== "");
+	}, [customerBasicVerificationDetails.firstName, customerBasicVerificationDetails.lastName]);
 
 	const onNextPress = () => {
 		navigation.navigate(Routes.PERSONAL_ADDRESS);
@@ -78,7 +83,7 @@ const PersonalDetails = (): JSX.Element => {
 					<Button
 						type="darkGreen"
 						title={Translation.BUTTON.NEXT}
-						disabled={false}
+						disabled={!goNext}
 						onPress={onNextPress}
 					/>
 				</View>

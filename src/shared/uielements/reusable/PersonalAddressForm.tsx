@@ -75,7 +75,7 @@ const PersonalAddressForm = (props: PersonalAddressProps): ReactElement => {
 					{Translation.PROFILE.PERSIONAL_DETAILS_BODY}
 				</Text>
 			</View>
-			<Text style={styles.label}>{Translation.LABEL.ADDRESS1}</Text>
+			<Text style={styles.label}>{Translation.LABEL.ADDRESS1} *</Text>
 			<BlockInput
 				name="address1"
 				placeholder="Street number, street name"
@@ -83,6 +83,7 @@ const PersonalAddressForm = (props: PersonalAddressProps): ReactElement => {
 				onChange={onValueChange}
 				style={props.style}
 			/>
+			<Text style={styles.label}>{Translation.LABEL.ADDRESS2}</Text>
 			<BlockInput
 				name="address2"
 				placeholder="Apt."
@@ -93,7 +94,7 @@ const PersonalAddressForm = (props: PersonalAddressProps): ReactElement => {
 
 			<View style={styles.inlineView}>
 				<View style={styles.cityView}>
-					<Text style={styles.label}>{Translation.LABEL.CITY}</Text>
+					<Text style={styles.label}>{Translation.LABEL.CITY} *</Text>
 					<BlockInput
 						name="city"
 						placeholder="City"
@@ -132,7 +133,7 @@ const PersonalAddressForm = (props: PersonalAddressProps): ReactElement => {
 				</View>
 			</View>
 
-			<Text style={styles.label}>{Translation.LABEL.POSTAL_CODE}</Text>
+			<Text style={styles.label}>{Translation.LABEL.POSTAL_CODE} *</Text>
 			<BlockInput
 				name="postalCode"
 				placeholder="00000"
