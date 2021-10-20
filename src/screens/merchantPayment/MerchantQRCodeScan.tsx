@@ -183,7 +183,7 @@ const PaymentConfirm = (props: PaymentConfirmProps) => {
 					/>
 					<Button
 						type={BUTTON_TYPES.PURPLE}
-						title={`Round up to B$ ${props.payInfo.amount.toFixed(2)}`}
+						title={`Round up to B$ ${Math.ceil(amountCalcedFee).toFixed(2)}`}
 						onPress={() => props.onConfirm(true)}
 					/>
 					<Text style={styles.description}>{Translation.PAYMENT.NOT_REFUNABLE_DONATION}</Text>
@@ -253,7 +253,7 @@ const MerchantQRCodeScan = (): JSX.Element => {
 		if (businessDwollaId) {
 			const request: ITransactionRequest = {
 				toUserId: state.to,
-				amount: isRoundUp ? state.amount.toString() : amountCalcedFee.toString(),
+				amount: isRoundUp ? Math.ceil(amountCalcedFee).toString() : amountCalcedFee.toString(),
 				comment: ''
 			};
 

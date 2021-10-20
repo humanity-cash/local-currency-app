@@ -1,5 +1,5 @@
 import { useNavigation } from '@react-navigation/native';
-import React, { ReactElement, useContext } from 'react';
+import React, { ReactElement, useContext, useState, useEffect } from 'react';
 import { ScrollView, View, StyleSheet } from 'react-native';
 import { Text } from 'react-native-elements';
 import { AuthContext } from 'src/auth';
@@ -34,7 +34,12 @@ const styles = StyleSheet.create({
 
 const BusinessProfile = (): ReactElement => {
 	const navigation = useNavigation()
-	const { signOut } = useContext(AuthContext);
+	const { signOut, buisnessBasicVerification } = useContext(AuthContext);
+	const [goNext, setGoNext] = useState<boolean>(false);
+
+	useEffect(() => {
+		setGoNext(buisnessBasicVerification.tag !== "");
+	}, [buisnessBasicVerification.tag]);
 
 	const onNextPress = () => {
 		navigation.navigate(Routes.BUSINESS_DETAIL);
@@ -47,19 +52,21 @@ const BusinessProfile = (): ReactElement => {
 				rightComponent={<CancelBtn color={colors.purple} text={Translation.BUTTON.LOGOUT} onClick={signOut} />}
 			/>
 
-			<ScrollView style={wrappingContainerBase}>
+			<View style={wrappingContainerBase}>
 				<View style={underlineHeaderB}>
 					<Text style={styles.headerText}>{Translation.PROFILE.SETUP_PROFILE}</Text>
 				</View>
-				<View style={styles.formView}>
-					<BusinessProfileForm
-					/>
-				</View>
-			</ScrollView>
+				<ScrollView>
+					<View style={styles.formView}>
+						<BusinessProfileForm
+						/>
+					</View>
+				</ScrollView>
+			</View>
 			<Button
 				type="purple"
 				title={Translation.BUTTON.NEXT}
-				disabled={false}
+				disabled={!goNext}
 				onPress={onNextPress}
 				style={styles.bottomButton}
 			/>

@@ -24,6 +24,7 @@ import {
 } from 'src/theme/elements';
 import { isEmailValid } from 'src/utils/validation';
 import Translation from 'src/translation/en.json';
+import { BERKSHARE_PRIVACY_URL, BERKSHARE_TERMS_URL } from 'src/config/env';
 
 const styles = StyleSheet.create({
 	container: {
@@ -66,9 +67,6 @@ const styles = StyleSheet.create({
 		textDecorationLine: 'underline'
 	}
 });
-
-const privacyUrl = "https://rib.ogg.mybluehost.me/wp-content/uploads/2021/08/Privacy-Form-Neighborly.pdf";;
-const termsUrl = "https://berkshares.org/about/terms-and-conditions/";
 
 const CreateAccount = (): JSX.Element => {
 	const navigation = useNavigation();
@@ -120,9 +118,9 @@ const CreateAccount = (): JSX.Element => {
 						/>
 						<View style={styles.checkboxTextView}>
 							<Text style={styles.bodyText}>I've read and accept the </Text>
-							<Text style={styles.underlineText} onPress={()=>Linking.openURL(privacyUrl)}>Terms & Conditions </Text>
+							<Text style={styles.underlineText} onPress={()=>Linking.openURL(BERKSHARE_TERMS_URL)}>Terms & Conditions </Text>
 							<Text style={styles.bodyText}>and </Text>
-							<Text style={styles.underlineText} onPress={()=>Linking.openURL(termsUrl)}>Privacy Policy</Text>
+							<Text style={styles.underlineText} onPress={()=>Linking.openURL(BERKSHARE_PRIVACY_URL)}>Privacy Policy</Text>
 						</View>
 					</View>
 					<Button

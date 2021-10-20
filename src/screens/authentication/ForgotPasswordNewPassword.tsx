@@ -8,6 +8,7 @@ import { BackBtn, BlockInput, Button, CancelBtn, Header } from "src/shared/uiele
 import { colors } from "src/theme/colors";
 import { baseHeader, viewBase, wrappingContainerBase } from "src/theme/elements";
 import { IMap } from "src/utils/types";
+import Translation from 'src/translation/en.json';
 
 interface PasswordForm extends IMap {
 	confirmPassword: string
@@ -50,9 +51,6 @@ const styles = StyleSheet.create({
 		justifyContent: "center"
 	}
 });
-
-//eslint-disable-next-line
-const strongRegex = new RegExp("^(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#\$%\^&\*])(?=.{8,})");
 
 const ForgotPasswordNewPassword = (): React.ReactElement => {
 	const { forgotPasswordDetails, setForgotPasswordDetails, completeForgotPasswordFlow }  = useContext(AuthContext);
@@ -106,8 +104,7 @@ const ForgotPasswordNewPassword = (): React.ReactElement => {
 					<View style={styles.form}>
 						<Text style={styles.label}>PASSWORD</Text>
 						<Text style={styles.label}>
-							(min.8 characters, 1 capitical, 1 lower and 1
-							symbol)
+							{Translation.LABEL.PASSWORD_REG}
 						</Text>
 						<BlockInput
 							name="password"

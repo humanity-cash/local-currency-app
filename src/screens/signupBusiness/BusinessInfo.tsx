@@ -1,6 +1,6 @@
 import { AntDesign } from '@expo/vector-icons';
 import { useNavigation } from "@react-navigation/native";
-import React, { ReactElement, useContext } from "react";
+import React, { ReactElement, useContext, useState, useEffect } from "react";
 import {
 	KeyboardAvoidingView,
 	Platform,
@@ -27,6 +27,7 @@ import {
 } from "src/theme/elements";
 import Translation from "src/translation/en.json";
 import { Industry } from "src/utils/types";
+import { BusinessBasicVerification } from "src/auth/types";
 
 const Industries = [
 	Industry.ARTS_ENTERTAINMENT,
@@ -81,13 +82,20 @@ const styles = StyleSheet.create({
 });
 
 const BusinessInfo = (): ReactElement => {
-	const { buisnessBasicVerification, signOut } =
+	const [goNext, setGoNext] = useState<boolean>(false);
+	const { buisnessBasicVerification, setBuisnessBasicVerification, signOut } =
 		useContext(AuthContext);
 	const navigation = useNavigation();
 
-	// eslint-disable-next-line @typescript-eslint/no-unused-vars
+	useEffect(() => {
+		setGoNext(buisnessBasicVerification.registeredBusinessName !== "");
+	}, [buisnessBasicVerification.registeredBusinessName])
+
 	const onValueChange = (name: string, change: string) => {
-		// setBuisnessBasicVerification({ [name]: change });
+		setBuisnessBasicVerification((pv: BusinessBasicVerification) => ({
+			...pv,
+			[name]: change,
+		}));
 	};
 
 	return (
@@ -107,71 +115,74 @@ const BusinessInfo = (): ReactElement => {
 					/>
 				}
 			/>
-			<ScrollView style={wrappingContainerBase}>
+			<View style={wrappingContainerBase}>
 				<View style={underlineHeaderB}>
 					<Text style={styles.headerText}>
 						{Translation.PROFILE.BUSINESS_INFORMATION}
 					</Text>
 				</View>
-				<Text style={styles.bodyText}></Text>
+				<ScrollView>
+					<View style={styles.formView}>
+						<Text style={styles.label}>
+							{Translation.LABEL.REGISTERD_NAME}
+						</Text>
+						<BlockInput
+							name="registeredBusinessName"
+							placeholder="Registered business name"
+							placeholderTextColor={colors.greyedPurple}
+							value={buisnessBasicVerification.registeredBusinessName}
+							onChange={onValueChange}
+							style={styles.input}
+						/>
 
-				<View style={styles.formView}>
-					<Text style={styles.label}>
-						{Translation.LABEL.REGISTERD_NAME}
-					</Text>
-					<BlockInput
-						name="registeredBusinessname"
-						placeholder="Registered business name"
-						value={buisnessBasicVerification.registeredBusinessName}
-						onChange={onValueChange}
-						style={styles.input}
-					/>
-
-					<Text style={styles.label}>
-						{Translation.LABEL.INDUSTRY}
-					</Text>
-					<View style={styles.picker}>
-						<SelectDropdown
-							data={Industries}
-							defaultValueByIndex={0}
-							onSelect={(selectedItem) => {
-								onValueChange("country", selectedItem)
-							}}
-							buttonTextAfterSelection={(selectedItem) => {
-								return selectedItem
-							}}
-							rowTextForSelection={(item) => {
-								return item
-							}}
-							buttonStyle={styles.selectItem}
-							buttonTextStyle={styles.pickerText}
-							rowStyle={styles.selectItem}
-							dropdownStyle={styles.dropdownContainer}
-							renderCustomizedRowChild={(item) => (
-								<Text style={styles.pickerText}>{item}</Text>
-							)}
-							renderDropdownIcon={() => (
-								<AntDesign name="down" size={18} color={colors.purple} />
-							)}
+						<Text style={styles.label}>
+							{Translation.LABEL.INDUSTRY}
+						</Text>
+						<View style={styles.picker}>
+							<SelectDropdown
+								data={Industries}
+								defaultValueByIndex={0}
+								onSelect={(selectedItem) => {
+									onValueChange("country", selectedItem)
+								}}
+								buttonTextAfterSelection={(selectedItem) => {
+									return selectedItem
+								}}
+								rowTextForSelection={(item) => {
+									return item
+								}}
+								buttonStyle={styles.selectItem}
+								buttonTextStyle={styles.pickerText}
+								rowStyle={styles.selectItem}
+								dropdownStyle={styles.dropdownContainer}
+								renderCustomizedRowChild={(item) => (
+									<Text style={styles.pickerText}>{item}</Text>
+								)}
+								renderDropdownIcon={() => (
+									<AntDesign name="down" size={18} color={colors.purple} />
+								)}
+							/>
+						</View>
+						<Text style={styles.label}>{Translation.LABEL.EIN}</Text>
+						<BlockInput
+							name="ein"
+							placeholder="Employee identification number"
+							keyboardType="number-pad"
+							placeholderTextColor={colors.greyedPurple}
+							value={buisnessBasicVerification.ein}
+							onChange={onValueChange}
+							style={styles.input}
 						/>
 					</View>
-					<Text style={styles.label}>{Translation.LABEL.EIN}</Text>
-					<BlockInput
-						name="ein"
-						placeholder="Employee identification number"
-						value={buisnessBasicVerification.ein}
-						onChange={onValueChange}
-						style={styles.input}
-					/>
-				</View>
-			</ScrollView>
+				</ScrollView>
+			</View>
 			<KeyboardAvoidingView
 				behavior={Platform.OS == "ios" ? "padding" : "height"}>
 				<View style={styles.bottomView}>
 					<Button
 						type="purple"
 						title={Translation.BUTTON.NEXT}
-						disabled={false}
+						disabled={!goNext}
 						onPress={() =>
 							navigation.navigate(Routes.BUSINESS_ADDRESS)
 						}

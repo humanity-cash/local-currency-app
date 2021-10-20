@@ -109,16 +109,18 @@ const PersonalAddress = (): React.ReactElement => {
 				}
 			/>
 
-			<ScrollView style={wrappingContainerBase}>
-				<View style={styles.content}>
-					<View style={underlineHeader}>
-						<Text style={styles.headerText}>
-							{Translation.PROFILE.PERSIONAL_DETAILS}
-						</Text>
-					</View>
-					<PersonalAddressForm userType={UserType.Customer} />
+			<View style={wrappingContainerBase}>
+				<View style={underlineHeader}>
+					<Text style={styles.headerText}>
+						{Translation.PROFILE.PERSIONAL_DETAILS}
+					</Text>
 				</View>
-			</ScrollView>
+				<ScrollView>
+					<View style={styles.content}>
+						<PersonalAddressForm userType={UserType.Customer} />
+					</View>
+				</ScrollView>
+			</View>
 			<KeyboardAvoidingView
 				behavior={Platform.OS == "ios" ? "padding" : "height"}>
 				<View style={styles.bottomView}>

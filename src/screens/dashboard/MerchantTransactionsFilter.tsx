@@ -84,14 +84,14 @@ const MerchantTransactionsFilter = (): ReactElement => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const onStartDateChange = (event: any, selectedDate?: Date) => {
         const currentDate = selectedDate || startDate;
-        setIsStartDate(Platform.OS === 'ios');
+        setIsStartDate(false);
         setStartDate(currentDate);
     };
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const onEndDateChange = (event: any, selectedDate?: Date) => {
         const currentDate = selectedDate || startDate;
-        setIsEndDate(Platform.OS === 'ios');
+        setIsStartDate(false);
         setEndDate(currentDate);
     };
 
@@ -155,8 +155,7 @@ const MerchantTransactionsFilter = (): ReactElement => {
                 <DateTimePicker
                     testID="dateTimePicker"
                     value={startDate ? startDate : new Date()}
-                    is24Hour={true}
-                    display="default"
+                    display="inline"
                     onChange={onStartDateChange}
                 />
             )}
@@ -164,8 +163,7 @@ const MerchantTransactionsFilter = (): ReactElement => {
                 <DateTimePicker
                     testID="dateTimePicker"
                     value={endDate ? endDate : new Date()}
-                    is24Hour={true}
-                    display="default"
+                    display="inline"
                     onChange={onEndDateChange}
                 />
             )}
