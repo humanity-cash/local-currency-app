@@ -24,7 +24,8 @@ const styles = StyleSheet.create({
 	switchView: {
 		flex: 1, 
 		justifyContent: 'center', 
-		alignItems: 'center'
+		alignItems: 'center',
+		marginTop: 40
 	},
 	contentView: { 
 		marginTop: 5
@@ -104,7 +105,7 @@ const PaymentRequest = (): JSX.Element => {
 			<Header
 				rightComponent={<CancelBtn text={Translation.BUTTON.CLOSE} onClick={() => navigation.navigate(Routes.DASHBOARD)} />}
 			/>
-			<ScrollView style={wrappingContainerBase}>
+			<View style={wrappingContainerBase}>
 				<View style={ baseHeader }>
 					<View style={styles.switchView}>
 						<ToggleButton
@@ -129,7 +130,7 @@ const PaymentRequest = (): JSX.Element => {
 						onChange={onValueChange}
 					/>
 				</View>
-			</ScrollView>
+			</View>
 			<KeyboardAvoidingView
 				behavior={Platform.OS == "ios" ? "padding" : "height"} >
 				<View style={styles.bottomView}>
