@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { StyleSheet, View, KeyboardAvoidingView, ScrollView, Platform } from 'react-native';
 import { Text } from 'react-native-elements';
 import { Header, Button, BackBtn } from "src/shared/uielements";
@@ -8,6 +8,9 @@ import Translation from 'src/translation/en.json';
 import * as Routes from 'src/navigation/constants';
 import { useNavigation } from '@react-navigation/core';
 import { BUTTON_TYPES } from 'src/constants';
+import StaticQRCodeGen from './MerchantStaticQRCodeGen';
+import { showToast } from 'src/utils/common';
+import { ToastType } from 'src/utils/types';
 
 const styles = StyleSheet.create({
 	headerText: {
@@ -31,6 +34,17 @@ const styles = StyleSheet.create({
 
 const MerchantSettingsStaticQr = (): JSX.Element => {
 	const navigation = useNavigation();
+	const [isStaticQRCode, setIsStaticQRCode] = useState<boolean>(false);
+
+	const onSuccess = (amount: number) => {
+		showToast(ToastType.INFO, "Succeeded!", "You have received B$ " + amount);
+		setIsStaticQRCode(false);
+	}
+
+	const onClose = () => {
+		setIsStaticQRCode(false);
+	}
+
 	return (
 		<View style={viewBase}>
 			<Header
@@ -51,7 +65,7 @@ const MerchantSettingsStaticQr = (): JSX.Element => {
 						type={BUTTON_TYPES.TRANSPARENT}
 						textStyle={styles.mainText}
 						title={Translation.BUTTON.SHOW_MY_QR}
-						onPress={() => navigation.navigate(Routes.MERCHANT_DASHBOARD)}
+						onPress={() => setIsStaticQRCode(true)}
 					/>
 					<Button
 						type={BUTTON_TYPES.PURPLE}
@@ -60,6 +74,10 @@ const MerchantSettingsStaticQr = (): JSX.Element => {
 					/>
 				</View>
 			</KeyboardAvoidingView>
+
+			{isStaticQRCode && (
+				<StaticQRCodeGen visible={isStaticQRCode} onSuccess={onSuccess} onClose={onClose} />
+			)}
 		</View>
 	);
 }

@@ -11,7 +11,7 @@ import Translation from 'src/translation/en.json';
 import * as Routes from 'src/navigation/constants';
 import { useNavigation } from '@react-navigation/core';
 import { QRCodeEntry, SECURITY_ID, PaymentMode, ToastType, LoadingScreenTypes } from 'src/utils/types';
-import { showToast, calcFee } from 'src/utils/common';
+import { showToast } from 'src/utils/common';
 import { modalViewBase, wrappingContainerBase, underlineHeaderB } from "src/theme/elements";
 import { Modal, ModalHeader, BorderedInput, Button } from "src/shared/uielements";
 import { BUTTON_TYPES } from 'src/constants';
@@ -21,6 +21,8 @@ import { updateLoadingStatus } from 'src/store/loading/loading.actions';
 import { loadBusinessWallet } from 'src/store/wallet/wallet.actions';
 import { loadBusinessTransactions } from 'src/store/transaction/transaction.actions';
 import { useDispatch } from 'react-redux';
+import { isQRCodeValid } from 'src/utils/validation';
+import moment from 'moment';
 
 type HandleScaned = {
 	type: string,
@@ -103,19 +105,19 @@ const MerchantReturnQRCodeScan = (): JSX.Element => {
 
 	useEffect(() => {
 		setIsScanned(false);
-	}, []);
+	});
 
 	useEffect(() => {
 		setGoNext(Number(amount) > 0);
 	}, [amount]);
 
 	const handleBarCodeScanned = (data: HandleScaned) => {
-		try {
+		if (isQRCodeValid(data.data)) {
 			setState(JSON.parse(data.data) as QRCodeEntry);
 			setIsScanned(true);
 			setIsReturnModal(true);
-		} catch (e) {
-			showToast(ToastType.ERROR, "Failed", "Whooops, something went wrong.");
+		} else {
+			showToast(ToastType.ERROR, "Whoops, something went wrong.", "Invalid QRCode.");
 		}
 	}
 
@@ -128,12 +130,12 @@ const MerchantReturnQRCodeScan = (): JSX.Element => {
 	}
 
 	const onReturn = async () => {
-		const amountCalcedFee = state.amount + calcFee(state.amount);
+		// const amountCalcedFee = state.amount + calcFee(state.amount);
 
 		if (businessDwollaId) {
 			const request: ITransactionRequest = {
 				toUserId: state.to,
-				amount: amountCalcedFee.toString(),
+				amount: amount.toString(),
 				comment: ''
 			};
 			dispatch(updateLoadingStatus({
@@ -144,19 +146,23 @@ const MerchantReturnQRCodeScan = (): JSX.Element => {
 			if (response.data) {
 				await dispatch(loadBusinessWallet(businessDwollaId));
 				await dispatch(loadBusinessTransactions(businessDwollaId));
+				dispatch(updateLoadingStatus({
+					isLoading: false,
+					screen: LoadingScreenTypes.PAYMENT_PENDING
+				}));
 				navigation.navigate(Routes.MERCHANT_PAYMENT_SUCCESS);
 			} else {
 				showToast(ToastType.ERROR, "Failed", "Whooops, something went wrong.");
+				dispatch(updateLoadingStatus({
+					isLoading: false,
+					screen: LoadingScreenTypes.PAYMENT_PENDING
+				}));
 				navigation.navigate(Routes.MERCHANT_DASHBOARD);
 			}
-			dispatch(updateLoadingStatus({
-				isLoading: false,
-				screen: LoadingScreenTypes.PAYMENT_PENDING
-			}));
 		} else {
 			showToast(ToastType.ERROR, "Failed", "Whooops, something went wrong.");
+			navigation.navigate(Routes.MERCHANT_DASHBOARD);
 		}
-		navigation.navigate(Routes.MERCHANT_PAYMENT_SUCCESS);
 	}
 
 	const onModalClose = () => {
@@ -203,7 +209,7 @@ const MerchantReturnQRCodeScan = (): JSX.Element => {
 									</View>
 									<View style={styles.inlineView}>
 										<Text style={styles.label}>DATE</Text>
-										<Text style={styles.label}>{state.transactionDate}</Text>
+										<Text style={styles.label}>{moment(state.transactionDate).format('HH:mm, MMM D, YYYY')}</Text>
 									</View>
 								</View>
 

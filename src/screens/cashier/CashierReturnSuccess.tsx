@@ -44,7 +44,7 @@ const CashierReturnSuccess = (): JSX.Element => {
 					<Button
 						type={BUTTON_TYPES.PURPLE}
 						title={Translation.BUTTON.NEXT}
-						onPress={() => navigation.navigate(Routes.MERCHANT_DASHBOARD)}
+						onPress={() => navigation.navigate(Routes.CASHIER_DASHBOARD)}
 					/>
 				</View>
 			</KeyboardAvoidingView>

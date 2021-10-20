@@ -79,7 +79,7 @@ const PaymentPending = ({visible = false}: PaymentPendingProps): JSX.Element => 
             <View style={ modalViewBase }>
                 <ModalHeader />
                 <ScrollView style={styles.modalWrap}>
-                    <Text style={userType === UserType.Business ? styles.headerTextB : styles.headerText}>Pending...</Text>
+                    <Text style={userType === UserType.Customer ? styles.headerText : styles.headerTextB}>Pending...</Text>
                     <Text style={styles.bodyText}>This usually takes 5-6 seconds</Text>
                     <View style={styles.contentView}>
                         <View style={styles.imageView}>
@@ -88,11 +88,11 @@ const PaymentPending = ({visible = false}: PaymentPendingProps): JSX.Element => 
                                 style={styles.image}
                             />
                         </View>
-                        <Text style={userType === UserType.Business ? styles.contentTextB : styles.contentText}>Great Barrington mountain</Text>
+                        <Text style={userType === UserType.Customer ? styles.contentText : styles.contentTextB}>Great Barrington mountain</Text>
                     </View>
                 </ScrollView>
                 <View style={styles.bottomView}>
-                    <ActivityIndicator size="large" color={userType === UserType.Business ? colors.purple : colors.darkGreen} />
+                    <ActivityIndicator size="large" color={userType === UserType.Customer ? colors.darkGreen : colors.purple} />
                 </View>
             </View>
         </Modal>

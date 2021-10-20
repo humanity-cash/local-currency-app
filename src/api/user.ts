@@ -1,6 +1,6 @@
 import { UserId, AxiosPromiseResponse, IUserRequest, IDepositRequest, IWithdrawalRequest, ITransactionRequest, ITransaction, IUser} from './types';
 import { getRequest, postRequest } from './base';
-import { userData, transactionDatas } from './formatters';
+import { userData, transactionDatas, fundingSource } from './formatters';
 
 // create local currency user
 export const user = async (request: IUserRequest): Promise<AxiosPromiseResponse> => {
@@ -24,9 +24,9 @@ export const iavToken = async (userId: UserId): Promise<AxiosPromiseResponse> =>
   return response;
 };
 
-export const getFundingSources = async (userId: UserId): Promise<AxiosPromiseResponse> => {
+export const getFundingSources = async (userId: UserId): Promise<boolean> => {
   const response = await getRequest(`/users/${userId}/funding-sources`);
-  return response;
+  return fundingSource(response);
 };
 
 export const transferTo = async (userId: UserId, request: ITransactionRequest): Promise<AxiosPromiseResponse> => {
