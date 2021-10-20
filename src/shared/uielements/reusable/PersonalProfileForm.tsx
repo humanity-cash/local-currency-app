@@ -1,10 +1,11 @@
 import * as ImagePicker from "expo-image-picker";
-import React, { ReactElement, useContext, useEffect } from "react";
-import { Platform, StyleSheet, TouchableOpacity, View } from "react-native";
+import React, { ReactElement, useContext } from "react";
+import { StyleSheet, TouchableOpacity, View } from "react-native";
 import { Image, Text } from "react-native-elements";
 import { AuthContext } from "src/auth";
 import { colors } from "src/theme/colors";
 import BlockInput from "../BlockInput";
+import { useMediaLibraryPermission } from 'src/hooks';
 
 const styles = StyleSheet.create({
 	container: {
@@ -57,21 +58,8 @@ const PersonalProfileForm = (): ReactElement => {
 		setCustomerBasicVerificationDetails,
 	} = useContext(AuthContext);
 
-	useEffect(() => {
-		(async () => {
-			if (Platform.OS !== "web") {
-				const { status } =
-					await ImagePicker.requestMediaLibraryPermissionsAsync();
-				if (status !== "granted") {
-					alert(
-						"Sorry, we need camera roll permissions to make this work!"
-					);
-				}
-			}
-		})();
-	}, []);
+	useMediaLibraryPermission();
 
-	//
 	const pickImage = async () => {
 		const result = await ImagePicker.launchImageLibraryAsync({
 			mediaTypes: ImagePicker.MediaTypeOptions.All,
@@ -89,6 +77,8 @@ const PersonalProfileForm = (): ReactElement => {
 	};
 
 	const onValueChange = (name: string, change: string) => {
+		if (change.indexOf('@') !== 0) { change = '@' + change; }
+		
 		setCustomerBasicVerificationDetails((pv: any) => ({
 			...pv,
 			tag: change,

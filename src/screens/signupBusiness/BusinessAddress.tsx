@@ -127,19 +127,21 @@ const BusinessAddress = (): ReactElement => {
 					/>
 				}
 			/>
-			<ScrollView style={wrappingContainerBase}>
+			<View style={wrappingContainerBase}>
 				<View style={underlineHeaderB}>
 					<Text style={styles.headerText}>
 						{Translation.PROFILE.BUSINESS_INFORMATION}
 					</Text>
 				</View>
-				<View style={styles.formView}>
-					<Text style={styles.bodyText}>
-						Where can customers find you?
-					</Text>
-					<BusinessAddressForm style={styles.input} />
-				</View>
-			</ScrollView>
+				<ScrollView>
+					<View style={styles.formView}>
+						<Text style={styles.bodyText}>
+							Where can customers find you?
+						</Text>
+						<BusinessAddressForm style={styles.input} />
+					</View>
+				</ScrollView>
+			</View>
 			<Button
 				type="purple"
 				title={Translation.BUTTON.NEXT}

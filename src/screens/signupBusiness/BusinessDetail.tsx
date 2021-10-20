@@ -102,7 +102,7 @@ const BusinessDetail = (): ReactElement => {
 					</Text>
 				</View>
 				<Text style={styles.bodyText}>
-					{Translation.PROFILE.PERSIONAL_DETAILS_BODY}
+					{Translation.PROFILE.USE_BUSINESS_INFOMATION}
 				</Text>
 
 				<Text style={styles.label}>

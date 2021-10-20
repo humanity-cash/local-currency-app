@@ -70,43 +70,27 @@ export const BusinessOwnerDetailsForm = (
 		}));
 	};
 
-	const FirstNameInput = () => {
-		return (
-			<>
-				<BasicInputWithLabel
-					labelStyle={styles.label}
-					inputStyle={props.style}
-					label={Translation.LABEL.FIRST_NAME}
-					name="firstName"
-					placeHolder="First Name"
-					value={buisnessBasicVerification.owner.firstName}
-					onInputChange={onValueChange}
-				/>
-			</>
-		);
-	};
-
-	const LastNameInput = () => {
-		return (
-			<>
-				<BasicInputWithLabel
-					labelStyle={styles.label}
-					inputStyle={props.style}
-					label={Translation.LABEL.LAST_NAME}
-					name="lastName"
-					placeHolder="Last Name"
-					value={buisnessBasicVerification.owner.lastName}
-					onInputChange={onValueChange}
-				/>
-			</>
-		);
-	};
-
 	return (
 		<View>
 			<Header />
-			<FirstNameInput />
-			<LastNameInput />
+			<BasicInputWithLabel
+				labelStyle={styles.label}
+				inputStyle={props.style}
+				label={Translation.LABEL.FIRST_NAME}
+				name="firstName"
+				placeHolder="First Name"
+				value={buisnessBasicVerification.owner.firstName}
+				onInputChange={onValueChange}
+			/>
+			<BasicInputWithLabel
+				labelStyle={styles.label}
+				inputStyle={props.style}
+				label={Translation.LABEL.LAST_NAME}
+				name="lastName"
+				placeHolder="Last Name"
+				value={buisnessBasicVerification.owner.lastName}
+				onInputChange={onValueChange}
+			/>
 		</View>
 	);
 };
@@ -124,43 +108,27 @@ const PersonalDetailsForm = (props: PersonalDetailsProps): ReactElement => {
 		}));
 	};
 
-	const FirstNameInput = () => {
-		return (
-			<>
-				<BasicInputWithLabel
-					labelStyle={styles.label}
-					inputStyle={props.style}
-					label={Translation.LABEL.FIRST_NAME}
-					name="firstName"
-					placeHolder="First Name"
-					inputValue={customerBasicVerificationDetails.firstName}
-					onInputChange={onValueChange}
-				/>
-			</>
-		);
-	};
-
-	const LastNameInput = () => {
-		return (
-			<>
-				<BasicInputWithLabel
-					labelStyle={styles.label}
-					inputStyle={props.style}
-					label={Translation.LABEL.LAST_NAME}
-					name="lastName"
-					placeHolder="Last Name"
-					inputValue={customerBasicVerificationDetails.lastName}
-					onInputChange={onValueChange}
-				/>
-			</>
-		);
-	};
-
 	return (
 		<View>
 			<Header />
-			<FirstNameInput />
-			<LastNameInput />
+			<BasicInputWithLabel
+				labelStyle={styles.label}
+				inputStyle={props.style}
+				label={Translation.LABEL.FIRST_NAME}
+				name="firstName"
+				placeHolder="First Name"
+				inputValue={customerBasicVerificationDetails.firstName}
+				onInputChange={onValueChange}
+			/>
+			<BasicInputWithLabel
+				labelStyle={styles.label}
+				inputStyle={props.style}
+				label={Translation.LABEL.LAST_NAME}
+				name="lastName"
+				placeHolder="Last Name"
+				inputValue={customerBasicVerificationDetails.lastName}
+				onInputChange={onValueChange}
+			/>
 		</View>
 	);
 };

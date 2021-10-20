@@ -48,7 +48,7 @@ const BusinessAccount = (): JSX.Element => {
                     <Text style={styles.headerText}>{Translation.PROFILE.BUSINESS_ACCOUNT}</Text>
                 </View>
                 <View style={styles.bodyView}>
-                    <Text style={styles.bodyText}>{Translation.PROFILE.BUSINESS_ACCOUNT_DETAIL}</Text>
+                    {!completedBusinessVerification && <Text style={styles.bodyText}>{Translation.PROFILE.BUSINESS_ACCOUNT_DETAIL}</Text>}
                 </View>
 			</ScrollView>
 			<KeyboardAvoidingView
@@ -56,6 +56,7 @@ const BusinessAccount = (): JSX.Element => {
 				<View style={styles.bottomView}>
 					<Button
 						type="darkGreen"
+						disabled={completedBusinessVerification}
 						title={Translation.BUTTON.SIGNUP_BUSINESS}
 						onPress={signupBusiness}
 					/>

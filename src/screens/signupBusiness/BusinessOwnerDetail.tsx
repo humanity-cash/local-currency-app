@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { StyleSheet, View, KeyboardAvoidingView, ScrollView, Platform } from 'react-native';
 import { Text } from 'react-native-elements';
 import { AuthContext } from 'src/auth';
@@ -48,10 +48,16 @@ const styles = StyleSheet.create({
 
 const BusinessOwnerDetail = (): JSX.Element => {
 	const navigation = useNavigation()
-	const { signOut } = useContext(AuthContext);
+	const { signOut, buisnessBasicVerification } = useContext(AuthContext);
+	const [goNext, setGoNext] = useState<boolean>(false);
+
+	useEffect(() => {
+		setGoNext(buisnessBasicVerification.owner.firstName !== "" && buisnessBasicVerification.owner.lastName !== "");
+	}, [buisnessBasicVerification.owner.firstName, buisnessBasicVerification.owner.lastName]);
 
 	const onNextPress = () => {
-		navigation.navigate(Routes.BUSINESS_OWNER_ADDRESS);
+		// navigation.navigate(Routes.BUSINESS_OWNER_ADDRESS);
+		navigation.navigate(Routes.BUSINESS_INFO);
 	};
 
 	return (
@@ -60,23 +66,25 @@ const BusinessOwnerDetail = (): JSX.Element => {
 				leftComponent={<BackBtn color={colors.purple} onClick={() => navigation.goBack()} />}
 				rightComponent={<CancelBtn color={colors.purple} text={Translation.BUTTON.LOGOUT} onClick={signOut} />}
 			/>
-			<ScrollView style={wrappingContainerBase}>
+			<View style={wrappingContainerBase}>
 				<View style={underlineHeaderB}>
 					<Text style={styles.headerText}>
 						{Translation.PROFILE.BUSINESS_OWNER}
 					</Text>
 				</View>
-				<View style={styles.formView}>
-					<BusinessOwnerDetailsForm style={styles.input} />
-				</View>
-			</ScrollView>
+				<ScrollView>
+					<View style={styles.formView}>
+						<BusinessOwnerDetailsForm style={styles.input} />
+					</View>
+				</ScrollView>
+			</View>
 			<KeyboardAvoidingView
 				behavior={Platform.OS == "ios" ? "padding" : "height"}>
 				<View style={styles.bottomView}>
 					<Button
 						type="purple"
 						title={Translation.BUTTON.NEXT}
-						disabled={false}
+						disabled={!goNext}
 						onPress={onNextPress}
 					/>
 				</View>
