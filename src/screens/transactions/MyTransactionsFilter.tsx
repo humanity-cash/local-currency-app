@@ -1,6 +1,6 @@
 import { AntDesign } from '@expo/vector-icons';
 import React, {useState} from 'react';
-import { StyleSheet, View, TouchableOpacity } from 'react-native';
+import { StyleSheet, View, TouchableOpacity, Platform } from 'react-native';
 import { Text } from 'react-native-elements';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import moment from 'moment';
@@ -79,6 +79,7 @@ const MyTransactionFilter = (): JSX.Element => {
     const [endDate, setEndDate] = useState<Date | null>(null);
     const [isStartDate, setIsStartDate] = useState<boolean>(false);
     const [isEndDate, setIsEndDate] = useState<boolean>(false);
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const [selectedType, setSelectedType] = useState<string>("All");
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -91,7 +92,7 @@ const MyTransactionFilter = (): JSX.Element => {
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     const onEndDateChange = (event: any, selectedDate?: Date) => {
         const currentDate = selectedDate || startDate;
-        setIsStartDate(false);
+        setIsEndDate(false);
         setEndDate(currentDate);
     };
 
@@ -155,7 +156,7 @@ const MyTransactionFilter = (): JSX.Element => {
                 <DateTimePicker
                     testID="dateTimePicker"
                     value={startDate ? startDate : new Date()}
-                    display="inline"
+                    display={Platform.OS == "ios" ? "inline" : "default"}
                     onChange={onStartDateChange}
                 />
             )}
@@ -163,7 +164,7 @@ const MyTransactionFilter = (): JSX.Element => {
                 <DateTimePicker
                     testID="dateTimePicker"
                     value={endDate ? endDate : new Date()}
-                    display="inline"
+                    display={Platform.OS == "ios" ? "inline" : "default"}
                     onChange={onEndDateChange}
                 />
             )}

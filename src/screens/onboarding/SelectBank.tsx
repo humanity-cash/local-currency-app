@@ -51,7 +51,7 @@ const SelectBank = (): JSX.Element => {
 		if (customerDwollaId) {
 			dispatch(loadPersonalFundingSource(customerDwollaId));
 		}
-		navigation.navigate(Routes.TABS);
+		navigation.navigate(Routes.DASHBOARD);
 	}
 
 	return (

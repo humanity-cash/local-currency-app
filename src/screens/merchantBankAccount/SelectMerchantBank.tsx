@@ -53,7 +53,7 @@ const SelectMerchantBank = (): JSX.Element => {
 		if (businessDwollaId) {
 			dispatch(loadBusinessFundingSource(businessDwollaId));
 		}
-		navigation.navigate(Routes.MERCHANT_TABS);
+		navigation.navigate(Routes.MERCHANT_DASHBOARD);
 	}
 
 	return (

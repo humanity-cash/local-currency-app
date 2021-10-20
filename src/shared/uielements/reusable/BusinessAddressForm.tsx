@@ -68,7 +68,7 @@ const BusinessAddressForm = (props: BusinessAddressProps): JSX.Element => {
 
   	return (
 		<View>
-			<Text style={styles.label}>ADDRESS 1</Text>
+			<Text style={styles.label}>ADDRESS 1 *</Text>
 			<BlockInput
 				name="address1"
 				placeholder="Street number, street name"
@@ -87,7 +87,7 @@ const BusinessAddressForm = (props: BusinessAddressProps): JSX.Element => {
 
 			<View style={styles.inlineView}>
 				<View style={styles.cityView}>
-					<Text style={styles.label}>CITY</Text>
+					<Text style={styles.label}>CITY *</Text>
 					<BlockInput
 						name="city"
 						placeholder="City"
@@ -126,7 +126,7 @@ const BusinessAddressForm = (props: BusinessAddressProps): JSX.Element => {
 				</View>
 			</View>
 
-			<Text style={styles.label}>POSTAL CODE</Text>
+			<Text style={styles.label}>POSTAL CODE *</Text>
 			<BlockInput
 				name="postalCode"
 				placeholder="00000"

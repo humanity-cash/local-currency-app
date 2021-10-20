@@ -25,7 +25,9 @@ const styles = StyleSheet.create({
 
 const termsAndConditions: AccordionEntry = {
   title: "Terms & Conditions",
-  content: "ARTICLE 1: GENERAL"
+  content: "ARTICLE 1: GENERAL \n\nSection 1: Name -  The name of the corporation will be BerkShares, Inc., a non-profit corporation organized under the laws of the Commonwealth of Massachusetts.\n" +
+		"Section 2: Area - The corporation will focus its activities in the Berkshire Region.\n" + 
+		"Section 3: Offices - The principal office of the corporation will be at 140 Jug End Road, South Egremont, Massachusetts 01258 (mailing address: P O Box 125, Great Barrington, MA 01230) or at some other physical location as determined by the Board of Trustees."
 }
 
 const privacyPolicy: AccordionEntry = {
