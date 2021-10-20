@@ -180,12 +180,6 @@ const Dashboard = (): JSX.Element => {
 				}));
 			})();
 		}
-
-		// Close all loading screens
-		dispatch(updateLoadingStatus({
-			isLoading: false,
-			screen: LoadingScreenTypes.LOADING_DATA
-		}));
 	}, []);
 
 	const selectBank = () => {
