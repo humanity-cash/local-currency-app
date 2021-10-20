@@ -3,12 +3,14 @@ import React, { useState, useEffect, useContext } from 'react';
 import { StyleSheet, View, ScrollView, Dimensions, ActivityIndicator } from 'react-native';
 import { WebView } from 'react-native-webview';
 import { AuthContext } from 'src/auth';
-import { BackBtn, Header, CancelBtn } from "src/shared/uielements";
+import { Header, CancelBtn } from "src/shared/uielements";
 import { colors } from "src/theme/colors";
 import { viewBaseWhite, wrappingContainerBase } from "src/theme/elements";
 import Translation from 'src/translation/en.json';
 import * as Routes from 'src/navigation/constants';
 import { UserAPI } from 'src/api';
+import { loadBusinessFundingSource } from 'src/store/funding-source/funding-source.actions';
+import { useDispatch } from 'react-redux';
 
 export const WEBVIEW_SCREEN = Dimensions.get('screen').height - 150;
 
@@ -30,6 +32,7 @@ const styles = StyleSheet.create({
 
 const SelectMerchantBank = (): JSX.Element => {
 	const navigation = useNavigation();
+	const dispatch = useDispatch();
 	const { businessDwollaId } = useContext(AuthContext);
 	const [iavToken, setIAVToken] = useState<string>("");
 	let webview: WebView<{ ref: unknown; style: { flex: number; height: number; paddingBottom: number; }; source: { uri: string; }; }> | null = null;
@@ -46,10 +49,17 @@ const SelectMerchantBank = (): JSX.Element => {
 		}
 	}, [businessDwollaId]);
 
+	const onClose = () => {
+		if (businessDwollaId) {
+			dispatch(loadBusinessFundingSource(businessDwollaId));
+		}
+		navigation.navigate(Routes.MERCHANT_TABS);
+	}
+
 	return (
 		<View style={viewBaseWhite}>
 			<Header
-				rightComponent={<CancelBtn text={Translation.BUTTON.CLOSE} color={colors.purple} onClick={() => navigation.navigate(Routes.MERCHANT_TABS)} />}
+				rightComponent={<CancelBtn text={Translation.BUTTON.CLOSE} color={colors.purple} onClick={onClose} />}
 			/>
 
 			<ScrollView style={wrappingContainerBase}>

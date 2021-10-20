@@ -15,14 +15,15 @@ import * as Routes from 'src/navigation/constants';
 import { getBerksharePrefix } from "src/utils/common";
 import DwollaDialog from './DwollaDialog';
 import { BUTTON_TYPES } from "src/constants";
-import { useBanks } from 'src/hooks';
 import moment from "moment";
 import { ITransaction } from 'src/api/types';
 import { updateLoadingStatus } from 'src/store/loading/loading.actions';
 import { loadBusinessTransactions } from 'src/store/transaction/transaction.actions';
 import { loadBusinessWallet } from 'src/store/wallet/wallet.actions';
+import { loadBusinessFundingSource } from 'src/store/funding-source/funding-source.actions';
 import { TransactionState } from 'src/store/transaction/transaction.reducer';
 import { WalletState } from 'src/store/wallet/wallet.reducer';
+import { FundingSourceState } from 'src/store/funding-source/funding-source.reducer';
 import { useSelector, useDispatch } from 'react-redux';
 import { AppState } from 'src/store';
 
@@ -241,7 +242,6 @@ const MerchantDashboard = (): JSX.Element => {
 	const navigation = useNavigation();
 	const dispatch = useDispatch();
 	const { completedCustomerVerification, businessDwollaId } = useContext(AuthContext);
-	const { hasBusinessBank, getBankStatus } = useBanks();
 	const [isFilterVisible, setIsFilterVisible] = useState<boolean>(false);
 	const [searchText, setSearchText] = useState<string>("");
 	const [isDetailViewOpen, setIsDetailViewOpen] = useState<boolean>(false);
@@ -251,10 +251,12 @@ const MerchantDashboard = (): JSX.Element => {
 
 	const { businessTransactions } = useSelector((state: AppState) => state.transactionReducer) as TransactionState;
 	const { businessWallet } = useSelector((state: AppState) => state.walletReducer) as WalletState;
+	const { businessFundingSource } = useSelector((state: AppState) => state.fundingSourceReducer) as FundingSourceState;
 
 	useEffect(() => {
 		if (businessDwollaId) {
 			(async () => {
+				dispatch(loadBusinessFundingSource(businessDwollaId));
 				dispatch(updateLoadingStatus({
 					isLoading: true,
 					screen: LoadingScreenTypes.LOADING_DATA
@@ -268,16 +270,6 @@ const MerchantDashboard = (): JSX.Element => {
 			})();
 		}
 	}, []);
-
-	useEffect(() => {
-		const unsubscribe = navigation.addListener("focus", async () => {
-			if (businessDwollaId) {
-				getBankStatus(businessDwollaId, true);
-			}
-		});
-
-		return unsubscribe;
-	}, [navigation]);
 
 	const onSearchChange = (name: string, change: string) => {
 		setSearchText(change);
@@ -323,7 +315,7 @@ const MerchantDashboard = (): JSX.Element => {
 					<Text style={styles.headerText}>{Translation.LANDING_PAGE.TITLE}</Text>
 				</View>
 				<View style={styles.amountView}>
-					<Text style={styles.amountTxt}>B$ {hasBusinessBank ? businessWallet.availableBalance : '-'}</Text>
+					<Text style={styles.amountTxt}>B$ {businessFundingSource ? businessWallet.availableBalance : '-'}</Text>
 				</View>
 
 				<ScrollView>
@@ -336,7 +328,7 @@ const MerchantDashboard = (): JSX.Element => {
 							</Text>
 						</View>}
 
-						{!hasBusinessBank && (
+						{!businessFundingSource && (
 							<View style={styles.alertView}>
 								<AntDesign
 									name='exclamationcircleo'
@@ -381,7 +373,7 @@ const MerchantDashboard = (): JSX.Element => {
 					</View>
 				</ScrollView>
 			</View>
-			<TouchableOpacity onPress={() => hasBusinessBank ? navigation.navigate(Routes.MERCHANT_QRCODE_SCAN) : setIsPayment(true)} style={styles.scanButton}>
+			<TouchableOpacity onPress={() => businessFundingSource ? navigation.navigate(Routes.MERCHANT_QRCODE_SCAN) : setIsPayment(true)} style={styles.scanButton}>
 				<Image
 					source={require('../../../assets/images/qr_code_merchant.png')}
 					containerStyle={styles.qrIcon}
