@@ -25,7 +25,8 @@ const styles = StyleSheet.create({
 	switchView: {
 		flex: 1, 
 		justifyContent: 'center', 
-		alignItems: 'center'
+		alignItems: 'center',
+		marginTop: 20
 	},
 	contentView: { 
 		marginTop: 5
