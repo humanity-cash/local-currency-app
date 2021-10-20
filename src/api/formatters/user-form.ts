@@ -25,3 +25,10 @@ export const transactionDatas = (res: AxiosPromiseResponse): ITransaction[] => {
         };
     });
 }
+
+export const fundingSource = (res: AxiosPromiseResponse): boolean => {
+    if (!res.data) return false;
+
+    if (res.data.body?._embedded["funding-sources"]?.length > 0) return true;
+    else return false;
+}
