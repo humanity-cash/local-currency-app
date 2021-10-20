@@ -1,5 +1,4 @@
-import { useNavigation } from '@react-navigation/native';
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { Text } from 'react-native-elements';
 import { AuthContext } from 'src/auth';
@@ -10,6 +9,10 @@ import { Button, Header } from "src/shared/uielements";
 import { colors } from "src/theme/colors";
 import { baseHeader, viewBase, wrappingContainerBase } from "src/theme/elements";
 import Translation from 'src/translation/en.json';
+import { LoadingScreenTypes } from 'src/utils/types';
+import { updateLoadingStatus } from 'src/store/loading/loading.actions';
+import { useDispatch } from 'react-redux';
+import DwollaDialog from './DwollaDialog';
 
 const styles = StyleSheet.create({
 	headerText: {
@@ -27,13 +30,22 @@ const styles = StyleSheet.create({
 });
 
 const LinkBankAccount = (): JSX.Element => {
-	const { updateUserType } = useContext(AuthContext)
-	const navigation = useNavigation();
+	const { updateUserType } = useContext(AuthContext);
+	const [isVisible, setIsVisible] = useState<boolean>(false);
+	const dispatch = useDispatch();
 
 	const selectBank = () => {
-		updateUserType(UserType.Customer);
-		navigation.navigate(Routes.SELECT_BANK);
+		setIsVisible(true);
 	}
+
+	const onSkip = () => {
+		dispatch(updateLoadingStatus({
+			isLoading: true,
+			screen: LoadingScreenTypes.LOADING_DATA
+		}));
+		updateUserType(UserType.Customer);
+	}
+
 	return (
 		<View style={viewBase}>
 			<Header />
@@ -50,9 +62,7 @@ const LinkBankAccount = (): JSX.Element => {
 					type={BUTTON_TYPES.TRANSPARENT}
 					title={Translation.BUTTON.SKIP_NOW}
 					style={styles.skipBtn}
-					onPress={() =>
-						updateUserType(UserType.Customer)
-					}
+					onPress={onSkip}
 				/>
 				<Button
 					type={BUTTON_TYPES.DARK_GREEN}
@@ -60,6 +70,10 @@ const LinkBankAccount = (): JSX.Element => {
 					onPress={selectBank}
 				/>
 			</View>
+
+			{isVisible && (
+				<DwollaDialog visible={isVisible} onClose={() => setIsVisible(false)} />
+			)}
 		</View>
 	);
 }

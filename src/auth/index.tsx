@@ -219,7 +219,6 @@ const AuthProvider: React.FunctionComponent = ({ children }) => {
 		const response = await userController.completeBusinessBasicVerification(
 			update
 		);
-    console.log("🚀 ~ file: index.tsx ~ line 200 ~ response", response)
 		if (response.success) {
 			await userController.updateUserAttributes({
 				"custom:basicBusinessV": "true",
@@ -236,6 +235,7 @@ const AuthProvider: React.FunctionComponent = ({ children }) => {
 			await userController.updateUserAttributes({
 				"custom:basicCustomerV": "true",
 			});
+			setCompletedCustomerVerification(true);
 		}
 
 		return response;
