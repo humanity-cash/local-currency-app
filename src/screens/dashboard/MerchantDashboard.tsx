@@ -270,12 +270,6 @@ const MerchantDashboard = (): JSX.Element => {
 				}));
 			})();
 		}
-
-		// Close all loading screens
-		dispatch(updateLoadingStatus({
-			isLoading: false,
-			screen: LoadingScreenTypes.LOADING_DATA
-		}));
 	}, []);
 
 	const onSearchChange = (name: string, change: string) => {
