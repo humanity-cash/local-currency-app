@@ -19,11 +19,12 @@ import DwollaDialog from './DwollaDialog';
 import { Button, Dialog } from "src/shared/uielements";
 import { dialogViewBase } from "src/theme/elements";
 import { BUTTON_TYPES } from "src/constants";
-import { useBanks } from 'src/hooks';
 import { LoadingScreenTypes } from 'src/utils/types';
 import { updateLoadingStatus } from 'src/store/loading/loading.actions';
 import { loadPersonalWallet } from 'src/store/wallet/wallet.actions';
+import { loadPersonalFundingSource } from 'src/store/funding-source/funding-source.actions';
 import { WalletState } from 'src/store/wallet/wallet.reducer';
+import { FundingSourceState } from 'src/store/funding-source/funding-source.reducer';
 import { useSelector, useDispatch } from 'react-redux';
 import { AppState } from 'src/store';
 
@@ -155,22 +156,23 @@ const feedData = [
 const Dashboard = (): JSX.Element => {
 	const navigation = useNavigation();
 	const dispatch = useDispatch();
-	const { hasPersonalBank, getBankStatus } = useBanks();
 	const { customerDwollaId } = useContext(AuthContext);
 	const [isVisible, setIsVisible] = useState<boolean>(false);
 	const [isLoadup, setIsLoadup] = useState<boolean>(false);
 	const [isPayment, setIsPayment] = useState<boolean>(false);
 
 	const { personalWallet } = useSelector((state: AppState) => state.walletReducer) as WalletState;
+	const { personalFundingSource } = useSelector((state: AppState) => state.fundingSourceReducer) as FundingSourceState;
 
 	useEffect(() => {
 		if (customerDwollaId) {
 			(async () => {
+				dispatch(loadPersonalWallet(customerDwollaId));
 				dispatch(updateLoadingStatus({
 					isLoading: true,
 					screen: LoadingScreenTypes.LOADING_DATA
 				}));
-				await dispatch(loadPersonalWallet(customerDwollaId));
+				await dispatch(loadPersonalFundingSource(customerDwollaId));
 				dispatch(updateLoadingStatus({
 					isLoading: false,
 					screen: LoadingScreenTypes.LOADING_DATA
@@ -178,16 +180,6 @@ const Dashboard = (): JSX.Element => {
 			})();
 		}
 	}, []);
-
-	useEffect(() => {
-		const unsubscribe = navigation.addListener("focus", async () => {
-			if (customerDwollaId) {
-				getBankStatus(customerDwollaId, false);
-			}
-		});
-
-		return unsubscribe;
-	}, [navigation]);
 
 	const selectBank = () => {
 		navigation.navigate(Routes.SELECT_BANK);
@@ -226,16 +218,16 @@ const Dashboard = (): JSX.Element => {
 					</Text>
 				</View>
 				<View style={styles.amountView}>
-					<Text style={styles.text}>B$ {hasPersonalBank ? personalWallet.availableBalance : '-'}</Text>
+					<Text style={styles.text}>B$ {personalFundingSource ? personalWallet.availableBalance : '-'}</Text>
 					<TouchableOpacity
 						style={styles.topupButton}
-						onPress={() => hasPersonalBank ? navigation.navigate(Routes.LOAD_UP) : setIsLoadup(true)}>
+						onPress={() => personalFundingSource ? navigation.navigate(Routes.LOAD_UP) : setIsLoadup(true)}>
 						<Text style={styles.topupText}>Load up B$</Text>
 					</TouchableOpacity>
 				</View>
 				<ScrollView>
 					<View style={styles.content}>
-						{!hasPersonalBank && (
+						{!personalFundingSource && (
 							<View style={styles.alertView}>
 								<AntDesign
 									name='exclamationcircleo'
@@ -282,7 +274,7 @@ const Dashboard = (): JSX.Element => {
 					</View>
 				</ScrollView>
 			</View>
-			<TouchableOpacity onPress={() => hasPersonalBank ? navigation.navigate(Routes.QRCODE_SCAN) : setIsPayment(true)} style={styles.scanButton}>
+			<TouchableOpacity onPress={() => personalFundingSource ? navigation.navigate(Routes.QRCODE_SCAN) : setIsPayment(true)} style={styles.scanButton}>
 				<Image
 					source={require('../../../assets/images/qr_code_consumer.png')}
 					containerStyle={styles.qrIcon}
