@@ -49,7 +49,6 @@ const SelectMerchantBank = (): JSX.Element => {
 	return (
 		<View style={viewBaseWhite}>
 			<Header
-				leftComponent={<BackBtn color={colors.purple} onClick={() => navigation.goBack()} />}
 				rightComponent={<CancelBtn text={Translation.BUTTON.CLOSE} color={colors.purple} onClick={() => navigation.navigate(Routes.MERCHANT_TABS)} />}
 			/>
 
@@ -58,7 +57,7 @@ const SelectMerchantBank = (): JSX.Element => {
 					<WebView
 						ref={(ref) => (webview = ref)}
 						style={styles.bankView}
-						source={{ uri: `https://testdwolla.s3.ap-northeast-2.amazonaws.com/index.html?iavToken=${iavToken}` }}
+						source={{ uri: `https://d11t12p3449df1.cloudfront.net/?iavToken=${iavToken}` }}
 					/>
 				)}
 			</ScrollView>

@@ -272,7 +272,7 @@ const MerchantDashboard = (): JSX.Element => {
 	useEffect(() => {
 		const unsubscribe = navigation.addListener("focus", async () => {
 			if (businessDwollaId) {
-				getBankStatus(businessDwollaId, false);
+				getBankStatus(businessDwollaId, true);
 			}
 		});
 

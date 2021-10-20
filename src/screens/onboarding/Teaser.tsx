@@ -1,6 +1,6 @@
 import { useNavigation } from '@react-navigation/native';
 import React from 'react';
-import { ImageBackground, StyleSheet, View } from 'react-native';
+import { ImageBackground, StyleSheet, View, TouchableOpacity } from 'react-native';
 import { Text } from 'react-native-elements';
 import { BUTTON_TYPES } from 'src/constants';
 import * as Routes from 'src/navigation/constants';
@@ -41,7 +41,8 @@ const styles = StyleSheet.create({
 		bottom: 0,
 		width: '100%',
 		height: 170,
-		padding: 20
+		paddingHorizontal: 20,
+		paddingBottom: 50
 	},
 	createAccountBtn: {
 		marginTop: 10,
