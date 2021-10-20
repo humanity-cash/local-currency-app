@@ -35,8 +35,8 @@ import Dashboard from "./Dashboard";
 import { Button, Dialog } from "src/shared/uielements";
 import { baseHeader, dialogViewBase, wrappingContainerBase } from "src/theme/elements";
 import { BUTTON_TYPES } from "src/constants";
-import { useBanks } from 'src/hooks';
 import { WalletState } from 'src/store/wallet/wallet.reducer';
+import { FundingSourceState } from 'src/store/funding-source/funding-source.reducer';
 import { useSelector } from 'react-redux';
 import { AppState } from 'src/store';
 
@@ -137,12 +137,12 @@ const DrawerContent = (
 	props: DrawerContentComponentProps<DrawerContentOptions>
 ) => {
 	const { signOut, updateUserType, userAttributes, completedBusinessVerification } = useContext(AuthContext);
-	const { hasPersonalBank } = useBanks();
 	const { authorization } = useUserDetails();
 	const [isExpanded, setIsExpanded] = useState<boolean>(false);
 	const [isBankDialog, setIsBankDialog] = useState<boolean>(false);
 
 	const { personalWallet } = useSelector((state: AppState) => state.walletReducer) as WalletState;
+	const { personalFundingSource } = useSelector((state: AppState) => state.fundingSourceReducer) as FundingSourceState;
 
 	const onMerchant = () => {
 		updateUserType(UserType.Business);
@@ -251,19 +251,19 @@ const DrawerContent = (
 					<Drawer.Section>
 						<DrawerItem
 							label="Scan to pay"
-							onPress={() => hasPersonalBank ? props.navigation.navigate(Routes.QRCODE_SCAN) : setIsBankDialog(true)}
+							onPress={() => personalFundingSource ? props.navigation.navigate(Routes.QRCODE_SCAN) : setIsBankDialog(true)}
 						/>
 						<DrawerItem
 							label="Receive payment"
-							onPress={() => hasPersonalBank ? props.navigation.navigate(Routes.RECEIVE_PAYMENT) : setIsBankDialog(true)}
+							onPress={() => personalFundingSource ? props.navigation.navigate(Routes.RECEIVE_PAYMENT) : setIsBankDialog(true)}
 						/>
 						<DrawerItem
 							label="Load up B$"
-							onPress={() => hasPersonalBank ? props.navigation.navigate(Routes.LOAD_UP) : setIsBankDialog(true)}
+							onPress={() => personalFundingSource ? props.navigation.navigate(Routes.LOAD_UP) : setIsBankDialog(true)}
 						/>
 						<DrawerItem
 							label="Cash out to USD"
-							onPress={() => hasPersonalBank ? props.navigation.navigate(Routes.CASHOUT_AMOUNT) : setIsBankDialog(true)}
+							onPress={() => personalFundingSource ? props.navigation.navigate(Routes.CASHOUT_AMOUNT) : setIsBankDialog(true)}
 						/>
 					</Drawer.Section>
 					<Drawer.Section>

@@ -6,7 +6,6 @@ import useModalStatusBar from "./useModalStatusBar";
 import useNotifications from "./useNotifications";
 import useRouteTracking from "./useRouteTracking";
 import useUserDetails from "./useUserDetails";
-import useBanks from "./useBanks";
 
 export {
 	useMediaLibraryPermission,
@@ -17,5 +16,4 @@ export {
 	useUserDetails,
 	useCameraPermission,
 	useBrightness,
-	useBanks,
 };
