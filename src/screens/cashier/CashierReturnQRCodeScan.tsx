@@ -21,6 +21,7 @@ import { loadBusinessWallet } from 'src/store/wallet/wallet.actions';
 import { loadBusinessTransactions } from 'src/store/transaction/transaction.actions';
 import { useDispatch } from 'react-redux';
 import { updateLoadingStatus } from 'src/store/loading/loading.actions';
+import moment from 'moment';
 
 type HandleScaned = {
 	type: string,
@@ -88,6 +89,7 @@ const styles = StyleSheet.create({
 const CashierReturnQRCodeScan = (): JSX.Element => {
 	const navigation = useNavigation();
 	const hasPermission = useCameraPermission();
+	const dispatch = useDispatch();
 	const { businessDwollaId } = useContext(AuthContext);
 	const [isScanned, setIsScanned] = useState<boolean>(false);
 	const [isReturnModal, setIsReturnModal] = useState<boolean>(false);
@@ -101,18 +103,13 @@ const CashierReturnQRCodeScan = (): JSX.Element => {
 	});
 
 	useEffect(() => {
+		setIsScanned(false);
+	});
+
+	useEffect(() => {
 		setGoNext(Number(amount) > 0);
 	}, [amount]);
 
-	useEffect(() => {
-		const unsubscribe = navigation.addListener("focus", async () => {
-			if (businessDwollaId) {
-				setIsScanned(true);
-			}
-		});
-		return unsubscribe;
-	}, [navigation]);
-	
 	const handleBarCodeScanned = (data: HandleScaned) => {
 		if(isQRCodeValid(data.data)) {
 			const qrcodeData = JSON.parse(data.data) as QRCodeEntry;
@@ -133,13 +130,12 @@ const CashierReturnQRCodeScan = (): JSX.Element => {
 	}
 
 	const onReturn = async () => {
-		const dispatch = useDispatch();
-		const amountCalcedFee = state.amount + calcFee(state.amount);
+		// const amountCalcedFee = state.amount + calcFee(state.amount);
 
 		if (businessDwollaId) {
 			const request: ITransactionRequest = {
 				toUserId: state.to,
-				amount: amountCalcedFee.toString(),
+				amount: amount.toString(),
 				comment: ''
 			};
 
@@ -151,19 +147,23 @@ const CashierReturnQRCodeScan = (): JSX.Element => {
 			if (response.data) {
 				await dispatch(loadBusinessWallet(businessDwollaId));
 				await dispatch(loadBusinessTransactions(businessDwollaId));
-				navigation.navigate(Routes.CASHIER_REQUEST_SUCCESS);
+				dispatch(updateLoadingStatus({
+					isLoading: false,
+					screen: LoadingScreenTypes.PAYMENT_PENDING
+				}));
+				navigation.navigate(Routes.CASHIER_RETURN_SUCCESS);
 			} else {
 				showToast(ToastType.ERROR, "Failed", "Whooops, something went wrong.");
+				dispatch(updateLoadingStatus({
+					isLoading: false,
+					screen: LoadingScreenTypes.PAYMENT_PENDING
+				}));
 				navigation.navigate(Routes.CASHIER_DASHBOARD);
 			}
-			dispatch(updateLoadingStatus({
-				isLoading: false,
-				screen: LoadingScreenTypes.PAYMENT_PENDING
-			}));
 		} else {
 			showToast(ToastType.ERROR, "Failed", "Whooops, something went wrong.");
+			navigation.navigate(Routes.CASHIER_DASHBOARD);
 		}
-		navigation.navigate(Routes.MERCHANT_PAYMENT_SUCCESS);
 	}
 
 	const onValueChange = (name: string, change: string) => {
@@ -213,7 +213,7 @@ const CashierReturnQRCodeScan = (): JSX.Element => {
 									</View>
 									<View style={styles.inlineView}>
 										<Text style={styles.label}>DATE</Text>
-										<Text style={styles.label}>{state.transactionDate}</Text>
+										<Text style={styles.label}>{moment(state.transactionDate).format('HH:mm, MMM D, YYYY')}</Text>
 									</View>
 								</View>
 
