@@ -4,6 +4,7 @@ import React, { useState, useContext, useEffect } from 'react';
 import { StyleSheet, TouchableWithoutFeedback, View, ScrollView, TouchableOpacity } from 'react-native';
 import { Text, Image } from "react-native-elements";
 import { AuthContext } from "src/auth";
+import { UserType } from "src/auth/types";
 import { colors } from "src/theme/colors";
 import { viewBaseB, wrappingContainerBase, baseHeader, dialogViewBase } from "src/theme/elements";
 import { SearchInput, Header, Dialog, Button } from "src/shared/uielements";
@@ -388,7 +389,7 @@ const MerchantDashboard = (): JSX.Element => {
 			</TouchableOpacity>
 			{isDetailViewOpen && <TransactionDetail visible={isDetailViewOpen} data={selectedItem} onConfirm={onConfirm} />}
 			{isDwollaVisible && (
-				<DwollaDialog visible={isDwollaVisible} onClose={onClose} />
+				<DwollaDialog visible={isDwollaVisible} onClose={onClose} userType={UserType.Business} />
 			)}
 			{(isPayment) && (
 				<Dialog visible={isPayment} onClose={onClose} backgroundStyle={styles.dialog}>
