@@ -40,7 +40,7 @@ const styles = StyleSheet.create({
 	},
 });
 
-const PersonalDetails = () => {
+const PersonalDetails = (): JSX.Element => {
 	const { signOut } = useContext(AuthContext);
 	const navigation = useNavigation();
 
@@ -60,16 +60,18 @@ const PersonalDetails = () => {
 				}
 			/>
 
-			<ScrollView style={wrappingContainerBase}>
-				<View style={styles.content}>
-					<View style={underlineHeader}>
-						<Text style={styles.headerText}>
-							{Translation.PROFILE.PERSIONAL_DETAILS}
-						</Text>
-					</View>
-					<PersonalDetailsForm />
+			<View style={wrappingContainerBase}>
+				<View style={underlineHeader}>
+					<Text style={styles.headerText}>
+						{Translation.PROFILE.PERSIONAL_DETAILS}
+					</Text>
 				</View>
-			</ScrollView>
+				<ScrollView>
+					<View style={styles.content}>
+						<PersonalDetailsForm />
+					</View>
+				</ScrollView>
+			</View>
 			<KeyboardAvoidingView
 				behavior={Platform.OS == "ios" ? "padding" : "height"}>
 				<View style={styles.bottomView}>

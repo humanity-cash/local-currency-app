@@ -168,31 +168,33 @@ const MerchantDictionary = (): JSX.Element => {
 			<Header
 				leftComponent={<BackBtn text="Home" onClick={() => navigation.goBack()} />}
 			/>
-			<ScrollView style={wrappingContainerBase}>
+			<View style={wrappingContainerBase}>
 				<View style={ underlineHeader }>
 					<Text style={styles.headerText}>Where to spend</Text>
 				</View>
-				<View style={styles.content}>
-					<View style={ styles.underlineView }>
-						<Text style={styles.categoryText}>MERCHANT OF THE MONTH</Text>
-					</View>
-					<View style={styles.popularMerchantView}>
-						<View style={styles.popularTextView}>
-							<Text style={styles.popularTitle}>{merchantList[0].merchants[0].title}</Text>
-							<Text style={styles.popularText}>{merchantList[0].merchants[0].description}</Text>
+				<ScrollView>
+					<View style={styles.content}>
+						<View style={ styles.underlineView }>
+							<Text style={styles.categoryText}>MERCHANT OF THE MONTH</Text>
 						</View>
-						<Image
-							source={require('../../../assets/images/feed1.png')}
-							containerStyle={styles.popularImage}
-						/>
+						<View style={styles.popularMerchantView}>
+							<View style={styles.popularTextView}>
+								<Text style={styles.popularTitle}>{merchantList[0].merchants[0].title}</Text>
+								<Text style={styles.popularText}>{merchantList[0].merchants[0].description}</Text>
+							</View>
+							<Image
+								source={require('../../../assets/images/feed1.png')}
+								containerStyle={styles.popularImage}
+							/>
+						</View>
+						{
+							merchantList.map((category: MerchantCategory, idx: number) => (
+								<CategoryView category={category} onSelect={handleSelect} key={idx} />
+							))
+						}
 					</View>
-					{
-						merchantList.map((category: MerchantCategory, idx: number) => (
-							<CategoryView category={category} onSelect={handleSelect} key={idx} />
-						))
-					}
-				</View>
-			</ScrollView>
+				</ScrollView>
+			</View>
 			{isVisible && (
 				<Modal visible={isVisible}>
 					<View style={ modalViewBase }>

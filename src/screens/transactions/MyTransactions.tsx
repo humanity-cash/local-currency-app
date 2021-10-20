@@ -4,7 +4,7 @@ import { AuthContext } from 'src/auth';
 import { StyleSheet, View, ScrollView, TouchableOpacity } from 'react-native';
 import { Text, Image } from 'react-native-elements';
 import { Octicons } from '@expo/vector-icons';
-import { Header, Button, BackBtn, SearchInput, Dialog } from "src/shared/uielements";
+import { Header, BackBtn, SearchInput, Dialog } from "src/shared/uielements";
 import { baseHeader, viewBase, dialogViewBase, wrappingContainerBase } from "src/theme/elements";
 import { colors } from "src/theme/colors";
 import MyTransactionList from './MyTransactionList';
@@ -38,7 +38,7 @@ const styles = StyleSheet.create({
 		flexDirection: 'row',
 		justifyContent: 'space-between',
 		marginVertical: 10,
-		paddingBottom: 10,
+		paddingBottom: 5,
 		borderBottomWidth: 1,
 		borderBottomColor: colors.darkGreen
 	},
@@ -235,6 +235,10 @@ const MyTransactions = (): JSX.Element => {
 		setIsReturnViewOpen(true);
 	}
 
+	const onSuccess = (amount: number) => {
+		console.log(amount);
+	}
+
 	const onClose = () => {
 		setIsDetailViewOpen(false);
 		setIsReturnViewOpen(false);
@@ -246,15 +250,15 @@ const MyTransactions = (): JSX.Element => {
 				leftComponent={<BackBtn text="Home" onClick={() => navigation.goBack()} />}
 			/>
 			<View style={wrappingContainerBase}>
-				<View style={styles.content}>
-					<View style={baseHeader}>
-						<Text style={styles.headerText}>{Translation.PAYMENT.MY_TRANSACTIONS}</Text>
-					</View>
-					<View style={styles.totalAmountView}>
-						<Text style={styles.amountText}>B$ {personalWallet.availableBalance}</Text>
-					</View>
-					
-					<ScrollView>
+				<View style={baseHeader}>
+					<Text style={styles.headerText}>{Translation.PAYMENT.MY_TRANSACTIONS}</Text>
+				</View>
+				<View style={styles.totalAmountView}>
+					<Text style={styles.amountText}>B$ {personalWallet.availableBalance}</Text>
+				</View>
+				
+				<ScrollView>
+					<View style={styles.content}>
 						<View style={styles.filterView}>
 							<View style={styles.filterInput}>
 								<SearchInput
@@ -276,8 +280,8 @@ const MyTransactions = (): JSX.Element => {
 						</View>
 						{isFilterVisible && <MyTransactionFilter></MyTransactionFilter>}
 						<MyTransactionList data={personalTransactions} onSelect={viewDetail} />
-					</ScrollView>
-				</View>
+					</View>
+				</ScrollView>
 			</View>
 
 			<TouchableOpacity onPress={()=>navigation.navigate(Routes.QRCODE_SCAN)} style={styles.scanButton}>
@@ -289,7 +293,7 @@ const MyTransactions = (): JSX.Element => {
 			</TouchableOpacity>
 
 			{isDetailViewOpen && <TransactionDetail visible={isDetailViewOpen} data={selectedItem} onReturn={onReturn} onClose={onClose} />}
-			{isReturnViewOpen && <QRCodeGen visible={isReturnViewOpen} onClose={onClose} isOpenAmount={true} amount={Number(selectedItem.value)} /> }
+			{isReturnViewOpen && <QRCodeGen visible={isReturnViewOpen} onSuccess={onSuccess} onClose={onClose} isOpenAmount={true} amount={Number(selectedItem.value)} /> }
 		</View>
 	);
 }

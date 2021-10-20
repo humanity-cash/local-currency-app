@@ -59,29 +59,29 @@ const styles = StyleSheet.create({
 });
 
 const BusinessProfileForm = (): ReactElement => {
-  const { buisnessBasicVerification, setBuisnessBasicVerification } =
-		useContext(AuthContext);
+	const { buisnessBasicVerification, setBuisnessBasicVerification } =
+			useContext(AuthContext);
 
-  useMediaLibraryPermission();
+	useMediaLibraryPermission();
 
-  const onValueChange = (name: string, change: string) => {
-    setBuisnessBasicVerification((pv: IAuth) => ({ ...pv, [name]: change }));
-  };
-
-  const pickImage = async () => {
-		const result = await ImagePicker.launchImageLibraryAsync({
-			mediaTypes: ImagePicker.MediaTypeOptions.All,
-			allowsEditing: true,
-			aspect: [4, 3],
-			quality: 1,
-		});
-	
-		if (!result.cancelled) {
-		  	onValueChange('avatar', result.uri);
-		}
+	const onValueChange = (name: string, change: string) => {
+		setBuisnessBasicVerification((pv: IAuth) => ({ ...pv, [name]: change }));
 	};
 
-  return (
+	const pickImage = async () => {
+			const result = await ImagePicker.launchImageLibraryAsync({
+				mediaTypes: ImagePicker.MediaTypeOptions.All,
+				allowsEditing: true,
+				aspect: [4, 3],
+				quality: 1,
+			});
+		
+			if (!result.cancelled) {
+				onValueChange('avatar', result.uri);
+			}
+		};
+
+	return (
 		<View style={styles.container}>
 			<Text style={styles.bodyText}>*Required fields</Text>
 			<View style={styles.pickImageView}>
@@ -103,14 +103,14 @@ const BusinessProfileForm = (): ReactElement => {
 				</TouchableOpacity>
 				<Text style={styles.label}>Upload profile picture</Text>
 				<Text style={styles.smallLabel}>
-					(Max 200 MB / .jpeg, .jpg, .png)
+					(MAX 200 MB / .JPEG, .JPG, .PNG)
 				</Text>
 			</View>
 			<Text style={styles.smallLabel}>
 				BUSINESS NAME - THIS NAME WILL BE PUBLIC*
 			</Text>
 			<BlockInput
-				name="businessname"
+				name="tag"
 				placeholder="Business name"
 				placeholderTextColor={colors.greyedPurple}
 				value={buisnessBasicVerification.tag}
@@ -132,7 +132,7 @@ const BusinessProfileForm = (): ReactElement => {
 				numberOfLines={6}
 			/>
 		</View>
-  );
+  	);
 };
 
 export default BusinessProfileForm;

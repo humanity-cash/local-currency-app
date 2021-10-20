@@ -70,7 +70,7 @@ const BusinessAddressForm = (props: BusinessAddressProps): JSX.Element => {
 		<View>
 			<Text style={styles.label}>ADDRESS 1</Text>
 			<BlockInput
-				name="addressLine"
+				name="address1"
 				placeholder="Street number, street name"
 				value={buisnessBasicVerification.address1}
 				onChange={onValueChange}
@@ -78,7 +78,7 @@ const BusinessAddressForm = (props: BusinessAddressProps): JSX.Element => {
 			/>
 			<Text style={styles.label}>ADDRESS 2</Text>
 			<BlockInput
-				name="addressLine2"
+				name="address2"
 				placeholder="Apt."
 				value={buisnessBasicVerification.address2}
 				onChange={onValueChange}
@@ -128,7 +128,7 @@ const BusinessAddressForm = (props: BusinessAddressProps): JSX.Element => {
 
 			<Text style={styles.label}>POSTAL CODE</Text>
 			<BlockInput
-				name="zipCode"
+				name="postalCode"
 				placeholder="00000"
 				keyboardType="number-pad"
 				value={buisnessBasicVerification.postalCode}
@@ -139,7 +139,8 @@ const BusinessAddressForm = (props: BusinessAddressProps): JSX.Element => {
 			<Text style={styles.label}>PHONE NUMBER - OPTIONAL</Text>
 			<BlockInput
 				name="phoneNumber"
-				placeholder="+00 0987 6543 21"
+				placeholder="000987654321"
+				keyboardType="number-pad"
 				value={buisnessBasicVerification.phoneNumber}
 				onChange={onValueChange}
 				style={props.style}

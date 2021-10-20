@@ -28,7 +28,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { AppState } from 'src/store';
 
 const styles = StyleSheet.create({
-	content: { paddingBottom: 40 },
+	content: { paddingBottom: 80 },
 	inlineView: { flexDirection: 'row' },
 	headerText: {
 		fontSize: 40,
@@ -112,6 +112,8 @@ const styles = StyleSheet.create({
 		color: colors.white
 	},
 	topupButton: {
+		justifyContent: 'center',
+		alignItems: 'center',
 		paddingLeft: 10,
 		paddingRight: 10,
 		borderRadius: 10,
@@ -217,67 +219,69 @@ const Dashboard = (): JSX.Element => {
 					</TouchableWithoutFeedback>
 				}
 			/>
-			<ScrollView style={wrappingContainerBase}>
-				<View style={styles.content}>
-					<View style={baseHeader}>
-						<Text style={styles.headerText}>
-							{Translation.LANDING_PAGE.TITLE}
-						</Text>
-					</View>
-					<View style={styles.amountView}>
-						<Text style={styles.text}>B$ {hasPersonalBank ? personalWallet.availableBalance : '-'}</Text>
-						<TouchableOpacity
-							style={styles.topupButton}
-							onPress={() => hasPersonalBank ? navigation.navigate(Routes.LOAD_UP) : setIsLoadup(true)}>
-							<Text style={styles.topupText}>Load up B$</Text>
-						</TouchableOpacity>
-					</View>
-					{!hasPersonalBank && (
-						<View style={styles.alertView}>
-							<AntDesign
-								name='exclamationcircleo'
-								size={18}
-								style={styles.alertIcon}
-							/>
-							<Text style={styles.alertText}>
-								{Translation.BANK_ACCOUNT.ACCOUNT_ALERT} &nbsp;
-								<Text
-									style={styles.alertIcon}
-									onPress={() => setIsVisible(true)}>
-									{Translation.BANK_ACCOUNT.ACCOUNT_LINK_TEXT}{' '}
-									&gt;
-								</Text>
-							</Text>
-						</View>
-					)}
-
-					<View style={styles.feedView}>
-						<View style={styles.feedHeader}>
-							<Text h3>Merchant of the month</Text>
-							<Text h3>{feedData[0].month}</Text>
-						</View>
-						<Text h2>{feedData[0].author}</Text>
-						<Text style={styles.bodyText}>{feedData[0].content}</Text>
-						<Image
-							source={require('../../../assets/images/feed1.png')}
-							containerStyle={styles.image}
-						/>
-					</View>
-
-					<View style={styles.feedView}>
-						<View style={styles.feedHeader}>
-							<Text h3>Merchant of the month</Text>
-							<Text h3>{feedData[1].month}</Text>
-						</View>
-						<Text h2>{feedData[1].author}</Text>
-						<Text style={styles.bodyText}>{feedData[1].content}</Text>
-						<Image
-							source={require('../../../assets/images/feed2.png')}
-							containerStyle={styles.image}
-						/>
-					</View>
+			<View style={wrappingContainerBase}>
+				<View style={baseHeader}>
+					<Text style={styles.headerText}>
+						{Translation.LANDING_PAGE.TITLE}
+					</Text>
 				</View>
-			</ScrollView>
+				<View style={styles.amountView}>
+					<Text style={styles.text}>B$ {hasPersonalBank ? personalWallet.availableBalance : '-'}</Text>
+					<TouchableOpacity
+						style={styles.topupButton}
+						onPress={() => hasPersonalBank ? navigation.navigate(Routes.LOAD_UP) : setIsLoadup(true)}>
+						<Text style={styles.topupText}>Load up B$</Text>
+					</TouchableOpacity>
+				</View>
+				<ScrollView>
+					<View style={styles.content}>
+						{!hasPersonalBank && (
+							<View style={styles.alertView}>
+								<AntDesign
+									name='exclamationcircleo'
+									size={18}
+									style={styles.alertIcon}
+								/>
+								<Text style={styles.alertText}>
+									{Translation.BANK_ACCOUNT.ACCOUNT_ALERT} &nbsp;
+									<Text
+										style={styles.alertIcon}
+										onPress={() => setIsVisible(true)}>
+										{Translation.BANK_ACCOUNT.ACCOUNT_LINK_TEXT}{' '}
+										&gt;
+									</Text>
+								</Text>
+							</View>
+						)}
+
+						<View style={styles.feedView}>
+							<View style={styles.feedHeader}>
+								<Text h3>Merchant of the month</Text>
+								<Text h3>{feedData[0].month}</Text>
+							</View>
+							<Text h2>{feedData[0].author}</Text>
+							<Text style={styles.bodyText}>{feedData[0].content}</Text>
+							<Image
+								source={require('../../../assets/images/feed1.png')}
+								containerStyle={styles.image}
+							/>
+						</View>
+
+						<View style={styles.feedView}>
+							<View style={styles.feedHeader}>
+								<Text h3>Merchant of the month</Text>
+								<Text h3>{feedData[1].month}</Text>
+							</View>
+							<Text h2>{feedData[1].author}</Text>
+							<Text style={styles.bodyText}>{feedData[1].content}</Text>
+							<Image
+								source={require('../../../assets/images/feed2.png')}
+								containerStyle={styles.image}
+							/>
+						</View>
+					</View>
+				</ScrollView>
+			</View>
 			<TouchableOpacity onPress={() => hasPersonalBank ? navigation.navigate(Routes.QRCODE_SCAN) : setIsPayment(true)} style={styles.scanButton}>
 				<Image
 					source={require('../../../assets/images/qr_code_consumer.png')}

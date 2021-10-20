@@ -71,43 +71,27 @@ const BusinessOwnerDetailsForm = (
 		}));
 	};
 
-	const FirstNameInput = () => {
-		return (
-			<>
-				<BasicInputWithLabel
-					labelStyle={styles.label}
-					inputStyle={props.style}
-					label={Translation.LABEL.FIRST_NAME}
-					name="firstName"
-					placeHolder="First Name"
-					inputValue={buisnessBasicVerification.owner.firstName}
-					onInputChange={onValueChange}
-				/>
-			</>
-		);
-	};
-
-	const LastNameInput = () => {
-		return (
-			<>
-				<BasicInputWithLabel
-					labelStyle={styles.label}
-					inputStyle={props.style}
-					label={Translation.LABEL.LAST_NAME}
-					name="lastName"
-					placeHolder="Last Name"
-					inputValue={buisnessBasicVerification.owner.lastName}
-					onInputChange={onValueChange}
-				/>
-			</>
-		);
-	};
-
 	return (
 		<View>
 			<Header />
-			<FirstNameInput />
-			<LastNameInput />
+			<BasicInputWithLabel
+				labelStyle={styles.label}
+				inputStyle={props.style}
+				label={Translation.LABEL.FIRST_NAME_BUSINESS}
+				name="firstName"
+				placeHolder="First Name"
+				inputValue={buisnessBasicVerification.owner.firstName}
+				onInputChange={onValueChange}
+			/>
+			<BasicInputWithLabel
+				labelStyle={styles.label}
+				inputStyle={props.style}
+				label={Translation.LABEL.LAST_NAME_BUSINESS}
+				name="lastName"
+				placeHolder="Last Name"
+				inputValue={buisnessBasicVerification.owner.lastName}
+				onInputChange={onValueChange}
+			/>
 		</View>
 	);
 };
