@@ -6,6 +6,7 @@
     "ios": "expo start --ios",
     "web": "expo start --web",
     "ios:build": "expo build:ios",
+    "android:build": "expo build:android",
     "web:build": "expo build:web",
     "start": "react-native start",
     "test": "./node_modules/.bin/jest --passWithNoTests --forceExit --detectOpenHandles",
