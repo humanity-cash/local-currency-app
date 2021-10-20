@@ -1,9 +1,8 @@
 import { Entypo } from '@expo/vector-icons';
 import { useNavigation } from "@react-navigation/native";
-import React, { useContext } from 'react';
+import React from 'react';
 import { StyleSheet, View, Linking } from 'react-native';
 import { Text } from 'react-native-elements';
-import { AuthContext } from 'src/auth';
 import { UserType } from "src/auth/types";
 import { Button, Dialog } from "src/shared/uielements";
 import { dialogViewBase } from "src/theme/elements";
@@ -59,32 +58,32 @@ const styles = StyleSheet.create({
 
 type DwollaDialogProps = {
 	visible: boolean,
+    userType: UserType,
 	onClose: ()=>void,
 }
 
 const DwollaDialog = (props: DwollaDialogProps): JSX.Element => {
     const navigation = useNavigation();
-    const { userType } = useContext(AuthContext);
 
     const selectBank = () => {
         props.onClose();
-        userType === UserType.Customer ? navigation.navigate(Routes.SELECT_BANK) : navigation.navigate(Routes.MERCHANT_BANK_ACCOUNT);
+        props.userType === UserType.Customer ? navigation.navigate(Routes.SELECT_BANK) : navigation.navigate(Routes.MERCHANT_BANK_ACCOUNT);
     }
 
-    const mainTextStyle = userType === UserType.Customer ? {color: colors.darkGreen} : {color: colors.purple};
+    const mainTextStyle = props.userType === UserType.Customer ? {color: colors.darkGreen} : {color: colors.purple};
 
-    const mainColor = userType === UserType.Customer ? colors.darkGreen : colors.purple;
+    const mainColor = props.userType === UserType.Customer ? colors.darkGreen : colors.purple;
 
     return (
         <Dialog 
             visible={props.visible} 
             onClose={()=>props.onClose()} 
             style={styles.dialog} 
-            backgroundStyle={userType === UserType.Customer ? styles.pDialogBg : styles.bDialogBg}
+            backgroundStyle={props.userType === UserType.Customer ? styles.pDialogBg : styles.bDialogBg}
         >
             <View style={dialogViewBase}>
                 <View style={styles.dialogWrap}>
-                    <Text style={userType === UserType.Customer ? styles.dialogHeader : styles.dialogHeaderB}>BerkShares uses Dwolla to link your business bank account.</Text>
+                    <Text style={props.userType === UserType.Customer ? styles.dialogHeader : styles.dialogHeaderB}>BerkShares uses Dwolla to link your business bank account.</Text>
                     <View style={styles.inlineView}>
                         <Entypo name="check" size={16} color={mainColor} style={styles.icon} />
                         <View>
@@ -118,7 +117,7 @@ const DwollaDialog = (props: DwollaDialogProps): JSX.Element => {
                 </View>
                 <View style={styles.dialogBottom}>
                     <Button
-                        type={userType === UserType.Customer ? BUTTON_TYPES.DARK_GREEN : BUTTON_TYPES.PURPLE}
+                        type={props.userType === UserType.Customer ? BUTTON_TYPES.DARK_GREEN : BUTTON_TYPES.PURPLE}
                         title="Continue"
                         onPress={selectBank}
                     />

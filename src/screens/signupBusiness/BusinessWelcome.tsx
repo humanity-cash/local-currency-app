@@ -16,7 +16,7 @@ import Translation from "src/translation/en.json";
 import { LoadingScreenTypes } from 'src/utils/types';
 import { updateLoadingStatus } from 'src/store/loading/loading.actions';
 import { useDispatch } from 'react-redux';
-import DwollaDialog from './DwollaDialog';
+import DwollaDialog from 'src/screens/dashboard/DwollaDialog';
 
 const styles = StyleSheet.create({
 	headerText: {
@@ -74,7 +74,7 @@ const BusinessWelcome = (): ReactElement => {
 			</KeyboardAvoidingView>
 
 			{isVisible && (
-				<DwollaDialog visible={isVisible} onClose={() => setIsVisible(false)} />
+				<DwollaDialog visible={isVisible} onClose={() => setIsVisible(false)} userType={UserType.Business} />
 			)}
 		</View>
 	);
