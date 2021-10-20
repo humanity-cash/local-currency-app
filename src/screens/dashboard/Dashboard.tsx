@@ -27,6 +27,7 @@ import { WalletState } from 'src/store/wallet/wallet.reducer';
 import { FundingSourceState } from 'src/store/funding-source/funding-source.reducer';
 import { useSelector, useDispatch } from 'react-redux';
 import { AppState } from 'src/store';
+import { UserType } from 'src/auth/types';
 
 const styles = StyleSheet.create({
 	content: { paddingBottom: 80 },
@@ -282,7 +283,7 @@ const Dashboard = (): JSX.Element => {
 				<Text style={styles.scanBtnText}>{Translation.BUTTON.SCAN}</Text>
 			</TouchableOpacity>
 			{isVisible && (
-				<DwollaDialog visible={isVisible} onClose={onClose} />
+				<DwollaDialog visible={isVisible} onClose={onClose} userType={UserType.Customer} />
 			)}
 			{(isLoadup || isPayment) && (
 				<Dialog visible={isLoadup || isPayment} onClose={onClose} style={styles.dialog}>

@@ -1,5 +1,5 @@
 import { useNavigation } from "@react-navigation/native";
-import React, { ReactElement, useContext } from "react";
+import React, { ReactElement, useContext, useEffect, useState } from "react";
 import { ScrollView, StyleSheet, View } from "react-native";
 import { Text } from "react-native-elements";
 import { AuthContext } from 'src/auth';
@@ -59,6 +59,7 @@ const styles = StyleSheet.create({
 });
 
 const BusinessAddress = (): ReactElement => {
+	const [goNext, setGoNext] = useState<boolean>(false);
 	const {
 		buisnessBasicVerification,
 		completeBusniessBasicVerification,
@@ -68,6 +69,14 @@ const BusinessAddress = (): ReactElement => {
 	} = useContext(AuthContext);
 	const navigation = useNavigation();
 	const dispatch = useDispatch();
+
+	useEffect(() => {
+		setGoNext(
+			buisnessBasicVerification.address1 !== "" && 
+			buisnessBasicVerification.city !== "" && 
+			buisnessBasicVerification.postalCode !== ""
+		);
+	}, [buisnessBasicVerification]);
 	
 	const onNextPress = async () => {
 		const response: BaseResponse<string | undefined> =
@@ -145,7 +154,7 @@ const BusinessAddress = (): ReactElement => {
 			<Button
 				type="purple"
 				title={Translation.BUTTON.NEXT}
-				disabled={false}
+				disabled={!goNext}
 				style={styles.bottomButton}
 				onPress={onNextPress}
 			/>

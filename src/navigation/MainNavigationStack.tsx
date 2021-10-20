@@ -189,16 +189,10 @@ const PrimaryStackScreen = () => {
 						component={SelectBank}
 					/>
 					{!completedBusinessVerification && (
-						<>
-							<PrimaryStack.Screen
-								name={Routes.SIGNUP_BUSINESS}
-								component={SignupBusinessNavigator}
-							/>
-							<PrimaryStack.Screen
-								name={Routes.MERCHANT_BANK_ACCOUNT}
-								component={MerchantBankAccountNavigator}
-							/>
-						</>
+						<PrimaryStack.Screen
+							name={Routes.SIGNUP_BUSINESS}
+							component={SignupBusinessNavigator}
+						/>
 					)}
 				</>
 			) : authStatus === AuthStatus.SignedIn &&
@@ -398,6 +392,10 @@ const PrimaryStackScreen = () => {
 					<PrimaryStack.Screen
 						name={Routes.TEASER}
 						component={Teaser}
+					/>
+					<PrimaryStack.Screen
+						name={Routes.SELECT_BANK}
+						component={SelectBank}
 					/>
 				</>
 			)}
