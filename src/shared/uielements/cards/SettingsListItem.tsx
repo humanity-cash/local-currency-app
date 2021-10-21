@@ -3,6 +3,7 @@ import React from 'react';
 import { StyleSheet, TouchableWithoutFeedback, View } from "react-native";
 import { Text } from "react-native-elements";
 import { colors } from "src/theme/colors";
+import { FontFamily } from "src/theme/elements";
 
 interface SettingsListItemProps {
 	onPress: () => void,
@@ -24,7 +25,7 @@ const styles = StyleSheet.create({
 		lineHeight: 60,
 		paddingLeft: 10,
 		flex: 1,
-		fontFamily: 'IBMPlexSansBold',
+		fontFamily: FontFamily.bold,
 	},
 	arrow: {
 		marginVertical: 20

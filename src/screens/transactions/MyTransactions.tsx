@@ -5,7 +5,7 @@ import { StyleSheet, View, ScrollView, TouchableOpacity } from 'react-native';
 import { Text, Image } from 'react-native-elements';
 import { Octicons } from '@expo/vector-icons';
 import { Header, BackBtn, SearchInput, Dialog, Button } from "src/shared/uielements";
-import { baseHeader, viewBase, dialogViewBase, wrappingContainerBase } from "src/theme/elements";
+import { baseHeader, viewBase, dialogViewBase, wrappingContainerBase, FontFamily } from "src/theme/elements";
 import { colors } from "src/theme/colors";
 import MyTransactionList from './MyTransactionList';
 import MyTransactionFilter from './MyTransactionsFilter';
@@ -44,7 +44,7 @@ const styles = StyleSheet.create({
 		borderBottomColor: colors.darkGreen
 	},
 	amountText: {
-		fontFamily: 'IBMPlexSansBold',
+		fontFamily: FontFamily.bold,
 		fontWeight: 'bold',
 		fontSize: 18
 	},
@@ -112,14 +112,14 @@ const styles = StyleSheet.create({
 		color: colors.darkRed
 	},
 	minusText: {
-		fontFamily: 'IBMPlexSansBold',
+		fontFamily: FontFamily.bold,
 		fontSize: 32,
 		lineHeight: 32,
 		color: colors.darkRed,
 		textAlign: 'center'
 	},
 	plusText: {
-		fontFamily: 'IBMPlexSansBold',
+		fontFamily: FontFamily.bold,
 		fontSize: 32,
 		lineHeight: 32,
 		color: colors.darkGreen,

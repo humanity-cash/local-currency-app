@@ -1,5 +1,10 @@
 import { colors } from "./colors";
 
+export const FontFamily = {
+   default: 'IBMPlexSans',
+   bold: 'IBMPlexSansBold'
+}
+
 export const viewBase: any = {
 	flex: 1,
 	justifyContent: 'space-between',
@@ -70,7 +75,7 @@ export const underlineHeaderB: any = {
 }
 
 export const modalBaseHeader: any = {
-	fontFamily: 'IBMPlexSansBold',
+	fontFamily: FontFamily.bold,
 	fontSize: 20,
 	paddingBottom: 10
 }

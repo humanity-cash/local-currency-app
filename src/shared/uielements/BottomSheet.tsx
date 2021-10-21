@@ -2,6 +2,7 @@ import React, { ReactElement } from 'react';
 import { Modal, StyleSheet, TouchableWithoutFeedback, View } from "react-native";
 import { Text } from "react-native-elements";
 import { colors } from "src/theme/colors";
+import { FontFamily } from "src/theme/elements";
 
 type BottomSheetProps = {
 	visible: boolean,
@@ -34,7 +35,7 @@ const styles = StyleSheet.create({
 		padding: 10,
 		marginVertical: 20,
 		fontSize: 20,
-		fontFamily: 'IBMPlexSansBold',
+		fontFamily: FontFamily.bold,
 	}
 })
 

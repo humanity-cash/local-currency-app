@@ -106,7 +106,7 @@ const Login = (): JSX.Element => {
 				<View style={styles.bottomView}>
 					<Button
 						type={BUTTON_TYPES.TRANSPARENT}
-						title='Forgot Passowrd'
+						title='Forgot password'
 						onPress={() =>
 							navigation.navigate(Routes.FORGOT_PASSWORD)
 						}

@@ -2,6 +2,7 @@ import React from 'react';
 import { StyleSheet, TouchableWithoutFeedback, View } from "react-native";
 import { Text } from 'react-native-elements';
 import { colors } from "src/theme/colors";
+import { FontFamily } from "src/theme/elements";
 import { formatValue } from "src/utils/common";
 import { Growth, Share } from "src/utils/types";
 
@@ -25,14 +26,14 @@ const styles = StyleSheet.create({
 	headerName: {
 		flex: 1,
 		fontSize: 20,
-		fontFamily: 'IBMPlexSansBold',
+		fontFamily: FontFamily.bold,
 	},
 	headerChangeRate: {
 		fontSize: 20,
-		fontFamily: 'IBMPlexSansBold',
+		fontFamily: FontFamily.bold,
 	},
 	boldText: {
-		fontFamily: 'IBMPlexSansBold',
+		fontFamily: FontFamily.bold,
 	},
 	detailsView: {
 		flexDirection: "row",

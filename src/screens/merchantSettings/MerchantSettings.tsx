@@ -40,7 +40,6 @@ const styles = StyleSheet.create({
 		color: colors.purple
 	},
 	signOutButton: {
-		fontFamily: 'IBMPlexSans',
 		color: colors.darkRed,
 		textDecorationLine: 'underline'
 	},
