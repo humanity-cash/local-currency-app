@@ -36,7 +36,7 @@ const styles = StyleSheet.create({
 	balanceText: {
 		color: colors.purple,
 		fontSize: 18,
-		fontFamily: 'GothamBold',
+		fontFamily: 'IBMPlexSansBold',
 		paddingLeft: 5,
 		paddingRight: 5
 	},
@@ -77,7 +77,7 @@ const styles = StyleSheet.create({
 		fontSize: 10
 	},
 	amountText: {
-		fontFamily: 'GothamBold',
+		fontFamily: 'IBMPlexSansBold',
 		fontSize: 32,
 		lineHeight: 35
 	},

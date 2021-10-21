@@ -24,7 +24,7 @@ const styles = StyleSheet.create({
 		fontSize: 20,
 		lineHeight: 30,
 		flex: 1,
-		fontFamily: 'GothamBold',
+		fontFamily: 'IBMPlexSansBold',
 	},
 	arrow: {
 		marginVertical: 20

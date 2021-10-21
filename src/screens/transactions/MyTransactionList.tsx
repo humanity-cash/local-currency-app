@@ -46,12 +46,12 @@ const styles = StyleSheet.create({
 		color: colors.darkGreen
 	},
 	minusText: {
-		fontFamily: 'GothamBold',
+		fontFamily: 'IBMPlexSansBold',
 		fontSize: 18,
 		color: colors.darkRed
 	},
 	plusText: {
-		fontFamily: 'GothamBold',
+		fontFamily: 'IBMPlexSansBold',
 		fontSize: 18,
 		color: colors.darkGreen
 	},

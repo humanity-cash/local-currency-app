@@ -44,7 +44,7 @@ const styles = StyleSheet.create({
 		borderBottomColor: colors.darkGreen
 	},
 	amountText: {
-		fontFamily: 'GothamBold',
+		fontFamily: 'IBMPlexSansBold',
 		fontWeight: 'bold',
 		fontSize: 18
 	},
@@ -112,14 +112,14 @@ const styles = StyleSheet.create({
 		color: colors.darkRed
 	},
 	minusText: {
-		fontFamily: 'GothamBold',
+		fontFamily: 'IBMPlexSansBold',
 		fontSize: 32,
 		lineHeight: 32,
 		color: colors.darkRed,
 		textAlign: 'center'
 	},
 	plusText: {
-		fontFamily: 'GothamBold',
+		fontFamily: 'IBMPlexSansBold',
 		fontSize: 32,
 		lineHeight: 32,
 		color: colors.darkGreen,

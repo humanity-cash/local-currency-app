@@ -36,7 +36,7 @@ const styles = StyleSheet.create({
 		fontSize: 20,
 		height: 60,
 		lineHeight: 60,
-		fontFamily: 'GothamBook',
+		fontFamily: 'IBMPlexSans',
 		textAlign: 'left',
 	},
 	inputText: {

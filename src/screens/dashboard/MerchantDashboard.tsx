@@ -37,7 +37,7 @@ const styles = StyleSheet.create({
 	headerText: {
 		color: colors.purple,
 		fontSize: 40,
-		fontFamily: 'GothamBook',
+		fontFamily: 'IBMPlexSans',
 		lineHeight: 45
 	},
 	amountView: {
@@ -51,7 +51,7 @@ const styles = StyleSheet.create({
 	amountTxt: {
 		color: colors.purple,
 		fontSize: 18,
-		fontFamily: 'GothamBold',
+		fontFamily: 'IBMPlexSansBold',
 		paddingLeft: 5,
 		paddingRight: 5
 	},
@@ -169,7 +169,7 @@ const styles = StyleSheet.create({
 		fontSize: 10
 	},
 	amountText: {
-		fontFamily: 'GothamBold',
+		fontFamily: 'IBMPlexSansBold',
 		fontSize: 32,
 		lineHeight: 35
 	},

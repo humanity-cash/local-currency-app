@@ -20,14 +20,14 @@ const styles = StyleSheet.create({
 		flex: 1
 	},
 	header: {
-		fontFamily: 'GothamBold',
+		fontFamily: 'IBMPlexSansBold',
 		fontSize: 16,
 		marginBottom: 10,
 		textAlign: "center",
 		opacity: 0.6
 	},
 	title: {
-		fontFamily: 'GothamBold',
+		fontFamily: 'IBMPlexSansBold',
 		fontSize: 20,
 		paddingHorizontal: '20%',
 		marginTop: 50,
@@ -35,7 +35,7 @@ const styles = StyleSheet.create({
 		textAlign: "center",
 	},
 	price: {
-		fontFamily: 'GothamBold',
+		fontFamily: 'IBMPlexSansBold',
 		fontSize: 20,
 		paddingHorizontal: '20%',
 		marginBottom: 10,
@@ -51,7 +51,7 @@ const styles = StyleSheet.create({
 		alignItems: "center"
 	},
 	boldText: {
-		fontFamily: 'GothamBold',
+		fontFamily: 'IBMPlexSansBold',
 	},
 	transferView: {
 		flex: 1,

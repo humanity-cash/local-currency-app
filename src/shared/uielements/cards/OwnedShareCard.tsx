@@ -19,7 +19,7 @@ const styles = StyleSheet.create({
 		paddingTop: 15
 	},
 	boldText: {
-		fontFamily: 'GothamBold',
+		fontFamily: 'IBMPlexSansBold',
 	},
 	detailsView: {
 		flexDirection: "row",

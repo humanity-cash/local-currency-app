@@ -34,7 +34,7 @@ const styles = StyleSheet.create({
 		padding: 10,
 		marginVertical: 20,
 		fontSize: 20,
-		fontFamily: 'GothamBold',
+		fontFamily: 'IBMPlexSansBold',
 	}
 })
 

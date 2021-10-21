@@ -53,13 +53,13 @@ const styles = StyleSheet.create({
         marginTop: 50,
     },
     contentText: {
-        fontFamily: 'GothamBold',
+        fontFamily: 'IBMPlexSansBold',
         fontSize: 18,
         lineHeight: 24,
         marginTop: 10
     },
     contentTextB: {
-        fontFamily: 'GothamBold',
+        fontFamily: 'IBMPlexSansBold',
         fontSize: 18,
         lineHeight: 24,
         marginTop: 10,

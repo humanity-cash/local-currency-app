@@ -33,7 +33,7 @@ const styles = StyleSheet.create({
 		marginBottom: 40
 	},
 	signOutButton: {
-		fontFamily: 'GothamBold',
+		fontFamily: 'IBMPlexSansBold',
 		color: colors.darkRed
 	},
 	dialogWrap: {

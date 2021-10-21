@@ -40,7 +40,7 @@ const styles = StyleSheet.create({
 		color: colors.purple
 	},
 	signOutButton: {
-		fontFamily: 'GothamBook',
+		fontFamily: 'IBMPlexSans',
 		color: colors.darkRed,
 		textDecorationLine: 'underline'
 	},

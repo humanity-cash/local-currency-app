@@ -23,7 +23,6 @@ const styles = StyleSheet.create({
 		paddingLeft: 35
 	},
 	titleText: {
-		fontFamily: 'GothamLight',
 		fontSize: 50,
 		lineHeight: 50,
 		color: colors.darkGreen1,

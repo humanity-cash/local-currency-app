@@ -81,7 +81,7 @@ const styles = StyleSheet.create({
 		marginBottom: 10
 	},
 	modalHeader: {
-		fontFamily: "GothamBook",
+		fontFamily: "IBMPlexSans",
 		fontSize: 26,
 		lineHeight: 45,
 		marginBottom: 10,

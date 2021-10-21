@@ -121,7 +121,7 @@ const styles = StyleSheet.create({
 		alignContent: "center"
 	},
 	labelCellText: {
-		fontFamily: 'GothamBold',
+		fontFamily: 'IBMPlexSansBold',
 		fontSize: 16
 	},
 	horizontalWrapper: {
@@ -142,7 +142,7 @@ const styles = StyleSheet.create({
 		color: colors.text,
 	},
 	buttonActive: {
-		fontFamily: 'GothamBold',
+		fontFamily: 'IBMPlexSansBold',
 	}
 });
 
