@@ -5,6 +5,7 @@ import { Text } from "react-native-elements";
 import { LineChart } from "react-native-svg-charts";
 import graphData from 'src/mocks/graphDates';
 import { colors } from "src/theme/colors";
+import { FontFamily } from "src/theme/elements";
 import { formatValue } from "src/utils/common";
 import { GraphDataset, Growth } from "src/utils/types";
 
@@ -121,7 +122,7 @@ const styles = StyleSheet.create({
 		alignContent: "center"
 	},
 	labelCellText: {
-		fontFamily: 'GothamBold',
+		fontFamily: FontFamily.bold,
 		fontSize: 16
 	},
 	horizontalWrapper: {
@@ -142,7 +143,7 @@ const styles = StyleSheet.create({
 		color: colors.text,
 	},
 	buttonActive: {
-		fontFamily: 'GothamBold',
+		fontFamily: FontFamily.bold,
 	}
 });
 

@@ -10,6 +10,7 @@ import {
 } from "react-native-gesture-handler";
 import { useNotifications } from "src/hooks";
 import { colors } from "src/theme/colors";
+import { FontFamily } from "src/theme/elements";
 import { Notification } from "src/utils/types";
 
 const CONTAINER_WIDTH = Dimensions.get("window").width - 20;
@@ -29,7 +30,7 @@ const styles = StyleSheet.create({
 		zIndex: 2
 	},
 	title: {
-		fontFamily: 'GothamBold',
+		fontFamily: FontFamily.bold,
 	},
 	link: {
 		color: colors.gold

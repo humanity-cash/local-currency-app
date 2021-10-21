@@ -4,7 +4,7 @@ import { ScrollView, StyleSheet, View } from "react-native";
 import { Text } from "react-native-elements";
 import { Button, Header, BackBtn, Dialog } from "src/shared/uielements";
 import { colors } from "src/theme/colors";
-import { underlineHeader, viewBase, dialogViewBase } from "src/theme/elements";
+import { underlineHeader, viewBase, dialogViewBase, FontFamily } from "src/theme/elements";
 import Translation from 'src/translation/en.json';
 import * as Routes from 'src/navigation/constants';
 
@@ -33,7 +33,7 @@ const styles = StyleSheet.create({
 		marginBottom: 40
 	},
 	signOutButton: {
-		fontFamily: 'GothamBold',
+		fontFamily: FontFamily.bold,
 		color: colors.darkRed
 	},
 	dialogWrap: {

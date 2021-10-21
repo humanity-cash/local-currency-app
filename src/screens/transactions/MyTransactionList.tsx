@@ -2,6 +2,7 @@ import React, {useState, useEffect} from 'react';
 import { StyleSheet, View } from 'react-native';
 import { Text, Image } from 'react-native-elements';
 import { colors } from "src/theme/colors";
+import { FontFamily } from "src/theme/elements";
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { ITransaction } from "src/api/types";
 import moment from 'moment';
@@ -46,12 +47,12 @@ const styles = StyleSheet.create({
 		color: colors.darkGreen
 	},
 	minusText: {
-		fontFamily: 'GothamBold',
+		fontFamily: FontFamily.bold,
 		fontSize: 18,
 		color: colors.darkRed
 	},
 	plusText: {
-		fontFamily: 'GothamBold',
+		fontFamily: FontFamily.bold,
 		fontSize: 18,
 		color: colors.darkGreen
 	},
