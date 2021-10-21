@@ -3,6 +3,7 @@ import React, { ReactElement, useState } from 'react';
 import { StyleSheet, TouchableWithoutFeedback, View } from "react-native";
 import { Text } from "react-native-elements";
 import { colors } from "src/theme/colors";
+import { FontFamily } from "src/theme/elements";
 import { AccordionEntry } from "src/utils/types";
 
 const styles = StyleSheet.create({
@@ -17,7 +18,7 @@ const styles = StyleSheet.create({
 	},
 	headerText: {
 		flex: 1,
-		fontFamily: 'IBMPlexSansBold',
+		fontFamily: FontFamily.bold,
 		fontSize: 16
 	},
 	headerIcon: {

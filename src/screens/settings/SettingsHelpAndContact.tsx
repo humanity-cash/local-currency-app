@@ -42,7 +42,6 @@ const styles = StyleSheet.create({
 		marginBottom: 10
 	},
 	modalHeader: {
-		fontFamily: "IBMPlexSans",
 		fontSize: 32,
 		lineHeight: 45,
 		paddingBottom: 10,

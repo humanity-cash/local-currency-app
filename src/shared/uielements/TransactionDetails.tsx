@@ -3,6 +3,7 @@ import React from 'react';
 import { StyleSheet, View } from "react-native";
 import { Text } from "react-native-elements";
 import { colors } from "src/theme/colors";
+import { FontFamily } from "src/theme/elements";
 import { formatValue } from "src/utils/common";
 import { OrderTransaction, Transaction, TransactionType } from "src/utils/types";
 import Button from "./Button";
@@ -20,14 +21,14 @@ const styles = StyleSheet.create({
 		flex: 1
 	},
 	header: {
-		fontFamily: 'IBMPlexSansBold',
+		fontFamily: FontFamily.bold,
 		fontSize: 16,
 		marginBottom: 10,
 		textAlign: "center",
 		opacity: 0.6
 	},
 	title: {
-		fontFamily: 'IBMPlexSansBold',
+		fontFamily: FontFamily.bold,
 		fontSize: 20,
 		paddingHorizontal: '20%',
 		marginTop: 50,
@@ -35,7 +36,7 @@ const styles = StyleSheet.create({
 		textAlign: "center",
 	},
 	price: {
-		fontFamily: 'IBMPlexSansBold',
+		fontFamily: FontFamily.bold,
 		fontSize: 20,
 		paddingHorizontal: '20%',
 		marginBottom: 10,
@@ -51,7 +52,7 @@ const styles = StyleSheet.create({
 		alignItems: "center"
 	},
 	boldText: {
-		fontFamily: 'IBMPlexSansBold',
+		fontFamily: FontFamily.bold,
 	},
 	transferView: {
 		flex: 1,

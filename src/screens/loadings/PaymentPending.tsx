@@ -3,7 +3,7 @@ import { StyleSheet, View, ScrollView, ActivityIndicator, Image } from 'react-na
 import { Text } from 'react-native-elements';
 import { AuthContext } from 'src/auth';
 import { Modal, ModalHeader } from "src/shared/uielements";
-import { modalViewBase } from "src/theme/elements";
+import { modalViewBase, FontFamily } from "src/theme/elements";
 import { colors } from "src/theme/colors";
 import { UserType } from 'src/auth/types';
 
@@ -53,13 +53,13 @@ const styles = StyleSheet.create({
         marginTop: 50,
     },
     contentText: {
-        fontFamily: 'IBMPlexSansBold',
+        fontFamily: FontFamily.bold,
         fontSize: 18,
         lineHeight: 24,
         marginTop: 10
     },
     contentTextB: {
-        fontFamily: 'IBMPlexSansBold',
+        fontFamily: FontFamily.bold,
         fontSize: 18,
         lineHeight: 24,
         marginTop: 10,

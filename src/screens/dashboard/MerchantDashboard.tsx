@@ -6,7 +6,7 @@ import { Text, Image } from "react-native-elements";
 import { AuthContext } from "src/auth";
 import { UserType } from "src/auth/types";
 import { colors } from "src/theme/colors";
-import { viewBaseB, wrappingContainerBase, baseHeader, dialogViewBase } from "src/theme/elements";
+import { viewBaseB, wrappingContainerBase, baseHeader, dialogViewBase, FontFamily } from "src/theme/elements";
 import { SearchInput, Header, Dialog, Button } from "src/shared/uielements";
 import MerchantTransactionList from "./MerchantTransactionList";
 import MerchantTransactionsFilter from "./MerchantTransactionsFilter";
@@ -37,7 +37,6 @@ const styles = StyleSheet.create({
 	headerText: {
 		color: colors.purple,
 		fontSize: 40,
-		fontFamily: 'IBMPlexSans',
 		lineHeight: 45
 	},
 	amountView: {
@@ -51,7 +50,7 @@ const styles = StyleSheet.create({
 	amountTxt: {
 		color: colors.purple,
 		fontSize: 18,
-		fontFamily: 'IBMPlexSansBold',
+		fontFamily: FontFamily.bold,
 		paddingLeft: 5,
 		paddingRight: 5
 	},
@@ -169,7 +168,7 @@ const styles = StyleSheet.create({
 		fontSize: 10
 	},
 	amountText: {
-		fontFamily: 'IBMPlexSansBold',
+		fontFamily: FontFamily.bold,
 		fontSize: 32,
 		lineHeight: 35
 	},

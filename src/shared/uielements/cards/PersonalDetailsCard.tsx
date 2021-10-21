@@ -3,6 +3,7 @@ import React from 'react';
 import { StyleSheet, TouchableWithoutFeedback, View } from "react-native";
 import { Text } from "react-native-elements";
 import { colors } from "src/theme/colors";
+import { FontFamily } from "src/theme/elements";
 
 interface PersonalDetailsCardProps {
 	onPress?: () => void,
@@ -24,7 +25,7 @@ const styles = StyleSheet.create({
 		fontSize: 20,
 		lineHeight: 30,
 		flex: 1,
-		fontFamily: 'IBMPlexSansBold',
+		fontFamily: FontFamily.bold,
 	},
 	arrow: {
 		marginVertical: 20

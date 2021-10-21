@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { ImageRequireSource, ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native';
 import { Image, Text } from 'react-native-elements';
 import { colors } from "src/theme/colors";
+import { FontFamily } from "src/theme/elements";
 import { CancelBtn, ModalHeader } from "./header";
 import Modal from "./Modal";
 
@@ -27,7 +28,7 @@ export type SelectionProps = {
 
 const styles = StyleSheet.create({
 	modalHeader: {
-		fontFamily: 'IBMPlexSansBold',
+		fontFamily: FontFamily.bold,
 		fontSize: 20,
 		paddingBottom: 10
 	},
