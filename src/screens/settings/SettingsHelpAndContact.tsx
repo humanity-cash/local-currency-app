@@ -42,7 +42,6 @@ const styles = StyleSheet.create({
 		marginBottom: 10
 	},
 	modalHeader: {
-		fontFamily: "GothamBook",
 		fontSize: 32,
 		lineHeight: 45,
 		paddingBottom: 10,

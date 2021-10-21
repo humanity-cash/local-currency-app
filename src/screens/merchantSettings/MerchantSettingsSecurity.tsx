@@ -6,7 +6,7 @@ import { useUserDetails } from "src/hooks";
 import { AuthContext } from "src/auth";
 import { Header, BlockInput, Button, BackBtn } from "src/shared/uielements";
 import { colors } from "src/theme/colors";
-import { viewBaseB, underlineHeaderB } from "src/theme/elements";
+import { viewBaseB, underlineHeaderB, FontFamily } from "src/theme/elements";
 import { IMap } from "src/utils/types";
 import Translation from 'src/translation/en.json';
 import { BUTTON_TYPES } from 'src/constants';
@@ -71,7 +71,7 @@ const styles = StyleSheet.create({
 		marginHorizontal: 20
 	},
 	saveButton: {
-		fontFamily: 'GothamBold',
+		fontFamily: FontFamily.bold,
 		color: colors.darkRed
 	}
 });

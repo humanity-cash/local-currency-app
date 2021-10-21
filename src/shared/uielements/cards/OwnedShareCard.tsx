@@ -2,6 +2,7 @@ import React from 'react';
 import { StyleSheet, View } from "react-native";
 import { Text } from 'react-native-elements';
 import { colors } from "src/theme/colors";
+import { FontFamily } from "src/theme/elements";
 import { formatValue } from "src/utils/common";
 import { MarketEntry, Share } from "src/utils/types";
 
@@ -19,7 +20,7 @@ const styles = StyleSheet.create({
 		paddingTop: 15
 	},
 	boldText: {
-		fontFamily: 'GothamBold',
+		fontFamily: FontFamily.bold,
 	},
 	detailsView: {
 		flexDirection: "row",

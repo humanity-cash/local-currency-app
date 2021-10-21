@@ -4,7 +4,7 @@ import { StyleSheet, View, ScrollView } from 'react-native';
 import { Text } from "react-native-elements";
 import { Header } from "src/shared/uielements";
 import { colors } from "src/theme/colors";
-import { viewBaseB, wrappingContainerBase, baseHeader, dialogViewBase } from "src/theme/elements";
+import { viewBaseB, wrappingContainerBase, baseHeader, dialogViewBase, FontFamily } from "src/theme/elements";
 import { SearchInput, Dialog, CancelBtn } from "src/shared/uielements";
 import CashierTransactionList from "./CashierTransactionList";
 import Translation from 'src/translation/en.json';
@@ -36,7 +36,7 @@ const styles = StyleSheet.create({
 	balanceText: {
 		color: colors.purple,
 		fontSize: 18,
-		fontFamily: 'GothamBold',
+		fontFamily: FontFamily.bold,
 		paddingLeft: 5,
 		paddingRight: 5
 	},
@@ -77,7 +77,7 @@ const styles = StyleSheet.create({
 		fontSize: 10
 	},
 	amountText: {
-		fontFamily: 'GothamBold',
+		fontFamily: FontFamily.bold,
 		fontSize: 32,
 		lineHeight: 35
 	},

@@ -11,10 +11,9 @@ const useCachedResources = () => {
 			try {
 				// Load fonts
 				await Font.loadAsync({
-					'GothamLight': require('../../assets/fonts/GothamLight.ttf'),
-					'GothamBook': require('../../assets/fonts/GothamBook.ttf'),
-					'GothamBold': require('../../assets/fonts/GothamBold.ttf'),
-					'GothamMedium': require('../../assets/fonts/GothamMedium.ttf')
+					'IBMPlexSans': require('../../assets/fonts/IBMPlexSans-Regular.ttf'),
+					'IBMPlexSansSemiBold': require('../../assets/fonts/IBMPlexSans-Medium.ttf'),
+					'IBMPlexSansBold': require('../../assets/fonts/IBMPlexSans-SemiBold.ttf')
 				});
 				await Font.loadAsync(AntDesign.font);
 				await Font.loadAsync(MaterialCommunityIcons.font);
