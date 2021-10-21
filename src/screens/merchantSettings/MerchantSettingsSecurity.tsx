@@ -71,7 +71,7 @@ const styles = StyleSheet.create({
 		marginHorizontal: 20
 	},
 	saveButton: {
-		fontFamily: 'GothamBold',
+		fontFamily: 'IBMPlexSansBold',
 		color: colors.darkRed
 	}
 });

@@ -70,7 +70,7 @@ export const underlineHeaderB: any = {
 }
 
 export const modalBaseHeader: any = {
-	fontFamily: 'GothamBold',
+	fontFamily: 'IBMPlexSansBold',
 	fontSize: 20,
 	paddingBottom: 10
 }

@@ -17,7 +17,7 @@ const styles = StyleSheet.create({
 	},
 	headerText: {
 		flex: 1,
-		fontFamily: 'GothamBold',
+		fontFamily: 'IBMPlexSansBold',
 		fontSize: 16
 	},
 	headerIcon: {

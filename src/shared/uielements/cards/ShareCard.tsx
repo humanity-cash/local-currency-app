@@ -25,14 +25,14 @@ const styles = StyleSheet.create({
 	headerName: {
 		flex: 1,
 		fontSize: 20,
-		fontFamily: 'GothamBold',
+		fontFamily: 'IBMPlexSansBold',
 	},
 	headerChangeRate: {
 		fontSize: 20,
-		fontFamily: 'GothamBold',
+		fontFamily: 'IBMPlexSansBold',
 	},
 	boldText: {
-		fontFamily: 'GothamBold',
+		fontFamily: 'IBMPlexSansBold',
 	},
 	detailsView: {
 		flexDirection: "row",
