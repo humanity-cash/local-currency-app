@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useContext} from 'react';
 import { StyleSheet, View, KeyboardAvoidingView, ScrollView, Platform } from 'react-native';
 import { useNavigation } from '@react-navigation/core';
 import { Text } from 'react-native-elements';
@@ -8,6 +8,13 @@ import { colors } from "src/theme/colors";
 import Translation from 'src/translation/en.json';
 import * as Routes from 'src/navigation/constants';
 import { BUTTON_TYPES } from 'src/constants';
+import { showToast } from '../../utils/common';
+import { ToastType } from '../../utils/types';
+import { AuthContext } from '../../auth/index';
+import { useDispatch } from 'react-redux';
+import { showLoadingProgress, hideLoadingProgress } from '../../store/loading/loading.actions';
+import { UserAPI } from 'src/api';
+import { LoadingScreenTypes } from 'src/utils/types';
 
 const styles = StyleSheet.create({
 	headerText: {
@@ -76,6 +83,8 @@ const styles = StyleSheet.create({
 
 const MerchantCashoutAmount = (): JSX.Element => {
 	const navigation = useNavigation();
+	const { businessDwollaId } = useContext(AuthContext);
+	const dispatch = useDispatch()
 	const [amount, setAmount] = useState<string>("");
 	const [goNext, setGoNext] = useState(false);
 	const [isVisible, setIsVisible] = useState(false);
@@ -92,9 +101,25 @@ const MerchantCashoutAmount = (): JSX.Element => {
 		setIsVisible(true);
 	}
 
-	const doCashout = () => {
+	const doCashout = async () => {
+		if (!businessDwollaId) {
+			showToast(ToastType.ERROR, "Whoops, something went wrong.", "Connection failed.");
+			return;
+		}
+
 		setIsVisible(false);
-		navigation.navigate(Routes.MERCHANT_CASHOUT_PASSWORD);
+		dispatch(showLoadingProgress(LoadingScreenTypes.LOADING_DATA))
+		const response = await UserAPI.withdraw(
+			businessDwollaId, 
+			{amount: amount}
+		);
+		dispatch(hideLoadingProgress())
+
+		if (response.data) {
+			navigation.navigate(Routes.MERCHANT_REDEMPTION_IN_PROGRESS);
+		} else {
+			showToast(ToastType.ERROR, response);
+		}
 	}
 
 	return (
