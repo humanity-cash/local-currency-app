@@ -23,9 +23,13 @@ const initialState: LoadingPageState = {
 export const loadingReducer = (state = initialState, action: LoadingAction): LoadingPageState => {
     switch(action.type) {
         case LOADING_STATE_SET: 
+            const loadingState = action.payload.loadingState
             return {
                 ...state,
-                ...action.payload
+                loadingState : {
+                    isLoading: loadingState.isLoading,
+                    screen: loadingState.screen === LoadingScreenTypes.ANY ? state.loadingState.screen : loadingState.screen
+                }
             };
 
         default: return state;
