@@ -136,7 +136,7 @@ const BankLinkDialog = (props: BankLinkDialogProps) => {
 const DrawerContent = (
 	props: DrawerContentComponentProps<DrawerContentOptions>
 ) => {
-	const { signOut, updateUserType, userAttributes, completedBusinessVerification } = useContext(AuthContext);
+	const { signOut, cognitoId, updateUserType, userAttributes, completedBusinessVerification } = useContext(AuthContext);
 	const { authorization } = useUserDetails();
 	const [isExpanded, setIsExpanded] = useState<boolean>(false);
 	const [isBankDialog, setIsBankDialog] = useState<boolean>(false);
@@ -145,11 +145,11 @@ const DrawerContent = (
 	const { personalFundingSource } = useSelector((state: AppState) => state.fundingSourceReducer) as FundingSourceState;
 
 	const onMerchant = () => {
-		updateUserType(UserType.Business);
+		updateUserType(cognitoId, UserType.Business);
 	};
 
 	const onCashier = () => {
-		updateUserType(UserType.Cashier);
+		updateUserType(cognitoId, UserType.Cashier);
 	};
 
 	const onBankDialogConfirm = () => {

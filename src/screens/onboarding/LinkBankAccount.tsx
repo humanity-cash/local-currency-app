@@ -30,7 +30,7 @@ const styles = StyleSheet.create({
 });
 
 const LinkBankAccount = (): JSX.Element => {
-	const { updateUserType } = useContext(AuthContext);
+	const { cognitoId, updateUserType } = useContext(AuthContext);
 	const [isVisible, setIsVisible] = useState<boolean>(false);
 	const dispatch = useDispatch();
 
@@ -43,7 +43,7 @@ const LinkBankAccount = (): JSX.Element => {
 			isLoading: true,
 			screen: LoadingScreenTypes.LOADING_DATA
 		}));
-		updateUserType(UserType.Customer);
+		updateUserType(cognitoId, UserType.Customer);
 	}
 
 	return (
