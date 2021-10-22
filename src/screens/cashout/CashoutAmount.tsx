@@ -1,13 +1,19 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useContext} from 'react';
 import { StyleSheet, View, KeyboardAvoidingView, ScrollView, Platform } from 'react-native';
 import { Text } from 'react-native-elements';
 import { Header, Button, CancelBtn, BorderedInput, Dialog } from "src/shared/uielements";
 import { underlineHeader, viewBase, dialogViewBase, wrappingContainerBase } from "src/theme/elements";
 import { colors } from "src/theme/colors";
-import { IMap } from "src/utils/types";
+import { IMap, LoadingScreenTypes } from "src/utils/types";
 import Translation from 'src/translation/en.json';
 import * as Routes from 'src/navigation/constants';
 import { useNavigation } from '@react-navigation/core';
+import { UserAPI } from 'src/api';
+import { AuthContext } from '../../auth/index';
+import { showToast } from '../../utils/common';
+import { ToastType } from '../../utils/types';
+import { showLoadingProgress, hideLoadingProgress } from '../../store/loading/loading.actions';
+import { useDispatch } from 'react-redux';
 
 interface CashoutState extends IMap {
 	amount: string;
@@ -63,6 +69,9 @@ const styles = StyleSheet.create({
 
 const CashoutAmount = (): JSX.Element => {
 	const navigation = useNavigation();
+	const { customerDwollaId } = useContext(AuthContext);
+	const dispatch = useDispatch()
+
 	const [state, setState] = useState<CashoutState>({
 		amount: "1",
 		costs: "1"
@@ -86,9 +95,25 @@ const CashoutAmount = (): JSX.Element => {
 		setIsVisible(true);
 	}
 
-	const doCashout = () => {
+	const doCashout = async () => {
+		if (!customerDwollaId) {
+			showToast(ToastType.ERROR, "Whoops, something went wrong.", "Connection failed.");
+			return;
+		}
+
 		setIsVisible(false);
-		navigation.navigate(Routes.CASHOUT);
+		dispatch(showLoadingProgress(LoadingScreenTypes.LOADING_DATA))
+		const response = await UserAPI.withdraw(
+			customerDwollaId, 
+			{amount: state.amount}
+		);
+		dispatch(hideLoadingProgress())
+
+		if (response.data) {
+			navigation.navigate(Routes.CASHOUT);
+		} else {
+			showToast(ToastType.ERROR, response);
+		}
 	}
 
 	return (
