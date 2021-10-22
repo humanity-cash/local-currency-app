@@ -115,10 +115,11 @@ const MerchantCashoutAmount = (): JSX.Element => {
 		);
 		dispatch(hideLoadingProgress())
 
+		console.log(response)
 		if (response.data) {
 			navigation.navigate(Routes.MERCHANT_REDEMPTION_IN_PROGRESS);
 		} else {
-			showToast(ToastType.ERROR, response);
+			showToast(ToastType.ERROR, "Whoops, something went wrong.", "Connection failed.");
 		}
 	}
 

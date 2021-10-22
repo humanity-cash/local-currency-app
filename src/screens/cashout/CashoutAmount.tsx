@@ -112,7 +112,7 @@ const CashoutAmount = (): JSX.Element => {
 		if (response.data) {
 			navigation.navigate(Routes.CASHOUT);
 		} else {
-			showToast(ToastType.ERROR, response);
+			showToast(ToastType.ERROR, "Whoops, something went wrong.", "Connection failed.");
 		}
 	}
 

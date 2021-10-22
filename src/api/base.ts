@@ -57,6 +57,6 @@ const ErrorHandler = async (
       config?.data ? JSON.parse(config?.data) : ""
     );
 
-    return `${response?.data?.message}`;
+    return err.toJSON().message;
   }
 };
