@@ -15,6 +15,7 @@ import { isPasswordValid } from 'src/utils/validation';
 
 import { updateLoadingStatus } from 'src/store/loading/loading.actions';
 import { useDispatch } from 'react-redux';
+import { showLoadingProgress, hideLoadingProgress } from '../../store/loading/loading.actions';
 
 const styles = StyleSheet.create({
 	headerText: {
@@ -58,17 +59,9 @@ const Login = (): JSX.Element => {
 	};
 
 	const handleSignin = async () => {
-		dispatch(updateLoadingStatus({
-			isLoading: true,
-			screen: LoadingScreenTypes.LOADING_DATA
-		}));
-
+		dispatch(showLoadingProgress(LoadingScreenTypes.LOADING_DATA))
 		await signIn();
-
-		dispatch(updateLoadingStatus({
-			isLoading: false,
-			screen: LoadingScreenTypes.LOADING_DATA
-		}));
+		dispatch(hideLoadingProgress())
 	}
 
 	return (
