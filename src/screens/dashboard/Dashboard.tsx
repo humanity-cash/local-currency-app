@@ -28,6 +28,7 @@ import { FundingSourceState } from 'src/store/funding-source/funding-source.redu
 import { useSelector, useDispatch } from 'react-redux';
 import { AppState } from 'src/store';
 import { UserType } from 'src/auth/types';
+import { showLoadingProgress, hideLoadingProgress } from '../../store/loading/loading.actions';
 
 const styles = StyleSheet.create({
 	content: { paddingBottom: 80 },
@@ -169,15 +170,9 @@ const Dashboard = (): JSX.Element => {
 		if (customerDwollaId) {
 			(async () => {
 				dispatch(loadPersonalWallet(customerDwollaId));
-				dispatch(updateLoadingStatus({
-					isLoading: true,
-					screen: LoadingScreenTypes.LOADING_DATA
-				}));
+				dispatch(showLoadingProgress(LoadingScreenTypes.LOADING_DATA))
 				await dispatch(loadPersonalFundingSource(customerDwollaId));
-				dispatch(updateLoadingStatus({
-					isLoading: false,
-					screen: LoadingScreenTypes.LOADING_DATA
-				}));
+				dispatch(hideLoadingProgress())
 			})();
 		}
 	}, []);

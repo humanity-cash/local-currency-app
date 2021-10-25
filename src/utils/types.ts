@@ -381,7 +381,8 @@ export enum ToastType {
 /* LOADING SCREENS	*/
 export const enum LoadingScreenTypes {
 	PAYMENT_PENDING = 'paymentPending',
-	LOADING_DATA = 'loadingData'
+	LOADING_DATA = 'loadingData',
+	ANY = 'anyData'
 }
 
 export interface LoadingState {

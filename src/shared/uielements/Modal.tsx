@@ -29,7 +29,7 @@ const styles = StyleSheet.create({
 export const MODAL_SCREEN_OFFSET = Dimensions.get('screen').height * 0.06;
 
 const Modal = ({ visible = false, style = {}, children, onShow }: ModalProps) => {
-	return (
+	return visible ? ( 
 		<Overlay
 			isVisible={visible}
 			overlayStyle={{
@@ -46,7 +46,7 @@ const Modal = ({ visible = false, style = {}, children, onShow }: ModalProps) =>
 				{children}
 			</View>
 		</Overlay>
-	);
+	) : null;
 }
 
 export default Modal;
