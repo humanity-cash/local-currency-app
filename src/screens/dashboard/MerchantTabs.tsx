@@ -187,7 +187,7 @@ const BankLinkDialog = (props: BankLinkDialogProps) => {
 }
 
 const DrawerContent = (props: DrawerContentComponentProps) => {
-	const { userAttributes } = useContext(AuthContext);
+	const { cognitoId, userAttributes } = useContext(AuthContext);
 	const { signOut, updateUserType, completedCustomerVerification } = useContext(AuthContext);
 	const { authorization } = useUserDetails();
 	const [isExpanded, setIsExpanded] = useState<boolean>(false);
@@ -209,7 +209,7 @@ const DrawerContent = (props: DrawerContentComponentProps) => {
 
 	const onCashierViewConfirm = () => {
 		setIsCashierView(false);
-		updateUserType(UserType.Cashier);
+		updateUserType(cognitoId, UserType.Cashier);
 	}
 
 	const onCashierViewCancel = () => {
@@ -226,7 +226,7 @@ const DrawerContent = (props: DrawerContentComponentProps) => {
 	}
 
 	const onPersonal = () => {
-		updateUserType(UserType.Customer);
+		updateUserType(cognitoId, UserType.Customer);
 	}
 
 	const userTag = userAttributes?.["custom:personal.tag"] || undefined

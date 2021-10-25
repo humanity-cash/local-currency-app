@@ -14,8 +14,8 @@ export const deposit = async (userId: UserId, request: IDepositRequest): Promise
   return response;
 };
 
-export const withdrawal = async (userId: UserId, request: IWithdrawalRequest): Promise<AxiosPromiseResponse> => {
-  const response = await postRequest(`/users/${userId}/withdrawal`, request);
+export const withdraw = async (userId: UserId, request: IWithdrawalRequest): Promise<AxiosPromiseResponse> => {
+  const response = await postRequest(`/users/${userId}/withdraw`, request);
   return response;
 };
 
