@@ -35,18 +35,18 @@ const convertAttributesArrayToObject = (attributes: any): any => {
 	return newObject;
 };
 
-const saveUserTypeToStorage = async (value: UserType) => {
+const saveUserTypeToStorage = async (cognitoId: String, value: UserType) => {
 	try {
-		await AsyncStorage.setItem("@accType", String(value));
+		await AsyncStorage.setItem(`@accType_${cognitoId}`, String(value));
 		return true;
 	} catch (e) {
 		return false;
 	}
 };
 
-const getLatestSelectedAccountType = async () => {
+const getLatestSelectedAccountType = async (cognitoId: String) => {
 	try {
-		const value: string | null = await AsyncStorage.getItem("@accType");
+		const value: string | null = await AsyncStorage.getItem(`@accType_${cognitoId}`);
 		if (!value) return "";
 		return value;
 	} catch (e) {
@@ -83,7 +83,7 @@ const AuthProvider: React.FunctionComponent = ({ children }) => {
 		setCognitoId(userAttributes?.["sub"]);
 		setCustomerDwollaId(userAttributes?.["custom:personal.dwollaId"]);
 		setBusinessDwollaId(userAttributes?.["custom:business.dwollaId"]);
-	}, [userAttributes, authStatus, userType]);
+	}, [userAttributes, authStatus]);
 
 	const [
 		customerBasicVerificationDetails,
@@ -107,7 +107,7 @@ const AuthProvider: React.FunctionComponent = ({ children }) => {
 			dwollaInfoInitialState
 		);
 
-	const updateUserType = (newType: UserType): void => {
+	const updateUserType = (cognitoId: String, newType: UserType): void => {
 		if (newType === userType) {
 			setAuthStatus(AuthStatus.Loading);
 		} else {
@@ -115,7 +115,7 @@ const AuthProvider: React.FunctionComponent = ({ children }) => {
 		}
 		if (newType !== UserType.Cashier) {
 			// dont cache cashier option. it will lock the user in cashier screens
-			saveUserTypeToStorage(newType);
+			saveUserTypeToStorage(cognitoId, newType);
 		}
 	};
 
@@ -143,24 +143,42 @@ const AuthProvider: React.FunctionComponent = ({ children }) => {
 
 	useEffect(() => {
 		getSessionInfo();
-	}, [authStatus, userType]);
+	}, [userType]);
 
 	useEffect(() => {
-		const initialTypeState = async () => {
-			const latestType = await getLatestSelectedAccountType();
-			if (!latestType) {
-				updateUserType(UserType.Customer);
-			} else if (latestType === "2") {
-				updateUserType(UserType.Business);
-			} else if (latestType === "0") {
-				updateUserType(UserType.Customer);
-			} else if (latestType === "1") {
-				updateUserType(UserType.Business);
-			}
-		};
-		initialTypeState();
-	}, []);
+		initialTypeState(cognitoId)
+	}, [cognitoId])
 
+	useEffect(() => {
+		setCognitoId(userAttributes?.["sub"]);
+	}, [userAttributes])
+
+	const initialTypeState = async (cognitoId: String) => {
+		if(cognitoId === undefined || cognitoId.length < 1) {
+			return
+		}
+
+		const latestType = await getLatestSelectedAccountType(cognitoId);
+		
+		if (!latestType) {
+			if (userType !== UserType.Customer) {
+				updateUserType(cognitoId, UserType.Customer);
+			}
+		} else if (latestType === "2") {
+			if (userType !== UserType.Cashier) {
+				updateUserType(cognitoId, UserType.Cashier);
+			}
+		} else if (latestType === "0") {
+			if (userType !== UserType.Customer) {
+				updateUserType(cognitoId, UserType.Customer);
+			}
+		} else if (latestType === "1") {
+			if (userType !== UserType.Business) {
+				updateUserType(cognitoId, UserType.Business);
+			}
+		}
+	};
+	
 	const emailVerification = (verificationCode: string) =>
 		userController.confirmEmailVerificationCode(
 			signUpDetails.email,
@@ -190,6 +208,7 @@ const AuthProvider: React.FunctionComponent = ({ children }) => {
 		if (!response?.success) {
 			setAuthStatus(AuthStatus.SignedOut); // Something went wrong in sign in
 		} else {
+			getAttributes()
 			setAuthStatus(AuthStatus.Loading); // Invokes getSession useEffect
 		}
 
