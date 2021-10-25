@@ -35,7 +35,7 @@ const styles = StyleSheet.create({
 });
 
 const BusinessWelcome = (): ReactElement => {
-	const { updateUserType } = useContext(AuthContext);
+	const { cognitoId, updateUserType } = useContext(AuthContext);
 	const [isVisible, setIsVisible] = useState<boolean>(false);
 	const dispatch = useDispatch();
 
@@ -44,7 +44,7 @@ const BusinessWelcome = (): ReactElement => {
 			isLoading: true,
 			screen: LoadingScreenTypes.LOADING_DATA
 		}));
-		updateUserType(UserType.Business);
+		updateUserType(cognitoId, UserType.Business);
 	}
 
 	return (
