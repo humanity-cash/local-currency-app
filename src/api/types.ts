@@ -87,3 +87,12 @@ export interface IOperatorResponse {
     deposits: IDepositResponse[];
     withdrawals: IWithdrawalResponse[];
 }
+
+export interface INotificationResponse {
+    userId: UserId;
+    timestamp: number;
+    message: string;
+    cloased: boolean;
+    level: string;
+    dbId: string
+}

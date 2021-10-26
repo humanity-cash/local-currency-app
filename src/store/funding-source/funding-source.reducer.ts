@@ -15,8 +15,8 @@ interface FundingSourceAction extends Action {
 }
 
 const initialState: FundingSourceState = {
-    personalFundingSource: false,
-    businessFundingSource: false,
+    personalFundingSource: true,
+    businessFundingSource: true,
 }
 
 export const fundingSourceReducer = (state = initialState, action: FundingSourceAction): FundingSourceState => {
