@@ -27,6 +27,8 @@ import { WalletState } from 'src/store/wallet/wallet.reducer';
 import { FundingSourceState } from 'src/store/funding-source/funding-source.reducer';
 import { useSelector, useDispatch } from 'react-redux';
 import { AppState } from 'src/store';
+import { INotificationResponse } from '../../api/types';
+import { UserAPI } from 'src/api';
 
 const styles = StyleSheet.create({
 	mainTextColor: {
@@ -54,7 +56,7 @@ const styles = StyleSheet.create({
 		paddingLeft: 5,
 		paddingRight: 5
 	},
-	alertView: {
+	warningView: {
 		borderLeftWidth: 5,
 		borderRadius: 4,
 		borderLeftColor: colors.alert,
@@ -65,11 +67,41 @@ const styles = StyleSheet.create({
 		alignItems: 'center',
 		marginBottom: 10
 	},
-	alertIcon: {
+	warningIcon: {
 		color: colors.alert,
 		fontWeight: 'bold'
 	},
-	alertText: {
+	infoView: {
+		borderLeftWidth: 5,
+		borderRadius: 4,
+		borderLeftColor: colors.info,
+		backgroundColor: colors.white,
+		padding: 10,
+		flexDirection: 'row',
+		justifyContent: 'space-between',
+		alignItems: 'center',
+		marginBottom: 10,
+	},
+	infoIcon: {
+		color: colors.info,
+		fontWeight: 'bold',
+	},
+	errorView: {
+		borderLeftWidth: 5,
+		borderRadius: 4,
+		borderLeftColor: colors.error,
+		backgroundColor: colors.white,
+		padding: 10,
+		flexDirection: 'row',
+		justifyContent: 'space-between',
+		alignItems: 'center',
+		marginBottom: 10,
+	},
+	errorIcon: {
+		color: colors.error,
+		fontWeight: 'bold',
+	},
+	notificationText: {
 		color: colors.black, 
 		width: '90%'
 	},
@@ -144,7 +176,7 @@ const styles = StyleSheet.create({
 	scanBtnText: {
 		color: colors.white
 	},
-	infoView: {
+	itemInfoView: {
 		paddingHorizontal: 5,
 		paddingTop: 30
 	},
@@ -206,7 +238,7 @@ const TransactionDetail = (props: TransactionDetailProps) => {
 							{getBerksharePrefix(data.type)} { data.value } 
 						</Text>
 					</View>
-					<View style={styles.infoView}>
+					<View style={styles.itemInfoView}>
 						<View style={styles.detailView}>
 							<Text style={styles.detailText}>{Translation.PAYMENT.TRANSACTION_ID}</Text>
 							<Text style={styles.detailText}>{data.transactionHash}</Text>
@@ -252,6 +284,7 @@ const MerchantDashboard = (): JSX.Element => {
 	const { businessTransactions } = useSelector((state: AppState) => state.transactionReducer) as TransactionState;
 	const { businessWallet } = useSelector((state: AppState) => state.walletReducer) as WalletState;
 	const { businessFundingSource } = useSelector((state: AppState) => state.fundingSourceReducer) as FundingSourceState;
+	const [notifications, setNotifications] = useState<INotificationResponse[]>([])
 
 	useEffect(() => {
 		if (businessDwollaId) {
@@ -269,7 +302,33 @@ const MerchantDashboard = (): JSX.Element => {
 				}));
 			})();
 		}
+	
+		updateNotification()
+		const timer = setInterval(() => {
+			updateNotification()
+		}, 20000)
+
+		return(() => {
+			clearInterval(timer)
+		})
 	}, []);
+
+	const updateNotification = async () => {
+		if(businessDwollaId) {
+			dispatch(loadBusinessFundingSource(businessDwollaId));
+			const notis = await UserAPI.getNotifications(businessDwollaId)
+			setNotifications(notis)
+			if(notis.length > 0) {
+				setTimeout(() => {
+					setNotifications([])
+				}, 5000)
+
+				for(let i = 0; i < notis.length; i++) {
+					await UserAPI.deleteNotification(businessDwollaId, notis[i].dbId)
+				}
+			}
+		}
+	}
 
 	const onSearchChange = (name: string, change: string) => {
 		setSearchText(change);
@@ -320,29 +379,52 @@ const MerchantDashboard = (): JSX.Element => {
 
 				<ScrollView>
 					<View style={styles.content}>
-						{!completedCustomerVerification && <View style={styles.alertView}>
-							<AntDesign name="exclamationcircleo" size={18} style={styles.alertIcon} />
-							<Text style={styles.alertText}>
+						{!completedCustomerVerification && <View style={styles.warningView}>
+							<AntDesign name="exclamationcircleo" size={18} style={styles.warningIcon} />
+							<Text style={styles.notificationText}>
 								{Translation.PROFILE.PERSONAL_PROFILE_ALERT} &nbsp;
-								<Text style={styles.alertIcon} onPress={() => navigation.navigate(Routes.PERSONAL_PROFILE)}>{Translation.BUTTON.GOTO_SETUP} &gt;</Text>
+								<Text style={styles.warningIcon} onPress={() => navigation.navigate(Routes.PERSONAL_PROFILE)}>{Translation.BUTTON.GOTO_SETUP} &gt;</Text>
 							</Text>
 						</View>}
 
-						{!businessFundingSource && (
-							<View style={styles.alertView}>
+						{!businessFundingSource ? (
+							<View style={styles.warningView}>
 								<AntDesign
 									name='exclamationcircleo'
 									size={18}
-									style={styles.alertIcon}
+									style={styles.warningIcon}
 								/>
-								<Text style={styles.alertText}>
+								<Text style={styles.notificationText}>
 									{Translation.BANK_ACCOUNT.ACCOUNT_ALERT} &nbsp;
 									<Text
-										style={styles.alertIcon}
+										style={styles.warningIcon}
 										onPress={() => setIsDwollaVisible(true)}>
 										{Translation.BANK_ACCOUNT.ACCOUNT_LINK_TEXT}{' '}
 										&gt;
 									</Text>
+								</Text>
+							</View>
+						) : notifications.length > 0 && (
+							<View style={
+								notifications[notifications.length-1].level === "INFO" ? styles.infoView
+								: notifications[notifications.length-1].level === "WARN" ? styles.warningView
+								: styles.errorView
+							}>
+								<AntDesign
+									name={
+										notifications[notifications.length-1].level === "INFO" ? 'checkcircleo'
+										: notifications[notifications.length-1].level === "WARN" ? 'exclamationcircleo'
+										: 'closecircleo'
+									}
+									size={18}
+									style={
+										notifications[notifications.length-1].level === "INFO" ? styles.infoIcon
+										: notifications[notifications.length-1].level === "WARN" ? styles.warningIcon
+										: styles.errorIcon
+									}
+								/>
+								<Text style={styles.notificationText}>
+									{notifications[notifications.length-1].message} &nbsp;
 								</Text>
 							</View>
 						)}

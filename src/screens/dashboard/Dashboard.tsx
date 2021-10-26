@@ -201,7 +201,6 @@ const Dashboard = (): JSX.Element => {
 	useEffect(() => {
 		if (customerDwollaId) {
 			(async () => {
-				dispatch(loadPersonalWallet(customerDwollaId));
 				dispatch(showLoadingProgress(LoadingScreenTypes.LOADING_DATA))
 				await dispatch(loadPersonalFundingSource(customerDwollaId));
 				dispatch(hideLoadingProgress())
