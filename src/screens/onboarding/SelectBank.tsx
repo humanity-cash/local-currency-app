@@ -10,6 +10,7 @@ import { colors } from "src/theme/colors";
 import { UserAPI } from 'src/api';
 import { loadPersonalFundingSource } from 'src/store/funding-source/funding-source.actions';
 import { useDispatch } from 'react-redux';
+import {Text} from 'react-native-elements'
 
 export const WEBVIEW_SCREEN = Dimensions.get('screen').height - 150;
 
@@ -69,9 +70,13 @@ const SelectBank = (): JSX.Element => {
 					/>
 				)}
 			</ScrollView>
-			{iavToken === "" && (
+			{iavToken === "" ? (
 				<View style={styles.bottomView}>
 					<ActivityIndicator size="large" color={colors.darkGreen} />
+				</View>
+			) : (
+				<View style={styles.bottomView}>
+					<Text>{iavToken}</Text>
 				</View>
 			)}
 		</View>

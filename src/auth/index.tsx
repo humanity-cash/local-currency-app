@@ -205,6 +205,7 @@ const AuthProvider: React.FunctionComponent = ({ children }) => {
 	) => {
 		const response: BaseResponse<CognitoUserSession> =
 			await userController.signIn({ email, password });
+			
 		if (!response?.success) {
 			setAuthStatus(AuthStatus.SignedOut); // Something went wrong in sign in
 		} else {
@@ -328,6 +329,9 @@ const AuthProvider: React.FunctionComponent = ({ children }) => {
 	const signOut = () => {
 		userController.signOut();
 		setAuthStatus(AuthStatus.SignedOut);
+		setUserAttributes({});
+		setCognitoId("")
+		setUserType(undefined)
 		if (userType === UserType.Cashier) {
 			setUserType(UserType.Business);
 		}
