@@ -70,13 +70,9 @@ const SelectBank = (): JSX.Element => {
 					/>
 				)}
 			</ScrollView>
-			{iavToken === "" ? (
+			{iavToken === "" && (
 				<View style={styles.bottomView}>
 					<ActivityIndicator size="large" color={colors.darkGreen} />
-				</View>
-			) : (
-				<View style={styles.bottomView}>
-					<Text>{iavToken}</Text>
 				</View>
 			)}
 		</View>
