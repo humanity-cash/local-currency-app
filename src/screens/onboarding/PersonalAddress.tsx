@@ -89,7 +89,6 @@ const PersonalAddress = (): React.ReactElement => {
 			}));
 			const resApi = await UserAPI.user(request);
 			if (resApi.data) {
-				console.log(resApi.data)
 				await completeCustomerDwollaInfo({
 					dwollaId: resApi.data.userId,
 					resourceUri: ""

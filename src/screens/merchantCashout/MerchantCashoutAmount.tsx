@@ -115,7 +115,6 @@ const MerchantCashoutAmount = (): JSX.Element => {
 		);
 		dispatch(hideLoadingProgress())
 
-		console.log(response)
 		if (response.data) {
 			navigation.navigate(Routes.MERCHANT_REDEMPTION_IN_PROGRESS);
 		} else {
