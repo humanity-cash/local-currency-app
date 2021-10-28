@@ -45,6 +45,7 @@ class BlockInput extends React.Component<BlockInputProps>{
 				value={this.props.value}
 				onKeyPress={this.props.onKeyPress}
 				maxLength={this.props.maxLength}
+				autoCapitalize='none'
 			/>
 		)
 	}

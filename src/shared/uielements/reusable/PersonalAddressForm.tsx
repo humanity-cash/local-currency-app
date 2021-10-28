@@ -9,7 +9,7 @@ import Translation from 'src/translation/en.json';
 import BlockInput from "../BlockInput";
 import { IMap } from "src/utils/types";
 import { UserType } from "src/auth/types";
-import countries from "src/mocks/countries";
+import states from "src/mocks/countries";
 
 interface PersonalAddressProps {
 	userType: UserType,
@@ -107,10 +107,10 @@ const PersonalAddressForm = (props: PersonalAddressProps): ReactElement => {
 					<Text style={styles.label}>{Translation.LABEL.STATE}</Text>
 					<View style={{...styles.stateView, ...props.style}} >
 						<SelectDropdown
-							data={countries}
+							data={states}
 							defaultValueByIndex={0}
 							onSelect={(selectedItem) => {
-								onValueChange("country", selectedItem)
+								onValueChange("state", selectedItem)
 							}}
 							buttonTextAfterSelection={(selectedItem) => {
 								return selectedItem

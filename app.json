@@ -17,7 +17,7 @@
     ],
     "ios": {
       "bundleIdentifier": "com.keyko.berkshares-app",
-      "buildNumber": "1"
+      "buildNumber": "2"
     },
     "packagerOpts": {
       "config": "metro.config.js",
@@ -33,7 +33,7 @@
     },
     "android": {
       "package": "com.berkshares",
-      "versionCode": 4,
+      "versionCode": 5,
       "permissions": [
         "CAMERA",
         "RECORD_AUDIO",

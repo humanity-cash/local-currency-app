@@ -109,7 +109,7 @@ const AuthProvider: React.FunctionComponent = ({ children }) => {
 
 	const updateUserType = (cognitoId: String, newType: UserType): void => {
 		if (newType === userType) {
-			setAuthStatus(AuthStatus.Loading);
+			getSessionInfo();
 		} else {
 			setUserType(newType);
 		}
@@ -200,7 +200,7 @@ const AuthProvider: React.FunctionComponent = ({ children }) => {
 	};
 
 	const signIn = async (
-		email = signInDetails.email,
+		email = signInDetails.email.toLowerCase(),
 		password = signInDetails.password
 	) => {
 		const response: BaseResponse<CognitoUserSession> =
