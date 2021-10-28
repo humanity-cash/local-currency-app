@@ -32,6 +32,7 @@ import { ToastType, LoadingScreenTypes } from 'src/utils/types';
 import { showToast } from 'src/utils/common';
 import { updateLoadingStatus } from 'src/store/loading/loading.actions';
 import { useDispatch } from 'react-redux';
+import countries from 'src/mocks/countries';
 
 const styles = StyleSheet.create({
 	content: {
@@ -70,6 +71,7 @@ const PersonalAddress = (): React.ReactElement => {
 
 	const onNextPress = async () => {
 		const response = await completeCustomerBasicVerification();
+		const state = customerBasicVerificationDetails.state
 		if (response.success && cognitoId && signInDetails) {
 			const request: IUserRequest = {
 				firstName: customerBasicVerificationDetails.firstName,
@@ -78,7 +80,7 @@ const PersonalAddress = (): React.ReactElement => {
 				address1: customerBasicVerificationDetails.address1,
 				address2: customerBasicVerificationDetails.address2,
 				city: customerBasicVerificationDetails.city,
-				state: customerBasicVerificationDetails.state,
+				state: state && state.length > 0 ? state : countries[0],
 				postalCode: customerBasicVerificationDetails.postalCode,
 				authUserId: "p_" + cognitoId
 			};
