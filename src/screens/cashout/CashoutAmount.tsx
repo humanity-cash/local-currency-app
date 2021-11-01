@@ -78,6 +78,7 @@ const CashoutAmount = (): JSX.Element => {
 	});
 	const [goNext, setGoNext] = useState(false);
 	const [isVisible, setIsVisible] = useState(false);
+	const maxAmount = 5
 
 	useEffect(() => {
 		setGoNext(state.costs !== "");
@@ -85,6 +86,11 @@ const CashoutAmount = (): JSX.Element => {
 
 	const onValueChange = (name: string, change: string) => {
 		const costs = change;
+		if (Number(costs) > maxAmount) {
+			showToast(ToastType.ERROR, "Whoops, something went wrong.", "Please note that the maximum amount is B$ 5.00");
+			return
+		}
+
 		setState({
 		  amount: change,
 		  costs: costs,
@@ -142,11 +148,11 @@ const CashoutAmount = (): JSX.Element => {
 					/>
 					<View style={styles.resultView}>
 						<Text style={styles.resultText}>{Translation.PAYMENT.REDEMPTION_FEE} (1.5%)</Text>
-						<Text style={styles.resultText}>{Translation.COMMON.USD} -</Text>
+						<Text style={styles.resultText}>$ {Number(state.amount) > 0 ? (Number(state.amount)*0.015).toFixed(2) : '-'}</Text>
 					</View>
 					<View style={styles.resultView}>
-						<Text style={{ ...styles.resultText, fontWeight: 'bold' }}>{Translation.LOAD_UP.TOTAL_COSTS}</Text>
-						<Text style={{ ...styles.resultText, fontWeight: 'bold' }}>{Translation.COMMON.USD} -</Text>
+						<Text style={{ ...styles.resultText, fontWeight: 'bold' }}>{Translation.LOAD_UP.NET_CASH_OUT}</Text>
+						<Text style={{ ...styles.resultText, fontWeight: 'bold' }}>$ {Number(state.amount) > 0 ? (Number(state.amount)*0.985).toFixed(2) : '-'}</Text>
 					</View>
 				</View>
 			</ScrollView>
@@ -167,7 +173,7 @@ const CashoutAmount = (): JSX.Element => {
 					<View style={dialogViewBase}>
 						<View style={styles.dialogWrap}>
 							<Text style={styles.dialogHeader}>{Translation.PAYMENT.CASH_OUT_CONFIRM}</Text>
-							<Text>{Translation.PAYMENT.CASH_OUT_CONFIRM_DETAIL}</Text>
+							<Text>{`You will redeem ${Number(state.amount).toFixed(2)} BerkShares for USD ${(Number(state.amount)*0.985).toFixed(2)} after a 1.5% fee.`}</Text>
 						</View>
 						<View style={styles.dialogBottom}>
 							<Button

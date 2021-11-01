@@ -136,7 +136,8 @@ const PaymentConfirm = (props: PaymentConfirmProps) => {
 
 	const firstName = userAttributes?.["custom:personal.firstName"];
     const lastName = userAttributes?.["custom:personal.lastName"];
-	const amountCalcedFee = props.payInfo.amount + calcFee(props.payInfo.amount);
+	// const amountCalcedFee = props.payInfo.amount + calcFee(props.payInfo.amount);
+	const amountCalcedFee = props.payInfo.amount;
 
 	return (
 		<Dialog visible={props.visible} onClose={props.onCancel} style={styles.dialog}>
@@ -256,7 +257,7 @@ const QRCodeScan = (): JSX.Element => {
 	}
 
 	const onPayConfirm = async (isRoundUp: boolean) => {
-		const amountCalcedFee = state.amount + calcFee(state.amount);
+		const amountCalcedFee = state.amount;	// + calcFee(state.amount);
 		setIsPaymentDialog(false);
 		
 		// check balance

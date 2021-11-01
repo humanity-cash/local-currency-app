@@ -123,7 +123,7 @@ const PaymentRequest = (): JSX.Element => {
 					<BorderedInput
 						label="Amount"
 						name="amount"
-						keyboardType="number-pad"
+						keyboardType="decimal-pad"
 						placeholder="Amount"
 						prefix="B$"
 						value={state.amount}
@@ -136,7 +136,7 @@ const PaymentRequest = (): JSX.Element => {
 				<View style={styles.bottomView}>
 					<Button
 						type="transparent"
-						title={Translation.BUTTON.OPEN_AMOUNT}
+						title={Translation.BUTTON.LET_CHOOSE_AMOUNT}
 						style={styles.openBtn}
 						onPress={openAmount}
 					/>
