@@ -109,9 +109,10 @@
         "CONFIRM_NEW_PASSWORD": "CONFIRM NEW PASSWORD",
         "OLD_PASSWORD": "OLD PASSWORD",
         "RETURN_AMOUNT": "RETURN AMOUNT",
+        "RETURN_MAX_AMOUNT": "MAX. TOTAL TRANSACTION AMOUNT",
         "TIME_PERIOD": "TIME PERIOD",
         "TYPE_OF_TRANSACTIONS": "TYPE OF TRANSACTIONS",
-        "TRANSACTION_DETAILS": "TRANSACTION_DETAILS"
+        "TRANSACTION_DETAILS": "TRANSACTION DETAILS"
     },
     "LANDING_PAGE": {
         "TITLE": "BerkShares",
@@ -225,9 +226,9 @@
         "BERKSHARE_AVAILABLE_PERSONAL": "The BerkShares are now available in your personal account.",
         "PAYOUT_AMOUNT_PERSONAL": "Select the amount of BerkShares you would like to pay out to your personal account.",
         "PAYOUT_IN": "Pay out in B$",
-        "SELECT_PAYOUT_AMOUNT": "Select the amount of BerkShares you would like to pay out.",
+        "SELECT_PAYOUT_AMOUNT": "Select the amount of BerkShares you would like to send.",
         "SCAN_QR": "Scan the recipients QR",
-        "SCAN_QR_DETAIL": "Scan the QR code of the recipients. The recipient can pull this up by clicking on 'Receive payment'.",
+        "SCAN_QR_DETAIL": "Scan the recipient’s QR code. The recipient can pull this up by clicking on “Scan to Pay or Receive” and toggling to “Receive.”",
         "SCAN_RECIPIENTS_QR": "Scan the customer’s return receipt QR code.",
         "SCAN_RECIPIENTS_QR_DETAIL": "The customer needs to provide the transaction receipt, and select “Make a Return” in order to generate a QR Code. Scan this QR code in order to the refund BerkShares to the customer.",
         "SCAN_TO_PAY_REQUEST": "Scan to Pay or Request",

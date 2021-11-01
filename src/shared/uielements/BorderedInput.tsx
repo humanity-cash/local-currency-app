@@ -16,6 +16,7 @@ type BorderedInputProps = {
 	keyboardType?: any
 	onKeyPress?: any
 	maxLength?: number
+	containerStyle?: any
 }
 
 const styles = StyleSheet.create({
@@ -26,7 +27,8 @@ const styles = StyleSheet.create({
 		alignItems: "center",
 		backgroundColor: colors.inputBg,
 		marginVertical: 8,
-		paddingHorizontal: 15
+		paddingHorizontal: 15,
+		borderRadius: 3
 	},
 	iconView: {
 		alignItems: "center"
@@ -52,7 +54,7 @@ const BorderedInput = (props: BorderedInputProps) => {
 
 	return (
 		<TouchableWithoutFeedback onPress={() => inputRef.current?.focus()}>
-			<View style={{ ...styles.container, ...props.style }}>
+			<View style={{ ...styles.container, ...props.style, ...props.containerStyle }}>
 				{props.prefix && (
 					<View style={{ alignItems: "center" }}>
 						<Text style={{

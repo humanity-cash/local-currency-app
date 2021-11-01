@@ -8,7 +8,7 @@ import moment from 'moment';
 import Translation from 'src/translation/en.json';
 import { colors } from "src/theme/colors";
 
-const TransactionTypes = ["All", "Sales", "Returns", "Cash outs", "Expenses"];
+const TransactionTypes = ["All", "Sales", "Returns", "Cash outs", "Other transfers"];
 
 const styles = StyleSheet.create({
     container: {

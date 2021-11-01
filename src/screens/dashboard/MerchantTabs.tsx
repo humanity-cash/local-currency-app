@@ -298,7 +298,7 @@ const DrawerContent = (props: DrawerContentComponentProps) => {
 											/>
 										</View>
 										<View style={styles.usernameView}>
-											<Text>Cashier</Text>
+											<Text>Humanity Cash Cashier</Text>
 										</View>
 									</View>
 								</TouchableWithoutFeedback>
