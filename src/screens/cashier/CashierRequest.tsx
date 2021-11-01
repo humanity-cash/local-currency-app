@@ -94,7 +94,7 @@ const CashierRequest = (): JSX.Element => {
 					<BorderedInput
 						label="Amount"
 						name="amount"
-						keyboardType="number-pad"
+						keyboardType="decimal-pad"
 						placeholder="Amount"
 						placeholderTextColor={colors.greyedPurple}
 						prefix="B$"

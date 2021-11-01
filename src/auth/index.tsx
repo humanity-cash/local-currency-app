@@ -61,7 +61,7 @@ const AuthProvider: React.FunctionComponent = ({ children }) => {
 	const [signInDetails, setSignInDetails] = useState(signInInitialState);
 	const [signUpDetails, setSignUpDetails] = useState(signUpInitialState);
 	const [forgotPasswordDetails, setForgotPasswordDetails] = useState<ForgotPassword>({
-		email: "esraa@keyko.io",
+		email: "",
 		verificationCode: "",
 		newPassword: "",
 	});

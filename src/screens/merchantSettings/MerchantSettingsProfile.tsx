@@ -511,7 +511,7 @@ export const MerchantSettingsProfile = (): JSX.Element => {
 						<BlockInput
 							name="zipCode"
 							placeholder="00000"
-							keyboardType="number-pad"
+							keyboardType="decimal-pad"
 							value={state.businessPostalCode}
 							onChange={(_name: string, newValue: string) => {
 								setState((pv) => ({
