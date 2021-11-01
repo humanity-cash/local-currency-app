@@ -153,7 +153,7 @@ const PaymentConfirm = (props: PaymentConfirmProps) => {
 
 	const firstName = userAttributes?.["custom:owner.firstName"];
     const lastName = userAttributes?.["custom:owner.lastName"];
-	const amountCalcedFee = props.payInfo.amount + calcFee(props.payInfo.amount);
+	const amountCalcedFee = props.payInfo.amount;		// + calcFee(props.payInfo.amount);
 
 	return (
 		<Dialog visible={props.visible} onClose={props.onCancel} backgroundStyle={styles.dialogBg} style={styles.dialog}>

@@ -8,7 +8,7 @@ import { colors } from "src/theme/colors";
 import Translation from 'src/translation/en.json';
 import SelectDropdown from 'react-native-select-dropdown';
 
-const consumerTransactionTypes = ["All", "Incoming transactions", "Outgoing transactions", "Load ups B$"];  // , "Cash out to USD"
+const consumerTransactionTypes = ["All", "Incoming transactions", "Outgoing transactions", "Load ups B$", "Cash out to USD"];
 
 const styles = StyleSheet.create({
     container: {
