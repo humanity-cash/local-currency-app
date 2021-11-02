@@ -3,27 +3,91 @@ import { AxiosResponse } from 'axios';
 export type UserId = string;
 export type AxiosPromiseResponse = AxiosResponse<unknown>;
 
-export interface IUserRequest {
+export interface BaseUser {
     firstName: string;
     lastName: string;
-    email: string;
     address1: string;
     address2?: string;
     city: string;
     state: string;
     postalCode: string;
-    businessName?: string;
-    ipAddress?: string;
-    authUserId: string;
+}
+
+export interface IDBMiniNewBusinessInput {
+    story: string,
+    tag: string,
+    avatar: string,
+    type: string,
+    rbn: string,
+    industry: string,
+    ein: string,
+    address1: string,
+    address2: string,
+    city: string,
+    state: string,
+    postalCode: string,
+    phoneNumber: string,
+    owner: BaseUser
+}
+
+export interface IDBMiniNewCustomerInput extends BaseUser {
+    avatar: string;
+    tag: string;
 }
 
 export interface IUser {
-    totalBalance: number;
-    availableBalance: number;
-    userId: string;
-    address: string;
-    createdBlock: string;
+    consent: boolean
+    verifiedCustomer: boolean
+    verifiedBusiness: boolean
+    email: string
+    customer?: Customer
+    business?: Business
+    dbId: string //ObjectId
 }
+
+type DwollaId = string;
+
+export interface Business {
+    story: string,
+    tag: string,
+    avatar: string,
+    type: string,
+    rbn: string,
+    industry: string,
+    ein: string,
+    address1: string,
+    address2: string,
+    city: string,
+    state: string,
+    postalCode: string,
+    phoneNumber: string,
+    dwollaId?: DwollaId,
+    resourceUri?: string,
+    owner: BaseUser
+}
+
+export interface Customer extends BaseUser {
+    avatar: string,
+    tag: string,
+    dwollaId?: DwollaId,
+    resourceUri?: string,
+}
+
+export interface IUserRequest {
+    email: string;
+    consent: boolean;
+    type: 'customer' | 'business';
+    business?: IDBMiniNewBusinessInput;
+    customer?: IDBMiniNewCustomerInput;
+}
+
+// export interface IUser {
+//     totalBalance: number;
+//     availableBalance: number;
+//     userId: string;
+//     address: string;
+//     createdBlock: string;
+// }
 
 export interface IDepositRequest {
     amount: string
@@ -87,3 +151,15 @@ export interface IOperatorResponse {
     deposits: IDepositResponse[];
     withdrawals: IWithdrawalResponse[];
 }
+
+// firstName: string;
+// lastName: string;
+// email: string;
+// address1: string;
+// address2?: string;
+// city: string;
+// state: string;
+// postalCode: string;
+// businessName?: string;
+// ipAddress?: string;
+// authUserId: string;

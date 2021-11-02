@@ -3,7 +3,7 @@ import { getRequest, postRequest } from './base';
 import { userData, transactionDatas, fundingSource } from './formatters';
 
 // create local currency user
-export const user = async (request: IUserRequest): Promise<AxiosPromiseResponse> => {
+export const createUser = async (request: IUserRequest): Promise<AxiosPromiseResponse> => {
   const response = await postRequest(`/users`, request);
   return response;
 };
