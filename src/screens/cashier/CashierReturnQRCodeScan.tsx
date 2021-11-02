@@ -55,6 +55,18 @@ const styles = StyleSheet.create({
 		color: colors.text, 
 		fontSize: 12 
 	},
+	labelView: {
+		flexDirection: 'row',
+		justifyContent: 'space-between'
+	},
+	maxLabel: { 
+		color: colors.mistakeRed, 
+		fontSize: 12 
+	},
+	mistakeWrapper: {
+		borderWidth: 1,
+		borderColor: colors.mistakeRed
+	},
 	input: {
 		backgroundColor: colors.white,
 		color: colors.purple
@@ -95,6 +107,7 @@ const CashierReturnQRCodeScan = (): JSX.Element => {
 	const [isReturnModal, setIsReturnModal] = useState<boolean>(false);
 	const [amount, setAmount] = useState<string>("");
 	const [goNext, setGoNext] = useState<boolean>(false);
+	const [isWrong, setIsWorng] = useState(false)
 	const [state, setState] = useState<QRCodeEntry>({
 		securityId: SECURITY_ID,
 		to: "",
@@ -107,7 +120,20 @@ const CashierReturnQRCodeScan = (): JSX.Element => {
 	});
 
 	useEffect(() => {
-		setGoNext(Number(amount) > 0);
+		const maxAmount = Number(state.amount);
+		const inputAmount = Number(amount)
+		if ( inputAmount > 0 ) {
+			if(inputAmount > maxAmount) {
+				setIsWorng(true)
+				setGoNext(false)
+			} else {
+				setIsWorng(false)
+				setGoNext(true)
+			}
+		} else {
+			setIsWorng(false)
+			setGoNext(false)
+		}
 	}, [amount]);
 
 	const handleBarCodeScanned = (data: HandleScaned) => {
@@ -217,7 +243,12 @@ const CashierReturnQRCodeScan = (): JSX.Element => {
 									</View>
 								</View>
 
-								<Text style={styles.label}>{Translation.LABEL.RETURN_AMOUNT}</Text>
+								<View style={styles.labelView}>
+									<Text style={styles.label}>{Translation.LABEL.RETURN_AMOUNT}</Text>
+									{isWrong &&
+										<Text style={styles.maxLabel}>{Translation.LABEL.RETURN_MAX_AMOUNT}</Text>
+									}
+								</View>
 								<BorderedInput
 									label="Amount"
 									name="amount"
@@ -226,6 +257,7 @@ const CashierReturnQRCodeScan = (): JSX.Element => {
 									placeholderTextColor={colors.greyedPurple}
 									prefix="B$"
 									style={styles.input}
+									containerStyle={isWrong ? styles.mistakeWrapper : null}
 									textStyle={styles.text}
 									value={amount}
 									onChange={onValueChange}
