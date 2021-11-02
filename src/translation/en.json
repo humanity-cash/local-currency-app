@@ -198,7 +198,7 @@
         "PAYMENT_SUCCESS_DETAIL": "Your receipt can be found in your transaction overview.",
         "PAYMENT_RECEIVE_SUCCESS": "Succeeded! You have received B$ {{amount}}",
         "CASH_OUT": "Cash out to USD",
-        "CASH_OUT_DETAIL": "Select the amount of BerkShares you would like to redeem to USD. Please note that the maximum amount is B$ 5.00 and you can not exceed your account balance.",
+        "CASH_OUT_DETAIL": "Select the amount of BerkShares you would like to redeem to USD. Please note that you can not exceed your account balance.",
         "REDEMPTION_FEE": "Redemption fee ",
         "NET_CASH_OUT": "Net cash out",
         "CASH_OUT_CONFIRM": "Are you sure you want to cash out?",
