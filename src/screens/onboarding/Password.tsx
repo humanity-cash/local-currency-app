@@ -12,8 +12,8 @@ import {
 	viewBaseWhite,
 	wrappingContainerBase
 } from 'src/theme/elements';
-import { isPasswordValid } from 'src/utils/validation';
 import Translation from 'src/translation/en.json';
+import { isPasswordValid } from 'src/utils/validation';
 
 const styles = StyleSheet.create({
 	headerText: {
@@ -50,6 +50,7 @@ const styles = StyleSheet.create({
 const Password = (): JSX.Element => {
 	const navigation = useNavigation();
 	const { setSignUpDetails, signUpDetails, signUp } = useContext(AuthContext);
+  console.log("🚀 ~ file: Password.tsx ~ line 53 ~ signUpDetails", signUpDetails)
 	const [isValidPassword, setIsValidPassword] = useState<boolean>(false);
 
 	useEffect(() => {
