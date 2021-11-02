@@ -1,8 +1,7 @@
 import { useNavigation } from "@react-navigation/native";
-import React, { useContext } from "react";
+import React from "react";
 import { ScrollView, StyleSheet, View } from "react-native";
 import { Text } from "react-native-elements";
-import { AuthContext } from "src/auth";
 import * as Routes from 'src/navigation/constants';
 import Button from "src/shared/uielements/Button";
 import Header from "src/shared/uielements/header/Header";
@@ -34,21 +33,10 @@ const styles = StyleSheet.create({
 
 const SelectAccountType = (): JSX.Element => {
 	const navigation = useNavigation()
-	const { setCustomerBasicVerificationDetails } = useContext(AuthContext);
-
 	const handlePersonal = () => {
-		setCustomerBasicVerificationDetails((pv: any) => ({
-			...pv,
-			type: "personal",
-		}));
 		navigation.navigate(Routes.PERSONAL_PROFILE)
 	}
-
 	const handleBuisness = () => {
-		setCustomerBasicVerificationDetails((pv: any) => ({
-			...pv,
-			type: "buisness",
-		}));
 		navigation.navigate(Routes.SIGNUP_BUSINESS);
 	}
 

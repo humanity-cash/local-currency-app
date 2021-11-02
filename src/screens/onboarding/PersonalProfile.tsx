@@ -1,7 +1,8 @@
 import { useNavigation } from '@react-navigation/native';
-import React, { ReactElement, useContext, useState, useEffect } from 'react';
+import React, { ReactElement, useContext, useEffect, useState } from 'react';
 import { KeyboardAvoidingView, Platform, ScrollView, StyleSheet, View } from 'react-native';
 import { Text } from 'react-native-elements';
+import { UserContext } from 'src/api/context';
 import { AuthContext } from 'src/auth';
 import { BUTTON_TYPES } from 'src/constants';
 import * as Routes from 'src/navigation/constants';
@@ -26,7 +27,8 @@ const styles = StyleSheet.create({
 const PersonalProfile = (): ReactElement => {
 	const navigation = useNavigation();
 	const [goNext, setGoNext] = useState<boolean>(false);
-	const { signOut, customerBasicVerificationDetails } = useContext(AuthContext);
+	const { user } = useContext(UserContext);
+	const { signOut  } = useContext(AuthContext);
 
 	useEffect(() => {
 		setGoNext(customerBasicVerificationDetails.tag !== "");

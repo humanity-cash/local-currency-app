@@ -34,11 +34,11 @@ import MerchantPayoutQRCodeScan from "src/screens/merchantPayout/MerchantPayoutQ
 import MerchantPayoutSuccess from "src/screens/merchantPayout/MerchantPayoutSuccess";
 import MerchantPayoutToPersonal from "src/screens/merchantPayout/MerchantPayoutToPersonal";
 import MerchantPayoutToSomeone from "src/screens/merchantPayout/MerchantPayoutToSomeone";
-import MerchantSettingsProfile from "src/screens/merchantSettings/MerchantSettingsProfile";
 import MerchantSettingsBankAccount from "src/screens/merchantSettings/MerchantSettingsBankAccount";
+import MerchantSettingsProfile from "src/screens/merchantSettings/MerchantSettingsProfile";
+import MerchantSettingsSecurity from "src/screens/merchantSettings/MerchantSettingsSecurity";
 import MerchantSettingsStaticQr from "src/screens/merchantSettings/MerchantSettingsStaticQr";
 import MerchantSettingsTermsAndConditions from "src/screens/merchantSettings/MerchantSettingsTermsAndConditions";
-import MerchantSettingsSecurity from "src/screens/merchantSettings/MerchantSettingsSecurity";
 import ConfirmEmail from "src/screens/onboarding/ConfirmEmail";
 import CreateAccount from "src/screens/onboarding/CreateAccount";
 import EmailConfirmed from "src/screens/onboarding/EmailConfirmed";
@@ -73,9 +73,11 @@ const PrimaryStackScreen = () => {
 	const {
 		authStatus,
 		userType,
-		completedCustomerVerification,
-		completedBusinessVerification,
 	} = useContext(AuthContext);
+	console.log("🚀 ~ file: MainNavigationStack.tsx ~ line 75 ~ PrimaryStackScreen ~ authStatus", authStatus)
+	console.log("🚀 ~ file: MainNavigationStack.tsx ~ line 76 ~ PrimaryStackScreen ~ userType", userType)
+	const completedCustomerVerification = false
+	const completedBusinessVerification = false
 
 	return (
 		<PrimaryStack.Navigator
@@ -83,7 +85,7 @@ const PrimaryStackScreen = () => {
 				headerShown: false,
 			})}>
 			{authStatus === AuthStatus.SignedOut ||
-			authStatus === AuthStatus.Loading ? (
+				authStatus === AuthStatus.Loading ? (
 				<>
 					<PrimaryStack.Screen
 						name={Routes.TEASER}
@@ -128,8 +130,8 @@ const PrimaryStackScreen = () => {
 					/>
 				</>
 			) : authStatus === AuthStatus.SignedIn &&
-			  userType === UserType.Customer &&
-			  completedCustomerVerification ? (
+				userType === UserType.Customer &&
+				completedCustomerVerification ? (
 				<>
 					<PrimaryStack.Screen name={Routes.TABS} component={Tabs} />
 					<PrimaryStack.Screen
@@ -196,8 +198,8 @@ const PrimaryStackScreen = () => {
 					)}
 				</>
 			) : authStatus === AuthStatus.SignedIn &&
-			  userType === UserType.Cashier &&
-			  completedBusinessVerification ? (
+				userType === UserType.Cashier &&
+				completedBusinessVerification ? (
 				/** Cahsier screens */
 				<>
 					<PrimaryStack.Screen
@@ -250,8 +252,8 @@ const PrimaryStackScreen = () => {
 					/>
 				</>
 			) : authStatus === AuthStatus.SignedIn &&
-			  userType === UserType.Business &&
-			  completedBusinessVerification ? (
+				userType === UserType.Business &&
+				completedBusinessVerification ? (
 				<>
 					<PrimaryStack.Screen
 						name={Routes.MERCHANT_TABS}
@@ -351,7 +353,7 @@ const PrimaryStackScreen = () => {
 					)}
 				</>
 			) : !completedBusinessVerification &&
-			  !completedCustomerVerification ? (
+				!completedCustomerVerification ? (
 				// Not Verified
 				<>
 					<PrimaryStack.Screen
