@@ -135,7 +135,7 @@ const MerchantCashoutAmount = (): JSX.Element => {
 					<Text style={styles.bodyText}>{Translation.PAYMENT.CASH_OUT_DETAIL}</Text>
 					<View style={styles.formLabel}>
 						<Text style={styles.labelText}>{Translation.LABEL.AMOUNT}</Text>
-						<Text style={styles.labelText}>{Translation.LABEL.MAX_BERKSHARES}</Text>
+						{/* <Text style={styles.labelText}>{Translation.LABEL.MAX_BERKSHARES}</Text> */}
 					</View>
 					<BorderedInput
 						label="Amount"

@@ -330,7 +330,8 @@ const DrawerContent = (props: DrawerContentComponentProps) => {
 						/>
 						<DrawerItem
 							label={Translation.TABS.CASHOUT}
-							onPress={() => businessFundingSource ?  props.navigation.navigate(Routes.MERCHANT_CASHOUT_AMOUNT) : setIsBankDialog(true)}
+							// onPress={() => businessFundingSource ?  props.navigation.navigate(Routes.MERCHANT_CASHOUT_AMOUNT) : setIsBankDialog(true)}
+							onPress={() => props.navigation.navigate(Routes.MERCHANT_CASHOUT_AMOUNT)}
 						/>
 					</Drawer.Section>
 					<Drawer.Section>
