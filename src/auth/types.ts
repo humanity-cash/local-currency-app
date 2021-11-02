@@ -1,15 +1,68 @@
 import { CognitoUser, CognitoUserAttribute } from "amazon-cognito-identity-js";
-import { 
-	BaseResponse, 
-	CognitoBusinessAttributes, 
-	CognitoBusinessUpdateAttributes, 
-	CognitoCustomerAttributes, 
-	CognitoCustomerAttributesUpdate, 
-	CognitoSharedUserAttributes, 
-	CognitoResponse
-} from 'src/auth/cognito/types';
-import { Dispatch, SetStateAction } from "react";
+import { BaseUser } from "src/api/types";
 
+export interface CognitoCustomerAttributesUpdate {
+	'avatar'?: string,
+	'tag': string,
+	'address1'?: string,
+	'address2'?: string,
+	'city'?: string,
+	'state'?: string,
+	'postalCode'?: string,
+	'firstName'?: string
+	'lastName'?: string
+}
+
+/**Customer */
+export interface CognitoCustomerAttributes {
+	'avatar': string,
+	'tag': string,
+	'address1': string,
+	'address2': string,
+	'city': string,
+	'state': string,
+	'postalCode': string,
+	'firstName': string,
+	'lastName': string
+}
+
+/**Business Update*/
+export interface CognitoBusinessUpdateAttributes {
+	"story"?: string,
+	"tag"?: string,
+	"avatar"?: string,
+	"type"?: string,
+	"industry"?: string,
+	"address1"?: string,
+	"address2"?: string,
+	"city"?: string,
+	"state"?: string,
+	"postalCode"?: string,
+	"phoneNumber"?: string,
+}
+
+/**Business */
+export interface CognitoBusinessAttributes {
+	"story": string,
+	"tag": string,
+	"avatar": string,
+	"type": string,
+	"rbn": string,
+	"industry": string,
+	"ein": string,
+	"address1": string,
+	"address2": string,
+	"city": string,
+	"state": string,
+	"postalCode": string,
+	"phoneNumber"?: string,
+	"owner": BaseUser,
+}
+
+export interface CognitoCustomerDwollaAttributes {
+	'dwollaId'?: string,
+	'resourceUri'?: string
+}
 export interface CustomerBasicVerification {
 	avatar: string
 	tag: string
@@ -25,7 +78,7 @@ export interface CustomerBasicVerification {
 	resourceUri?: string,
 };
 
-export type AccountUpdate = CognitoCustomerAttributesUpdate | CognitoBusinessUpdateAttributes | CognitoSharedUserAttributes
+export type AccountUpdate = CognitoCustomerAttributesUpdate | CognitoBusinessUpdateAttributes;
 
 export interface BusinessBasicVerification {
 	story: string,
@@ -116,15 +169,6 @@ export interface IAuth {
 	setAuthStatus?: any,
 	startForgotPasswordFlow: () => Promise<BaseResponse<unknown>>,
 	completeForgotPasswordFlow: () => Promise<BaseResponse<unknown>>,
-	completeBusniessBasicVerification?: any,
-	completedCustomerVerification: boolean,
-	completedBusinessVerification: boolean,
-	cognitoId?: string,
-	customerDwollaId?: string,
-	businessDwollaId?: string,
-	userAttributes?: any,
-	completeCustomerBasicVerification?: any,
-	updateAttributes: (update: AccountUpdate) => Promise<BaseResponse<string | undefined>>;
 	sessionInfo?: Session;
 	resendEmailVerificationCode?: any;
 	authStatus?: AuthStatus;
@@ -133,37 +177,45 @@ export interface IAuth {
 	signInDetails?: { password: string; email: string };
 	signOut?: any;
 	getSession?: any;
-	getAttributes?: any;
 	signUpDetails?: any;
 	setSignUpDetails?: any;
 	emailVerification?: any;
-	updateAttributeAfterSignUp?: any;
 	signUp?: any;
-	isCustomerVerified?: any;
-	isVerified?: boolean;
-	setCustomerBasicVerificationDetails?: any;
-	customerBasicVerificationDetails?: any;
-	buisnessBasicVerification?: any,
-	setBuisnessBasicVerification?: any,
-	setCustomerDwollaInfo?: Dispatch<SetStateAction<DwollaInfo>>,
-	completeCustomerDwollaInfo?: (update: DwollaInfo) => CognitoResponse<string | undefined>,
-	setBusinessDwollaInfo?: Dispatch<SetStateAction<DwollaInfo>>,
-	completeBusinessDwollaInfo?: (update: DwollaInfo) => CognitoResponse<string | undefined>,
 	changePassword?: any
 }
 
 //@ts-ignore
 export const defaultState: IAuth = {
-	completedCustomerVerification: false,
-	completedBusinessVerification: false,
 	sessionInfo: {},
 	authStatus: AuthStatus.Loading,
 	signInDetails: { password: '', email: '' },
-	isVerified: false,
 	setSignInDetails: () => {
 		console.log('setSigninDetails is not loaded yet')
 	},
 };
+
+
+export type CognitoError = any
+
+export type BaseResponse<T> = { user?: CognitoUser | null, success: boolean, data: { error: string } | T }
+
+export const CognitoResponse = Promise
+export type CognitoResponse<T> = Promise<BaseResponse<T>>
+
+export interface StartForgotPasswordInput {
+	email: string,
+}
+
+export interface CompleteForgotPasswordInput {
+	email: string,
+	verificationCode: string,
+	newPassword: string
+}
+
+export interface ChangePasswordInput {
+	oldPassword: string,
+	newPassword: string
+}
 
 // export interface IAuth {
 // 	userType?: UserType | undefined,
