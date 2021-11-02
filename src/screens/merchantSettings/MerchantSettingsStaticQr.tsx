@@ -11,6 +11,7 @@ import { BUTTON_TYPES } from 'src/constants';
 import StaticQRCodeGen from './MerchantStaticQRCodeGen';
 import { showToast } from 'src/utils/common';
 import { ToastType } from 'src/utils/types';
+import email from 'react-native-email'
 
 const styles = StyleSheet.create({
 	headerText: {
@@ -45,6 +46,17 @@ const MerchantSettingsStaticQr = (): JSX.Element => {
 		setIsStaticQRCode(false);
 	}
 
+	const sendEmail = () => {
+		const to = ['info@berkshares,org'] // string or array of email addresses
+        email(to, {
+            // Optional additional arguments
+            // cc: ['aaa@hotmail.com'], // string or array of email addresses
+            // bcc: ['eee@hotmail.com'], // string or array of email addresses
+            subject: 'QR code',
+            body: 'Feature coming soon'
+        }).catch(console.error)
+	}
+
 	return (
 		<View style={viewBase}>
 			<Header
@@ -57,6 +69,7 @@ const MerchantSettingsStaticQr = (): JSX.Element => {
 				<Text style={styles.text}>{Translation.OTHER.STATIC_QR_DETAIL1}</Text>
 				<Text style={styles.text}>{Translation.OTHER.STATIC_QR_DETAIL2}</Text>
 				<Text style={styles.text}>{Translation.OTHER.STATIC_QR_DETAIL3}</Text>
+				<Text style={styles.text}>{Translation.OTHER.STATIC_QR_DETAIL4}</Text>
 			</ScrollView>
 			<KeyboardAvoidingView
 				behavior={Platform.OS == "ios" ? "padding" : "height"} >
@@ -70,7 +83,7 @@ const MerchantSettingsStaticQr = (): JSX.Element => {
 					<Button
 						type={BUTTON_TYPES.PURPLE}
 						title={Translation.BUTTON.MAIL_QR_CODE}
-						onPress={() => navigation.navigate(Routes.MERCHANT_DASHBOARD)}
+						onPress={sendEmail}
 					/>
 				</View>
 			</KeyboardAvoidingView>

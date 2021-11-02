@@ -8895,6 +8895,11 @@ qrcode@^1.4.4:
     pngjs "^3.3.0"
     yargs "^13.2.4"
 
+qs@6.9.4:
+  version "6.9.4"
+  resolved "https://registry.yarnpkg.com/qs/-/qs-6.9.4.tgz#9090b290d1f91728d3c22e54843ca44aea5ab687"
+  integrity sha512-A1kFqHekCTM7cz0udomYUoYNWjBebHm/5wzU/XqrBRBNWectVH0QIiN+NEcZ0Dte5hvzHwbr8+XQmguPhJ6WdQ==
+
 qs@~6.5.2:
   version "6.5.2"
   resolved "https://registry.yarnpkg.com/qs/-/qs-6.5.2.tgz#cb3ae806e8740444584ef154ce8ee98d403f3e36"
@@ -9000,6 +9005,13 @@ react-native-elements@^2.1.0:
     prop-types "^15.7.2"
     react-native-ratings "^7.2.0"
     react-native-status-bar-height "^2.5.0"
+
+react-native-email@^1.1.0:
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/react-native-email/-/react-native-email-1.1.0.tgz#b41ddd3d67476fb6d703d65f250f0cc9eff747a8"
+  integrity sha512-vyH8gkk+Rz/l7QF76bSr6EclBu1yF7DMWejfspGdbOsDe6/6TGbReP0t4zx2FXR4mh6h4GjmZNPwFEwycepGRA==
+  dependencies:
+    qs "6.9.4"
 
 react-native-gesture-handler@~1.10.2:
   version "1.10.3"
