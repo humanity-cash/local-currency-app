@@ -44,10 +44,11 @@ const ErrorHandler = async (
   try {
     const response: AxiosResponse = await requestHandler();
     return response;
-  } catch (err) {
+  } catch (err: any) {
     const config = err?.config;
     const message = err?.message;
     const response = err?.response;
+    console.log("~ error.response.data", response.data)
     console.error(
       `API request failed: '${message}'`,
       `internal error: '${response?.data?.message}'`,

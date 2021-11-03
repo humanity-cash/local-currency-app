@@ -19,6 +19,7 @@ const AuthProvider: React.FunctionComponent = ({ children }) => {
 	const [userType, setUserType] = useState<UserType | undefined>(undefined);
 	const [authStatus, setAuthStatus] = useState(AuthStatus.SignedOut);
 	const [update, setUpdate] = useState(false);
+	const [userEmail, setUserEmail] = useState<string>("");
 	const [signInDetails, setSignInDetails] = useState(signInInitialState);
 	const [signUpDetails, setSignUpDetails] = useState(signUpInitialState);
 	const [forgotPasswordDetails, setForgotPasswordDetails] = useState<ForgotPassword>({
@@ -27,7 +28,7 @@ const AuthProvider: React.FunctionComponent = ({ children }) => {
 		newPassword: "",
 	});
 
-	const updateUserType = (userEmail: string, newType: UserType): void => {
+	const updateUserType = (newType: UserType, uEmail = userEmail): void => {
 		if (newType === userType) {
 			setAuthStatus(AuthStatus.Loading);
 		} else {
@@ -35,7 +36,7 @@ const AuthProvider: React.FunctionComponent = ({ children }) => {
 		}
 		if (newType !== UserType.Cashier) {
 			// dont cache cashier option. it will lock the user in cashier screens
-			saveUserTypeToStorage(userEmail, newType);
+			saveUserTypeToStorage(uEmail, newType);
 		}
 	};
 
@@ -43,9 +44,11 @@ const AuthProvider: React.FunctionComponent = ({ children }) => {
 		try {
 			const response: BaseResponse<CognitoUserSession | undefined> =
 				await userController.getSession();
-      console.log("🚀 ~ file: index.tsx ~ line 45 ~ getSessionInfo ~ response", response)
-			if (response.success) {
+      console.log("🚀  getSessionInfo ~ response", response.data?.getAccessToken().decodePayload().username)
+			if (response.success && response.data && response.data.isValid()) {
 				// await getAttributes(); // should invoke getUser from DB
+				const email = response.data.getAccessToken().decodePayload().username;
+				setUserEmail(email);
 				setAuthStatus(AuthStatus.SignedIn);
 			} else {
 				setAuthStatus(AuthStatus.SignedOut);
@@ -77,19 +80,19 @@ const AuthProvider: React.FunctionComponent = ({ children }) => {
 		const latestType = await getLatestSelectedAccountType(cognitoId);
 		if (!latestType) {
 			if (userType !== UserType.Customer) {
-				updateUserType(cognitoId, UserType.Customer);
+				updateUserType(UserType.Customer);
 			}
 		} else if (latestType === "2") {
 			if (userType !== UserType.Cashier) {
-				updateUserType(cognitoId, UserType.Cashier);
+				updateUserType(UserType.Cashier);
 			}
 		} else if (latestType === "0") {
 			if (userType !== UserType.Customer) {
-				updateUserType(cognitoId, UserType.Customer);
+				updateUserType(UserType.Customer);
 			}
 		} else if (latestType === "1") {
 			if (userType !== UserType.Business) {
-				updateUserType(cognitoId, UserType.Business);
+				updateUserType(UserType.Business);
 			}
 		}
 	};
@@ -189,6 +192,7 @@ const AuthProvider: React.FunctionComponent = ({ children }) => {
 		completeForgotPasswordFlow,
 		resendEmailVerificationCode,
 		changePassword,
+		userEmail
 	};
 
 	return (
