@@ -1,12 +1,19 @@
 import React, { useContext, useState } from "react";
 import { AuthContext } from "../auth";
-import { Customer, IUser } from "./types";
+import { Business, Customer, IUser } from "./types";
+import { createUser } from "./user";
 
 export const UserContext = React.createContext<IState>({ 
 	user: {} as IUser, 
 	userType: undefined,
+	//@ts-ignore
+	createCustomer: async () => any,
+	//@ts-ignore
+	createBusiness: async () => any,
 	getCustomerData: () => undefined,
 	updateCustomerData: (u: Customer) => ({}),
+	getBusinessData: () => undefined,
+	updateBusinessData: (u: Business) => ({}),
 });
 
 const initialUserState = {
@@ -63,6 +70,10 @@ export enum UserType {
 }
 
 interface IState {
+	getBusinessData: () => Business | undefined,
+	updateBusinessData: (u: any) => void,
+	createCustomer: () => Promise<void>,
+	createBusiness: () => Promise<void>,
 	getCustomerData: () => Customer | undefined,
 	updateCustomerData: (u: any) => void,
 	user: IUser | undefined;
@@ -70,7 +81,7 @@ interface IState {
 }
 
 const UserProvider: React.FunctionComponent = ({ children }) => {
-	const { authStatus } = useContext(AuthContext);
+	const { authStatus, userEmail } = useContext(AuthContext);
 	const [user, setUser] = useState<IUser>(initialUserState);
 	const [userType, setUserType] = useState<UserType>();
 
@@ -78,15 +89,47 @@ const UserProvider: React.FunctionComponent = ({ children }) => {
 		setUser((pv: IUser) => ({ ...pv, customer: { ...pv.customer, ...u } }))
 	}
 
+	const updateBusinessData = (u: any) => {
+		setUser((pv: IUser) => ({ ...pv, business: { ...pv.business, ...u } }))
+	}
+
 	const getCustomerData = (): Customer | undefined => {
 		return user.customer
+	}
+
+	const getBusinessData = (): Business | undefined => {
+		return user.business
+	}
+
+	const createBusiness = async () => {
+		const data = {
+			email: userEmail,
+			consent: true,
+			type: 'business',
+			business: user.business
+		};
+		await createUser(data);
+	}
+
+	const createCustomer = async () => {
+		const data = {
+			email: userEmail,
+			consent: true,
+			type: 'customer',
+			customer: user.customer
+		};
+		await createUser(data);
 	}
 
 	const state: IState = {
 		user,
 		userType,
 		getCustomerData,
-		updateCustomerData
+		updateCustomerData,
+		getBusinessData,
+		updateBusinessData,
+		createCustomer,
+		createBusiness,
 	};
 
 	return (
