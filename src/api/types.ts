@@ -67,16 +67,16 @@ export interface Business {
 }
 
 export interface Customer extends BaseUser {
-    avatar: string,
-    tag: string,
-    dwollaId?: DwollaId,
-    resourceUri?: string,
+    avatar: string;
+    tag: string;
+    dwollaId?: DwollaId;
+    resourceUri?: string;
 }
 
 export interface IUserRequest {
     email: string;
     consent: boolean;
-    type: 'customer' | 'business';
+    type: string; // 'customer' | 'business';
     business?: IDBMiniNewBusinessInput;
     customer?: IDBMiniNewCustomerInput;
 }

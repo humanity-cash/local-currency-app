@@ -136,9 +136,9 @@ export interface ConfirmEmailVerificationCodeInput {
 
 
 export enum UserType {
-	Customer,
-	Business,
-	Cashier,
+	Customer = "customer",
+	Business = "business",
+	Cashier = "cashier",
 }
 
 export enum AuthStatus {
@@ -164,6 +164,7 @@ export interface ForgotPassword {
 export interface IAuth {
 	forgotPasswordDetails: ForgotPassword, 
 	setForgotPasswordDetails?: any,
+	userEmail: string,
 	userType?: UserType | undefined,
 	updateUserType?: any,
 	setAuthStatus?: any,
@@ -197,7 +198,7 @@ export const defaultState: IAuth = {
 
 export type CognitoError = any
 
-export type BaseResponse<T> = { user?: CognitoUser | null, success: boolean, data: { error: string } | T }
+export type BaseResponse<T> = { success: boolean, data: T, error: string }
 
 export const CognitoResponse = Promise
 export type CognitoResponse<T> = Promise<BaseResponse<T>>
