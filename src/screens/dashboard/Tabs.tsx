@@ -39,6 +39,7 @@ import { WalletState } from 'src/store/wallet/wallet.reducer';
 import { FundingSourceState } from 'src/store/funding-source/funding-source.reducer';
 import { useSelector } from 'react-redux';
 import { AppState } from 'src/store';
+import BankLinkDialog from 'src/shared/uielements/BankLinkDialog';
 
 const styles = StyleSheet.create({
 	headerText: {
@@ -105,34 +106,6 @@ const styles = StyleSheet.create({
 	}
 });
 
-type BankLinkDialogProps = {
-	visible: boolean,
-	onConfirm: ()=>void,
-	onCancel: ()=>void
-}
-
-const BankLinkDialog = (props: BankLinkDialogProps) => {
-	return (
-		<Dialog visible={props.visible} onClose={()=>props.onCancel()}>
-			<View style={dialogViewBase}>
-				<View style={wrappingContainerBase}>
-					<View style={ baseHeader }>
-						<Text style={styles.headerText}>{Translation.PAYMENT.PAYMENT_NO_BANK_TITLE}</Text>
-					</View>
-					<Text>{Translation.PAYMENT.PAYMENT_NO_BANK_DETAIL}</Text>
-				</View>
-				<View>
-				<Button
-					type={BUTTON_TYPES.DARK_GREEN}
-					title={Translation.BUTTON.LINK_BANK}
-					onPress={props.onConfirm}
-				/>
-				</View>
-			</View>
-		</Dialog>
-	)
-}
-
 const DrawerContent = (
 	props: DrawerContentComponentProps<DrawerContentOptions>
 ) => {
@@ -140,6 +113,7 @@ const DrawerContent = (
 	const { authorization } = useUserDetails();
 	const [isExpanded, setIsExpanded] = useState<boolean>(false);
 	const [isBankDialog, setIsBankDialog] = useState<boolean>(false);
+	const [isLoadupDialog, setIsLoadupDialog] = useState<boolean>(false);
 
 	const { personalWallet } = useSelector((state: AppState) => state.walletReducer) as WalletState;
 	const { personalFundingSource } = useSelector((state: AppState) => state.fundingSourceReducer) as FundingSourceState;
@@ -159,6 +133,27 @@ const DrawerContent = (
 
 	const onBankDialogCancel = () => {
 		setIsBankDialog(false);
+	}
+
+	const onLoadupDialogConfirm = () => {
+		setIsLoadupDialog(false);
+		props.navigation.navigate(Routes.LOAD_UP);
+	}
+
+	const onLoadupDialogCancel = () => {
+		setIsLoadupDialog(false);
+	}
+
+	const onPressScanToPay = () => {
+		if(personalWallet.availableBalance > 0) {
+			props.navigation.navigate(Routes.QRCODE_SCAN)
+		} else {
+			if(personalFundingSource) {
+				setIsBankDialog(true)
+			} else {
+				setIsLoadupDialog(true)
+			}
+		} 
 	}
 
 	const customerTag = userAttributes?.["custom:personal.tag"];
@@ -251,11 +246,11 @@ const DrawerContent = (
 					<Drawer.Section>
 						<DrawerItem
 							label="Scan to pay"
-							onPress={() => personalFundingSource ? props.navigation.navigate(Routes.QRCODE_SCAN) : setIsBankDialog(true)}
+							onPress={onPressScanToPay}
 						/>
 						<DrawerItem
 							label="Receive payment"
-							onPress={() => personalFundingSource ? props.navigation.navigate(Routes.RECEIVE_PAYMENT) : setIsBankDialog(true)}
+							onPress={() => props.navigation.navigate(Routes.RECEIVE_PAYMENT)}
 						/>
 						<DrawerItem
 							label="Load up B$"
@@ -315,13 +310,20 @@ const DrawerContent = (
 					onPress={signOut}
 				/>
 			</Drawer.Section>
-			{isBankDialog && (
-				<BankLinkDialog 
-					visible={isBankDialog}
-					onConfirm={onBankDialogConfirm}
-					onCancel={onBankDialogCancel}
-				/>
-			)}
+			<BankLinkDialog 
+				visible={isBankDialog}
+				description={Translation.PAYMENT.PAYMENT_NO_BANK_DETAIL}
+				buttonTitle={Translation.BUTTON.LINK_BANK}
+				onConfirm={onBankDialogConfirm}
+				onCancel={onBankDialogCancel}
+			/>
+			<BankLinkDialog 
+				visible={isLoadupDialog}
+				description={Translation.PAYMENT.PAYMENT_NO_BALANCE_DETAIL}
+				buttonTitle={Translation.BUTTON.LOAD_UP_BERKSHARES}
+				onConfirm={onLoadupDialogConfirm}
+				onCancel={onLoadupDialogCancel}
+			/>
 		</View>
 	);
 };
