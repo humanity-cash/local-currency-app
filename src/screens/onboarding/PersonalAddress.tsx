@@ -8,7 +8,6 @@ import {
 	View
 } from "react-native";
 import { Text } from "react-native-elements";
-import { useDispatch } from 'react-redux';
 import { UserContext } from "src/api/context";
 import { AuthContext } from "src/auth";
 import { UserType } from "src/auth/types";
@@ -43,16 +42,12 @@ const styles = StyleSheet.create({
 	},
 });
 
-const PersonalAddress = (): React.ReactElement => {
-	const { getCustomerData } = useContext(UserContext);
+const PersonalAddress = () => {
+	const { getCustomerData, createCustomer } = useContext(UserContext);
 	const customer = getCustomerData();
 	const [goNext, setGoNext] = useState<boolean>(false);
-	const {
-		signOut,
-		signInDetails
-	} = useContext(AuthContext);
+	const { signOut } = useContext(AuthContext);
 	const navigation = useNavigation();
-	const dispatch = useDispatch();
 	const address1 = customer?.address1;
 	const city = customer?.city;
 	const postalCode = customer?.postalCode;
@@ -65,42 +60,8 @@ const PersonalAddress = (): React.ReactElement => {
 	}, [address1,city, postalCode]);
 
 	const onNextPress = async () => {
-		// const response = await completeCustomerBasicVerification();
-		// if (response.success && cognitoId && signInDetails) {
-		// 	const request: IUserRequest = {
-		// 		firstName: customerBasicVerificationDetails.firstName,
-		// 		lastName: customerBasicVerificationDetails.lastName,
-		// 		email: signInDetails.email,
-		// 		address1: customerBasicVerificationDetails.address1,
-		// 		address2: customerBasicVerificationDetails.address2,
-		// 		city: customerBasicVerificationDetails.city,
-		// 		state: customerBasicVerificationDetails.state,
-		// 		postalCode: customerBasicVerificationDetails.postalCode,
-		// 		authUserId: "p_" + cognitoId
-		// 	};
-
-		// 	dispatch(updateLoadingStatus({
-		// 		isLoading: true,
-		// 		screen: LoadingScreenTypes.LOADING_DATA
-		// 	}));
-		// 	const resApi = await UserAPI.user(request);
-		// 	if (resApi.data) {
-		// 		await completeCustomerDwollaInfo({
-		// 			dwollaId: resApi.data.userId,
-		// 			resourceUri: ""
-		// 		});
-
-		// 		navigation.navigate(Routes.LINK_BANK_ACCOUNT);
-		// 	}
-
-		// 	dispatch(updateLoadingStatus({
-		// 		isLoading: false,
-		// 		screen: LoadingScreenTypes.LOADING_DATA
-		// 	}));
-		// } else {
-		// 	showToast(ToastType.ERROR, "Whooops, something went wrong.", "Connection failed.");
-		// }
-	};
+		createCustomer()
+	}
 
 	return (
 		<View style={viewBase}>
@@ -142,3 +103,37 @@ const PersonalAddress = (): React.ReactElement => {
 };
 
 export default PersonalAddress;
+
+			// const request: IUserRequest = {
+			// 	firstName: customer.firstName,
+			// 	lastName: customer.lastName,
+			// 	email: signInDetails.email,
+			// 	address1: customer.address1,
+			// 	address2: customer.address2,
+			// 	city: customer.city,
+			// 	state: customer.state,
+			// 	postalCode: customer.postalCode,
+			// };
+
+		// 	dispatch(updateLoadingStatus({
+		// 		isLoading: true,
+		// 		screen: LoadingScreenTypes.LOADING_DATA
+		// 	}));
+		// 	const resApi = await UserAPI.user(request);
+		// 	if (resApi.data) {
+		// 		await completeCustomerDwollaInfo({
+		// 			dwollaId: resApi.data.userId,
+		// 			resourceUri: ""
+		// 		});
+
+		// 		navigation.navigate(Routes.LINK_BANK_ACCOUNT);
+		// 	}
+
+		// 	dispatch(updateLoadingStatus({
+		// 		isLoading: false,
+		// 		screen: LoadingScreenTypes.LOADING_DATA
+		// 	}));
+		// } else {
+		// 	showToast(ToastType.ERROR, "Whooops, something went wrong.", "Connection failed.");
+		// }
+		// const response = await completeCustomerBasicVerification();

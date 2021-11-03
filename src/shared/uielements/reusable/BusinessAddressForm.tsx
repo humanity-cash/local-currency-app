@@ -3,12 +3,11 @@ import React, { useContext } from "react";
 import { StyleSheet, View } from "react-native";
 import { Text } from "react-native-elements";
 import SelectDropdown from 'react-native-select-dropdown';
-import { AuthContext } from "src/auth";
-import { BusinessBasicVerification } from "src/auth/types";
-import { colors } from "src/theme/colors";
-import BlockInput from "../BlockInput";
-import { IMap } from 'src/utils/types'
+import { UserContext } from "src/api/context";
 import countries from "src/mocks/countries";
+import { colors } from "src/theme/colors";
+import { IMap } from 'src/utils/types';
+import BlockInput from "../BlockInput";
 
 interface BusinessAddressProps {
   style?: IMap;
@@ -57,13 +56,13 @@ const styles = StyleSheet.create({
 });
 
 const BusinessAddressForm = (props: BusinessAddressProps): JSX.Element => {
-	const { buisnessBasicVerification, setBuisnessBasicVerification } = useContext(AuthContext);
+	const { getBusinessData, updateBusinessData } = useContext(UserContext)
+	const business = getBusinessData();
 
 	const onValueChange = (name: string, change: string) => {
-		setBuisnessBasicVerification((pv: BusinessBasicVerification) => ({
-			...pv,
+		updateBusinessData({
 			[name]: change,
-		}));
+		});
 	};
 
   	return (
@@ -72,7 +71,7 @@ const BusinessAddressForm = (props: BusinessAddressProps): JSX.Element => {
 			<BlockInput
 				name="address1"
 				placeholder="Street number, street name"
-				value={buisnessBasicVerification.address1}
+				value={business?.address1}
 				onChange={onValueChange}
 				style={props.style}
 			/>
@@ -80,7 +79,7 @@ const BusinessAddressForm = (props: BusinessAddressProps): JSX.Element => {
 			<BlockInput
 				name="address2"
 				placeholder="Apt."
-				value={buisnessBasicVerification.address2}
+				value={business?.address2}
 				onChange={onValueChange}
 				style={props.style}
 			/>
@@ -91,7 +90,7 @@ const BusinessAddressForm = (props: BusinessAddressProps): JSX.Element => {
 					<BlockInput
 						name="city"
 						placeholder="City"
-						value={buisnessBasicVerification.city}
+						value={business?.city}
 						onChange={onValueChange}
 						style={props.style}
 					/>
@@ -131,7 +130,7 @@ const BusinessAddressForm = (props: BusinessAddressProps): JSX.Element => {
 				name="postalCode"
 				placeholder="00000"
 				keyboardType="number-pad"
-				value={buisnessBasicVerification.postalCode}
+				value={business?.postalCode}
 				onChange={onValueChange}
 				style={props.style}
 			/>
@@ -141,7 +140,7 @@ const BusinessAddressForm = (props: BusinessAddressProps): JSX.Element => {
 				name="phoneNumber"
 				placeholder="000987654321"
 				keyboardType="number-pad"
-				value={buisnessBasicVerification.phoneNumber}
+				value={business?.phoneNumber}
 				onChange={onValueChange}
 				style={props.style}
 			/>
