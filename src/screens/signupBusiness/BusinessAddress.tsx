@@ -2,9 +2,8 @@ import { useNavigation } from "@react-navigation/native";
 import React, { ReactElement, useContext, useEffect, useState } from "react";
 import { ScrollView, StyleSheet, View } from "react-native";
 import { Text } from "react-native-elements";
+import { UserContext } from "src/api/context";
 import { AuthContext } from 'src/auth';
-import { BaseResponse } from "src/auth/cognito/types";
-import * as Routes from "src/navigation/constants";
 import {
 	BackBtn,
 	BusinessAddressForm, Button,
@@ -17,12 +16,6 @@ import {
 	wrappingContainerBase
 } from "src/theme/elements";
 import Translation from "src/translation/en.json";
-import { IUserRequest } from 'src/api/types';
-import { UserAPI } from 'src/api';
-import { ToastType, LoadingScreenTypes } from 'src/utils/types';
-import { showToast } from 'src/utils/common';
-import { updateLoadingStatus } from 'src/store/loading/loading.actions';
-import { useDispatch } from 'react-redux';
 
 const styles = StyleSheet.create({
 	headerText: {
@@ -61,62 +54,25 @@ const styles = StyleSheet.create({
 const BusinessAddress = (): ReactElement => {
 	const [goNext, setGoNext] = useState<boolean>(false);
 	const {
-		buisnessBasicVerification,
-		completeBusniessBasicVerification,
 		signOut,
-		cognitoId,
-		completeBusinessDwollaInfo
 	} = useContext(AuthContext);
 	const navigation = useNavigation();
-	const dispatch = useDispatch();
+	const { getBusinessData } = useContext(UserContext);
+	const business = getBusinessData();
+	const address1 = business?.address1;
+	const city = business?.city;
+	const postalCode = business?.postalCode;
 
 	useEffect(() => {
 		setGoNext(
-			buisnessBasicVerification.address1 !== "" && 
-			buisnessBasicVerification.city !== "" && 
-			buisnessBasicVerification.postalCode !== ""
+			address1 !== "" &&
+			city !== "" &&
+			postalCode !== ""
 		);
-	}, [buisnessBasicVerification]);
-	
+	}, [address1, city, postalCode]);
+
 	const onNextPress = async () => {
-		const response: BaseResponse<string | undefined> =
-			await completeBusniessBasicVerification();
-		if (response.success && cognitoId) {
-			const request: IUserRequest = {
-				firstName: buisnessBasicVerification.owner?.firstName,
-				lastName: buisnessBasicVerification.owner?.lastName,
-				businessName: buisnessBasicVerification.tag,
-				email: cognitoId + "@humanity.cash",
-				address1: buisnessBasicVerification.address1,
-				address2: buisnessBasicVerification.address2,
-				city: buisnessBasicVerification.city,
-				state: buisnessBasicVerification.state,
-				postalCode: buisnessBasicVerification.postalCode,
-				authUserId: "m_" + cognitoId
-			};
-
-			dispatch(updateLoadingStatus({
-				isLoading: true,
-				screen: LoadingScreenTypes.LOADING_DATA
-			}));
-			const resApi = await UserAPI.user(request);
-
-			if (resApi.data) {
-				await completeBusinessDwollaInfo({
-					dwollaId: resApi.data.userId,
-					resourceUri: ""
-				});
-
-				navigation.navigate(Routes.BUSINESS_WELCOME);
-			}
-
-			dispatch(updateLoadingStatus({
-				isLoading: false,
-				screen: LoadingScreenTypes.LOADING_DATA
-			}));
-		} else {
-			showToast(ToastType.ERROR, "Whooops, something went wrong.", "Connection failed.");
-		}
+		console.log('next')
 	};
 
 	return (
@@ -163,3 +119,42 @@ const BusinessAddress = (): ReactElement => {
 };
 
 export default BusinessAddress;
+
+// const response: BaseResponse<string | undefined> =
+// 	await completeBusniessBasicVerification();
+// if (response.success && cognitoId) {
+// 	const request: IUserRequest = {
+// 		firstName: buisnessBasicVerification.owner?.firstName,
+// 		lastName: buisnessBasicVerification.owner?.lastName,
+// 		businessName: buisnessBasicVerification.tag,
+// 		email: cognitoId + "@humanity.cash",
+// 		address1: buisnessBasicVerification.address1,
+// 		address2: buisnessBasicVerification.address2,
+// 		city: buisnessBasicVerification.city,
+// 		state: buisnessBasicVerification.state,
+// 		postalCode: buisnessBasicVerification.postalCode,
+// 		authUserId: "m_" + cognitoId
+// 	};
+
+// 	dispatch(updateLoadingStatus({
+// 		isLoading: true,
+// 		screen: LoadingScreenTypes.LOADING_DATA
+// 	}));
+// 	const resApi = await UserAPI.user(request);
+
+// 	if (resApi.data) {
+// 		await completeBusinessDwollaInfo({
+// 			dwollaId: resApi.data.userId,
+// 			resourceUri: ""
+// 		});
+
+// 		navigation.navigate(Routes.BUSINESS_WELCOME);
+// 	}
+
+// 	dispatch(updateLoadingStatus({
+// 		isLoading: false,
+// 		screen: LoadingScreenTypes.LOADING_DATA
+// 	}));
+// } else {
+// 	showToast(ToastType.ERROR, "Whooops, something went wrong.", "Connection failed.");
+// }

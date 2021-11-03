@@ -7,16 +7,16 @@ import {
 	View
 } from "react-native";
 import { Text } from "react-native-elements";
+import { useDispatch } from 'react-redux';
 import { AuthContext } from "src/auth";
 import { UserType } from "src/auth/types";
+import DwollaDialog from 'src/screens/dashboard/DwollaDialog';
 import { Button, Header } from "src/shared/uielements";
+import { updateLoadingStatus } from 'src/store/loading/loading.actions';
 import { colors } from "src/theme/colors";
 import { viewBaseB, wrappingContainerBase } from "src/theme/elements";
 import Translation from "src/translation/en.json";
 import { LoadingScreenTypes } from 'src/utils/types';
-import { updateLoadingStatus } from 'src/store/loading/loading.actions';
-import { useDispatch } from 'react-redux';
-import DwollaDialog from 'src/screens/dashboard/DwollaDialog';
 
 const styles = StyleSheet.create({
 	headerText: {
@@ -35,7 +35,7 @@ const styles = StyleSheet.create({
 });
 
 const BusinessWelcome = (): ReactElement => {
-	const { cognitoId, updateUserType } = useContext(AuthContext);
+	const { updateUserType } = useContext(AuthContext);
 	const [isVisible, setIsVisible] = useState<boolean>(false);
 	const dispatch = useDispatch();
 
@@ -44,7 +44,7 @@ const BusinessWelcome = (): ReactElement => {
 			isLoading: true,
 			screen: LoadingScreenTypes.LOADING_DATA
 		}));
-		updateUserType(cognitoId, UserType.Business);
+		updateUserType(UserType.Business);
 	}
 
 	return (

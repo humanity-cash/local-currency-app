@@ -2,8 +2,6 @@ import React, { ReactElement, useContext } from "react";
 import { StyleSheet, View } from "react-native";
 import { Text } from "react-native-elements";
 import { UserContext } from "src/api/context";
-import { AuthContext } from "src/auth";
-import { BusinessBasicVerification } from "src/auth/types";
 import { colors } from "src/theme/colors";
 import Translation from "src/translation/en.json";
 import BlockInput from "../BlockInput";
@@ -61,14 +59,12 @@ const Header = () => {
 export const BusinessOwnerDetailsForm = (
 	props: PersonalDetailsProps
 ): ReactElement => {
-	const { buisnessBasicVerification, setBuisnessBasicVerification } =
-		useContext(AuthContext);
-
+	const { getBusinessData, updateBusinessData } = useContext(UserContext);
+	const business = getBusinessData()
 	const onValueChange = (name: string, change: string) => {
-		setBuisnessBasicVerification((pv: BusinessBasicVerification) => ({
-			...pv,
-			owner: { ...pv.owner, change },
-		}));
+		updateBusinessData({
+			owner: { change },
+		});
 	};
 
 	return (
@@ -80,7 +76,7 @@ export const BusinessOwnerDetailsForm = (
 				label={Translation.LABEL.FIRST_NAME}
 				name="firstName"
 				placeHolder="First Name"
-				value={buisnessBasicVerification.owner.firstName}
+				value={business?.owner.firstName}
 				onInputChange={onValueChange}
 			/>
 			<BasicInputWithLabel
@@ -89,7 +85,7 @@ export const BusinessOwnerDetailsForm = (
 				label={Translation.LABEL.LAST_NAME}
 				name="lastName"
 				placeHolder="Last Name"
-				value={buisnessBasicVerification.owner.lastName}
+				value={business?.owner.lastName}
 				onInputChange={onValueChange}
 			/>
 		</View>

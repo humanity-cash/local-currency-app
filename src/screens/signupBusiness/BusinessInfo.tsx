@@ -1,6 +1,6 @@
 import { AntDesign } from '@expo/vector-icons';
 import { useNavigation } from "@react-navigation/native";
-import React, { ReactElement, useContext, useState, useEffect } from "react";
+import React, { ReactElement, useContext, useEffect, useState } from "react";
 import {
 	KeyboardAvoidingView,
 	Platform,
@@ -10,7 +10,8 @@ import {
 } from "react-native";
 import { Text } from "react-native-elements";
 import SelectDropdown from 'react-native-select-dropdown';
-import { AuthContext } from "src/auth";
+import { UserContext } from 'src/api/context';
+import { AuthContext } from 'src/auth';
 import * as Routes from "src/navigation/constants";
 import {
 	BackBtn,
@@ -27,7 +28,6 @@ import {
 } from "src/theme/elements";
 import Translation from "src/translation/en.json";
 import { Industry } from "src/utils/types";
-import { BusinessBasicVerification } from "src/auth/types";
 
 const Industries = [
 	Industry.ARTS_ENTERTAINMENT,
@@ -83,19 +83,19 @@ const styles = StyleSheet.create({
 
 const BusinessInfo = (): ReactElement => {
 	const [goNext, setGoNext] = useState<boolean>(false);
-	const { buisnessBasicVerification, setBuisnessBasicVerification, signOut } =
-		useContext(AuthContext);
 	const navigation = useNavigation();
+	const { getBusinessData, updateBusinessData } = useContext(UserContext);
+	const { signOut } = useContext(AuthContext);
+	const business = getBusinessData();
 
 	useEffect(() => {
-		setGoNext(buisnessBasicVerification.registeredBusinessName !== "");
-	}, [buisnessBasicVerification.registeredBusinessName])
+		setGoNext(business?.rbn !== "");
+	}, [business?.rbn])
 
 	const onValueChange = (name: string, change: string) => {
-		setBuisnessBasicVerification((pv: BusinessBasicVerification) => ({
-			...pv,
+		updateBusinessData({
 			[name]: change,
-		}));
+		});
 	};
 
 	return (
@@ -127,10 +127,10 @@ const BusinessInfo = (): ReactElement => {
 							{Translation.LABEL.REGISTERD_NAME}
 						</Text>
 						<BlockInput
-							name="registeredBusinessName"
+							name="rbn"
 							placeholder="Registered business name"
 							placeholderTextColor={colors.greyedPurple}
-							value={buisnessBasicVerification.registeredBusinessName}
+							value={business?.rbn}
 							onChange={onValueChange}
 							style={styles.input}
 						/>
@@ -169,7 +169,7 @@ const BusinessInfo = (): ReactElement => {
 							placeholder="Employee identification number"
 							keyboardType="number-pad"
 							placeholderTextColor={colors.greyedPurple}
-							value={buisnessBasicVerification.ein}
+							value={business?.ein}
 							onChange={onValueChange}
 							style={styles.input}
 						/>

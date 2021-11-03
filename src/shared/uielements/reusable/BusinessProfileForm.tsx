@@ -2,8 +2,7 @@ import * as ImagePicker from 'expo-image-picker';
 import React, { ReactElement, useContext } from "react";
 import { StyleSheet, TextInput, TouchableOpacity, View } from "react-native";
 import { Image, Text } from "react-native-elements";
-import { AuthContext } from "src/auth";
-import { IAuth } from "src/auth/types";
+import { UserContext } from "src/api/context";
 import { useMediaLibraryPermission } from "src/hooks";
 import { colors } from "src/theme/colors";
 import BlockInput from "../BlockInput";
@@ -59,13 +58,13 @@ const styles = StyleSheet.create({
 });
 
 const BusinessProfileForm = (): ReactElement => {
-	const { buisnessBasicVerification, setBuisnessBasicVerification } =
-			useContext(AuthContext);
+	const { getBusinessData, updateBusinessData } = useContext(UserContext)
+	const business = getBusinessData();
 
 	useMediaLibraryPermission();
 
 	const onValueChange = (name: string, change: string) => {
-		setBuisnessBasicVerification((pv: IAuth) => ({ ...pv, [name]: change }));
+		updateBusinessData({ [name]: change });
 	};
 
 	const pickImage = async () => {
@@ -86,7 +85,7 @@ const BusinessProfileForm = (): ReactElement => {
 			<Text style={styles.bodyText}>*Required fields</Text>
 			<View style={styles.pickImageView}>
 				<TouchableOpacity onPress={pickImage}>
-					{buisnessBasicVerification.avatar === "" && (
+					{business?.avatar === "" && (
 						<View style={styles.imageView}>
 							<Image
 								source={require("../../../../assets/images/placeholder4.png")}
@@ -94,9 +93,9 @@ const BusinessProfileForm = (): ReactElement => {
 							/>
 						</View>
 					)}
-					{buisnessBasicVerification.avatar !== "" && (
+					{business?.avatar !== "" && (
 						<Image
-							source={{ uri: buisnessBasicVerification.avatar }}
+							source={{ uri: business?.avatar }}
 							style={styles.imageView}
 						/>
 					)}
@@ -113,7 +112,7 @@ const BusinessProfileForm = (): ReactElement => {
 				name="tag"
 				placeholder="Business name"
 				placeholderTextColor={colors.greyedPurple}
-				value={buisnessBasicVerification.tag}
+				value={business?.tag}
 				onChange={onValueChange}
 				style={styles.inputBg}
 			/>
@@ -123,7 +122,7 @@ const BusinessProfileForm = (): ReactElement => {
 			</Text>
 			<TextInput
 				placeholder="Tell the world about your business. What gives you joy as an entrepreneur? What do you love about the Berkshires?"
-				value={buisnessBasicVerification.story}
+				value={business?.story}
 				multiline={true}
 				onChangeText={(newValue) =>
 					onValueChange("story", newValue)

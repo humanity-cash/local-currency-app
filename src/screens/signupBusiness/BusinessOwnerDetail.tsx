@@ -1,19 +1,18 @@
-import React, { useContext, useState, useEffect } from 'react';
-import { StyleSheet, View, KeyboardAvoidingView, ScrollView, Platform } from 'react-native';
-import { Text } from 'react-native-elements';
-import { AuthContext } from 'src/auth';
-import {
-	Header,
-	Button,
-	CancelBtn,
-	BackBtn,
-} from "src/shared/uielements";
-import { underlineHeaderB, viewBaseB, wrappingContainerBase } from "src/theme/elements";
-import { colors } from "src/theme/colors";
-import Translation from 'src/translation/en.json';
-import * as Routes from 'src/navigation/constants';
-import { BusinessOwnerDetailsForm } from 'src/shared/uielements/reusable';
 import { useNavigation } from '@react-navigation/native';
+import React, { useContext, useEffect, useState } from 'react';
+import { KeyboardAvoidingView, Platform, ScrollView, StyleSheet, View } from 'react-native';
+import { Text } from 'react-native-elements';
+import { UserContext } from 'src/api/context';
+import { AuthContext } from 'src/auth';
+import * as Routes from 'src/navigation/constants';
+import {
+	BackBtn, Button,
+	CancelBtn, Header
+} from "src/shared/uielements";
+import { BusinessOwnerDetailsForm } from 'src/shared/uielements/reusable';
+import { colors } from "src/theme/colors";
+import { underlineHeaderB, viewBaseB, wrappingContainerBase } from "src/theme/elements";
+import Translation from 'src/translation/en.json';
 
 const styles = StyleSheet.create({
     headerText: {
@@ -48,12 +47,14 @@ const styles = StyleSheet.create({
 
 const BusinessOwnerDetail = (): JSX.Element => {
 	const navigation = useNavigation()
-	const { signOut, buisnessBasicVerification } = useContext(AuthContext);
+	const { signOut } = useContext(AuthContext);
 	const [goNext, setGoNext] = useState<boolean>(false);
+	const { getBusinessData } = useContext(UserContext);
+	const business = getBusinessData();
 
 	useEffect(() => {
-		setGoNext(buisnessBasicVerification.owner.firstName !== "" && buisnessBasicVerification.owner.lastName !== "");
-	}, [buisnessBasicVerification.owner.firstName, buisnessBasicVerification.owner.lastName]);
+		setGoNext(business?.owner.firstName !== "" && business?.owner.lastName !== "");
+	}, [business?.owner.firstName, business?.owner.lastName]);
 
 	const onNextPress = () => {
 		// navigation.navigate(Routes.BUSINESS_OWNER_ADDRESS);

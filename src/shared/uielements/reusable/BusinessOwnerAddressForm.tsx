@@ -2,14 +2,13 @@ import { AntDesign } from '@expo/vector-icons';
 import React, { ReactElement, useContext } from "react";
 import { StyleSheet, View } from "react-native";
 import { Text } from "react-native-elements";
-import { BusinessBasicVerification } from "src/auth/types";
-import { AuthContext } from "src/auth";
-import countries from "src/mocks/countries";
 import SelectDropdown from 'react-native-select-dropdown';
+import { UserContext } from "src/api/context";
+import countries from "src/mocks/countries";
 import { colors } from "src/theme/colors";
 import Translation from "src/translation/en.json";
-import BlockInput from "../BlockInput";
 import { IMap } from "src/utils/types";
+import BlockInput from "../BlockInput";
 
 interface BusinessOwnerAddressFormProps {
 	style?: IMap;
@@ -63,16 +62,13 @@ const styles = StyleSheet.create({
 const BusinessOwnerAddressForm = (
 	props: BusinessOwnerAddressFormProps
 ): ReactElement => {
-	const {
-		buisnessBasicVerification,
-		setBuisnessBasicVerification
-	} = useContext(AuthContext);
+	const { getBusinessData, updateBusinessData } = useContext(UserContext)
+	const business = getBusinessData();
 
 	const onValueChange = (name: string, change: string) => {
-		setBuisnessBasicVerification((pv: BusinessBasicVerification) => ({
-			...pv,
-			owner: { ...pv.owner, [name]: change },
-		}));
+		updateBusinessData({
+			owner: { [name]: change },
+		});
 	};
 
 	return (
@@ -86,7 +82,7 @@ const BusinessOwnerAddressForm = (
 			<BlockInput
 				name="address1"
 				placeholder="Street number, street name"
-				value={buisnessBasicVerification?.owner?.address1}
+				value={business?.owner?.address1}
 				onChange={onValueChange}
 				style={props.style}
 			/>
@@ -94,7 +90,7 @@ const BusinessOwnerAddressForm = (
 			<BlockInput
 				name="address2"
 				placeholder="Apt."
-				value={buisnessBasicVerification?.owner?.address2}
+				value={business?.owner?.address2}
 				onChange={onValueChange}
 				style={props.style}
 			/>
@@ -105,7 +101,7 @@ const BusinessOwnerAddressForm = (
 					<BlockInput
 						name="city"
 						placeholder="City"
-						value={buisnessBasicVerification?.owner?.city}
+						value={business?.owner?.city}
 						onChange={onValueChange}
 						style={props.style}
 					/>
@@ -145,7 +141,7 @@ const BusinessOwnerAddressForm = (
 				name="postalCode"
 				placeholder="00000"
 				keyboardType="number-pad"
-				value={buisnessBasicVerification?.owner?.postalCode}
+				value={business?.owner?.postalCode}
 				onChange={onValueChange}
 				style={props.style}
 			/>

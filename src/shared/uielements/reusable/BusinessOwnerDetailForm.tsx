@@ -1,12 +1,11 @@
 import React, { ReactElement, useContext } from "react";
 import { StyleSheet, View } from "react-native";
 import { Text } from "react-native-elements";
-import { AuthContext } from "../../../auth";
-import { BusinessBasicVerification } from "src/auth/types";
+import { UserContext } from "src/api/context";
+import { IMap } from "src/utils/types";
 import { colors } from "../../../theme/colors";
 import Translation from "../../../translation/en.json";
 import BlockInput from "../BlockInput";
-import { IMap } from "src/utils/types";
 
 interface PersonalDetailsProps {
 	style?: IMap;
@@ -61,14 +60,13 @@ const Header = () => {
 const BusinessOwnerDetailsForm = (
 	props: PersonalDetailsProps
 ): ReactElement => {
-	const { buisnessBasicVerification, setBuisnessBasicVerification } =
-		useContext(AuthContext);
+	const { getBusinessData, updateBusinessData } = useContext(UserContext)
+	const business = getBusinessData();
 
 	const onValueChange = (name: string, change: string) => {
-		setBuisnessBasicVerification((pv: BusinessBasicVerification) => ({
-			...pv,
-			owner: { ...pv.owner, [name]: change },
-		}));
+		updateBusinessData({
+			owner: { [name]: change },
+		});
 	};
 
 	return (
@@ -80,7 +78,7 @@ const BusinessOwnerDetailsForm = (
 				label={Translation.LABEL.FIRST_NAME_BUSINESS}
 				name="firstName"
 				placeHolder="First Name"
-				inputValue={buisnessBasicVerification.owner.firstName}
+				inputValue={business?.owner.firstName}
 				onInputChange={onValueChange}
 			/>
 			<BasicInputWithLabel
@@ -89,7 +87,7 @@ const BusinessOwnerDetailsForm = (
 				label={Translation.LABEL.LAST_NAME_BUSINESS}
 				name="lastName"
 				placeHolder="Last Name"
-				inputValue={buisnessBasicVerification.owner.lastName}
+				inputValue={business?.owner.lastName}
 				onInputChange={onValueChange}
 			/>
 		</View>
