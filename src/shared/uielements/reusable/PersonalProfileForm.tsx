@@ -2,10 +2,10 @@ import * as ImagePicker from "expo-image-picker";
 import React, { ReactElement, useContext } from "react";
 import { StyleSheet, TouchableOpacity, View } from "react-native";
 import { Image, Text } from "react-native-elements";
-import { AuthContext } from "src/auth";
+import { UserContext } from "src/api/context";
+import { useMediaLibraryPermission } from 'src/hooks';
 import { colors } from "src/theme/colors";
 import BlockInput from "../BlockInput";
-import { useMediaLibraryPermission } from 'src/hooks';
 
 const styles = StyleSheet.create({
 	container: {
@@ -53,10 +53,10 @@ const styles = StyleSheet.create({
 });
 
 const PersonalProfileForm = (): ReactElement => {
-	const {
-		customerBasicVerificationDetails,
-		setCustomerBasicVerificationDetails,
-	} = useContext(AuthContext);
+	const { getCustomerData, updateCustomerData } = useContext(UserContext);
+	const customer = getCustomerData();
+	const tag = customer?.tag;
+	const avatar = customer?.avatar;
 
 	useMediaLibraryPermission();
 
@@ -69,20 +69,12 @@ const PersonalProfileForm = (): ReactElement => {
 		});
 
 		if (!result.cancelled) {
-			setCustomerBasicVerificationDetails((pv: any) => ({
-				...pv,
-				avatar: result.uri,
-			}));
+			updateCustomerData({ avatar: result.uri });
 		}
 	};
 
 	const onValueChange = (name: string, change: string) => {
-		if (change.indexOf('@') !== 0) { change = '@' + change; }
-		
-		setCustomerBasicVerificationDetails((pv: any) => ({
-			...pv,
-			tag: change,
-		}));
+		updateCustomerData({ tag: change });
 	};
 
 	return (
@@ -91,18 +83,18 @@ const PersonalProfileForm = (): ReactElement => {
 			<View style={styles.pickImageView}>
 				<TouchableOpacity onPress={pickImage}>
 					<View style={styles.imageView}>
-						{customerBasicVerificationDetails?.avatar ===
+						{avatar ===
 							"" && (
 							<Image
 								source={require("../../../../assets/images/placeholder5.png")}
 								containerStyle={styles.image}
 							/>
 						)}
-						{customerBasicVerificationDetails?.avatar !==
+						{avatar !==
 							"" && (
 							<Image
 								source={{
-									uri: customerBasicVerificationDetails?.avatar,
+									uri: avatar,
 								}}
 								style={styles.image}
 							/>
@@ -118,7 +110,7 @@ const PersonalProfileForm = (): ReactElement => {
 			<BlockInput
 				name="tag"
 				placeholder="@username"
-				value={customerBasicVerificationDetails.tag}
+				value={tag}
 				onChange={onValueChange}
 			/>
 		</View>

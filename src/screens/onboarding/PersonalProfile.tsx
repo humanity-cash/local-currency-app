@@ -27,12 +27,14 @@ const styles = StyleSheet.create({
 const PersonalProfile = (): ReactElement => {
 	const navigation = useNavigation();
 	const [goNext, setGoNext] = useState<boolean>(false);
-	const { user } = useContext(UserContext);
+	const { getCustomerData } = useContext(UserContext);
 	const { signOut  } = useContext(AuthContext);
+	const customer = getCustomerData();
+	const tag = customer?.tag;
 
 	useEffect(() => {
-		setGoNext(customerBasicVerificationDetails.tag !== "");
-	}, [customerBasicVerificationDetails.tag]);
+		setGoNext(tag !== "");
+	}, [tag]);
 
 	const onNextPress = () => {
 		navigation.navigate(Routes.PERSONAL_DETAILS);

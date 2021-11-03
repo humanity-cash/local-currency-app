@@ -1,5 +1,5 @@
 import { useNavigation } from "@react-navigation/native";
-import React, { useContext, useState, useEffect } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import {
 	KeyboardAvoidingView,
 	Platform,
@@ -8,6 +8,7 @@ import {
 	View
 } from "react-native";
 import { Text } from "react-native-elements";
+import { UserContext } from "src/api/context";
 import { AuthContext } from "src/auth";
 import * as Routes from "src/navigation/constants";
 import {
@@ -41,13 +42,17 @@ const styles = StyleSheet.create({
 });
 
 const PersonalDetails = (): JSX.Element => {
-	const { signOut, customerBasicVerificationDetails } = useContext(AuthContext);
+	const { getCustomerData } = useContext(UserContext);
+	const customer = getCustomerData();
+	const { signOut } = useContext(AuthContext);
 	const [goNext, setGoNext] = useState<boolean>(false);
 	const navigation = useNavigation();
+	const firstName = customer?.firstName;
+	const lastName = customer?.lastName;
 
 	useEffect(() => {
-		setGoNext(customerBasicVerificationDetails.firstName !== "" && customerBasicVerificationDetails.lastName !== "");
-	}, [customerBasicVerificationDetails.firstName, customerBasicVerificationDetails.lastName]);
+		setGoNext(firstName !== "" && lastName !== "");
+	}, [firstName, lastName]);
 
 	const onNextPress = () => {
 		navigation.navigate(Routes.PERSONAL_ADDRESS);

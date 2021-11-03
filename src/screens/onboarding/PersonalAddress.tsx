@@ -8,10 +8,11 @@ import {
 	View
 } from "react-native";
 import { Text } from "react-native-elements";
-import { UserType } from "src/auth/types";
+import { useDispatch } from 'react-redux';
+import { UserContext } from "src/api/context";
 import { AuthContext } from "src/auth";
+import { UserType } from "src/auth/types";
 import { BUTTON_TYPES } from "src/constants";
-import * as Routes from "src/navigation/constants";
 import {
 	BackBtn,
 	Button,
@@ -26,12 +27,6 @@ import {
 	wrappingContainerBase
 } from "src/theme/elements";
 import Translation from "src/translation/en.json";
-import { UserAPI } from 'src/api';
-import { IUserRequest } from 'src/api/types';
-import { ToastType, LoadingScreenTypes } from 'src/utils/types';
-import { showToast } from 'src/utils/common';
-import { updateLoadingStatus } from 'src/store/loading/loading.actions';
-import { useDispatch } from 'react-redux';
 
 const styles = StyleSheet.create({
 	content: {
@@ -49,61 +44,62 @@ const styles = StyleSheet.create({
 });
 
 const PersonalAddress = (): React.ReactElement => {
+	const { getCustomerData } = useContext(UserContext);
+	const customer = getCustomerData();
 	const [goNext, setGoNext] = useState<boolean>(false);
-	const { customerBasicVerificationDetails, 
-		completeCustomerBasicVerification, 
-		signOut, 
-		cognitoId, 
-		completeCustomerDwollaInfo,
+	const {
+		signOut,
 		signInDetails
 	} = useContext(AuthContext);
 	const navigation = useNavigation();
 	const dispatch = useDispatch();
-
+	const address1 = customer?.address1;
+	const city = customer?.city;
+	const postalCode = customer?.postalCode;
 	useEffect(() => {
 		setGoNext(
-			customerBasicVerificationDetails.address1 !== "" && 
-			customerBasicVerificationDetails.city !== "" && 
-			customerBasicVerificationDetails.postalCode !== ""
+			address1 !== "" && 
+			city !== "" && 
+			postalCode !== ""
 		);
-	}, [customerBasicVerificationDetails]);
+	}, [address1,city, postalCode]);
 
 	const onNextPress = async () => {
-		const response = await completeCustomerBasicVerification();
-		if (response.success && cognitoId && signInDetails) {
-			const request: IUserRequest = {
-				firstName: customerBasicVerificationDetails.firstName,
-				lastName: customerBasicVerificationDetails.lastName,
-				email: signInDetails.email,
-				address1: customerBasicVerificationDetails.address1,
-				address2: customerBasicVerificationDetails.address2,
-				city: customerBasicVerificationDetails.city,
-				state: customerBasicVerificationDetails.state,
-				postalCode: customerBasicVerificationDetails.postalCode,
-				authUserId: "p_" + cognitoId
-			};
+		// const response = await completeCustomerBasicVerification();
+		// if (response.success && cognitoId && signInDetails) {
+		// 	const request: IUserRequest = {
+		// 		firstName: customerBasicVerificationDetails.firstName,
+		// 		lastName: customerBasicVerificationDetails.lastName,
+		// 		email: signInDetails.email,
+		// 		address1: customerBasicVerificationDetails.address1,
+		// 		address2: customerBasicVerificationDetails.address2,
+		// 		city: customerBasicVerificationDetails.city,
+		// 		state: customerBasicVerificationDetails.state,
+		// 		postalCode: customerBasicVerificationDetails.postalCode,
+		// 		authUserId: "p_" + cognitoId
+		// 	};
 
-			dispatch(updateLoadingStatus({
-				isLoading: true,
-				screen: LoadingScreenTypes.LOADING_DATA
-			}));
-			const resApi = await UserAPI.user(request);
-			if (resApi.data) {
-				await completeCustomerDwollaInfo({
-					dwollaId: resApi.data.userId,
-					resourceUri: ""
-				});
+		// 	dispatch(updateLoadingStatus({
+		// 		isLoading: true,
+		// 		screen: LoadingScreenTypes.LOADING_DATA
+		// 	}));
+		// 	const resApi = await UserAPI.user(request);
+		// 	if (resApi.data) {
+		// 		await completeCustomerDwollaInfo({
+		// 			dwollaId: resApi.data.userId,
+		// 			resourceUri: ""
+		// 		});
 
-				navigation.navigate(Routes.LINK_BANK_ACCOUNT);
-			}
+		// 		navigation.navigate(Routes.LINK_BANK_ACCOUNT);
+		// 	}
 
-			dispatch(updateLoadingStatus({
-				isLoading: false,
-				screen: LoadingScreenTypes.LOADING_DATA
-			}));
-		} else {
-			showToast(ToastType.ERROR, "Whooops, something went wrong.", "Connection failed.");
-		}
+		// 	dispatch(updateLoadingStatus({
+		// 		isLoading: false,
+		// 		screen: LoadingScreenTypes.LOADING_DATA
+		// 	}));
+		// } else {
+		// 	showToast(ToastType.ERROR, "Whooops, something went wrong.", "Connection failed.");
+		// }
 	};
 
 	return (

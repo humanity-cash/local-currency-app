@@ -1,8 +1,9 @@
 import React, { ReactElement, useContext } from "react";
 import { StyleSheet, View } from "react-native";
 import { Text } from "react-native-elements";
-import { BusinessBasicVerification } from "src/auth/types";
+import { UserContext } from "src/api/context";
 import { AuthContext } from "src/auth";
+import { BusinessBasicVerification } from "src/auth/types";
 import { colors } from "src/theme/colors";
 import Translation from "src/translation/en.json";
 import BlockInput from "../BlockInput";
@@ -96,16 +97,15 @@ export const BusinessOwnerDetailsForm = (
 };
 
 const PersonalDetailsForm = (props: PersonalDetailsProps): ReactElement => {
-	const {
-		customerBasicVerificationDetails,
-		setCustomerBasicVerificationDetails,
-	} = useContext(AuthContext);
+	const { getCustomerData, updateCustomerData } = useContext(UserContext);
+	const customer = getCustomerData();
+	const firstName = customer?.firstName;
+	const lastName = customer?.lastName;
 
 	const onValueChange = (name: string, change: string) => {
-		setCustomerBasicVerificationDetails((pv: any) => ({
-			...pv,
-			[name]: change,
-		}));
+		updateCustomerData({
+			[name]: change
+		});
 	};
 
 	return (
@@ -117,7 +117,7 @@ const PersonalDetailsForm = (props: PersonalDetailsProps): ReactElement => {
 				label={Translation.LABEL.FIRST_NAME}
 				name="firstName"
 				placeHolder="First Name"
-				inputValue={customerBasicVerificationDetails.firstName}
+				inputValue={firstName}
 				onInputChange={onValueChange}
 			/>
 			<BasicInputWithLabel
@@ -126,7 +126,7 @@ const PersonalDetailsForm = (props: PersonalDetailsProps): ReactElement => {
 				label={Translation.LABEL.LAST_NAME}
 				name="lastName"
 				placeHolder="Last Name"
-				inputValue={customerBasicVerificationDetails.lastName}
+				inputValue={lastName}
 				onInputChange={onValueChange}
 			/>
 		</View>
