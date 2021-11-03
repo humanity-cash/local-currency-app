@@ -2,14 +2,14 @@ import { AntDesign } from '@expo/vector-icons';
 import React, { ReactElement, useContext } from "react";
 import { StyleSheet, View } from "react-native";
 import { Text } from "react-native-elements";
-import { AuthContext } from "src/auth";
 import SelectDropdown from 'react-native-select-dropdown';
-import { colors } from "src/theme/colors";
-import Translation from 'src/translation/en.json';
-import BlockInput from "../BlockInput";
-import { IMap } from "src/utils/types";
+import { UserContext } from 'src/api/context';
 import { UserType } from "src/auth/types";
 import countries from "src/mocks/countries";
+import { colors } from "src/theme/colors";
+import Translation from 'src/translation/en.json';
+import { IMap } from "src/utils/types";
+import BlockInput from "../BlockInput";
 
 interface PersonalAddressProps {
 	userType: UserType,
@@ -58,14 +58,17 @@ const styles = StyleSheet.create({
 });
 
 const PersonalAddressForm = (props: PersonalAddressProps): ReactElement => {
-  const { customerBasicVerificationDetails, setCustomerBasicVerificationDetails } =
-		useContext(AuthContext);
+	const { getCustomerData, updateCustomerData } = useContext(UserContext);
+	const customer = getCustomerData();
+	const postalCode = customer?.postalCode;
+	const city = customer?.city;
+	const address1 = customer?.address1;
+	const address2 = customer?.address2;
 
   const onValueChange = (name: string, change: string) => {
-    setCustomerBasicVerificationDetails((pv: IMap) => ({
-      ...pv,
-      [name]: change,
-    }));
+    updateCustomerData({
+      [name]: change
+    });
   };
 
   return (
@@ -79,7 +82,7 @@ const PersonalAddressForm = (props: PersonalAddressProps): ReactElement => {
 			<BlockInput
 				name="address1"
 				placeholder="Street number, street name"
-				value={customerBasicVerificationDetails.address1}
+				value={address1}
 				onChange={onValueChange}
 				style={props.style}
 			/>
@@ -87,7 +90,7 @@ const PersonalAddressForm = (props: PersonalAddressProps): ReactElement => {
 			<BlockInput
 				name="address2"
 				placeholder="Apt."
-				value={customerBasicVerificationDetails.address2}
+				value={address2}
 				onChange={onValueChange}
 				style={props.style}
 			/>
@@ -98,7 +101,7 @@ const PersonalAddressForm = (props: PersonalAddressProps): ReactElement => {
 					<BlockInput
 						name="city"
 						placeholder="City"
-						value={customerBasicVerificationDetails.city}
+						value={city}
 						onChange={onValueChange}
 						style={props.style}
 					/>
@@ -138,7 +141,7 @@ const PersonalAddressForm = (props: PersonalAddressProps): ReactElement => {
 				name="postalCode"
 				placeholder="00000"
 				keyboardType="number-pad"
-				value={customerBasicVerificationDetails.postalCode}
+				value={postalCode}
 				onChange={onValueChange}
 				style={props.style}
 			/>
