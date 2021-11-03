@@ -1,8 +1,13 @@
 import React, { useContext, useState } from "react";
 import { AuthContext } from "../auth";
-import { IUser } from "./types";
+import { Customer, IUser } from "./types";
 
-export const UserContext = React.createContext({ user: {} as IUser, userType: '' });
+export const UserContext = React.createContext<IState>({ 
+	user: {} as IUser, 
+	userType: undefined,
+	getCustomerData: () => undefined,
+	updateCustomerData: (u: Customer) => ({}),
+});
 
 const initialUserState = {
 	dbId: "",
@@ -58,6 +63,8 @@ export enum UserType {
 }
 
 interface IState {
+	getCustomerData: () => Customer | undefined,
+	updateCustomerData: (u: any) => void,
 	user: IUser | undefined;
 	userType: UserType | undefined;
 }
@@ -67,9 +74,19 @@ const UserProvider: React.FunctionComponent = ({ children }) => {
 	const [user, setUser] = useState<IUser>(initialUserState);
 	const [userType, setUserType] = useState<UserType>();
 
+	const updateCustomerData = (u: any) => {
+		setUser((pv: IUser) => ({ ...pv, customer: { ...pv.customer, ...u } }))
+	}
+
+	const getCustomerData = (): Customer | undefined => {
+		return user.customer
+	}
+
 	const state: IState = {
 		user,
-		userType
+		userType,
+		getCustomerData,
+		updateCustomerData
 	};
 
 	return (
