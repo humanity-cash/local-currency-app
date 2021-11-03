@@ -9,6 +9,11 @@ import QRCodeGen from "./QRCodeGen";
 import PaymentRequestSuccess from "./PaymentRequestSuccess";
 import Translation from 'src/translation/en.json';
 import * as Routes from 'src/navigation/constants';
+import { WalletState } from 'src/store/wallet/wallet.reducer';
+import { FundingSourceState } from 'src/store/funding-source/funding-source.reducer';
+import { useSelector } from 'react-redux';
+import { AppState } from 'src/store'
+import BankLinkDialog from 'src/shared/uielements/BankLinkDialog'
 
 type AmountState = {
 	amount: string,
@@ -61,6 +66,14 @@ const PaymentRequest = (): JSX.Element => {
 	const [isVisible, setIsVisible] = useState<boolean>(false);
 	const [isRequestSuccess, setIsRequestSuccess] = useState<boolean>(false);
 	const [isOpenAmount, setIsOpenAmount] = useState<boolean>(false);
+	const [bankDialogInfo, setBankDialogInfo] = useState<any>({
+		isVisible: false,
+		title: "",
+		detail: "",
+		buttonTitle: ""
+	});
+	const { personalFundingSource } = useSelector((state: AppState) => state.fundingSourceReducer) as FundingSourceState;
+	const { personalWallet } = useSelector((state: AppState) => state.walletReducer) as WalletState;
 
 	useEffect(() => {
 		setGoNext(Number(state.amount) > 0);
@@ -100,6 +113,46 @@ const PaymentRequest = (): JSX.Element => {
 		setIsVisible(false);
 	}
 
+	const onPressQRScan = () => {
+		if (personalWallet.availableBalance > 0) {
+			navigation.navigate(Routes.QRCODE_SCAN)
+			return
+		}
+
+		if(personalFundingSource) {
+			setBankDialogInfo({
+				...bankDialogInfo,
+				isVisible: true,
+				detail: Translation.PAYMENT.PAYMENT_NO_BALANCE_DETAIL,
+				buttonTitle: Translation.BUTTON.LOAD_UP_BERKSHARES
+			})
+		} else {
+			setBankDialogInfo({
+				...bankDialogInfo,
+				isVisible: true,
+				detail: Translation.PAYMENT.PAYMENT_NO_BANK_DETAIL,
+				buttonTitle: Translation.BUTTON.LINK_BANK
+			})
+		}
+	}
+
+	const onBankDialogConfirm = () => {
+		onBankDialogCancel()
+
+		if(personalFundingSource) {
+			navigation.navigate(Routes.LOAD_UP);
+		} else {
+			navigation.navigate(Routes.SELECT_BANK);
+		}
+	}
+
+	const onBankDialogCancel = () => {
+		setBankDialogInfo({
+			...bankDialogInfo,
+			isVisible: false
+		})
+	}
+
 	return (
 		<View style={viewBase}>
 			<Header
@@ -110,7 +163,7 @@ const PaymentRequest = (): JSX.Element => {
 					<View style={styles.switchView}>
 						<ToggleButton
 							value={false}
-							onChange={()=>navigation.navigate(Routes.QRCODE_SCAN)}
+							onChange={onPressQRScan}
 							activeText="Pay"
 							inActiveText="Receive"
 							style={styles.switch}
@@ -150,6 +203,14 @@ const PaymentRequest = (): JSX.Element => {
 			</KeyboardAvoidingView>
 			{ isVisible && <QRCodeGen visible={isVisible} onSuccess={onSuccess} onClose={onClose} isOpenAmount={isOpenAmount} amount={Number(state.amount)} /> }
 			{ isRequestSuccess && <PaymentRequestSuccess visible={isRequestSuccess} onClose={onConfirm} amount={receivedAmount} /> }
+
+			<BankLinkDialog 
+				visible={bankDialogInfo.isVisible}
+				description={bankDialogInfo.detail}
+				buttonTitle={bankDialogInfo.buttonTitle}
+				onConfirm={onBankDialogConfirm}
+				onCancel={onBankDialogCancel}
+			/>
 		</View>
 	);
 }

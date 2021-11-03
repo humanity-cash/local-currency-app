@@ -236,6 +236,7 @@
         "NOT_REFUNABLE_DONATION": "*THE ROUND UP IS A NON REFUNABLE DONATION.",
         "PAYMENT_NO_BANK_TITLE": "Whoooops. You cannot make a payment yet.",
         "PAYMENT_NO_BANK_DETAIL": "First link your bank account and load up B$ to make sute you have enough B$ for your purchasement.",
+        "PAYMENT_NO_BALANCE_DETAIL": "You have too little funds available. Please load up your balance first.",
         "WRONG": "Whooops, something went wrong.",
         "SPECIFY_PAYMENT": "Specify payment"
     },

@@ -30,6 +30,7 @@ import { UserType } from 'src/auth/types';
 import { showLoadingProgress, hideLoadingProgress } from '../../store/loading/loading.actions';
 import { UserAPI } from 'src/api';
 import { INotificationResponse } from '../../api/types';
+import BankLinkDialog from 'src/shared/uielements/BankLinkDialog';
 
 const styles = StyleSheet.create({
 	content: { paddingBottom: 80 },
@@ -235,7 +236,11 @@ const Dashboard = (): JSX.Element => {
 	}
 
 	const selectBank = () => {
-		navigation.navigate(Routes.SELECT_BANK);
+		if (personalFundingSource) {
+			navigation.navigate(Routes.LOAD_UP);
+		} else {
+			navigation.navigate(Routes.SELECT_BANK);
+		}
 		onClose();
 	}
 
@@ -244,6 +249,18 @@ const Dashboard = (): JSX.Element => {
 		setIsPayment(false);
 		setIsLoadup(false);
 	};
+
+	const onPressScan = () => {
+		if(personalWallet.availableBalance > 0) {
+			if(personalFundingSource) {
+				navigation.navigate(Routes.QRCODE_SCAN)
+			} else {
+				navigation.navigate(Routes.RECEIVE_PAYMENT)
+			}
+		} else {
+			setIsPayment(true)
+		}
+	}
 
 	return (
 		<View style={viewBase}>
@@ -350,7 +367,7 @@ const Dashboard = (): JSX.Element => {
 					</View>
 				</ScrollView>
 			</View>
-			<TouchableOpacity onPress={() => personalFundingSource ? navigation.navigate(Routes.QRCODE_SCAN) : setIsPayment(true)} style={styles.scanButton}>
+			<TouchableOpacity onPress={onPressScan} style={styles.scanButton}>
 				<Image
 					source={require('../../../assets/images/qr_code_consumer.png')}
 					containerStyle={styles.qrIcon}
@@ -360,31 +377,21 @@ const Dashboard = (): JSX.Element => {
 			{isVisible && (
 				<DwollaDialog visible={isVisible} onClose={onClose} userType={UserType.Customer} />
 			)}
-			{(isLoadup || isPayment) && (
-				<Dialog visible={isLoadup || isPayment} onClose={onClose} style={styles.dialog}>
-					<View style={dialogViewBase}>
-						{isLoadup && (
-							<View style={styles.dialogWrap}>
-								<Text style={styles.dialogHeader}>{Translation.LOAD_UP.LOAD_UP_NO_BANK_TITLE}</Text>
-								<Text>{Translation.LOAD_UP.LOAD_UP_NO_BANK_DETAIL}</Text>
-							</View>
-						)}
-						{isPayment && (
-							<View style={styles.dialogWrap}>
-								<Text style={styles.dialogHeader}>{Translation.PAYMENT.PAYMENT_NO_BANK_TITLE}</Text>
-								<Text>{Translation.PAYMENT.PAYMENT_NO_BANK_DETAIL}</Text>
-							</View>
-						)}
-						<View style={styles.dialogBottom}>
-							<Button
-								type={BUTTON_TYPES.DARK_GREEN}
-								title={Translation.BUTTON.LINK_BANK}
-								onPress={selectBank}
-							/>
-						</View>
-					</View>
-				</Dialog>
-			)}
+
+			<BankLinkDialog 
+				visible={isLoadup || isPayment}
+				description={isLoadup ? Translation.LOAD_UP.LOAD_UP_NO_BANK_DETAIL 
+					: personalWallet.availableBalance > 0 
+						? Translation.PAYMENT.PAYMENT_NO_BALANCE_DETAIL
+						: Translation.PAYMENT.PAYMENT_NO_BANK_DETAIL}
+				buttonTitle={
+					personalFundingSource 
+						? Translation.BUTTON.LOAD_UP_BERKSHARES
+						: Translation.BUTTON.LINK_BANK
+				}
+				onConfirm={selectBank}
+				onCancel={onClose}
+			/>
 		</View>
 	);
 };
