@@ -1,4 +1,3 @@
-// import DateTimePicker from "@react-native-community/datetimepicker";
 import DateTimePicker from "react-native-modal-datetime-picker";
 import { useNavigation } from "@react-navigation/native";
 import moment from "moment";

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { StyleSheet, View, ScrollView } from 'react-native';
+import { StyleSheet, View, ScrollView, SafeAreaView } from 'react-native';
 import { Text, Image } from 'react-native-elements';
 import { Modal, ModalHeader, Header, CancelBtn, BackBtn } from "src/shared/uielements";
 import { underlineHeader, viewBase, wrappingContainerBase, modalViewBase } from "src/theme/elements";
@@ -196,7 +196,7 @@ const MerchantDictionary = (): JSX.Element => {
 			</View>
 			{isVisible && (
 				<Modal visible={isVisible}>
-					<View style={ modalViewBase }>
+					<SafeAreaView style={ modalViewBase }>
 						<ModalHeader
 							rightComponent={<CancelBtn text="Close" onClick={handleDeSelect} />}
 						/>
@@ -214,7 +214,7 @@ const MerchantDictionary = (): JSX.Element => {
 								<Text style={styles.rightText}>{selected.phone}</Text>
 							</View>
 						</ScrollView>
-					</View>
+					</SafeAreaView>
 				</Modal>
 			)}
 		</View>
