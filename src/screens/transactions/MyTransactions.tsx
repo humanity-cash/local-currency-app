@@ -1,5 +1,5 @@
 import { useNavigation } from '@react-navigation/native';
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect, useContext, useMemo } from 'react';
 import { AuthContext } from 'src/auth';
 import { StyleSheet, View, ScrollView, TouchableOpacity } from 'react-native';
 import { Text, Image } from 'react-native-elements';
@@ -8,7 +8,7 @@ import { Header, BackBtn, SearchInput, Dialog, Button } from "src/shared/uieleme
 import { baseHeader, viewBase, dialogViewBase, wrappingContainerBase, FontFamily } from "src/theme/elements";
 import { colors } from "src/theme/colors";
 import MyTransactionList from './MyTransactionList';
-import MyTransactionFilter from './MyTransactionsFilter';
+import MyTransactionFilter, { transactionTypes } from './MyTransactionsFilter';
 import ReturnQRCodeGen from './ReturnQRCodeGen';
 import Translation from 'src/translation/en.json';
 import * as Routes from 'src/navigation/constants';
@@ -24,6 +24,7 @@ import { WalletState } from 'src/store/wallet/wallet.reducer';
 import { updateLoadingStatus } from 'src/store/loading/loading.actions';
 import { BUTTON_TYPES } from 'src/constants';
 import PaymentRequestSuccess from 'src/screens/payment/PaymentRequestSuccess';
+import DateTimePicker from "react-native-modal-datetime-picker";
 
 const styles = StyleSheet.create({
 	content: {
@@ -127,7 +128,43 @@ const styles = StyleSheet.create({
 	},
 	dialogHeight: {
 		height: 300
-	}
+	},
+	inlineView: {
+        flex: 1,
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        marginVertical: 5,
+        alignItems: 'center'
+    },
+    dateView: {
+        flex: 1,
+    },
+    label: {
+		fontSize: 10,
+		lineHeight: 14,
+		color: colors.bodyText
+	},
+    date: {
+        height: 55,
+        marginVertical: 7,
+        alignItems: 'center',
+        justifyContent: 'center',
+        borderRadius: 3,
+        backgroundColor: colors.inputBg
+    },
+    placeholder: {
+        color: colors.lightGreen
+    },
+    pickerText: {
+        color: colors.darkGreen
+    },
+    separator: {
+        width: 15,
+        height: 1,
+        marginHorizontal: 10,
+        marginTop: 15,
+        backgroundColor: colors.darkGreen
+    },
 });
 
 type TransactionDetailProps = {
@@ -211,6 +248,12 @@ const MyTransactions = (): JSX.Element => {
 	const { personalTransactions } = useSelector((state: AppState) => state.transactionReducer) as TransactionState;
 	const { personalWallet } = useSelector((state: AppState) => state.walletReducer) as WalletState;
 
+	const [startDate, setStartDate] = useState<Date | undefined>(undefined);
+	const [endDate, setEndDate] = useState<Date | undefined>(undefined);
+    const [isStartDate, setIsStartDate] = useState<boolean>(false);
+    const [isEndDate, setIsEndDate] = useState<boolean>(false);
+	const [type, setType] = useState<string>('All');
+
 	useEffect(() => {
 		if (customerDwollaId) {
 			(async () => {
@@ -226,6 +269,37 @@ const MyTransactions = (): JSX.Element => {
 			})();
 		}
 	}, []);
+
+	const transactionList = useMemo(() => {
+		
+		let computedList: ITransaction[] = personalTransactions;
+
+		// To do
+		if (searchText != '') {
+			computedList = computedList.filter(item => item);
+		}
+
+		const selectedType = type == transactionTypes[1] ? 'IN' : 
+							type == transactionTypes[2] ? 'OUT' :
+							type == transactionTypes[3] ? 'LOADUP' : 'CASHOUT';
+		if (type != transactionTypes[0]) {
+			computedList = computedList.filter(item => item.type === selectedType);
+		}
+
+		if(startDate && endDate) {
+			computedList = computedList.filter(item => 
+				moment(item.timestamp).isAfter(startDate) && moment(item.timestamp).isBefore(endDate)
+			);
+		} else {
+			if (startDate) {
+				computedList = computedList.filter(item => moment(item.timestamp).isAfter(startDate));
+			} else if (endDate) {
+				computedList = computedList.filter(item => moment(item.timestamp).isBefore(endDate));
+			}
+		}
+
+		return computedList;
+	}, [personalTransactions, type, startDate, endDate, searchText]);
 
 	const onSearchChange = (name: string, change: string) => {
 		setSearchText(change);
@@ -255,6 +329,31 @@ const MyTransactions = (): JSX.Element => {
 		setIsDetailView(false);
 		setIsReturnView(false);
 		setIsRequestSuccess(false);
+	}
+
+	// calendar
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const onStartDateChange = (selectedDate?: Date) => {
+        const currentDate = selectedDate || startDate;
+        setIsStartDate(false);
+        setStartDate(currentDate);
+    };
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const onEndDateChange = (selectedDate?: Date) => {
+        const currentDate = selectedDate || startDate;
+        setIsEndDate(false);
+        setEndDate(currentDate);
+    };
+
+	const onClear = () => {
+		setType('All');
+		setStartDate(undefined);
+		setEndDate(undefined);
+	}
+
+	const onSelectType = (type: string) => {
+		setType(type);
 	}
 
 	return (
@@ -291,8 +390,34 @@ const MyTransactions = (): JSX.Element => {
 								/>
 							</TouchableOpacity>
 						</View>
-						{isFilterVisible && <MyTransactionFilter></MyTransactionFilter>}
-						<MyTransactionList data={personalTransactions} onSelect={viewDetail} />
+						{isFilterVisible &&
+							<>
+								<View style={styles.inlineView}>
+									<View style={styles.dateView}>
+										<Text style={styles.label}>{Translation.LABEL.START_DATE}</Text>
+										<TouchableOpacity onPress={()=>setIsStartDate(true)} style={styles.date} >
+											<Text style={startDate == null ? styles.placeholder : styles.pickerText}>
+												{startDate == null ? "MM/DD/YY" : moment(startDate).format('DD/MM/yyyy')}
+											</Text>
+										</TouchableOpacity>
+									</View>
+									<View style={styles.separator}></View>
+									<View style={styles.dateView}>
+										<Text style={styles.label}>{Translation.LABEL.END_DATE}</Text>
+										<TouchableOpacity onPress={()=>setIsEndDate(true)} style={styles.date}>
+											<Text style={endDate == null ? styles.placeholder : styles.pickerText}>
+												{endDate == null ? "MM/DD/YY" : moment(endDate).format('DD/MM/yyyy')}
+											</Text>
+										</TouchableOpacity>
+									</View>
+								</View>	
+								<MyTransactionFilter
+									onClear={onClear}
+									onSelectType={onSelectType}
+								/>
+							</>
+						}
+						<MyTransactionList data={transactionList} onSelect={viewDetail} />
 					</View>
 				</ScrollView>
 			</View>
@@ -308,6 +433,22 @@ const MyTransactions = (): JSX.Element => {
 			{isDetailView && <TransactionDetail visible={isDetailView} data={selectedItem} onReturn={onReturn} onClose={onClose} />}
 			{isReturnView && <ReturnQRCodeGen visible={isReturnView} onSuccess={onSuccess} onClose={onClose} transactionInfo={selectedItem} /> }
 			{isRequestSuccess && <PaymentRequestSuccess visible={isRequestSuccess} onClose={onConfirm} amount={receivedAmount} /> }
+
+			<DateTimePicker
+				isVisible={isStartDate}
+				mode="date"
+				date={startDate ? startDate : new Date()}
+				onConfirm={onStartDateChange}
+				onCancel={() => {setIsStartDate(false)}}
+			/>
+			<DateTimePicker
+				isVisible={isEndDate}
+				mode="date"
+				date={endDate ? endDate : new Date()}
+				onConfirm={onEndDateChange}
+				minimumDate={startDate}
+				onCancel={() => {setIsEndDate(false)}}
+			/>
 		</View>
 	);
 }

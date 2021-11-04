@@ -66,6 +66,7 @@ const SearchInput = (props: SearchInputProps) => {
 					value={props.value}
 					onKeyPress={props.onKeyPress}
 					maxLength={props.maxLength}
+					autoCapitalize='none'
 				/>
 			</View>
 		</TouchableWithoutFeedback>
