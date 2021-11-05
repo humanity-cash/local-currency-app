@@ -1,7 +1,7 @@
 import { useNavigation } from '@react-navigation/native';
 import React, { useState, useContext, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import { StyleSheet, View, Image, KeyboardAvoidingView, ScrollView, Platform } from 'react-native';
+import { StyleSheet, View, Image, KeyboardAvoidingView, ScrollView, Platform, ActivityIndicator } from 'react-native';
 import { Text } from 'react-native-elements';
 import { useCameraPermission } from 'src/hooks';
 import { AuthContext } from 'src/auth';
@@ -121,7 +121,18 @@ const styles = StyleSheet.create({
 	bottomView: {
 		padding: 20,
 		paddingBottom: 45
+	},
+	loading: {
+		position: 'absolute', 
+		top: 0, 
+		left: 0, 
+		right: 0, 
+		bottom: 0, 
+		alignItems: 'center', 
+		justifyContent: 'center', 
+		backgroundColor: 'rgba(0, 0, 0, 0.4)'
 	}
+
 });
 
 type PaymentConfirmProps = {
@@ -226,6 +237,7 @@ const QRCodeScan = (): JSX.Element => {
 		amount: 0,
 		mode: PaymentMode.SELECT_AMOUNT
 	});
+	const [isLoading, setIsLoading] = useState(false)
 
 	const { personalWallet } = useSelector((state: AppState) => state.walletReducer) as WalletState;
 
@@ -313,10 +325,7 @@ const QRCodeScan = (): JSX.Element => {
 					comment: ''
 				};
 
-				dispatch(updateLoadingStatus({
-					isLoading: true,
-					screen: LoadingScreenTypes.PAYMENT_PENDING
-				}));
+				setIsLoading(true)
 				const response = await UserAPI.transferTo(customerDwollaId, request);
 				if (response.data) {
 					await dispatch(loadPersonalWallet(customerDwollaId));
@@ -325,10 +334,7 @@ const QRCodeScan = (): JSX.Element => {
 				} else {
 					navigation.navigate(Routes.PAYMENT_FAILED);
 				}
-				dispatch(updateLoadingStatus({
-					isLoading: false,
-					screen: LoadingScreenTypes.PAYMENT_PENDING
-				}));
+				setIsLoading(false)
 			} else {
 				showToast(ToastType.ERROR, "Failed", "Whooops, something went wrong.");
 			}
@@ -403,6 +409,11 @@ const QRCodeScan = (): JSX.Element => {
 								/>
 							</View>
 						</KeyboardAvoidingView>
+						{ isLoading && 
+							<View style={styles.loading}>
+								<ActivityIndicator size='large' color={colors.white}/>
+							</View> 
+						}
 					</View>
 				</Modal>
 			)}

@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { StyleSheet, View, ScrollView, KeyboardAvoidingView, Platform } from 'react-native';
+import { StyleSheet, View, ScrollView, KeyboardAvoidingView, Platform, ActivityIndicator } from 'react-native';
 import { Text } from 'react-native-elements';
 import { AuthContext } from 'src/auth';
 import { useCameraPermission } from 'src/hooks';
@@ -96,6 +96,16 @@ const styles = StyleSheet.create({
 	inlineView: {
 		flexDirection: 'row',
 		justifyContent: 'space-between'
+	},
+	loading: {
+		position: 'absolute', 
+		top: 0, 
+		left: 0, 
+		right: 0, 
+		bottom: 0, 
+		alignItems: 'center', 
+		justifyContent: 'center', 
+		backgroundColor: 'rgba(0, 0, 0, 0.4)'
 	}
 });
 
@@ -115,6 +125,7 @@ const MerchantReturnQRCodeScan = (): JSX.Element => {
 		amount: 0,
 		mode: PaymentMode.SELECT_AMOUNT
 	});
+	const [isLoading, setIsLoading] = useState(false)
 
 	useEffect(() => {
 		setIsScanned(false);
@@ -164,16 +175,18 @@ const MerchantReturnQRCodeScan = (): JSX.Element => {
 				amount: amount.toString(),
 				comment: ''
 			};
-			dispatch(showLoadingProgress(LoadingScreenTypes.LOADING_DATA))
+			setIsLoading(true)
 			const response = await UserAPI.transferTo(businessDwollaId, request);
 			if (response.data) {
 				await dispatch(loadBusinessWallet(businessDwollaId));
 				await dispatch(loadBusinessTransactions(businessDwollaId));
-				dispatch(hideLoadingProgress())
+				setIsLoading(false)
+				setIsReturnModal(false)
 				navigation.navigate(Routes.MERCHANT_PAYMENT_SUCCESS);
 			} else {
 				showToast(ToastType.ERROR, "Failed", "Whooops, something went wrong.");
-				dispatch(hideLoadingProgress())
+				setIsLoading(false)
+				setIsReturnModal(false)
 				navigation.navigate(Routes.MERCHANT_DASHBOARD);
 			}
 		} else {
@@ -203,6 +216,7 @@ const MerchantReturnQRCodeScan = (): JSX.Element => {
 
 			{ isReturnModal && (
 				<Modal visible={isReturnModal}>
+
 					<View style={ modalViewBase }>
 						<ModalHeader
 							leftComponent={<BackBtn color={colors.purple} onClick={() => setIsReturnModal(false)} />}
@@ -262,6 +276,11 @@ const MerchantReturnQRCodeScan = (): JSX.Element => {
 								/>
 							</View>
 						</KeyboardAvoidingView>
+						{ isLoading && 
+							<View style={styles.loading}>
+								<ActivityIndicator size='large' color={colors.white}/>
+							</View> 
+						}
 					</View>
 				</Modal>
 			)}
