@@ -33,7 +33,7 @@ const styles = StyleSheet.create({
 const SelectMerchantBank = (): JSX.Element => {
 	const navigation = useNavigation();
 	const dispatch = useDispatch();
-	const { businessDwollaId } = useContext(AuthContext);
+	const { businessDwollaId, getAttributes } = useContext(AuthContext);
 	const [iavToken, setIAVToken] = useState<string>("");
 	let webview: WebView<{ ref: unknown; style: { flex: number; height: number; paddingBottom: number; }; source: { uri: string; }; }> | null = null;
 
@@ -46,6 +46,8 @@ const SelectMerchantBank = (): JSX.Element => {
 					webview?.reload();
 				}
 			})();
+		} else {
+			getAttributes()
 		}
 	}, [businessDwollaId]);
 

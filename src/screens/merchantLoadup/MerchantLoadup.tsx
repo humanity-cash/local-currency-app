@@ -178,7 +178,7 @@ const MerchantLoadup = (): JSX.Element => {
             
             <View style={styles.maxBView}>
               <Text style={styles.text}>{Translation.LABEL.AMOUNT}</Text>
-              <Text style={styles.text}>{Translation.LABEL.MAX_BERKSHARES}</Text>
+              <Text style={styles.text}>{Translation.LABEL.MAX_LOADUP_BERKSHARES}</Text>
             </View>
             <BorderedInput
               label="Amount"

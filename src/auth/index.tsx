@@ -21,7 +21,8 @@ import {
 	ForgotPassword,
 	DwollaInfo,
 	defaultState,
-	IAuth, UserType
+	IAuth,
+	UserType
 } from "./types";
 
 export const AuthContext = React.createContext(defaultState);
@@ -82,6 +83,7 @@ const AuthProvider: React.FunctionComponent = ({ children }) => {
 		setCompletedBusinessVerification(isVerifiedBusiness);
 		setCognitoId(userAttributes?.["sub"]);
 		setCustomerDwollaId(userAttributes?.["custom:personal.dwollaId"]);
+		console.log('customerDwollaId', customerDwollaId)
 		setBusinessDwollaId(userAttributes?.["custom:business.dwollaId"]);
 	}, [userAttributes, authStatus]);
 
@@ -194,7 +196,9 @@ const AuthProvider: React.FunctionComponent = ({ children }) => {
 			signUpDetails.password
 		);
 		if (!response?.success) setAuthStatus(AuthStatus.SignedOut);
-		else setAuthStatus(AuthStatus.Loading); // Invokes getSession useEffect
+		else {
+			setAuthStatus(AuthStatus.Loading); // Invokes getSession useEffect
+		}
 
 		return response;
 	};
@@ -219,6 +223,7 @@ const AuthProvider: React.FunctionComponent = ({ children }) => {
 	const getAttributes = async (): CognitoResponse<
 		CognitoUserAttribute[] | undefined
 	> => {
+		console.log('getAttributes')
 		const response = await userController.getAttributes();
 		if (!response.success) {
 			setUserAttributes({});
@@ -373,6 +378,7 @@ const AuthProvider: React.FunctionComponent = ({ children }) => {
 		setBusinessDwollaInfo,
 		completeBusinessDwollaInfo,
 		changePassword,
+		getAttributes
 	};
 
 	return (
