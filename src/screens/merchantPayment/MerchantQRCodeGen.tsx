@@ -61,6 +61,7 @@ type MerchantQRCodeGenProps = {
 	visible: boolean,
 	onClose: () => void,
     onSuccess: (amount: number) => void,
+    isOpenAmount: boolean,
     amount?: number
 }
 
@@ -76,7 +77,7 @@ const MerchantQRCodeGen = (props: MerchantQRCodeGenProps): JSX.Element => {
         securityId: SECURITY_ID,
         to: businessDwollaId,
         amount: props.amount,
-        mode: PaymentMode.SELECT_AMOUNT
+        mode: props.isOpenAmount ? PaymentMode.OPEN_AMOUNT : PaymentMode.SELECT_AMOUNT
     });
 
     useEffect(() => {

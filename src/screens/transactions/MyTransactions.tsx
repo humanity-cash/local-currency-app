@@ -336,7 +336,10 @@ const MyTransactions = (): JSX.Element => {
     const onStartDateChange = (selectedDate?: Date) => {
         const currentDate = selectedDate || startDate;
         setIsStartDate(false);
-        setStartDate(currentDate);
+		setStartDate(currentDate);
+		if(moment(currentDate).isAfter(endDate)) {
+			setEndDate(currentDate)
+		}
     };
 
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -397,7 +400,7 @@ const MyTransactions = (): JSX.Element => {
 										<Text style={styles.label}>{Translation.LABEL.START_DATE}</Text>
 										<TouchableOpacity onPress={()=>setIsStartDate(true)} style={styles.date} >
 											<Text style={startDate == null ? styles.placeholder : styles.pickerText}>
-												{startDate == null ? "MM/DD/YY" : moment(startDate).format('DD/MM/yyyy')}
+												{startDate == null ? "MM/DD/YY" : moment(startDate).format('MM/DD/yyyy')}
 											</Text>
 										</TouchableOpacity>
 									</View>
@@ -406,7 +409,7 @@ const MyTransactions = (): JSX.Element => {
 										<Text style={styles.label}>{Translation.LABEL.END_DATE}</Text>
 										<TouchableOpacity onPress={()=>setIsEndDate(true)} style={styles.date}>
 											<Text style={endDate == null ? styles.placeholder : styles.pickerText}>
-												{endDate == null ? "MM/DD/YY" : moment(endDate).format('DD/MM/yyyy')}
+												{endDate == null ? "MM/DD/YY" : moment(endDate).format('MM/DD/yyyy')}
 											</Text>
 										</TouchableOpacity>
 									</View>

@@ -10,6 +10,11 @@ import MerchantRequestSuccess from "./MerchantRequestSuccess";
 import Translation from 'src/translation/en.json';
 import * as Routes from 'src/navigation/constants';
 import { BUTTON_TYPES } from 'src/constants';
+import BankLinkDialog from 'src/shared/uielements/BankLinkDialog'
+import { useSelector } from 'react-redux';
+import { AppState } from 'src/store';
+import { WalletState } from 'src/store/wallet/wallet.reducer';
+import { FundingSourceState } from 'src/store/funding-source/funding-source.reducer';
 
 type AmountState = {
 	amount: string,
@@ -53,6 +58,9 @@ const styles = StyleSheet.create({
 	switchText: {
 		color: colors.purple
 	},
+	openBtn: {
+		marginBottom: 10
+	},
 	toggleBg: {
 		backgroundColor: colors.purple
 	}
@@ -68,6 +76,16 @@ const MerchantRequest = (): JSX.Element => {
 	const [isVisible, setIsVisible] = useState<boolean>(false);
 	const [receivedAmount, setReceivedAmount] = useState<number>(0);
 	const [isRequestSuccess, setIsRequestSuccess] = useState<boolean>(false);
+	const [isOpenAmount, setIsOpenAmount] = useState<boolean>(false);
+	const [bankDialogInfo, setBankDialogInfo] = useState<any>({
+		isVisible: false,
+		title: "",
+		detail: "",
+		buttonTitle: ""
+	});
+
+	const { businessWallet } = useSelector((state: AppState) => state.walletReducer) as WalletState;
+	const { businessFundingSource } = useSelector((state: AppState) => state.fundingSourceReducer) as FundingSourceState;
 
 	useEffect(() => {
 		setGoNext(Number(state.costs) > 0);
@@ -86,6 +104,11 @@ const MerchantRequest = (): JSX.Element => {
 		setIsVisible(true);
 	}
 
+	const openAmount = () => {
+		setIsOpenAmount(true);
+		setIsVisible(true);
+	}
+
 	const onSuccess = (amount: number) => {
 		setReceivedAmount(amount);
 		setIsVisible(false);
@@ -101,6 +124,46 @@ const MerchantRequest = (): JSX.Element => {
 		setIsVisible(false);
 	}
 
+	const onPressPay = () => {
+		if (businessWallet.availableBalance > 0) {
+			navigation.navigate(Routes.MERCHANT_QRCODE_SCAN)
+			return
+		}
+
+		if(businessFundingSource) {
+			setBankDialogInfo({
+				...bankDialogInfo,
+				isVisible: true,
+				detail: Translation.PAYMENT.PAYMENT_NO_BALANCE_DETAIL,
+				buttonTitle: Translation.BUTTON.LOAD_UP_BERKSHARES
+			})
+		} else {
+			setBankDialogInfo({
+				...bankDialogInfo,
+				isVisible: true,
+				detail: Translation.PAYMENT.PAYMENT_NO_BANK_DETAIL,
+				buttonTitle: Translation.BUTTON.LINK_BANK
+			})
+		}
+	}
+
+	const onBankDialogConfirm = () => {
+		onBankDialogCancel()
+
+		if(businessFundingSource) {
+			navigation.navigate(Routes.MERCHANT_LOADUP);
+		} else {
+			navigation.navigate(Routes.MERCHANT_BANK_ACCOUNT);
+		}
+	}
+
+	const onBankDialogCancel = () => {
+		setBankDialogInfo({
+			...bankDialogInfo,
+			isVisible: false
+		})
+	}
+
 	return (
 		<View style={viewBaseB}>
 			<Header
@@ -111,7 +174,7 @@ const MerchantRequest = (): JSX.Element => {
 					<View style={styles.switchView}>
 						<ToggleButton
 							value={false}
-							onChange={()=>navigation.navigate(Routes.MERCHANT_QRCODE_SCAN)}
+							onChange={onPressPay}
 							activeText="Pay"
 							inActiveText="Receive"
 							style={styles.switch}
@@ -140,6 +203,12 @@ const MerchantRequest = (): JSX.Element => {
 				behavior={Platform.OS == "ios" ? "padding" : "height"} >
 				<View style={styles.bottomView}>
 					<Button
+						type="transparent"
+						title={Translation.BUTTON.LET_CHOOSE_AMOUNT}
+						style={styles.openBtn}
+						onPress={openAmount}
+					/>
+					<Button
 						type={BUTTON_TYPES.PURPLE}
 						disabled={!goNext}
 						title={Translation.BUTTON.NEXT}
@@ -147,8 +216,16 @@ const MerchantRequest = (): JSX.Element => {
 					/>
 				</View>
 			</KeyboardAvoidingView>
-			{ isVisible && <MerchantQRCodeGen visible={isVisible} onSuccess={onSuccess} onClose={onClose} amount={Number(state.amount)} /> }
+			{ isVisible && <MerchantQRCodeGen visible={isVisible} onSuccess={onSuccess} onClose={onClose} isOpenAmount={isOpenAmount} amount={Number(state.amount)} /> }
 			{ isRequestSuccess && <MerchantRequestSuccess visible={isRequestSuccess} onClose={onConfirm} amount={receivedAmount} /> }
+
+			<BankLinkDialog 
+				visible={bankDialogInfo.isVisible}
+				description={bankDialogInfo.detail}
+				buttonTitle={bankDialogInfo.buttonTitle}
+				onConfirm={onBankDialogConfirm}
+				onCancel={onBankDialogCancel}
+			/>
 		</View>
 	);
 }

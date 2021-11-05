@@ -17,7 +17,7 @@ import { Modal, ModalHeader, BorderedInput, Button } from "src/shared/uielements
 import { BUTTON_TYPES } from 'src/constants';
 import { ITransactionRequest } from 'src/api/types';
 import { UserAPI } from 'src/api';
-import { updateLoadingStatus } from 'src/store/loading/loading.actions';
+import { updateLoadingStatus, showLoadingProgress, hideLoadingProgress } from 'src/store/loading/loading.actions';
 import { loadBusinessWallet } from 'src/store/wallet/wallet.actions';
 import { loadBusinessTransactions } from 'src/store/transaction/transaction.actions';
 import { useDispatch } from 'react-redux';
@@ -164,25 +164,16 @@ const MerchantReturnQRCodeScan = (): JSX.Element => {
 				amount: amount.toString(),
 				comment: ''
 			};
-			dispatch(updateLoadingStatus({
-				isLoading: true,
-				screen: LoadingScreenTypes.PAYMENT_PENDING
-			}));
+			dispatch(showLoadingProgress(LoadingScreenTypes.LOADING_DATA))
 			const response = await UserAPI.transferTo(businessDwollaId, request);
 			if (response.data) {
 				await dispatch(loadBusinessWallet(businessDwollaId));
 				await dispatch(loadBusinessTransactions(businessDwollaId));
-				dispatch(updateLoadingStatus({
-					isLoading: false,
-					screen: LoadingScreenTypes.PAYMENT_PENDING
-				}));
+				dispatch(hideLoadingProgress())
 				navigation.navigate(Routes.MERCHANT_PAYMENT_SUCCESS);
 			} else {
 				showToast(ToastType.ERROR, "Failed", "Whooops, something went wrong.");
-				dispatch(updateLoadingStatus({
-					isLoading: false,
-					screen: LoadingScreenTypes.PAYMENT_PENDING
-				}));
+				dispatch(hideLoadingProgress())
 				navigation.navigate(Routes.MERCHANT_DASHBOARD);
 			}
 		} else {
@@ -210,7 +201,7 @@ const MerchantReturnQRCodeScan = (): JSX.Element => {
 				/>
 			</View>
 
-			{isReturnModal && (
+			{ isReturnModal && (
 				<Modal visible={isReturnModal}>
 					<View style={ modalViewBase }>
 						<ModalHeader

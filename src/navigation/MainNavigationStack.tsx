@@ -188,6 +188,10 @@ const PrimaryStackScreen = () => {
 						name={Routes.SELECT_BANK}
 						component={SelectBank}
 					/>
+					<PrimaryStack.Screen
+						name={Routes.MERCHANT_BANK_ACCOUNT}
+						component={MerchantBankAccountNavigator}
+					/>
 					{!completedBusinessVerification && (
 						<PrimaryStack.Screen
 							name={Routes.SIGNUP_BUSINESS}

@@ -353,6 +353,14 @@ const MerchantDashboard = (): JSX.Element => {
 		onClose();
 	}
 
+	const onPressScan = () => {
+		if(businessFundingSource && businessWallet.availableBalance > 0) {
+			navigation.navigate(Routes.MERCHANT_QRCODE_SCAN)
+		} else {
+			navigation.navigate(Routes.MERCHANT_REQUEST)
+		}
+	}
+
 	return (
 		<View style={viewBaseB}>
 			<Header
@@ -455,7 +463,7 @@ const MerchantDashboard = (): JSX.Element => {
 					</View>
 				</ScrollView>
 			</View>
-			<TouchableOpacity onPress={() => businessFundingSource ? navigation.navigate(Routes.MERCHANT_QRCODE_SCAN) : setIsPayment(true)} style={styles.scanButton}>
+			<TouchableOpacity onPress={onPressScan} style={styles.scanButton}>
 				<Image
 					source={require('../../../assets/images/qr_code_merchant.png')}
 					containerStyle={styles.qrIcon}

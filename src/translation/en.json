@@ -93,6 +93,7 @@
         "AMOUNT": "AMOUNT",
         "AMOUNT1": "AMOUNT (B$ 1 = USD 1)",
         "MAX_BERKSHARES": "MAX B$ 5.00",
+        "MAX_LOADUP_BERKSHARES": "MAX B$ 2,000",
         "START_DATE": "START DATE",
         "END_DATE": "END DATE",
         "TRANSACTION_ID": "TRANSACTION ID",

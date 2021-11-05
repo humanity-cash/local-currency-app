@@ -16,9 +16,6 @@ import { colors } from 'src/theme/colors';
 import { baseHeader, viewBase, wrappingContainerBase } from 'src/theme/elements';
 import Translation from 'src/translation/en.json';
 import DwollaDialog from './DwollaDialog';
-import { Button, Dialog } from "src/shared/uielements";
-import { dialogViewBase } from "src/theme/elements";
-import { BUTTON_TYPES } from "src/constants";
 import { LoadingScreenTypes } from 'src/utils/types';
 import { loadPersonalWallet } from 'src/store/wallet/wallet.actions';
 import { loadPersonalFundingSource } from 'src/store/funding-source/funding-source.actions';
@@ -251,14 +248,10 @@ const Dashboard = (): JSX.Element => {
 	};
 
 	const onPressScan = () => {
-		if(personalWallet.availableBalance > 0) {
-			if(personalFundingSource) {
-				navigation.navigate(Routes.QRCODE_SCAN)
-			} else {
-				navigation.navigate(Routes.RECEIVE_PAYMENT)
-			}
+		if(personalFundingSource && personalWallet.availableBalance > 0) {
+			navigation.navigate(Routes.QRCODE_SCAN)
 		} else {
-			setIsPayment(true)
+			navigation.navigate(Routes.RECEIVE_PAYMENT)
 		}
 	}
 
