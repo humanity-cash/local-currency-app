@@ -113,7 +113,7 @@ const PaymentRequest = (): JSX.Element => {
 		setIsVisible(false);
 	}
 
-	const onPressQRScan = () => {
+	const onPressPay = () => {
 		if (personalWallet.availableBalance > 0) {
 			navigation.navigate(Routes.QRCODE_SCAN)
 			return
@@ -163,7 +163,7 @@ const PaymentRequest = (): JSX.Element => {
 					<View style={styles.switchView}>
 						<ToggleButton
 							value={false}
-							onChange={onPressQRScan}
+							onChange={onPressPay}
 							activeText="Pay"
 							inActiveText="Receive"
 							style={styles.switch}

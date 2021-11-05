@@ -149,9 +149,9 @@ const DrawerContent = (
 			props.navigation.navigate(Routes.QRCODE_SCAN)
 		} else {
 			if(personalFundingSource) {
-				setIsBankDialog(true)
-			} else {
 				setIsLoadupDialog(true)
+			} else {
+				setIsBankDialog(true)
 			}
 		} 
 	}
@@ -245,19 +245,19 @@ const DrawerContent = (
 					<Text style={styles.berkAmount}>B$ {personalWallet.availableBalance}</Text>
 					<Drawer.Section>
 						<DrawerItem
-							label="Scan to pay"
+							label={Translation.TABS.SCAN_TO_PAY}
 							onPress={onPressScanToPay}
 						/>
 						<DrawerItem
-							label="Receive payment"
+							label={Translation.TABS.RECEIVE_PAYMENT}
 							onPress={() => props.navigation.navigate(Routes.RECEIVE_PAYMENT)}
 						/>
 						<DrawerItem
-							label="Load up B$"
+							label={Translation.TABS.LOADUP}
 							onPress={() => personalFundingSource ? props.navigation.navigate(Routes.LOAD_UP) : setIsBankDialog(true)}
 						/>
 						<DrawerItem
-							label="Cash out to USD"
+							label={Translation.TABS.CASHOUT}
 							onPress={() => personalFundingSource ? props.navigation.navigate(Routes.CASHOUT_AMOUNT) : setIsBankDialog(true)}
 						/>
 					</Drawer.Section>

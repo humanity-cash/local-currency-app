@@ -43,7 +43,6 @@ const ErrorHandler = async (
 ): Promise<AxiosResponse> => {
   try {
     const response: AxiosResponse = await requestHandler();
-    console.log(response)
     return response;
   } catch (err) {
     const config = err?.config;

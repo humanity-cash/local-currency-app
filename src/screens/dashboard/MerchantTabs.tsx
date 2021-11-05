@@ -27,6 +27,7 @@ import { WalletState } from 'src/store/wallet/wallet.reducer';
 import { FundingSourceState } from 'src/store/funding-source/funding-source.reducer';
 import { useSelector } from 'react-redux';
 import { AppState } from 'src/store';
+import BankLinkDialog from 'src/shared/uielements/BankLinkDialog';
 
 const styles = StyleSheet.create({
 	headerText: {
@@ -158,34 +159,6 @@ const CashierViewDialogDialog = (props: CashierViewDialogProps) => {
 	)
 }
 
-type BankLinkDialogProps = {
-	visible: boolean,
-	onConfirm: ()=>void,
-	onCancel: ()=>void
-}
-
-const BankLinkDialog = (props: BankLinkDialogProps) => {
-	return (
-		<Dialog visible={props.visible} onClose={()=>props.onCancel()} backgroundStyle={styles.dialogBg}>
-			<View style={dialogViewBase}>
-				<View style={wrappingContainerBase}>
-					<View style={ baseHeader }>
-						<Text style={styles.headerText}>{Translation.PAYMENT.PAYMENT_NO_BANK_TITLE}</Text>
-					</View>
-					<Text style={styles.detailText}>{Translation.PAYMENT.PAYMENT_NO_BANK_DETAIL}</Text>
-				</View>
-				<View>
-				<Button
-						type={BUTTON_TYPES.PURPLE}
-						title={Translation.BUTTON.LINK_BANK}
-						onPress={props.onConfirm}
-					/>
-				</View>
-			</View>
-		</Dialog>
-	)
-}
-
 const DrawerContent = (props: DrawerContentComponentProps) => {
 	const { cognitoId, userAttributes } = useContext(AuthContext);
 	const { signOut, updateUserType, completedCustomerVerification } = useContext(AuthContext);
@@ -194,6 +167,7 @@ const DrawerContent = (props: DrawerContentComponentProps) => {
 	const [isVisible, setIsVisible] = useState<boolean>(false);
 	const [isCashierView, setIsCashierView] = useState<boolean>(false);
 	const [isBankDialog, setIsBankDialog] = useState<boolean>(false);
+	const [isLoadupDialog, setIsLoadupDialog] = useState<boolean>(false);
 
 	const { businessWallet } = useSelector((state: AppState) => state.walletReducer) as WalletState;
 	const { businessFundingSource } = useSelector((state: AppState) => state.fundingSourceReducer) as FundingSourceState;
@@ -225,8 +199,29 @@ const DrawerContent = (props: DrawerContentComponentProps) => {
 		setIsBankDialog(false);
 	}
 
+	const onLoadupDialogConfirm = () => {
+		setIsLoadupDialog(false);
+		props.navigation.navigate(Routes.LOAD_UP);
+	}
+
+	const onLoadupDialogCancel = () => {
+		setIsLoadupDialog(false);
+	}
+
 	const onPersonal = () => {
 		updateUserType(cognitoId, UserType.Customer);
+	}
+
+	const onPressScanToPay = () => {
+		if(businessWallet.availableBalance > 0) {
+			props.navigation.navigate(Routes.QRCODE_SCAN)
+		} else {
+			if(businessFundingSource) {
+				setIsLoadupDialog(true)
+			} else {
+				setIsBankDialog(true)
+			}
+		} 
 	}
 
 	const userTag = userAttributes?.["custom:personal.tag"] || undefined
@@ -310,11 +305,11 @@ const DrawerContent = (props: DrawerContentComponentProps) => {
 					<Drawer.Section>
 						<DrawerItem
 							label={Translation.TABS.RECEIVE_PAYMENT}
-							onPress={() => businessFundingSource ?  props.navigation.navigate(Routes.MERCHANT_REQUEST) : setIsBankDialog(true)}
+							onPress={() => props.navigation.navigate(Routes.MERCHANT_REQUEST)}
 						/>
 						<DrawerItem
 							label={Translation.TABS.SCAN_TO_PAY}
-							onPress={() => businessFundingSource ?  props.navigation.navigate(Routes.MERCHANT_QRCODE_SCAN) : setIsBankDialog(true)}
+							onPress={onPressScanToPay}
 						/>
 						<DrawerItem
 							label={Translation.TABS.MAKE_RETURN}
@@ -387,13 +382,21 @@ const DrawerContent = (props: DrawerContentComponentProps) => {
 					onCancel={onCashierViewCancel}
 				/>
 			)}
-			{isBankDialog && (
-				<BankLinkDialog 
-					visible={isBankDialog}
-					onConfirm={onBankDialogConfirm}
-					onCancel={onBankDialogCancel}
-				/>
-			)}
+
+			<BankLinkDialog 
+				visible={isBankDialog}
+				description={Translation.PAYMENT.PAYMENT_NO_BALANCE_DETAIL}
+				buttonTitle={Translation.BUTTON.LOAD_UP_BERKSHARES}
+				onConfirm={onBankDialogConfirm}
+				onCancel={onBankDialogCancel}
+			/>
+			<BankLinkDialog 
+				visible={isLoadupDialog}
+				description={Translation.PAYMENT.PAYMENT_NO_BALANCE_DETAIL}
+				buttonTitle={Translation.BUTTON.LOAD_UP_BERKSHARES}
+				onConfirm={onLoadupDialogConfirm}
+				onCancel={onLoadupDialogCancel}
+			/>
 		</View>
 	);
 }
