@@ -83,7 +83,6 @@ const AuthProvider: React.FunctionComponent = ({ children }) => {
 		setCompletedBusinessVerification(isVerifiedBusiness);
 		setCognitoId(userAttributes?.["sub"]);
 		setCustomerDwollaId(userAttributes?.["custom:personal.dwollaId"]);
-		console.log('customerDwollaId', customerDwollaId)
 		setBusinessDwollaId(userAttributes?.["custom:business.dwollaId"]);
 	}, [userAttributes, authStatus]);
 
