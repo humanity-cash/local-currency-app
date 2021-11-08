@@ -233,7 +233,7 @@ const DrawerContent = (
 													/>
 												</View>
 												<View style={styles.usernameView}>
-													<Text>Humanity Cash Cashier</Text>
+													<Text>Cashier</Text>
 												</View>
 											</View>
 										) : null}
