@@ -1,7 +1,7 @@
 import { useNavigation } from '@react-navigation/native';
 import React, { useState, useContext, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import { StyleSheet, View, Image, KeyboardAvoidingView, ScrollView, Platform, ActivityIndicator } from 'react-native';
+import { StyleSheet, View, Image, KeyboardAvoidingView, ScrollView, Platform, ActivityIndicator, SafeAreaView } from 'react-native';
 import { Text } from 'react-native-elements';
 import { useCameraPermission } from 'src/hooks';
 import { AuthContext } from 'src/auth';
@@ -375,7 +375,7 @@ const QRCodeScan = (): JSX.Element => {
 			{ isLowAmountDialog && <LowAmount visible={isLowAmountDialog} onConfirm={onLoadUp} onCancel={onCancle} /> }
 			{ isOpenPayment && (
 				<Modal visible={isOpenPayment}>
-					<View style={ modalViewBase }>
+					<SafeAreaView style={ modalViewBase }>
 						<ModalHeader
 							leftComponent={<BackBtn onClick={() => setIsOpenPayment(false)} />}
 							rightComponent={<CancelBtn text="Close" onClick={onCancle} />}
@@ -414,7 +414,7 @@ const QRCodeScan = (): JSX.Element => {
 								<ActivityIndicator size='large' color={colors.white}/>
 							</View> 
 						}
-					</View>
+					</SafeAreaView>
 				</Modal>
 			)}
 		</View>
