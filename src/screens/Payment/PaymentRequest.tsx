@@ -80,10 +80,10 @@ const PaymentRequest = (): JSX.Element => {
 	}, [state]);
 
 	const onValueChange = (name: string, change: string) => {
-		const costs = change;
+		const costs = change.replace(',', '.');
 		setState({
 		  ...state,
-		  [name]: change,
+		  [name]: costs,
 		  costs: costs,
 		} as AmountState);
 	};

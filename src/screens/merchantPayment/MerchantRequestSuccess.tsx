@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, View, KeyboardAvoidingView, ScrollView, Platform } from 'react-native';
+import { StyleSheet, View, KeyboardAvoidingView, ScrollView, Platform, SafeAreaView } from 'react-native';
 import { Text } from 'react-native-elements';
 import { colors } from "src/theme/colors";
 import { CancelBtn, Button, Modal, ModalHeader } from "src/shared/uielements";
@@ -28,7 +28,7 @@ type MerchantRequestSuccessProps = {
 const MerchantRequestSuccess = (props: MerchantRequestSuccessProps): JSX.Element => {
     return (
         <Modal visible={props.visible}>
-            <View style={ modalViewBase }>
+            <SafeAreaView style={ modalViewBase }>
                 <ModalHeader
                     rightComponent={<CancelBtn text="Close" color={colors.purple} onClick={props.onClose} />}
                 />
@@ -49,7 +49,7 @@ const MerchantRequestSuccess = (props: MerchantRequestSuccessProps): JSX.Element
                         />
                     </View>
                 </KeyboardAvoidingView>
-            </View>
+            </SafeAreaView>
         </Modal>
     )
 }

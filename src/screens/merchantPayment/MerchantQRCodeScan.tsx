@@ -317,9 +317,8 @@ const MerchantQRCodeScan = (): JSX.Element => {
 
 	const onClose = () => {
 		setIsPaymentDialog(false);
-		setIsOpenPayment(true);
+		setIsOpenPayment(false);
 		setIsScanned(false);
-		navigation.navigate(Routes.MERCHANT_DASHBOARD);
 	};
 
 	return (
@@ -371,7 +370,7 @@ const MerchantQRCodeScan = (): JSX.Element => {
 									style={styles.input}
 									textStyle={styles.switchText}
 									value={openAmount}
-									onChange={(name: string, amount: string) => setOpenAmount(amount)}
+									onChange={(name: string, amount: string) => setOpenAmount(amount.replace(',', '.'))}
 								/>
 							</View>
 						</ScrollView>

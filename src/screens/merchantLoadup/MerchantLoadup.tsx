@@ -107,7 +107,7 @@ const MerchantLoadup = (): JSX.Element => {
   }, [amount]);
 
   const onValueChange = (name: string, change: string) => {
-    setAmount(change);
+    setAmount(change.replace(',', '.'));
   };
 
   const onLoadUp = async () => {

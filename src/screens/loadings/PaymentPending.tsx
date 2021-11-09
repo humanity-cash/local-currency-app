@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { StyleSheet, View, ScrollView, ActivityIndicator, Image } from 'react-native';
+import { StyleSheet, View, ScrollView, ActivityIndicator, Image, SafeAreaView } from 'react-native';
 import { Text } from 'react-native-elements';
 import { AuthContext } from 'src/auth';
 import { Modal, ModalHeader } from "src/shared/uielements";
@@ -76,7 +76,7 @@ const PaymentPending = ({visible = false}: PaymentPendingProps): JSX.Element => 
 
     return (
         <Modal visible={visible}>
-            <View style={ modalViewBase }>
+            <SafeAreaView style={ modalViewBase }>
                 <ModalHeader />
                 <ScrollView style={styles.modalWrap}>
                     <Text style={userType === UserType.Customer ? styles.headerText : styles.headerTextB}>Pending...</Text>
@@ -94,7 +94,7 @@ const PaymentPending = ({visible = false}: PaymentPendingProps): JSX.Element => 
                 <View style={styles.bottomView}>
                     <ActivityIndicator size="large" color={userType === UserType.Customer ? colors.darkGreen : colors.purple} />
                 </View>
-            </View>
+            </SafeAreaView>
         </Modal>
     );
 }

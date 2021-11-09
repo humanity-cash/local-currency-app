@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { ImageRequireSource, ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native';
+import { ImageRequireSource, ScrollView, StyleSheet, TouchableOpacity, View, SafeAreaView } from 'react-native';
 import { Image, Text } from 'react-native-elements';
 import { colors } from "src/theme/colors";
 import { FontFamily } from "src/theme/elements";
@@ -122,7 +122,7 @@ const SelectModal = ({
 
 			{visible && (
 				<Modal visible={visible} style={{backgroundColor: colors.white }}>
-					<View>
+					<SafeAreaView>
 						<ModalHeader
 							rightComponent={<CancelBtn onClick={() => setVisible(false)} />}
 						/>
@@ -158,7 +158,7 @@ const SelectModal = ({
 								))
 							)}
 						</ScrollView>
-					</View>
+					</SafeAreaView>
 				</Modal>
 			)}
 		</View>

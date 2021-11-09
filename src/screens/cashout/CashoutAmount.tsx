@@ -85,14 +85,14 @@ const CashoutAmount = (): JSX.Element => {
 	}, [state]);
 
 	const onValueChange = (name: string, change: string) => {
-		const costs = change;
+		const costs = change.replace(',', '.');
 		if (Number(costs) > maxAmount) {
 			showToast(ToastType.ERROR, "Whoops, something went wrong.", "Please note that the maximum amount is B$ 5.00");
 			return
 		}
 
 		setState({
-		  amount: change,
+		  amount: costs,
 		  costs: costs,
 		} as CashoutState);
 	};

@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, View, KeyboardAvoidingView, ScrollView, Platform } from 'react-native';
+import { StyleSheet, View, KeyboardAvoidingView, ScrollView, Platform, SafeAreaView } from 'react-native';
 import { Text } from 'react-native-elements';
 import { CancelBtn, Button, Modal, ModalHeader } from "src/shared/uielements";
 import { modalViewBase, wrappingContainerBase, baseHeader } from "src/theme/elements";
@@ -26,7 +26,7 @@ type PaymentRequestSuccessProps = {
 const PaymentRequestSuccess = (props: PaymentRequestSuccessProps): JSX.Element => {
     return (
         <Modal visible={props.visible}>
-            <View style={ modalViewBase }>
+            <SafeAreaView style={ modalViewBase }>
                 <ModalHeader
                     rightComponent={<CancelBtn text="Close" onClick={props.onClose} />}
                 />
@@ -47,7 +47,7 @@ const PaymentRequestSuccess = (props: PaymentRequestSuccessProps): JSX.Element =
                         />
                     </View>
                 </KeyboardAvoidingView>
-            </View>
+            </SafeAreaView>
         </Modal>
     )
 }

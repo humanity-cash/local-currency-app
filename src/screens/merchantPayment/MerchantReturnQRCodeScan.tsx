@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { StyleSheet, View, ScrollView, KeyboardAvoidingView, Platform, ActivityIndicator } from 'react-native';
+import { StyleSheet, View, ScrollView, KeyboardAvoidingView, Platform, ActivityIndicator, SafeAreaView } from 'react-native';
 import { Text } from 'react-native-elements';
 import { AuthContext } from 'src/auth';
 import { useCameraPermission } from 'src/hooks';
@@ -163,7 +163,7 @@ const MerchantReturnQRCodeScan = (): JSX.Element => {
 	}
 
 	const onValueChange = (name: string, change: string) => {
-		setAmount(change);
+		setAmount(change.replace(',', '.'));
 	}
 
 	const onReturn = async () => {
@@ -216,8 +216,7 @@ const MerchantReturnQRCodeScan = (): JSX.Element => {
 
 			{ isReturnModal && (
 				<Modal visible={isReturnModal}>
-
-					<View style={ modalViewBase }>
+					<SafeAreaView style={ modalViewBase }>
 						<ModalHeader
 							leftComponent={<BackBtn color={colors.purple} onClick={() => setIsReturnModal(false)} />}
 							rightComponent={<CancelBtn text="Close" onClick={onModalClose} />}
@@ -281,7 +280,7 @@ const MerchantReturnQRCodeScan = (): JSX.Element => {
 								<ActivityIndicator size='large' color={colors.white}/>
 							</View> 
 						}
-					</View>
+					</SafeAreaView>
 				</Modal>
 			)}
 		</View>

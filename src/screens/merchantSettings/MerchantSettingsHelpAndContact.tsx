@@ -1,6 +1,6 @@
 import { useNavigation } from '@react-navigation/native';
 import React, { useState, useEffect } from 'react';
-import { ScrollView, StyleSheet, View } from "react-native";
+import { ScrollView, StyleSheet, View, SafeAreaView } from 'react-native';
 import { Text } from 'react-native-elements';
 import { Header, Modal, ModalHeader, BackBtn, Button, AccordionCard, SearchInput } from "src/shared/uielements";
 import { underlineHeaderB, modalViewBase, viewBaseB } from "src/theme/elements";
@@ -110,7 +110,7 @@ export const MerchantSettingsHelpAndContact = (): JSX.Element => {
 			/>
 			{isContacted && (
 				<Modal visible={isContacted}>
-					<View style={ modalViewBase }>
+					<SafeAreaView style={ modalViewBase }>
 						<ModalHeader
 							leftComponent={<BackBtn onClick={()=>setIsContacted(false)} color={colors.purple} />}
 						/>
@@ -118,7 +118,7 @@ export const MerchantSettingsHelpAndContact = (): JSX.Element => {
 							<Text style={styles.modalHeader}>{Translation.OTHER.CONTACT}</Text>
 							<Text style={styles.section}>{Translation.OTHER.CONTACT_DETAIL}</Text>
 						</ScrollView>
-					</View>
+					</SafeAreaView>
 				</Modal>
 			)}
 		</View>
