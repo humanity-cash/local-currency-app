@@ -94,7 +94,7 @@ const MerchantCashoutAmount = (): JSX.Element => {
 	}, [amount]);
 
 	const onValueChange = (name: string, change: string) => {
-		setAmount(change);
+		setAmount(change.replace(',', '.'));
 	};
 
 	const viewConfirm = () => {

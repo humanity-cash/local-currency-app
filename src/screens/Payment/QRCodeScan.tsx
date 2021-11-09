@@ -394,7 +394,7 @@ const QRCodeScan = (): JSX.Element => {
 									placeholder="Amount"
 									prefix="B$"
 									value={openAmount}
-									onChange={(name: string, amount: string) => setOpenAmount(amount)}
+									onChange={(name: string, amount: string) => setOpenAmount(amount.replace(',', '.'))}
 								/>
 							</View>
 						</ScrollView>

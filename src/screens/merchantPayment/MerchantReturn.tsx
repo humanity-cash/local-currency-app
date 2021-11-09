@@ -53,7 +53,7 @@ const MerchantReturn = (): JSX.Element => {
 
 
 	const onValueChange = (name: string, change: string) => {
-		setAmount(change);
+		setAmount(change.replace(',', '.'));
 	}
 
 	const onReturn = () => {
