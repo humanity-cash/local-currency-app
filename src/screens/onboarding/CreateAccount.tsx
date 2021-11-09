@@ -87,11 +87,12 @@ const CreateAccount = (): JSX.Element => {
 			<ScrollView style={wrappingContainerBase}>
 				<View style={styles.container}>
 					<View style={baseHeader}>
-						<Text style={styles.headerText}>Create account</Text>
+						<Text style={styles.headerText}>
+							{Translation.EMAIL_VERIFICATION.CREATE_ACCOUNT}
+						</Text>
 					</View>
 					<Text style={styles.bodyText}>
-						Hello! Tell us how to reach you. We will send a
-						Verification code to your email.
+						{Translation.EMAIL_VERIFICATION.HOW_TO_REACH}
 					</Text>
 					<View style={styles.form}>
 						<Text style={styles.label}>{Translation.LABEL.EMAIL_ADDR}</Text>
@@ -117,10 +118,12 @@ const CreateAccount = (): JSX.Element => {
 							onPress={() => setSelection(!isSelected)}
 						/>
 						<View style={styles.checkboxTextView}>
-							<Text style={styles.bodyText}>I've read and accept the </Text>
-							<Text style={styles.underlineText} onPress={()=>Linking.openURL(BERKSHARE_TERMS_URL)}>Terms & Conditions </Text>
-							<Text style={styles.bodyText}>and </Text>
-							<Text style={styles.underlineText} onPress={()=>Linking.openURL(BERKSHARE_PRIVACY_URL)}>Privacy Policy</Text>
+							<Text style={styles.bodyText}>
+								By checking this box, you agree to our partner Humnanity Cash's 
+								<Text style={styles.underlineText} onPress={()=>Linking.openURL(BERKSHARE_TERMS_URL)}> Terms & Conditions </Text>
+								and
+								<Text style={styles.underlineText} onPress={()=>Linking.openURL(BERKSHARE_PRIVACY_URL)}> Privacy Policy</Text>
+							</Text>
 						</View>
 					</View>
 					<Button

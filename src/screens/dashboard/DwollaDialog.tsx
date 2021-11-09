@@ -1,8 +1,8 @@
 import { Entypo } from '@expo/vector-icons';
 import { useNavigation } from "@react-navigation/native";
-import React from 'react';
+import React, {useState} from 'react';
 import { StyleSheet, View, Linking } from 'react-native';
-import { Text } from 'react-native-elements';
+import { CheckBox, Text } from 'react-native-elements';
 import { UserType } from "src/auth/types";
 import { Button, Dialog } from "src/shared/uielements";
 import { dialogViewBase } from "src/theme/elements";
@@ -10,6 +10,7 @@ import { colors } from 'src/theme/colors';
 import * as Routes from 'src/navigation/constants';
 import { BUTTON_TYPES } from 'src/constants';
 import { DWOLLA_PRIVACY_URL, DWOLLA_TERMS_URL } from 'src/config/env';
+import Translation from 'src/translation/en.json';
 
 const styles = StyleSheet.create({
     dialog: {
@@ -49,9 +50,21 @@ const styles = StyleSheet.create({
     },
     termsTextView: {
 		flexDirection: 'row',
-		flexWrap: 'wrap'
+        flexWrap: 'wrap',
+        flex: 1
 	},
-    underlineText: {
+	checkboxContainer: {
+		borderWidth: 0,
+        backgroundColor: 'transparent',
+        padding: 0,
+        margin: 0
+	},
+    terms: {
+		flexDirection: 'row',
+		paddingBottom: 30,
+        marginHorizontal: -16
+	},
+   underlineText: {
 		textDecorationLine: 'underline'
 	}
 });
@@ -64,6 +77,7 @@ type DwollaDialogProps = {
 
 const DwollaDialog = (props: DwollaDialogProps): JSX.Element => {
     const navigation = useNavigation();
+	const [isSelected, setSelection] = useState(false);
 
     const selectBank = () => {
         props.onClose();
@@ -83,7 +97,9 @@ const DwollaDialog = (props: DwollaDialogProps): JSX.Element => {
         >
             <View style={dialogViewBase}>
                 <View style={styles.dialogWrap}>
-                    <Text style={props.userType === UserType.Customer ? styles.dialogHeader : styles.dialogHeaderB}>BerkShares uses Dwolla to link your business bank account.</Text>
+                    <Text style={props.userType === UserType.Customer ? styles.dialogHeader : styles.dialogHeaderB}>
+                        {Translation.BANK_ACCOUNT.USE_DWOLLA}
+                    </Text>
                     <View style={styles.inlineView}>
                         <Entypo name="check" size={16} color={mainColor} style={styles.icon} />
                         <View>
@@ -98,27 +114,36 @@ const DwollaDialog = (props: DwollaDialogProps): JSX.Element => {
                             <Text style={mainTextStyle}>Your credentials will never be made access to BerkShares.</Text>
                         </View>
                     </View>
-                    <View style={styles.termsTextView}>
-                        <Text style={mainTextStyle}>By selecting ‘continue’ you agree to the </Text>
-                        <Text 
-                            style={{...mainTextStyle, ...styles.underlineText}} 
-                            onPress={()=>Linking.openURL(DWOLLA_TERMS_URL)}
-                        >
-                            Dwolla Terms of Service
+                    <View style={styles.terms}>
+						<CheckBox
+							checked={isSelected}
+                            containerStyle={styles.checkboxContainer}
+							checkedColor={colors.darkGreen}
+                            onPress={() => setSelection(!isSelected)}
+						/>
+						<Text style={styles.termsTextView}>
+                            <Text style={mainTextStyle}>By checking this box, you agree to the </Text>
+                            <Text 
+                                style={{...mainTextStyle, ...styles.underlineText}} 
+                                onPress={()=>Linking.openURL(DWOLLA_TERMS_URL)}
+                            >
+                                Dwolla Terms of Service
+                            </Text>
+                            <Text style={mainTextStyle}> and </Text>
+                            <Text 
+                                style={{...mainTextStyle, ...styles.underlineText}} 
+                                onPress={()=>Linking.openURL(DWOLLA_PRIVACY_URL)}
+                            >
+                                Dwolla Privacy Policy
+                            </Text>
                         </Text>
-                        <Text style={mainTextStyle}> and </Text>
-                        <Text 
-                            style={{...mainTextStyle, ...styles.underlineText}} 
-                            onPress={()=>Linking.openURL(DWOLLA_PRIVACY_URL)}
-                        >
-                            Dwolla Privacy Policy
-                        </Text>
-                    </View>
+					</View>
                 </View>
                 <View style={styles.dialogBottom}>
                     <Button
                         type={props.userType === UserType.Customer ? BUTTON_TYPES.DARK_GREEN : BUTTON_TYPES.PURPLE}
                         title="Continue"
+                        disabled={!isSelected}
                         onPress={selectBank}
                     />
                 </View>

@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect } from 'react';
-import { StyleSheet, View, Image, ScrollView, KeyboardAvoidingView, Platform } from 'react-native';
+import { StyleSheet, View, Image, ScrollView, KeyboardAvoidingView, Platform, SafeAreaView } from 'react-native';
 import { useNavigation } from '@react-navigation/core';
 import { Text } from 'react-native-elements';
 import { useCameraPermission } from 'src/hooks';
@@ -349,7 +349,7 @@ const MerchantQRCodeScan = (): JSX.Element => {
 			{ isPaymentDialog && <PaymentConfirm visible={isPaymentDialog} payInfo={state} onConfirm={onPayConfirm} onCancel={onClose} /> }
 			{ isOpenPayment && (
 				<Modal visible={isOpenPayment}>
-					<View style={ modalViewBase }>
+					<SafeAreaView style={ modalViewBase }>
 						<ModalHeader
 							leftComponent={<BackBtn color={colors.purple} onClick={() => setIsOpenPayment(false)} />}
 							rightComponent={<CancelBtn color={colors.purple} text="Close" onClick={onClose} />}
@@ -386,7 +386,7 @@ const MerchantQRCodeScan = (): JSX.Element => {
 								/>
 							</View>
 						</KeyboardAvoidingView>
-					</View>
+					</SafeAreaView>
 				</Modal>
 			)}
 		</View>
