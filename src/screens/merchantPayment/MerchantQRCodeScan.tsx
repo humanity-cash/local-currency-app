@@ -200,25 +200,18 @@ const MerchantQRCodeScan = (): JSX.Element => {
 	const hasPermission = useCameraPermission();
 	const [isScanned, setIsScanned] = useState<boolean>(false);
 	const [isPaymentDialog, setIsPaymentDialog] = useState<boolean>(false);
-	const [isOpenPayment, setIsOpenPayment] = useState<boolean>(false);
-	const [openAmount, setOpenAmount] = useState<string>("");
 	const [state, setState] = useState<QRCodeEntry>({
 		securityId: SECURITY_ID,
 		to: "",
 		amount: 0,
 		mode: PaymentMode.SELECT_AMOUNT
 	});
-	const [goNext, setGoNext] = useState<boolean>(false);
 
 	const { businessWallet } = useSelector((state: AppState) => state.walletReducer) as WalletState;
 
 	useEffect(() => {
 		setIsScanned(false);
 	});
-
-	useEffect(() => {
-		setGoNext(Number(openAmount) > 0);
-	}, [openAmount]);
 
 	const handleBarCodeScanned = (data: HandleScaned) => {
 		if (isQRCodeValid(data.data)) {
@@ -227,7 +220,7 @@ const MerchantQRCodeScan = (): JSX.Element => {
 			setIsScanned(true);
 
 			if (qrcodeData.mode == PaymentMode.OPEN_AMOUNT) {
-				setIsOpenPayment(true);
+				navigation.navigate(Routes.PAYMENT_RECEIVE_AMOUNT, qrcodeData)
 			} else {
 				setIsPaymentDialog(true);
 			}
@@ -243,7 +236,7 @@ const MerchantQRCodeScan = (): JSX.Element => {
 	const onPayConfirm = async (isRoundUp: boolean) => {
 		setIsPaymentDialog(false);
 		setIsScanned(false);
-		const amountCalcedFee = state.amount + calcFee(state.amount);
+		const amountCalcedFee = state.amount;
 
 		if (businessWallet.availableBalance <= state.amount) {
 			showToast(ToastType.ERROR, "Whoooops. You cannot the payment.", "You have too little funds available. Please load up your balance first.");
@@ -265,7 +258,8 @@ const MerchantQRCodeScan = (): JSX.Element => {
 			if (response.data) {
 				await dispatch(loadBusinessWallet(businessDwollaId));
 				await dispatch(loadBusinessTransactions(businessDwollaId));
-				navigation.navigate(Routes.MERCHANT_PAYMENT_SUCCESS);
+				navigation.goBack()
+				navigation.navigate(Routes.PAYMENT_SUCCESS);
 			} else {
 				showToast(ToastType.ERROR, "Failed", "Whooops, something went wrong.");
 				navigation.navigate(Routes.MERCHANT_DASHBOARD);
@@ -279,45 +273,8 @@ const MerchantQRCodeScan = (): JSX.Element => {
 		}
 	};
 
-	const handleOpenPay = async () => {
-		setIsOpenPayment(false);
-		// check balance
-		if (businessWallet.availableBalance <= state.amount) {
-			showToast(ToastType.ERROR, "Whoooops. You cannot the payment.", "You have too little funds available. Please load up your balance first.");
-			return;
-		}
-
-		if (businessDwollaId) {
-			const request: ITransactionRequest = {
-				toUserId: state.to,
-				amount: openAmount,
-				comment: ''
-			};
-
-			dispatch(updateLoadingStatus({
-				isLoading: true,
-				screen: LoadingScreenTypes.PAYMENT_PENDING
-			}));
-			const response = await UserAPI.transferTo(businessDwollaId, request);
-			if (response.data) {
-				await dispatch(loadBusinessWallet(businessDwollaId));
-				await dispatch(loadBusinessTransactions(businessDwollaId));
-				navigation.navigate(Routes.MERCHANT_PAYMENT_SUCCESS);
-			} else {
-				showToast(ToastType.ERROR, "Whooops, something went wrong.", "Connection failed");
-			}
-			dispatch(updateLoadingStatus({
-				isLoading: false,
-				screen: LoadingScreenTypes.PAYMENT_PENDING
-			}));
-		} else {
-			showToast(ToastType.ERROR, "Whooops, something went wrong.", "Connection failed");
-		}
-	}
-
 	const onClose = () => {
 		setIsPaymentDialog(false);
-		setIsOpenPayment(false);
 		setIsScanned(false);
 	};
 
@@ -346,48 +303,6 @@ const MerchantQRCodeScan = (): JSX.Element => {
 				</View>
 			</View>
 			{ isPaymentDialog && <PaymentConfirm visible={isPaymentDialog} payInfo={state} onConfirm={onPayConfirm} onCancel={onClose} /> }
-			{ isOpenPayment && (
-				<Modal visible={isOpenPayment}>
-					<SafeAreaView style={ modalViewBase }>
-						<ModalHeader
-							leftComponent={<BackBtn color={colors.purple} onClick={() => setIsOpenPayment(false)} />}
-							rightComponent={<CancelBtn color={colors.purple} text="Close" onClick={onClose} />}
-						/>
-						<ScrollView style={wrappingContainerBase}>
-							<View style={underlineHeaderB}>
-								<Text style={styles.headerText}>{Translation.PAYMENT.SPECIFY_PAYMENT}</Text>
-							</View>
-							<Text style={styles.switchText}>Select the amount of BerkShares you would like to send.</Text>
-							<View>
-								<Text style={styles.label}>{Translation.LABEL.AMOUNT}</Text>
-								<BorderedInput
-									label="Amount"
-									name="amount"
-									placeholderTextColor={colors.greyedPurple}
-									keyboardType="decimal-pad"
-									placeholder="Amount"
-									prefix="B$"
-									style={styles.input}
-									textStyle={styles.switchText}
-									value={openAmount}
-									onChange={(name: string, amount: string) => setOpenAmount(amount.replace(',', '.'))}
-								/>
-							</View>
-						</ScrollView>
-						<KeyboardAvoidingView
-							behavior={Platform.OS == "ios" ? "padding" : "height"} >
-							<View style={styles.bottomView}>
-								<Button
-									type={BUTTON_TYPES.PURPLE}
-									disabled={!goNext}
-									title={Translation.BUTTON.CONFIRM}
-									onPress={handleOpenPay}
-								/>
-							</View>
-						</KeyboardAvoidingView>
-					</SafeAreaView>
-				</Modal>
-			)}
 		</View>
 	);
 }

@@ -66,6 +66,7 @@ import SettingsPersonalProfile from "src/screens/settings/SettingsPersonalProfil
 import SettingsSecurity from "src/screens/settings/SettingsSecurity";
 import SettingsTermsAndConditions from "src/screens/settings/SettingsTermsAndConditions";
 import * as Routes from "./constants";
+import PaymentReceiveAmount from '../screens/payment/PaymentReceiveAmount';
 
 const PrimaryStack = createStackNavigator();
 
@@ -139,6 +140,10 @@ const PrimaryStackScreen = () => {
 					<PrimaryStack.Screen
 						name={Routes.PAYMENT_PENDING}
 						component={PaymentPending}
+					/>
+					<PrimaryStack.Screen
+						name={Routes.PAYMENT_RECEIVE_AMOUNT}
+						component={PaymentReceiveAmount}
 					/>
 					<PrimaryStack.Screen
 						name={Routes.PAYMENT_SUCCESS}
@@ -294,8 +299,12 @@ const PrimaryStackScreen = () => {
 						component={MerchantPayoutPending}
 					/>
 					<PrimaryStack.Screen
-						name={Routes.MERCHANT_PAYOUT_SUCCESS}
-						component={MerchantPayoutSuccess}
+						name={Routes.PAYMENT_RECEIVE_AMOUNT}
+						component={PaymentReceiveAmount}
+					/>
+					<PrimaryStack.Screen
+						name={Routes.PAYMENT_SUCCESS}
+						component={PaymentSuccess}
 					/>
 					<PrimaryStack.Screen
 						name={Routes.MERCHANT_PAYOUT_QR_SCAN}

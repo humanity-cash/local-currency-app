@@ -214,7 +214,7 @@ const DrawerContent = (props: DrawerContentComponentProps) => {
 
 	const onPressScanToPay = () => {
 		if(businessWallet.availableBalance > 0) {
-			props.navigation.navigate(Routes.QRCODE_SCAN)
+			props.navigation.navigate(Routes.MERCHANT_QRCODE_SCAN)
 		} else {
 			if(businessFundingSource) {
 				setIsLoadupDialog(true)

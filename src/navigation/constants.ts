@@ -31,6 +31,7 @@ export const PAYMENT_SUCCESS = "PaymentSuccess";
 export const PAYMENT_FAILED = "PaymentFailed";
 export const PAYMENT_REQUEST = "PaymentRequest";
 export const PAYMENT_PENDING = "PaymentPending";
+export const PAYMENT_RECEIVE_AMOUNT = "PaymentReceiveAmount";
 export const PASSWORD = 'Password';
 export const VERIFICATION = 'Verification';
 export const VERIFICATION_HELP = 'VerificationHelp';
