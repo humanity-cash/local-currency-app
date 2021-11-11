@@ -222,7 +222,6 @@ const AuthProvider: React.FunctionComponent = ({ children }) => {
 	const getAttributes = async (): CognitoResponse<
 		CognitoUserAttribute[] | undefined
 	> => {
-		console.log('getAttributes')
 		const response = await userController.getAttributes();
 		if (!response.success) {
 			setUserAttributes({});
