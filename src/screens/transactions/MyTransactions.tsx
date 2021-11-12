@@ -25,6 +25,8 @@ import { updateLoadingStatus } from 'src/store/loading/loading.actions';
 import { BUTTON_TYPES } from 'src/constants';
 import PaymentRequestSuccess from 'src/screens/payment/PaymentRequestSuccess';
 import DateTimePicker from "react-native-modal-datetime-picker";
+import { BarCodeScanner } from 'expo-barcode-scanner';
+import SettingDialog from 'src/shared/uielements/SettingDialog';
 
 const styles = StyleSheet.create({
 	content: {
@@ -244,9 +246,11 @@ const MyTransactions = (): JSX.Element => {
 	const [selectedItem, setSelectedItem] = useState<ITransaction>(defaultTransaction);
 	const [isRequestSuccess, setIsRequestSuccess] = useState<boolean>(false);
 	const [receivedAmount, setReceivedAmount] = useState<number>(0);
+	const [isSetting, setIsSetting] = useState(false)
 
 	const { personalTransactions } = useSelector((state: AppState) => state.transactionReducer) as TransactionState;
 	const { personalWallet } = useSelector((state: AppState) => state.walletReducer) as WalletState;
+	const { personalFundingSource } = useSelector((state: AppState) => state.fundingSourceReducer) as FundingSourceState;
 
 	const [startDate, setStartDate] = useState<Date | undefined>(undefined);
 	const [endDate, setEndDate] = useState<Date | undefined>(undefined);
@@ -359,6 +363,19 @@ const MyTransactions = (): JSX.Element => {
 		setType(type);
 	}
 
+	const onPressScan = async () => {
+		const {status} = await BarCodeScanner.requestPermissionsAsync();
+		if(status === 'granted') {
+			if(personalFundingSource && personalWallet.availableBalance > 0) {
+				navigation.navigate(Routes.QRCODE_SCAN)
+			} else {
+				navigation.navigate(Routes.RECEIVE_PAYMENT)
+			}
+		} else {
+			setIsSetting(true)
+		}
+	}
+
 	return (
 		<View style={viewBase}>
 			<Header
@@ -425,7 +442,7 @@ const MyTransactions = (): JSX.Element => {
 				</ScrollView>
 			</View>
 
-			<TouchableOpacity onPress={()=>navigation.navigate(Routes.QRCODE_SCAN)} style={styles.scanButton}>
+			<TouchableOpacity onPress={onPressScan} style={styles.scanButton}>
 				<Image
 					source={require('../../../assets/images/qr_code_consumer.png')}
 					containerStyle={styles.qrIcon}
@@ -451,6 +468,12 @@ const MyTransactions = (): JSX.Element => {
 				onConfirm={onEndDateChange}
 				minimumDate={startDate}
 				onCancel={() => {setIsEndDate(false)}}
+			/>
+
+			<SettingDialog
+				visible={isSetting}
+				onCancel={() => setIsSetting(false)}
+				description={Translation.OTHER.NO_CAMERA_PERMISSION_DETAIL}
 			/>
 		</View>
 	);

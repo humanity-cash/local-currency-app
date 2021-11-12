@@ -70,7 +70,8 @@
         "SOMEONE_ELSE" :"Someone else",
         "MAIL_QR_CODE": "Mail my QR code again",
         "SHOW_MY_QR": "Show my QR",
-        "STATIC_QR": "Static QR"
+        "STATIC_QR": "Static QR",
+        "GOTO_SETTING": "Go to setting"
     },
     "LABEL": {
         "EMAIL_ADDR": "EMAIL ADDRESS",
@@ -248,7 +249,8 @@
         "CONTACT": "Contact",
         "CONTACT_DETAIL": "If you have questions, complaints, remarks, or just like to chat, please send an email to fennie@humanity.cash or contact the Schumacher Center by calling 010-125 08766",
         "DELETED_ACCOUNT_MESSAGE": "Sad to see you leave. Your account has been deleted. Hope to see you back soon.",
-        "NO_CAMERA_PERMISSION": "Sorry, we need camera roll permissions to make this work!",
+        "NO_CAMERA_PERMISSION_TITLE": "Whoops camera permission denied.",
+        "NO_CAMERA_PERMISSION_DETAIL": "Sorry, we need camera roll permissions to make this work!\nPlease go to the settings and allow camera permission.",
         "REQUEST_CAMERA_PERMISSION": "Requesting for camera permission",
         "LEGAL": "Legal",
         "STATIC_QR": "Static QR",
@@ -259,7 +261,7 @@
         "ENABLE_CASHIER_VIEW" :"Enable cashier view",
         "CONFIRM_SAVE": "Are you sure you want to go back without saving changes?",
         "CHANGE_PASSWORD_FAILED": "Whoops something went wrong. Your action did not succeed.",
-        "CHANGE_PASSWORD_SUCCESS": "Password changed successfully."
+        "CHANGE_PASSWORD_SUCCESS": "Password changed successfully.",
     },
     "COMMUNITY_CHEST": {
         "CONTENT": "The BerkShares community want to support the lcal community. Therefor, we ask you at each transaction if you are willing to make a donation. This donation will go to a local project. On this page you will find the current project and its status.",

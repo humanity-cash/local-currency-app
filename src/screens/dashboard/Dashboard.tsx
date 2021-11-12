@@ -6,7 +6,8 @@ import {
 	StyleSheet,
 	TouchableWithoutFeedback,
 	View,
-	TouchableOpacity
+	TouchableOpacity,
+	Platform
 } from 'react-native';
 import { Image, Text } from 'react-native-elements';
 import { AuthContext } from 'src/auth';
@@ -28,6 +29,8 @@ import { showLoadingProgress, hideLoadingProgress } from '../../store/loading/lo
 import { UserAPI } from 'src/api';
 import { INotificationResponse } from '../../api/types';
 import BankLinkDialog from 'src/shared/uielements/BankLinkDialog';
+import { BarCodeScanner } from 'expo-barcode-scanner';
+import SettingDialog from 'src/shared/uielements/SettingDialog';
 
 const styles = StyleSheet.create({
 	content: { paddingBottom: 80 },
@@ -192,6 +195,7 @@ const Dashboard = (): JSX.Element => {
 	const [isLoadup, setIsLoadup] = useState<boolean>(false);
 	const [isPayment, setIsPayment] = useState<boolean>(false);
 	const [notifications, setNotifications] = useState<INotificationResponse[]>([])
+	const [isSetting, setIsSetting] = useState(false)
 
 	const { personalWallet } = useSelector((state: AppState) => state.walletReducer) as WalletState;
 	const { personalFundingSource } = useSelector((state: AppState) => state.fundingSourceReducer) as FundingSourceState;
@@ -208,7 +212,7 @@ const Dashboard = (): JSX.Element => {
 		updateNotification()
 		const timer = setInterval(() => {
 			updateNotification()
-		}, 20000)
+		}, 10000)
 
 		return(() => {
 			clearInterval(timer)
@@ -247,11 +251,16 @@ const Dashboard = (): JSX.Element => {
 		setIsLoadup(false);
 	};
 
-	const onPressScan = () => {
-		if(personalFundingSource && personalWallet.availableBalance > 0) {
-			navigation.navigate(Routes.QRCODE_SCAN)
+	const onPressScan = async () => {
+		const {status} = await BarCodeScanner.requestPermissionsAsync();
+		if(status === 'granted') {
+			if(personalFundingSource && personalWallet.availableBalance > 0) {
+				navigation.navigate(Routes.QRCODE_SCAN)
+			} else {
+				navigation.navigate(Routes.RECEIVE_PAYMENT)
+			}
 		} else {
-			navigation.navigate(Routes.RECEIVE_PAYMENT)
+			setIsSetting(true)
 		}
 	}
 
@@ -384,6 +393,12 @@ const Dashboard = (): JSX.Element => {
 				}
 				onConfirm={selectBank}
 				onCancel={onClose}
+			/>
+
+			<SettingDialog
+				visible={isSetting}
+				onCancel={() => setIsSetting(false)}
+				description={Translation.OTHER.NO_CAMERA_PERMISSION_DETAIL}
 			/>
 		</View>
 	);

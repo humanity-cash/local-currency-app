@@ -28,9 +28,7 @@ const PaymentSuccess = (): JSX.Element => {
 	const navigation = useNavigation();
 	return (
 		<View style={viewBase}>
-			<Header
-				rightComponent={<CancelBtn text="Close" onClick={() => navigation.goBack()} />}
-			/>
+			<Header />
 			<View style={{paddingHorizontal: 10, flex: 1}}>
 				<View style={ baseHeader }>
 					<Text style={styles.headerText}>{Translation.COMMON.SUCCEEDED}</Text>

@@ -11,6 +11,8 @@ import { Button, CancelBtn, Dialog} from "src/shared/uielements";
 import Translation from 'src/translation/en.json';
 import * as Routes from 'src/navigation/constants';
 import { BUTTON_TYPES } from "src/constants";
+import { BarCodeScanner } from 'expo-barcode-scanner';
+import SettingDialog from 'src/shared/uielements/SettingDialog';
 
 const styles = StyleSheet.create({
 	container: {
@@ -50,12 +52,12 @@ const styles = StyleSheet.create({
 		backgroundColor: colors.overlayPurple
 	},
     headerText: {
-		fontSize: 32,
-		lineHeight: 35,
+		fontSize: 28,
+		lineHeight: 32,
 		color: colors.purple
 	},
     detailText: {
-		fontSize: 16,
+		fontSize: 14,
 		color: colors.bodyText
 	},
 });
@@ -97,6 +99,7 @@ const CashierDashboard = (): JSX.Element => {
     const { signOut } = useContext(AuthContext);
     const [isVisible, setIsVisible] = useState<boolean>(false);
     const [isReturn, setIsReturn] = useState<boolean>(false);
+	const [isSetting, setIsSetting] = useState(false)
 
     const onLogout = () => {
         setIsVisible(true);
@@ -118,7 +121,16 @@ const CashierDashboard = (): JSX.Element => {
 
 	const onScanCancel = () => {
 		setIsReturn(false);
-	}
+    }
+    
+    const onMakeReturn = async () => {
+        const {status} = await BarCodeScanner.requestPermissionsAsync();
+		if(status === 'granted') {
+			setIsReturn(true)
+		} else {
+			setIsSetting(true)
+		}
+    }
 
 	return (
 		<View style={viewBaseB}>
@@ -140,7 +152,7 @@ const CashierDashboard = (): JSX.Element => {
                         <Feather name="server" size={20} color={colors.purple} style={styles.icon} />
                         <Text style={styles.text}>Transactions</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity style={styles.itemView} onPress={()=>setIsReturn(true)}>
+                    <TouchableOpacity style={styles.itemView} onPress={onMakeReturn}>
                         <Feather name="rotate-ccw" size={20} color={colors.purple} style={styles.icon} />
                         <Text style={styles.text}>Make a return</Text>
                     </TouchableOpacity>
@@ -184,6 +196,11 @@ const CashierDashboard = (): JSX.Element => {
             </Dialog>}
 
             {isReturn && <ReturnPaymentDialog visible={isReturn} onConfirm={onScanConfirm} onCancel={onScanCancel} />}
+            <SettingDialog
+				visible={isSetting}
+				onCancel={() => setIsSetting(false)}
+				description={Translation.OTHER.NO_CAMERA_PERMISSION_DETAIL}
+			/>
 		</View>
 	);
 }

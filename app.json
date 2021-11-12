@@ -37,11 +37,14 @@
       "package": "com.berkshares",
       "versionCode": 5,
       "permissions": [
-        "CAMERA",
-        "RECORD_AUDIO",
-        "READ_PHONE_STATE",
-        "READ_CONTACTS"
+          "CAMERA"
       ]
     }
-  }
+  },
+  "comment": [
+      "android.permission.CAMERA",
+      "RECORD_AUDIO",
+      "READ_PHONE_STATE",
+      "READ_CONTACTS"
+  ]
 }

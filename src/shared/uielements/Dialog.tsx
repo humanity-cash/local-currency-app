@@ -38,7 +38,7 @@ const styles = StyleSheet.create({
 	},
 	dialogWrap: {
 		width: '90%',
-		height: 350,
+		height: 360,
 		alignSelf: 'center',
 		borderRadius: 20,
 		backgroundColor: colors.background,

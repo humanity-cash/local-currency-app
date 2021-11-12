@@ -28,10 +28,12 @@ import { FundingSourceState } from 'src/store/funding-source/funding-source.redu
 import { useSelector } from 'react-redux';
 import { AppState } from 'src/store';
 import BankLinkDialog from 'src/shared/uielements/BankLinkDialog';
+import { BarCodeScanner } from 'expo-barcode-scanner';
+import SettingDialog from 'src/shared/uielements/SettingDialog';
 
 const styles = StyleSheet.create({
 	headerText: {
-		fontSize: 32,
+		fontSize: 30,
 		lineHeight: 35,
 		color: colors.purple
 	},
@@ -171,6 +173,7 @@ const DrawerContent = (props: DrawerContentComponentProps) => {
 
 	const { businessWallet } = useSelector((state: AppState) => state.walletReducer) as WalletState;
 	const { businessFundingSource } = useSelector((state: AppState) => state.fundingSourceReducer) as FundingSourceState;
+	const [isSetting, setIsSetting] = useState(false)
 
 	const onScanConfirm = () => {
 		setIsVisible(false);
@@ -210,6 +213,19 @@ const DrawerContent = (props: DrawerContentComponentProps) => {
 
 	const onPersonal = () => {
 		updateUserType(cognitoId, UserType.Customer);
+	}
+
+	const onMakeReturn = async () => {
+		const {status} = await BarCodeScanner.requestPermissionsAsync();
+		if(status === 'granted') {
+			if(businessFundingSource) {
+				setIsVisible(true)
+			} else {
+				setIsBankDialog(true)
+			}
+		} else {
+			setIsSetting(true)
+		}
 	}
 
 	const onPressScanToPay = () => {
@@ -313,7 +329,7 @@ const DrawerContent = (props: DrawerContentComponentProps) => {
 						/>
 						<DrawerItem
 							label={Translation.TABS.MAKE_RETURN}
-							onPress={() => businessFundingSource ?  setIsVisible(true) : setIsBankDialog(true)}
+							onPress={onMakeReturn}
 						/>
 						<DrawerItem
 							label={Translation.TABS.LOADUP}
@@ -375,6 +391,11 @@ const DrawerContent = (props: DrawerContentComponentProps) => {
 					onCancel={onScanCancel}
 				/>
 			)}
+			<SettingDialog
+				visible={isSetting}
+				onCancel={() => setIsSetting(false)}
+				description={Translation.OTHER.NO_CAMERA_PERMISSION_DETAIL}
+			/>
 			{isCashierView && (
 				<CashierViewDialogDialog
 					visible={isCashierView}

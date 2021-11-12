@@ -101,6 +101,7 @@ const MerchantRequest = (): JSX.Element => {
 	};
 
 	const requestAmount = () => {
+		setIsOpenAmount(false);
 		setIsVisible(true);
 	}
 
