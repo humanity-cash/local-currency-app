@@ -2,7 +2,6 @@ import React, { useState, useEffect, useContext } from 'react';
 import { StyleSheet, View, ScrollView, KeyboardAvoidingView, Platform, ActivityIndicator, SafeAreaView } from 'react-native';
 import { Text } from 'react-native-elements';
 import { AuthContext } from 'src/auth';
-import { useCameraPermission } from 'src/hooks';
 import { Header, CancelBtn, BackBtn } from "src/shared/uielements";
 import { colors } from "src/theme/colors";
 import { viewBase } from "src/theme/elements";
@@ -112,7 +111,6 @@ const styles = StyleSheet.create({
 const MerchantReturnQRCodeScan = (): JSX.Element => {
 	const navigation = useNavigation();
 	const { businessDwollaId } = useContext(AuthContext);
-	const hasPermission = useCameraPermission();
 	const dispatch = useDispatch();
 	const [isScanned, setIsScanned] = useState<boolean>(false);
 	const [isReturnModal, setIsReturnModal] = useState<boolean>(false);
@@ -156,10 +154,6 @@ const MerchantReturnQRCodeScan = (): JSX.Element => {
 		} else {
 			showToast(ToastType.ERROR, "Whoops, something went wrong.", "Invalid QRCode.");
 		}
-	}
-
-	if (hasPermission === false) {
-		return <Text>{Translation.OTHER.NO_CAMERA_PERMISSION}</Text>;
 	}
 
 	const onValueChange = (name: string, change: string) => {

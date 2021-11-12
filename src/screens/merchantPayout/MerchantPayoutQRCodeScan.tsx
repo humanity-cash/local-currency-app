@@ -1,8 +1,6 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { useNavigation } from '@react-navigation/core';
-import { Text } from 'react-native-elements';
-import { useCameraPermission } from 'src/hooks';
 import { Header, CancelBtn } from "src/shared/uielements";
 import { colors } from "src/theme/colors";
 import { viewBase } from "src/theme/elements";
@@ -38,22 +36,17 @@ const styles = StyleSheet.create({
 
 const MerchantPayoutQRCodeScan = (): JSX.Element => {
 	const navigation = useNavigation();
-	const hasPermission = useCameraPermission();
 	const [isScanned, setIsScanned] = useState<boolean>(false);
 
-	useEffect(() => {
-		setTimeout(() => {
-			navigation.navigate(Routes.MERCHANT_PAYOUT_PENDING);
-		}, 2000);
-	}, []);
+	// useEffect(() => {
+	// 	setTimeout(() => {
+	// 		navigation.navigate(Routes.MERCHANT_PAYOUT_PENDING);
+	// 	}, 2000);
+	// }, []);
 
 	const handleBarCodeScanned = (data: HandleScaned) => {
 		setIsScanned(true);
 		navigation.navigate(Routes.MERCHANT_PAYOUT_PENDING);
-	}
-
-	if (hasPermission === false) {
-		return <Text>{Translation.OTHER.NO_CAMERA_PERMISSION}</Text>;
 	}
 
 	return (

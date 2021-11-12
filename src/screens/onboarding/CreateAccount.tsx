@@ -25,6 +25,7 @@ import {
 import { isEmailValid } from 'src/utils/validation';
 import Translation from 'src/translation/en.json';
 import { BERKSHARE_PRIVACY_URL, BERKSHARE_TERMS_URL } from 'src/config/env';
+import { SafeAreaView } from 'react-native';
 
 const styles = StyleSheet.create({
 	container: {
@@ -39,14 +40,14 @@ const styles = StyleSheet.create({
 		color: colors.bodyText,
 	},
 	form: {
-		marginTop: 30,
+		marginTop: 20,
 	},
 	label: {
 		fontSize: 10,
 	},
 	bottomView: {
-		paddingHorizontal: 20,
-		paddingBottom: 50,
+		marginHorizontal: 20,
+		marginBottom: 20,
 	},
 	checkboxTextView: {
 		fontWeight: '400',
@@ -57,10 +58,12 @@ const styles = StyleSheet.create({
 	checkboxContainer: {
 		borderWidth: 0,
 		backgroundColor: 'transparent',
+		paddingHorizontal: 0,
 	},
 	terms: {
 		flexDirection: 'row',
 		paddingBottom: 30,
+		marginHorizontal: -10,
 		width: '80%'
 	},
 	underlineText: {
@@ -99,16 +102,18 @@ const CreateAccount = (): JSX.Element => {
 						<BlockInput
 							name='email'
 							placeholder='myname@mail.com'
+							keyboardType='email-address'
 							value={signUpDetails.email}
 							onChange={onValueChange}
 							placeholderTextColor={colors.lightGreen}
 						/>
 					</View>
+					
 				</View>
 			</ScrollView>
 			<KeyboardAvoidingView
 				behavior={Platform.OS == 'ios' ? 'padding' : 'height'}>
-				<View style={styles.bottomView}>
+				<SafeAreaView style={styles.bottomView}>
 					<View style={styles.terms}>
 						<CheckBox
 							checked={isSelected}
@@ -134,7 +139,7 @@ const CreateAccount = (): JSX.Element => {
 						}
 						onPress={() => navigation.navigate(Routes.PASSWORD)}
 					/>
-				</View>
+				</SafeAreaView>
 			</KeyboardAvoidingView>
 		</View>
 	);

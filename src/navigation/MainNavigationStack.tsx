@@ -299,6 +299,10 @@ const PrimaryStackScreen = () => {
 						component={MerchantPayoutPending}
 					/>
 					<PrimaryStack.Screen
+						name={Routes.MERCHANT_PAYOUT_SUCCESS}
+						component={MerchantPayoutSuccess}
+					/>
+					<PrimaryStack.Screen
 						name={Routes.PAYMENT_RECEIVE_AMOUNT}
 						component={PaymentReceiveAmount}
 					/>

@@ -1,7 +1,7 @@
 import { AntDesign, Entypo, Octicons } from "@expo/vector-icons";
 import { useNavigation, DrawerActions } from "@react-navigation/native";
 import React, { useState, useContext, useEffect } from 'react';
-import { StyleSheet, TouchableWithoutFeedback, View, ScrollView, TouchableOpacity } from 'react-native';
+import { StyleSheet, TouchableWithoutFeedback, View, ScrollView, TouchableOpacity, SafeAreaView } from 'react-native';
 import { Text, Image } from "react-native-elements";
 import { AuthContext } from "src/auth";
 import { UserType } from "src/auth/types";
@@ -29,6 +29,8 @@ import { useSelector, useDispatch } from 'react-redux';
 import { AppState } from 'src/store';
 import { INotificationResponse } from '../../api/types';
 import { UserAPI } from 'src/api';
+import { BarCodeScanner } from 'expo-barcode-scanner';
+import SettingDialog from 'src/shared/uielements/SettingDialog';
 
 const styles = StyleSheet.create({
 	mainTextColor: {
@@ -166,12 +168,12 @@ const styles = StyleSheet.create({
 		alignItems: 'center',
 		width: '90%',
 		height: 55,
-		position: 'absolute',
-		bottom: 45,
 		color: colors.white,
 		backgroundColor: colors.purple,
 		alignSelf: 'center',
-		borderRadius: 30
+		borderRadius: 30,
+		marginBottom: 20,
+		marginTop: 10
 	},
 	scanBtnText: {
 		color: colors.white
@@ -280,6 +282,7 @@ const MerchantDashboard = (): JSX.Element => {
 	const [selectedItem, setSelectedItem] = useState<ITransaction>(defaultTransaction);
 	const [isDwollaVisible, setIsDwollaVisible] = useState<boolean>(false);
 	const [isPayment, setIsPayment] = useState<boolean>(false);
+	const [isSetting, setIsSetting] = useState(false)
 
 	const { businessTransactions } = useSelector((state: AppState) => state.transactionReducer) as TransactionState;
 	const { businessWallet } = useSelector((state: AppState) => state.walletReducer) as WalletState;
@@ -306,7 +309,7 @@ const MerchantDashboard = (): JSX.Element => {
 		updateNotification()
 		const timer = setInterval(() => {
 			updateNotification()
-		}, 20000)
+		}, 10000)
 
 		return(() => {
 			clearInterval(timer)
@@ -353,11 +356,16 @@ const MerchantDashboard = (): JSX.Element => {
 		onClose();
 	}
 
-	const onPressScan = () => {
-		if(businessFundingSource && businessWallet.availableBalance > 0) {
-			navigation.navigate(Routes.MERCHANT_QRCODE_SCAN)
+	const onPressScan = async () => {
+		const {status} = await BarCodeScanner.requestPermissionsAsync();
+		if(status === 'granted') {
+			if(businessFundingSource && businessWallet.availableBalance > 0) {
+				navigation.navigate(Routes.MERCHANT_QRCODE_SCAN)
+			} else {
+				navigation.navigate(Routes.MERCHANT_REQUEST)
+			}
 		} else {
-			navigation.navigate(Routes.MERCHANT_REQUEST)
+			setIsSetting(true)
 		}
 	}
 
@@ -463,13 +471,15 @@ const MerchantDashboard = (): JSX.Element => {
 					</View>
 				</ScrollView>
 			</View>
-			<TouchableOpacity onPress={onPressScan} style={styles.scanButton}>
-				<Image
-					source={require('../../../assets/images/qr_code_merchant.png')}
-					containerStyle={styles.qrIcon}
-				/>
-				<Text style={styles.scanBtnText}>{Translation.BUTTON.RECEIVE_OR_SCAN}</Text>
-			</TouchableOpacity>
+			<SafeAreaView>
+				<TouchableOpacity onPress={onPressScan} style={styles.scanButton}>
+					<Image
+						source={require('../../../assets/images/qr_code_merchant.png')}
+						containerStyle={styles.qrIcon}
+					/>
+					<Text style={styles.scanBtnText}>{Translation.BUTTON.RECEIVE_OR_SCAN}</Text>
+				</TouchableOpacity>
+			</SafeAreaView>
 			{isDetailViewOpen && <TransactionDetail visible={isDetailViewOpen} data={selectedItem} onConfirm={onConfirm} />}
 			{isDwollaVisible && (
 				<DwollaDialog visible={isDwollaVisible} onClose={onClose} userType={UserType.Business} />
@@ -491,6 +501,11 @@ const MerchantDashboard = (): JSX.Element => {
 					</View>
 				</Dialog>
 			)}
+			<SettingDialog
+				visible={isSetting}
+				onCancel={() => setIsSetting(false)}
+				description={Translation.OTHER.NO_CAMERA_PERMISSION_DETAIL}
+			/>
 		</View>
 	);
 }

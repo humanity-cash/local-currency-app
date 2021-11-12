@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, View, KeyboardAvoidingView, ScrollView, Platform, SafeAreaView } from 'react-native';
+import { StyleSheet, View, KeyboardAvoidingView, ScrollView, Platform, SafeAreaView, Image } from 'react-native';
 import { Text } from 'react-native-elements';
 import { colors } from "src/theme/colors";
 import { CancelBtn, Button, Modal, ModalHeader } from "src/shared/uielements";
@@ -29,16 +29,19 @@ const MerchantRequestSuccess = (props: MerchantRequestSuccessProps): JSX.Element
     return (
         <Modal visible={props.visible}>
             <SafeAreaView style={ modalViewBase }>
-                <ModalHeader
-                    rightComponent={<CancelBtn text="Close" color={colors.purple} onClick={props.onClose} />}
-                />
-                <ScrollView style={wrappingContainerBase}>
-                    <View style={baseHeader}>
+                <ModalHeader />
+                    <View style={{paddingHorizontal: 10, flex: 1}}>
                         <Text style={styles.headerText}>
                             Succeeded! You have received B$ {props.amount.toFixed(2)}.
                         </Text>
+                        <View style={{flex: 1, margin: 15, justifyContent: 'center', alignItems: 'center'}}>
+                            <Image
+                                source={require("../../../assets/images/burkshare_paper_money.png")}
+                                style={{justifyContent: 'center', width: '100%'}}
+                                resizeMode='contain'
+                            />			
+                        </View>
                     </View>
-                </ScrollView>
                 <KeyboardAvoidingView
                     behavior={Platform.OS == "ios" ? "padding" : "height"} >
                     <View style={styles.bottomView}>

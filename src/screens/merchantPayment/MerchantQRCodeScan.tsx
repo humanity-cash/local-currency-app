@@ -2,7 +2,6 @@ import React, { useState, useContext, useEffect } from 'react';
 import { StyleSheet, View, Image, ScrollView, KeyboardAvoidingView, Platform, SafeAreaView } from 'react-native';
 import { useNavigation } from '@react-navigation/core';
 import { Text } from 'react-native-elements';
-import { useCameraPermission } from 'src/hooks';
 import { AuthContext } from 'src/auth';
 import { Header, CancelBtn, Dialog, Button, ToggleButton, Modal, ModalHeader, BorderedInput, BackBtn } from "src/shared/uielements";
 import { colors } from "src/theme/colors";
@@ -197,7 +196,6 @@ const MerchantQRCodeScan = (): JSX.Element => {
 	const navigation = useNavigation();
 	const { businessDwollaId } = useContext(AuthContext);
 	const dispatch = useDispatch();
-	const hasPermission = useCameraPermission();
 	const [isScanned, setIsScanned] = useState<boolean>(false);
 	const [isPaymentDialog, setIsPaymentDialog] = useState<boolean>(false);
 	const [state, setState] = useState<QRCodeEntry>({
@@ -228,10 +226,6 @@ const MerchantQRCodeScan = (): JSX.Element => {
 			showToast(ToastType.ERROR, "Whooops, something went wrong.", "Invalide QRCode");
 		}
 	};
-
-	if (hasPermission === false) {
-		return <Text>No access to camera</Text>;
-	}
 
 	const onPayConfirm = async (isRoundUp: boolean) => {
 		setIsPaymentDialog(false);

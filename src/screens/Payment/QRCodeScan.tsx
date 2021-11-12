@@ -3,7 +3,6 @@ import React, { useState, useContext, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { StyleSheet, View, Image } from 'react-native';
 import { Text } from 'react-native-elements';
-import { useCameraPermission } from 'src/hooks';
 import { AuthContext } from 'src/auth';
 import { Header, CancelBtn, Dialog, Button, ToggleButton } from "src/shared/uielements";
 import { colors } from "src/theme/colors";
@@ -219,7 +218,6 @@ const QRCodeScan = (): JSX.Element => {
 	const navigation = useNavigation();
 	const dispatch = useDispatch();
 	const { customerDwollaId } = useContext(AuthContext);
-	const hasPermission = useCameraPermission();
 	const [isScanned, setIsScanned] = useState<boolean>(false);
 	const [isPaymentDialog, setIsPaymentDialog] = useState<boolean>(false);
 	const [isLowAmountDialog, setIsLowAmountDialog] = useState<boolean>(false);
@@ -249,10 +247,6 @@ const QRCodeScan = (): JSX.Element => {
 		} else {
 			showToast(ToastType.ERROR, "Whooops, something went wrong.", "Invalid QRCode!");
 		}
-	}
-
-	if (hasPermission === false) {
-		return <Text>{Translation.OTHER.NO_CAMERA_PERMISSION}</Text>;
 	}
 
 	const onPayConfirm = async (isRoundUp: boolean) => {
@@ -303,7 +297,7 @@ const QRCodeScan = (): JSX.Element => {
 	const onCancle = () => {
 		setIsPaymentDialog(false);
 		setIsLowAmountDialog(false);
-		navigation.navigate(Routes.DASHBOARD);
+		navigation.goBack();
 	}
 
 	return (
@@ -316,7 +310,7 @@ const QRCodeScan = (): JSX.Element => {
 			</View>
 			<View style={styles.toggleView}>
 				<Header
-					rightComponent={<CancelBtn text={Translation.BUTTON.CLOSE} color={colors.white} onClick={() => navigation.navigate(Routes.DASHBOARD)} />}
+					rightComponent={<CancelBtn text={Translation.BUTTON.CLOSE} color={colors.white} onClick={() => navigation.goBack()} />}
 				/>
 				<View style={styles.switchView}>
 					<ToggleButton

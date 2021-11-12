@@ -2,7 +2,6 @@ import React, { useEffect, useState, useContext } from 'react';
 import { StyleSheet, View, ScrollView, KeyboardAvoidingView, Platform, SafeAreaView } from 'react-native';
 import { Text } from 'react-native-elements';
 import { AuthContext } from 'src/auth';
-import { useCameraPermission } from 'src/hooks';
 import { colors } from "src/theme/colors";
 import { BarCodeScanner } from 'expo-barcode-scanner';
 import Translation from 'src/translation/en.json';
@@ -100,7 +99,6 @@ const styles = StyleSheet.create({
 
 const CashierReturnQRCodeScan = (): JSX.Element => {
 	const navigation = useNavigation();
-	const hasPermission = useCameraPermission();
 	const dispatch = useDispatch();
 	const { businessDwollaId } = useContext(AuthContext);
 	const [isScanned, setIsScanned] = useState<boolean>(false);
@@ -149,10 +147,6 @@ const CashierReturnQRCodeScan = (): JSX.Element => {
 		} else {
 			showToast(ToastType.ERROR, "Whooops, something went wrong.", "Ivalid QRCode");
 		}
-	}
-
-	if (hasPermission === false) {
-		return <Text>{Translation.OTHER.NO_CAMERA_PERMISSION}</Text>;
 	}
 
 	const onReturn = async () => {

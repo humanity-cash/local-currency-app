@@ -8,6 +8,13 @@ import { colors } from "src/theme/colors";
 import Translation from 'src/translation/en.json';
 import * as Routes from 'src/navigation/constants';
 import { BUTTON_TYPES } from 'src/constants';
+import { BarCodeScanner } from 'expo-barcode-scanner';
+import SettingDialog from 'src/shared/uielements/SettingDialog';
+import { useSelector, useDispatch } from 'react-redux';
+import { AppState } from 'src/store';
+import { WalletState } from 'src/store/wallet/wallet.reducer';
+import { FundingSourceState } from 'src/store/funding-source/funding-source.reducer';
+import BankLinkDialog from 'src/shared/uielements/BankLinkDialog';
 
 const styles = StyleSheet.create({
 	headerText: {
@@ -65,17 +72,54 @@ const MerchantCashoutAmount = (): JSX.Element => {
     const [isVisible, setIsVisible] = useState<boolean>(false);
 	const [goNext, setGoNext] = useState(false);
 
+	const { businessWallet } = useSelector((state: AppState) => state.walletReducer) as WalletState;
+	const { businessFundingSource } = useSelector((state: AppState) => state.fundingSourceReducer) as FundingSourceState;
+	const [isBankDialog, setIsBankDialog] = useState<boolean>(false);
+	const [isLoadupDialog, setIsLoadupDialog] = useState<boolean>(false);
+	const [isSetting, setIsSetting] = useState(false)
+
 	useEffect(() => {
 		setGoNext(amount != "");
 	}, [amount]);
+
+	const onBankDialogConfirm = () => {
+		setIsBankDialog(false);
+		navigation.navigate(Routes.MERCHANT_BANK_ACCOUNT);
+	}
+
+	const onBankDialogCancel = () => {
+		setIsBankDialog(false);
+	}
+
+	const onLoadupDialogConfirm = () => {
+		setIsLoadupDialog(false);
+		navigation.navigate(Routes.MERCHANT_LOADUP);
+	}
+
+	const onLoadupDialogCancel = () => {
+		setIsLoadupDialog(false);
+	}
 
 	const onValueChange = (name: string, change: string) => {
 		setAmount(change.replace(',', '.'));
 	};
 
-    const doScan = () => {
-        setIsVisible(false);
-        navigation.navigate(Routes.MERCHANT_PAYOUT_QR_SCAN);
+    const doScan = async () => {
+		setIsVisible(false);
+		const {status} = await BarCodeScanner.requestPermissionsAsync();
+		if(status === 'granted') {
+			if(businessWallet.availableBalance > 0) {
+				navigation.navigate(Routes.MERCHANT_PAYOUT_QR_SCAN);
+			} else {
+				if(businessFundingSource) {
+					setIsLoadupDialog(true)
+				} else {
+					setIsBankDialog(true)
+				}
+			} 
+		} else {
+			setIsSetting(true)
+		}
     }
 
 	return (
@@ -135,6 +179,28 @@ const MerchantCashoutAmount = (): JSX.Element => {
 					</View>
 				</Dialog>
 			)}
+
+			<BankLinkDialog 
+				visible={isBankDialog}
+				description={Translation.PAYMENT.PAYMENT_NO_BANK_DETAIL}
+				buttonTitle={Translation.BUTTON.LINK_BANK}
+				onConfirm={onBankDialogConfirm}
+				onCancel={onBankDialogCancel}
+			/>
+			<BankLinkDialog 
+				visible={isLoadupDialog}
+				description={Translation.PAYMENT.PAYMENT_NO_BALANCE_DETAIL}
+				buttonTitle={Translation.BUTTON.LOAD_UP_BERKSHARES}
+				onConfirm={onLoadupDialogConfirm}
+				onCancel={onLoadupDialogCancel}
+			/>
+
+			<SettingDialog
+				visible={isSetting}
+				onCancel={() => setIsSetting(false)}
+				description={Translation.OTHER.NO_CAMERA_PERMISSION_DETAIL}
+			/>
+
 		</View>
 	);
 }
