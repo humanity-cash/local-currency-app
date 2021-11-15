@@ -148,7 +148,7 @@
         "LOG_OUT_DETAIL": "Please note that unsaved data will be lost.",
         "PERSIONAL_DETAILS": "Personal details",
         "PERSIONAL_DETAILS_BODY": "We use your personal details to set up your BerkShares wallet. Don't worry, this information is not shared publicy!",
-        "WELCOME_BERKSHARES": "Thank you! Welcome to the BerkShares App. Now it is time to add some BerkShares to your wallet!",
+        "WELCOME_BERKSHARES": "Thank you!\nWelcome to the BerkShares App.\nNow it is time to add some BerkShares to your wallet!",
         "BUSINESS_ACCOUNT": "Business account",
         "BUSINESS_ACCOUNT_DETAIL": "You do not have a business account linked. If you do have a business that accepts BerkShares you can sign up and link your business!",
         "BUSINESS_DETAIL": "Business details",
@@ -261,10 +261,10 @@
         "ENABLE_CASHIER_VIEW" :"Enable cashier view",
         "CONFIRM_SAVE": "Are you sure you want to go back without saving changes?",
         "CHANGE_PASSWORD_FAILED": "Whoops something went wrong. Your action did not succeed.",
-        "CHANGE_PASSWORD_SUCCESS": "Password changed successfully.",
+        "CHANGE_PASSWORD_SUCCESS": "Password changed successfully."
     },
     "COMMUNITY_CHEST": {
-        "CONTENT": "The BerkShares community want to support the lcal community. Therefor, we ask you at each transaction if you are willing to make a donation. This donation will go to a local project. On this page you will find the current project and its status.",
+        "CONTENT": "The BerkShares community want to support the local community. Therefore, we ask you at each transaction if you are willing to make a donation. This donation will go to a local project. On this page you will find the current project and its status.",
         "INFORMATION_SHARE": "This information is shared publicly.",
         "REMOVE_BANK_ACCOUNT": "Are you sure you want to remove this bank account?",
         "NO_BANK_ACCOUNT": "You do not have a bank account linked. Link your bank account in order to enable buying new BerkShares and/or cash out to USD.",

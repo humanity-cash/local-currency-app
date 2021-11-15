@@ -88,13 +88,21 @@ const MerchantCashoutAmount = (): JSX.Element => {
 	const [amount, setAmount] = useState<string>("");
 	const [goNext, setGoNext] = useState(false);
 	const [isVisible, setIsVisible] = useState(false);
+	const maxAmount = 5
 
 	useEffect(() => {
 		setGoNext(Number(amount) > 0);
 	}, [amount]);
 
 	const onValueChange = (name: string, change: string) => {
-		setAmount(change.replace(',', '.'));
+		
+		const costs = change.replace(',', '.');
+		if (Number(costs) > maxAmount) {
+			showToast(ToastType.ERROR, "Whoops, something went wrong.", "Please note that the maximum amount is B$ 5.00");
+			return
+		}
+
+		setAmount(costs);
 	};
 
 	const viewConfirm = () => {
