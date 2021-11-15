@@ -54,7 +54,7 @@ const EmailConfirmed = (): JSX.Element => {
 					</Text>
 				</View>
 				<Text style={styles.bodyText}>
-					Your email address {email} is confirmed.
+					{`Your email address:\n${email}\nis confirmed.`}
 				</Text>
 			</View>
 			<View style={styles.bottomView}>

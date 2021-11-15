@@ -1,14 +1,18 @@
 import { AntDesign } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import * as ImagePicker from "expo-image-picker";
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, RefObject, createRef } from "react";
 import {
 	Dimensions,
 	ScrollView,
 	StyleSheet,
 	TextInput,
 	TouchableOpacity,
-	View
+	View,
+	KeyboardAvoidingView,
+	Platform,
+	InputAccessoryView,
+	Button as NativeButton
 } from "react-native";
 import { Image, Text } from "react-native-elements";
 import SelectDropdown from "react-native-select-dropdown";
@@ -216,6 +220,17 @@ export const MerchantSettingsProfile = (): JSX.Element => {
 	});
 	const [isVisible, setIsVisible] = useState<boolean>(false);
 
+	const tellUsRef: RefObject<TextInput> = createRef()
+	const websiteRef: RefObject<TextInput> = createRef()
+	const address1Ref: RefObject<TextInput> = createRef()
+	const address2Ref: RefObject<TextInput> = createRef()
+	const cityRef: RefObject<TextInput> = createRef()
+	const stateRef: RefObject<SelectDropdown> = createRef()
+	const postalCodeRef: RefObject<TextInput> = createRef()
+	const phoneRef: RefObject<TextInput> = createRef()
+
+	const inputAccessoryViewID = 'postalCodeAccesoryView';
+
 	const handleSave = async () => {
 
 		// Only add dirty inputs
@@ -363,11 +378,16 @@ export const MerchantSettingsProfile = (): JSX.Element => {
 							setState((pv) => ({ ...pv, businessTag: newValue }))
 						}
 						style={styles.inputBg}
+						onSubmitEditing={() => {
+							tellUsRef.current?.focus()
+						}}
+						returnKeyType='next'
 					/>
 					<Text style={styles.smallLabel}>
 						TELL US YOUR STORY (50 WORDS MAX)
 					</Text>
 					<TextInput
+						ref={tellUsRef}
 						placeholder="Tell the world about your business. What gives you joy as an entrepreneur? What do you love about the Berkshires?"
 						value={state.businessStory}
 						multiline={true}
@@ -379,10 +399,12 @@ export const MerchantSettingsProfile = (): JSX.Element => {
 						}
 						style={styles.storyText}
 						numberOfLines={4}
+						maxLength={50}
 					/>
 
 					<Text style={styles.smallLabel}>WEBSITE - OPTIONAL</Text>
 					<BlockInput
+						reff={websiteRef}
 						name="website"
 						placeholder="www.shop.com"
 						placeholderTextColor={colors.greyedPurple}
@@ -394,6 +416,10 @@ export const MerchantSettingsProfile = (): JSX.Element => {
 							}))
 						}
 						style={styles.inputBg}
+						returnKeyType='next'
+						onSubmitEditing={() => {
+							address1Ref.current?.focus()
+						}}
 					/>
 
 					<View>
@@ -401,6 +427,7 @@ export const MerchantSettingsProfile = (): JSX.Element => {
 							ADDRESS 1
 						</Text>
 						<BlockInput
+							reff={address1Ref}
 							name="addressLine"
 							placeholder="Street number, street name"
 							value={state.businessAddress1}
@@ -411,11 +438,16 @@ export const MerchantSettingsProfile = (): JSX.Element => {
 								}));
 							}}
 							style={businessAddressFormStyles.inputBg}
+							returnKeyType='next'
+							onSubmitEditing={() => {
+								address2Ref.current?.focus()
+							}}
 						/>
 						<Text style={businessAddressFormStyles.label}>
 							ADDRESS 2
 						</Text>
 						<BlockInput
+							reff={address2Ref}
 							name="addressLine2"
 							placeholder="Apt."
 							value={state.businessAddress2}
@@ -426,6 +458,10 @@ export const MerchantSettingsProfile = (): JSX.Element => {
 								}));
 							}}
 							style={businessAddressFormStyles.inputBg}
+							returnKeyType='next'
+							onSubmitEditing={() => {
+								cityRef.current?.focus()
+							}}
 						/>
 
 						<View style={businessAddressFormStyles.inlineView}>
@@ -434,6 +470,7 @@ export const MerchantSettingsProfile = (): JSX.Element => {
 									CITY
 								</Text>
 								<BlockInput
+									reff={cityRef}
 									name="city"
 									placeholder="City"
 									value={state.businessCity}
@@ -447,6 +484,11 @@ export const MerchantSettingsProfile = (): JSX.Element => {
 										}));
 									}}
 									style={businessAddressFormStyles.inputBg}
+									returnKeyType='next'
+									onSubmitEditing={() => {
+										postalCodeRef.current?.focus()
+										// stateRef.current?.openDropdown()
+									}}
 								/>
 							</View>
 							<View
@@ -457,13 +499,16 @@ export const MerchantSettingsProfile = (): JSX.Element => {
 								<View
 									style={businessAddressFormStyles.stateView}>
 									<SelectDropdown
+										ref={stateRef}
 										data={countries}
 										defaultValueByIndex={0}
 										onSelect={(selectedItem) => {
+											console.log(selectedItem)
 											setState((pv) => ({
 												...pv,
 												businessState: selectedItem,
 											}));
+											postalCodeRef.current?.focus()
 										}}
 										buttonTextAfterSelection={(
 											selectedItem
@@ -509,6 +554,7 @@ export const MerchantSettingsProfile = (): JSX.Element => {
 							POSTAL CODE
 						</Text>
 						<BlockInput
+							reff={postalCodeRef}
 							name="zipCode"
 							placeholder="00000"
 							keyboardType="number-pad"
@@ -520,11 +566,13 @@ export const MerchantSettingsProfile = (): JSX.Element => {
 								}));
 							}}
 							style={businessAddressFormStyles.inputBg}
+							inputAccessoryViewID={inputAccessoryViewID}
 						/>
 						<Text style={businessAddressFormStyles.label}>
 							PHONE NUMBER - OPTIONAL
 						</Text>
 						<BlockInput
+							reff={phoneRef}
 							name="phoneNumber"
 							placeholder="+00 0987 6543 21"
 							value={state.businessPhonenumber}
@@ -535,17 +583,30 @@ export const MerchantSettingsProfile = (): JSX.Element => {
 								}));
 							}}
 							style={businessAddressFormStyles.inputBg}
+							returnKeyType='done'
 						/>
 					</View>
 				</View>
 			</ScrollView>
-			<TouchableOpacity
-				onPress={handleSave} 
-				style={styles.scanButton}>
-				<Text style={styles.scanBtnText}>
-					{Translation.BUTTON.SAVE_CHANGE}
-				</Text>
-			</TouchableOpacity>
+			<InputAccessoryView nativeID={inputAccessoryViewID}>
+				<View style={{alignItems: 'flex-end', paddingEnd: 12}}>
+					<NativeButton
+						onPress={() => {phoneRef.current?.focus()}}
+						title="next"
+					/>
+				</View>
+			</InputAccessoryView>
+			<KeyboardAvoidingView
+				behavior={Platform.OS == "ios" ? "padding" : "height"}>
+				<TouchableOpacity
+					onPress={handleSave} 
+					style={styles.scanButton}>
+					<Text style={styles.scanBtnText}>
+						{Translation.BUTTON.SAVE_CHANGE}
+					</Text>
+				</TouchableOpacity>
+			</KeyboardAvoidingView>
+			
 			{isVisible && (
 				<Dialog
 					visible={isVisible}

@@ -17,6 +17,7 @@ type BlockInputProps = {
 	blurOnSubmit?: boolean
 	returnKeyType?: ReturnKeyTypeOptions
 	onSubmitEditing?: (()=>void)
+	inputAccessoryViewID?: string
 }
 
 const styles = StyleSheet.create({
@@ -54,6 +55,7 @@ class BlockInput extends React.Component<BlockInputProps>{
 				returnKeyType={this.props.returnKeyType || 'done'}
 				blurOnSubmit={this.props.blurOnSubmit === null ? true : this.props.blurOnSubmit}
 				onSubmitEditing={this.props.onSubmitEditing}
+				inputAccessoryViewID={this.props.inputAccessoryViewID}
 			/>
 		)
 	}
