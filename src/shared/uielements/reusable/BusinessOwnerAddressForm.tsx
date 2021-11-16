@@ -67,7 +67,7 @@ const BusinessOwnerAddressForm = (
 
 	const onValueChange = (name: string, change: string) => {
 		updateBusinessData({
-			owner: { [name]: change },
+			owner: { ...business?.owner, [name]: change },
 		});
 	};
 
@@ -113,7 +113,7 @@ const BusinessOwnerAddressForm = (
 							data={countries}
 							defaultValueByIndex={0}
 							onSelect={(selectedItem) => {
-								onValueChange("country", selectedItem)
+								onValueChange("state", selectedItem)
 							}}
 							buttonTextAfterSelection={(selectedItem) => {
 								return selectedItem

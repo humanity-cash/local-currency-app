@@ -102,7 +102,7 @@ const BusinessAddressForm = (props: BusinessAddressProps): JSX.Element => {
 							data={countries}
 							defaultValueByIndex={0}
 							onSelect={(selectedItem) => {
-								onValueChange("country", selectedItem)
+								onValueChange("state", selectedItem)
 							}}
 							buttonTextAfterSelection={(selectedItem) => {
 								return selectedItem

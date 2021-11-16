@@ -65,7 +65,8 @@ const BusinessOwnerDetailsForm = (
 
 	const onValueChange = (name: string, change: string) => {
 		updateBusinessData({
-			owner: { [name]: change },
+			...business,
+			owner: { ...business?.owner, [name]: change },
 		});
 	};
 
@@ -78,7 +79,7 @@ const BusinessOwnerDetailsForm = (
 				label={Translation.LABEL.FIRST_NAME_BUSINESS}
 				name="firstName"
 				placeHolder="First Name"
-				inputValue={business?.owner.firstName}
+				inputValue={business?.owner?.firstName}
 				onInputChange={onValueChange}
 			/>
 			<BasicInputWithLabel
@@ -87,7 +88,7 @@ const BusinessOwnerDetailsForm = (
 				label={Translation.LABEL.LAST_NAME_BUSINESS}
 				name="lastName"
 				placeHolder="Last Name"
-				inputValue={business?.owner.lastName}
+				inputValue={business?.owner?.lastName}
 				onInputChange={onValueChange}
 			/>
 		</View>
