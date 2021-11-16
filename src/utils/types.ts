@@ -320,20 +320,20 @@ export const TransactionTypes = {
   'Purchasement': 'Purchasement'
 }
 
-export type MerchantTransactionItem = {
+export type BusinessTransactionItem = {
   transactionId: string,
   type: TransactionType,
   amount: number,
   date: string
 }
 
-export type MerchantCategory = {
+export type BusinessCategory = {
   id: string;
   name: string;
-  merchants: MerchantEntry[];
+  businesses: BusinessEntry[];
 }
 
-export type MerchantEntry = {
+export type BusinessEntry = {
   title: string;
   description: string;
   image: string;

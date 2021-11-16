@@ -219,7 +219,7 @@
         "SHOW_QR_CODE_TO_CASHIER": "Show QR code to the cashier",
         "PAYMENT_RETURN_SUCCESS": "SUcceeded! You have received B$ {{amount}} in return.",
         "WHERE_TO_SPEND": "Where t spend",
-        "MERCHANT_MONTH": "MERCHANT OF THE MONTH",
+        "BUSINESS_MONTH": "MERCHANT OF THE MONTH",
         "PENDING": "Pending...",
         "PENDING_DETAIL": "This usually takes 5-6 seconds",
         "SEND_RETURN": "Send return",

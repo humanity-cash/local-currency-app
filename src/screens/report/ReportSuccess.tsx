@@ -34,7 +34,7 @@ const ReportSuccess = (): JSX.Element => {
 
 	const onConfirm = () => {
 		if (userType === UserType.Business) {
-			navigation.navigate(Routes.MERCHANT_DASHBOARD);
+			navigation.navigate(Routes.BUSINESS_DASHBOARD);
 		} else {
 			navigation.navigate(Routes.CASHIER_DASHBOARD);
 		}

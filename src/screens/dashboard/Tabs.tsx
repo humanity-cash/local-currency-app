@@ -24,7 +24,7 @@ import * as Routes from "src/navigation/constants";
 import { colors } from "src/theme/colors";
 import Translation from "src/translation/en.json";
 import CashoutAmount from "../cashout/CashoutAmount";
-import MerchantDictionary from "../merchant/MerchantDictionary";
+import BusinessDictionary from "../business/BusinessDictionary";
 import PaymentRequest from "../payment/PaymentRequest";
 import QRCodeScan from "../payment/QRCodeScan";
 import Settings from "../settings/Settings";
@@ -118,7 +118,7 @@ const DrawerContent = (
 	const { personalWallet } = useSelector((state: AppState) => state.walletReducer) as WalletState;
 	const { personalFundingSource } = useSelector((state: AppState) => state.fundingSourceReducer) as FundingSourceState;
 
-	const onMerchant = () => {
+	const onBusiness = () => {
 		updateUserType(cognitoId, UserType.Business);
 	};
 
@@ -203,7 +203,7 @@ const DrawerContent = (
 							<View>
 								<TouchableWithoutFeedback
 									onPress={() =>
-										businessTag ? onMerchant() : null
+										businessTag ? onBusiness() : null
 									}>
 									{businessTag ? (
 										<View style={styles.userInfo}>
@@ -354,7 +354,7 @@ const Tabs = (): JSX.Element => {
 			/>
 			<DrawerNav.Screen
 				name={Routes.WHERE_TO_SPEND}
-				component={MerchantDictionary}
+				component={BusinessDictionary}
 			/>
 			<DrawerNav.Screen
 				name={Routes.BUSINESS_ACCOUNT}

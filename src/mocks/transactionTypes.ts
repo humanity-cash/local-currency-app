@@ -5,7 +5,7 @@ export const consumerTransactions: string[] = [
 	'Cash out to USD'
 ];
 
-export const merchantTransactions: string[] = [
+export const businessTransactions: string[] = [
 	'Sales',
 	'Returns',
 	'Cash outs',

@@ -22,7 +22,7 @@ berkshares frontend application
 ### The main folders are src/api, src/screens, src/hooks, src/stores, src/style, src/common
 
 #### src/api: holde the api setup, api requests and formatters for requests and responses going thro the api
-#### src/screens: holds the different screens grouped into: onboarding, user, merchant, auth, transaction. the main motivation here is to keep this as clean as possible, ie only contains the views - any logic the screens are using should be located in src/hooks or src/common.
+#### src/screens: holds the different screens grouped into: onboarding, user, business, auth, transaction. the main motivation here is to keep this as clean as possible, ie only contains the views - any logic the screens are using should be located in src/hooks or src/common.
 #### src/hooks: holds functions that use react hooks like useEffect
 #### src/stores: holds stores initializations and thier initial state, using react-hooksstore
 #### src/style: holds the theme definition, global style vars, global styled components
