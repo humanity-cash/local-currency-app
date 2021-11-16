@@ -13,7 +13,7 @@ import BlockInput from "../BlockInput";
 
 interface PersonalAddressProps {
 	userType: UserType,
-  	style?: IMap;
+	style?: IMap;
 }
 
 const styles = StyleSheet.create({
@@ -113,7 +113,7 @@ const PersonalAddressForm = (props: PersonalAddressProps): ReactElement => {
 							data={countries}
 							defaultValueByIndex={0}
 							onSelect={(selectedItem) => {
-								onValueChange("country", selectedItem)
+								onValueChange("state", selectedItem)
 							}}
 							buttonTextAfterSelection={(selectedItem) => {
 								return selectedItem
