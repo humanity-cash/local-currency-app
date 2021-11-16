@@ -187,8 +187,7 @@ const BankLinkDialog = (props: BankLinkDialogProps) => {
 }
 
 const DrawerContent = (props: DrawerContentComponentProps) => {
-	const { cognitoId, userAttributes } = useContext(AuthContext);
-	const { signOut, updateUserType, completedCustomerVerification } = useContext(AuthContext);
+	const { user, signOut, updateUserType, userEmail, isVerifiedCustomer } = useContext(AuthContext);
 	const { authorization } = useUserDetails();
 	const [isExpanded, setIsExpanded] = useState<boolean>(false);
 	const [isVisible, setIsVisible] = useState<boolean>(false);
@@ -209,7 +208,7 @@ const DrawerContent = (props: DrawerContentComponentProps) => {
 
 	const onCashierViewConfirm = () => {
 		setIsCashierView(false);
-		updateUserType(cognitoId, UserType.Cashier);
+		updateUserType(userEmail, UserType.Cashier);
 	}
 
 	const onCashierViewCancel = () => {
@@ -226,11 +225,11 @@ const DrawerContent = (props: DrawerContentComponentProps) => {
 	}
 
 	const onPersonal = () => {
-		updateUserType(cognitoId, UserType.Customer);
+		updateUserType(userEmail, UserType.Customer);
 	}
 
-	const userTag = userAttributes?.["custom:personal.tag"] || undefined
-	const businessTag = userAttributes?.["custom:business.tag"] || undefined
+	const userTag = user?.customer?.tag || undefined
+	const businessTag = user?.business?.tag  || undefined
 
 	return (
 		<View style={styles.drawerWrap}>
@@ -257,7 +256,7 @@ const DrawerContent = (props: DrawerContentComponentProps) => {
 								</View>
 								<View style={styles.usernameView}>
 									<Text>{businessTag}</Text>
-									{(completedCustomerVerification || isCashierView) && <View style={styles.inlineView}>
+									{(isVerifiedCustomer || isCashierView) && <View style={styles.inlineView}>
 										<Text style={styles.fadeText}>
 											Switch account
 										</Text>
@@ -306,7 +305,7 @@ const DrawerContent = (props: DrawerContentComponentProps) => {
 							</View>
 						)}
 					</View>
-					<Text style={styles.berkAmount}>B$ {businessWallet.availableBalance}</Text>
+					<Text style={styles.berkAmount}>B$ {businessWallet?.availableBalance}</Text>
 					<Drawer.Section>
 						<DrawerItem
 							label={Translation.TABS.RECEIVE_PAYMENT}

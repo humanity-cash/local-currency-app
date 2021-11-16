@@ -3,8 +3,7 @@ import * as ImagePicker from 'expo-image-picker';
 import React, { useContext, useState } from 'react';
 import { Image, KeyboardAvoidingView, Platform, ScrollView, StyleSheet, TouchableOpacity, View } from "react-native";
 import { Text } from "react-native-elements";
-import { AuthContext } from 'src/auth';
-import { CognitoCustomerAttributesUpdate } from "src/auth/cognito/types";
+import { UserContext } from 'src/api/context';
 import { BUTTON_TYPES } from 'src/constants';
 import { BackBtn, BlockInput, Button, Header } from "src/shared/uielements";
 import { colors } from "src/theme/colors";
@@ -58,10 +57,10 @@ const styles = StyleSheet.create({
 });
 
 export const SettingsPersonalDetails = (): JSX.Element => {
-	const { userAttributes, updateAttributes } = useContext(AuthContext);
+	const { user } = useContext(UserContext);
 	const navigation = useNavigation();
 	const dispatch = useDispatch();
-	const username =  userAttributes['custom:personal.tag']
+	const username =  user?.customer?.tag;
 	const [state, setState] = useState({
 		avatar: '',
 		username
@@ -90,15 +89,18 @@ export const SettingsPersonalDetails = (): JSX.Element => {
 	};
 
 	const handleSave = async () => {
-		const attr: CognitoCustomerAttributesUpdate = {
-			"custom:personal.tag": state.username,
-		};
+		// const attr: CognitoCustomerAttributesUpdate = {
+		// 	"custom:personal.tag": state.username,
+		// };
+		const response = {
+			success: true
+		}
 
 		dispatch(updateLoadingStatus({
 			isLoading: true,
 			screen: LoadingScreenTypes.LOADING_DATA
 		}));
-		const response = await updateAttributes(attr);
+		// const response = await updateAttributes(attr);
 		dispatch(updateLoadingStatus({
 			isLoading: false,
 			screen: LoadingScreenTypes.LOADING_DATA

@@ -136,7 +136,7 @@ const BankLinkDialog = (props: BankLinkDialogProps) => {
 const DrawerContent = (
 	props: DrawerContentComponentProps<DrawerContentOptions>
 ) => {
-	const { signOut, cognitoId, updateUserType, userAttributes, completedBusinessVerification } = useContext(AuthContext);
+	const { signOut, userEmail, user, updateUserType, isVerifiedBusiness } = useContext(AuthContext);
 	const { authorization } = useUserDetails();
 	const [isExpanded, setIsExpanded] = useState<boolean>(false);
 	const [isBankDialog, setIsBankDialog] = useState<boolean>(false);
@@ -145,11 +145,11 @@ const DrawerContent = (
 	const { personalFundingSource } = useSelector((state: AppState) => state.fundingSourceReducer) as FundingSourceState;
 
 	const onMerchant = () => {
-		updateUserType(cognitoId, UserType.Business);
+		updateUserType(userEmail, UserType.Business);
 	};
 
 	const onCashier = () => {
-		updateUserType(cognitoId, UserType.Cashier);
+		updateUserType(userEmail, UserType.Cashier);
 	};
 
 	const onBankDialogConfirm = () => {
@@ -161,8 +161,8 @@ const DrawerContent = (
 		setIsBankDialog(false);
 	}
 
-	const customerTag = userAttributes?.["custom:personal.tag"];
-	const businessTag = userAttributes?.["custom:business.tag"];
+	const customerTag = user?.customer?.tag || undefined
+	const businessTag = user?.business?.tag || undefined
 
 	return (
 		<View style={styles.drawerWrap}>
@@ -191,7 +191,7 @@ const DrawerContent = (
 								</View>
 								<View style={styles.usernameView}>
 									<Text>{customerTag}</Text>
-									{completedBusinessVerification && <View style={styles.inlineView}>
+									{isVerifiedBusiness && <View style={styles.inlineView}>
 										<Text style={styles.fadeText}>
 											{Translation.COMMON.SWITCH_ACCOUNT}
 										</Text>
@@ -247,7 +247,7 @@ const DrawerContent = (
 							</View>
 						)}
 					</View>
-					<Text style={styles.berkAmount}>B$ {personalWallet.availableBalance}</Text>
+					<Text style={styles.berkAmount}>B$ {personalWallet?.availableBalance}</Text>
 					<Drawer.Section>
 						<DrawerItem
 							label="Scan to pay"

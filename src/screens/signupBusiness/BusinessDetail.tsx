@@ -1,6 +1,6 @@
 import { AntDesign } from '@expo/vector-icons';
 import { useNavigation } from "@react-navigation/native";
-import React, { ReactElement, useContext, useState } from "react";
+import React, { ReactElement, useContext } from "react";
 import {
 	KeyboardAvoidingView,
 	Platform,
@@ -10,6 +10,7 @@ import {
 } from "react-native";
 import { Text } from "react-native-elements";
 import SelectDropdown from 'react-native-select-dropdown';
+import { UserContext } from 'src/api/context';
 import { AuthContext } from "src/auth";
 import * as Routes from "src/navigation/constants";
 import { BackBtn, Button, CancelBtn, Header } from "src/shared/uielements";
@@ -73,10 +74,13 @@ const styles = StyleSheet.create({
 const BusinessDetail = (): ReactElement => {
 	const { signOut } = useContext(AuthContext);
 	const navigation = useNavigation();
-	/** Need to integrate business type from auth context here */
-	const [businessType, setBusinessType] = useState<BusinessType>(
-		BusinessType.SOLE_PROPRIETORSHIP
-	);
+	const { updateBusinessData } = useContext(UserContext);
+
+	const onValueChange = (name: string, change: string) => {
+		updateBusinessData({
+			[name]: change,
+		});
+	};
 
 	return (
 		<View style={viewBaseB}>
@@ -113,7 +117,7 @@ const BusinessDetail = (): ReactElement => {
 						data={businessTypes}
 						defaultValueByIndex={0}
 						onSelect={(selectedItem) => {
-							setBusinessType(selectedItem)
+							onValueChange('type', selectedItem)
 						}}
 						buttonTextAfterSelection={(selectedItem) => {
 							return selectedItem
