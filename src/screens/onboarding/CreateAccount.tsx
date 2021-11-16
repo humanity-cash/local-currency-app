@@ -70,12 +70,11 @@ const styles = StyleSheet.create({
 
 const CreateAccount = (): JSX.Element => {
 	const navigation = useNavigation();
-	const { signUpDetails, setSignUpDetails, setSignInDetails } = useContext(AuthContext);
+	const { signUpDetails, updateSignUpDetails } = useContext(AuthContext);
 	const [isSelected, setSelection] = useState(true);
 
 	const onValueChange = (_name: never, change: string) => {
-		setSignUpDetails({ email: change });
-		setSignInDetails({ email: change });
+		updateSignUpDetails({ email: change });
 	};
 
 	return (

@@ -57,22 +57,22 @@ const BusinessAddress = (): ReactElement => {
 		signOut,
 	} = useContext(AuthContext);
 	const navigation = useNavigation();
-	const { getBusinessData } = useContext(UserContext);
+	const { getBusinessData, createBusiness } = useContext(UserContext);
 	const business = getBusinessData();
 	const address1 = business?.address1;
 	const city = business?.city;
 	const postalCode = business?.postalCode;
 
 	useEffect(() => {
-		setGoNext(
-			address1 !== "" &&
-			city !== "" &&
-			postalCode !== ""
-		);
+		const allInputsFilled =
+			address1 !== ""
+			&& city !== ""
+			&& postalCode !== ""
+		setGoNext(allInputsFilled);
 	}, [address1, city, postalCode]);
 
 	const onNextPress = async () => {
-		console.log('next')
+		await createBusiness();
 	};
 
 	return (

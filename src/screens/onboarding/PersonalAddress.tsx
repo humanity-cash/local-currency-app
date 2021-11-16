@@ -60,7 +60,7 @@ const PersonalAddress = () => {
 	}, [address1,city, postalCode]);
 
 	const onNextPress = async () => {
-		createCustomer()
+		await createCustomer()
 	}
 
 	return (

@@ -11,23 +11,23 @@ import { useNavigation } from '@react-navigation/native';
 import { BusinessOwnerAddressForm } from 'src/shared/uielements/reusable';
 
 const styles = StyleSheet.create({
-    headerText: {
+	headerText: {
 		fontSize: 32,
-        lineHeight: 32,
+		lineHeight: 32,
 		color: colors.purple,
 	},
-    bodyView: {
-        paddingTop: 50,
-        paddingHorizontal: 17
-    },
-    bodyText: {
-        color: colors.bodyText
-    },
+	bodyView: {
+		paddingTop: 50,
+		paddingHorizontal: 17
+	},
+	bodyText: {
+		color: colors.bodyText
+	},
 	label: {
 		marginTop: 30,
-        color: colors.bodyText,
+		color: colors.bodyText,
 		fontSize: 10
-    },
+	},
 	input: {
 		color: colors.purple,
 		backgroundColor: colors.white
@@ -35,7 +35,7 @@ const styles = StyleSheet.create({
 	formView: {
 		paddingBottom: 120
 	},
-    bottomButton: {
+	bottomButton: {
 		width: '90%',
 		position: 'absolute',
 		bottom: 45,
@@ -58,13 +58,12 @@ const BusinessOwnerAddress = (): ReactElement => {
 				rightComponent={<CancelBtn color={colors.purple} text={Translation.BUTTON.LOGOUT} onClick={signOut} />}
 			/>
 			<ScrollView style={wrappingContainerBase}>
-                <View style={underlineHeaderB}>
-                    <Text style={styles.headerText}>{Translation.PROFILE.BUSINESS_OWNER}</Text>
-                </View>
+				<View style={underlineHeaderB}>
+					<Text style={styles.headerText}>{Translation.PROFILE.BUSINESS_OWNER}</Text>
+				</View>
 				<View style={styles.formView}>
 					<BusinessOwnerAddressForm style={styles.input} />
 				</View>
-				
 			</ScrollView>
 			<Button
 				type="purple"

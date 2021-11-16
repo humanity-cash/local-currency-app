@@ -49,8 +49,7 @@ const styles = StyleSheet.create({
 
 const Password = (): JSX.Element => {
 	const navigation = useNavigation();
-	const { setSignUpDetails, signUpDetails, signUp } = useContext(AuthContext);
-  console.log("🚀 ~ file: Password.tsx ~ line 53 ~ signUpDetails", signUpDetails)
+	const { updateSignUpDetails, signUpDetails, signUp } = useContext(AuthContext);
 	const [isValidPassword, setIsValidPassword] = useState<boolean>(false);
 
 	useEffect(() => {
@@ -68,10 +67,7 @@ const Password = (): JSX.Element => {
 		name: 'password' | 'confirmPassword',
 		change: string
 	) => {
-		setSignUpDetails({
-			...signUpDetails,
-			[name]: change,
-		});
+		updateSignUpDetails({ [name]: change });
 	};
 
 	return (
