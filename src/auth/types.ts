@@ -1,4 +1,4 @@
-import { CognitoUser, CognitoUserAttribute } from "amazon-cognito-identity-js";
+import { CognitoUser } from "amazon-cognito-identity-js";
 import { BaseUser } from "src/api/types";
 
 export interface CognitoCustomerAttributesUpdate {
@@ -127,7 +127,7 @@ export interface SignInInput {
 export interface SignUpInput {
 	email: string
 	password: string
-	attributeList: CognitoUserAttribute[]
+	confirmPassword: string
 }
 
 export interface ConfirmEmailVerificationCodeInput {
@@ -165,8 +165,6 @@ export interface IAuth {
 	forgotPasswordDetails: ForgotPassword, 
 	setForgotPasswordDetails?: any,
 	userEmail: string,
-	userType?: UserType | undefined,
-	updateUserType?: any,
 	setAuthStatus?: any,
 	startForgotPasswordFlow: () => Promise<BaseResponse<unknown>>,
 	completeForgotPasswordFlow: () => Promise<BaseResponse<unknown>>,
@@ -179,7 +177,7 @@ export interface IAuth {
 	signOut?: any;
 	getSession?: any;
 	signUpDetails?: any;
-	setSignUpDetails?: any;
+	updateSignUpDetails: (i: Partial<SignUpInput>) => void;
 	emailVerification?: any;
 	signUp?: any;
 	changePassword?: any
@@ -198,7 +196,7 @@ export const defaultState: IAuth = {
 
 export type CognitoError = any
 
-export type BaseResponse<T> = { success: boolean, data: T, error: string }
+export type BaseResponse<T> = { success: boolean, data?: T, error?: string }
 
 export const CognitoResponse = Promise
 export type CognitoResponse<T> = Promise<BaseResponse<T>>

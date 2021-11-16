@@ -7,49 +7,36 @@ import {
 	signInInitialState,
 	signUpInitialState
 } from "./consts";
-import { getLatestSelectedAccountType, saveUserTypeToStorage } from "./localStorage";
 import {
 	AuthStatus,
-	BaseResponse, ChangePasswordInput, defaultState, ForgotPassword, IAuth, UserType
+	BaseResponse, ChangePasswordInput, defaultState, ForgotPassword, IAuth, SignUpInput, UserType
 } from "./types";
 
 export const AuthContext = React.createContext(defaultState);
-
 const AuthProvider: React.FunctionComponent = ({ children }) => {
-	const [userType, setUserType] = useState<UserType | undefined>(undefined);
 	const [authStatus, setAuthStatus] = useState(AuthStatus.SignedOut);
-	const [update, setUpdate] = useState(false);
 	const [userEmail, setUserEmail] = useState<string>("");
 	const [signInDetails, setSignInDetails] = useState(signInInitialState);
-	const [signUpDetails, setSignUpDetails] = useState(signUpInitialState);
+	const [signUpDetails, setSignUpDetails] = 
+		useState<SignUpInput>(signUpInitialState);
 	const [forgotPasswordDetails, setForgotPasswordDetails] = useState<ForgotPassword>({
 		email: "",
 		verificationCode: "",
 		newPassword: "",
 	});
 
-	const updateUserType = (newType: UserType, uEmail = userEmail): void => {
-		if (newType === userType) {
-			setAuthStatus(AuthStatus.Loading);
-		} else {
-			setUserType(newType);
-		}
-		if (newType !== UserType.Cashier) {
-			// dont cache cashier option. it will lock the user in cashier screens
-			saveUserTypeToStorage(uEmail, newType);
-		}
-	};
+	const updateSignUpDetails = (i: Partial<SignUpInput>): void => {
+		setSignUpDetails((pv: SignUpInput) => ({ ...pv, ...i }))
+	}
 
 	const getSessionInfo = async () => {
 		try {
 			const response: BaseResponse<CognitoUserSession | undefined> =
 				await userController.getSession();
-      console.log("🚀  getSessionInfo ~ response", response.data?.getAccessToken().decodePayload().username)
 			if (response.success && response.data && response.data.isValid()) {
-				// await getAttributes(); // should invoke getUser from DB
+				setAuthStatus(AuthStatus.SignedIn);
 				const email = response.data.getAccessToken().decodePayload().username;
 				setUserEmail(email);
-				setAuthStatus(AuthStatus.SignedIn);
 			} else {
 				setAuthStatus(AuthStatus.SignedOut);
 			}
@@ -59,45 +46,10 @@ const AuthProvider: React.FunctionComponent = ({ children }) => {
 	}
 
 	useEffect(() => {
-		if(update){  
-			getSessionInfo(); 
-			setUpdate(false);
-		}
-	}, [update]);
-
-	useEffect(() => {
 		getSessionInfo();
-	}, [userType, authStatus]);
-
-	useEffect(() => {
-		initialTypeState('email') // :FIXME
-	}, [])
-
-	const initialTypeState = async (cognitoId: string) => {
-		if(cognitoId === undefined || cognitoId.length < 1) {
-			return
-		}
-		const latestType = await getLatestSelectedAccountType(cognitoId);
-		if (!latestType) {
-			if (userType !== UserType.Customer) {
-				updateUserType(UserType.Customer);
-			}
-		} else if (latestType === "2") {
-			if (userType !== UserType.Cashier) {
-				updateUserType(UserType.Cashier);
-			}
-		} else if (latestType === "0") {
-			if (userType !== UserType.Customer) {
-				updateUserType(UserType.Customer);
-			}
-		} else if (latestType === "1") {
-			if (userType !== UserType.Business) {
-				updateUserType(UserType.Business);
-			}
-		}
-	};
+	}, []);
 	
-	const emailVerification = (verificationCode: string) =>
+	const confirmEmailVerification = (verificationCode: string) =>
 		userController.confirmEmailVerificationCode(
 			signUpDetails.email,
 			verificationCode
@@ -107,12 +59,13 @@ const AuthProvider: React.FunctionComponent = ({ children }) => {
 		userController.resendEmailVerificationCode(signUpDetails.email);
 
 	const signUp = async () => {
+		setAuthStatus(AuthStatus.Loading)
 		const response = await userController.signUp(
 			signUpDetails.email.toLowerCase(),
 			signUpDetails.password
 		);
 		if (!response?.success) setAuthStatus(AuthStatus.SignedOut);
-		else setAuthStatus(AuthStatus.Loading); // Invokes getSession useEffect
+		else signIn(signUpDetails.email.toLowerCase(), signUpDetails.password);
 		return response;
 	};
 
@@ -120,13 +73,13 @@ const AuthProvider: React.FunctionComponent = ({ children }) => {
 		email = signInDetails.email,
 		password = signInDetails.password
 	) => {
+		setAuthStatus(AuthStatus.Loading)
 		const response: BaseResponse<CognitoUserSession> =
 			await userController.signIn({ email, password });
-    console.log("🚀 ~ file: index.tsx ~ line 120 ~ response", response)
 		if (!response?.success) {
 			setAuthStatus(AuthStatus.SignedOut);
 		} else {
-			setAuthStatus(AuthStatus.Loading); // Invokes getSession useEffect
+			await getSessionInfo();
 		}
 		return response;
 	};
@@ -167,32 +120,31 @@ const AuthProvider: React.FunctionComponent = ({ children }) => {
 	const signOut = () => {
 		userController.signOut();
 		setAuthStatus(AuthStatus.SignedOut);
-		setUserType(undefined)
-		if (userType === UserType.Cashier) {
-			setUserType(UserType.Business);
-		}
+		setUserEmail("");
 	};
 
-	const state: IAuth = {
-		userType,
-		forgotPasswordDetails, 
+	const actions = {
 		setForgotPasswordDetails,
-		authStatus,
 		signIn,
 		setAuthStatus,
 		signOut,
 		signUp,
 		setSignInDetails,
-		updateUserType,
-		signInDetails,
-		signUpDetails,
-		setSignUpDetails,
-		emailVerification,
+		updateSignUpDetails,	
 		startForgotPasswordFlow,
 		completeForgotPasswordFlow,
 		resendEmailVerificationCode,
 		changePassword,
-		userEmail
+		emailVerification: confirmEmailVerification,
+	}
+
+	const state: IAuth = {
+		...actions,
+		forgotPasswordDetails, 
+		authStatus,
+		signInDetails,
+		signUpDetails,
+		userEmail,
 	};
 
 	return (
