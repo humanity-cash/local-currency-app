@@ -5,13 +5,13 @@ import {
 	AuthorizationDetails, 
 	IMap, 
 	OnboardingState, 
-	PersonalDetails,
+	ClientDetails,
 } from "src/utils/types";
 
 const storeId = "ONBOARDING_DETAILS";
 
 const defaultState: OnboardingState = {
-	personalDetails: {
+	clientDetails: {
 		email: '',
 		emailVerified: false
 	},
@@ -26,7 +26,7 @@ let loaded = false;
 
 const useUserDetails = (): IMap => {
 	const [details] = useStore<OnboardingState>(storeId);
-	const { personalDetails, authorization } = details;
+	const { clientDetails, authorization } = details;
 
 	useEffect(() => {
 		async function readStorage() {
@@ -71,13 +71,13 @@ const useUserDetails = (): IMap => {
 			await storeInMemory(newState);
 	}, []);
 
-	const updatePersonalDetails = useCallback(
-		async (data: Partial<PersonalDetails>) => {
+	const updateClientDetails = useCallback(
+		async (data: Partial<ClientDetails>) => {
 			const currentState: OnboardingState = store.getState();
 			const newState: OnboardingState = {
 				...currentState,
-				personalDetails: {
-					...currentState.personalDetails,
+				clientDetails: {
+					...currentState.clientDetails,
 					...data
 				}
 			};
@@ -106,10 +106,10 @@ const useUserDetails = (): IMap => {
 		}, []);
 
 	return {
-		personalDetails,
+		clientDetails,
 		authorization,
 		update,
-		updatePersonalDetails,
+		updateClientDetails,
 		updateAuthorization,
 		resetState
 	}

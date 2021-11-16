@@ -15,7 +15,7 @@ import {
 	Button,
 	CancelBtn,
 	Header,
-	PersonalDetailsForm
+	ClientDetailsForm
 } from "src/shared/uielements";
 import { colors } from "src/theme/colors";
 import {
@@ -40,7 +40,7 @@ const styles = StyleSheet.create({
 	},
 });
 
-const PersonalDetails = (): JSX.Element => {
+const ClientDetails = (): JSX.Element => {
 	const { signOut, customerBasicVerificationDetails } = useContext(AuthContext);
 	const [goNext, setGoNext] = useState<boolean>(false);
 	const navigation = useNavigation();
@@ -50,7 +50,7 @@ const PersonalDetails = (): JSX.Element => {
 	}, [customerBasicVerificationDetails.firstName, customerBasicVerificationDetails.lastName]);
 
 	const onNextPress = () => {
-		navigation.navigate(Routes.PERSONAL_ADDRESS);
+		navigation.navigate(Routes.CLIENT_ADDRESS);
 	};
 
 	return (
@@ -68,12 +68,12 @@ const PersonalDetails = (): JSX.Element => {
 			<View style={wrappingContainerBase}>
 				<View style={underlineHeader}>
 					<Text style={styles.headerText}>
-						{Translation.PROFILE.PERSIONAL_DETAILS}
+						{Translation.PROFILE.CLIENT_DETAILS}
 					</Text>
 				</View>
 				<ScrollView>
 					<View style={styles.content}>
-						<PersonalDetailsForm />
+						<ClientDetailsForm />
 					</View>
 				</ScrollView>
 			</View>
@@ -92,4 +92,4 @@ const PersonalDetails = (): JSX.Element => {
 	);
 };
 
-export default PersonalDetails;
+export default ClientDetails;

@@ -1,20 +1,20 @@
 import { Dispatch } from 'redux'
-import { PERSONAL_WALLET_LOAD, BUSINESS_WALLET_LOAD } from '../action-types';
+import { CLIENT_WALLET_LOAD, BUSINESS_WALLET_LOAD } from '../action-types';
 import { UserAPI } from 'src/api';
 import errorHandler from '../errorHandler';
 
-export const loadPersonalWallet = (userId: string) => async (dispatch: Dispatch): Promise<void> => {
+export const loadClientWallet = (userId: string) => async (dispatch: Dispatch): Promise<void> => {
     try {
         const wallet = await UserAPI.getUser(userId);
 
         dispatch({
-            type: PERSONAL_WALLET_LOAD,
+            type: CLIENT_WALLET_LOAD,
             payload: {
-                personalWallet: wallet
+                clientWallet: wallet
             },
         });
     } catch (error) {
-        errorHandler(error, PERSONAL_WALLET_LOAD);
+        errorHandler(error, CLIENT_WALLET_LOAD);
     }
 }
 

@@ -52,7 +52,7 @@ const styles = StyleSheet.create({
 	},
 });
 
-const PersonalProfileForm = (): ReactElement => {
+const ClientProfileForm = (): ReactElement => {
 	const {
 		customerBasicVerificationDetails,
 		setCustomerBasicVerificationDetails,
@@ -125,4 +125,4 @@ const PersonalProfileForm = (): ReactElement => {
 	);
 };
 
-export default PersonalProfileForm;
+export default ClientProfileForm;

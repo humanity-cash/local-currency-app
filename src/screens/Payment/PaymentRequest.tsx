@@ -72,8 +72,8 @@ const PaymentRequest = (): JSX.Element => {
 		detail: "",
 		buttonTitle: ""
 	});
-	const { personalFundingSource } = useSelector((state: AppState) => state.fundingSourceReducer) as FundingSourceState;
-	const { personalWallet } = useSelector((state: AppState) => state.walletReducer) as WalletState;
+	const { clientFundingSource } = useSelector((state: AppState) => state.fundingSourceReducer) as FundingSourceState;
+	const { clientWallet } = useSelector((state: AppState) => state.walletReducer) as WalletState;
 
 	useEffect(() => {
 		setGoNext(Number(state.amount) > 0);
@@ -114,12 +114,12 @@ const PaymentRequest = (): JSX.Element => {
 	}
 
 	const onPressPay = () => {
-		if (personalWallet.availableBalance > 0) {
+		if (clientWallet.availableBalance > 0) {
 			navigation.navigate(Routes.QRCODE_SCAN)
 			return
 		}
 
-		if(personalFundingSource) {
+		if(clientFundingSource) {
 			setBankDialogInfo({
 				...bankDialogInfo,
 				isVisible: true,
@@ -139,7 +139,7 @@ const PaymentRequest = (): JSX.Element => {
 	const onBankDialogConfirm = () => {
 		onBankDialogCancel()
 
-		if(personalFundingSource) {
+		if(clientFundingSource) {
 			navigation.navigate(Routes.LOAD_UP);
 		} else {
 			navigation.navigate(Routes.SELECT_BANK);

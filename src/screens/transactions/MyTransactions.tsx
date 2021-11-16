@@ -15,7 +15,7 @@ import * as Routes from 'src/navigation/constants';
 import { getBerksharePrefix } from "src/utils/common";
 import { TransactionType, LoadingScreenTypes } from "src/utils/types";
 import { ITransaction } from 'src/api/types';
-import { loadPersonalTransactions } from 'src/store/transaction/transaction.actions';
+import { loadClientTransactions } from 'src/store/transaction/transaction.actions';
 import { TransactionState } from 'src/store/transaction/transaction.reducer';
 import { useSelector, useDispatch } from 'react-redux';
 import { AppState } from 'src/store';
@@ -27,6 +27,7 @@ import PaymentRequestSuccess from 'src/screens/payment/PaymentRequestSuccess';
 import DateTimePicker from "react-native-modal-datetime-picker";
 import { BarCodeScanner } from 'expo-barcode-scanner';
 import SettingDialog from 'src/shared/uielements/SettingDialog';
+import { FundingSourceState } from 'src/store/funding-source/funding-source.reducer';
 
 const styles = StyleSheet.create({
 	content: {
@@ -248,9 +249,9 @@ const MyTransactions = (): JSX.Element => {
 	const [receivedAmount, setReceivedAmount] = useState<number>(0);
 	const [isSetting, setIsSetting] = useState(false)
 
-	const { personalTransactions } = useSelector((state: AppState) => state.transactionReducer) as TransactionState;
-	const { personalWallet } = useSelector((state: AppState) => state.walletReducer) as WalletState;
-	const { personalFundingSource } = useSelector((state: AppState) => state.fundingSourceReducer) as FundingSourceState;
+	const { clientTransactions } = useSelector((state: AppState) => state.transactionReducer) as TransactionState;
+	const { clientWallet } = useSelector((state: AppState) => state.walletReducer) as WalletState;
+	const { clientFundingSource } = useSelector((state: AppState) => state.fundingSourceReducer) as FundingSourceState;
 
 	const [startDate, setStartDate] = useState<Date | undefined>(undefined);
 	const [endDate, setEndDate] = useState<Date | undefined>(undefined);
@@ -265,7 +266,7 @@ const MyTransactions = (): JSX.Element => {
 					isLoading: true,
 					screen: LoadingScreenTypes.LOADING_DATA
 				}));
-				await dispatch(loadPersonalTransactions(customerDwollaId));
+				await dispatch(loadClientTransactions(customerDwollaId));
 				dispatch(updateLoadingStatus({
 					isLoading: false,
 					screen: LoadingScreenTypes.LOADING_DATA
@@ -276,7 +277,7 @@ const MyTransactions = (): JSX.Element => {
 
 	const transactionList = useMemo(() => {
 		
-		let computedList: ITransaction[] = personalTransactions;
+		let computedList: ITransaction[] = clientTransactions;
 
 		// To do
 		if (searchText != '') {
@@ -303,7 +304,7 @@ const MyTransactions = (): JSX.Element => {
 		}
 
 		return computedList;
-	}, [personalTransactions, type, startDate, endDate, searchText]);
+	}, [clientTransactions, type, startDate, endDate, searchText]);
 
 	const onSearchChange = (name: string, change: string) => {
 		setSearchText(change);
@@ -366,7 +367,7 @@ const MyTransactions = (): JSX.Element => {
 	const onPressScan = async () => {
 		const {status} = await BarCodeScanner.requestPermissionsAsync();
 		if(status === 'granted') {
-			if(personalFundingSource && personalWallet.availableBalance > 0) {
+			if(clientFundingSource && clientWallet.availableBalance > 0) {
 				navigation.navigate(Routes.QRCODE_SCAN)
 			} else {
 				navigation.navigate(Routes.RECEIVE_PAYMENT)
@@ -386,7 +387,7 @@ const MyTransactions = (): JSX.Element => {
 					<Text style={styles.headerText}>{Translation.PAYMENT.MY_TRANSACTIONS}</Text>
 				</View>
 				<View style={styles.totalAmountView}>
-					<Text style={styles.amountText}>B$ {personalWallet.availableBalance}</Text>
+					<Text style={styles.amountText}>B$ {clientWallet.availableBalance}</Text>
 				</View>
 				
 				<ScrollView>

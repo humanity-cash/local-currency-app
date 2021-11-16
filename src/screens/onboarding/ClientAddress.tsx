@@ -17,7 +17,7 @@ import {
 	Button,
 	CancelBtn,
 	Header,
-	PersonalAddressForm
+	ClientAddressForm
 } from "src/shared/uielements";
 import { colors } from "src/theme/colors";
 import {
@@ -49,7 +49,7 @@ const styles = StyleSheet.create({
 	},
 });
 
-const PersonalAddress = (): React.ReactElement => {
+const ClientAddress = (): React.ReactElement => {
 	const [goNext, setGoNext] = useState<boolean>(false);
 	const { customerBasicVerificationDetails, 
 		completeCustomerBasicVerification, 
@@ -90,7 +90,7 @@ const PersonalAddress = (): React.ReactElement => {
 				screen: LoadingScreenTypes.LOADING_DATA
 			}));
 			const resApi = await UserAPI.user(request);
-			if (resApi.data) {
+			if (completeCustomerDwollaInfo && resApi.data) {
 				await completeCustomerDwollaInfo({
 					dwollaId: resApi.data.userId,
 					resourceUri: ""
@@ -123,12 +123,12 @@ const PersonalAddress = (): React.ReactElement => {
 			<View style={wrappingContainerBase}>
 				<View style={underlineHeader}>
 					<Text style={styles.headerText}>
-						{Translation.PROFILE.PERSIONAL_DETAILS}
+						{Translation.PROFILE.CLIENT_DETAILS}
 					</Text>
 				</View>
 				<ScrollView>
 					<View style={styles.content}>
-						<PersonalAddressForm userType={UserType.Customer} />
+						<ClientAddressForm userType={UserType.Customer} />
 					</View>
 				</ScrollView>
 			</View>
@@ -147,4 +147,4 @@ const PersonalAddress = (): React.ReactElement => {
 	);
 };
 
-export default PersonalAddress;
+export default ClientAddress;

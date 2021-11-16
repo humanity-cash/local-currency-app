@@ -8,7 +8,7 @@ import Translation from "../../../translation/en.json";
 import BlockInput from "../BlockInput";
 import { IMap } from "src/utils/types";
 
-interface PersonalDetailsProps {
+interface ClientDetailsProps {
 	style?: IMap;
 }
 
@@ -52,14 +52,14 @@ const Header = () => {
 	return (
 		<View style={styles.container}>
 			<Text style={styles.bodyText}>
-				{Translation.PROFILE.PERSIONAL_DETAILS_BODY}
+				{Translation.PROFILE.CLIENT_DETAILS_BODY}
 			</Text>
 		</View>
 	);
 };
 
 const BusinessOwnerDetailsForm = (
-	props: PersonalDetailsProps
+	props: ClientDetailsProps
 ): ReactElement => {
 	const { buisnessBasicVerification, setBuisnessBasicVerification } =
 		useContext(AuthContext);

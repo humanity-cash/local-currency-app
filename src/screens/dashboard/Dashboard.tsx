@@ -18,8 +18,8 @@ import { baseHeader, viewBase, wrappingContainerBase } from 'src/theme/elements'
 import Translation from 'src/translation/en.json';
 import DwollaDialog from './DwollaDialog';
 import { LoadingScreenTypes } from 'src/utils/types';
-import { loadPersonalWallet } from 'src/store/wallet/wallet.actions';
-import { loadPersonalFundingSource } from 'src/store/funding-source/funding-source.actions';
+import { loadClientWallet } from 'src/store/wallet/wallet.actions';
+import { loadClientFundingSource } from 'src/store/funding-source/funding-source.actions';
 import { WalletState } from 'src/store/wallet/wallet.reducer';
 import { FundingSourceState } from 'src/store/funding-source/funding-source.reducer';
 import { useSelector, useDispatch } from 'react-redux';
@@ -197,14 +197,14 @@ const Dashboard = (): JSX.Element => {
 	const [notifications, setNotifications] = useState<INotificationResponse[]>([])
 	const [isSetting, setIsSetting] = useState(false)
 
-	const { personalWallet } = useSelector((state: AppState) => state.walletReducer) as WalletState;
-	const { personalFundingSource } = useSelector((state: AppState) => state.fundingSourceReducer) as FundingSourceState;
+	const { clientWallet } = useSelector((state: AppState) => state.walletReducer) as WalletState;
+	const { clientFundingSource } = useSelector((state: AppState) => state.fundingSourceReducer) as FundingSourceState;
 
 	useEffect(() => {
 		if (customerDwollaId) {
 			(async () => {
 				dispatch(showLoadingProgress(LoadingScreenTypes.LOADING_DATA))
-				await dispatch(loadPersonalFundingSource(customerDwollaId));
+				await dispatch(loadClientFundingSource(customerDwollaId));
 				dispatch(hideLoadingProgress())
 			})();
 		}
@@ -221,7 +221,7 @@ const Dashboard = (): JSX.Element => {
 
 	const updateNotification = async () => {
 		if(customerDwollaId) {
-			dispatch(loadPersonalWallet(customerDwollaId));
+			dispatch(loadClientWallet(customerDwollaId));
 			const notis = await UserAPI.getNotifications(customerDwollaId)
 			setNotifications(notis)
 			if(notis.length > 0) {
@@ -237,7 +237,7 @@ const Dashboard = (): JSX.Element => {
 	}
 
 	const selectBank = () => {
-		if (personalFundingSource) {
+		if (clientFundingSource) {
 			navigation.navigate(Routes.LOAD_UP);
 		} else {
 			navigation.navigate(Routes.SELECT_BANK);
@@ -254,7 +254,7 @@ const Dashboard = (): JSX.Element => {
 	const onPressScan = async () => {
 		const {status} = await BarCodeScanner.requestPermissionsAsync();
 		if(status === 'granted') {
-			if(personalFundingSource && personalWallet.availableBalance > 0) {
+			if(clientFundingSource && clientWallet.availableBalance > 0) {
 				navigation.navigate(Routes.QRCODE_SCAN)
 			} else {
 				navigation.navigate(Routes.RECEIVE_PAYMENT)
@@ -290,16 +290,16 @@ const Dashboard = (): JSX.Element => {
 					</Text>
 				</View>
 				<View style={styles.amountView}>
-					<Text style={styles.text}>B$ {personalFundingSource ? personalWallet.availableBalance : '-'}</Text>
+					<Text style={styles.text}>B$ {clientFundingSource ? clientWallet.availableBalance : '-'}</Text>
 					<TouchableOpacity
 						style={styles.topupButton}
-						onPress={() => personalFundingSource ? navigation.navigate(Routes.LOAD_UP) : setIsLoadup(true)}>
+						onPress={() => clientFundingSource ? navigation.navigate(Routes.LOAD_UP) : setIsLoadup(true)}>
 						<Text style={styles.topupText}>Load up B$</Text>
 					</TouchableOpacity>
 				</View>
 				<ScrollView>
 					<View style={styles.content}>
-						{!personalFundingSource ? (
+						{!clientFundingSource ? (
 							<View style={styles.warningView}>
 								<AntDesign
 									name='exclamationcircleo'
@@ -383,11 +383,11 @@ const Dashboard = (): JSX.Element => {
 			<BankLinkDialog 
 				visible={isLoadup || isPayment}
 				description={isLoadup ? Translation.LOAD_UP.LOAD_UP_NO_BANK_DETAIL 
-					: personalWallet.availableBalance > 0 
+					: clientWallet.availableBalance > 0 
 						? Translation.PAYMENT.PAYMENT_NO_BALANCE_DETAIL
 						: Translation.PAYMENT.PAYMENT_NO_BANK_DETAIL}
 				buttonTitle={
-					personalFundingSource 
+					clientFundingSource 
 						? Translation.BUTTON.LOAD_UP_BERKSHARES
 						: Translation.BUTTON.LINK_BANK
 				}

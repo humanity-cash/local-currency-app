@@ -11,8 +11,8 @@ import LinkBankAccount from './onboarding/LinkBankAccount';
 import Passcode from "./onboarding/Passcode";
 import Password from "./onboarding/Password";
 import PasswordConfirm from "./onboarding/PasswordConfirm";
-import PersonalAddress from "./onboarding/PersonalAddress";
-import PersonalDetails from "./onboarding/PersonalDetails";
+import ClientAddress from "./onboarding/ClientAddress";
+import ClientDetails from "./onboarding/ClientDetails";
 import SelectAccountType from "./onboarding/SelectAccountType";
 import SelectBank from "./onboarding/SelectBank";
 import SelectPayment from "./onboarding/SelectPayment";
@@ -29,7 +29,7 @@ import QRCodeScan from "./payment/QRCodeScan";
 
 export {
 	Teaser, CreateAccount, Verification, VerificationHelp, Password, PasswordConfirm, Passcode, TouchId,
-	PersonalDetails, PersonalAddress, TermsEmail, ConfirmEmail, EmailConfirmed, LoadUp, LoadUpSuccess, SelectPayment,
+	ClientDetails, ClientAddress, TermsEmail, ConfirmEmail, EmailConfirmed, LoadUp, LoadUpSuccess, SelectPayment,
 	CreditCard, Login, Dashboard, LinkBankAccount, SelectBank, SelectAccountType, Tabs, QRCodeScan, 
 	PaymentPending, PaymentSuccess, PaymentRequest, BusinessDictionary
 };
