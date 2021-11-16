@@ -1,10 +1,21 @@
-import { UserId, AxiosPromiseResponse, IUserRequest, IDepositRequest, IWithdrawalRequest, ITransactionRequest, ITransaction, IUser} from './types';
+import { UserId, AxiosPromiseResponse, IUserRequest, IDepositRequest, IWithdrawalRequest, ITransactionRequest, ITransaction, IUser, Business, Customer } from './types';
 import { getRequest, postRequest } from './base';
 import { userData, transactionDatas, fundingSource } from './formatters';
 
 // create local currency user
 export const createUser = async (request: IUserRequest): Promise<AxiosPromiseResponse> => {
   const response = await postRequest(`/users`, request);
+  return response;
+};
+
+export const addCustomerVerification = async (businessDwollaId: string, request: Customer): Promise<AxiosPromiseResponse> => {
+  const response = await postRequest(`/users/${businessDwollaId}/customer`, { customer: request });
+  return response;
+};
+
+export const addBusinessVerification = async (customerDwollaId: string, request: Business): Promise<AxiosPromiseResponse> => {
+  console.log("🚀 ~ file: user.ts ~ line 18 ~ addBusinessVerification ~ request", request)
+  const response = await postRequest(`/users/${customerDwollaId}/business`, { business: request });
   return response;
 };
 
@@ -43,6 +54,14 @@ export const webhook = async (): Promise<AxiosPromiseResponse> => {
 export const health = async (): Promise<AxiosPromiseResponse> => {
   const response = await getRequest(`/health`);
   return response;
+};
+
+type Email = string;
+
+export const getUserByEmail = async (email: Email): Promise<any> => {
+  const response: AxiosPromiseResponse = await getRequest(`/users/email/${email}`);
+  const data = response?.data;
+  return data;
 };
 
 // Retrieve user information and balances
