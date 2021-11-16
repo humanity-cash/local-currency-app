@@ -2,7 +2,7 @@
 import Login from "./authentication/Login";
 import Dashboard from "./dashboard/Dashboard";
 import Tabs from "./dashboard/Tabs";
-import MerchantDictionary from "./merchant/MerchantDictionary";
+import BusinessDictionary from "./business/BusinessDictionary";
 import ConfirmEmail from "./onboarding/ConfirmEmail";
 import CreateAccount from "./onboarding/CreateAccount";
 import CreditCard from "./onboarding/CreditCard";
@@ -31,6 +31,6 @@ export {
 	Teaser, CreateAccount, Verification, VerificationHelp, Password, PasswordConfirm, Passcode, TouchId,
 	PersonalDetails, PersonalAddress, TermsEmail, ConfirmEmail, EmailConfirmed, LoadUp, LoadUpSuccess, SelectPayment,
 	CreditCard, Login, Dashboard, LinkBankAccount, SelectBank, SelectAccountType, Tabs, QRCodeScan, 
-	PaymentPending, PaymentSuccess, PaymentRequest, MerchantDictionary
+	PaymentPending, PaymentSuccess, PaymentRequest, BusinessDictionary
 };
 

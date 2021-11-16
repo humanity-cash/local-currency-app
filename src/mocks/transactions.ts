@@ -1,6 +1,6 @@
-import { MerchantTransactionItem, TransactionType } from "../utils/types";
+import { BusinessTransactionItem, TransactionType } from "../utils/types";
 
-export const merchantTransactions: MerchantTransactionItem[] = [
+export const businessTransactions: BusinessTransactionItem[] = [
 	{
 		transactionId: '12345',
 		type: TransactionType.SALE,

@@ -1,10 +1,10 @@
-import { MerchantCategory } from "../utils/types";
+import { BusinessCategory } from "../utils/types";
 
-const list: MerchantCategory[] = [
+const list: BusinessCategory[] = [
 	{
 		id: '6543',
 		name: 'ARTS & ENTERTAINMENT',
-		merchants: [
+		businesses: [
 			{
 				title: 'ABBOTTSS LIMOUSINE SERVICE',
 				description: 'We have treasures for your home and lifestyle, along with the perfect gift for that special someone or that occasion that begs for something unique.',
@@ -31,7 +31,7 @@ const list: MerchantCategory[] = [
 	}, {
 		id: '6544',
 		name: 'COMMUNITY & EDUCATION',
-		merchants: [
+		businesses: [
 			{
 				title: 'DORY & GINGER',
 				description: 'We have treasures for your home and lifestyle, along with the perfect gift for that special someone or that occasion that begs for something unique.',
@@ -65,7 +65,7 @@ const list: MerchantCategory[] = [
 	}, {
 		id: '6545',
 		name: 'FOOD & DRINK',
-		merchants: [
+		businesses: [
 			{
 				title: 'DORY & GINGER',
 				description: 'We have treasures for your home and lifestyle, along with the perfect gift for that special someone or that occasion that begs for something unique.',
@@ -92,7 +92,7 @@ const list: MerchantCategory[] = [
 	}, {
 		id: '6546',
 		name: 'HEALTH & WELNESS',
-		merchants: [
+		businesses: [
 			{
 				title: 'DORY & GINGER',
 				description: 'We have treasures for your home and lifestyle, along with the perfect gift for that special someone or that occasion that begs for something unique.',
@@ -119,7 +119,7 @@ const list: MerchantCategory[] = [
 	}, {
 		id: '6547',
 		name: 'LODGING',
-		merchants: [
+		businesses: [
 			{
 				title: 'DORY & GINGER',
 				description: 'We have treasures for your home and lifestyle, along with the perfect gift for that special someone or that occasion that begs for something unique.',
@@ -146,7 +146,7 @@ const list: MerchantCategory[] = [
 	}, {
 		id: '6548',
 		name: 'SHOPPING',
-		merchants: [
+		businesses: [
 			{
 				title: 'DORY & GINGER',
 				description: 'We have treasures for your home and lifestyle, along with the perfect gift for that special someone or that occasion that begs for something unique.',
@@ -173,7 +173,7 @@ const list: MerchantCategory[] = [
 	}, {
 		id: '6549',
 		name: 'SERVICES',
-		merchants: [
+		businesses: [
 			{
 				title: 'DORY & GINGER',
 				description: 'We have treasures for your home and lifestyle, along with the perfect gift for that special someone or that occasion that begs for something unique.',

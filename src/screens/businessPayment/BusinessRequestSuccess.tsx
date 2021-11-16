@@ -13,9 +13,6 @@ const styles = StyleSheet.create({
         lineHeight: 40,
         color: colors.purple
     },
-	bodyText: {
-		color: colors.bodyText
-	},
     bottomView: {
 		padding: 20,
 		paddingBottom: 45
@@ -28,27 +25,23 @@ type BusinessRequestSuccessProps = {
     amount: number
 }
 
-const CashierRequestSuccess = (props: BusinessRequestSuccessProps): JSX.Element => {
+const BusinessRequestSuccess = (props: BusinessRequestSuccessProps): JSX.Element => {
     return (
         <Modal visible={props.visible}>
             <SafeAreaView style={ modalViewBase }>
-                <ModalHeader
-                    rightComponent={<CancelBtn text="Close" color={colors.purple} onClick={props.onClose} />}
-                />
-                <ScrollView style={wrappingContainerBase}>
-                    <View style={baseHeader}>
+                <ModalHeader />
+                    <View style={{paddingHorizontal: 10, flex: 1}}>
                         <Text style={styles.headerText}>
-                            {Translation.CASHIER.PAYMENT_SUCCESS} {props.amount.toFixed(2)}.
+                            Succeeded! You have received B$ {props.amount.toFixed(2)}.
                         </Text>
+                        <View style={{flex: 1, margin: 15, justifyContent: 'center', alignItems: 'center'}}>
+                            <Image
+                                source={require("../../../assets/images/burkshare_paper_money.png")}
+                                style={{justifyContent: 'center', width: '100%'}}
+                                resizeMode='contain'
+                            />			
+                        </View>
                     </View>
-					<View style={{flex: 1, margin: 15, justifyContent: 'center', alignItems: 'center'}}>
-                        <Image
-                            source={require("../../../assets/images/burkshare_paper_money.png")}
-                            style={{justifyContent: 'center', width: '100%'}}
-                            resizeMode='contain'
-                        />			
-                    </View>
-                </ScrollView>
                 <KeyboardAvoidingView
                     behavior={Platform.OS == "ios" ? "padding" : "height"} >
                     <View style={styles.bottomView}>
@@ -64,4 +57,4 @@ const CashierRequestSuccess = (props: BusinessRequestSuccessProps): JSX.Element 
     )
 }
 
-export default CashierRequestSuccess;
+export default BusinessRequestSuccess;

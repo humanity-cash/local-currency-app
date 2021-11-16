@@ -78,7 +78,7 @@ const PaymentReceiveAmount = (): JSX.Element => {
 
 	const onLoadupDialogConfirm = () => {
 		setIsLowAmountDialog(false);
-		navigation.navigate(userType == UserType.Customer ? Routes.LOAD_UP : Routes.MERCHANT_LOADUP);
+		navigation.navigate(userType == UserType.Customer ? Routes.LOAD_UP : Routes.BUSINESS_LOADUP);
 	}
 
 	const onLoadupDialogCancel = () => {
