@@ -26,15 +26,15 @@ export const buisnessBasicVerificationInitialState: BusinessBasicVerification = 
 
 export const customerBasicVerificationInitialState: CustomerBasicVerification = {
 	type: "personal",
-	tag: "",
+	tag: "Esraa",
 	avatar: "",
-	firstName: "",
-	lastName: "",
-	address1: "",
-	address2: "",
-	city: "",
-	state: "",
-	postalCode: "",
+	firstName: "Esraa",
+	lastName: "Jbara",
+	address1: "Address 1",
+	address2: "Address 2",
+	city: "City",
+	state: "MA",
+	postalCode: "1232123",
 }
 
 export const dwollaInfoInitialState: DwollaInfo = {
@@ -43,12 +43,12 @@ export const dwollaInfoInitialState: DwollaInfo = {
 }
 
 export const signInInitialState = {
-	email: "esraa+4321@humanity.cash",
-	password: "Twinpeaks1301@",
+	email: "esraa+8282@humanity.cash",
+	password: "HumanityCash1122@",
 }
 
 export const signUpInitialState = {
-	email: "esraa+4321@humanity.cash",
-	password: "Twinpeaks1301@",
-	confirmPassword: "Twinpeaks1301@",
+	email: "esraa+8282@humanity.cash",
+	password: "HumanityCash1122@",
+	confirmPassword: "HumanityCash1122@",
 }
