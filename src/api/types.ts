@@ -13,28 +13,6 @@ export interface BaseUser {
     postalCode: string;
 }
 
-export interface IDBMiniNewBusinessInput {
-    story: string,
-    tag: string,
-    avatar: string,
-    type: string,
-    rbn: string,
-    industry: string,
-    ein: string,
-    address1: string,
-    address2: string,
-    city: string,
-    state: string,
-    postalCode: string,
-    phoneNumber: string,
-    owner: BaseUser
-}
-
-export interface IDBMiniNewCustomerInput extends BaseUser {
-    avatar: string;
-    tag: string;
-}
-
 export interface IUser {
     consent: boolean
     verifiedCustomer: boolean
@@ -77,8 +55,8 @@ export interface IUserRequest {
     email: string;
     consent: boolean;
     type: string; // 'customer' | 'business';
-    business?: IDBMiniNewBusinessInput;
-    customer?: IDBMiniNewCustomerInput;
+    business?: Business;
+    customer?: Customer;
 }
 
 // export interface IUser {
