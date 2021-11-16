@@ -6,7 +6,7 @@ export type BirthDate = {
 
 export type OnboardingState = {
   authorization: AuthorizationDetails;
-  personalDetails: PersonalDetails;
+  clientDetails: ClientDetails;
 };
 
 export type AuthorizationDetails = {
@@ -14,12 +14,12 @@ export type AuthorizationDetails = {
   cashierView: boolean;
 };
 
-export type PersonalDetails = {
+export type ClientDetails = {
   email: string;
   emailVerified: boolean;
 };
 
-export type PersonalDetailsErrors = {
+export type ClientDetailsErrors = {
   firstname?: string;
   lastname?: string;
   username?: string;
@@ -27,7 +27,7 @@ export type PersonalDetailsErrors = {
   dateOfBirth?: string;
 };
 
-export type PersonalAddressErrors = {
+export type ClientAddressErrors = {
   addressLine?: string;
   addressLine2?: string;
   zipCode?: string;
@@ -36,7 +36,7 @@ export type PersonalAddressErrors = {
 };
 
 export type Status = {
-  personalDetails: boolean;
+  clientDetails: boolean;
   cashAdded: boolean;
   terms: boolean;
   verifyId: boolean;

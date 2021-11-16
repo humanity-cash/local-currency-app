@@ -57,7 +57,7 @@ const styles = StyleSheet.create({
 	},
 });
 
-export const SettingsPersonalDetails = (): JSX.Element => {
+export const SettingsClientDetails = (): JSX.Element => {
 	const { userAttributes, updateAttributes } = useContext(AuthContext);
 	const navigation = useNavigation();
 	const dispatch = useDispatch();
@@ -161,4 +161,4 @@ export const SettingsPersonalDetails = (): JSX.Element => {
 	);
 };
 
-export default SettingsPersonalDetails;
+export default SettingsClientDetails;

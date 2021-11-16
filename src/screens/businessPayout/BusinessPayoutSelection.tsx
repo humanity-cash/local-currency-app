@@ -52,7 +52,7 @@ const BusinessPayoutSelection = (): JSX.Element => {
 				<View style={styles.accountType}>
 					<Button 
 						type={BUTTON_TYPES.TRANSPARENT}
-						onPress={() => navigation.navigate(Routes.BUSINESS_PAYOUT_PERSONAL)} 
+						onPress={() => navigation.navigate(Routes.BUSINESS_PAYOUT_CLIENT)} 
 						title={Translation.BUTTON.MY_PERSONAL_ACCOUNT}
 						textStyle={styles.text}
 						style={styles.button} />

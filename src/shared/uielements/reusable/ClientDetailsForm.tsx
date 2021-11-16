@@ -7,7 +7,7 @@ import { colors } from "src/theme/colors";
 import Translation from "src/translation/en.json";
 import BlockInput from "../BlockInput";
 
-interface PersonalDetailsProps {
+interface ClientDetailsProps {
 	style?: any;
 }
 
@@ -51,14 +51,14 @@ const Header = () => {
 	return (
 		<View style={styles.container}>
 			<Text style={styles.bodyText}>
-				{Translation.PROFILE.PERSIONAL_DETAILS_BODY}
+				{Translation.PROFILE.CLIENT_DETAILS_BODY}
 			</Text>
 		</View>
 	);
 };
 
 export const BusinessOwnerDetailsForm = (
-	props: PersonalDetailsProps
+	props: ClientDetailsProps
 ): ReactElement => {
 	const { buisnessBasicVerification, setBuisnessBasicVerification } =
 		useContext(AuthContext);
@@ -95,7 +95,7 @@ export const BusinessOwnerDetailsForm = (
 	);
 };
 
-const PersonalDetailsForm = (props: PersonalDetailsProps): ReactElement => {
+const ClientDetailsForm = (props: ClientDetailsProps): ReactElement => {
 	const {
 		customerBasicVerificationDetails,
 		setCustomerBasicVerificationDetails,
@@ -133,4 +133,4 @@ const PersonalDetailsForm = (props: PersonalDetailsProps): ReactElement => {
 	);
 };
 
-export default PersonalDetailsForm;
+export default ClientDetailsForm;

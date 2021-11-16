@@ -19,8 +19,8 @@ import { showToast } from 'src/utils/common';
 import { UserAPI } from 'src/api';
 import { ITransactionRequest } from 'src/api/types';
 import { AuthContext } from 'src/auth';
-import { loadPersonalWallet, loadBusinessWallet } from 'src/store/wallet/wallet.actions';
-import { loadPersonalTransactions, loadBusinessTransactions } from 'src/store/transaction/transaction.actions';
+import { loadClientWallet, loadBusinessWallet } from 'src/store/wallet/wallet.actions';
+import { loadClientTransactions, loadBusinessTransactions } from 'src/store/transaction/transaction.actions';
 import BankLinkDialog from 'src/shared/uielements/BankLinkDialog';
 import { UserType } from '../../auth/types';
 
@@ -53,7 +53,7 @@ const PaymentReceiveAmount = (): JSX.Element => {
 	const [isLowAmountDialog, setIsLowAmountDialog] = useState<boolean>(false);
 	const [dwollaId, setDwollaId] = useState<string|undefined>(undefined)
 	
-	const { personalWallet, businessWallet } = useSelector((state: AppState) => state.walletReducer) as WalletState;
+	const { clientWallet, businessWallet } = useSelector((state: AppState) => state.walletReducer) as WalletState;
 	const { customerDwollaId, businessDwollaId, userType } = useContext(AuthContext);
 
 	const [state, setState] = useState<any>({
@@ -88,9 +88,9 @@ const PaymentReceiveAmount = (): JSX.Element => {
 	const handleOpenPay = async () => {
 		const amout = Number(openAmount)
 		// check balance
-		const wallet = userType == UserType.Customer ? personalWallet : businessWallet
-		const loadWallet = userType == UserType.Customer ? loadPersonalWallet : loadBusinessWallet
-		const loadTransactions = userType == UserType.Customer ? loadPersonalTransactions : loadBusinessTransactions
+		const wallet = userType == UserType.Customer ? clientWallet : businessWallet
+		const loadWallet = userType == UserType.Customer ? loadClientWallet : loadBusinessWallet
+		const loadTransactions = userType == UserType.Customer ? loadClientTransactions : loadBusinessTransactions
 		if (wallet.availableBalance <= amout) {
 			setIsLowAmountDialog(true);
 		} else {

@@ -5,7 +5,7 @@ import { Text } from 'react-native-elements';
 import { AuthContext } from 'src/auth';
 import { BUTTON_TYPES } from 'src/constants';
 import * as Routes from 'src/navigation/constants';
-import { BackBtn, Button, CancelBtn, Header, PersonalProfileForm } from 'src/shared/uielements';
+import { BackBtn, Button, CancelBtn, Header, ClientProfileForm } from 'src/shared/uielements';
 import { colors } from "src/theme/colors";
 import { underlineHeader, viewBase, wrappingContainerBase } from "src/theme/elements";
 import Translation from 'src/translation/en.json';
@@ -23,7 +23,7 @@ const styles = StyleSheet.create({
 	},
 });
 
-const PersonalProfile = (): ReactElement => {
+const ClientProfile = (): ReactElement => {
 	const navigation = useNavigation();
 	const [goNext, setGoNext] = useState<boolean>(false);
 	const { signOut, customerBasicVerificationDetails } = useContext(AuthContext);
@@ -33,7 +33,7 @@ const PersonalProfile = (): ReactElement => {
 	}, [customerBasicVerificationDetails.tag]);
 
 	const onNextPress = () => {
-		navigation.navigate(Routes.PERSONAL_DETAILS);
+		navigation.navigate(Routes.CLIENT_DETAILS);
 	}
 
 	return (
@@ -48,7 +48,7 @@ const PersonalProfile = (): ReactElement => {
 					<Text style={styles.headerText}>{Translation.PROFILE.SETUP_PROFILE}</Text>
 				</View>
 				<ScrollView>
-					<PersonalProfileForm />
+					<ClientProfileForm />
 				</ScrollView>
 			</View>
 			<KeyboardAvoidingView
@@ -67,4 +67,4 @@ const PersonalProfile = (): ReactElement => {
 	);
 }
 
-export default PersonalProfile
+export default ClientProfile

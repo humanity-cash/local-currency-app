@@ -5,7 +5,7 @@ import { Text } from "react-native-elements";
 import { colors } from "src/theme/colors";
 import { FontFamily } from "src/theme/elements";
 
-interface PersonalDetailsCardProps {
+interface ClientDetailsCardProps {
 	onPress?: () => void,
 	name: string,
 	value: string,
@@ -32,7 +32,7 @@ const styles = StyleSheet.create({
 	}
 })
 
-const PersonalDetailsCard = (props: PersonalDetailsCardProps) => {
+const ClientDetailsCard = (props: ClientDetailsCardProps) => {
 	return (
 		<TouchableWithoutFeedback onPress={props.onPress}>
 			<View style={{ ...styles.view, opacity: props.disabled ? 0.7 : 1 }}>
@@ -53,4 +53,4 @@ const PersonalDetailsCard = (props: PersonalDetailsCardProps) => {
 	)
 }
 
-export default PersonalDetailsCard;
+export default ClientDetailsCard;

@@ -1,20 +1,20 @@
 import { Dispatch } from 'redux'
-import { PERSONAL_FUNDING_SOURCE_LOAD, BUSINESS_FUNDING_SOURCE_LOAD } from '../action-types';
+import { CLIENT_FUNDING_SOURCE_LOAD, BUSINESS_FUNDING_SOURCE_LOAD } from '../action-types';
 import { UserAPI } from 'src/api';
 import errorHandler from '../errorHandler';
 
-export const loadPersonalFundingSource = (userId: string) => async (dispatch: Dispatch): Promise<void> => {
+export const loadClientFundingSource = (userId: string) => async (dispatch: Dispatch): Promise<void> => {
     try {
         const fundingSource = await UserAPI.getFundingSources(userId);
 
         dispatch({
-            type: PERSONAL_FUNDING_SOURCE_LOAD,
+            type: CLIENT_FUNDING_SOURCE_LOAD,
             payload: {
-                personalFundingSource: fundingSource
+                clientFundingSource: fundingSource
             },
         });
     } catch (error) {
-        errorHandler(error, PERSONAL_FUNDING_SOURCE_LOAD);
+        errorHandler(error, CLIENT_FUNDING_SOURCE_LOAD);
     }
 }
 

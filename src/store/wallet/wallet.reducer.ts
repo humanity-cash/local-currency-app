@@ -1,22 +1,22 @@
 import { Action } from 'redux';
-import { PERSONAL_WALLET_LOAD, BUSINESS_WALLET_LOAD } from '../action-types';
+import { CLIENT_WALLET_LOAD, BUSINESS_WALLET_LOAD } from '../action-types';
 import { IUser } from 'src/api/types';
 
 export interface WalletState {
-    personalWallet: IUser,
+    clientWallet: IUser,
     businessWallet: IUser,
 }
 
 interface WalletAction extends Action {
     type: string,
     payload: {
-        personalWallet?: IUser,
+        clientWallet?: IUser,
         businessWallet?: IUser,
     }
 }
 
 const initialState: WalletState = {
-    personalWallet: {
+    clientWallet: {
         totalBalance: 0,
         availableBalance: 0,
         userId: "",
@@ -34,7 +34,7 @@ const initialState: WalletState = {
 
 export const walletReducer = (state = initialState, action: WalletAction): WalletState => {
     switch(action.type) {
-        case PERSONAL_WALLET_LOAD: 
+        case CLIENT_WALLET_LOAD: 
             return {
                 ...state,
                 ...action.payload

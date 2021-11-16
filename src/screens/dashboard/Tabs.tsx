@@ -115,8 +115,8 @@ const DrawerContent = (
 	const [isBankDialog, setIsBankDialog] = useState<boolean>(false);
 	const [isLoadupDialog, setIsLoadupDialog] = useState<boolean>(false);
 
-	const { personalWallet } = useSelector((state: AppState) => state.walletReducer) as WalletState;
-	const { personalFundingSource } = useSelector((state: AppState) => state.fundingSourceReducer) as FundingSourceState;
+	const { clientWallet } = useSelector((state: AppState) => state.walletReducer) as WalletState;
+	const { clientFundingSource } = useSelector((state: AppState) => state.fundingSourceReducer) as FundingSourceState;
 
 	const onBusiness = () => {
 		updateUserType(cognitoId, UserType.Business);
@@ -145,10 +145,10 @@ const DrawerContent = (
 	}
 
 	const onPressScanToPay = () => {
-		if(personalWallet.availableBalance > 0) {
+		if(clientWallet.availableBalance > 0) {
 			props.navigation.navigate(Routes.QRCODE_SCAN)
 		} else {
-			if(personalFundingSource) {
+			if(clientFundingSource) {
 				setIsLoadupDialog(true)
 			} else {
 				setIsBankDialog(true)
@@ -242,7 +242,7 @@ const DrawerContent = (
 							</View>
 						)}
 					</View>
-					<Text style={styles.berkAmount}>B$ {personalWallet.availableBalance}</Text>
+					<Text style={styles.berkAmount}>B$ {clientWallet.availableBalance}</Text>
 					<Drawer.Section>
 						<DrawerItem
 							label={Translation.TABS.SCAN_TO_PAY}
@@ -254,11 +254,11 @@ const DrawerContent = (
 						/>
 						<DrawerItem
 							label={Translation.TABS.LOADUP}
-							onPress={() => personalFundingSource ? props.navigation.navigate(Routes.LOAD_UP) : setIsBankDialog(true)}
+							onPress={() => clientFundingSource ? props.navigation.navigate(Routes.LOAD_UP) : setIsBankDialog(true)}
 						/>
 						<DrawerItem
 							label={Translation.TABS.CASHOUT}
-							onPress={() => personalFundingSource ? props.navigation.navigate(Routes.CASHOUT_AMOUNT) : setIsBankDialog(true)}
+							onPress={() => clientFundingSource ? props.navigation.navigate(Routes.CASHOUT_AMOUNT) : setIsBankDialog(true)}
 						/>
 					</Drawer.Section>
 					<Drawer.Section>

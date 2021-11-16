@@ -11,7 +11,7 @@ import { IMap } from "src/utils/types";
 import { UserType } from "src/auth/types";
 import states from "src/mocks/countries";
 
-interface PersonalAddressProps {
+interface ClientAddressProps {
 	userType: UserType,
   	style?: IMap;
 }
@@ -57,7 +57,7 @@ const styles = StyleSheet.create({
     dropdownContainer: {marginTop: -20},
 });
 
-const PersonalAddressForm = (props: PersonalAddressProps): ReactElement => {
+const ClientAddressForm = (props: ClientAddressProps): ReactElement => {
   const { customerBasicVerificationDetails, setCustomerBasicVerificationDetails } =
 		useContext(AuthContext);
 
@@ -72,7 +72,7 @@ const PersonalAddressForm = (props: PersonalAddressProps): ReactElement => {
 		<View>
 			<View style={styles.container}>
 				<Text style={styles.bodyText}>
-					{Translation.PROFILE.PERSIONAL_DETAILS_BODY}
+					{Translation.PROFILE.CLIENT_DETAILS_BODY}
 				</Text>
 			</View>
 			<Text style={styles.label}>{Translation.LABEL.ADDRESS1} *</Text>
@@ -146,4 +146,4 @@ const PersonalAddressForm = (props: PersonalAddressProps): ReactElement => {
   );
 };
 
-export default PersonalAddressForm;
+export default ClientAddressForm;

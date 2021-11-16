@@ -8,7 +8,7 @@ import { viewBaseWhite, wrappingContainerBase } from "src/theme/elements";
 import * as Routes from 'src/navigation/constants';
 import { colors } from "src/theme/colors";
 import { UserAPI } from 'src/api';
-import { loadPersonalFundingSource } from 'src/store/funding-source/funding-source.actions';
+import { loadClientFundingSource } from 'src/store/funding-source/funding-source.actions';
 import { useDispatch } from 'react-redux';
 
 export const WEBVIEW_SCREEN = Dimensions.get('screen').height - 150;
@@ -51,7 +51,7 @@ const SelectBank = (): JSX.Element => {
 
 	const onClose = () => {
 		if (customerDwollaId) {
-			dispatch(loadPersonalFundingSource(customerDwollaId));
+			dispatch(loadClientFundingSource(customerDwollaId));
 		}
 		navigation.navigate(Routes.DASHBOARD);
 	}

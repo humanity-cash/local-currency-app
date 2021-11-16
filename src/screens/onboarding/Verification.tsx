@@ -60,7 +60,7 @@ const Verification = (): JSX.Element => {
 		useContext(AuthContext);
 	const [noCodeReceived, setNoCodeReceived] = useState<boolean>(false);
 	const [goNext, setGoNext] = useState<boolean>(false);
-	const { personalDetails } = useUserDetails();
+	const { clientDetails } = useUserDetails();
 
 	const onComplete = async (text: string) => {
 		const response = await emailVerification(text);
@@ -92,13 +92,13 @@ const Verification = (): JSX.Element => {
 					{!noCodeReceived && (
 						<Text style={styles.bodyText}>
 							We have sent an email with a verification code to{' '}
-							{personalDetails.email}
+							{clientDetails.email}
 						</Text>
 					)}
 					{noCodeReceived && (
 						<Text style={styles.bodyText}>
 							We have sent another message with a new verification
-							code to {personalDetails.email}
+							code to {clientDetails.email}
 						</Text>
 					)}
 					<View style={styles.codeView}>

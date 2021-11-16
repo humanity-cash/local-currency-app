@@ -398,8 +398,8 @@ const BusinessDashboard = (): JSX.Element => {
 						{!completedCustomerVerification && <View style={styles.warningView}>
 							<AntDesign name="exclamationcircleo" size={18} style={styles.warningIcon} />
 							<Text style={styles.notificationText}>
-								{Translation.PROFILE.PERSONAL_PROFILE_ALERT} &nbsp;
-								<Text style={styles.warningIcon} onPress={() => navigation.navigate(Routes.PERSONAL_PROFILE)}>{Translation.BUTTON.GOTO_SETUP} &gt;</Text>
+								{Translation.PROFILE.CLIENT_PROFILE_ALERT} &nbsp;
+								<Text style={styles.warningIcon} onPress={() => navigation.navigate(Routes.CLIENT_PROFILE)}>{Translation.BUTTON.GOTO_SETUP} &gt;</Text>
 							</Text>
 						</View>}
 

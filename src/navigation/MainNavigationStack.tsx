@@ -46,9 +46,9 @@ import LinkBankAccount from "src/screens/onboarding/LinkBankAccount";
 import LoadUp from "src/screens/onboarding/LoadUp";
 import LoadUpSuccess from "src/screens/onboarding/LoadUpSuccess";
 import Password from "src/screens/onboarding/Password";
-import PersonalAddress from "src/screens/onboarding/PersonalAddress";
-import PersonalDetails from "src/screens/onboarding/PersonalDetails";
-import PersonalProfile from "src/screens/onboarding/PersonalProfile";
+import ClientAddress from "src/screens/onboarding/ClientAddress";
+import ClientDetails from "src/screens/onboarding/ClientDetails";
+import ClientProfile from "src/screens/onboarding/ClientProfile";
 import SelectAccountType from "src/screens/onboarding/SelectAccountType";
 import SelectBank from "src/screens/onboarding/SelectBank";
 import Teaser from "src/screens/onboarding/Teaser";
@@ -62,7 +62,7 @@ import Report from "src/screens/report/Report";
 import ReportSuccess from "src/screens/report/ReportSuccess";
 import SettingsBankAccount from "src/screens/settings/SettingsBankAccount";
 import SettingsDeleteAccount from "src/screens/settings/SettingsDeleteAccount";
-import SettingsPersonalProfile from "src/screens/settings/SettingsPersonalProfile";
+import SettingsClientProfile from "src/screens/settings/SettingsClientProfile";
 import SettingsSecurity from "src/screens/settings/SettingsSecurity";
 import SettingsTermsAndConditions from "src/screens/settings/SettingsTermsAndConditions";
 import * as Routes from "./constants";
@@ -170,8 +170,8 @@ const PrimaryStackScreen = () => {
 						component={SettingsTermsAndConditions}
 					/>
 					<PrimaryStack.Screen
-						name={Routes.SETTING_PERSONAL_PROFILE}
-						component={SettingsPersonalProfile}
+						name={Routes.SETTING_CLIENT_PROFILE}
+						component={SettingsClientProfile}
 					/>
 					<PrimaryStack.Screen
 						name={Routes.SETTING_SECURITY}
@@ -287,7 +287,7 @@ const PrimaryStackScreen = () => {
 						component={BusinessLoadupSuccess}
 					/>
 					<PrimaryStack.Screen
-						name={Routes.BUSINESS_PAYOUT_PERSONAL}
+						name={Routes.BUSINESS_PAYOUT_CLIENT}
 						component={BusinessPayoutToClient}
 					/>
 					<PrimaryStack.Screen
@@ -353,16 +353,16 @@ const PrimaryStackScreen = () => {
 					{!completedCustomerVerification && (
 						<>
 							<PrimaryStack.Screen
-								name={Routes.PERSONAL_PROFILE}
-								component={PersonalProfile}
+								name={Routes.CLIENT_PROFILE}
+								component={ClientProfile}
 							/>
 							<PrimaryStack.Screen
-								name={Routes.PERSONAL_DETAILS}
-								component={PersonalDetails}
+								name={Routes.CLIENT_DETAILS}
+								component={ClientDetails}
 							/>
 							<PrimaryStack.Screen
-								name={Routes.PERSONAL_ADDRESS}
-								component={PersonalAddress}
+								name={Routes.CLIENT_ADDRESS}
+								component={ClientAddress}
 							/>
 						</>
 					)}
@@ -376,16 +376,16 @@ const PrimaryStackScreen = () => {
 						component={SelectAccountType}
 					/>
 					<PrimaryStack.Screen
-						name={Routes.PERSONAL_PROFILE}
-						component={PersonalProfile}
+						name={Routes.CLIENT_PROFILE}
+						component={ClientProfile}
 					/>
 					<PrimaryStack.Screen
-						name={Routes.PERSONAL_DETAILS}
-						component={PersonalDetails}
+						name={Routes.CLIENT_DETAILS}
+						component={ClientDetails}
 					/>
 					<PrimaryStack.Screen
-						name={Routes.PERSONAL_ADDRESS}
-						component={PersonalAddress}
+						name={Routes.CLIENT_ADDRESS}
+						component={ClientAddress}
 					/>
 					<PrimaryStack.Screen
 						name={Routes.LINK_BANK_ACCOUNT}

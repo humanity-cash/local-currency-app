@@ -211,7 +211,7 @@ const DrawerContent = (props: DrawerContentComponentProps) => {
 		setIsLoadupDialog(false);
 	}
 
-	const onPersonal = () => {
+	const onClient = () => {
 		updateUserType(cognitoId, UserType.Customer);
 	}
 
@@ -285,7 +285,7 @@ const DrawerContent = (props: DrawerContentComponentProps) => {
 							<View>
 								{userTag ? (
 									<TouchableWithoutFeedback
-										onPress={onPersonal}>
+										onPress={onClient}>
 										<View style={styles.userInfo}>
 											<View style={styles.imageView}>
 												<Image

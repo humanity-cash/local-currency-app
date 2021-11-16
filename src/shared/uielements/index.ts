@@ -18,7 +18,7 @@ import {
 	ShareEntryCard,
 	ShareCardView,
 	SettingsListItem,
-	PersonalDetailsCard,
+	ClientDetailsCard,
 	OwnedShareCard,
 	OrderCardView,
 	MarketCardView,
@@ -35,9 +35,9 @@ import {
 } from "./header";
 import { 
 	DepositView, 
-	PersonalAddressForm, 
-	PersonalDetailsForm, 
-	PersonalProfileForm,
+	ClientAddressForm, 
+	ClientDetailsForm, 
+	ClientProfileForm,
 	BusinessProfileForm,
 	BusinessAddressForm 
 } from "./reusable";
@@ -61,7 +61,7 @@ export {
 	ShareEntryCard,
 	ShareCardView,
 	SettingsListItem,
-	PersonalDetailsCard,
+	ClientDetailsCard,
 	OwnedShareCard,
 	OrderCardView,
 	MarketCardView,
@@ -74,9 +74,9 @@ export {
 	ModalHeader,
 	NextBtn,
 	DepositView, 
-	PersonalAddressForm, 
-	PersonalDetailsForm, 
-	PersonalProfileForm,
+	ClientAddressForm, 
+	ClientDetailsForm, 
+	ClientProfileForm,
 	BusinessProfileForm,
 	BusinessAddressForm,
 	ToggleButton
