@@ -122,6 +122,7 @@ const Password = (): JSX.Element => {
 						disabled={!isValidPassword}
 						onPress={async () => {
 							const response = await signUp();
+              console.log(" onPress={ ~ response", response)
 							if (response.success) {
 								navigation.navigate(Routes.VERIFICATION);
 							}

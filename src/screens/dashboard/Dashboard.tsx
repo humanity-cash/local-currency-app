@@ -9,7 +9,6 @@ import {
 	TouchableOpacity
 } from 'react-native';
 import { Image, Text } from 'react-native-elements';
-import { AuthContext } from 'src/auth';
 import * as Routes from 'src/navigation/constants';
 import { Header } from 'src/shared/uielements';
 import { colors } from 'src/theme/colors';
@@ -20,7 +19,6 @@ import { Button, Dialog } from "src/shared/uielements";
 import { dialogViewBase } from "src/theme/elements";
 import { BUTTON_TYPES } from "src/constants";
 import { LoadingScreenTypes } from 'src/utils/types';
-import { updateLoadingStatus } from 'src/store/loading/loading.actions';
 import { loadPersonalWallet } from 'src/store/wallet/wallet.actions';
 import { loadPersonalFundingSource } from 'src/store/funding-source/funding-source.actions';
 import { WalletState } from 'src/store/wallet/wallet.reducer';
@@ -29,6 +27,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { AppState } from 'src/store';
 import { UserType } from 'src/auth/types';
 import { showLoadingProgress, hideLoadingProgress } from '../../store/loading/loading.actions';
+import { Dwolla } from "src/contexts";
 
 const styles = StyleSheet.create({
 	content: { paddingBottom: 80 },
@@ -158,7 +157,7 @@ const feedData = [
 const Dashboard = (): JSX.Element => {
 	const navigation = useNavigation();
 	const dispatch = useDispatch();
-	const { customerDwollaId } = useContext(AuthContext);
+	const { customerDwollaId } = useContext(Dwolla.Context);
 	const [isVisible, setIsVisible] = useState<boolean>(false);
 	const [isLoadup, setIsLoadup] = useState<boolean>(false);
 	const [isPayment, setIsPayment] = useState<boolean>(false);
