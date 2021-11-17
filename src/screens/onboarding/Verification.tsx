@@ -63,6 +63,7 @@ const Verification = (): JSX.Element => {
 	const { personalDetails } = useUserDetails();
 
 	const onComplete = async (text: string) => {
+		if(text?.length < 5) return;
 		const response = await emailVerification(text);
 		if (response.success) {
 			setGoNext(true);

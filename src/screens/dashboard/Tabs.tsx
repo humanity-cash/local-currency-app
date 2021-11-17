@@ -39,6 +39,7 @@ import { WalletState } from 'src/store/wallet/wallet.reducer';
 import { FundingSourceState } from 'src/store/funding-source/funding-source.reducer';
 import { useSelector } from 'react-redux';
 import { AppState } from 'src/store';
+import { UserContext } from "src/api/context";
 
 const styles = StyleSheet.create({
 	headerText: {
@@ -136,8 +137,10 @@ const BankLinkDialog = (props: BankLinkDialogProps) => {
 const DrawerContent = (
 	props: DrawerContentComponentProps<DrawerContentOptions>
 ) => {
-	const { signOut, userEmail, user, updateUserType, isVerifiedBusiness } = useContext(AuthContext);
-	const { authorization } = useUserDetails();
+	const { signOut } = useContext(AuthContext);
+	const { user, updateUserType } = useContext(UserContext)
+	// const { authorization } = useUserDetails();
+	const authorization = { cashierView: user?.verifiedBusiness };
 	const [isExpanded, setIsExpanded] = useState<boolean>(false);
 	const [isBankDialog, setIsBankDialog] = useState<boolean>(false);
 
@@ -145,11 +148,11 @@ const DrawerContent = (
 	const { personalFundingSource } = useSelector((state: AppState) => state.fundingSourceReducer) as FundingSourceState;
 
 	const onMerchant = () => {
-		updateUserType(userEmail, UserType.Business);
+		updateUserType(UserType.Business);
 	};
 
 	const onCashier = () => {
-		updateUserType(userEmail, UserType.Cashier);
+		updateUserType(UserType.Cashier);
 	};
 
 	const onBankDialogConfirm = () => {
@@ -163,6 +166,7 @@ const DrawerContent = (
 
 	const customerTag = user?.customer?.tag || undefined
 	const businessTag = user?.business?.tag || undefined
+	const isVerifiedBusiness = user?.verifiedBusiness;
 
 	return (
 		<View style={styles.drawerWrap}>

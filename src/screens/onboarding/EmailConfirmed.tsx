@@ -39,6 +39,7 @@ const styles = StyleSheet.create({
 const EmailConfirmed = (): JSX.Element => {
 	const navigation = useNavigation();
 	const { signUpDetails: { email, password }, signIn } = useContext(AuthContext);
+  console.log("🚀 ~ file: EmailConfirmed.tsx ~ line 42 ~ email, password", email, password)
 
 	return (
 		<View style={viewBase}>

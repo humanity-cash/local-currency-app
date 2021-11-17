@@ -6,7 +6,6 @@ import { DrawerActions } from '@react-navigation/native';
 import { Drawer } from 'react-native-paper';
 import { AuthContext } from 'src/auth';
 import { UserType } from 'src/auth/types';
-import { useUserDetails } from "src/hooks";
 import { BUTTON_TYPES } from 'src/constants';
 import * as Routes from 'src/navigation/constants';
 import MerchantCashoutAmount from "src/screens/merchantCashout/MerchantCashoutAmount";
@@ -27,6 +26,7 @@ import { WalletState } from 'src/store/wallet/wallet.reducer';
 import { FundingSourceState } from 'src/store/funding-source/funding-source.reducer';
 import { useSelector } from 'react-redux';
 import { AppState } from 'src/store';
+import { UserContext } from 'src/api/context';
 
 const styles = StyleSheet.create({
 	headerText: {
@@ -187,15 +187,17 @@ const BankLinkDialog = (props: BankLinkDialogProps) => {
 }
 
 const DrawerContent = (props: DrawerContentComponentProps) => {
-	const { user, signOut, updateUserType, userEmail, isVerifiedCustomer } = useContext(AuthContext);
-	const { authorization } = useUserDetails();
+	const { signOut } = useContext(AuthContext);
+	const { user, updateUserType } = useContext(UserContext);
+	// const { authorization } = useUserDetails();
+	const authorization = { cashierView: user?.verifiedBusiness };
 	const [isExpanded, setIsExpanded] = useState<boolean>(false);
 	const [isVisible, setIsVisible] = useState<boolean>(false);
 	const [isCashierView, setIsCashierView] = useState<boolean>(false);
 	const [isBankDialog, setIsBankDialog] = useState<boolean>(false);
-
 	const { businessWallet } = useSelector((state: AppState) => state.walletReducer) as WalletState;
 	const { businessFundingSource } = useSelector((state: AppState) => state.fundingSourceReducer) as FundingSourceState;
+	const isVerifiedCustomer = user?.verifiedCustomer;
 
 	const onScanConfirm = () => {
 		setIsVisible(false);
@@ -208,7 +210,7 @@ const DrawerContent = (props: DrawerContentComponentProps) => {
 
 	const onCashierViewConfirm = () => {
 		setIsCashierView(false);
-		updateUserType(userEmail, UserType.Cashier);
+		updateUserType(UserType.Cashier);
 	}
 
 	const onCashierViewCancel = () => {
@@ -225,7 +227,7 @@ const DrawerContent = (props: DrawerContentComponentProps) => {
 	}
 
 	const onPersonal = () => {
-		updateUserType(userEmail, UserType.Customer);
+		updateUserType(UserType.Customer);
 	}
 
 	const userTag = user?.customer?.tag || undefined
