@@ -1,10 +1,13 @@
 import React, { useContext, useEffect, useState } from "react";
+import { LoadingScreenTypes } from 'src/utils/types';
+import { updateLoadingStatus } from 'src/store/loading/loading.actions';
 import { saveUserTypeToStorage } from "../auth/localStorage";
 import { AuthContext } from "../auth";
 import { AxiosPromiseResponse, Business, Customer, IUser } from "./types";
 import { addBusinessVerification, addCustomerVerification, createUser } from "./user";
 import { AuthStatus, UserType } from "../auth/types";
 import { UserAPI } from "../api";
+import { useDispatch } from "react-redux";
 
 export const UserContext = React.createContext<IState>({
 	user: {} as IUser,
@@ -14,6 +17,7 @@ export const UserContext = React.createContext<IState>({
 	//@ts-ignore
 	createBusiness: async () => any,
 	getCustomerData: () => undefined,
+	updateUserType: () => undefined,
 	updateCustomerData: (u: Customer) => ({}),
 	getBusinessData: () => undefined,
 	updateBusinessData: (u: Business) => ({}),
@@ -70,29 +74,29 @@ interface IState {
 	getBusinessData: () => Business | undefined,
 	updateBusinessData: (u: any) => void,
 	createCustomer: () => Promise<void>,
+	updateUserType: (i: UserType | 'notApplicable' | null) => void,
 	createBusiness: () => Promise<void>,
 	getCustomerData: () => Customer | undefined,
 	updateCustomerData: (u: any) => void,
 	user: IUser | undefined;
-	userType: UserType | null;
+	userType: UserType | null | "notApplicable";
 }
 
 const UserProvider: React.FunctionComponent = ({ children }) => {
-	const { authStatus, userEmail } = useContext(AuthContext);
+	const { authStatus, userEmail, setAuthStatus } = useContext(AuthContext);
 	const [user, setUser] = useState<IUser>(initialUserState);
-  console.log("🚀 ~ file: context.tsx ~ line 85 ~ user", user)
-	const [userType, setUserType] = useState<UserType | null>(null);
+	const [userType, setUserType] = useState<UserType | null | "notApplicable">(null);
 	const verifiedCustomer = user?.verifiedCustomer;
 	const verifiedBusiness = user?.verifiedBusiness;
 
-	const updateUserType = (newType: UserType | null, uEmail = userEmail): void => {
+	const updateUserType = (newType: UserType | null | "notApplicable", uEmail = userEmail): void => {
 		setUserType(newType);
-		if (newType !== UserType.Cashier && newType) { // dont cache cashier option. it will lock the user in cashier screens
+		if (newType !== UserType.Cashier && newType && newType != "notApplicable") { // dont cache cashier option. it will lock the user in cashier screens
 			saveUserTypeToStorage(uEmail, newType);
 		}
 	};
 
-	const handleDbUser = (user: any) => {
+	const handleDbUser = () => {
 		if (verifiedBusiness || verifiedCustomer) {
 			if (verifiedBusiness && verifiedCustomer) {
 				const latestSelectedType = UserType.Customer; // :FIXME
@@ -109,17 +113,17 @@ const UserProvider: React.FunctionComponent = ({ children }) => {
 		try {
 			if (!(authStatus === AuthStatus.SignedIn) || !userEmail) {
 				setUser(initialUserState);
-				updateUserType(null);
+				updateUserType(null)
 				return;
 			}
 			if (userEmail) {
 				const [dbUser] = await UserAPI.getUserByEmail(userEmail);
 				if (dbUser) {
 					setUser(dbUser);
-					handleDbUser(dbUser);
+					handleDbUser();
 				} else {
 					setUser(initialUserState);
-					updateUserType(null);
+					updateUserType("notApplicable")
 				}
 			}
 		}
@@ -159,7 +163,7 @@ const UserProvider: React.FunctionComponent = ({ children }) => {
 		let response = {} as AxiosPromiseResponse;
 		if (user?.verifiedCustomer && user?.customer?.dwollaId && user?.business) {
 			response = await addBusinessVerification(user.customer?.dwollaId, { ...user?.business, avatar: "avatar" });
-      console.log("🚀 ~ file: context.tsx ~ line 162 ~ createBusiness ~ response", response)
+			console.log("🚀 ~ 162 ~", response)
 		} else {
 			response = await createUser(data);
 		}
@@ -171,8 +175,13 @@ const UserProvider: React.FunctionComponent = ({ children }) => {
 			}
 		}
 	}
+	const dispatch = useDispatch();
 
 	const createCustomer = async () => {
+		dispatch(updateLoadingStatus({
+			isLoading: true,
+			screen: LoadingScreenTypes.ANY
+		}));
 		let response = {} as AxiosPromiseResponse;
 		const data = {
 			email: userEmail,
@@ -192,11 +201,16 @@ const UserProvider: React.FunctionComponent = ({ children }) => {
 				updateUserType(UserType.Customer);
 			}
 		}
+		dispatch(updateLoadingStatus({
+			isLoading: false,
+			screen: LoadingScreenTypes.ANY
+		}));
 	}
 
 	const state: IState = {
 		user,
 		userType,
+		updateUserType,
 		getCustomerData,
 		updateCustomerData,
 		getBusinessData,
