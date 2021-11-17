@@ -1,10 +1,7 @@
-import { DefaultTheme, NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
-import React, { useContext } from "react";
+import React from "react";
 import "react-native-gesture-handler";
-import { AuthContext } from "src/auth";
-import { AuthStatus, UserType } from "src/auth/types";
-import { useRouteTracking } from "src/hooks";
+import LoadingPage from "src/screens/loadings/LoadingPage";
 import { CashoutNavigator } from "src/navigation/CashoutNavigator";
 import { ForgotPasswordNavigator } from "src/navigation/ForgotPasswordStack";
 import { MerchantBankAccountNavigator } from "src/navigation/MerchantBankAccountNavigator";
@@ -136,6 +133,17 @@ export const CustomerUserStack = ({ isVerifiedBusiness }: { isVerifiedBusiness: 
 					component={SignupBusinessNavigator}
 				/>
 			)}
+		</>
+	)
+}
+
+export const LoadingStack = () => {
+	return (
+		<>
+			<PrimaryStack.Screen
+				name={"LOADING"}
+				component={LoadingPage}
+			/>
 		</>
 	)
 }
