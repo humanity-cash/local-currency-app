@@ -31,6 +31,7 @@ const AuthProvider: React.FunctionComponent = ({ children }) => {
 
 	const getSessionInfo = async () => {
 		try {
+			setAuthStatus(AuthStatus.Loading);
 			const response: BaseResponse<CognitoUserSession | undefined> =
 				await userController.getSession();
 			if (response.success && response.data && response.data.isValid()) {
@@ -59,13 +60,10 @@ const AuthProvider: React.FunctionComponent = ({ children }) => {
 		userController.resendEmailVerificationCode(signUpDetails.email);
 
 	const signUp = async () => {
-		setAuthStatus(AuthStatus.Loading)
 		const response = await userController.signUp(
 			signUpDetails.email.toLowerCase(),
 			signUpDetails.password
 		);
-		if (!response?.success) setAuthStatus(AuthStatus.SignedOut);
-		else signIn(signUpDetails.email.toLowerCase(), signUpDetails.password);
 		return response;
 	};
 
@@ -73,12 +71,10 @@ const AuthProvider: React.FunctionComponent = ({ children }) => {
 		email = signInDetails.email,
 		password = signInDetails.password
 	) => {
-		setAuthStatus(AuthStatus.Loading)
 		const response: BaseResponse<CognitoUserSession> =
 			await userController.signIn({ email, password });
-		if (!response?.success) {
-			setAuthStatus(AuthStatus.SignedOut);
-		} else {
+    console.log("🚀 ~ file: index.tsx ~ line 79 ~ response", response)
+		if (response?.success) {
 			await getSessionInfo();
 		}
 		return response;
