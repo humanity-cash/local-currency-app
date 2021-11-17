@@ -78,8 +78,6 @@ export interface CustomerBasicVerification {
 	resourceUri?: string,
 };
 
-export type AccountUpdate = CognitoCustomerAttributesUpdate | CognitoBusinessUpdateAttributes;
-
 export interface BusinessBasicVerification {
 	story: string,
 	tag: string,
