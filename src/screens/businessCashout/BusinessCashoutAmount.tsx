@@ -1,5 +1,5 @@
 import React, {useState, useEffect, useContext} from 'react';
-import { StyleSheet, View, KeyboardAvoidingView, ScrollView, Platform } from 'react-native';
+import { StyleSheet, View, KeyboardAvoidingView, ScrollView, Platform, SafeAreaView } from 'react-native';
 import { useNavigation } from '@react-navigation/core';
 import { Text } from 'react-native-elements';
 import { Header, Button, CancelBtn, BorderedInput, Dialog } from "src/shared/uielements";
@@ -58,8 +58,8 @@ const styles = StyleSheet.create({
 		color: colors.purple
 	},
 	bottomView: {
-		paddingHorizontal: 20,
-		paddingBottom: 45
+		marginHorizontal: 20,
+		marginBottom: 20
 	},
 	dialogBg: {
         backgroundColor: colors.overlayPurple
@@ -169,14 +169,14 @@ const BusinessCashoutAmount = (): JSX.Element => {
 			</ScrollView>
 			<KeyboardAvoidingView
 				behavior={Platform.OS == "ios" ? "padding" : "height"} >
-				<View style={styles.bottomView}>
+				<SafeAreaView style={styles.bottomView}>
 					<Button
 						type={BUTTON_TYPES.PURPLE}
 						disabled={!goNext}
 						title={Translation.BUTTON.CONFIRM}
 						onPress={viewConfirm}
 					/>
-				</View>
+				</SafeAreaView>
 			</KeyboardAvoidingView>
 
 			{ isVisible && (
