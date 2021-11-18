@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useContext } from 'react';
 import { StyleSheet, View, KeyboardAvoidingView, ScrollView, Platform } from 'react-native';
 import { Text } from 'react-native-elements';
 import { Header, Button, BackBtn } from "src/shared/uielements";
@@ -12,6 +12,10 @@ import BusinessStaticQRCodeGen from './BusinessStaticQRCodeGen';
 import { showToast } from 'src/utils/common';
 import { ToastType } from 'src/utils/types';
 import email from 'react-native-email'
+import QRCode from 'react-native-qrcode-svg';
+import * as MailComposer from 'expo-mail-composer'
+import { PaymentMode, SECURITY_ID } from "src/utils/types";
+import { AuthContext } from 'src/auth';
 
 const styles = StyleSheet.create({
 	headerText: {
@@ -36,6 +40,17 @@ const styles = StyleSheet.create({
 const BusinessSettingsStaticQr = (): JSX.Element => {
 	const navigation = useNavigation();
 	const [isStaticQRCode, setIsStaticQRCode] = useState<boolean>(false);
+    const { businessDwollaId, userAttributes } = useContext(AuthContext);
+	const businessName = userAttributes?.["custom:business.tag"] || undefined
+	const addressStr = JSON.stringify({
+        securityId: SECURITY_ID,
+        to: businessDwollaId,
+        amount: 0,
+        mode: PaymentMode.OPEN_AMOUNT
+    });
+
+
+	let qrRef = useRef()
 
 	const onSuccess = (amount: number) => {
 		showToast(ToastType.INFO, "Succeeded!", "You have received B$ " + amount);
@@ -46,19 +61,33 @@ const BusinessSettingsStaticQr = (): JSX.Element => {
 		setIsStaticQRCode(false);
 	}
 
-	const sendEmail = () => {
-		const to = ['info@berkshares,org'] // string or array of email addresses
-        email(to, {
-            // Optional additional arguments
-            // cc: ['aaa@hotmail.com'], // string or array of email addresses
-            // bcc: ['eee@hotmail.com'], // string or array of email addresses
-            subject: 'QR code',
-            body: 'Feature coming soon'
-        }).catch(console.error)
+	const onPressShowMyQR = () => {
+		qrRef.toDataURL(sendEmail)
 	}
 
+	const sendEmail = (dataURL: string) => {
+        const to = ["info@berkshares.org"] // string or array of email addresses
+        const path = `data:imgae/png;base64,${dataURL}`
+
+        MailComposer.composeAsync({
+            subject: 'From BerkShare',
+            recipients: to,
+            body: `<div>
+					<p>Shared QR code of ${businessName}</p>
+					<img src="${path}" alt="Red dot" />
+				</div>`,
+            isHtml: true
+        })
+    }
 	return (
 		<View style={viewBase}>
+			<View style={{position: 'absolute', opacity: 0}}>
+				<QRCode
+					value={addressStr}
+					size={200}
+					getRef={c => {qrRef = c}}
+				/>
+			</View>
 			<Header
 				leftComponent={<BackBtn onClick={() => navigation.goBack()} color={colors.purple} />}
 			/>
@@ -83,7 +112,7 @@ const BusinessSettingsStaticQr = (): JSX.Element => {
 					<Button
 						type={BUTTON_TYPES.PURPLE}
 						title={Translation.BUTTON.MAIL_QR_CODE}
-						onPress={sendEmail}
+						onPress={onPressShowMyQR}
 					/>
 				</View>
 			</KeyboardAvoidingView>
