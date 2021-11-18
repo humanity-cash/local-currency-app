@@ -24,7 +24,7 @@ import * as Routes from "src/navigation/constants";
 import { colors } from "src/theme/colors";
 import Translation from "src/translation/en.json";
 import CashoutAmount from "../cashout/CashoutAmount";
-import MerchantDictionary from "../merchant/MerchantDictionary";
+import BusinessDictionary from "../business/BusinessDictionary";
 import PaymentRequest from "../payment/PaymentRequest";
 import QRCodeScan from "../payment/QRCodeScan";
 import Settings from "../settings/Settings";
@@ -32,13 +32,13 @@ import SettingsHelpAndContact from "../settings/SettingsHelpAndContact";
 import BusinessAccount from "../signupBusiness/BusinessAccount";
 import MyTransactions from "../transactions/MyTransactions";
 import Dashboard from "./Dashboard";
-import { Button, Dialog } from "src/shared/uielements";
-import { baseHeader, dialogViewBase, wrappingContainerBase } from "src/theme/elements";
-import { BUTTON_TYPES } from "src/constants";
 import { WalletState } from 'src/store/wallet/wallet.reducer';
 import { FundingSourceState } from 'src/store/funding-source/funding-source.reducer';
 import { useSelector } from 'react-redux';
 import { AppState } from 'src/store';
+import BankLinkDialog from 'src/shared/uielements/BankLinkDialog';
+import SettingDialog from 'src/shared/uielements/SettingDialog';
+import { BarCodeScanner } from 'expo-barcode-scanner';
 
 const styles = StyleSheet.create({
 	headerText: {
@@ -105,34 +105,6 @@ const styles = StyleSheet.create({
 	}
 });
 
-type BankLinkDialogProps = {
-	visible: boolean,
-	onConfirm: ()=>void,
-	onCancel: ()=>void
-}
-
-const BankLinkDialog = (props: BankLinkDialogProps) => {
-	return (
-		<Dialog visible={props.visible} onClose={()=>props.onCancel()}>
-			<View style={dialogViewBase}>
-				<View style={wrappingContainerBase}>
-					<View style={ baseHeader }>
-						<Text style={styles.headerText}>{Translation.PAYMENT.PAYMENT_NO_BANK_TITLE}</Text>
-					</View>
-					<Text>{Translation.PAYMENT.PAYMENT_NO_BANK_DETAIL}</Text>
-				</View>
-				<View>
-				<Button
-					type={BUTTON_TYPES.DARK_GREEN}
-					title={Translation.BUTTON.LINK_BANK}
-					onPress={props.onConfirm}
-				/>
-				</View>
-			</View>
-		</Dialog>
-	)
-}
-
 const DrawerContent = (
 	props: DrawerContentComponentProps<DrawerContentOptions>
 ) => {
@@ -140,11 +112,13 @@ const DrawerContent = (
 	const { authorization } = useUserDetails();
 	const [isExpanded, setIsExpanded] = useState<boolean>(false);
 	const [isBankDialog, setIsBankDialog] = useState<boolean>(false);
+	const [isLoadupDialog, setIsLoadupDialog] = useState<boolean>(false);
 
-	const { personalWallet } = useSelector((state: AppState) => state.walletReducer) as WalletState;
-	const { personalFundingSource } = useSelector((state: AppState) => state.fundingSourceReducer) as FundingSourceState;
+	const { clientWallet } = useSelector((state: AppState) => state.walletReducer) as WalletState;
+	const { clientFundingSource } = useSelector((state: AppState) => state.fundingSourceReducer) as FundingSourceState;
+	const [isSetting, setIsSetting] = useState(false)
 
-	const onMerchant = () => {
+	const onBusiness = () => {
 		updateUserType(cognitoId, UserType.Business);
 	};
 
@@ -159,6 +133,33 @@ const DrawerContent = (
 
 	const onBankDialogCancel = () => {
 		setIsBankDialog(false);
+	}
+
+	const onLoadupDialogConfirm = () => {
+		setIsLoadupDialog(false);
+		props.navigation.navigate(Routes.LOAD_UP);
+	}
+
+	const onLoadupDialogCancel = () => {
+		setIsLoadupDialog(false);
+	}
+
+	const onPressScanToPay = async () => {
+		const {status} = await BarCodeScanner.requestPermissionsAsync();
+		if(status === 'granted') {
+			if(clientWallet.availableBalance > 0) {
+				props.navigation.navigate(Routes.QRCODE_SCAN)
+			} else {
+				if(clientFundingSource) {
+					setIsLoadupDialog(true)
+				} else {
+					setIsBankDialog(true)
+				}
+			} 
+		} else {
+			setIsSetting(true)
+		}
+		
 	}
 
 	const customerTag = userAttributes?.["custom:personal.tag"];
@@ -208,7 +209,7 @@ const DrawerContent = (
 							<View>
 								<TouchableWithoutFeedback
 									onPress={() =>
-										businessTag ? onMerchant() : null
+										businessTag ? onBusiness() : null
 									}>
 									{businessTag ? (
 										<View style={styles.userInfo}>
@@ -247,23 +248,23 @@ const DrawerContent = (
 							</View>
 						)}
 					</View>
-					<Text style={styles.berkAmount}>B$ {personalWallet.availableBalance}</Text>
+					<Text style={styles.berkAmount}>B$ {clientWallet.availableBalance}</Text>
 					<Drawer.Section>
 						<DrawerItem
-							label="Scan to pay"
-							onPress={() => personalFundingSource ? props.navigation.navigate(Routes.QRCODE_SCAN) : setIsBankDialog(true)}
+							label={Translation.TABS.SCAN_TO_PAY}
+							onPress={onPressScanToPay}
 						/>
 						<DrawerItem
-							label="Receive payment"
-							onPress={() => personalFundingSource ? props.navigation.navigate(Routes.RECEIVE_PAYMENT) : setIsBankDialog(true)}
+							label={Translation.TABS.RECEIVE_PAYMENT}
+							onPress={() => props.navigation.navigate(Routes.RECEIVE_PAYMENT)}
 						/>
 						<DrawerItem
-							label="Load up B$"
-							onPress={() => personalFundingSource ? props.navigation.navigate(Routes.LOAD_UP) : setIsBankDialog(true)}
+							label={Translation.TABS.LOADUP}
+							onPress={() => clientFundingSource ? props.navigation.navigate(Routes.LOAD_UP) : setIsBankDialog(true)}
 						/>
 						<DrawerItem
-							label="Cash out to USD"
-							onPress={() => personalFundingSource ? props.navigation.navigate(Routes.CASHOUT_AMOUNT) : setIsBankDialog(true)}
+							label={Translation.TABS.CASHOUT}
+							onPress={() => clientFundingSource ? props.navigation.navigate(Routes.CASHOUT_AMOUNT) : setIsBankDialog(true)}
 						/>
 					</Drawer.Section>
 					<Drawer.Section>
@@ -315,13 +316,25 @@ const DrawerContent = (
 					onPress={signOut}
 				/>
 			</Drawer.Section>
-			{isBankDialog && (
-				<BankLinkDialog 
-					visible={isBankDialog}
-					onConfirm={onBankDialogConfirm}
-					onCancel={onBankDialogCancel}
-				/>
-			)}
+			<BankLinkDialog 
+				visible={isBankDialog}
+				description={Translation.PAYMENT.PAYMENT_NO_BANK_DETAIL}
+				buttonTitle={Translation.BUTTON.LINK_BANK}
+				onConfirm={onBankDialogConfirm}
+				onCancel={onBankDialogCancel}
+			/>
+			<BankLinkDialog 
+				visible={isLoadupDialog}
+				description={Translation.PAYMENT.PAYMENT_NO_BALANCE_DETAIL}
+				buttonTitle={Translation.BUTTON.LOAD_UP_BERKSHARES}
+				onConfirm={onLoadupDialogConfirm}
+				onCancel={onLoadupDialogCancel}
+			/>
+			<SettingDialog
+				visible={isSetting}
+				onCancel={() => setIsSetting(false)}
+				description={Translation.OTHER.NO_CAMERA_PERMISSION_DETAIL}
+			/>
 		</View>
 	);
 };
@@ -352,7 +365,7 @@ const Tabs = (): JSX.Element => {
 			/>
 			<DrawerNav.Screen
 				name={Routes.WHERE_TO_SPEND}
-				component={MerchantDictionary}
+				component={BusinessDictionary}
 			/>
 			<DrawerNav.Screen
 				name={Routes.BUSINESS_ACCOUNT}

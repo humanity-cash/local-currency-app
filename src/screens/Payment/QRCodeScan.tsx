@@ -1,13 +1,12 @@
 import { useNavigation } from '@react-navigation/native';
 import React, { useState, useContext, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import { StyleSheet, View, Image, KeyboardAvoidingView, ScrollView, Platform } from 'react-native';
+import { StyleSheet, View, Image } from 'react-native';
 import { Text } from 'react-native-elements';
-import { useCameraPermission } from 'src/hooks';
 import { AuthContext } from 'src/auth';
-import { Header, CancelBtn, Dialog, Button, ToggleButton, Modal, ModalHeader, BorderedInput, BackBtn } from "src/shared/uielements";
+import { Header, CancelBtn, Dialog, Button, ToggleButton } from "src/shared/uielements";
 import { colors } from "src/theme/colors";
-import { baseHeader, viewBase, dialogViewBase, modalViewBase, wrappingContainerBase, underlineHeader } from "src/theme/elements";
+import { baseHeader, viewBase, dialogViewBase } from "src/theme/elements";
 import { BarCodeScanner } from 'expo-barcode-scanner';
 import Translation from 'src/translation/en.json';
 import * as Routes from 'src/navigation/constants';
@@ -18,8 +17,8 @@ import { ITransactionRequest } from 'src/api/types';
 import { calcFee, showToast } from 'src/utils/common';
 import { isQRCodeValid } from 'src/utils/validation';
 
-import { loadPersonalWallet } from 'src/store/wallet/wallet.actions';
-import { loadPersonalTransactions } from 'src/store/transaction/transaction.actions';
+import { loadClientWallet } from 'src/store/wallet/wallet.actions';
+import { loadClientTransactions } from 'src/store/transaction/transaction.actions';
 import { updateLoadingStatus } from 'src/store/loading/loading.actions';
 import { WalletState } from 'src/store/wallet/wallet.reducer';
 import { useSelector } from 'react-redux';
@@ -113,15 +112,21 @@ const styles = StyleSheet.create({
 	switchText: {
 		color: colors.darkGreen
 	},
-	label: { 
-		color: colors.text, 
-		fontSize: 12,
-		paddingTop: 10
-	},
 	bottomView: {
 		padding: 20,
 		paddingBottom: 45
+	},
+	loading: {
+		position: 'absolute', 
+		top: 0, 
+		left: 0, 
+		right: 0, 
+		bottom: 0, 
+		alignItems: 'center', 
+		justifyContent: 'center', 
+		backgroundColor: 'rgba(0, 0, 0, 0.4)'
 	}
+
 });
 
 type PaymentConfirmProps = {
@@ -136,7 +141,8 @@ const PaymentConfirm = (props: PaymentConfirmProps) => {
 
 	const firstName = userAttributes?.["custom:personal.firstName"];
     const lastName = userAttributes?.["custom:personal.lastName"];
-	const amountCalcedFee = props.payInfo.amount + calcFee(props.payInfo.amount);
+	// const amountCalcedFee = props.payInfo.amount + calcFee(props.payInfo.amount);
+	const amountCalcedFee = props.payInfo.amount;
 
 	return (
 		<Dialog visible={props.visible} onClose={props.onCancel} style={styles.dialog}>
@@ -212,13 +218,9 @@ const QRCodeScan = (): JSX.Element => {
 	const navigation = useNavigation();
 	const dispatch = useDispatch();
 	const { customerDwollaId } = useContext(AuthContext);
-	const hasPermission = useCameraPermission();
 	const [isScanned, setIsScanned] = useState<boolean>(false);
 	const [isPaymentDialog, setIsPaymentDialog] = useState<boolean>(false);
 	const [isLowAmountDialog, setIsLowAmountDialog] = useState<boolean>(false);
-	const [isOpenPayment, setIsOpenPayment] = useState<boolean>(false);
-	const [openAmount, setOpenAmount] = useState<string>("");
-	const [goNext, setGoNext] = useState<boolean>(false);
 	const [state, setState] = useState<QRCodeEntry>({
 		securityId: SECURITY_ID,
 		to: "",
@@ -226,15 +228,11 @@ const QRCodeScan = (): JSX.Element => {
 		mode: PaymentMode.SELECT_AMOUNT
 	});
 
-	const { personalWallet } = useSelector((state: AppState) => state.walletReducer) as WalletState;
+	const { clientWallet } = useSelector((state: AppState) => state.walletReducer) as WalletState;
 
 	useEffect(() => {
 		setIsScanned(false);
 	});
-
-	useEffect(() => {
-		setGoNext(Number(openAmount) > 0);
-	}, [openAmount]);
 
 	const handleBarCodeScanned = (data: HandleScaned) => {
 		if (isQRCodeValid(data.data)) {
@@ -242,7 +240,7 @@ const QRCodeScan = (): JSX.Element => {
 			setState(qrcodeData);
 			setIsScanned(true);
 			if (qrcodeData.mode == PaymentMode.OPEN_AMOUNT) {
-				setIsOpenPayment(true);
+				navigation.navigate(Routes.PAYMENT_RECEIVE_AMOUNT, qrcodeData)
 			} else {
 				setIsPaymentDialog(true);
 			}
@@ -251,16 +249,12 @@ const QRCodeScan = (): JSX.Element => {
 		}
 	}
 
-	if (hasPermission === false) {
-		return <Text>{Translation.OTHER.NO_CAMERA_PERMISSION}</Text>;
-	}
-
 	const onPayConfirm = async (isRoundUp: boolean) => {
-		const amountCalcedFee = state.amount + calcFee(state.amount);
+		const amountCalcedFee = state.amount;	// + calcFee(state.amount);
 		setIsPaymentDialog(false);
 		
 		// check balance
-		if (personalWallet.availableBalance <= state.amount) {
+		if (clientWallet.availableBalance <= state.amount) {
 			setIsLowAmountDialog(true);
 		} else {
 			if (customerDwollaId) {
@@ -278,8 +272,9 @@ const QRCodeScan = (): JSX.Element => {
 				
 				if (response.data) {
 					// Update user info
-					await dispatch(loadPersonalWallet(customerDwollaId));
-					await dispatch(loadPersonalTransactions(customerDwollaId));
+					await dispatch(loadClientWallet(customerDwollaId));
+					await dispatch(loadClientTransactions(customerDwollaId));
+					navigation.goBack()
 					navigation.navigate(Routes.PAYMENT_SUCCESS);
 				} else {
 					navigation.navigate(Routes.PAYMENT_FAILED);
@@ -299,46 +294,10 @@ const QRCodeScan = (): JSX.Element => {
 		navigation.navigate(Routes.LOAD_UP);
 	}
 
-	const handleOpenPay = async () => {
-		setIsOpenPayment(false);
-		// check balance
-		if (personalWallet.availableBalance <= state.amount) {
-			setIsLowAmountDialog(true);
-		} else {
-			if (customerDwollaId) {
-				const request: ITransactionRequest = {
-					toUserId: state.to,
-					amount: openAmount,
-					comment: ''
-				};
-
-				dispatch(updateLoadingStatus({
-					isLoading: true,
-					screen: LoadingScreenTypes.PAYMENT_PENDING
-				}));
-				const response = await UserAPI.transferTo(customerDwollaId, request);
-				if (response.data) {
-					await dispatch(loadPersonalWallet(customerDwollaId));
-					await dispatch(loadPersonalTransactions(customerDwollaId));
-					navigation.navigate(Routes.PAYMENT_SUCCESS);
-				} else {
-					navigation.navigate(Routes.PAYMENT_FAILED);
-				}
-				dispatch(updateLoadingStatus({
-					isLoading: false,
-					screen: LoadingScreenTypes.PAYMENT_PENDING
-				}));
-			} else {
-				showToast(ToastType.ERROR, "Failed", "Whooops, something went wrong.");
-			}
-		}
-	}
-
 	const onCancle = () => {
 		setIsPaymentDialog(false);
 		setIsLowAmountDialog(false);
-		setIsOpenPayment(false);
-		navigation.navigate(Routes.DASHBOARD);
+		navigation.goBack();
 	}
 
 	return (
@@ -351,7 +310,7 @@ const QRCodeScan = (): JSX.Element => {
 			</View>
 			<View style={styles.toggleView}>
 				<Header
-					rightComponent={<CancelBtn text={Translation.BUTTON.CLOSE} color={colors.white} onClick={() => navigation.navigate(Routes.DASHBOARD)} />}
+					rightComponent={<CancelBtn text={Translation.BUTTON.CLOSE} color={colors.white} onClick={() => navigation.goBack()} />}
 				/>
 				<View style={styles.switchView}>
 					<ToggleButton
@@ -366,45 +325,6 @@ const QRCodeScan = (): JSX.Element => {
 			</View>
 			{ isPaymentDialog && <PaymentConfirm visible={isPaymentDialog} payInfo={state} onConfirm={(mode) => onPayConfirm(mode)} onCancel={onCancle} /> }
 			{ isLowAmountDialog && <LowAmount visible={isLowAmountDialog} onConfirm={onLoadUp} onCancel={onCancle} /> }
-			{ isOpenPayment && (
-				<Modal visible={isOpenPayment}>
-					<View style={ modalViewBase }>
-						<ModalHeader
-							leftComponent={<BackBtn onClick={() => setIsOpenPayment(false)} />}
-							rightComponent={<CancelBtn text="Close" onClick={onCancle} />}
-						/>
-						<ScrollView style={wrappingContainerBase}>
-							<View style={underlineHeader}>
-								<Text style={styles.headerText}>{Translation.PAYMENT.SPECIFY_PAYMENT}</Text>
-							</View>
-							<Text>Select the amount of BerkShares you would like to send.</Text>
-							<View>
-								<Text style={styles.label}>{Translation.LABEL.AMOUNT}</Text>
-								<BorderedInput
-									label="Amount"
-									name="amount"
-									keyboardType="number-pad"
-									placeholder="Amount"
-									prefix="B$"
-									value={openAmount}
-									onChange={(name: string, amount: string) => setOpenAmount(amount)}
-								/>
-							</View>
-						</ScrollView>
-						<KeyboardAvoidingView
-							behavior={Platform.OS == "ios" ? "padding" : "height"} >
-							<View style={styles.bottomView}>
-								<Button
-									type={BUTTON_TYPES.DARK_GREEN}
-									disabled={!goNext}
-									title={Translation.BUTTON.CONFIRM}
-									onPress={handleOpenPay}
-								/>
-							</View>
-						</KeyboardAvoidingView>
-					</View>
-				</Modal>
-			)}
 		</View>
 	);
 }

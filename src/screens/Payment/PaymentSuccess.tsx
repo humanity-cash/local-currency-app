@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, View, KeyboardAvoidingView, ScrollView, Platform } from 'react-native';
+import { StyleSheet, View, KeyboardAvoidingView, Image, Platform } from 'react-native';
 import { Text } from 'react-native-elements';
 import { Header, Button, CancelBtn } from "src/shared/uielements";
 import { baseHeader, viewBase, wrappingContainerBase } from "src/theme/elements";
@@ -28,23 +28,28 @@ const PaymentSuccess = (): JSX.Element => {
 	const navigation = useNavigation();
 	return (
 		<View style={viewBase}>
-			<Header
-				rightComponent={<CancelBtn text="Close" onClick={() => navigation.navigate(Routes.DASHBOARD)} />}
-			/>
-			<ScrollView style={wrappingContainerBase}>
+			<Header />
+			<View style={{paddingHorizontal: 10, flex: 1}}>
 				<View style={ baseHeader }>
 					<Text style={styles.headerText}>{Translation.COMMON.SUCCEEDED}</Text>
 					<Text style={styles.headerText}>{Translation.COMMON.THANK_YOU}</Text>
 				</View>
-				<Text style={styles.bodyText}>Your receipt can be found in your transaction overview.</Text>
-			</ScrollView>
+				<View style={{flex: 1, margin: 15, justifyContent: 'center', alignItems: 'center'}}>
+					<Image
+						source={require("../../../assets/images/burkshare_paper_money.png")}
+						style={{justifyContent: 'center', width: '100%'}}
+						resizeMode='contain'
+					/>			
+				</View>
+			</View>
+			
 			<KeyboardAvoidingView
 				behavior={Platform.OS == "ios" ? "padding" : "height"} >
 				<View style={styles.bottomView}>
 					<Button
 						type={BUTTON_TYPES.DARK_GREEN}
 						title={Translation.BUTTON.CLOSE}
-						onPress={() => navigation.navigate(Routes.DASHBOARD)}
+						onPress={() => navigation.goBack()}
 					/>
 				</View>
 			</KeyboardAvoidingView>

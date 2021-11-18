@@ -1,27 +1,27 @@
 import { Action } from 'redux';
-import { PERSONAL_FUNDING_SOURCE_LOAD, BUSINESS_FUNDING_SOURCE_LOAD } from '../action-types';
+import { CLIENT_FUNDING_SOURCE_LOAD, BUSINESS_FUNDING_SOURCE_LOAD } from '../action-types';
 
 export interface FundingSourceState {
-    personalFundingSource: boolean,
+    clientFundingSource: boolean,
     businessFundingSource: boolean,
 }
 
 interface FundingSourceAction extends Action {
     type: string,
     payload: {
-        personalFundingSource?: boolean,
+        clientFundingSource?: boolean,
         businessFundingSource?: boolean,
     }
 }
 
 const initialState: FundingSourceState = {
-    personalFundingSource: false,
-    businessFundingSource: false,
+    clientFundingSource: true,
+    businessFundingSource: true,
 }
 
 export const fundingSourceReducer = (state = initialState, action: FundingSourceAction): FundingSourceState => {
     switch(action.type) {
-        case PERSONAL_FUNDING_SOURCE_LOAD: 
+        case CLIENT_FUNDING_SOURCE_LOAD: 
             return {
                 ...state,
                 ...action.payload

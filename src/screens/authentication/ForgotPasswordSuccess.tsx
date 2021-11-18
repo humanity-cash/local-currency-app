@@ -38,10 +38,7 @@ const ForgotPasswordSuccess = () => {
 					type="darkGreen"
 					title="DONE"
 					onPress={() => {
-						signIn({
-							email: forgotPasswordDetails.email,
-							password: forgotPasswordDetails.newPassword,
-						});
+						signIn(forgotPasswordDetails.email, forgotPasswordDetails.newPassword);
 					}}
 				/>
 			</View>

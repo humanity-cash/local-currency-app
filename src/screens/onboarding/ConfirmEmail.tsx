@@ -23,16 +23,16 @@ const styles = StyleSheet.create({
 const ConfirmEmail = (): React.ReactElement => {
 	const navigation = useNavigation();
 	const [noCodeReceived, setNoCodeReceived] = useState(false);
-	const { personalDetails: { email, emailVerified }, updatePersonalDetails } = useUserDetails();
+	const { clientDetails: { email, emailVerified }, updateClientDetails } = useUserDetails();
 
 	useEffect(() => {
-		updatePersonalDetails({ emailVerified: false });
+		updateClientDetails({ emailVerified: false });
 	}, [noCodeReceived]);
 
 	useEffect(() => {
 		setTimeout(() => {
 			if (!emailVerified) {
-				updatePersonalDetails({ emailVerified: true });
+				updateClientDetails({ emailVerified: true });
 			}
 		}, 6000);
 	}, [noCodeReceived, emailVerified]);

@@ -23,7 +23,7 @@ import { BUTTON_TYPES } from 'src/constants';
 import { UserAPI } from 'src/api';
 import { showToast } from 'src/utils/common';
 import { ToastType, LoadingScreenTypes } from 'src/utils/types';
-import { loadPersonalWallet } from 'src/store/wallet/wallet.actions';
+import { loadClientWallet } from 'src/store/wallet/wallet.actions';
 import { updateLoadingStatus } from 'src/store/loading/loading.actions';
 
 const styles = StyleSheet.create({
@@ -102,7 +102,7 @@ const LoadUp = (): JSX.Element => {
   }, [amount]);
 
   const onValueChange = (name: string, change: string) => {
-    setAmount(change);
+    setAmount(change.replace(',', '.'));
   };
 
   const onLoadUp = async () => {
@@ -121,7 +121,7 @@ const LoadUp = (): JSX.Element => {
     );
 
     if (response.data) {
-      await dispatch(loadPersonalWallet(customerDwollaId));
+      await dispatch(loadClientWallet(customerDwollaId));
       navigation.navigate(Routes.LOADUP_SUCCESS);
     } else {
       showToast(ToastType.ERROR, "Whoops, something went wrong.", "Connection failed.");
@@ -184,7 +184,7 @@ const LoadUp = (): JSX.Element => {
             <BorderedInput
               label="Amount"
               name="amount"
-              keyboardType="number-pad"
+              keyboardType="decimal-pad"
               placeholder="Amount"
               prefix="B$"
               value={amount}

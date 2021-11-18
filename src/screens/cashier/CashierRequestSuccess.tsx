@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, View, KeyboardAvoidingView, ScrollView, Platform } from 'react-native';
+import { StyleSheet, View, KeyboardAvoidingView, ScrollView, Platform, SafeAreaView, Image } from 'react-native';
 import { Text } from 'react-native-elements';
 import { colors } from "src/theme/colors";
 import { CancelBtn, Button, Modal, ModalHeader } from "src/shared/uielements";
@@ -22,16 +22,16 @@ const styles = StyleSheet.create({
 	}
 });
 
-type MerchantRequestSuccessProps = {
+type BusinessRequestSuccessProps = {
 	visible: boolean,
 	onClose: ()=>void,
     amount: number
 }
 
-const CashierRequestSuccess = (props: MerchantRequestSuccessProps): JSX.Element => {
+const CashierRequestSuccess = (props: BusinessRequestSuccessProps): JSX.Element => {
     return (
         <Modal visible={props.visible}>
-            <View style={ modalViewBase }>
+            <SafeAreaView style={ modalViewBase }>
                 <ModalHeader
                     rightComponent={<CancelBtn text="Close" color={colors.purple} onClick={props.onClose} />}
                 />
@@ -41,7 +41,13 @@ const CashierRequestSuccess = (props: MerchantRequestSuccessProps): JSX.Element 
                             {Translation.CASHIER.PAYMENT_SUCCESS} {props.amount.toFixed(2)}.
                         </Text>
                     </View>
-					<Text style={styles.bodyText}> {Translation.CASHIER.PAYMENT_SUCCESS_DETAIL} </Text>
+					<View style={{flex: 1, margin: 15, justifyContent: 'center', alignItems: 'center'}}>
+                        <Image
+                            source={require("../../../assets/images/burkshare_paper_money.png")}
+                            style={{justifyContent: 'center', width: '100%'}}
+                            resizeMode='contain'
+                        />			
+                    </View>
                 </ScrollView>
                 <KeyboardAvoidingView
                     behavior={Platform.OS == "ios" ? "padding" : "height"} >
@@ -53,7 +59,7 @@ const CashierRequestSuccess = (props: MerchantRequestSuccessProps): JSX.Element 
                         />
                     </View>
                 </KeyboardAvoidingView>
-            </View>
+            </SafeAreaView>
         </Modal>
     )
 }

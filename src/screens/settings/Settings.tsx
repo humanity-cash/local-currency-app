@@ -76,7 +76,7 @@ export const Settings = (): ReactElement => {
 						type="transparent"
 						title={Translation.BUTTON.MY_PROFILE}
 						style={styles.settingItem}
-						onPress={()=>navigation.navigate(Routes.SETTING_PERSONAL_PROFILE)}
+						onPress={()=>navigation.navigate(Routes.SETTING_CLIENT_PROFILE)}
 					/>
 					<Button
 						type="transparent"
