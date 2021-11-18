@@ -130,6 +130,7 @@ const BusinessProfileForm = (): ReactElement => {
 				}
 				style={styles.storyText}
 				numberOfLines={6}
+				maxLength={50}
 			/>
 		</View>
   	);

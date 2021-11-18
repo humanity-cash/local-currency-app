@@ -1,8 +1,7 @@
 import React, { useEffect, useState, useContext } from 'react';
-import { StyleSheet, View, ScrollView, KeyboardAvoidingView, Platform } from 'react-native';
+import { StyleSheet, View, ScrollView, KeyboardAvoidingView, Platform, SafeAreaView } from 'react-native';
 import { Text } from 'react-native-elements';
 import { AuthContext } from 'src/auth';
-import { useCameraPermission } from 'src/hooks';
 import { colors } from "src/theme/colors";
 import { BarCodeScanner } from 'expo-barcode-scanner';
 import Translation from 'src/translation/en.json';
@@ -55,6 +54,18 @@ const styles = StyleSheet.create({
 		color: colors.text, 
 		fontSize: 12 
 	},
+	labelView: {
+		flexDirection: 'row',
+		justifyContent: 'space-between'
+	},
+	maxLabel: { 
+		color: colors.mistakeRed, 
+		fontSize: 12 
+	},
+	mistakeWrapper: {
+		borderWidth: 1,
+		borderColor: colors.mistakeRed
+	},
 	input: {
 		backgroundColor: colors.white,
 		color: colors.purple
@@ -88,13 +99,13 @@ const styles = StyleSheet.create({
 
 const CashierReturnQRCodeScan = (): JSX.Element => {
 	const navigation = useNavigation();
-	const hasPermission = useCameraPermission();
 	const dispatch = useDispatch();
 	const { businessDwollaId } = useContext(AuthContext);
 	const [isScanned, setIsScanned] = useState<boolean>(false);
 	const [isReturnModal, setIsReturnModal] = useState<boolean>(false);
 	const [amount, setAmount] = useState<string>("");
 	const [goNext, setGoNext] = useState<boolean>(false);
+	const [isWrong, setIsWorng] = useState(false)
 	const [state, setState] = useState<QRCodeEntry>({
 		securityId: SECURITY_ID,
 		to: "",
@@ -107,7 +118,20 @@ const CashierReturnQRCodeScan = (): JSX.Element => {
 	});
 
 	useEffect(() => {
-		setGoNext(Number(amount) > 0);
+		const maxAmount = Number(state.amount);
+		const inputAmount = Number(amount)
+		if ( inputAmount > 0 ) {
+			if(inputAmount > maxAmount) {
+				setIsWorng(true)
+				setGoNext(false)
+			} else {
+				setIsWorng(false)
+				setGoNext(true)
+			}
+		} else {
+			setIsWorng(false)
+			setGoNext(false)
+		}
 	}, [amount]);
 
 	const handleBarCodeScanned = (data: HandleScaned) => {
@@ -123,10 +147,6 @@ const CashierReturnQRCodeScan = (): JSX.Element => {
 		} else {
 			showToast(ToastType.ERROR, "Whooops, something went wrong.", "Ivalid QRCode");
 		}
-	}
-
-	if (hasPermission === false) {
-		return <Text>{Translation.OTHER.NO_CAMERA_PERMISSION}</Text>;
 	}
 
 	const onReturn = async () => {
@@ -167,7 +187,7 @@ const CashierReturnQRCodeScan = (): JSX.Element => {
 	}
 
 	const onValueChange = (name: string, change: string) => {
-		setAmount(change);
+		setAmount(change.replace(',', '.'));
 	}
 
 	const onModalClose = () => {
@@ -190,7 +210,7 @@ const CashierReturnQRCodeScan = (): JSX.Element => {
 			</View>
 			{isReturnModal && (
 				<Modal visible={isReturnModal}>
-					<View style={ modalViewBase }>
+					<SafeAreaView style={ modalViewBase }>
 						<ModalHeader
 							leftComponent={<BackBtn color={colors.purple} onClick={() => setIsReturnModal(false)} />}
 							rightComponent={<CancelBtn text="Close" onClick={onModalClose} />}
@@ -217,15 +237,21 @@ const CashierReturnQRCodeScan = (): JSX.Element => {
 									</View>
 								</View>
 
-								<Text style={styles.label}>{Translation.LABEL.RETURN_AMOUNT}</Text>
+								<View style={styles.labelView}>
+									<Text style={styles.label}>{Translation.LABEL.RETURN_AMOUNT}</Text>
+									{isWrong &&
+										<Text style={styles.maxLabel}>{Translation.LABEL.RETURN_MAX_AMOUNT}</Text>
+									}
+								</View>
 								<BorderedInput
 									label="Amount"
 									name="amount"
-									keyboardType="number-pad"
+									keyboardType="decimal-pad"
 									placeholder="Amount"
 									placeholderTextColor={colors.greyedPurple}
 									prefix="B$"
 									style={styles.input}
+									containerStyle={isWrong ? styles.mistakeWrapper : null}
 									textStyle={styles.text}
 									value={amount}
 									onChange={onValueChange}
@@ -243,7 +269,7 @@ const CashierReturnQRCodeScan = (): JSX.Element => {
 								/>
 							</View>
 						</KeyboardAvoidingView>
-					</View>
+					</SafeAreaView>
 				</Modal>
 			)}
 		</View>

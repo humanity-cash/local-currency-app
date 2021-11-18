@@ -7,11 +7,11 @@ import { Dialog } from "src/shared/uielements";
 import { dialogViewBase } from "src/theme/elements";
 import { PaymentMode, SECURITY_ID } from "src/utils/types";
 import { useBrightness } from "src/hooks";
-import { loadPersonalWallet } from 'src/store/wallet/wallet.actions';
+import { loadClientWallet } from 'src/store/wallet/wallet.actions';
 import { WalletState } from 'src/store/wallet/wallet.reducer';
 import { useSelector, useDispatch } from 'react-redux';
 import { AppState } from 'src/store';
-import { loadPersonalTransactions } from 'src/store/transaction/transaction.actions';
+import { loadClientTransactions } from 'src/store/transaction/transaction.actions';
 
 const styles = StyleSheet.create({
     dialog: {
@@ -61,12 +61,12 @@ type QRCodeGenProps = {
 }
 
 const QRCodeGen = (props: QRCodeGenProps): JSX.Element => {
-    const { personalWallet } = useSelector((state: AppState) => state.walletReducer) as WalletState;
+    const { clientWallet } = useSelector((state: AppState) => state.walletReducer) as WalletState;
     const dispatch = useDispatch();
     const { customerDwollaId, userAttributes } = useContext(AuthContext);
     const { hasPermission, setMaxBrightness, setDefaultBrightness} = useBrightness();
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const [initBalance, setInitBalance] = useState<number>(personalWallet.availableBalance);
+    const [initBalance, setInitBalance] = useState<number>(clientWallet.availableBalance);
     const [isSuccess, setIsSuccess] = useState<boolean>(false);
     const addressStr = JSON.stringify({
         securityId: SECURITY_ID,
@@ -78,7 +78,7 @@ const QRCodeGen = (props: QRCodeGenProps): JSX.Element => {
     useEffect(() => {
         const timerId = setInterval(async () => {
             if (customerDwollaId) {
-                await dispatch(loadPersonalWallet(customerDwollaId));
+                await dispatch(loadClientWallet(customerDwollaId));
             }
         }, 1500);
         return () => clearInterval(timerId);
@@ -99,14 +99,14 @@ const QRCodeGen = (props: QRCodeGenProps): JSX.Element => {
         if (!isSuccess) {
             setIsSuccess(true);
             if (customerDwollaId) {
-                await dispatch(loadPersonalTransactions(customerDwollaId));
+                await dispatch(loadClientTransactions(customerDwollaId));
             }
             setDefaultBrightness();
-            props.onSuccess(personalWallet.availableBalance - initBalance);
+            props.onSuccess(clientWallet.availableBalance - initBalance);
         }
     }
 
-    if (personalWallet.availableBalance > initBalance) {
+    if (clientWallet.availableBalance > initBalance) {
         onSuccess();
     }
 

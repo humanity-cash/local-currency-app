@@ -6,7 +6,7 @@ export type BirthDate = {
 
 export type OnboardingState = {
   authorization: AuthorizationDetails;
-  personalDetails: PersonalDetails;
+  clientDetails: ClientDetails;
 };
 
 export type AuthorizationDetails = {
@@ -14,12 +14,12 @@ export type AuthorizationDetails = {
   cashierView: boolean;
 };
 
-export type PersonalDetails = {
+export type ClientDetails = {
   email: string;
   emailVerified: boolean;
 };
 
-export type PersonalDetailsErrors = {
+export type ClientDetailsErrors = {
   firstname?: string;
   lastname?: string;
   username?: string;
@@ -27,7 +27,7 @@ export type PersonalDetailsErrors = {
   dateOfBirth?: string;
 };
 
-export type PersonalAddressErrors = {
+export type ClientAddressErrors = {
   addressLine?: string;
   addressLine2?: string;
   zipCode?: string;
@@ -36,7 +36,7 @@ export type PersonalAddressErrors = {
 };
 
 export type Status = {
-  personalDetails: boolean;
+  clientDetails: boolean;
   cashAdded: boolean;
   terms: boolean;
   verifyId: boolean;
@@ -320,20 +320,20 @@ export const TransactionTypes = {
   'Purchasement': 'Purchasement'
 }
 
-export type MerchantTransactionItem = {
+export type BusinessTransactionItem = {
   transactionId: string,
   type: TransactionType,
   amount: number,
   date: string
 }
 
-export type MerchantCategory = {
+export type BusinessCategory = {
   id: string;
   name: string;
-  merchants: MerchantEntry[];
+  businesses: BusinessEntry[];
 }
 
-export type MerchantEntry = {
+export type BusinessEntry = {
   title: string;
   description: string;
   image: string;

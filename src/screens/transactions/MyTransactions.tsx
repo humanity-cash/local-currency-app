@@ -1,5 +1,5 @@
 import { useNavigation } from '@react-navigation/native';
-import React, { useState, useEffect, useContext } from 'react';
+import React, { useState, useEffect, useContext, useMemo } from 'react';
 import { AuthContext } from 'src/auth';
 import { StyleSheet, View, ScrollView, TouchableOpacity } from 'react-native';
 import { Text, Image } from 'react-native-elements';
@@ -8,14 +8,14 @@ import { Header, BackBtn, SearchInput, Dialog, Button } from "src/shared/uieleme
 import { baseHeader, viewBase, dialogViewBase, wrappingContainerBase, FontFamily } from "src/theme/elements";
 import { colors } from "src/theme/colors";
 import MyTransactionList from './MyTransactionList';
-import MyTransactionFilter from './MyTransactionsFilter';
+import MyTransactionFilter, { transactionTypes } from './MyTransactionsFilter';
 import ReturnQRCodeGen from './ReturnQRCodeGen';
 import Translation from 'src/translation/en.json';
 import * as Routes from 'src/navigation/constants';
 import { getBerksharePrefix } from "src/utils/common";
 import { TransactionType, LoadingScreenTypes } from "src/utils/types";
 import { ITransaction } from 'src/api/types';
-import { loadPersonalTransactions } from 'src/store/transaction/transaction.actions';
+import { loadClientTransactions } from 'src/store/transaction/transaction.actions';
 import { TransactionState } from 'src/store/transaction/transaction.reducer';
 import { useSelector, useDispatch } from 'react-redux';
 import { AppState } from 'src/store';
@@ -24,6 +24,10 @@ import { WalletState } from 'src/store/wallet/wallet.reducer';
 import { updateLoadingStatus } from 'src/store/loading/loading.actions';
 import { BUTTON_TYPES } from 'src/constants';
 import PaymentRequestSuccess from 'src/screens/payment/PaymentRequestSuccess';
+import DateTimePicker from "react-native-modal-datetime-picker";
+import { BarCodeScanner } from 'expo-barcode-scanner';
+import SettingDialog from 'src/shared/uielements/SettingDialog';
+import { FundingSourceState } from 'src/store/funding-source/funding-source.reducer';
 
 const styles = StyleSheet.create({
 	content: {
@@ -127,7 +131,43 @@ const styles = StyleSheet.create({
 	},
 	dialogHeight: {
 		height: 300
-	}
+	},
+	inlineView: {
+        flex: 1,
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        marginVertical: 5,
+        alignItems: 'center'
+    },
+    dateView: {
+        flex: 1,
+    },
+    label: {
+		fontSize: 10,
+		lineHeight: 14,
+		color: colors.bodyText
+	},
+    date: {
+        height: 55,
+        marginVertical: 7,
+        alignItems: 'center',
+        justifyContent: 'center',
+        borderRadius: 3,
+        backgroundColor: colors.inputBg
+    },
+    placeholder: {
+        color: colors.lightGreen
+    },
+    pickerText: {
+        color: colors.darkGreen
+    },
+    separator: {
+        width: 15,
+        height: 1,
+        marginHorizontal: 10,
+        marginTop: 15,
+        backgroundColor: colors.darkGreen
+    },
 });
 
 type TransactionDetailProps = {
@@ -207,9 +247,17 @@ const MyTransactions = (): JSX.Element => {
 	const [selectedItem, setSelectedItem] = useState<ITransaction>(defaultTransaction);
 	const [isRequestSuccess, setIsRequestSuccess] = useState<boolean>(false);
 	const [receivedAmount, setReceivedAmount] = useState<number>(0);
+	const [isSetting, setIsSetting] = useState(false)
 
-	const { personalTransactions } = useSelector((state: AppState) => state.transactionReducer) as TransactionState;
-	const { personalWallet } = useSelector((state: AppState) => state.walletReducer) as WalletState;
+	const { clientTransactions } = useSelector((state: AppState) => state.transactionReducer) as TransactionState;
+	const { clientWallet } = useSelector((state: AppState) => state.walletReducer) as WalletState;
+	const { clientFundingSource } = useSelector((state: AppState) => state.fundingSourceReducer) as FundingSourceState;
+
+	const [startDate, setStartDate] = useState<Date | undefined>(undefined);
+	const [endDate, setEndDate] = useState<Date | undefined>(undefined);
+    const [isStartDate, setIsStartDate] = useState<boolean>(false);
+    const [isEndDate, setIsEndDate] = useState<boolean>(false);
+	const [type, setType] = useState<string>('All');
 
 	useEffect(() => {
 		if (customerDwollaId) {
@@ -218,7 +266,7 @@ const MyTransactions = (): JSX.Element => {
 					isLoading: true,
 					screen: LoadingScreenTypes.LOADING_DATA
 				}));
-				await dispatch(loadPersonalTransactions(customerDwollaId));
+				await dispatch(loadClientTransactions(customerDwollaId));
 				dispatch(updateLoadingStatus({
 					isLoading: false,
 					screen: LoadingScreenTypes.LOADING_DATA
@@ -226,6 +274,37 @@ const MyTransactions = (): JSX.Element => {
 			})();
 		}
 	}, []);
+
+	const transactionList = useMemo(() => {
+		
+		let computedList: ITransaction[] = clientTransactions;
+
+		// To do
+		if (searchText != '') {
+			computedList = computedList.filter(item => item);
+		}
+
+		const selectedType = type == transactionTypes[1] ? 'IN' : 
+							type == transactionTypes[2] ? 'OUT' :
+							type == transactionTypes[3] ? 'LOADUP' : 'CASHOUT';
+		if (type != transactionTypes[0]) {
+			computedList = computedList.filter(item => item.type === selectedType);
+		}
+
+		if(startDate && endDate) {
+			computedList = computedList.filter(item => 
+				moment(item.timestamp).isAfter(startDate) && moment(item.timestamp).isBefore(endDate)
+			);
+		} else {
+			if (startDate) {
+				computedList = computedList.filter(item => moment(item.timestamp).isAfter(startDate));
+			} else if (endDate) {
+				computedList = computedList.filter(item => moment(item.timestamp).isBefore(endDate));
+			}
+		}
+
+		return computedList;
+	}, [clientTransactions, type, startDate, endDate, searchText]);
 
 	const onSearchChange = (name: string, change: string) => {
 		setSearchText(change);
@@ -257,6 +336,47 @@ const MyTransactions = (): JSX.Element => {
 		setIsRequestSuccess(false);
 	}
 
+	// calendar
+	// eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const onStartDateChange = (selectedDate?: Date) => {
+        const currentDate = selectedDate || startDate;
+        setIsStartDate(false);
+		setStartDate(currentDate);
+		if(moment(currentDate).isAfter(endDate)) {
+			setEndDate(currentDate)
+		}
+    };
+
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const onEndDateChange = (selectedDate?: Date) => {
+        const currentDate = selectedDate || startDate;
+        setIsEndDate(false);
+        setEndDate(currentDate);
+    };
+
+	const onClear = () => {
+		setType('All');
+		setStartDate(undefined);
+		setEndDate(undefined);
+	}
+
+	const onSelectType = (type: string) => {
+		setType(type);
+	}
+
+	const onPressScan = async () => {
+		const {status} = await BarCodeScanner.requestPermissionsAsync();
+		if(status === 'granted') {
+			if(clientFundingSource && clientWallet.availableBalance > 0) {
+				navigation.navigate(Routes.QRCODE_SCAN)
+			} else {
+				navigation.navigate(Routes.RECEIVE_PAYMENT)
+			}
+		} else {
+			setIsSetting(true)
+		}
+	}
+
 	return (
 		<View style={viewBase}>
 			<Header
@@ -267,7 +387,7 @@ const MyTransactions = (): JSX.Element => {
 					<Text style={styles.headerText}>{Translation.PAYMENT.MY_TRANSACTIONS}</Text>
 				</View>
 				<View style={styles.totalAmountView}>
-					<Text style={styles.amountText}>B$ {personalWallet.availableBalance}</Text>
+					<Text style={styles.amountText}>B$ {clientWallet.availableBalance}</Text>
 				</View>
 				
 				<ScrollView>
@@ -291,13 +411,39 @@ const MyTransactions = (): JSX.Element => {
 								/>
 							</TouchableOpacity>
 						</View>
-						{isFilterVisible && <MyTransactionFilter></MyTransactionFilter>}
-						<MyTransactionList data={personalTransactions} onSelect={viewDetail} />
+						{isFilterVisible &&
+							<>
+								<View style={styles.inlineView}>
+									<View style={styles.dateView}>
+										<Text style={styles.label}>{Translation.LABEL.START_DATE}</Text>
+										<TouchableOpacity onPress={()=>setIsStartDate(true)} style={styles.date} >
+											<Text style={startDate == null ? styles.placeholder : styles.pickerText}>
+												{startDate == null ? "MM/DD/YY" : moment(startDate).format('MM/DD/yyyy')}
+											</Text>
+										</TouchableOpacity>
+									</View>
+									<View style={styles.separator}></View>
+									<View style={styles.dateView}>
+										<Text style={styles.label}>{Translation.LABEL.END_DATE}</Text>
+										<TouchableOpacity onPress={()=>setIsEndDate(true)} style={styles.date}>
+											<Text style={endDate == null ? styles.placeholder : styles.pickerText}>
+												{endDate == null ? "MM/DD/YY" : moment(endDate).format('MM/DD/yyyy')}
+											</Text>
+										</TouchableOpacity>
+									</View>
+								</View>	
+								<MyTransactionFilter
+									onClear={onClear}
+									onSelectType={onSelectType}
+								/>
+							</>
+						}
+						<MyTransactionList data={transactionList} onSelect={viewDetail} />
 					</View>
 				</ScrollView>
 			</View>
 
-			<TouchableOpacity onPress={()=>navigation.navigate(Routes.QRCODE_SCAN)} style={styles.scanButton}>
+			<TouchableOpacity onPress={onPressScan} style={styles.scanButton}>
 				<Image
 					source={require('../../../assets/images/qr_code_consumer.png')}
 					containerStyle={styles.qrIcon}
@@ -308,6 +454,28 @@ const MyTransactions = (): JSX.Element => {
 			{isDetailView && <TransactionDetail visible={isDetailView} data={selectedItem} onReturn={onReturn} onClose={onClose} />}
 			{isReturnView && <ReturnQRCodeGen visible={isReturnView} onSuccess={onSuccess} onClose={onClose} transactionInfo={selectedItem} /> }
 			{isRequestSuccess && <PaymentRequestSuccess visible={isRequestSuccess} onClose={onConfirm} amount={receivedAmount} /> }
+
+			<DateTimePicker
+				isVisible={isStartDate}
+				mode="date"
+				date={startDate ? startDate : new Date()}
+				onConfirm={onStartDateChange}
+				onCancel={() => {setIsStartDate(false)}}
+			/>
+			<DateTimePicker
+				isVisible={isEndDate}
+				mode="date"
+				date={endDate ? endDate : new Date()}
+				onConfirm={onEndDateChange}
+				minimumDate={startDate}
+				onCancel={() => {setIsEndDate(false)}}
+			/>
+
+			<SettingDialog
+				visible={isSetting}
+				onCancel={() => setIsSetting(false)}
+				description={Translation.OTHER.NO_CAMERA_PERMISSION_DETAIL}
+			/>
 		</View>
 	);
 }

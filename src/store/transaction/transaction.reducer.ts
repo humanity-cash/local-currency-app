@@ -1,28 +1,28 @@
 import { Action } from 'redux';
-import { PERSONAL_TRANSACTION_LOAD_ALL, BUSINESS_TRANSACTION_LOAD_ALL } from '../action-types';
+import { CLIENT_TRANSACTION_LOAD_ALL, BUSINESS_TRANSACTION_LOAD_ALL } from '../action-types';
 import { ITransaction } from 'src/api/types';
 
 export interface TransactionState {
-    personalTransactions: ITransaction[],
+    clientTransactions: ITransaction[],
     businessTransactions: ITransaction[],
 }
 
 interface TransactionAction extends Action {
     type: string,
     payload: {
-        personalTransactions?: ITransaction[],
+        clientTransactions?: ITransaction[],
         businessTransactions?: ITransaction[],
     }
 }
 
 const initialState: TransactionState = {
-    personalTransactions: [],
+    clientTransactions: [],
     businessTransactions: [],
 }
 
 export const transactionReducer = (state = initialState, action: TransactionAction): TransactionState => {
     switch(action.type) {
-        case PERSONAL_TRANSACTION_LOAD_ALL: 
+        case CLIENT_TRANSACTION_LOAD_ALL: 
             return {
                 ...state,
                 ...action.payload

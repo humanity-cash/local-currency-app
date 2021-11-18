@@ -36,12 +36,12 @@ const SelectAccountType = (): JSX.Element => {
 	const navigation = useNavigation()
 	const { setCustomerBasicVerificationDetails } = useContext(AuthContext);
 
-	const handlePersonal = () => {
+	const handleClient = () => {
 		setCustomerBasicVerificationDetails((pv: any) => ({
 			...pv,
 			type: "personal",
 		}));
-		navigation.navigate(Routes.PERSONAL_PROFILE)
+		navigation.navigate(Routes.CLIENT_PROFILE)
 	}
 
 	const handleBuisness = () => {
@@ -63,13 +63,13 @@ const SelectAccountType = (): JSX.Element => {
 			<View style={styles.accountType}>
 				<Button 
 					type="transparent" 
-					onPress={handlePersonal} 
+					onPress={handleClient} 
 					title={Translation.BUTTON.PERSONAL}
 					style={styles.button} />
 				<Button 
 					type="transparent" 
 					onPress={handleBuisness} 
-					title={Translation.BUTTON.BUSINESS_PERSONAL}
+					title={Translation.BUTTON.BUSINESS_CLIENT}
 					style={styles.button}/>
 			</View>
 		</ScrollView>

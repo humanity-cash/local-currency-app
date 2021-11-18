@@ -79,7 +79,7 @@ const BusinessOwnerAddressForm = (
 		<View>
 			<View style={styles.container}>
 				<Text style={styles.bodyText}>
-					{Translation.PROFILE.PERSIONAL_DETAILS_BODY}
+					{Translation.PROFILE.CLIENT_DETAILS_BODY}
 				</Text>
 			</View>
 			<Text style={styles.label}>{Translation.LABEL.ADDRESS1}</Text>

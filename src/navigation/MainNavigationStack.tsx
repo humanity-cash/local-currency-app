@@ -7,7 +7,7 @@ import { AuthStatus, UserType } from "src/auth/types";
 import { useRouteTracking } from "src/hooks";
 import { CashoutNavigator } from "src/navigation/CashoutNavigator";
 import { ForgotPasswordNavigator } from "src/navigation/ForgotPasswordStack";
-import { MerchantBankAccountNavigator } from "src/navigation/MerchantBankAccountNavigator";
+import { BusinessBankAccountNavigator } from "src/navigation/BusinessBankAccountNavigator";
 import { SignupBusinessNavigator } from "src/navigation/SignupBusinessNavigator";
 import Login from "src/screens/authentication/Login";
 import CashierHelp from "src/screens/cashier/CashierHelp";
@@ -20,25 +20,25 @@ import CashierReturnQRCodeScan from "src/screens/cashier/CashierReturnQRCodeScan
 import CashierReturnSuccess from "src/screens/cashier/CashierReturnSuccess";
 import CashierTransactions from "src/screens/cashier/CashierTransactions";
 import CashierDashboard from "src/screens/dashboard/CashierDashboard";
-import MerchantTabs from "src/screens/dashboard/MerchantTabs";
+import BusinessTabs from "src/screens/dashboard/BusinessTabs";
 import Tabs from "src/screens/dashboard/Tabs";
-import MerchantCashoutPassword from "src/screens/merchantCashout/MerchantCashoutPassword";
-import MerchantRedemptionInProgress from "src/screens/merchantCashout/MerchantRedemptionInProgress";
-import MerchantLoadupPending from "src/screens/merchantLoadup/MerchantLoadupPending";
-import MerchantLoadupSuccess from "src/screens/merchantLoadup/MerchantLoadupSuccess";
-import MerchantPaymentPending from "src/screens/merchantPayment/MerchantPaymentPending";
-import MerchantPaymentSuccess from "src/screens/merchantPayment/MerchantPaymentSuccess";
-import MerchantReturn from "src/screens/merchantPayment/MerchantReturn";
-import MerchantPayoutPending from "src/screens/merchantPayout/MerchantPayoutPending";
-import MerchantPayoutQRCodeScan from "src/screens/merchantPayout/MerchantPayoutQRCodeScan";
-import MerchantPayoutSuccess from "src/screens/merchantPayout/MerchantPayoutSuccess";
-import MerchantPayoutToPersonal from "src/screens/merchantPayout/MerchantPayoutToPersonal";
-import MerchantPayoutToSomeone from "src/screens/merchantPayout/MerchantPayoutToSomeone";
-import MerchantSettingsProfile from "src/screens/merchantSettings/MerchantSettingsProfile";
-import MerchantSettingsBankAccount from "src/screens/merchantSettings/MerchantSettingsBankAccount";
-import MerchantSettingsStaticQr from "src/screens/merchantSettings/MerchantSettingsStaticQr";
-import MerchantSettingsTermsAndConditions from "src/screens/merchantSettings/MerchantSettingsTermsAndConditions";
-import MerchantSettingsSecurity from "src/screens/merchantSettings/MerchantSettingsSecurity";
+import BusinessCashoutPassword from "src/screens/businessCashout/BusinessCashoutPassword";
+import BusinessRedemptionInProgress from "src/screens/businessCashout/BusinessRedemptionInProgress";
+import BusinessLoadupPending from "src/screens/businessLoadup/BusinessLoadupPending";
+import BusinessLoadupSuccess from "src/screens/businessLoadup/BusinessLoadupSuccess";
+import BusinessPaymentPending from "src/screens/businessPayment/BusinessPaymentPending";
+import BusinessPaymentSuccess from "src/screens/businessPayment/BusinessPaymentSuccess";
+import BusinessReturn from "src/screens/businessPayment/BusinessReturn";
+import BusinessPayoutPending from "src/screens/businessPayout/BusinessPayoutPending";
+import BusinessPayoutQRCodeScan from "src/screens/businessPayout/BusinessPayoutQRCodeScan";
+import BusinessPayoutSuccess from "src/screens/businessPayout/BusinessPayoutSuccess";
+import BusinessPayoutToClient from "src/screens/businessPayout/BusinessPayoutToClient";
+import BusinessPayoutToSomeone from "src/screens/businessPayout/BusinessPayoutToSomeone";
+import BusinessSettingsProfile from "src/screens/businessSettings/BusinessSettingsProfile";
+import BusinessSettingsBankAccount from "src/screens/businessSettings/BusinessSettingsBankAccount";
+import BusinessSettingsStaticQr from "src/screens/businessSettings/BusinessSettingsStaticQr";
+import BusinessSettingsTermsAndConditions from "src/screens/businessSettings/BusinessSettingsTermsAndConditions";
+import BusinessSettingsSecurity from "src/screens/businessSettings/BusinessSettingsSecurity";
 import ConfirmEmail from "src/screens/onboarding/ConfirmEmail";
 import CreateAccount from "src/screens/onboarding/CreateAccount";
 import EmailConfirmed from "src/screens/onboarding/EmailConfirmed";
@@ -46,9 +46,9 @@ import LinkBankAccount from "src/screens/onboarding/LinkBankAccount";
 import LoadUp from "src/screens/onboarding/LoadUp";
 import LoadUpSuccess from "src/screens/onboarding/LoadUpSuccess";
 import Password from "src/screens/onboarding/Password";
-import PersonalAddress from "src/screens/onboarding/PersonalAddress";
-import PersonalDetails from "src/screens/onboarding/PersonalDetails";
-import PersonalProfile from "src/screens/onboarding/PersonalProfile";
+import ClientAddress from "src/screens/onboarding/ClientAddress";
+import ClientDetails from "src/screens/onboarding/ClientDetails";
+import ClientProfile from "src/screens/onboarding/ClientProfile";
 import SelectAccountType from "src/screens/onboarding/SelectAccountType";
 import SelectBank from "src/screens/onboarding/SelectBank";
 import Teaser from "src/screens/onboarding/Teaser";
@@ -62,10 +62,11 @@ import Report from "src/screens/report/Report";
 import ReportSuccess from "src/screens/report/ReportSuccess";
 import SettingsBankAccount from "src/screens/settings/SettingsBankAccount";
 import SettingsDeleteAccount from "src/screens/settings/SettingsDeleteAccount";
-import SettingsPersonalProfile from "src/screens/settings/SettingsPersonalProfile";
+import SettingsClientProfile from "src/screens/settings/SettingsClientProfile";
 import SettingsSecurity from "src/screens/settings/SettingsSecurity";
 import SettingsTermsAndConditions from "src/screens/settings/SettingsTermsAndConditions";
 import * as Routes from "./constants";
+import PaymentReceiveAmount from '../screens/payment/PaymentReceiveAmount';
 
 const PrimaryStack = createStackNavigator();
 
@@ -141,6 +142,10 @@ const PrimaryStackScreen = () => {
 						component={PaymentPending}
 					/>
 					<PrimaryStack.Screen
+						name={Routes.PAYMENT_RECEIVE_AMOUNT}
+						component={PaymentReceiveAmount}
+					/>
+					<PrimaryStack.Screen
 						name={Routes.PAYMENT_SUCCESS}
 						component={PaymentSuccess}
 					/>
@@ -165,8 +170,8 @@ const PrimaryStackScreen = () => {
 						component={SettingsTermsAndConditions}
 					/>
 					<PrimaryStack.Screen
-						name={Routes.SETTING_PERSONAL_PROFILE}
-						component={SettingsPersonalProfile}
+						name={Routes.SETTING_CLIENT_PROFILE}
+						component={SettingsClientProfile}
 					/>
 					<PrimaryStack.Screen
 						name={Routes.SETTING_SECURITY}
@@ -187,6 +192,10 @@ const PrimaryStackScreen = () => {
 					<PrimaryStack.Screen
 						name={Routes.SELECT_BANK}
 						component={SelectBank}
+					/>
+					<PrimaryStack.Screen
+						name={Routes.BUSINESS_BANK_ACCOUNT}
+						component={BusinessBankAccountNavigator}
 					/>
 					{!completedBusinessVerification && (
 						<PrimaryStack.Screen
@@ -254,98 +263,106 @@ const PrimaryStackScreen = () => {
 			  completedBusinessVerification ? (
 				<>
 					<PrimaryStack.Screen
-						name={Routes.MERCHANT_TABS}
-						component={MerchantTabs}
+						name={Routes.BUSINESS_TABS}
+						component={BusinessTabs}
 					/>
 					<PrimaryStack.Screen
-						name={Routes.MERCHANT_PAYMENT_PENDING}
-						component={MerchantPaymentPending}
+						name={Routes.BUSINESS_PAYMENT_PENDING}
+						component={BusinessPaymentPending}
 					/>
 					<PrimaryStack.Screen
-						name={Routes.MERCHANT_PAYMENT_SUCCESS}
-						component={MerchantPaymentSuccess}
+						name={Routes.BUSINESS_PAYMENT_SUCCESS}
+						component={BusinessPaymentSuccess}
 					/>
 					<PrimaryStack.Screen
-						name={Routes.MERCHANT_RETURN}
-						component={MerchantReturn}
+						name={Routes.BUSINESS_RETURN}
+						component={BusinessReturn}
 					/>
 					<PrimaryStack.Screen
-						name={Routes.MERCHANT_LOADUP_PENDING}
-						component={MerchantLoadupPending}
+						name={Routes.BUSINESS_LOADUP_PENDING}
+						component={BusinessLoadupPending}
 					/>
 					<PrimaryStack.Screen
-						name={Routes.MERCHANT_LOADUP_SUCCESS}
-						component={MerchantLoadupSuccess}
+						name={Routes.BUSINESS_LOADUP_SUCCESS}
+						component={BusinessLoadupSuccess}
 					/>
 					<PrimaryStack.Screen
-						name={Routes.MERCHANT_PAYOUT_PERSONAL}
-						component={MerchantPayoutToPersonal}
+						name={Routes.BUSINESS_PAYOUT_CLIENT}
+						component={BusinessPayoutToClient}
 					/>
 					<PrimaryStack.Screen
-						name={Routes.MERCHANT_PAYOUT_SOMEONE}
-						component={MerchantPayoutToSomeone}
+						name={Routes.BUSINESS_PAYOUT_SOMEONE}
+						component={BusinessPayoutToSomeone}
 					/>
 					<PrimaryStack.Screen
-						name={Routes.MERCHANT_PAYOUT_PENDING}
-						component={MerchantPayoutPending}
+						name={Routes.BUSINESS_PAYOUT_PENDING}
+						component={BusinessPayoutPending}
 					/>
 					<PrimaryStack.Screen
-						name={Routes.MERCHANT_PAYOUT_SUCCESS}
-						component={MerchantPayoutSuccess}
+						name={Routes.BUSINESS_PAYOUT_SUCCESS}
+						component={BusinessPayoutSuccess}
 					/>
 					<PrimaryStack.Screen
-						name={Routes.MERCHANT_PAYOUT_QR_SCAN}
-						component={MerchantPayoutQRCodeScan}
+						name={Routes.PAYMENT_RECEIVE_AMOUNT}
+						component={PaymentReceiveAmount}
 					/>
 					<PrimaryStack.Screen
-						name={Routes.MERCHANT_CASHOUT_PASSWORD}
-						component={MerchantCashoutPassword}
+						name={Routes.PAYMENT_SUCCESS}
+						component={PaymentSuccess}
 					/>
 					<PrimaryStack.Screen
-						name={Routes.MERCHANT_REDEMPTION_IN_PROGRESS}
-						component={MerchantRedemptionInProgress}
+						name={Routes.BUSINESS_PAYOUT_QR_SCAN}
+						component={BusinessPayoutQRCodeScan}
 					/>
 					<PrimaryStack.Screen
-						name={Routes.MERCHANT_BANK_ACCOUNT}
-						component={MerchantBankAccountNavigator}
+						name={Routes.BUSINESS_CASHOUT_PASSWORD}
+						component={BusinessCashoutPassword}
+					/>
+					<PrimaryStack.Screen
+						name={Routes.BUSINESS_REDEMPTION_IN_PROGRESS}
+						component={BusinessRedemptionInProgress}
+					/>
+					<PrimaryStack.Screen
+						name={Routes.BUSINESS_BANK_ACCOUNT}
+						component={BusinessBankAccountNavigator}
 					/>
 					<PrimaryStack.Screen
 						name={Routes.REPORT_SUCCESS}
 						component={ReportSuccess}
 					/>
 					<PrimaryStack.Screen
-						name={Routes.MERCHANT_SETTINGS_PROFILE}
-						component={MerchantSettingsProfile}
+						name={Routes.BUSINESS_SETTINGS_PROFILE}
+						component={BusinessSettingsProfile}
 					/>
 					<PrimaryStack.Screen
-						name={Routes.MERCHANT_SETTINGS_BANK_ACCOUNT}
-						component={MerchantSettingsBankAccount}
+						name={Routes.BUSINESS_SETTINGS_BANK_ACCOUNT}
+						component={BusinessSettingsBankAccount}
 					/>
 					<PrimaryStack.Screen
-						name={Routes.MERCHANT_SETTINGS_STATIC_QR}
-						component={MerchantSettingsStaticQr}
+						name={Routes.BUSINESS_SETTINGS_STATIC_QR}
+						component={BusinessSettingsStaticQr}
 					/>
 					<PrimaryStack.Screen
-						name={Routes.MERCHANT_SETTINGS_LEGAL}
-						component={MerchantSettingsTermsAndConditions}
+						name={Routes.BUSINESS_SETTINGS_LEGAL}
+						component={BusinessSettingsTermsAndConditions}
 					/>
 					<PrimaryStack.Screen
-						name={Routes.MERCHANT_SETTINGS_SECURITY}
-						component={MerchantSettingsSecurity}
+						name={Routes.BUSINESS_SETTINGS_SECURITY}
+						component={BusinessSettingsSecurity}
 					/>
 					{!completedCustomerVerification && (
 						<>
 							<PrimaryStack.Screen
-								name={Routes.PERSONAL_PROFILE}
-								component={PersonalProfile}
+								name={Routes.CLIENT_PROFILE}
+								component={ClientProfile}
 							/>
 							<PrimaryStack.Screen
-								name={Routes.PERSONAL_DETAILS}
-								component={PersonalDetails}
+								name={Routes.CLIENT_DETAILS}
+								component={ClientDetails}
 							/>
 							<PrimaryStack.Screen
-								name={Routes.PERSONAL_ADDRESS}
-								component={PersonalAddress}
+								name={Routes.CLIENT_ADDRESS}
+								component={ClientAddress}
 							/>
 						</>
 					)}
@@ -359,16 +376,16 @@ const PrimaryStackScreen = () => {
 						component={SelectAccountType}
 					/>
 					<PrimaryStack.Screen
-						name={Routes.PERSONAL_PROFILE}
-						component={PersonalProfile}
+						name={Routes.CLIENT_PROFILE}
+						component={ClientProfile}
 					/>
 					<PrimaryStack.Screen
-						name={Routes.PERSONAL_DETAILS}
-						component={PersonalDetails}
+						name={Routes.CLIENT_DETAILS}
+						component={ClientDetails}
 					/>
 					<PrimaryStack.Screen
-						name={Routes.PERSONAL_ADDRESS}
-						component={PersonalAddress}
+						name={Routes.CLIENT_ADDRESS}
+						component={ClientAddress}
 					/>
 					<PrimaryStack.Screen
 						name={Routes.LINK_BANK_ACCOUNT}
@@ -383,8 +400,8 @@ const PrimaryStackScreen = () => {
 						component={SignupBusinessNavigator}
 					/>
 					<PrimaryStack.Screen
-						name={Routes.MERCHANT_BANK_ACCOUNT}
-						component={MerchantBankAccountNavigator}
+						name={Routes.BUSINESS_BANK_ACCOUNT}
+						component={BusinessBankAccountNavigator}
 					/>
 				</>
 			) : (

@@ -76,5 +76,6 @@ export const getWithdrawals = async (userId: UserId): Promise<AxiosPromiseRespon
 // Retrieve transactions for a user
 export const getTransactions = async (userId: UserId): Promise<ITransaction[]> => {
   const response = await getRequest(`/users/${userId}/transfer`);
-  return transactionDatas(response);
+
+  return transactionDatas(response.data);
 };

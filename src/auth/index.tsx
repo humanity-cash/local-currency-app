@@ -21,7 +21,8 @@ import {
 	ForgotPassword,
 	DwollaInfo,
 	defaultState,
-	IAuth, UserType
+	IAuth,
+	UserType
 } from "./types";
 
 export const AuthContext = React.createContext(defaultState);
@@ -61,7 +62,7 @@ const AuthProvider: React.FunctionComponent = ({ children }) => {
 	const [signInDetails, setSignInDetails] = useState(signInInitialState);
 	const [signUpDetails, setSignUpDetails] = useState(signUpInitialState);
 	const [forgotPasswordDetails, setForgotPasswordDetails] = useState<ForgotPassword>({
-		email: "esraa@keyko.io",
+		email: "",
 		verificationCode: "",
 		newPassword: "",
 	});
@@ -109,7 +110,7 @@ const AuthProvider: React.FunctionComponent = ({ children }) => {
 
 	const updateUserType = (cognitoId: String, newType: UserType): void => {
 		if (newType === userType) {
-			setAuthStatus(AuthStatus.Loading);
+			getSessionInfo();
 		} else {
 			setUserType(newType);
 		}
@@ -194,13 +195,15 @@ const AuthProvider: React.FunctionComponent = ({ children }) => {
 			signUpDetails.password
 		);
 		if (!response?.success) setAuthStatus(AuthStatus.SignedOut);
-		else setAuthStatus(AuthStatus.Loading); // Invokes getSession useEffect
+		else {
+			setAuthStatus(AuthStatus.Loading); // Invokes getSession useEffect
+		}
 
 		return response;
 	};
 
 	const signIn = async (
-		email = signInDetails.email,
+		email = signInDetails.email.toLowerCase(),
 		password = signInDetails.password
 	) => {
 		const response: BaseResponse<CognitoUserSession> =
@@ -373,6 +376,7 @@ const AuthProvider: React.FunctionComponent = ({ children }) => {
 		setBusinessDwollaInfo,
 		completeBusinessDwollaInfo,
 		changePassword,
+		getAttributes
 	};
 
 	return (
