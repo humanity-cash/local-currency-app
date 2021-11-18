@@ -106,7 +106,7 @@ const TransactionTypePicker = ({
 
 		const onPressCheck = () => {
 			if(selected && setSelected) {
-				let checks = [...selected];
+				const checks = [...selected];
 				checks[index] = !checks[index];
 				updateSelectCheck(checks)
 			}
