@@ -48,7 +48,8 @@ const SettingDialog = ({
 			Linking.openURL('app-settings:')
 		} else{
 			startActivityAsync(
-				Constants.manifest?.releaseChannel ? ActivityAction.APPLICATION_DETAILS_SETTINGS : ActivityAction.APPLICATION_SETTINGS
+				// Constants.manifest?.releaseChannel ? ActivityAction.APPLICATION_DETAILS_SETTINGS : ActivityAction.APPLICATION_SETTINGS
+				ActivityAction.APPLICATION_SETTINGS
 			);
 		}
 		onCancel()

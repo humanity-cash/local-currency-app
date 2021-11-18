@@ -32,14 +32,13 @@ import SettingsHelpAndContact from "../settings/SettingsHelpAndContact";
 import BusinessAccount from "../signupBusiness/BusinessAccount";
 import MyTransactions from "../transactions/MyTransactions";
 import Dashboard from "./Dashboard";
-import { Button, Dialog } from "src/shared/uielements";
-import { baseHeader, dialogViewBase, wrappingContainerBase } from "src/theme/elements";
-import { BUTTON_TYPES } from "src/constants";
 import { WalletState } from 'src/store/wallet/wallet.reducer';
 import { FundingSourceState } from 'src/store/funding-source/funding-source.reducer';
 import { useSelector } from 'react-redux';
 import { AppState } from 'src/store';
 import BankLinkDialog from 'src/shared/uielements/BankLinkDialog';
+import SettingDialog from 'src/shared/uielements/SettingDialog';
+import { BarCodeScanner } from 'expo-barcode-scanner';
 
 const styles = StyleSheet.create({
 	headerText: {
@@ -117,6 +116,7 @@ const DrawerContent = (
 
 	const { clientWallet } = useSelector((state: AppState) => state.walletReducer) as WalletState;
 	const { clientFundingSource } = useSelector((state: AppState) => state.fundingSourceReducer) as FundingSourceState;
+	const [isSetting, setIsSetting] = useState(false)
 
 	const onBusiness = () => {
 		updateUserType(cognitoId, UserType.Business);
@@ -144,16 +144,22 @@ const DrawerContent = (
 		setIsLoadupDialog(false);
 	}
 
-	const onPressScanToPay = () => {
-		if(clientWallet.availableBalance > 0) {
-			props.navigation.navigate(Routes.QRCODE_SCAN)
-		} else {
-			if(clientFundingSource) {
-				setIsLoadupDialog(true)
+	const onPressScanToPay = async () => {
+		const {status} = await BarCodeScanner.requestPermissionsAsync();
+		if(status === 'granted') {
+			if(clientWallet.availableBalance > 0) {
+				props.navigation.navigate(Routes.QRCODE_SCAN)
 			} else {
-				setIsBankDialog(true)
-			}
-		} 
+				if(clientFundingSource) {
+					setIsLoadupDialog(true)
+				} else {
+					setIsBankDialog(true)
+				}
+			} 
+		} else {
+			setIsSetting(true)
+		}
+		
 	}
 
 	const customerTag = userAttributes?.["custom:personal.tag"];
@@ -323,6 +329,11 @@ const DrawerContent = (
 				buttonTitle={Translation.BUTTON.LOAD_UP_BERKSHARES}
 				onConfirm={onLoadupDialogConfirm}
 				onCancel={onLoadupDialogCancel}
+			/>
+			<SettingDialog
+				visible={isSetting}
+				onCancel={() => setIsSetting(false)}
+				description={Translation.OTHER.NO_CAMERA_PERMISSION_DETAIL}
 			/>
 		</View>
 	);

@@ -176,7 +176,7 @@ const BusinessDictionary = (): JSX.Element => {
 						<View style={ styles.underlineView }>
 							<Text style={styles.categoryText}>MERCHANT OF THE MONTH</Text>
 						</View>
-						<View style={styles.popularBusinessView}>
+						<TouchableOpacity style={styles.popularBusinessView} onPress={() => handleSelect(businessList[0].businesses[0])}>
 							<View style={styles.popularTextView}>
 								<Text style={styles.popularTitle}>{businessList[0].businesses[0].title}</Text>
 								<Text style={styles.popularText}>{businessList[0].businesses[0].description}</Text>
@@ -185,7 +185,7 @@ const BusinessDictionary = (): JSX.Element => {
 								source={require('../../../assets/images/feed1.png')}
 								containerStyle={styles.popularImage}
 							/>
-						</View>
+						</TouchableOpacity>
 						{
 							businessList.map((category: BusinessCategory, idx: number) => (
 								<CategoryView category={category} onSelect={handleSelect} key={idx} />
