@@ -299,7 +299,7 @@
         "MAKE_RETURN_DETAIL": "Specify the amount you want to return",
         "HOW_TO_WORK": "How does this work?",
         "HOW_TO_WORK_DETAIL": "The customer wants to make a purchase and pay with BerkShares.",
-        "HOW_TO_WORK_1": "You fill in the total amount the sale.",
+        "HOW_TO_WORK_1": "Enter the total amount of the sale.",
         "HOW_TO_WORK_2": "Click on ‘Next’. This generates a unique QR code for the transaction.",
         "HOW_TO_WORK_3": "Show this QR code to the customer to scan and pay.",
         "HOW_TO_WORK_4": "Wait for the payment confirmation.",

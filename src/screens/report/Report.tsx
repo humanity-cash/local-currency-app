@@ -172,8 +172,8 @@ const Report = (): JSX.Element => {
 	const [selIndexes, setSelIndexes] = useState<boolean[]>()
 
 	useEffect(() => {
-		let indexes = []
-		for(var i = 0; i < items.length; i++) {
+		const indexes = []
+		for(let i = 0; i < items.length; i++) {
 			indexes.push(false)
 		}
 		setSelIndexes(indexes)
