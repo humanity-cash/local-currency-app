@@ -1,6 +1,6 @@
 import { useNavigation } from '@react-navigation/native';
-import React, { useContext, useEffect, useState } from 'react';
-import { KeyboardAvoidingView, Platform, ScrollView, StyleSheet, View } from 'react-native';
+import React, { useContext, useEffect, useState, useRef, createRef, RefObject, LegacyRef } from 'react';
+import { KeyboardAvoidingView, Platform, ScrollView, StyleSheet, View, SafeAreaView, TextInput } from 'react-native';
 import { Text } from 'react-native-elements';
 import { AuthContext } from 'src/auth';
 import { SignInInput } from 'src/auth/types';
@@ -36,8 +36,8 @@ const styles = StyleSheet.create({
 		paddingTop: 10
 	},
 	bottomView: {
-		paddingHorizontal: 20,
-		paddingBottom: 50,
+		marginHorizontal: 20,
+		marginBottom: 20
 	},
 });
 
@@ -46,6 +46,7 @@ const Login = (): JSX.Element => {
 	const dispatch = useDispatch();
 	const { signIn, signInDetails, setSignInDetails } = useContext(AuthContext);
 	const [goNext, setGoNext] = useState<boolean>(false);
+	const confirmRef: RefObject<TextInput> = createRef()
 
 	useEffect(() => {
 		setGoNext(isPasswordValid(signInDetails ? signInDetails.password : ""));
@@ -82,21 +83,30 @@ const Login = (): JSX.Element => {
 						placeholder='Email'
 						value={signInDetails?.email}
 						onChange={onValueChange}
+						returnKeyType='next'
+						keyboardType='email-address'
+						blurOnSubmit={false}
+						onSubmitEditing={()=>{
+							confirmRef.current?.focus()
+							
+						}}						
 					/>
 					<Text style={styles.label}>{Translation.LABEL.CONFIRM_PASSWORD}</Text>
 					<BlockInput
+						reff={confirmRef}
 						name='password'
 						placeholder='Password'
 						value={signInDetails?.password}
 						secureTextEntry={true}
 						onChange={onValueChange}
+						returnKeyType='done'
 					/>
 				</View>
 			</ScrollView>
 
 			<KeyboardAvoidingView
 				behavior={Platform.OS == 'ios' ? 'padding' : 'height'}>
-				<View style={styles.bottomView}>
+				<SafeAreaView style={styles.bottomView}>
 					<Button
 						type={BUTTON_TYPES.TRANSPARENT}
 						title='Forgot password'
@@ -110,7 +120,7 @@ const Login = (): JSX.Element => {
 						disabled={!goNext}
 						onPress={handleSignin}
 					/>
-				</View>
+				</SafeAreaView>
 			</KeyboardAvoidingView>
 		</View>
 	);

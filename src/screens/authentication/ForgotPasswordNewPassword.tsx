@@ -1,6 +1,6 @@
 import { useNavigation } from '@react-navigation/native';
 import React, { useContext, useEffect, useState } from 'react';
-import { KeyboardAvoidingView, Platform, StyleSheet, View } from 'react-native';
+import { KeyboardAvoidingView, Platform, StyleSheet, View, ScrollView } from 'react-native';
 import { Text } from 'react-native-elements';
 import { AuthContext } from 'src/auth';
 import { ForgotPassword } from 'src/auth/types';
@@ -91,7 +91,7 @@ const ForgotPasswordNewPassword = (): React.ReactElement => {
 					/>
 				}
 			/>
-			<View style={wrappingContainerBase}>
+			<ScrollView style={wrappingContainerBase}>
 				<View style={baseHeader}>
 					<Text style={styles.modalHeader}>
 						Create a new password
@@ -130,7 +130,7 @@ const ForgotPasswordNewPassword = (): React.ReactElement => {
 						/>
 					</View>
 				</View>
-			</View>
+			</ScrollView>
 			<KeyboardAvoidingView
 				behavior={Platform.OS == "ios" ? "padding" : "height"}>
 				<View style={styles.bottomView}>

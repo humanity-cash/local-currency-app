@@ -6,7 +6,8 @@ import {
 	StyleSheet,
 	TouchableWithoutFeedback,
 	View,
-	TouchableOpacity
+	TouchableOpacity,
+	Platform
 } from 'react-native';
 import { Image, Text } from 'react-native-elements';
 import { AuthContext } from 'src/auth';
@@ -16,19 +17,20 @@ import { colors } from 'src/theme/colors';
 import { baseHeader, viewBase, wrappingContainerBase } from 'src/theme/elements';
 import Translation from 'src/translation/en.json';
 import DwollaDialog from './DwollaDialog';
-import { Button, Dialog } from "src/shared/uielements";
-import { dialogViewBase } from "src/theme/elements";
-import { BUTTON_TYPES } from "src/constants";
 import { LoadingScreenTypes } from 'src/utils/types';
-import { updateLoadingStatus } from 'src/store/loading/loading.actions';
-import { loadPersonalWallet } from 'src/store/wallet/wallet.actions';
-import { loadPersonalFundingSource } from 'src/store/funding-source/funding-source.actions';
+import { loadClientWallet } from 'src/store/wallet/wallet.actions';
+import { loadClientFundingSource } from 'src/store/funding-source/funding-source.actions';
 import { WalletState } from 'src/store/wallet/wallet.reducer';
 import { FundingSourceState } from 'src/store/funding-source/funding-source.reducer';
 import { useSelector, useDispatch } from 'react-redux';
 import { AppState } from 'src/store';
 import { UserType } from 'src/auth/types';
 import { showLoadingProgress, hideLoadingProgress } from '../../store/loading/loading.actions';
+import { UserAPI } from 'src/api';
+import { INotificationResponse } from '../../api/types';
+import BankLinkDialog from 'src/shared/uielements/BankLinkDialog';
+import { BarCodeScanner } from 'expo-barcode-scanner';
+import SettingDialog from 'src/shared/uielements/SettingDialog';
 
 const styles = StyleSheet.create({
 	content: { paddingBottom: 80 },
@@ -52,7 +54,7 @@ const styles = StyleSheet.create({
 		paddingLeft: 5,
 		paddingRight: 5,
 	},
-	alertView: {
+	warningView: {
 		borderLeftWidth: 5,
 		borderRadius: 4,
 		borderLeftColor: colors.alert,
@@ -63,11 +65,41 @@ const styles = StyleSheet.create({
 		alignItems: 'center',
 		marginBottom: 10,
 	},
-	alertIcon: {
+	warningIcon: {
 		color: colors.alert,
 		fontWeight: 'bold',
 	},
-	alertText: {
+	infoView: {
+		borderLeftWidth: 5,
+		borderRadius: 4,
+		borderLeftColor: colors.info,
+		backgroundColor: colors.white,
+		padding: 10,
+		flexDirection: 'row',
+		justifyContent: 'space-between',
+		alignItems: 'center',
+		marginBottom: 10,
+	},
+	infoIcon: {
+		color: colors.info,
+		fontWeight: 'bold',
+	},
+	errorView: {
+		borderLeftWidth: 5,
+		borderRadius: 4,
+		borderLeftColor: colors.error,
+		backgroundColor: colors.white,
+		padding: 10,
+		flexDirection: 'row',
+		justifyContent: 'space-between',
+		alignItems: 'center',
+		marginBottom: 10,
+	},
+	errorIcon: {
+		color: colors.error,
+		fontWeight: 'bold',
+	},
+	notificationText: {
 		color: colors.black,
 		width: '90%',
 	},
@@ -162,23 +194,54 @@ const Dashboard = (): JSX.Element => {
 	const [isVisible, setIsVisible] = useState<boolean>(false);
 	const [isLoadup, setIsLoadup] = useState<boolean>(false);
 	const [isPayment, setIsPayment] = useState<boolean>(false);
+	const [notifications, setNotifications] = useState<INotificationResponse[]>([])
+	const [isSetting, setIsSetting] = useState(false)
 
-	const { personalWallet } = useSelector((state: AppState) => state.walletReducer) as WalletState;
-	const { personalFundingSource } = useSelector((state: AppState) => state.fundingSourceReducer) as FundingSourceState;
+	const { clientWallet } = useSelector((state: AppState) => state.walletReducer) as WalletState;
+	const { clientFundingSource } = useSelector((state: AppState) => state.fundingSourceReducer) as FundingSourceState;
 
 	useEffect(() => {
 		if (customerDwollaId) {
 			(async () => {
-				dispatch(loadPersonalWallet(customerDwollaId));
 				dispatch(showLoadingProgress(LoadingScreenTypes.LOADING_DATA))
-				await dispatch(loadPersonalFundingSource(customerDwollaId));
+				await dispatch(loadClientFundingSource(customerDwollaId));
 				dispatch(hideLoadingProgress())
 			})();
 		}
+
+		updateNotification()
+		const timer = setInterval(() => {
+			updateNotification()
+		}, 10000)
+
+		return(() => {
+			clearInterval(timer)
+		})
 	}, []);
 
+	const updateNotification = async () => {
+		if(customerDwollaId) {
+			dispatch(loadClientWallet(customerDwollaId));
+			const notis = await UserAPI.getNotifications(customerDwollaId)
+			setNotifications(notis)
+			if(notis.length > 0) {
+				setTimeout(() => {
+					setNotifications([])
+				}, 5000)
+
+				for(let i = 0; i < notis.length; i++) {
+					await UserAPI.deleteNotification(customerDwollaId, notis[i].dbId)
+				}
+			}
+		}
+	}
+
 	const selectBank = () => {
-		navigation.navigate(Routes.SELECT_BANK);
+		if (clientFundingSource) {
+			navigation.navigate(Routes.LOAD_UP);
+		} else {
+			navigation.navigate(Routes.SELECT_BANK);
+		}
 		onClose();
 	}
 
@@ -187,6 +250,19 @@ const Dashboard = (): JSX.Element => {
 		setIsPayment(false);
 		setIsLoadup(false);
 	};
+
+	const onPressScan = async () => {
+		const {status} = await BarCodeScanner.requestPermissionsAsync();
+		if(status === 'granted') {
+			if(clientFundingSource && clientWallet.availableBalance > 0) {
+				navigation.navigate(Routes.QRCODE_SCAN)
+			} else {
+				navigation.navigate(Routes.RECEIVE_PAYMENT)
+			}
+		} else {
+			setIsSetting(true)
+		}
+	}
 
 	return (
 		<View style={viewBase}>
@@ -214,30 +290,53 @@ const Dashboard = (): JSX.Element => {
 					</Text>
 				</View>
 				<View style={styles.amountView}>
-					<Text style={styles.text}>B$ {personalFundingSource ? personalWallet.availableBalance : '-'}</Text>
+					<Text style={styles.text}>B$ {clientFundingSource ? clientWallet.availableBalance : '-'}</Text>
 					<TouchableOpacity
 						style={styles.topupButton}
-						onPress={() => personalFundingSource ? navigation.navigate(Routes.LOAD_UP) : setIsLoadup(true)}>
+						onPress={() => clientFundingSource ? navigation.navigate(Routes.LOAD_UP) : setIsLoadup(true)}>
 						<Text style={styles.topupText}>Load up B$</Text>
 					</TouchableOpacity>
 				</View>
 				<ScrollView>
 					<View style={styles.content}>
-						{!personalFundingSource && (
-							<View style={styles.alertView}>
+						{!clientFundingSource ? (
+							<View style={styles.warningView}>
 								<AntDesign
 									name='exclamationcircleo'
 									size={18}
-									style={styles.alertIcon}
+									style={styles.warningIcon}
 								/>
-								<Text style={styles.alertText}>
+								<Text style={styles.notificationText}>
 									{Translation.BANK_ACCOUNT.ACCOUNT_ALERT} &nbsp;
 									<Text
-										style={styles.alertIcon}
+										style={styles.warningIcon}
 										onPress={() => setIsVisible(true)}>
 										{Translation.BANK_ACCOUNT.ACCOUNT_LINK_TEXT}{' '}
 										&gt;
 									</Text>
+								</Text>
+							</View>
+						) : notifications.length > 0 && (
+							<View style={
+								notifications[notifications.length-1].level === "INFO" ? styles.infoView
+								: notifications[notifications.length-1].level === "WARN" ? styles.warningView
+								: styles.errorView
+							}>
+								<AntDesign
+									name={
+										notifications[notifications.length-1].level === "INFO" ? 'checkcircleo'
+										: notifications[notifications.length-1].level === "WARN" ? 'exclamationcircleo'
+										: 'closecircleo'
+									}
+									size={18}
+									style={
+										notifications[notifications.length-1].level === "INFO" ? styles.infoIcon
+										: notifications[notifications.length-1].level === "WARN" ? styles.warningIcon
+										: styles.errorIcon
+									}
+								/>
+								<Text style={styles.notificationText}>
+									{notifications[notifications.length-1].message} &nbsp;
 								</Text>
 							</View>
 						)}
@@ -270,7 +369,7 @@ const Dashboard = (): JSX.Element => {
 					</View>
 				</ScrollView>
 			</View>
-			<TouchableOpacity onPress={() => personalFundingSource ? navigation.navigate(Routes.QRCODE_SCAN) : setIsPayment(true)} style={styles.scanButton}>
+			<TouchableOpacity onPress={onPressScan} style={styles.scanButton}>
 				<Image
 					source={require('../../../assets/images/qr_code_consumer.png')}
 					containerStyle={styles.qrIcon}
@@ -280,31 +379,27 @@ const Dashboard = (): JSX.Element => {
 			{isVisible && (
 				<DwollaDialog visible={isVisible} onClose={onClose} userType={UserType.Customer} />
 			)}
-			{(isLoadup || isPayment) && (
-				<Dialog visible={isLoadup || isPayment} onClose={onClose} style={styles.dialog}>
-					<View style={dialogViewBase}>
-						{isLoadup && (
-							<View style={styles.dialogWrap}>
-								<Text style={styles.dialogHeader}>{Translation.LOAD_UP.LOAD_UP_NO_BANK_TITLE}</Text>
-								<Text>{Translation.LOAD_UP.LOAD_UP_NO_BANK_DETAIL}</Text>
-							</View>
-						)}
-						{isPayment && (
-							<View style={styles.dialogWrap}>
-								<Text style={styles.dialogHeader}>{Translation.PAYMENT.PAYMENT_NO_BANK_TITLE}</Text>
-								<Text>{Translation.PAYMENT.PAYMENT_NO_BANK_DETAIL}</Text>
-							</View>
-						)}
-						<View style={styles.dialogBottom}>
-							<Button
-								type={BUTTON_TYPES.DARK_GREEN}
-								title={Translation.BUTTON.LINK_BANK}
-								onPress={selectBank}
-							/>
-						</View>
-					</View>
-				</Dialog>
-			)}
+
+			<BankLinkDialog 
+				visible={isLoadup || isPayment}
+				description={isLoadup ? Translation.LOAD_UP.LOAD_UP_NO_BANK_DETAIL 
+					: clientWallet.availableBalance > 0 
+						? Translation.PAYMENT.PAYMENT_NO_BALANCE_DETAIL
+						: Translation.PAYMENT.PAYMENT_NO_BANK_DETAIL}
+				buttonTitle={
+					clientFundingSource 
+						? Translation.BUTTON.LOAD_UP_BERKSHARES
+						: Translation.BUTTON.LINK_BANK
+				}
+				onConfirm={selectBank}
+				onCancel={onClose}
+			/>
+
+			<SettingDialog
+				visible={isSetting}
+				onCancel={() => setIsSetting(false)}
+				description={Translation.OTHER.NO_CAMERA_PERMISSION_DETAIL}
+			/>
 		</View>
 	);
 };

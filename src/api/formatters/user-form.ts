@@ -1,4 +1,5 @@
 import { IUser, AxiosPromiseResponse, ITransaction } from "src/api/types";
+import { INotificationResponse } from '../types';
 
 export const userData = (res: AxiosPromiseResponse): IUser => {
     if (!res.data) return {
@@ -31,4 +32,13 @@ export const fundingSource = (res: AxiosPromiseResponse): boolean => {
 
     if (res.data.body?._embedded["funding-sources"]?.length > 0) return true;
     else return false;
+}
+
+export const notificationDatas = (res: AxiosPromiseResponse): INotificationResponse[] => {
+    if (!res.data) return [];
+
+    const list = res.data as INotificationResponse[];
+    return list.filter((notification) => {
+        return !notification.cloased
+    })
 }

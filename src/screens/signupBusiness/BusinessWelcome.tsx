@@ -1,4 +1,4 @@
-import React, { ReactElement, useContext, useState } from "react";
+import React, { ReactElement, useState } from "react";
 import {
 	KeyboardAvoidingView,
 	Platform,
@@ -7,16 +7,13 @@ import {
 	View
 } from "react-native";
 import { Text } from "react-native-elements";
-import { AuthContext } from "src/auth";
 import { UserType } from "src/auth/types";
 import { Button, Header } from "src/shared/uielements";
 import { colors } from "src/theme/colors";
 import { viewBaseB, wrappingContainerBase } from "src/theme/elements";
 import Translation from "src/translation/en.json";
-import { LoadingScreenTypes } from 'src/utils/types';
-import { updateLoadingStatus } from 'src/store/loading/loading.actions';
-import { useDispatch } from 'react-redux';
 import DwollaDialog from 'src/screens/dashboard/DwollaDialog';
+import { useNavigation } from '@react-navigation/native';
 
 const styles = StyleSheet.create({
 	headerText: {
@@ -35,16 +32,11 @@ const styles = StyleSheet.create({
 });
 
 const BusinessWelcome = (): ReactElement => {
-	const { cognitoId, updateUserType } = useContext(AuthContext);
 	const [isVisible, setIsVisible] = useState<boolean>(false);
-	const dispatch = useDispatch();
+	const navigation = useNavigation()
 
 	const onSkip = () => {
-		dispatch(updateLoadingStatus({
-			isLoading: true,
-			screen: LoadingScreenTypes.LOADING_DATA
-		}));
-		updateUserType(cognitoId, UserType.Business);
+		navigation.goBack()
 	}
 
 	return (

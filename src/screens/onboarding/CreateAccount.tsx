@@ -25,6 +25,7 @@ import {
 import { isEmailValid } from 'src/utils/validation';
 import Translation from 'src/translation/en.json';
 import { BERKSHARE_PRIVACY_URL, BERKSHARE_TERMS_URL } from 'src/config/env';
+import { SafeAreaView } from 'react-native';
 
 const styles = StyleSheet.create({
 	container: {
@@ -39,14 +40,14 @@ const styles = StyleSheet.create({
 		color: colors.bodyText,
 	},
 	form: {
-		marginTop: 30,
+		marginTop: 20,
 	},
 	label: {
 		fontSize: 10,
 	},
 	bottomView: {
-		paddingHorizontal: 20,
-		paddingBottom: 50,
+		marginHorizontal: 20,
+		marginBottom: 20,
 	},
 	checkboxTextView: {
 		fontWeight: '400',
@@ -57,10 +58,12 @@ const styles = StyleSheet.create({
 	checkboxContainer: {
 		borderWidth: 0,
 		backgroundColor: 'transparent',
+		paddingHorizontal: 0,
 	},
 	terms: {
 		flexDirection: 'row',
 		paddingBottom: 30,
+		marginHorizontal: -10,
 		width: '80%'
 	},
 	underlineText: {
@@ -87,27 +90,30 @@ const CreateAccount = (): JSX.Element => {
 			<ScrollView style={wrappingContainerBase}>
 				<View style={styles.container}>
 					<View style={baseHeader}>
-						<Text style={styles.headerText}>Create account</Text>
+						<Text style={styles.headerText}>
+							{Translation.EMAIL_VERIFICATION.CREATE_ACCOUNT}
+						</Text>
 					</View>
 					<Text style={styles.bodyText}>
-						Hello! Tell us how to reach you. We will send a
-						Verification code to your email.
+						{Translation.EMAIL_VERIFICATION.HOW_TO_REACH}
 					</Text>
 					<View style={styles.form}>
 						<Text style={styles.label}>{Translation.LABEL.EMAIL_ADDR}</Text>
 						<BlockInput
 							name='email'
 							placeholder='myname@mail.com'
+							keyboardType='email-address'
 							value={signUpDetails.email}
 							onChange={onValueChange}
 							placeholderTextColor={colors.lightGreen}
 						/>
 					</View>
+					
 				</View>
 			</ScrollView>
 			<KeyboardAvoidingView
 				behavior={Platform.OS == 'ios' ? 'padding' : 'height'}>
-				<View style={styles.bottomView}>
+				<SafeAreaView style={styles.bottomView}>
 					<View style={styles.terms}>
 						<CheckBox
 							checked={isSelected}
@@ -117,10 +123,12 @@ const CreateAccount = (): JSX.Element => {
 							onPress={() => setSelection(!isSelected)}
 						/>
 						<View style={styles.checkboxTextView}>
-							<Text style={styles.bodyText}>I've read and accept the </Text>
-							<Text style={styles.underlineText} onPress={()=>Linking.openURL(BERKSHARE_TERMS_URL)}>Terms & Conditions </Text>
-							<Text style={styles.bodyText}>and </Text>
-							<Text style={styles.underlineText} onPress={()=>Linking.openURL(BERKSHARE_PRIVACY_URL)}>Privacy Policy</Text>
+							<Text style={styles.bodyText}>
+								By checking this box, you agree to our partner Humnanity Cash's 
+								<Text style={styles.underlineText} onPress={()=>Linking.openURL(BERKSHARE_TERMS_URL)}> Terms & Conditions </Text>
+								and
+								<Text style={styles.underlineText} onPress={()=>Linking.openURL(BERKSHARE_PRIVACY_URL)}> Privacy Policy</Text>
+							</Text>
 						</View>
 					</View>
 					<Button
@@ -131,7 +139,7 @@ const CreateAccount = (): JSX.Element => {
 						}
 						onPress={() => navigation.navigate(Routes.PASSWORD)}
 					/>
-				</View>
+				</SafeAreaView>
 			</KeyboardAvoidingView>
 		</View>
 	);

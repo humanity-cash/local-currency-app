@@ -2,9 +2,9 @@ import {
 	BusinessAddressErrors,
 	BusinessDetails,
 	BusinessDetailsErrors, CreditCardDetails, CreditCardDetailsErrors,
-	PersonalAddressErrors,
-	PersonalDetails,
-	PersonalDetailsErrors,
+	ClientAddressErrors,
+	ClientDetails,
+	ClientDetailsErrors,
 	QRCodeEntry,
 	SECURITY_ID
 } from "./types";
@@ -48,25 +48,25 @@ export const validateCreditCard = (creditCardDetails: CreditCardDetails) => {
 
 }
 
-export const validateProfileForm = (personalDetails: PersonalDetails) => {
-	const { username } = personalDetails;
-	const errors: PersonalDetailsErrors = {};
+export const validateProfileForm = (clientDetails: ClientDetails) => {
+	const { username } = clientDetails;
+	const errors: ClientDetailsErrors = {};
 	if (username === '') {
 		errors.username = 'SORRY, THAT NAME IS ALREADY TAKEN';
 	}
 	return { errors, valid: Object.keys(errors).length === 0 };
 }
 
-export const validateAddressForm = (personalDetails: PersonalDetails) => {
-	const { addressLine, addressLine2, zipCode, city, country } = personalDetails;
-	const errors: PersonalAddressErrors = {};
+export const validateAddressForm = (clientDetails: ClientDetails) => {
+	const { addressLine, addressLine2, zipCode, city, country } = clientDetails;
+	const errors: ClientAddressErrors = {};
 	// TODO: add eventual validation of address form
 	return { errors, valid: Object.keys(errors).length === 0 };
 }
 
-export const validateDetailsForm = (personalDetails: PersonalDetails) => {
-	const { firstname, lastname } = personalDetails;
-	const errors: PersonalDetailsErrors = {};
+export const validateDetailsForm = (clientDetails: ClientDetails) => {
+	const { firstname, lastname } = clientDetails;
+	const errors: ClientDetailsErrors = {};
 	if (firstname === '') {
 		errors.firstname = 'Firstname needs to be specified';
 	}

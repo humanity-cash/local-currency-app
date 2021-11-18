@@ -1,6 +1,7 @@
-import { UserId, AxiosPromiseResponse, IUserRequest, IDepositRequest, IWithdrawalRequest, ITransactionRequest, ITransaction, IUser} from './types';
-import { getRequest, postRequest } from './base';
+import { UserId, AxiosPromiseResponse, IUserRequest, IDepositRequest, IWithdrawalRequest, ITransactionRequest, ITransaction, IUser, INotificationResponse } from './types';
+import { getRequest, postRequest, deleteRequest } from './base';
 import { userData, transactionDatas, fundingSource } from './formatters';
+import { notificationDatas } from './formatters/user-form';
 
 // create local currency user
 export const user = async (request: IUserRequest): Promise<AxiosPromiseResponse> => {
@@ -32,6 +33,15 @@ export const getFundingSources = async (userId: UserId): Promise<boolean> => {
 export const transferTo = async (userId: UserId, request: ITransactionRequest): Promise<AxiosPromiseResponse> => {
   const response = await postRequest(`/users/${userId}/transfer`, request);
   return response;
+};
+
+export const getNotifications = async (userId: UserId): Promise<INotificationResponse[]> => {
+  const response = await getRequest(`/users/${userId}/notifications`);
+  return notificationDatas(response);
+};
+
+export const deleteNotification = async (userId: UserId, notificationId: string): Promise<void> => {
+  await deleteRequest(`/users/${userId}/notifications/${notificationId}`, {});
 };
 
 // Receive webhooks from Dwolla
@@ -66,5 +76,6 @@ export const getWithdrawals = async (userId: UserId): Promise<AxiosPromiseRespon
 // Retrieve transactions for a user
 export const getTransactions = async (userId: UserId): Promise<ITransaction[]> => {
   const response = await getRequest(`/users/${userId}/transfer`);
-  return transactionDatas(response);
+
+  return transactionDatas(response.data);
 };

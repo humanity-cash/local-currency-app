@@ -1,6 +1,6 @@
 import { useNavigation } from '@react-navigation/native';
 import React, { useContext, useEffect, useState } from 'react';
-import { KeyboardAvoidingView, Platform, StyleSheet, View } from 'react-native';
+import { KeyboardAvoidingView, Platform, StyleSheet, View, ScrollView } from 'react-native';
 import { Text } from 'react-native-elements';
 import { AuthContext } from 'src/auth';
 import { BUTTON_TYPES } from 'src/constants';
@@ -78,7 +78,7 @@ const Password = (): JSX.Element => {
 			<Header
 				leftComponent={<BackBtn onClick={() => navigation.goBack()} />}
 			/>
-			<View style={wrappingContainerBase}>
+			<ScrollView style={wrappingContainerBase}>
 				<View style={baseHeader}>
 					<Text style={styles.headerText}>{Translation.EMAIL_VERIFICATION.CREATE_PASSWORD}</Text>
 				</View>
@@ -114,7 +114,7 @@ const Password = (): JSX.Element => {
 						/>
 					</View>
 				</View>
-			</View>
+			</ScrollView>
 
 			<KeyboardAvoidingView
 				behavior={Platform.OS == 'ios' ? 'padding' : 'height'}>

@@ -18,7 +18,7 @@ const styles = StyleSheet.create({
 		alignItems: "center"
 	},
 	arrow: {
-		paddingLeft: 10
+		paddingLeft: 0
 	},
 	text: {
 		paddingLeft: 10,
