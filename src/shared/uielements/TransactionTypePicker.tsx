@@ -66,7 +66,7 @@ const TransactionTypePicker = ({
 	
 	const renderTypeItem = (index: number, item: string): any => {
 		const setAllCheck = (isCheck: boolean) => {
-			let checks: boolean[] = []
+			const checks: boolean[] = []
 			for( let i = 0; i < selected!.length; i++) {
 				checks.push(isCheck)
 			}
