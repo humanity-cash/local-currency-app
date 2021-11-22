@@ -14,7 +14,6 @@ export const addCustomerVerification = async (businessDwollaId: string, request:
 };
 
 export const addBusinessVerification = async (customerDwollaId: string, request: Business): Promise<AxiosPromiseResponse> => {
-  console.log("🚀 ~ file: user.ts ~ line 18 ~ addBusinessVerification ~ request", request)
   const response = await postRequest(`/users/${customerDwollaId}/business`, { business: request });
   return response;
 };
