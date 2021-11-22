@@ -1,6 +1,6 @@
 import { useNavigation } from '@react-navigation/native';
 import React from 'react';
-import { ImageBackground, StyleSheet, View, TouchableOpacity } from 'react-native';
+import { ImageBackground, StyleSheet, View, TouchableOpacity, SafeAreaView } from 'react-native';
 import { Text } from 'react-native-elements';
 import { BUTTON_TYPES } from 'src/constants';
 import * as Routes from 'src/navigation/constants';
@@ -38,10 +38,9 @@ const styles = StyleSheet.create({
 		position: "absolute",
 		left: 0,
 		bottom: 0,
-		width: '100%',
-		height: 170,
-		paddingHorizontal: 20,
-		paddingBottom: 50
+		right: 0,
+		marginHorizontal: 20,
+		marginBottom: 20
 	},
 	createAccountBtn: {
 		marginTop: 10,
@@ -63,7 +62,7 @@ const Teaser = (): JSX.Element => {
 					<Text style={styles.description}>{Translation.LANDING_PAGE.DESCRIPTION}</Text>
 				</View>
 
-				<View style={styles.bottomView}>
+				<SafeAreaView style={styles.bottomView}>
 					<Button
 						type={BUTTON_TYPES.DARK_GREEN}
 						title="Log In"
@@ -76,7 +75,7 @@ const Teaser = (): JSX.Element => {
 						style={styles.createAccountBtn}
 						textStyle={{color: colors.darkGreen}}
 					/>
-				</View>
+				</SafeAreaView>
 			</ImageBackground>
 		</View>
 	);

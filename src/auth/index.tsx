@@ -3,7 +3,7 @@ import {
 	CognitoUserAttribute,
 	CognitoUserSession
 } from "amazon-cognito-identity-js";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { userController } from "./cognito";
 import { BaseResponse, CognitoResponse, ChangePasswordInput } from "./cognito/types";
 import {
@@ -331,6 +331,8 @@ const AuthProvider: React.FunctionComponent = ({ children }) => {
 
 	const signOut = () => {
 		userController.signOut();
+		setSignUpDetails(signUpInitialState);
+		setSignInDetails(signInInitialState);
 		setAuthStatus(AuthStatus.SignedOut);
 		setUserAttributes({});
 		setCognitoId("")
