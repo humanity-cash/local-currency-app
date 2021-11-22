@@ -1,7 +1,6 @@
 import React, { useEffect, useContext, useState } from 'react';
 import { StyleSheet, View, Image } from 'react-native';
 import QRCode from 'react-native-qrcode-svg';
-import { AuthContext } from 'src/auth';
 import { Text } from 'react-native-elements';
 import { Dialog } from "src/shared/uielements";
 import { dialogViewBase } from "src/theme/elements";
@@ -13,6 +12,8 @@ import { useBrightness } from "src/hooks";
 import { useSelector, useDispatch } from 'react-redux';
 import { AppState } from 'src/store';
 import { loadBusinessTransactions } from 'src/store/transaction/transaction.actions';
+import { Dwolla } from 'src/contexts';
+import { UserContext } from 'src/api/context';
 
 const styles = StyleSheet.create({
     dialog: {
@@ -66,7 +67,8 @@ type MerchantQRCodeGenProps = {
 
 const MerchantQRCodeGen = (props: MerchantQRCodeGenProps): JSX.Element => {
     const { businessWallet } = useSelector((state: AppState) => state.walletReducer) as WalletState;
-    const { businessDwollaId, userAttributes } = useContext(AuthContext);
+    const { businessDwollaId } = useContext(Dwolla.Context);
+    const { user } = useContext(UserContext);
     const dispatch = useDispatch();
     const { hasPermission, setMaxBrightness, setDefaultBrightness} = useBrightness();
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
@@ -114,8 +116,8 @@ const MerchantQRCodeGen = (props: MerchantQRCodeGenProps): JSX.Element => {
         onSuccess();
     }
 
-    const firstName = userAttributes?.["custom:owner.firstName"];
-    const lastName = userAttributes?.["custom:owner.lastName"];
+	const firstName = user?.business?.owner?.firstName;
+	const lastName = user?.business?.owner?.lastName;
 
     return (
         <Dialog visible={props.visible} onClose={onClose} backgroundStyle={styles.dialogBg} style={styles.dialog}>

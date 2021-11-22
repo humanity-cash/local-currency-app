@@ -87,14 +87,12 @@ const BusinessInfo = (): ReactElement => {
 	const { getBusinessData, updateBusinessData } = useContext(UserContext);
 	const { signOut } = useContext(AuthContext);
 	const business = getBusinessData();
-  console.log("🚀 ~ file: BusinessInfo.tsx ~ line 90 ~ BusinessInfo ~ business", business)
 
 	useEffect(() => {
 		setGoNext(business?.rbn !== "");
 	}, [business?.rbn])
 
 	const onValueChange = (name: string, change: string) => {
-  console.log("🚀 ~ file: BusinessInfo.tsx ~ line 1", name, change)
 		updateBusinessData({
 			[name]: change,
 		});

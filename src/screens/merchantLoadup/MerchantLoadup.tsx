@@ -3,7 +3,6 @@ import React, { useEffect, useState, useContext } from "react";
 import { KeyboardAvoidingView, Platform, ScrollView, StyleSheet, View } from "react-native";
 import { Text } from "react-native-elements";
 import { TouchableOpacity } from "react-native-gesture-handler";
-import { AuthContext } from 'src/auth';
 import { BorderedInput, Button, Header, CancelBtn } from "src/shared/uielements";
 import { colors } from "src/theme/colors";
 import { underlineHeaderB, viewBaseB, wrappingContainerBase } from "src/theme/elements";
@@ -16,6 +15,7 @@ import { ToastType, LoadingScreenTypes } from 'src/utils/types';
 import { updateLoadingStatus } from 'src/store/loading/loading.actions';
 import { loadBusinessWallet } from 'src/store/wallet/wallet.actions';
 import { useDispatch } from 'react-redux';
+import { Dwolla } from 'src/contexts';
 
 const styles = StyleSheet.create({
   headerText: {
@@ -98,7 +98,7 @@ const MAX_AMOUNT = 2000;
 const MerchantLoadup = (): JSX.Element => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
-  const { businessDwollaId } = useContext(AuthContext);
+  const { businessDwollaId } = useContext(Dwolla.Context);
   const [amount, setAmount] = useState<string>("");
   const [goNext, setGoNext] = useState<boolean>(false);
 

@@ -3,7 +3,6 @@ import { StyleSheet, View, Image, ScrollView, KeyboardAvoidingView, Platform } f
 import { useNavigation } from '@react-navigation/core';
 import { Text } from 'react-native-elements';
 import { useCameraPermission } from 'src/hooks';
-import { AuthContext } from 'src/auth';
 import { Header, CancelBtn, Dialog, Button, ToggleButton, Modal, ModalHeader, BorderedInput, BackBtn } from "src/shared/uielements";
 import { colors } from "src/theme/colors";
 import { viewBase, dialogViewBase, modalViewBase, wrappingContainerBase, underlineHeaderB } from "src/theme/elements";
@@ -23,6 +22,8 @@ import { useDispatch } from 'react-redux';
 import { WalletState } from 'src/store/wallet/wallet.reducer';
 import { useSelector } from 'react-redux';
 import { AppState } from 'src/store';
+import { Dwolla } from 'src/contexts';
+import { UserContext } from 'src/api/context';
 
 type HandleScaned = {
 	type: string,
@@ -149,10 +150,10 @@ type PaymentConfirmProps = {
 }
 
 const PaymentConfirm = (props: PaymentConfirmProps) => {
-	const { userAttributes } = useContext(AuthContext);
+	const { user } = useContext(UserContext);
 
-	const firstName = userAttributes?.["custom:owner.firstName"];
-    const lastName = userAttributes?.["custom:owner.lastName"];
+	const firstName = user?.business?.owner?.firstName;
+	const lastName = user?.business?.owner?.lastName;
 	const amountCalcedFee = props.payInfo.amount + calcFee(props.payInfo.amount);
 
 	return (
@@ -195,7 +196,7 @@ const PaymentConfirm = (props: PaymentConfirmProps) => {
 
 const MerchantQRCodeScan = (): JSX.Element => {
 	const navigation = useNavigation();
-	const { businessDwollaId } = useContext(AuthContext);
+	const { businessDwollaId } = useContext(Dwolla.Context);
 	const dispatch = useDispatch();
 	const hasPermission = useCameraPermission();
 	const [isScanned, setIsScanned] = useState<boolean>(false);
