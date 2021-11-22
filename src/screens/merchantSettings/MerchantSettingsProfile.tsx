@@ -308,7 +308,7 @@ export const MerchantSettingsProfile = (): JSX.Element => {
 						placeholder="Business name"
 						placeholderTextColor={colors.greyedPurple}
 						value={user?.business?.tag}
-						onChange={(_: string, newValue: string) => { }}
+						onChange={(_: string, newValue: string) => { console.log('newValue', newValue) }}
 							// setState((pv) => ({ ...pv, businessTag: newValue }))
 						style={styles.inputBg}
 					/>
@@ -319,7 +319,7 @@ export const MerchantSettingsProfile = (): JSX.Element => {
 						placeholder="Tell the world about your business. What gives you joy as an entrepreneur? What do you love about the Berkshires?"
 						value={user?.business?.story}
 						multiline={true}
-						onChangeText={(newValue: string) => { }}
+						onChangeText={(newValue: string) => { console.log('newValue', newValue) }}
 						// setState((pv) => ({
 						// 	...pv,
 						// 	businessStory: newValue,
@@ -334,7 +334,7 @@ export const MerchantSettingsProfile = (): JSX.Element => {
 						placeholder="www.shop.com"
 						placeholderTextColor={colors.greyedPurple}
 						value={"NOT DEFINED"}
-						onChange={(_: string, newValue: string) => { }
+						onChange={(_: string, newValue: string) => { console.log('newValue', newValue) }
 							// setState((pv) => ({
 							// 	...pv,
 							// 	businessWebsite: newValue,
