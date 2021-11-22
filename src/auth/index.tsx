@@ -73,7 +73,6 @@ const AuthProvider: React.FunctionComponent = ({ children }) => {
 	) => {
 		const response: BaseResponse<CognitoUserSession> =
 			await userController.signIn({ email, password });
-    console.log("🚀 ~ file: index.tsx ~ line 79 ~ response", response)
 		if (response?.success) {
 			await getSessionInfo();
 		}
