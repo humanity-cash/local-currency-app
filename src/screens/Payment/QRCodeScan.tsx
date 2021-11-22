@@ -4,7 +4,6 @@ import { useDispatch } from 'react-redux';
 import { StyleSheet, View, Image, KeyboardAvoidingView, ScrollView, Platform } from 'react-native';
 import { Text } from 'react-native-elements';
 import { useCameraPermission } from 'src/hooks';
-import { AuthContext } from 'src/auth';
 import { Header, CancelBtn, Dialog, Button, ToggleButton, Modal, ModalHeader, BorderedInput, BackBtn } from "src/shared/uielements";
 import { colors } from "src/theme/colors";
 import { baseHeader, viewBase, dialogViewBase, modalViewBase, wrappingContainerBase, underlineHeader } from "src/theme/elements";
@@ -18,6 +17,8 @@ import { ITransactionRequest } from 'src/api/types';
 import { calcFee, showToast } from 'src/utils/common';
 import { isQRCodeValid } from 'src/utils/validation';
 
+import { Dwolla } from 'src/contexts';
+import { UserContext } from 'src/api/context';
 import { loadPersonalWallet } from 'src/store/wallet/wallet.actions';
 import { loadPersonalTransactions } from 'src/store/transaction/transaction.actions';
 import { updateLoadingStatus } from 'src/store/loading/loading.actions';
@@ -132,10 +133,10 @@ type PaymentConfirmProps = {
 }
 
 const PaymentConfirm = (props: PaymentConfirmProps) => {
-	const { userAttributes } = useContext(AuthContext);
+	const { user } = useContext(UserContext);
 
-	const firstName = userAttributes?.["custom:personal.firstName"];
-    const lastName = userAttributes?.["custom:personal.lastName"];
+	const firstName = user?.customer?.firstName;
+	const lastName = user?.customer?.lastName;
 	const amountCalcedFee = props.payInfo.amount + calcFee(props.payInfo.amount);
 
 	return (
@@ -211,7 +212,7 @@ const LowAmount = (props: LowAmountProps) => {
 const QRCodeScan = (): JSX.Element => {
 	const navigation = useNavigation();
 	const dispatch = useDispatch();
-	const { customerDwollaId } = useContext(AuthContext);
+	const { customerDwollaId } = useContext(Dwolla.Context);
 	const hasPermission = useCameraPermission();
 	const [isScanned, setIsScanned] = useState<boolean>(false);
 	const [isPaymentDialog, setIsPaymentDialog] = useState<boolean>(false);

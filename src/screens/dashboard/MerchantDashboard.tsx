@@ -3,7 +3,6 @@ import { useNavigation, DrawerActions } from "@react-navigation/native";
 import React, { useState, useContext, useEffect } from 'react';
 import { StyleSheet, TouchableWithoutFeedback, View, ScrollView, TouchableOpacity } from 'react-native';
 import { Text, Image } from "react-native-elements";
-import { AuthContext } from "src/auth";
 import { UserType } from "src/auth/types";
 import { colors } from "src/theme/colors";
 import { viewBaseB, wrappingContainerBase, baseHeader, dialogViewBase, FontFamily } from "src/theme/elements";
@@ -27,6 +26,8 @@ import { WalletState } from 'src/store/wallet/wallet.reducer';
 import { FundingSourceState } from 'src/store/funding-source/funding-source.reducer';
 import { useSelector, useDispatch } from 'react-redux';
 import { AppState } from 'src/store';
+import { Dwolla } from 'src/contexts';
+import { UserContext } from "src/api/context";
 
 const styles = StyleSheet.create({
 	mainTextColor: {
@@ -241,7 +242,9 @@ const defaultTransaction = {
 const MerchantDashboard = (): JSX.Element => {
 	const navigation = useNavigation();
 	const dispatch = useDispatch();
-	const { completedCustomerVerification, businessDwollaId } = useContext(AuthContext);
+	const {  businessDwollaId } = useContext(Dwolla.Context);
+	const { user } = useContext(UserContext);
+	const completedCustomerVerification = user?.verifiedCustomer;
 	const [isFilterVisible, setIsFilterVisible] = useState<boolean>(false);
 	const [searchText, setSearchText] = useState<string>("");
 	const [isDetailViewOpen, setIsDetailViewOpen] = useState<boolean>(false);

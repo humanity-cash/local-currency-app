@@ -8,7 +8,6 @@ import { AppState } from 'src/store';
 
 const LoadingPage = (): JSX.Element => {
     const { loadingState } = useSelector((state: AppState) => state.loadingReducer) as LoadingPageState;
-    console.log("🚀 ~ file: LoadingPage.tsx ~ line 11 ~ loadingState", loadingState)
 
     return loadingState.screen === LoadingScreenTypes.PAYMENT_PENDING ? (
         <PaymentPending visible={loadingState?.isLoading} />

@@ -14,6 +14,8 @@ import { WalletState } from 'src/store/wallet/wallet.reducer';
 import { useSelector, useDispatch } from 'react-redux';
 import { AppState } from 'src/store';
 import { loadPersonalTransactions } from 'src/store/transaction/transaction.actions';
+import { Dwolla } from 'src/contexts';
+import { UserContext } from 'src/api/context';
 
 const styles = StyleSheet.create({
     dialog: {
@@ -68,7 +70,8 @@ type ReturnQRCodeGenProps = {
 const ReturnQRCodeGen = (props: ReturnQRCodeGenProps): JSX.Element => {
     const { personalWallet } = useSelector((state: AppState) => state.walletReducer) as WalletState;
     const dispatch = useDispatch();
-    const { customerDwollaId, userAttributes } = useContext(AuthContext);
+    const { user } = useContext(UserContext);
+    const { customerDwollaId } = useContext(Dwolla.Context);
     const { hasPermission, setMaxBrightness, setDefaultBrightness} = useBrightness();
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const [initBalance, setInitBalance] = useState<number>(personalWallet.availableBalance);
@@ -118,8 +121,8 @@ const ReturnQRCodeGen = (props: ReturnQRCodeGenProps): JSX.Element => {
         onSuccess();
     }
 
-    const firstName = userAttributes?.["custom:personal.firstName"];
-    const lastName = userAttributes?.["custom:personal.lastName"];
+    const firstName = user?.customer?.firstName;
+    const lastName = user?.customer?.lastName;
 
     return (
         <Dialog visible={props.visible} onClose={onClose} style={styles.dialog}>

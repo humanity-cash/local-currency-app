@@ -1,7 +1,6 @@
 import React, { useEffect, useState, useContext } from 'react';
 import { StyleSheet, View, ScrollView, KeyboardAvoidingView, Platform } from 'react-native';
 import { Text } from 'react-native-elements';
-import { AuthContext } from 'src/auth';
 import { useCameraPermission } from 'src/hooks';
 import { colors } from "src/theme/colors";
 import { BarCodeScanner } from 'expo-barcode-scanner';
@@ -10,12 +9,12 @@ import * as Routes from 'src/navigation/constants';
 import { useNavigation } from '@react-navigation/core';
 import { modalViewBase, wrappingContainerBase, underlineHeaderB, viewBase } from "src/theme/elements";
 import { Header, CancelBtn, BackBtn, Modal, ModalHeader, BorderedInput, Button } from "src/shared/uielements";
-
+import { Dwolla } from 'src/contexts';
 import { QRCodeEntry, SECURITY_ID, PaymentMode, ToastType, LoadingScreenTypes } from 'src/utils/types';
 import { isQRCodeValid } from 'src/utils/validation';
 import { UserAPI } from 'src/api';
 import { ITransactionRequest } from 'src/api/types';
-import { calcFee, showToast } from 'src/utils/common';
+import { showToast } from 'src/utils/common';
 import { BUTTON_TYPES } from 'src/constants';
 import { loadBusinessWallet } from 'src/store/wallet/wallet.actions';
 import { loadBusinessTransactions } from 'src/store/transaction/transaction.actions';
@@ -90,7 +89,7 @@ const CashierReturnQRCodeScan = (): JSX.Element => {
 	const navigation = useNavigation();
 	const hasPermission = useCameraPermission();
 	const dispatch = useDispatch();
-	const { businessDwollaId } = useContext(AuthContext);
+	const { businessDwollaId } = useContext(Dwolla.Context);
 	const [isScanned, setIsScanned] = useState<boolean>(false);
 	const [isReturnModal, setIsReturnModal] = useState<boolean>(false);
 	const [amount, setAmount] = useState<string>("");
