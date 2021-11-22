@@ -129,11 +129,9 @@ export const confirmEmailVerificationCode = async (email: string, code: string)
 };
 
 export const resendEmailVerificationCode = async (email: string): CognitoResponse<unknown> => {
-console.log("🚀 ~ file: cognito.ts ~ line 145 ~ resendEmailVerificationCode ~ email", email)
 	const cognitoUser = getCognitoUser(email);
 	return new Promise((resolve) => {
 		cognitoUser.resendConfirmationCode(function (err) {
-      console.log("🚀 ~ file: cognito.ts ~ line 138 ~ err", err)
 			if (err) resolve({ success: false, data: {} });
 			else resolve({ success: true, data: {} });
 		});

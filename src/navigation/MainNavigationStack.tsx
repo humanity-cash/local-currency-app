@@ -21,7 +21,6 @@ const PrimaryStack = createStackNavigator();
 const PrimaryStackScreen = () => {
   const { authStatus } = useContext(AuthContext);
   const { userType, user } = useContext(UserContext);
-  console.log("🚀 ~ file: MainNavigationStack.tsx ~ line 24 ~ PrimaryStackScreen ~ userType", userType)
   const isVerifiedCustomer = user?.verifiedCustomer || false;
   const isVerifiedBusiness = user?.verifiedBusiness || false;
   const userNotSignedIn = authStatus !== AuthStatus.SignedIn;
@@ -39,7 +38,6 @@ const PrimaryStackScreen = () => {
     userType === UserType.Cashier &&
     isVerifiedBusiness;
   const notVerifiedUser = !customerUser && !cashierUser && !businessUser && authStatus === AuthStatus.SignedIn && userType === "notApplicable";
-  console.log("🚀 ~ file: MainNavigationStack.tsx ~ line 41 ~ PrimaryStackScreen ~ notVerifiedUser", notVerifiedUser)
   return (
     <PrimaryStack.Navigator
       screenOptions={() => ({
