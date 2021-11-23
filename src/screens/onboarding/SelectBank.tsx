@@ -2,7 +2,6 @@ import { useNavigation } from '@react-navigation/native';
 import React, { useState, useEffect, useContext } from 'react';
 import { StyleSheet, View, ScrollView, Dimensions, ActivityIndicator } from 'react-native';
 import { WebView } from 'react-native-webview';
-import { AuthContext } from 'src/auth';
 import { Header, CancelBtn } from "src/shared/uielements";
 import { viewBaseWhite, wrappingContainerBase } from "src/theme/elements";
 import * as Routes from 'src/navigation/constants';
@@ -10,6 +9,7 @@ import { colors } from "src/theme/colors";
 import { UserAPI } from 'src/api';
 import { loadPersonalFundingSource } from 'src/store/funding-source/funding-source.actions';
 import { useDispatch } from 'react-redux';
+import { UserContext } from 'src/api/context';
 
 export const WEBVIEW_SCREEN = Dimensions.get('screen').height - 150;
 
@@ -31,16 +31,16 @@ const styles = StyleSheet.create({
 const SelectBank = (): JSX.Element => {
 	const navigation = useNavigation();
 	const dispatch = useDispatch();
-	const { customerDwollaId } = useContext(AuthContext);
+	const { customerDwollaId } = useContext(UserContext);
 	const [iavToken, setIAVToken] = useState<string>("");
 	let webview: WebView<{ ref: unknown; style: { flex: number; height: number; paddingBottom: number; }; source: { uri: string; }; }> | null = null;
 
 	useEffect(() => {
 		if (customerDwollaId) {
 			(async () => {
-				const response = await UserAPI.iavToken(customerDwollaId);
-				if (response.data) {
-					setIAVToken(response.data.iavToken);
+				const response: any = await UserAPI.iavToken(customerDwollaId);
+				if (response?.data) {
+					setIAVToken(response?.data?.iavToken);
 					webview?.reload();
 				}
 			})();

@@ -9,7 +9,6 @@ import {
     TouchableOpacity
 } from "react-native";
 import { Text } from "react-native-elements";
-import { AuthContext } from 'src/auth';
 import { BackBtn, BorderedInput, Button, Header, CancelBtn } from "src/shared/uielements";
 import { colors } from "src/theme/colors";
 import {
@@ -25,6 +24,7 @@ import { showToast } from 'src/utils/common';
 import { ToastType, LoadingScreenTypes } from 'src/utils/types';
 import { loadPersonalWallet } from 'src/store/wallet/wallet.actions';
 import { updateLoadingStatus } from 'src/store/loading/loading.actions';
+import { UserContext } from "src/api/context";
 
 const styles = StyleSheet.create({
   container: { 
@@ -93,7 +93,7 @@ const MIN_AMOUNT = 1;
 const LoadUp = (): JSX.Element => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
-  const { customerDwollaId } = useContext(AuthContext);
+  const { customerDwollaId } = useContext(UserContext);
   const [amount, setAmount] = useState<string>("");
   const [goNext, setGoNext] = useState(false);
 

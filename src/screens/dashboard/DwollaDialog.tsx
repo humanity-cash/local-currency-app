@@ -67,7 +67,9 @@ const DwollaDialog = (props: DwollaDialogProps): JSX.Element => {
 
     const selectBank = () => {
         props.onClose();
-        props.userType === UserType.Customer ? navigation.navigate(Routes.SELECT_BANK) : navigation.navigate(Routes.MERCHANT_BANK_ACCOUNT);
+        // props.userType === UserType.Customer
+        navigation.navigate(Routes.SELECT_BANK)
+            // : navigation.navigate(Routes.MERCHANT_BANK_ACCOUNT);
     }
 
     const mainTextStyle = props.userType === UserType.Customer ? {color: colors.darkGreen} : {color: colors.purple};
@@ -109,7 +111,7 @@ const DwollaDialog = (props: DwollaDialogProps): JSX.Element => {
                         <Text style={mainTextStyle}> and </Text>
                         <Text 
                             style={{...mainTextStyle, ...styles.underlineText}} 
-                            onPress={()=>Linking.openURL(DWOLLA_PRIVACY_URL)}
+                            onPress={() => Linking.openURL(DWOLLA_PRIVACY_URL)}
                         >
                             Dwolla Privacy Policy
                         </Text>

@@ -1,7 +1,6 @@
 import React, { useEffect, useContext, useState } from 'react';
 import { StyleSheet, View, Image } from 'react-native';
 import QRCode from 'react-native-qrcode-svg';
-import { AuthContext } from 'src/auth';
 import { Text } from 'react-native-elements';
 import { Dialog } from "src/shared/uielements";
 import { dialogViewBase } from "src/theme/elements";
@@ -14,7 +13,6 @@ import { WalletState } from 'src/store/wallet/wallet.reducer';
 import { useSelector, useDispatch } from 'react-redux';
 import { AppState } from 'src/store';
 import { loadPersonalTransactions } from 'src/store/transaction/transaction.actions';
-import { Dwolla } from 'src/contexts';
 import { UserContext } from 'src/api/context';
 
 const styles = StyleSheet.create({
@@ -70,8 +68,7 @@ type ReturnQRCodeGenProps = {
 const ReturnQRCodeGen = (props: ReturnQRCodeGenProps): JSX.Element => {
     const { personalWallet } = useSelector((state: AppState) => state.walletReducer) as WalletState;
     const dispatch = useDispatch();
-    const { user } = useContext(UserContext);
-    const { customerDwollaId } = useContext(Dwolla.Context);
+    const { user, customerDwollaId } = useContext(UserContext);
     const { hasPermission, setMaxBrightness, setDefaultBrightness} = useBrightness();
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const [initBalance, setInitBalance] = useState<number>(personalWallet.availableBalance);

@@ -30,9 +30,9 @@ const styles = StyleSheet.create({
 });
 
 const LinkBankAccount = (): JSX.Element => {
-	const { cognitoId, updateUserType } = useContext(AuthContext);
 	const [isVisible, setIsVisible] = useState<boolean>(false);
 	const dispatch = useDispatch();
+	const { signUpDetails: { email, password }, signIn } = useContext(AuthContext);
 
 	const selectBank = () => {
 		setIsVisible(true);
@@ -43,7 +43,7 @@ const LinkBankAccount = (): JSX.Element => {
 			isLoading: true,
 			screen: LoadingScreenTypes.LOADING_DATA
 		}));
-		updateUserType(cognitoId, UserType.Customer);
+		signIn(email, password);
 	}
 
 	return (

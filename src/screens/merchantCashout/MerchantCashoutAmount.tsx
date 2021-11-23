@@ -14,7 +14,7 @@ import { useDispatch } from 'react-redux';
 import { showLoadingProgress, hideLoadingProgress } from '../../store/loading/loading.actions';
 import { UserAPI } from 'src/api';
 import { LoadingScreenTypes } from 'src/utils/types';
-import { Dwolla } from 'src/contexts';
+import { UserContext } from 'src/api/context';
 
 const styles = StyleSheet.create({
 	headerText: {
@@ -83,7 +83,7 @@ const styles = StyleSheet.create({
 
 const MerchantCashoutAmount = (): JSX.Element => {
 	const navigation = useNavigation();
-	const { businessDwollaId } = useContext(Dwolla.Context);
+	const { businessDwollaId } = useContext(UserContext);
 	const dispatch = useDispatch()
 	const [amount, setAmount] = useState<string>("");
 	const [goNext, setGoNext] = useState(false);

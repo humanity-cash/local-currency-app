@@ -9,7 +9,6 @@ import * as Routes from 'src/navigation/constants';
 import { useNavigation } from '@react-navigation/core';
 import { modalViewBase, wrappingContainerBase, underlineHeaderB, viewBase } from "src/theme/elements";
 import { Header, CancelBtn, BackBtn, Modal, ModalHeader, BorderedInput, Button } from "src/shared/uielements";
-import { Dwolla } from 'src/contexts';
 import { QRCodeEntry, SECURITY_ID, PaymentMode, ToastType, LoadingScreenTypes } from 'src/utils/types';
 import { isQRCodeValid } from 'src/utils/validation';
 import { UserAPI } from 'src/api';
@@ -21,6 +20,7 @@ import { loadBusinessTransactions } from 'src/store/transaction/transaction.acti
 import { useDispatch } from 'react-redux';
 import { updateLoadingStatus } from 'src/store/loading/loading.actions';
 import moment from 'moment';
+import { UserContext } from 'src/api/context';
 
 type HandleScaned = {
 	type: string,
@@ -89,7 +89,7 @@ const CashierReturnQRCodeScan = (): JSX.Element => {
 	const navigation = useNavigation();
 	const hasPermission = useCameraPermission();
 	const dispatch = useDispatch();
-	const { businessDwollaId } = useContext(Dwolla.Context);
+	const { businessDwollaId } = useContext(UserContext);
 	const [isScanned, setIsScanned] = useState<boolean>(false);
 	const [isReturnModal, setIsReturnModal] = useState<boolean>(false);
 	const [amount, setAmount] = useState<string>("");

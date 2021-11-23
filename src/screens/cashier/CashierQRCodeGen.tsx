@@ -12,7 +12,6 @@ import { WalletState } from 'src/store/wallet/wallet.reducer';
 import { useSelector, useDispatch } from 'react-redux';
 import { AppState } from 'src/store';
 import { loadBusinessTransactions } from 'src/store/transaction/transaction.actions';
-import { Dwolla } from 'src/contexts';
 import { UserContext } from 'src/api/context';
 
 const styles = StyleSheet.create({
@@ -67,8 +66,7 @@ type CashierQRCodeGenProps = {
 
 const CashierQRCodeGen = (props: CashierQRCodeGenProps): JSX.Element => {
     const { businessWallet } = useSelector((state: AppState) => state.walletReducer) as WalletState;
-    const { businessDwollaId } = useContext(Dwolla.Context);
-    const { user } = useContext(UserContext);
+    const { user, businessDwollaId } = useContext(UserContext);
     const dispatch = useDispatch();
     const { hasPermission, setMaxBrightness, setDefaultBrightness} = useBrightness();
     const [initBalance] = useState<number>(businessWallet.availableBalance);

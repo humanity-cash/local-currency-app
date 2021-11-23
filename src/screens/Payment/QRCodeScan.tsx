@@ -16,8 +16,6 @@ import { UserAPI } from 'src/api';
 import { ITransactionRequest } from 'src/api/types';
 import { calcFee, showToast } from 'src/utils/common';
 import { isQRCodeValid } from 'src/utils/validation';
-
-import { Dwolla } from 'src/contexts';
 import { UserContext } from 'src/api/context';
 import { loadPersonalWallet } from 'src/store/wallet/wallet.actions';
 import { loadPersonalTransactions } from 'src/store/transaction/transaction.actions';
@@ -212,7 +210,7 @@ const LowAmount = (props: LowAmountProps) => {
 const QRCodeScan = (): JSX.Element => {
 	const navigation = useNavigation();
 	const dispatch = useDispatch();
-	const { customerDwollaId } = useContext(Dwolla.Context);
+	const { customerDwollaId } = useContext(UserContext);
 	const hasPermission = useCameraPermission();
 	const [isScanned, setIsScanned] = useState<boolean>(false);
 	const [isPaymentDialog, setIsPaymentDialog] = useState<boolean>(false);

@@ -23,7 +23,7 @@ import { loadBusinessTransactions } from 'src/store/transaction/transaction.acti
 import { useDispatch } from 'react-redux';
 import { isQRCodeValid } from 'src/utils/validation';
 import moment from 'moment';
-import { Dwolla } from 'src/contexts';
+import { UserContext } from 'src/api/context';
 
 type HandleScaned = {
 	type: string,
@@ -90,7 +90,7 @@ const styles = StyleSheet.create({
 
 const MerchantReturnQRCodeScan = (): JSX.Element => {
 	const navigation = useNavigation();
-	const { businessDwollaId } = useContext(Dwolla.Context);
+	const { businessDwollaId } = useContext(UserContext);
 	const hasPermission = useCameraPermission();
 	const dispatch = useDispatch();
 	const [isScanned, setIsScanned] = useState<boolean>(false);
