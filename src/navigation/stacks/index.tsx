@@ -190,6 +190,14 @@ export const OnboardingStack = () => {
 				component={EmailConfirmed}
 			/>
 			<PrimaryStack.Screen
+				name={Routes.LINK_BANK_ACCOUNT}
+				component={LinkBankAccount}
+			/>
+			<PrimaryStack.Screen
+				name={Routes.SELECT_BANK}
+				component={SelectBank}
+			/>
+			<PrimaryStack.Screen
 				name={Routes.FORGOT_PASSWORD}
 				component={ForgotPasswordNavigator}
 			/>
