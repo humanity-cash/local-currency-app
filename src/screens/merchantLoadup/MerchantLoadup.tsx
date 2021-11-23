@@ -15,7 +15,7 @@ import { ToastType, LoadingScreenTypes } from 'src/utils/types';
 import { updateLoadingStatus } from 'src/store/loading/loading.actions';
 import { loadBusinessWallet } from 'src/store/wallet/wallet.actions';
 import { useDispatch } from 'react-redux';
-import { Dwolla } from 'src/contexts';
+import { UserContext } from "src/api/context";
 
 const styles = StyleSheet.create({
   headerText: {
@@ -98,7 +98,7 @@ const MAX_AMOUNT = 2000;
 const MerchantLoadup = (): JSX.Element => {
   const navigation = useNavigation();
   const dispatch = useDispatch();
-  const { businessDwollaId } = useContext(Dwolla.Context);
+  const { businessDwollaId } = useContext(UserContext);
   const [amount, setAmount] = useState<string>("");
   const [goNext, setGoNext] = useState<boolean>(false);
 

@@ -10,7 +10,7 @@ import * as Routes from 'src/navigation/constants';
 import { UserAPI } from 'src/api';
 import { loadBusinessFundingSource } from 'src/store/funding-source/funding-source.actions';
 import { useDispatch } from 'react-redux';
-import { Dwolla } from 'src/contexts';
+import { UserContext } from 'src/api/context';
 
 export const WEBVIEW_SCREEN = Dimensions.get('screen').height - 150;
 
@@ -33,14 +33,14 @@ const styles = StyleSheet.create({
 const SelectMerchantBank = (): JSX.Element => {
 	const navigation = useNavigation();
 	const dispatch = useDispatch();
-	const { businessDwollaId } = useContext(Dwolla.Context);
+	const { businessDwollaId } = useContext(UserContext);
 	const [iavToken, setIAVToken] = useState<string>("");
 	let webview: WebView<{ ref: unknown; style: { flex: number; height: number; paddingBottom: number; }; source: { uri: string; }; }> | null = null;
 
 	useEffect(() => {
 		if (businessDwollaId) {
 			(async () => {
-				const response = await UserAPI.iavToken(businessDwollaId);
+				const response: any = await UserAPI.iavToken(businessDwollaId);
 				if (response.data) {
 					setIAVToken(response?.data?.iavToken);
 					webview?.reload();

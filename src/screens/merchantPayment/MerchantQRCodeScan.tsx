@@ -22,7 +22,6 @@ import { useDispatch } from 'react-redux';
 import { WalletState } from 'src/store/wallet/wallet.reducer';
 import { useSelector } from 'react-redux';
 import { AppState } from 'src/store';
-import { Dwolla } from 'src/contexts';
 import { UserContext } from 'src/api/context';
 
 type HandleScaned = {
@@ -196,7 +195,7 @@ const PaymentConfirm = (props: PaymentConfirmProps) => {
 
 const MerchantQRCodeScan = (): JSX.Element => {
 	const navigation = useNavigation();
-	const { businessDwollaId } = useContext(Dwolla.Context);
+	const { businessDwollaId } = useContext(UserContext);
 	const dispatch = useDispatch();
 	const hasPermission = useCameraPermission();
 	const [isScanned, setIsScanned] = useState<boolean>(false);

@@ -27,7 +27,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { AppState } from 'src/store';
 import { UserType } from 'src/auth/types';
 import { showLoadingProgress, hideLoadingProgress } from '../../store/loading/loading.actions';
-import { Dwolla } from "src/contexts";
+import { UserContext } from 'src/api/context';
 
 const styles = StyleSheet.create({
 	content: { paddingBottom: 80 },
@@ -157,7 +157,7 @@ const feedData = [
 const Dashboard = (): JSX.Element => {
 	const navigation = useNavigation();
 	const dispatch = useDispatch();
-	const { customerDwollaId } = useContext(Dwolla.Context);
+	const { customerDwollaId } = useContext(UserContext);
 	const [isVisible, setIsVisible] = useState<boolean>(false);
 	const [isLoadup, setIsLoadup] = useState<boolean>(false);
 	const [isPayment, setIsPayment] = useState<boolean>(false);
@@ -216,7 +216,7 @@ const Dashboard = (): JSX.Element => {
 					<Text style={styles.text}>B$ {personalFundingSource ? personalWallet.availableBalance : '-'}</Text>
 					<TouchableOpacity
 						style={styles.topupButton}
-						onPress={() => personalFundingSource ? navigation.navigate(Routes.LOAD_UP) : setIsLoadup(true)}>
+						onPress={() => { navigation.navigate(Routes.LOAD_UP) }}>
 						<Text style={styles.topupText}>Load up B$</Text>
 					</TouchableOpacity>
 				</View>
@@ -234,7 +234,7 @@ const Dashboard = (): JSX.Element => {
 									<Text
 										style={styles.alertIcon}
 										onPress={() => setIsVisible(true)}>
-										{Translation.BANK_ACCOUNT.ACCOUNT_LINK_TEXT}{' '}
+										{Translation.BANK_ACCOUNT.ACCOUNT_LINK_TEXT}
 										&gt;
 									</Text>
 								</Text>

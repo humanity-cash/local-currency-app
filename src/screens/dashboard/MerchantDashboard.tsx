@@ -26,7 +26,6 @@ import { WalletState } from 'src/store/wallet/wallet.reducer';
 import { FundingSourceState } from 'src/store/funding-source/funding-source.reducer';
 import { useSelector, useDispatch } from 'react-redux';
 import { AppState } from 'src/store';
-import { Dwolla } from 'src/contexts';
 import { UserContext } from "src/api/context";
 
 const styles = StyleSheet.create({
@@ -242,8 +241,7 @@ const defaultTransaction = {
 const MerchantDashboard = (): JSX.Element => {
 	const navigation = useNavigation();
 	const dispatch = useDispatch();
-	const {  businessDwollaId } = useContext(Dwolla.Context);
-	const { user } = useContext(UserContext);
+	const { user, businessDwollaId } = useContext(UserContext);
 	const completedCustomerVerification = user?.verifiedCustomer;
 	const [isFilterVisible, setIsFilterVisible] = useState<boolean>(false);
 	const [searchText, setSearchText] = useState<string>("");

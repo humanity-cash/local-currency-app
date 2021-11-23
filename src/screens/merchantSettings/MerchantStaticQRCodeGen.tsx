@@ -13,7 +13,6 @@ import { useSelector, useDispatch } from 'react-redux';
 import { AppState } from 'src/store';
 import { loadBusinessTransactions } from 'src/store/transaction/transaction.actions';
 import { colors } from 'src/theme/colors';
-import { Dwolla } from 'src/contexts';
 
 const styles = StyleSheet.create({
     dialog: {
@@ -67,8 +66,7 @@ type QRCodeGenProps = {
 const StaticQRCodeGen = (props: QRCodeGenProps): JSX.Element => {
     const { businessWallet } = useSelector((state: AppState) => state.walletReducer) as WalletState;
     const dispatch = useDispatch();
-    const { businessDwollaId } = useContext(Dwolla.Context);
-    const { user } = useContext(UserContext);
+    const { user, businessDwollaId } = useContext(UserContext);
     const { hasPermission, setMaxBrightness, setDefaultBrightness} = useBrightness();
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const [initBalance, setInitBalance] = useState<number>(businessWallet.availableBalance);

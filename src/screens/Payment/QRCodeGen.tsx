@@ -11,7 +11,6 @@ import { WalletState } from 'src/store/wallet/wallet.reducer';
 import { useSelector, useDispatch } from 'react-redux';
 import { AppState } from 'src/store';
 import { loadPersonalTransactions } from 'src/store/transaction/transaction.actions';
-import { Dwolla } from 'src/contexts';
 import { UserContext } from 'src/api/context';
 
 const styles = StyleSheet.create({
@@ -64,8 +63,7 @@ type QRCodeGenProps = {
 const QRCodeGen = (props: QRCodeGenProps): JSX.Element => {
     const { personalWallet } = useSelector((state: AppState) => state.walletReducer) as WalletState;
     const dispatch = useDispatch();
-    const { customerDwollaId } = useContext(Dwolla.Context);
-    const { user } = useContext(UserContext);
+    const { user, customerDwollaId } = useContext(UserContext);
     const { hasPermission, setMaxBrightness, setDefaultBrightness} = useBrightness();
     const [initBalance] = useState<number>(personalWallet.availableBalance);
     const [isSuccess, setIsSuccess] = useState<boolean>(false);
