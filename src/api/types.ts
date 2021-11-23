@@ -59,13 +59,13 @@ export interface IUserRequest {
     customer?: Customer;
 }
 
-// export interface IUser {
-//     totalBalance: number;
-//     availableBalance: number;
-//     userId: string;
-//     address: string;
-//     createdBlock: string;
-// }
+export interface IWallet {
+    totalBalance: number;
+    availableBalance: number;
+    userId: string;
+    address: string;
+    createdBlock: string;
+}
 
 export interface IDepositRequest {
     amount: string

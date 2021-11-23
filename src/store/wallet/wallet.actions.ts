@@ -6,14 +6,20 @@ import errorHandler from '../errorHandler';
 export const loadPersonalWallet = (userId: string) => async (dispatch: Dispatch): Promise<void> => {
     try {
         const wallet = await UserAPI.getUser(userId);
-
+        const walletData = {
+            totalBalance: wallet?.totalBalance,
+            availableBalance: wallet?.availableBalance,
+            userId: wallet?.userId,
+            address: wallet?.address,
+            createdBlock: wallet?.createdBlock,
+        }
         dispatch({
             type: PERSONAL_WALLET_LOAD,
             payload: {
-                personalWallet: wallet
+                personalWallet: walletData
             },
         });
-    } catch (error) {
+    } catch (error: any) {
         errorHandler(error, PERSONAL_WALLET_LOAD);
     }
 }
@@ -28,7 +34,7 @@ export const loadBusinessWallet = (userId: string) => async (dispatch: Dispatch)
                 businessWallet: wallet
             },
         });
-    } catch (error) {
+    } catch (error: any) {
         errorHandler(error, BUSINESS_WALLET_LOAD);
     }
 }
