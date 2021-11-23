@@ -19,6 +19,7 @@ export const loadClientFundingSource = (userId: string) => async (dispatch: Disp
 }
 
 export const loadBusinessFundingSource = (userId: string) => async (dispatch: Dispatch): Promise<void> => {
+    console.log(userId)
     try {
         const fundingSource = await UserAPI.getFundingSources(userId);
 

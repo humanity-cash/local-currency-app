@@ -6,6 +6,7 @@ import {
 import React, { useEffect, useState, useContext } from "react";
 import { userController } from "./cognito";
 import { BaseResponse, CognitoResponse, ChangePasswordInput } from "./cognito/types";
+import { AppState } from '../store/index';
 import {
 	buisnessBasicVerificationInitialState,
 	customerBasicVerificationInitialState,
@@ -72,6 +73,7 @@ const AuthProvider: React.FunctionComponent = ({ children }) => {
 	const [cognitoId, setCognitoId] = useState<string>("");
 	const [customerDwollaId, setCustomerDwollaId] = useState<string>("");
 	const [businessDwollaId, setBusinessDwollaId] = useState<string>("");
+	const [isSignUp, setIsSignUp] = useState<boolean>(true)
 
 	useEffect(() => {
 		const isVerifiedCustomer =
@@ -160,8 +162,12 @@ const AuthProvider: React.FunctionComponent = ({ children }) => {
 		}
 
 		const latestType = await getLatestSelectedAccountType(cognitoId);
-		
-		if (!latestType) {
+
+		const isVerifiedCustomer =
+			userAttributes?.["custom:basicCustomerV"] === "true";
+		if(!isVerifiedCustomer) {
+			updateUserType(cognitoId, UserType.Business)
+		} else if (!latestType) {
 			if (userType !== UserType.Customer) {
 				updateUserType(cognitoId, UserType.Customer);
 			}
@@ -196,6 +202,7 @@ const AuthProvider: React.FunctionComponent = ({ children }) => {
 		);
 		if (!response?.success) setAuthStatus(AuthStatus.SignedOut);
 		else {
+			getAttributes()
 			setAuthStatus(AuthStatus.Loading); // Invokes getSession useEffect
 		}
 
@@ -210,10 +217,10 @@ const AuthProvider: React.FunctionComponent = ({ children }) => {
 			await userController.signIn({ email, password });
 			
 		if (!response?.success) {
-			setAuthStatus(AuthStatus.SignedOut); // Something went wrong in sign in
+			setAuthStatus(AuthStatus.SignedOut); 	// Something went wrong in sign in
 		} else {
 			getAttributes()
-			setAuthStatus(AuthStatus.Loading); // Invokes getSession useEffect
+			setAuthStatus(AuthStatus.Loading); 		// Invokes getSession useEffect
 		}
 
 		return response;
@@ -246,6 +253,7 @@ const AuthProvider: React.FunctionComponent = ({ children }) => {
 			await userController.updateUserAttributes({
 				"custom:basicBusinessV": "true",
 			});
+			setCompletedBusinessVerification(true);
 		}
 		return response;
 	};
@@ -333,6 +341,8 @@ const AuthProvider: React.FunctionComponent = ({ children }) => {
 		userController.signOut();
 		setSignUpDetails(signUpInitialState);
 		setSignInDetails(signInInitialState);
+		setCustomerBasicVerificationDetails(customerBasicVerificationInitialState)
+		setBuisnessBasicVerification(buisnessBasicVerificationInitialState)
 		setAuthStatus(AuthStatus.SignedOut);
 		setUserAttributes({});
 		setCognitoId("")
@@ -378,7 +388,11 @@ const AuthProvider: React.FunctionComponent = ({ children }) => {
 		setBusinessDwollaInfo,
 		completeBusinessDwollaInfo,
 		changePassword,
-		getAttributes
+		getAttributes,
+		setCustomerDwollaId,
+		setBusinessDwollaId,
+		isSignUp,
+		setIsSignUp
 	};
 
 	return (

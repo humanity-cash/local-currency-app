@@ -268,9 +268,9 @@ const DrawerContent = (props: DrawerContentComponentProps) => {
 								</View>
 								<View style={styles.usernameView}>
 									<Text>{businessTag}</Text>
-									{(completedCustomerVerification || isCashierView) && <View style={styles.inlineView}>
+									{(completedCustomerVerification || authorization.cashierView) && <View style={styles.inlineView}>
 										<Text style={styles.fadeText}>
-											Switch account
+											{Translation.COMMON.SWITCH_ACCOUNT}
 										</Text>
 										<EvilIcons
 											name="chevron-down"
@@ -283,7 +283,7 @@ const DrawerContent = (props: DrawerContentComponentProps) => {
 						</TouchableWithoutFeedback>
 						{isExpanded && (
 							<View>
-								{userTag ? (
+								{completedCustomerVerification ? (
 									<TouchableWithoutFeedback
 										onPress={onClient}>
 										<View style={styles.userInfo}>

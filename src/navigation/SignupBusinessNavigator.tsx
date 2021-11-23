@@ -7,6 +7,7 @@ import BusinessOwnerAddress from "src/screens/signupBusiness/BusinessOwnerAddres
 import BusinessInfo from "src/screens/signupBusiness/BusinessInfo";
 import BusinessAddress from "src/screens/signupBusiness/BusinessAddress";
 import BusinessWelcome from "src/screens/signupBusiness/BusinessWelcome";
+import * as Constants from './constants';
 
 const SignupBusinessStack = createStackNavigator()
 function SignupBusinessScreen(): ReactElement {
@@ -16,13 +17,13 @@ function SignupBusinessScreen(): ReactElement {
 				headerShown: false,
 			})}
 		>
-			<SignupBusinessStack.Screen name="BusinessProfile" component={BusinessProfile} />
-			<SignupBusinessStack.Screen name="BusinessDetail" component={BusinessDetail} />
-			<SignupBusinessStack.Screen name="BusinessOwnerDetail" component={BusinessOwnerDetail} />
-			<SignupBusinessStack.Screen name="BusinessOwnerAddress" component={BusinessOwnerAddress} />
-			<SignupBusinessStack.Screen name="BusinessInfo" component={BusinessInfo} />
-			<SignupBusinessStack.Screen name="BusinessAddress" component={BusinessAddress} />
-			<SignupBusinessStack.Screen name="BusinessWelcome" component={BusinessWelcome} />
+			<SignupBusinessStack.Screen name={Constants.BUSINESS_PROFILE} component={BusinessProfile} />
+			<SignupBusinessStack.Screen name={Constants.BUSINESS_DETAIL} component={BusinessDetail} />
+			<SignupBusinessStack.Screen name={Constants.BUSINESS_OWNER_DETAIL} component={BusinessOwnerDetail} />
+			<SignupBusinessStack.Screen name={Constants.BUSINESS_OWNER_ADDRESS} component={BusinessOwnerAddress} />
+			<SignupBusinessStack.Screen name={Constants.BUSINESS_INFO} component={BusinessInfo} />
+			<SignupBusinessStack.Screen name={Constants.BUSINESS_ADDRESS} component={BusinessAddress} />
+			<SignupBusinessStack.Screen name={Constants.BUSINESS_WELCOME} component={BusinessWelcome} />
 		</SignupBusinessStack.Navigator>
 	);
 }

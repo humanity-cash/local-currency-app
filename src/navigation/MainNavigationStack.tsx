@@ -67,6 +67,7 @@ import SettingsSecurity from "src/screens/settings/SettingsSecurity";
 import SettingsTermsAndConditions from "src/screens/settings/SettingsTermsAndConditions";
 import * as Routes from "./constants";
 import PaymentReceiveAmount from '../screens/payment/PaymentReceiveAmount';
+import BusinessWelcome from 'src/screens/signupBusiness/BusinessWelcome';
 
 const PrimaryStack = createStackNavigator();
 
@@ -350,6 +351,10 @@ const PrimaryStackScreen = () => {
 						name={Routes.BUSINESS_SETTINGS_SECURITY}
 						component={BusinessSettingsSecurity}
 					/>
+					<PrimaryStack.Screen
+						name={Routes.BUSINESS_WELCOME}
+						component={BusinessWelcome}
+					/>
 					{!completedCustomerVerification && (
 						<>
 							<PrimaryStack.Screen
@@ -402,6 +407,10 @@ const PrimaryStackScreen = () => {
 					<PrimaryStack.Screen
 						name={Routes.BUSINESS_BANK_ACCOUNT}
 						component={BusinessBankAccountNavigator}
+					/>
+					<PrimaryStack.Screen
+						name={Routes.BUSINESS_WELCOME}
+						component={BusinessWelcome}
 					/>
 				</>
 			) : (

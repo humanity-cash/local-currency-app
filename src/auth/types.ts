@@ -122,6 +122,8 @@ export interface IAuth {
 	cognitoId?: string,
 	customerDwollaId?: string,
 	businessDwollaId?: string,
+	setCustomerDwollaId?: Dispatch<SetStateAction<string>>,
+	setBusinessDwollaId?: Dispatch<SetStateAction<string>>,
 	userAttributes?: any,
 	completeCustomerBasicVerification?: any,
 	updateAttributes: (update: AccountUpdate) => Promise<BaseResponse<string | undefined>>;
@@ -149,7 +151,9 @@ export interface IAuth {
 	completeCustomerDwollaInfo?: (update: DwollaInfo) => CognitoResponse<string | undefined>,
 	setBusinessDwollaInfo?: Dispatch<SetStateAction<DwollaInfo>>,
 	completeBusinessDwollaInfo?: (update: DwollaInfo) => CognitoResponse<string | undefined>,
-	changePassword?: any
+	changePassword?: any,
+	isSignUp: boolean,
+	setIsSignUp: Dispatch<SetStateAction<boolean>>
 }
 
 //@ts-ignore

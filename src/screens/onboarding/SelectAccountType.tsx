@@ -9,6 +9,7 @@ import Header from "src/shared/uielements/header/Header";
 import { colors } from "src/theme/colors";
 import { underlineHeader, viewBaseWhite, wrappingContainerBase } from "src/theme/elements";
 import Translation from 'src/translation/en.json';
+import { UserType } from '../../auth/types';
 
 const styles = StyleSheet.create({
 	headerText: {
@@ -34,9 +35,10 @@ const styles = StyleSheet.create({
 
 const SelectAccountType = (): JSX.Element => {
 	const navigation = useNavigation()
-	const { setCustomerBasicVerificationDetails } = useContext(AuthContext);
+	const { setCustomerBasicVerificationDetails, updateUserType, cognitoId } = useContext(AuthContext);
 
 	const handleClient = () => {
+		updateUserType(cognitoId, UserType.Customer)
 		setCustomerBasicVerificationDetails((pv: any) => ({
 			...pv,
 			type: "personal",
@@ -45,6 +47,7 @@ const SelectAccountType = (): JSX.Element => {
 	}
 
 	const handleBuisness = () => {
+		updateUserType(cognitoId, UserType.Business)
 		setCustomerBasicVerificationDetails((pv: any) => ({
 			...pv,
 			type: "buisness",

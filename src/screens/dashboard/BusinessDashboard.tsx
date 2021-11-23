@@ -275,7 +275,7 @@ const defaultTransaction = {
 const BusinessDashboard = (): JSX.Element => {
 	const navigation = useNavigation();
 	const dispatch = useDispatch();
-	const { completedCustomerVerification, businessDwollaId } = useContext(AuthContext);
+	const { completedCustomerVerification, businessDwollaId, isSignUp, setIsSignUp } = useContext(AuthContext);
 	const [isFilterVisible, setIsFilterVisible] = useState<boolean>(false);
 	const [searchText, setSearchText] = useState<string>("");
 	const [isDetailViewOpen, setIsDetailViewOpen] = useState<boolean>(false);
@@ -290,7 +290,7 @@ const BusinessDashboard = (): JSX.Element => {
 	const [notifications, setNotifications] = useState<INotificationResponse[]>([])
 
 	useEffect(() => {
-		if (businessDwollaId) {
+		if (businessDwollaId && businessDwollaId.length > 0) {
 			(async () => {
 				dispatch(loadBusinessFundingSource(businessDwollaId));
 				dispatch(updateLoadingStatus({
@@ -314,7 +314,15 @@ const BusinessDashboard = (): JSX.Element => {
 		return(() => {
 			clearInterval(timer)
 		})
-	}, []);
+	}, [businessDwollaId]);
+
+	useEffect(() => {
+		console.log("isSignUp", isSignUp)
+		if(isSignUp) {
+			setIsSignUp(false)
+			navigation.navigate(Routes.BUSINESS_WELCOME);
+		}
+	}, [isSignUp])
 
 	const updateNotification = async () => {
 		if(businessDwollaId) {

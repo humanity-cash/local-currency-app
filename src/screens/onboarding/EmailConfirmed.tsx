@@ -7,6 +7,9 @@ import { BUTTON_TYPES } from 'src/constants';
 import { BackBtn, Button, Header } from "src/shared/uielements";
 import { colors } from "src/theme/colors";
 import { baseHeader, viewBase, wrappingContainerBase } from "src/theme/elements";
+import { useDispatch } from 'react-redux';
+import { showLoadingProgress, hideLoadingProgress } from '../../store/loading/loading.actions';
+import { LoadingScreenTypes } from 'src/utils/types';
 
 const styles = StyleSheet.create({
 	headerText: {
@@ -39,6 +42,13 @@ const styles = StyleSheet.create({
 const EmailConfirmed = (): JSX.Element => {
 	const navigation = useNavigation();
 	const { signUpDetails: { email, password }, signIn } = useContext(AuthContext);
+	const dispatch = useDispatch()
+
+	const onPressNext = async () => {
+		dispatch(showLoadingProgress(LoadingScreenTypes.LOADING_DATA))
+		await signIn(email, password)
+		dispatch(hideLoadingProgress())
+	}
 
 	return (
 		<View style={viewBase}>
@@ -61,7 +71,7 @@ const EmailConfirmed = (): JSX.Element => {
 				<Button
 					type={BUTTON_TYPES.DARK_GREEN}
 					title='NEXT'
-					onPress={() => signIn(email, password)}
+					onPress={onPressNext}
 				/>
 			</View>
 		</View>

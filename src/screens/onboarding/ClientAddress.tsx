@@ -30,22 +30,24 @@ import { UserAPI } from 'src/api';
 import { IUserRequest } from 'src/api/types';
 import { ToastType, LoadingScreenTypes } from 'src/utils/types';
 import { showToast } from 'src/utils/common';
-import { updateLoadingStatus } from 'src/store/loading/loading.actions';
 import { useDispatch } from 'react-redux';
 import countries from 'src/mocks/countries';
+import { SafeAreaView } from 'react-native';
+import { showLoadingProgress, hideLoadingProgress } from '../../store/loading/loading.actions';
+import { DwollaInfo } from '../../auth/types';
 
 const styles = StyleSheet.create({
 	content: {
-		paddingBottom: 40,
+		paddingBottom: 40
 	},
 	headerText: {
 		fontSize: 32,
 		color: colors.darkGreen,
-		lineHeight: 35,
+		lineHeight: 35
 	},
 	bottomView: {
-		paddingHorizontal: 20,
-		paddingBottom: 50,
+		marginHorizontal: 20,
+		marginBottom: 20
 	},
 });
 
@@ -56,7 +58,9 @@ const ClientAddress = (): React.ReactElement => {
 		signOut, 
 		cognitoId, 
 		completeCustomerDwollaInfo,
-		signInDetails
+		setCustomerDwollaId,
+		signInDetails,
+		getAttributes
 	} = useContext(AuthContext);
 	const navigation = useNavigation();
 	const dispatch = useDispatch();
@@ -70,6 +74,7 @@ const ClientAddress = (): React.ReactElement => {
 	}, [customerBasicVerificationDetails]);
 
 	const onNextPress = async () => {
+		dispatch(showLoadingProgress(LoadingScreenTypes.LOADING_DATA))
 		const response = await completeCustomerBasicVerification();
 		const state = customerBasicVerificationDetails.state
 		if (response.success && cognitoId && signInDetails) {
@@ -85,27 +90,16 @@ const ClientAddress = (): React.ReactElement => {
 				authUserId: "p_" + cognitoId
 			};
 
-			dispatch(updateLoadingStatus({
-				isLoading: true,
-				screen: LoadingScreenTypes.LOADING_DATA
-			}));
 			const resApi = await UserAPI.user(request);
 			if (completeCustomerDwollaInfo && resApi.data) {
-				await completeCustomerDwollaInfo({
-					dwollaId: resApi.data.userId,
-					resourceUri: ""
-				});
-
-				navigation.navigate(Routes.LINK_BANK_ACCOUNT);
+				setCustomerDwollaId!(resApi.data.userId as string)
+				await completeCustomerDwollaInfo(resApi.data as DwollaInfo);
+				await getAttributes()
 			}
-
-			dispatch(updateLoadingStatus({
-				isLoading: false,
-				screen: LoadingScreenTypes.LOADING_DATA
-			}));
 		} else {
 			showToast(ToastType.ERROR, "Whooops, something went wrong.", "Connection failed.");
 		}
+		dispatch(hideLoadingProgress())
 	};
 
 	return (
@@ -134,14 +128,14 @@ const ClientAddress = (): React.ReactElement => {
 			</View>
 			<KeyboardAvoidingView
 				behavior={Platform.OS == "ios" ? "padding" : "height"}>
-				<View style={styles.bottomView}>
+				<SafeAreaView style={styles.bottomView}>
 					<Button
 						type={BUTTON_TYPES.DARK_GREEN}
 						title={Translation.BUTTON.NEXT}
 						disabled={!goNext}
 						onPress={onNextPress}
 					/>
-				</View>
+				</SafeAreaView>
 			</KeyboardAvoidingView>
 		</View>
 	);

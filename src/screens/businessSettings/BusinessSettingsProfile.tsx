@@ -503,7 +503,6 @@ export const BusinessSettingsProfile = (): JSX.Element => {
 										data={countries}
 										defaultValueByIndex={0}
 										onSelect={(selectedItem) => {
-											console.log(selectedItem)
 											setState((pv) => ({
 												...pv,
 												businessState: selectedItem,

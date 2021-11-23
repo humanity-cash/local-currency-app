@@ -1,6 +1,6 @@
 import { useNavigation } from '@react-navigation/native';
-import React, { useContext, useEffect, useState } from 'react';
-import { KeyboardAvoidingView, Platform, StyleSheet, View, ScrollView } from 'react-native';
+import React, { useContext, useEffect, useState, RefObject, createRef } from 'react';
+import { KeyboardAvoidingView, Platform, StyleSheet, View, ScrollView, TextInput, SafeAreaView } from 'react-native';
 import { Text } from 'react-native-elements';
 import { AuthContext } from 'src/auth';
 import { BUTTON_TYPES } from 'src/constants';
@@ -14,6 +14,9 @@ import {
 } from 'src/theme/elements';
 import { isPasswordValid } from 'src/utils/validation';
 import Translation from 'src/translation/en.json';
+import { useDispatch } from 'react-redux';
+import { showLoadingProgress, hideLoadingProgress } from '../../store/loading/loading.actions';
+import { LoadingScreenTypes } from 'src/utils/types';
 
 const styles = StyleSheet.create({
 	headerText: {
@@ -42,8 +45,8 @@ const styles = StyleSheet.create({
 		color: colors.bodyText,
 	},
 	bottomView: {
-		paddingHorizontal: 20,
-		paddingBottom: 50,
+		marginHorizontal: 20,
+		marginBottom: 20,
 	},
 });
 
@@ -51,6 +54,8 @@ const Password = (): JSX.Element => {
 	const navigation = useNavigation();
 	const { setSignUpDetails, signUpDetails, signUp } = useContext(AuthContext);
 	const [isValidPassword, setIsValidPassword] = useState<boolean>(false);
+	const conPwRef: RefObject<TextInput> = createRef()
+	const dispatch = useDispatch()
 
 	useEffect(() => {
 		if (
@@ -97,6 +102,10 @@ const Password = (): JSX.Element => {
 							value={signUpDetails.password}
 							secureTextEntry={true}
 							onChange={onValueChange}
+							returnKeyType='next'
+							onSubmitEditing={()=>{
+								conPwRef.current?.focus()			
+							}}
 						/>
 
 						<View style={styles.inlineView}>
@@ -106,6 +115,7 @@ const Password = (): JSX.Element => {
 							)}
 						</View>
 						<BlockInput
+							reff={conPwRef}
 							name='confirmPassword'
 							placeholder='confirm password'
 							value={signUpDetails.confirmPassword}
@@ -118,19 +128,21 @@ const Password = (): JSX.Element => {
 
 			<KeyboardAvoidingView
 				behavior={Platform.OS == 'ios' ? 'padding' : 'height'}>
-				<View style={styles.bottomView}>
+				<SafeAreaView style={styles.bottomView}>
 					<Button
 						type={BUTTON_TYPES.DARK_GREEN}
 						title='NEXT'
 						disabled={!isValidPassword}
 						onPress={async () => {
+							dispatch(showLoadingProgress(LoadingScreenTypes.LOADING_DATA))
 							const response = await signUp();
+							dispatch(hideLoadingProgress())
 							if (response.success) {
 								navigation.navigate(Routes.VERIFICATION);
 							}
 						}}
 					/>
-				</View>
+				</SafeAreaView>
 			</KeyboardAvoidingView>
 		</View>
 	);

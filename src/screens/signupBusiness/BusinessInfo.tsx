@@ -1,6 +1,6 @@
 import { AntDesign } from '@expo/vector-icons';
 import { useNavigation } from "@react-navigation/native";
-import React, { ReactElement, useContext, useState, useEffect } from "react";
+import React, { ReactElement, useContext, useState, useEffect, RefObject, createRef } from "react";
 import {
 	KeyboardAvoidingView,
 	Platform,
@@ -28,6 +28,7 @@ import {
 import Translation from "src/translation/en.json";
 import { Industry } from "src/utils/types";
 import { BusinessBasicVerification } from "src/auth/types";
+import { SafeAreaView, TextInput } from 'react-native';
 
 const Industries = [
 	Industry.ARTS_ENTERTAINMENT,
@@ -76,8 +77,8 @@ const styles = StyleSheet.create({
 		paddingBottom: 40,
 	},
 	bottomView: {
-		paddingHorizontal: 20,
-		paddingBottom: 50,
+		marginHorizontal: 20,
+		marginBottom: 20,
 	},
 });
 
@@ -86,6 +87,7 @@ const BusinessInfo = (): ReactElement => {
 	const { buisnessBasicVerification, setBuisnessBasicVerification, signOut } =
 		useContext(AuthContext);
 	const navigation = useNavigation();
+	const industryRef: RefObject<SelectDropdown> = createRef()
 
 	useEffect(() => {
 		setGoNext(buisnessBasicVerification.registeredBusinessName !== "");
@@ -133,6 +135,10 @@ const BusinessInfo = (): ReactElement => {
 							value={buisnessBasicVerification.registeredBusinessName}
 							onChange={onValueChange}
 							style={styles.input}
+							returnKeyType='next'
+							onSubmitEditing={() => {
+								industryRef.current?.openDropdown()
+							}}
 						/>
 
 						<Text style={styles.label}>
@@ -140,6 +146,7 @@ const BusinessInfo = (): ReactElement => {
 						</Text>
 						<View style={styles.picker}>
 							<SelectDropdown
+								ref={industryRef}
 								data={Industries}
 								defaultValueByIndex={0}
 								onSelect={(selectedItem) => {
@@ -178,7 +185,7 @@ const BusinessInfo = (): ReactElement => {
 			</View>
 			<KeyboardAvoidingView
 				behavior={Platform.OS == "ios" ? "padding" : "height"}>
-				<View style={styles.bottomView}>
+				<SafeAreaView style={styles.bottomView}>
 					<Button
 						type="purple"
 						title={Translation.BUTTON.NEXT}
@@ -187,7 +194,7 @@ const BusinessInfo = (): ReactElement => {
 							navigation.navigate(Routes.BUSINESS_ADDRESS)
 						}
 					/>
-				</View>
+				</SafeAreaView>
 			</KeyboardAvoidingView>
 		</View>
 	);

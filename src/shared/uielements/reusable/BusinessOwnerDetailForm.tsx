@@ -1,5 +1,5 @@
-import React, { ReactElement, useContext } from "react";
-import { StyleSheet, View } from "react-native";
+import React, { ReactElement, useContext, RefObject, createRef } from "react";
+import { StyleSheet, View, TextInput, ReturnKeyTypeOptions } from "react-native";
 import { Text } from "react-native-elements";
 import { AuthContext } from "../../../auth";
 import { BusinessBasicVerification } from "src/auth/types";
@@ -25,7 +25,21 @@ const styles = StyleSheet.create({
 	},
 });
 
+type BasicInputWithLabelProps = {
+	reff?: RefObject<TextInput>
+	inputStyle?: any,
+	labelStyle?: any,
+	label: string,
+	onInputChange: any,
+	inputValue: any,
+	placeHolder?: string,
+	name?: string,
+	returnKeyType?: ReturnKeyTypeOptions,
+	onSubmitEditing?: (()=>void)
+}
+
 const BasicInputWithLabel = ({
+	reff,
 	inputStyle,
 	labelStyle,
 	label,
@@ -33,16 +47,21 @@ const BasicInputWithLabel = ({
 	inputValue,
 	placeHolder,
 	name,
-}: any) => {
+	returnKeyType,
+	onSubmitEditing
+}: BasicInputWithLabelProps) => {
 	return (
 		<>
 			<Text style={labelStyle}>{label}</Text>
 			<BlockInput
+				reff={reff}
 				name={name}
 				placeholder={placeHolder}
 				value={inputValue}
 				onChange={onInputChange}
 				style={inputStyle}
+				returnKeyType={returnKeyType}
+				onSubmitEditing={onSubmitEditing}
 			/>
 		</>
 	);
@@ -63,6 +82,7 @@ const BusinessOwnerDetailsForm = (
 ): ReactElement => {
 	const { buisnessBasicVerification, setBuisnessBasicVerification } =
 		useContext(AuthContext);
+	const lastNameReff: RefObject<TextInput> = createRef()
 
 	const onValueChange = (name: string, change: string) => {
 		setBuisnessBasicVerification((pv: BusinessBasicVerification) => ({
@@ -82,8 +102,13 @@ const BusinessOwnerDetailsForm = (
 				placeHolder="First Name"
 				inputValue={buisnessBasicVerification.owner.firstName}
 				onInputChange={onValueChange}
+				returnKeyType='next'
+				onSubmitEditing={() => {
+					lastNameReff.current?.focus()
+				}}
 			/>
 			<BasicInputWithLabel
+				reff={lastNameReff}
 				labelStyle={styles.label}
 				inputStyle={props.style}
 				label={Translation.LABEL.LAST_NAME_BUSINESS}

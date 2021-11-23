@@ -1,6 +1,6 @@
 import { useNavigation } from '@react-navigation/native';
 import React, { ReactElement, useContext, useState, useEffect } from 'react';
-import { ScrollView, View, StyleSheet } from 'react-native';
+import { ScrollView, View, StyleSheet, KeyboardAvoidingView, SafeAreaView, Platform } from 'react-native';
 import { Text } from 'react-native-elements';
 import { AuthContext } from 'src/auth';
 import { Button, BackBtn, Header, CancelBtn, BusinessProfileForm } from 'src/shared/uielements';
@@ -29,6 +29,10 @@ const styles = StyleSheet.create({
 		position: 'absolute',
 		bottom: 45,
 		left: '5%'
+	},
+	bottomView: {
+		marginHorizontal: 20,
+    	marginBottom: 20
 	},
 });
 
@@ -63,13 +67,19 @@ const BusinessProfile = (): ReactElement => {
 					</View>
 				</ScrollView>
 			</View>
-			<Button
-				type="purple"
-				title={Translation.BUTTON.NEXT}
-				disabled={!goNext}
-				onPress={onNextPress}
-				style={styles.bottomButton}
-			/>
+			<KeyboardAvoidingView
+				behavior={Platform.OS == "ios" ? "padding" : "height"}
+			>
+				<SafeAreaView style={styles.bottomView}>
+				<Button
+					type="purple"
+					title={Translation.BUTTON.NEXT}
+					disabled={!goNext}
+					onPress={onNextPress}
+				/>
+				</SafeAreaView>
+			</KeyboardAvoidingView>
+			
 		</View>
 	);
 }

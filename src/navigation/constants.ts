@@ -22,6 +22,7 @@ export const BUSINESS_OWNER_ADDRESS = "BusinessOwnerAddress"
 export const BUSINESS_INFO = "BusinessInfo";
 export const BUSINESS_ADDRESS = "BusinessAddress";
 export const BUSINESS_WELCOME = "BusinessWelcome";
+export const BUSINESS_PROFILE = "BusinessProfile";
 export const SETTING_DELETE_ACCOUNT = "SettingsDeleteAccount";
 export const SETTING_CLIENT_PROFILE = "SettingsClientProfile";
 export const SETTING_BANK_ACCOUNT = "SettingsBankAccount";

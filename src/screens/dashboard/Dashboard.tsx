@@ -190,7 +190,7 @@ const feedData = [
 const Dashboard = (): JSX.Element => {
 	const navigation = useNavigation();
 	const dispatch = useDispatch();
-	const { customerDwollaId } = useContext(AuthContext);
+	const { customerDwollaId, isSignUp, setIsSignUp } = useContext(AuthContext);
 	const [isVisible, setIsVisible] = useState<boolean>(false);
 	const [isLoadup, setIsLoadup] = useState<boolean>(false);
 	const [isPayment, setIsPayment] = useState<boolean>(false);
@@ -217,7 +217,15 @@ const Dashboard = (): JSX.Element => {
 		return(() => {
 			clearInterval(timer)
 		})
-	}, []);
+	}, [customerDwollaId]);
+
+	useEffect(() => {
+		console.log("isSignUp", isSignUp)
+		if(isSignUp) {
+			setIsSignUp(false)
+			navigation.navigate(Routes.LINK_BANK_ACCOUNT);
+		}
+	}, [isSignUp])
 
 	const updateNotification = async () => {
 		if(customerDwollaId) {

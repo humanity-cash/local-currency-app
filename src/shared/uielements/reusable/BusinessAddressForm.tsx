@@ -1,6 +1,6 @@
 import { AntDesign } from '@expo/vector-icons';
-import React, { useContext } from "react";
-import { StyleSheet, View } from "react-native";
+import React, { useContext, RefObject, createRef } from "react";
+import { StyleSheet, View, TextInput, InputAccessoryView, Button } from "react-native";
 import { Text } from "react-native-elements";
 import SelectDropdown from 'react-native-select-dropdown';
 import { AuthContext } from "src/auth";
@@ -58,6 +58,12 @@ const styles = StyleSheet.create({
 
 const BusinessAddressForm = (props: BusinessAddressProps): JSX.Element => {
 	const { buisnessBasicVerification, setBuisnessBasicVerification } = useContext(AuthContext);
+	const address2Ref: RefObject<TextInput> = createRef()
+	const cityRef: RefObject<TextInput> = createRef()
+	const stateRef: RefObject<SelectDropdown> = createRef()
+	const postalCodeRef: RefObject<TextInput> = createRef()
+	const phoneRef: RefObject<TextInput> = createRef()
+	const inputAccessoryViewID = 'postalCodeAccesoryView';
 
 	const onValueChange = (name: string, change: string) => {
 		setBuisnessBasicVerification((pv: BusinessBasicVerification) => ({
@@ -75,31 +81,46 @@ const BusinessAddressForm = (props: BusinessAddressProps): JSX.Element => {
 				value={buisnessBasicVerification.address1}
 				onChange={onValueChange}
 				style={props.style}
+				returnKeyType='next'
+				onSubmitEditing={() => {
+					address2Ref.current?.focus()
+				}}
 			/>
 			<Text style={styles.label}>ADDRESS 2</Text>
 			<BlockInput
+				reff={address2Ref}
 				name="address2"
 				placeholder="Apt."
 				value={buisnessBasicVerification.address2}
 				onChange={onValueChange}
 				style={props.style}
+				returnKeyType='next'
+				onSubmitEditing={() => {
+					cityRef.current?.focus()
+				}}
 			/>
 
 			<View style={styles.inlineView}>
 				<View style={styles.cityView}>
 					<Text style={styles.label}>CITY *</Text>
 					<BlockInput
+						reff={cityRef}
 						name="city"
 						placeholder="City"
 						value={buisnessBasicVerification.city}
 						onChange={onValueChange}
 						style={props.style}
+						returnKeyType='next'
+						onSubmitEditing={() => {
+							stateRef.current?.openDropdown()
+						}}
 					/>
 				</View>
 				<View style={styles.stateContent}>
 					<Text style={styles.label}>STATE</Text>
 					<View style={styles.stateView}>
 						<SelectDropdown
+							ref={stateRef}
 							data={countries}
 							defaultValueByIndex={0}
 							onSelect={(selectedItem) => {
@@ -128,16 +149,23 @@ const BusinessAddressForm = (props: BusinessAddressProps): JSX.Element => {
 
 			<Text style={styles.label}>POSTAL CODE *</Text>
 			<BlockInput
+				reff={postalCodeRef}
 				name="postalCode"
 				placeholder="00000"
 				keyboardType="number-pad"
 				value={buisnessBasicVerification.postalCode}
 				onChange={onValueChange}
 				style={props.style}
-			/>
+				inputAccessoryViewID={inputAccessoryViewID}
+				returnKeyType='next'
+				onSubmitEditing={() => {
+					phoneRef.current?.focus()
+				}}
+	/>
 
 			<Text style={styles.label}>PHONE NUMBER - OPTIONAL</Text>
 			<BlockInput
+				reff={phoneRef}
 				name="phoneNumber"
 				placeholder="000987654321"
 				keyboardType="number-pad"
@@ -145,6 +173,16 @@ const BusinessAddressForm = (props: BusinessAddressProps): JSX.Element => {
 				onChange={onValueChange}
 				style={props.style}
 			/>
+			<InputAccessoryView nativeID={inputAccessoryViewID}>
+				<View style={{alignItems: 'flex-end', paddingEnd: 12, backgroundColor: 'white'}}>
+					<Button
+						onPress={(ev) => {
+							phoneRef.current?.focus()
+						}}
+						title="next"
+					/>
+				</View>
+			</InputAccessoryView>
 		</View>
   	);
 };

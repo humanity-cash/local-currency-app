@@ -65,8 +65,8 @@ const styles = StyleSheet.create({
     },
     dropdownContainer: {marginTop: -22},
 	bottomView: {
-		paddingHorizontal: 20,
-		paddingBottom: 50,
+		marginHorizontal: 20,
+    	marginBottom: 20
 	},
 });
 

@@ -1,6 +1,6 @@
 import { useNavigation } from "@react-navigation/native";
 import React, { ReactElement, useContext, useEffect, useState } from "react";
-import { ScrollView, StyleSheet, View } from "react-native";
+import { ScrollView, StyleSheet, View, KeyboardAvoidingView, SafeAreaView, Platform } from "react-native";
 import { Text } from "react-native-elements";
 import { AuthContext } from 'src/auth';
 import { BaseResponse } from "src/auth/cognito/types";
@@ -23,6 +23,8 @@ import { ToastType, LoadingScreenTypes } from 'src/utils/types';
 import { showToast } from 'src/utils/common';
 import { updateLoadingStatus } from 'src/store/loading/loading.actions';
 import { useDispatch } from 'react-redux';
+import { showLoadingProgress, hideLoadingProgress } from '../../store/loading/loading.actions';
+import { DwollaInfo } from '../../auth/types';
 
 const styles = StyleSheet.create({
 	headerText: {
@@ -50,11 +52,9 @@ const styles = StyleSheet.create({
 	formView: {
 		paddingBottom: 120,
 	},
-	bottomButton: {
-		width: "90%",
-		position: "absolute",
-		bottom: 45,
-		left: "5%",
+	bottomView: {
+		marginHorizontal: 20,
+		marginBottom: 20,
 	},
 });
 
@@ -65,11 +65,13 @@ const BusinessAddress = (): ReactElement => {
 		completeBusniessBasicVerification,
 		signOut,
 		cognitoId,
-		completeBusinessDwollaInfo
+		completeBusinessDwollaInfo,
+		setBusinessDwollaId,
+		getAttributes
 	} = useContext(AuthContext);
+
 	const navigation = useNavigation();
 	const dispatch = useDispatch();
-
 	useEffect(() => {
 		setGoNext(
 			buisnessBasicVerification.address1 !== "" && 
@@ -79,6 +81,7 @@ const BusinessAddress = (): ReactElement => {
 	}, [buisnessBasicVerification]);
 	
 	const onNextPress = async () => {
+		dispatch(showLoadingProgress(LoadingScreenTypes.LOADING_DATA))
 		const response: BaseResponse<string | undefined> =
 			await completeBusniessBasicVerification();
 		if (response.success && cognitoId) {
@@ -95,28 +98,17 @@ const BusinessAddress = (): ReactElement => {
 				authUserId: "m_" + cognitoId
 			};
 
-			dispatch(updateLoadingStatus({
-				isLoading: true,
-				screen: LoadingScreenTypes.LOADING_DATA
-			}));
 			const resApi = await UserAPI.user(request);
 
-			if (resApi.data) {
-				await completeBusinessDwollaInfo({
-					dwollaId: resApi.data.userId,
-					resourceUri: ""
-				});
-
-				navigation.navigate(Routes.BUSINESS_WELCOME);
+			if (resApi.data && completeBusinessDwollaInfo) {
+				setBusinessDwollaId!(resApi.data.userId as string);
+				await completeBusinessDwollaInfo(resApi.data! as DwollaInfo);
+				await getAttributes()
 			}
-
-			dispatch(updateLoadingStatus({
-				isLoading: false,
-				screen: LoadingScreenTypes.LOADING_DATA
-			}));
 		} else {
 			showToast(ToastType.ERROR, "Whooops, something went wrong.", "Connection failed.");
 		}
+		dispatch(hideLoadingProgress())
 	};
 
 	return (
@@ -142,7 +134,7 @@ const BusinessAddress = (): ReactElement => {
 						{Translation.PROFILE.BUSINESS_INFORMATION}
 					</Text>
 				</View>
-				<ScrollView>
+				<ScrollView keyboardDismissMode="interactive">
 					<View style={styles.formView}>
 						<Text style={styles.bodyText}>
 							Where can customers find you?
@@ -151,13 +143,17 @@ const BusinessAddress = (): ReactElement => {
 					</View>
 				</ScrollView>
 			</View>
-			<Button
-				type="purple"
-				title={Translation.BUTTON.NEXT}
-				disabled={!goNext}
-				style={styles.bottomButton}
-				onPress={onNextPress}
-			/>
+			<KeyboardAvoidingView
+				behavior={Platform.OS == "ios" ? "padding" : "height"}>
+				<SafeAreaView style={styles.bottomView}>
+					<Button
+						type="purple"
+						title={Translation.BUTTON.NEXT}
+						disabled={!goNext}
+						onPress={onNextPress}
+					/>
+				</SafeAreaView>
+			</KeyboardAvoidingView>
 		</View>
 	);
 };

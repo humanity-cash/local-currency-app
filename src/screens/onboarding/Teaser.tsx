@@ -1,5 +1,5 @@
 import { useNavigation } from '@react-navigation/native';
-import React from 'react';
+import React, { useContext } from 'react';
 import { ImageBackground, StyleSheet, View, TouchableOpacity, SafeAreaView } from 'react-native';
 import { Text } from 'react-native-elements';
 import { BUTTON_TYPES } from 'src/constants';
@@ -8,6 +8,7 @@ import { Button } from 'src/shared/uielements';
 import { colors } from "src/theme/colors";
 import { viewBase } from "src/theme/elements";
 import Translation from 'src/translation/en.json';
+import { AuthContext } from 'src/auth';
 
 const styles = StyleSheet.create({
 	content: {
@@ -50,6 +51,17 @@ const styles = StyleSheet.create({
 
 const Teaser = (): JSX.Element => {
 	const navigation = useNavigation();
+	const { userType, authStatus, isSignUp, setIsSignUp } = useContext(AuthContext);
+	
+	const onPressLogin = () => {
+		setIsSignUp(false)
+		navigation.navigate(Routes.LOGIN)
+	}
+
+	const onPressCreateAccount = () => {
+		setIsSignUp(true)
+		navigation.navigate(Routes.CREATE_ACCOUNT)
+	}
 
 	return (
 		<View style={viewBase}>
@@ -66,12 +78,12 @@ const Teaser = (): JSX.Element => {
 					<Button
 						type={BUTTON_TYPES.DARK_GREEN}
 						title="Log In"
-						onPress={() => navigation.navigate(Routes.LOGIN)}
+						onPress={onPressLogin}
 					/>
 					<Button
 						type={BUTTON_TYPES.DARK_RED}
 						title="Create an account"
-						onPress={() => navigation.navigate(Routes.CREATE_ACCOUNT)}
+						onPress={onPressCreateAccount}
 						style={styles.createAccountBtn}
 						textStyle={{color: colors.darkGreen}}
 					/>
