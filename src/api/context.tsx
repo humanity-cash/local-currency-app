@@ -8,10 +8,13 @@ import { addBusinessVerification, addCustomerVerification, createUser } from "./
 import { AuthStatus, UserType } from "../auth/types";
 import { UserAPI } from "../api";
 import { useDispatch } from "react-redux";
+import { customerBasicVerificationInitialState } from "src/auth/consts";
 
 export const UserContext = React.createContext<IState>({
 	user: {} as IUser,
 	userType: null,
+	businessDwollaId: "",
+	customerDwollaId: "",
 	//@ts-ignore
 	createCustomer: async () => any,
 	//@ts-ignore
@@ -29,19 +32,20 @@ const initialUserState = {
 	email: '',
 	verifiedCustomer: false,
 	verifiedBusiness: false,
-	customer: {
-		firstName: "",
-		lastName: "",
-		address1: "",
-		address2: "",
-		city: "",
-		state: "",
-		postalCode: "",
-		avatar: "",
-		tag: "",
-		dwollaId: "",
-		resourceUri: "",
-	},
+	customer: customerBasicVerificationInitialState, 
+	// {
+	// 	firstName: "",
+	// 	lastName: "",
+	// 	address1: "",
+	// 	address2: "",
+	// 	city: "",
+	// 	state: "",
+	// 	postalCode: "",
+	// 	avatar: "",
+	// 	tag: "",
+	// 	dwollaId: "",
+	// 	resourceUri: "",
+	// },
 	business: {
 		story: "",
 		tag: "",
@@ -79,15 +83,20 @@ interface IState {
 	getCustomerData: () => Customer | undefined,
 	updateCustomerData: (u: any) => void,
 	user: IUser | undefined;
+	businessDwollaId: string;
+	customerDwollaId: string;
 	userType: UserType | null | "notApplicable";
 }
 
 const UserProvider: React.FunctionComponent = ({ children }) => {
-	const { authStatus, userEmail, setAuthStatus } = useContext(AuthContext);
+	const { authStatus, userEmail } = useContext(AuthContext);
 	const [user, setUser] = useState<IUser>(initialUserState);
+	const dispatch = useDispatch();
 	const [userType, setUserType] = useState<UserType | null | "notApplicable">(null);
 	const verifiedCustomer = user?.verifiedCustomer;
 	const verifiedBusiness = user?.verifiedBusiness;
+	const [customerDwollaId, setCustomerDwollaId] = useState("")
+	const [businessDwollaId, setBusinessDwollaId] = useState("")
 
 	const updateUserType = (newType: UserType | null | "notApplicable", uEmail = userEmail): void => {
 		setUserType(newType);
@@ -137,6 +146,15 @@ const UserProvider: React.FunctionComponent = ({ children }) => {
 	}, [authStatus, userEmail, verifiedCustomer,
 		verifiedBusiness])
 
+	useEffect(() => {
+		if (verifiedBusiness) {
+			setBusinessDwollaId(user?.business?.dwollaId || "")
+		}
+		if (verifiedCustomer) {
+			setCustomerDwollaId(user?.customer?.dwollaId || "")
+		}
+	}, [verifiedCustomer, verifiedBusiness, user])
+
 	const updateCustomerData = (u: any) => {
 		setUser((pv: IUser) => ({ ...pv, customer: { ...pv.customer, ...u } }))
 	}
@@ -154,17 +172,20 @@ const UserProvider: React.FunctionComponent = ({ children }) => {
 	}
 
 	const createBusiness = async () => {
-		const data = {
-			email: userEmail,
-			consent: true,
-			type: 'business',
-			business: user.business
-		};
+		dispatch(updateLoadingStatus({
+			isLoading: true,
+			screen: LoadingScreenTypes.ANY
+		}));
 		let response = {} as AxiosPromiseResponse;
 		if (user?.verifiedCustomer && user?.customer?.dwollaId && user?.business) {
 			response = await addBusinessVerification(user.customer?.dwollaId, { ...user?.business, avatar: "avatar" });
-			console.log("🚀 ~ 162 ~", response)
 		} else {
+			const data = {
+				email: userEmail,
+				consent: true,
+				type: 'business',
+				business: user.business
+			};
 			response = await createUser(data);
 		}
 		if (response.status >= 200 && response.status <= 299) {
@@ -174,8 +195,12 @@ const UserProvider: React.FunctionComponent = ({ children }) => {
 				updateUserType(UserType.Business);
 			}
 		}
+		dispatch(updateLoadingStatus({
+			isLoading: false,
+			screen: LoadingScreenTypes.ANY
+		}));
 	}
-	const dispatch = useDispatch();
+
 
 	const createCustomer = async () => {
 		dispatch(updateLoadingStatus({
@@ -183,15 +208,17 @@ const UserProvider: React.FunctionComponent = ({ children }) => {
 			screen: LoadingScreenTypes.ANY
 		}));
 		let response = {} as AxiosPromiseResponse;
-		const data = {
-			email: userEmail,
-			consent: true,
-			type: 'customer',
-			customer: user?.customer
-		};
-		if (user?.verifiedBusiness && user?.business?.dwollaId && user?.customer) {
+		if (!user?.customer) return
+		user.customer.avatar = "avatarlink";
+		if (user?.verifiedBusiness && user?.business?.dwollaId && user?.dbId && user?.customer) {
 			response = await addCustomerVerification(user.business?.dwollaId, user?.customer);
 		} else {
+			const data = {
+				email: userEmail,
+				consent: true,
+				type: 'customer',
+				customer: user?.customer
+			};
 			response = await createUser(data);
 		}
 		if (response.status >= 200 && response.status <= 299) {
@@ -217,6 +244,8 @@ const UserProvider: React.FunctionComponent = ({ children }) => {
 		updateBusinessData,
 		createCustomer,
 		createBusiness,
+		businessDwollaId,
+		customerDwollaId
 	};
 
 	return (
