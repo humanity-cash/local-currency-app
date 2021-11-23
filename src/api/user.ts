@@ -64,7 +64,7 @@ export const getUserByEmail = async (email: Email): Promise<any> => {
 };
 
 // Retrieve user information and balances
-export const getUser = async (userId: UserId): Promise<IUser> => {
+export const getUser = async (userId: UserId): Promise<IWallet> => {
   const response = await getRequest(`/users/${userId}`);
   return userData(response);
 };
