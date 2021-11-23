@@ -1,6 +1,6 @@
-import { IUser, AxiosPromiseResponse, ITransaction } from "src/api/types";
+import { IUser, AxiosPromiseResponse, ITransaction, IWallet } from "src/api/types";
 
-export const userData = (res: AxiosPromiseResponse): IUser => {
+export const userData = (res: AxiosPromiseResponse): IWallet => {
     if (!res.data) return {
         totalBalance: 0,
         availableBalance: 0,
@@ -9,7 +9,7 @@ export const userData = (res: AxiosPromiseResponse): IUser => {
         createdBlock: ""
     }
 
-    const list = res.data as IUser[]
+    const list = res.data as IWallet[]
     return list[0];
 }
 

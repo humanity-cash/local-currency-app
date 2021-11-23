@@ -1,4 +1,4 @@
-import { CognitoUser } from "amazon-cognito-identity-js";
+import { CognitoUser, CognitoUserSession } from "amazon-cognito-identity-js";
 import { BaseUser } from "src/api/types";
 
 export interface CognitoCustomerAttributesUpdate {
@@ -161,29 +161,26 @@ export interface ForgotPassword {
 
 export interface IAuth {
 	forgotPasswordDetails: ForgotPassword, 
-	setForgotPasswordDetails?: any,
+	setForgotPasswordDetails: any,
 	userEmail: string,
-	setAuthStatus?: any,
+	setAuthStatus: any,
 	startForgotPasswordFlow: () => Promise<BaseResponse<unknown>>,
 	completeForgotPasswordFlow: () => Promise<BaseResponse<unknown>>,
-	sessionInfo?: Session;
-	resendEmailVerificationCode?: any;
-	authStatus?: AuthStatus;
-	signIn?: any;
-	setSignInDetails?: any;
-	signInDetails?: { password: string; email: string };
-	signOut?: any;
-	getSession?: any;
-	signUpDetails?: any;
+	resendEmailVerificationCode: any;
+	authStatus: AuthStatus;
+	signIn: (email: string, password: string) => Promise<BaseResponse<CognitoUserSession>>;
+	setSignInDetails: any;
+	signInDetails: { password: string; email: string };
+	signOut: any;
+	signUpDetails: any;
 	updateSignUpDetails: (i: Partial<SignUpInput>) => void;
-	emailVerification?: any;
-	signUp?: any;
-	changePassword?: any
+	emailVerification: any;
+	signUp: any;
+	changePassword: any
 }
 
 //@ts-ignore
 export const defaultState: IAuth = {
-	sessionInfo: {},
 	authStatus: AuthStatus.Loading,
 	signInDetails: { password: '', email: '' },
 	setSignInDetails: () => {
@@ -213,31 +210,3 @@ export interface ChangePasswordInput {
 	oldPassword: string,
 	newPassword: string
 }
-
-// export interface IAuth {
-// 	userType?: UserType | undefined,
-// 	updateUserType?: (type: UserType) => void,
-// 	setAuthStatus?: (auth: AuthStatus) => void,
-// 	completeBusniessBasicVerification?: (update: BusinessBasicVerification) => Promise<CognitoResponse<string | undefined>>,
-// 	userAttributes?: any,
-// 	completeCustomerBasicVerification?: (update: CustomerBasicVerification) => Promise<CognitoResponse<string | undefined>>,
-// 	updateAttributes?: any;
-// 	sessionInfo?: Session;
-// 	resendEmailVerificationCode?: () => Promise<BaseResponse<unknown>>;
-// 	signIn?: (email: string, password: string) => Promise<BaseResponse<CognitoUserSession>>;
-// 	authStatus: AuthStatus;
-// 	setSignInDetails?: (data: { email?: string, password?: string }) => void;
-// 	signInDetails?: { password: string, email: string };
-// 	signOut?: () => void;
-// 	getAttributes?: () => Promise<CognitoResponse<CognitoUserAttribute[] | undefined>>;
-// 	signUpDetails?: { password: string, confirmPassword: string, email: string };
-// 	setSignUpDetails?: any;
-// 	emailVerification?: (verificationCode: string) => Promise<CognitoResponse<any>>;
-// 	signUp?: () => Promise<CognitoResponse<ISignUpResult | undefined>>;
-// 	setCustomerBasicVerificationDetails?: any;
-// 	customerBasicVerificationDetails?: CustomerBasicVerification;
-// 	buisnessBasicVerification?: BusinessBasicVerification,
-// 	setBuisnessBasicVerification?: any
-	// completedCustomerVerification: boolean,
-	// completedBusinessVerification: boolean,
-// }
