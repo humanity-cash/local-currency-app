@@ -1,17 +1,17 @@
 import { Action } from 'redux';
 import { PERSONAL_WALLET_LOAD, BUSINESS_WALLET_LOAD } from '../action-types';
-import { IUser } from 'src/api/types';
+import { IWallet } from 'src/api/types';
 
 export interface WalletState {
-    personalWallet: IUser,
-    businessWallet: IUser,
+    personalWallet: IWallet,
+    businessWallet: IWallet,
 }
 
 interface WalletAction extends Action {
     type: string,
     payload: {
-        personalWallet?: IUser,
-        businessWallet?: IUser,
+        personalWallet?: IWallet,
+        businessWallet?: IWallet,
     }
 }
 
