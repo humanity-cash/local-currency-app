@@ -29,7 +29,7 @@ const ForgotPasswordSuccess = () => {
 				rightComponent={<CancelBtn text="Close" onClick={() => navigation.navigate('Login')} />}
 			/>
 			<View style={wrappingContainerBase}>
-				<View style={ baseHeader }>
+				<View style={baseHeader}>
 					<Text style={styles.modalHeader}>Create a new password</Text>
 				</View>
 			</View>
@@ -38,10 +38,10 @@ const ForgotPasswordSuccess = () => {
 					type="darkGreen"
 					title="DONE"
 					onPress={() => {
-						signIn({
-							email: forgotPasswordDetails.email,
-							password: forgotPasswordDetails.newPassword,
-						});
+						signIn(
+							forgotPasswordDetails.email,
+							forgotPasswordDetails.newPassword,
+						);
 					}}
 				/>
 			</View>
