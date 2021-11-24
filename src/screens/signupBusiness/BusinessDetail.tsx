@@ -11,7 +11,7 @@ import {
 import { Text } from "react-native-elements";
 import SelectDropdown from 'react-native-select-dropdown';
 import { UserContext } from 'src/contexts';
-import { AuthContext } from "src/auth";
+import { AuthContext } from "src/contexts";
 import * as Routes from "src/navigation/constants";
 import { BackBtn, Button, CancelBtn, Header } from "src/shared/uielements";
 import { colors } from "src/theme/colors";

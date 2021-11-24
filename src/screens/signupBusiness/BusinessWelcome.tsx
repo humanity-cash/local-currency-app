@@ -6,9 +6,9 @@ import {
 	StyleSheet,
 	View
 } from "react-native";
+import { UserContext } from "src/contexts";
 import { Text } from "react-native-elements";
 import { useDispatch } from 'react-redux';
-import { AuthContext } from "src/auth";
 import { UserType } from "src/auth/types";
 import DwollaDialog from 'src/screens/dashboard/DwollaDialog';
 import { Button, Header } from "src/shared/uielements";
@@ -35,7 +35,7 @@ const styles = StyleSheet.create({
 });
 
 const BusinessWelcome = (): ReactElement => {
-	const { updateUserType } = useContext(AuthContext);
+	const { updateUserType } = useContext(UserContext);
 	const [isVisible, setIsVisible] = useState<boolean>(false);
 	const dispatch = useDispatch();
 

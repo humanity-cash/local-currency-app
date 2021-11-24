@@ -9,7 +9,7 @@ import {
 	View
 } from "react-native";
 import { Text } from "react-native-elements";
-import { AuthContext } from "src/auth";
+import { AuthContext } from "src/contexts";
 import { ForgotPassword } from "src/auth/types";
 import {
 	BackBtn,

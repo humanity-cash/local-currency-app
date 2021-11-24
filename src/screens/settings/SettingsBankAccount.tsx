@@ -2,7 +2,7 @@ import { useNavigation } from '@react-navigation/native';
 import React, { useEffect, useState, useContext } from 'react';
 import { ScrollView, StyleSheet, View } from "react-native";
 import { Text, Image } from 'react-native-elements';
-import { AuthContext } from "src/auth";
+import { UserContext } from "src/contexts";
 import { Header, Dialog, BackBtn, Button } from "src/shared/uielements";
 import { underlineHeader, viewBase, dialogViewBase } from "src/theme/elements";
 import { colors } from "src/theme/colors";
@@ -77,7 +77,8 @@ const styles = StyleSheet.create({
 
 export const SettingsBankAccount = (): JSX.Element => {
 	const navigation = useNavigation();
-	const { completedCustomerVerification } = useContext(AuthContext);
+	const { user } = useContext(UserContext);
+	const completedCustomerVerification = user?.verifiedCustomer;
 	const [isVisible, setIsVisible] = useState<boolean>(false);
 	const [hasBankAccount, setHasBankAccount] = useState<boolean>(false);
 

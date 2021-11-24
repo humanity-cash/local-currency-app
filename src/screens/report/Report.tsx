@@ -10,7 +10,7 @@ import {
 } from "react-native";
 import { Text } from "react-native-elements";
 import DropDownPicker, { RenderBadgeItemPropsInterface } from 'react-native-dropdown-picker';
-import { AuthContext } from "src/auth";
+import { UserContext } from "src/contexts";
 import { BUTTON_TYPES } from "src/constants";
 import * as Routes from "src/navigation/constants";
 import { BackBtn, Button, Header } from "src/shared/uielements";
@@ -173,7 +173,7 @@ const Report = (): JSX.Element => {
 	const [isEndDate, setIsEndDate] = useState<boolean>(false);
 	const [goNext, setGoNext] = useState(false);
 	const [reportType, setReportType] = useState<ReportType>(ReportType.ALL);
-	const { userType } = useContext(AuthContext);
+	const { userType } = useContext(UserContext);
 
 	const [open, setOpen] = useState(false);
 	const [value, setValue] = useState([]);
