@@ -1,19 +1,20 @@
-import { UserId, AxiosPromiseResponse, IUserRequest, IDepositRequest, IWithdrawalRequest, ITransactionRequest, ITransaction, IUser, Business, Customer } from './types';
+import { UserId, AxiosPromiseResponse, IUserRequest, IDepositRequest, IWithdrawalRequest, ITransactionRequest, ITransaction } from './types';
 import { getRequest, postRequest } from './base';
 import { userData, transactionDatas, fundingSource } from './formatters';
+import { Business, Customer, IDBUser, IWallet } from '@humanity.cash/types';
 
 // create local currency user
-export const createUser = async (request: IUserRequest): Promise<AxiosPromiseResponse> => {
+export const createUser = async (request: IUserRequest): Promise<AxiosPromiseResponse<IDBUser>> => {
   const response = await postRequest(`/users`, request);
   return response;
 };
 
-export const addCustomerVerification = async (businessDwollaId: string, request: Customer): Promise<AxiosPromiseResponse> => {
+export const addCustomerVerification = async (businessDwollaId: string, request: Customer): Promise<AxiosPromiseResponse<IDBUser>> => {
   const response = await postRequest(`/users/${businessDwollaId}/customer`, { customer: request });
   return response;
 };
 
-export const addBusinessVerification = async (customerDwollaId: string, request: Business): Promise<AxiosPromiseResponse> => {
+export const addBusinessVerification = async (customerDwollaId: string, request: Business): Promise<AxiosPromiseResponse<IDBUser>> => {
   const response = await postRequest(`/users/${customerDwollaId}/business`, { business: request });
   return response;
 };
@@ -50,22 +51,15 @@ export const webhook = async (): Promise<AxiosPromiseResponse> => {
   return response;
 };
 
-export const health = async (): Promise<AxiosPromiseResponse> => {
-  const response = await getRequest(`/health`);
-  return response;
-};
-
-type Email = string;
-
-export const getUserByEmail = async (email: Email): Promise<any> => {
-  const response: AxiosPromiseResponse = await getRequest(`/users/email/${email}`);
-  const data = response?.data;
+export const getUserByEmail = async (email: string): Promise<IDBUser> => {
+  const response: AxiosPromiseResponse<IDBUser[]> = await getRequest(`/users/email/${email}`);
+  const data = response?.data[0];
   return data;
 };
 
 // Retrieve user information and balances
 export const getUser = async (userId: UserId): Promise<IWallet> => {
-  const response = await getRequest(`/users/${userId}`);
+  const response: AxiosPromiseResponse<IWallet> = await getRequest(`/users/${userId}`);
   return userData(response);
 };
 

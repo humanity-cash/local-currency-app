@@ -20,7 +20,7 @@ import { loadBusinessTransactions } from 'src/store/transaction/transaction.acti
 import { useDispatch } from 'react-redux';
 import { updateLoadingStatus } from 'src/store/loading/loading.actions';
 import moment from 'moment';
-import { UserContext } from 'src/api/context';
+import { UserContext } from 'src/contexts';
 
 type HandleScaned = {
 	type: string,

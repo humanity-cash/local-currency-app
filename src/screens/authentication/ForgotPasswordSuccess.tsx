@@ -2,7 +2,7 @@ import { useNavigation } from '@react-navigation/native';
 import React, { useContext } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { Text } from 'react-native-elements';
-import { AuthContext } from 'src/auth';
+import { AuthContext } from "src/contexts";
 import { BackBtn, Button, CancelBtn, Header } from "src/shared/uielements";
 import { baseHeader, viewBase, wrappingContainerBase } from "src/theme/elements";
 

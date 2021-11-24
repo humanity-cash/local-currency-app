@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import { StyleSheet, View, ScrollView, ActivityIndicator, Image } from 'react-native';
 import { Text } from 'react-native-elements';
-import { AuthContext } from 'src/auth';
+import { AuthContext } from "src/contexts";
 import { Modal, ModalHeader } from "src/shared/uielements";
 import { modalViewBase, FontFamily } from "src/theme/elements";
 import { colors } from "src/theme/colors";

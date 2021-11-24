@@ -34,7 +34,7 @@ import { ToastType, LoadingScreenTypes } from 'src/utils/types';
 import { showToast } from 'src/utils/common';
 import { updateLoadingStatus } from 'src/store/loading/loading.actions';
 import { useDispatch } from 'react-redux';
-import { UserContext } from "src/api/context";
+import { UserContext } from "src/contexts";
 
 const businessAddressFormStyles = StyleSheet.create({
 	bodyText: {

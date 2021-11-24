@@ -2,7 +2,7 @@ import { useNavigation } from '@react-navigation/native';
 import React, { useContext, useEffect, useState } from 'react';
 import { KeyboardAvoidingView, Platform, StyleSheet, View } from 'react-native';
 import { Text } from 'react-native-elements';
-import { AuthContext } from 'src/auth';
+import { AuthContext } from 'src/contexts';
 import { ForgotPassword } from 'src/auth/types';
 import { BackBtn, BlockInput, Button, CancelBtn, Header } from "src/shared/uielements";
 import { colors } from "src/theme/colors";

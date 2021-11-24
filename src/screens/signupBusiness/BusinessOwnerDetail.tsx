@@ -2,8 +2,7 @@ import { useNavigation } from '@react-navigation/native';
 import React, { useContext, useEffect, useState } from 'react';
 import { KeyboardAvoidingView, Platform, ScrollView, StyleSheet, View } from 'react-native';
 import { Text } from 'react-native-elements';
-import { UserContext } from 'src/api/context';
-import { AuthContext } from 'src/auth';
+import { UserContext, AuthContext } from 'src/contexts';
 import * as Routes from 'src/navigation/constants';
 import {
 	BackBtn, Button,

@@ -27,7 +27,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { AppState } from 'src/store';
 import { UserType } from 'src/auth/types';
 import { showLoadingProgress, hideLoadingProgress } from '../../store/loading/loading.actions';
-import { UserContext } from 'src/api/context';
+import { UserContext } from 'src/contexts';
 
 const styles = StyleSheet.create({
 	content: { paddingBottom: 80 },

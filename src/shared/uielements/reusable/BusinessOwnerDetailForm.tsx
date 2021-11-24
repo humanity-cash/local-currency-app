@@ -1,7 +1,7 @@
 import React, { ReactElement, useContext } from "react";
 import { StyleSheet, View } from "react-native";
 import { Text } from "react-native-elements";
-import { UserContext } from "src/api/context";
+import { UserContext } from "src/contexts";
 import { IMap } from "src/utils/types";
 import { colors } from "../../../theme/colors";
 import Translation from "../../../translation/en.json";

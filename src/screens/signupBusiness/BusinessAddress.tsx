@@ -2,8 +2,7 @@ import { useNavigation } from "@react-navigation/native";
 import React, { ReactElement, useContext, useEffect, useState } from "react";
 import { ScrollView, StyleSheet, View } from "react-native";
 import { Text } from "react-native-elements";
-import { UserContext } from "src/api/context";
-import { AuthContext } from 'src/auth';
+import { UserContext, AuthContext } from "src/contexts";
 import {
 	BackBtn,
 	BusinessAddressForm, Button,

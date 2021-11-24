@@ -8,8 +8,7 @@ import {
 	View
 } from "react-native";
 import { Text } from "react-native-elements";
-import { UserContext } from "src/api/context";
-import { AuthContext } from "src/auth";
+import { UserContext, AuthContext } from "src/contexts";
 import { UserType } from "src/auth/types";
 import { BUTTON_TYPES } from "src/constants";
 import {

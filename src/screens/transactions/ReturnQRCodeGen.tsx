@@ -13,7 +13,7 @@ import { WalletState } from 'src/store/wallet/wallet.reducer';
 import { useSelector, useDispatch } from 'react-redux';
 import { AppState } from 'src/store';
 import { loadPersonalTransactions } from 'src/store/transaction/transaction.actions';
-import { UserContext } from 'src/api/context';
+import { UserContext } from 'src/contexts';
 
 const styles = StyleSheet.create({
     dialog: {

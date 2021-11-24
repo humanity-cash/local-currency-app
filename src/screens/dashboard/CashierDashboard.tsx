@@ -3,7 +3,7 @@ import { useNavigation } from "@react-navigation/native";
 import React, { useState, useContext } from 'react';
 import { StyleSheet, View, ScrollView, Image, TouchableOpacity } from 'react-native';
 import { Text } from "react-native-elements";
-import { AuthContext } from 'src/auth';
+import { AuthContext } from "src/contexts";
 import { Header } from "src/shared/uielements";
 import { colors } from "src/theme/colors";
 import { baseHeader, viewBaseB, wrappingContainerBase, dialogViewBase } from "src/theme/elements";

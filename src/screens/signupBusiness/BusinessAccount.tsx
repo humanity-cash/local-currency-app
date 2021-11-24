@@ -2,7 +2,7 @@ import { useNavigation } from '@react-navigation/core';
 import React, { useContext } from 'react';
 import { KeyboardAvoidingView, Platform, ScrollView, StyleSheet, View } from 'react-native';
 import { Text } from 'react-native-elements';
-import { UserContext } from "src/api/context";
+import { UserContext } from "src/contexts";
 import * as Routes from 'src/navigation/constants';
 import { BackBtn, Button, Header } from "src/shared/uielements";
 import { colors } from "src/theme/colors";

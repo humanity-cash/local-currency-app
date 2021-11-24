@@ -168,7 +168,7 @@ export interface IAuth {
 	completeForgotPasswordFlow: () => Promise<BaseResponse<unknown>>,
 	resendEmailVerificationCode: any;
 	authStatus: AuthStatus;
-	signIn: (email: string, password: string) => Promise<BaseResponse<CognitoUserSession>>;
+	signIn: (email?: string, password?: string) => Promise<BaseResponse<CognitoUserSession>>;
 	setSignInDetails: any;
 	signInDetails: { password: string; email: string };
 	signOut: any;

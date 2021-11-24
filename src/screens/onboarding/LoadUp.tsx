@@ -24,7 +24,7 @@ import { showToast } from 'src/utils/common';
 import { ToastType, LoadingScreenTypes } from 'src/utils/types';
 import { loadPersonalWallet } from 'src/store/wallet/wallet.actions';
 import { updateLoadingStatus } from 'src/store/loading/loading.actions';
-import { UserContext } from "src/api/context";
+import { UserContext } from "src/contexts";
 
 const styles = StyleSheet.create({
   container: { 

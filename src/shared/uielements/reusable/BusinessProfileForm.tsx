@@ -2,7 +2,7 @@ import * as ImagePicker from 'expo-image-picker';
 import React, { ReactElement, useContext } from "react";
 import { StyleSheet, TextInput, TouchableOpacity, View } from "react-native";
 import { Image, Text } from "react-native-elements";
-import { UserContext } from "src/api/context";
+import { UserContext } from "src/contexts";
 import { useMediaLibraryPermission } from "src/hooks";
 import { colors } from "src/theme/colors";
 import BlockInput from "../BlockInput";
