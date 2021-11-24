@@ -168,10 +168,6 @@ export const OnboardingStack = () => {
 				name={Routes.PASSWORD}
 				component={Password}
 			/>
-			{/* <PrimaryStack.Screen
-						name='ConfirmPassword'
-						component={PasswordConfirm}
-					/> */}
 			<PrimaryStack.Screen
 				name={Routes.VERIFICATION}
 				component={Verification}
@@ -180,7 +176,6 @@ export const OnboardingStack = () => {
 				name={Routes.VERIFICATION_HELP}
 				component={VerificationHelp}
 			/>
-			{/* <PrimaryStack.Screen name={'TouchId'} component={TouchId} /> */}
 			<PrimaryStack.Screen
 				name={Routes.CONFIRM_EMAIL}
 				component={ConfirmEmail}
@@ -404,3 +399,9 @@ export const NotVerifiedUserStack = () => {
 		</>
 	)
 }
+{/* <PrimaryStack.Screen name={'TouchId'} component={TouchId} /> */}
+
+{/* <PrimaryStack.Screen
+			name='ConfirmPassword'
+			component={PasswordConfirm}
+		/> */}

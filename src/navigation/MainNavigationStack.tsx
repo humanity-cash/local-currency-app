@@ -24,18 +24,22 @@ const PrimaryStackScreen = () => {
   const userNotSignedIn = authStatus !== AuthStatus.SignedIn;
   const isLoading = authStatus === AuthStatus.Loading;
   const customerUser =
-    authStatus === AuthStatus.SignedIn &&
-    userType === UserType.Customer &&
-    isVerifiedCustomer;
+    authStatus === AuthStatus.SignedIn
+    && userType === UserType.Customer
+    && isVerifiedCustomer;
   const businessUser =
-    authStatus === AuthStatus.SignedIn &&
-    userType === UserType.Business &&
-    isVerifiedBusiness;
+    authStatus === AuthStatus.SignedIn
+    && userType === UserType.Business
+    && isVerifiedBusiness;
   const cashierUser =
     authStatus === AuthStatus.SignedIn &&
     userType === UserType.Cashier &&
     isVerifiedBusiness;
-  const notVerifiedUser = !customerUser && !cashierUser && !businessUser && authStatus === AuthStatus.SignedIn && userType === "notApplicable";
+  const notVerifiedUser = !customerUser
+    && !cashierUser
+    && !businessUser
+    && authStatus === AuthStatus.SignedIn
+    && (!userType || userType === "notApplicable");
   return (
     <PrimaryStack.Navigator
       screenOptions={() => ({
