@@ -114,6 +114,8 @@ export interface ITransaction {
     blockNumber: number,
     timestamp: number;
     fromUserId: string;
+    toName: string;
+    fromName: string;
     fromAddress: string;
     toUserId: string;
     toAddress: string;

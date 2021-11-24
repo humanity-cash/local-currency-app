@@ -2,7 +2,6 @@ import React, { useContext, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { Text } from 'react-native-elements';
 import { AuthContext } from "src/contexts";
-import { UserType } from "src/auth/types";
 import { BUTTON_TYPES } from 'src/constants';
 import * as Routes from 'src/navigation/constants';
 import { Button, Header } from "src/shared/uielements";
@@ -72,7 +71,7 @@ const LinkBankAccount = (): JSX.Element => {
 			</View>
 
 			{isVisible && (
-				<DwollaDialog visible={isVisible} onClose={() => setIsVisible(false)} userType={UserType.Customer} />
+				<DwollaDialog visible={isVisible} onClose={() => setIsVisible(false)} />
 			)}
 		</View>
 	);

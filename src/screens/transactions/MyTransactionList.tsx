@@ -65,6 +65,9 @@ type MyTransactionItemProps = {
 
 const TransactionItem = (props: MyTransactionItemProps) => {
 	const {item, selected} = props;
+  console.log("transaction type", item.type)
+  console.log("transaction fromname", item.fromName)
+  console.log("transaction toname", item.toName)
 	
 	const getStyle = (type: string) => {
 		if (type === TransactionType.SALE || type === TransactionType.RETURN || type === TransactionType.IN) {
@@ -74,6 +77,7 @@ const TransactionItem = (props: MyTransactionItemProps) => {
 		}
 	}
 
+	const name = item.type === "OUT" ? item.toName : item.fromName;
 	return (
 		<View style={ selected===item.transactionHash? styles.selectedItem : styles.item }>
 			<View style={styles.imageContainer}>
@@ -82,7 +86,7 @@ const TransactionItem = (props: MyTransactionItemProps) => {
 					containerStyle={styles.image}
 				/>
 				<View>
-					<Text>name</Text>
+					<Text>{name}</Text>
 					<Text style={styles.timeText}>{moment(item.timestamp).format('HH:mm, MMM D, YYYY')}</Text>
 				</View>
 			</View>
