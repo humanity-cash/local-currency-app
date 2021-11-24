@@ -1,10 +1,12 @@
-import { IUser, AxiosPromiseResponse, ITransaction, IWallet } from "src/api/types";
+import { IWallet } from "@humanity.cash/types";
+import { AxiosPromiseResponse, ITransaction } from "src/api/types";
 
 export const userData = (res: AxiosPromiseResponse): IWallet => {
     if (!res.data) return {
         totalBalance: 0,
         availableBalance: 0,
         userId: "",
+        createdTimestamp: 0,
         address: "",
         createdBlock: ""
     }

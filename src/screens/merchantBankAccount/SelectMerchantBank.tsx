@@ -10,7 +10,7 @@ import * as Routes from 'src/navigation/constants';
 import { UserAPI } from 'src/api';
 import { loadBusinessFundingSource } from 'src/store/funding-source/funding-source.actions';
 import { useDispatch } from 'react-redux';
-import { UserContext } from 'src/api/context';
+import { UserContext } from 'src/contexts';
 
 export const WEBVIEW_SCREEN = Dimensions.get('screen').height - 150;
 

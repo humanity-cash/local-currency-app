@@ -1,7 +1,7 @@
 import { AxiosResponse } from 'axios';
 
 export type UserId = string;
-export type AxiosPromiseResponse = AxiosResponse<unknown>;
+export type AxiosPromiseResponse<T = unknown> = AxiosResponse<T>;
 
 export interface BaseUser {
     firstName: string;

@@ -15,7 +15,7 @@ import { ToastType, LoadingScreenTypes } from 'src/utils/types';
 import { updateLoadingStatus } from 'src/store/loading/loading.actions';
 import { loadBusinessWallet } from 'src/store/wallet/wallet.actions';
 import { useDispatch } from 'react-redux';
-import { UserContext } from "src/api/context";
+import { UserContext } from "src/contexts";
 
 const styles = StyleSheet.create({
   headerText: {

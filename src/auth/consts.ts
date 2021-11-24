@@ -1,27 +1,27 @@
 import { BusinessBasicVerification, CustomerBasicVerification, DwollaInfo } from './types';
 
 export const buisnessBasicVerificationInitialState: BusinessBasicVerification = {
-	story: "",
-	tag: "",
-	avatar: "",
-	type: "business type",
+	story: "Business Story",
+	tag: "businesstag",
+	avatar: "avatarrrara",
+	type: "LLC",
 	owner: {
-		firstName: "",
-		lastName: "",
-		address1: "",
-		address2: "",
-		city: "",
-		state: "",
-		postalCode: "",
+		firstName: "owowname",
+		lastName: "erwrwe",
+		address1: "rewrwe",
+		address2: "rwe",
+		city: "rerew",
+		state: "reqwrqew",
+		postalCode: "123321",
 	},
-	registeredBusinessName: "",
-	industry: "",
-	ein: "",
-	address1: "",
-	address2: "",
-	city: "",
-	state: "",
-	postalCode: "",
+	registeredBusinessName: "aaalkol",
+	industry: "bosos",
+	ein: "12321",
+	address1: "adsasada",
+	address2: "aasds",
+	city: "cici",
+	state: "ssses",
+	postalCode: "12321",
 }
 
 export const customerBasicVerificationInitialState: CustomerBasicVerification = {
@@ -43,12 +43,12 @@ export const dwollaInfoInitialState: DwollaInfo = {
 }
 
 export const signInInitialState = {
-	email: "esraa+7771@humanity.cash",
+	email: "esraa+070705@humanity.cash",
 	password: "HumanityCash1122@",
 }
 
 export const signUpInitialState = {
-	email: "esraa+8282@humanity.cash",
+	email: "esraa+070705@humanity.cash",
 	password: "HumanityCash1122@",
 	confirmPassword: "HumanityCash1122@",
 }

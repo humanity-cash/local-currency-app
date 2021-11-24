@@ -3,7 +3,7 @@ import * as ImagePicker from 'expo-image-picker';
 import React, { useContext, useState } from 'react';
 import { Image, KeyboardAvoidingView, Platform, ScrollView, StyleSheet, TouchableOpacity, View } from "react-native";
 import { Text } from "react-native-elements";
-import { UserContext } from 'src/api/context';
+import { UserContext } from 'src/contexts';
 import { BUTTON_TYPES } from 'src/constants';
 import { BackBtn, BlockInput, Button, Header } from "src/shared/uielements";
 import { colors } from "src/theme/colors";

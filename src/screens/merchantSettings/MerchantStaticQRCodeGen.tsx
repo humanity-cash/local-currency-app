@@ -1,7 +1,7 @@
 import React, { useEffect, useContext, useState } from 'react';
 import { StyleSheet, View, Image } from 'react-native';
 import QRCode from 'react-native-qrcode-svg';
-import { UserContext } from 'src/api/context';
+import { UserContext } from 'src/contexts';
 import { Text } from 'react-native-elements';
 import { Dialog } from "src/shared/uielements";
 import { dialogViewBase } from "src/theme/elements";

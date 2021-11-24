@@ -22,7 +22,7 @@ import { useDispatch } from 'react-redux';
 import { WalletState } from 'src/store/wallet/wallet.reducer';
 import { useSelector } from 'react-redux';
 import { AppState } from 'src/store';
-import { UserContext } from 'src/api/context';
+import { UserContext } from 'src/contexts';
 
 type HandleScaned = {
 	type: string,

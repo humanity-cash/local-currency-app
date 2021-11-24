@@ -1,10 +1,8 @@
 import { DefaultTheme, NavigationContainer } from "@react-navigation/native";
 import { createStackNavigator } from "@react-navigation/stack";
 import React, { useContext } from "react";
-import { Text } from "react-native";
 import "react-native-gesture-handler";
-import { UserContext } from "src/api/context";
-import { AuthContext } from "src/auth";
+import { UserContext, AuthContext } from "src/contexts";
 import { AuthStatus, UserType } from "src/auth/types";
 import { useRouteTracking } from "src/hooks";
 import {

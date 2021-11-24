@@ -8,8 +8,7 @@ import {
 	View
 } from "react-native";
 import { Text } from "react-native-elements";
-import { UserContext } from "src/api/context";
-import { AuthContext } from "src/auth";
+import { UserContext, AuthContext } from "src/contexts";
 import * as Routes from "src/navigation/constants";
 import {
 	BackBtn,

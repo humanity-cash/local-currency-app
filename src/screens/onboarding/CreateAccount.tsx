@@ -9,7 +9,7 @@ import {
 	Linking
 } from 'react-native';
 import { CheckBox, Text } from 'react-native-elements';
-import { AuthContext } from 'src/auth';
+import { AuthContext } from "src/contexts";
 import { BUTTON_TYPES } from 'src/constants';
 import * as Routes from 'src/navigation/constants';
 import BlockInput from 'src/shared/uielements/BlockInput';

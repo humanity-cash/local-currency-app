@@ -14,7 +14,7 @@ import { useDispatch } from 'react-redux';
 import { showLoadingProgress, hideLoadingProgress } from '../../store/loading/loading.actions';
 import { UserAPI } from 'src/api';
 import { LoadingScreenTypes } from 'src/utils/types';
-import { UserContext } from 'src/api/context';
+import { UserContext } from 'src/contexts';
 
 const styles = StyleSheet.create({
 	headerText: {

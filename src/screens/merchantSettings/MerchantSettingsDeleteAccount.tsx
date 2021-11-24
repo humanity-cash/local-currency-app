@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import { ScrollView, StyleSheet, View } from "react-native";
 import { Text } from 'react-native-elements';
-import { AuthContext } from 'src/auth';
+import { AuthContext } from "src/contexts";
 import { Button } from "src/shared/uielements";
 import { viewBase } from "src/theme/elements";
 import Translation from 'src/translation/en.json';

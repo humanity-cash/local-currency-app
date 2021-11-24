@@ -9,7 +9,7 @@ import {
 	View
 } from 'react-native';
 import { Text } from 'react-native-elements';
-import { AuthContext } from 'src/auth';
+import { AuthContext } from "src/contexts";
 import { BUTTON_TYPES } from 'src/constants';
 import { useUserDetails } from 'src/hooks';
 import * as Routes from 'src/navigation/constants';

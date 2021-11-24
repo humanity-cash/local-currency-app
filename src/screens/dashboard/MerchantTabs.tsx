@@ -4,7 +4,6 @@ import React, { useContext, useState } from 'react';
 import { Image, StyleSheet, Text, TouchableWithoutFeedback, View, TouchableOpacity } from 'react-native';
 import { DrawerActions } from '@react-navigation/native';
 import { Drawer } from 'react-native-paper';
-import { AuthContext } from 'src/auth';
 import { UserType } from 'src/auth/types';
 import { BUTTON_TYPES } from 'src/constants';
 import * as Routes from 'src/navigation/constants';
@@ -26,7 +25,7 @@ import { WalletState } from 'src/store/wallet/wallet.reducer';
 import { FundingSourceState } from 'src/store/funding-source/funding-source.reducer';
 import { useSelector } from 'react-redux';
 import { AppState } from 'src/store';
-import { UserContext } from 'src/api/context';
+import { UserContext, AuthContext } from 'src/contexts';
 
 const styles = StyleSheet.create({
 	headerText: {

@@ -1,7 +1,6 @@
 import React, { useState, useEffect, useContext } from 'react';
 import { StyleSheet, View, ScrollView, KeyboardAvoidingView, Platform } from 'react-native';
 import { Text } from 'react-native-elements';
-import { AuthContext } from 'src/auth';
 import { useCameraPermission } from 'src/hooks';
 import { Header, CancelBtn, BackBtn } from "src/shared/uielements";
 import { colors } from "src/theme/colors";
@@ -23,7 +22,7 @@ import { loadBusinessTransactions } from 'src/store/transaction/transaction.acti
 import { useDispatch } from 'react-redux';
 import { isQRCodeValid } from 'src/utils/validation';
 import moment from 'moment';
-import { UserContext } from 'src/api/context';
+import { UserContext, AuthContext } from 'src/contexts';
 
 type HandleScaned = {
 	type: string,

@@ -9,7 +9,7 @@ import { colors } from "src/theme/colors";
 import { UserAPI } from 'src/api';
 import { loadPersonalFundingSource } from 'src/store/funding-source/funding-source.actions';
 import { useDispatch } from 'react-redux';
-import { UserContext } from 'src/api/context';
+import { UserContext } from 'src/contexts';
 
 export const WEBVIEW_SCREEN = Dimensions.get('screen').height - 150;
 

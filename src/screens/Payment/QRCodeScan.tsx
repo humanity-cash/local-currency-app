@@ -16,7 +16,7 @@ import { UserAPI } from 'src/api';
 import { ITransactionRequest } from 'src/api/types';
 import { calcFee, showToast } from 'src/utils/common';
 import { isQRCodeValid } from 'src/utils/validation';
-import { UserContext } from 'src/api/context';
+import { UserContext } from 'src/contexts';
 import { loadPersonalWallet } from 'src/store/wallet/wallet.actions';
 import { loadPersonalTransactions } from 'src/store/transaction/transaction.actions';
 import { updateLoadingStatus } from 'src/store/loading/loading.actions';

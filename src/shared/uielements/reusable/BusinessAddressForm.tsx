@@ -3,7 +3,7 @@ import React, { useContext } from "react";
 import { StyleSheet, View } from "react-native";
 import { Text } from "react-native-elements";
 import SelectDropdown from 'react-native-select-dropdown';
-import { UserContext } from "src/api/context";
+import { UserContext } from "src/contexts";
 import countries from "src/mocks/countries";
 import { colors } from "src/theme/colors";
 import { IMap } from 'src/utils/types';
