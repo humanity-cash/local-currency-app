@@ -2,6 +2,7 @@ import { useNavigation } from "@react-navigation/native";
 import React, { ReactElement, useContext, useEffect, useState } from "react";
 import { ScrollView, StyleSheet, View } from "react-native";
 import { Text } from "react-native-elements";
+import { LINK_BANK_ACCOUNT } from "src/navigation/constants";
 import { UserContext, AuthContext } from "src/contexts";
 import {
 	BackBtn,
@@ -71,7 +72,10 @@ const BusinessAddress = (): ReactElement => {
 	}, [address1, city, postalCode]);
 
 	const onNextPress = async () => {
-		await createBusiness();
+		const response = await createBusiness();
+		if (response) {
+			navigation.navigate(LINK_BANK_ACCOUNT)
+		}
 	};
 
 	return (

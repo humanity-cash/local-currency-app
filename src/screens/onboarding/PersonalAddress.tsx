@@ -25,6 +25,7 @@ import {
 	wrappingContainerBase
 } from "src/theme/elements";
 import Translation from "src/translation/en.json";
+import { LINK_BANK_ACCOUNT } from "src/navigation/constants";
 
 const styles = StyleSheet.create({
 	content: {
@@ -41,7 +42,7 @@ const styles = StyleSheet.create({
 	},
 });
 
-const PersonalAddress = () => {
+const PersonalAddress = (): React.ReactElement => {
 	const { getCustomerData, createCustomer } = useContext(UserContext);
 	const customer = getCustomerData();
 	const [goNext, setGoNext] = useState<boolean>(false);
@@ -59,7 +60,10 @@ const PersonalAddress = () => {
 	}, [address1,city, postalCode]);
 
 	const onNextPress = async () => {
-		await createCustomer()
+		const response = await createCustomer()
+		if(response) {
+			navigation.navigate(LINK_BANK_ACCOUNT)
+		}
 	}
 
 	return (

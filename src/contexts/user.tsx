@@ -5,9 +5,8 @@ import { updateLoadingStatus } from 'src/store/loading/loading.actions';
 import { saveUserTypeToStorage } from "../auth/localStorage";
 import { AuthContext } from "./auth";
 import { AxiosPromiseResponse } from "src/api/types";
-import { addBusinessVerification, addCustomerVerification, createUser } from "src/api/user";
+import { addBusinessVerification, addCustomerVerification, createUser, getUserByEmail } from "src/api/user";
 import { AuthStatus, UserType } from "../auth/types";
-import { UserAPI } from "../api";
 import { useDispatch } from "react-redux";
 import { ObjectId } from "mongoose";
 
@@ -80,9 +79,9 @@ const initialUserState = {
 interface IState {
 	getBusinessData: () => Business | undefined,
 	updateBusinessData: (u: any) => void,
-	createCustomer: () => Promise<void>,
+	createCustomer: () => Promise<boolean>,
 	updateUserType: (i: UserType | 'notApplicable' | null) => void,
-	createBusiness: () => Promise<void>,
+	createBusiness: () => Promise<boolean>,
 	getCustomerData: () => Customer | undefined,
 	updateCustomerData: (u: any) => void,
 	user: IDBUser | undefined;
@@ -92,7 +91,7 @@ interface IState {
 }
 
 export const UserProvider: React.FunctionComponent = ({ children }) => {
-	const { authStatus, userEmail } = useContext(AuthContext);
+	const { authStatus, userEmail: userEmailFromCognito } = useContext(AuthContext);
 	const [user, setUser] = useState<IDBUser>(initialUserState);
 	const dispatch = useDispatch();
 	const [userType, setUserType] = useState<UserType | null | "notApplicable">(null);
@@ -100,7 +99,15 @@ export const UserProvider: React.FunctionComponent = ({ children }) => {
 	const verifiedBusiness = user?.verifiedBusiness;
 	const [customerDwollaId, setCustomerDwollaId] = useState("")
 	const [businessDwollaId, setBusinessDwollaId] = useState("")
-
+	const userEmail = user?.email?.length ? user.email : userEmailFromCognito;
+	const updateCustomerData = (u: any) => {
+		setUser((pv: IDBUser) => ({ ...pv, customer: { ...pv.customer, ...u } }))
+	}
+	const updateBusinessData = (u: any) => {
+		setUser((pv: IDBUser) => ({ ...pv, business: { ...pv.business, ...u } }))
+	}
+	const getCustomerData = (): Customer | undefined => user?.customer;
+	const getBusinessData = (): Business | undefined => user?.business;
 	const updateUserType = (newType: UserType | null | "notApplicable", uEmail = userEmail): void => {
 		setUserType(newType);
 		if (newType && newType != "notApplicable") { 
@@ -108,46 +115,36 @@ export const UserProvider: React.FunctionComponent = ({ children }) => {
 		}
 	};
 
-	const handleDbUser = () => {
-		if (verifiedBusiness || verifiedCustomer) {
-			if (verifiedBusiness && verifiedCustomer) {
-				const latestSelectedType = UserType.Customer; // :FIXME
-				updateUserType(latestSelectedType)
-			} else if (verifiedCustomer) {
-				updateUserType(UserType.Customer)
-			} else if (verifiedBusiness) {
-				updateUserType(UserType.Business)
-			}
-		}
-	}
 
-	const updateType = async () => {
-		try {
-			if (!(authStatus === AuthStatus.SignedIn) || !userEmail) {
-				setUser(initialUserState);
-				updateUserType(null)
+	useEffect(() => {
+		const updateUserData = async () => {
+			if ((authStatus === AuthStatus.SignedIn) && userEmail) {
+				const userData = await getUserByEmail(userEmail);
+				setUser({ ...userData })
 				return;
 			}
-			if (userEmail) {
-				const dbUser = await UserAPI.getUserByEmail(userEmail);
-				if (dbUser) {
-					setUser(dbUser);
-					handleDbUser();
-				} else {
-					setUser(initialUserState);
-					updateUserType("notApplicable")
+		}
+		updateUserData();
+	}, [authStatus, userEmail])
+
+	useEffect(() => {
+		if (!(authStatus === AuthStatus.SignedIn) || !userEmail) {
+			updateUserType(null)
+			return;
+		}
+		if (userEmail) {
+			if (verifiedBusiness || verifiedCustomer) {
+				if (verifiedBusiness && verifiedCustomer) {
+					const latestSelectedType = UserType.Customer; // :FIXME
+					updateUserType(latestSelectedType)
+				} else if (verifiedCustomer) {
+					updateUserType(UserType.Customer)
+				} else if (verifiedBusiness) {
+					updateUserType(UserType.Business)
 				}
 			}
 		}
-		catch (err) {
-			console.log("error", err);
-		}
-	}
-
-	useEffect(() => {
-		updateType();
-	}, [authStatus, userEmail, verifiedCustomer,
-		verifiedBusiness])
+	}, [authStatus, user, userEmail])
 
 	useEffect(() => {
 		if (verifiedBusiness) {
@@ -158,82 +155,51 @@ export const UserProvider: React.FunctionComponent = ({ children }) => {
 		}
 	}, [verifiedCustomer, verifiedBusiness, user])
 
-	const updateCustomerData = (u: any) => {
-		setUser((pv: IDBUser) => ({ ...pv, customer: { ...pv.customer, ...u } }))
-	}
-
-	const updateBusinessData = (u: any) => {
-		setUser((pv: IDBUser) => ({ ...pv, business: { ...pv.business, ...u } }))
-	}
-
-	const getCustomerData = (): Customer | undefined => {
-		return user?.customer;
-	}
-
-	const getBusinessData = (): Business | undefined => {
-		return user?.business;
-	}
-
-	const createBusiness = async () => {
+	const createBusiness = async (): Promise<boolean> => {
 		dispatch(updateLoadingStatus({
 			isLoading: true,
 			screen: LoadingScreenTypes.ANY
 		}));
-		let response = {} as AxiosPromiseResponse<IDBUser>;
-		if (user?.verifiedCustomer && user?.customer?.dwollaId && user?.business) {
-			response = await addBusinessVerification(user.customer?.dwollaId, { ...user?.business, avatar: "avatar" });
-		} else {
-			const data = {
-				email: userEmail,
-				consent: true,
-				type: 'business',
-				business: user.business
-			};
-			response = await createUser(data);
+		if(!user.email) {
+			user.email = userEmail;
 		}
-		if (response.status >= 200 && response.status <= 299) {
-			const data: IDBUser = response?.data //IDBUser
-			if (data?.verifiedBusiness) {
-				setUser(data);
-				updateUserType(UserType.Business);
+		const response = await createBus(user);
+		if (isSuccessResponse(response)) {
+			const newUser: IDBUser = response?.data
+			if (newUser?.verifiedBusiness) {
+				setUser(newUser);
 			}
 		}
 		dispatch(updateLoadingStatus({
 			isLoading: false,
 			screen: LoadingScreenTypes.ANY
 		}));
+		return isSuccessResponse(response);
 	}
 
-	const createCustomer = async () => {
+	const createCustomer = async (): Promise<boolean> => {
 		dispatch(updateLoadingStatus({
 			isLoading: true,
 			screen: LoadingScreenTypes.ANY
 		}));
-		let response = {} as AxiosPromiseResponse;
-		if (!user?.customer) return
+		if (!user?.customer) return false
+		if(!user.email) {
+			user.email = userEmailFromCognito;
+		}
 		user.customer.avatar = "avatarlink";
-		if (user?.verifiedBusiness && user?.business?.dwollaId && user?.dbId && user?.customer) {
-			response = await addCustomerVerification(user.business?.dwollaId, user?.customer);
-		} else {
-			const data = {
-				email: userEmail,
-				consent: true,
-				type: 'customer',
-				customer: user?.customer
-			};
-			response = await createUser(data);
-		}
-		if (response.status >= 200 && response.status <= 299) {
-			const data: any = response?.data //IDBUser
-			if (data?.verifiedCustomer) {
-				setUser(data);
-				updateUserType(UserType.Customer);
+		const response = await createCus(user);
+    console.log("🚀 ~ file: user.tsx ~ line 181 ~ createCustomer ~ response", response)
+		if (isSuccessResponse(response)) {
+			const newUser: IDBUser = response?.data
+			if (newUser?.verifiedCustomer) {
+				setUser(newUser);
 			}
 		}
 		dispatch(updateLoadingStatus({
 			isLoading: false,
 			screen: LoadingScreenTypes.ANY
 		}));
+		return isSuccessResponse(response);
 	}
 
 	const state: IState = {
@@ -254,3 +220,56 @@ export const UserProvider: React.FunctionComponent = ({ children }) => {
 		<UserContext.Provider value={state}>{children}</UserContext.Provider>
 	);
 };
+
+const isSuccessResponse = (response: AxiosPromiseResponse) => {
+	if (response.status >= 200 && response.status <= 299) {
+		return true
+	} else return false
+}
+
+const createBus = async (user: IDBUser): Promise<AxiosPromiseResponse<IDBUser>> => {
+	try {
+		const isRegisteredUser = user?.verifiedCustomer
+			&& user?.customer?.dwollaId
+			&& user?.business;
+		if (isRegisteredUser) {
+			const response: AxiosPromiseResponse<IDBUser> = await addBusinessVerification(
+				//@ts-ignore
+				user.customer.dwollaId
+				, { ...user?.business, avatar: "avatar" });
+			return response;
+		} else {
+			const response = await createUser({
+				email: user.email,
+				consent: true,
+				type: 'business',
+				business: user.business
+			});
+			return response
+		}
+	} catch (error) {
+		console.log("error creating business", error)
+	}
+}
+
+const createCus = async (user: IDBUser): Promise<AxiosPromiseResponse<IDBUser>> => {
+	try {
+		const isRegisteredUser = user?.verifiedBusiness && user?.business?.dwollaId && user?.dbId && user?.customer;
+		if (isRegisteredUser) {
+			const response: AxiosPromiseResponse<IDBUser> =
+			//@ts-ignore
+				await addCustomerVerification(user.business.dwollaId, user?.customer);
+			return response;
+		} else {
+			const response = await createUser({
+				email: user.email,
+				consent: true,
+				type: 'customer',
+				customer: user.customer
+			});
+			return response
+		}
+	} catch (error) {
+		console.log("error creating business", error)
+	}
+}
