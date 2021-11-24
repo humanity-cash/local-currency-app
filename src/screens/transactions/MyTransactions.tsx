@@ -189,6 +189,8 @@ const defaultTransaction = {
 	toUserId: "",
 	toAddress: "",
 	fromAddress: "",
+	fromName: "",
+	toName: "",
 	fromUserId: "",
 	type: "",
 	value: "",
