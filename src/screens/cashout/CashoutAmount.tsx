@@ -9,7 +9,7 @@ import Translation from 'src/translation/en.json';
 import * as Routes from 'src/navigation/constants';
 import { useNavigation } from '@react-navigation/core';
 import { UserAPI } from 'src/api';
-import { AuthContext } from '../../auth/index';
+import { UserContext } from 'src/contexts';
 import { showToast } from '../../utils/common';
 import { ToastType } from '../../utils/types';
 import { showLoadingProgress, hideLoadingProgress } from '../../store/loading/loading.actions';
@@ -69,7 +69,7 @@ const styles = StyleSheet.create({
 
 const CashoutAmount = (): JSX.Element => {
 	const navigation = useNavigation();
-	const { customerDwollaId } = useContext(AuthContext);
+	const { customerDwollaId } = useContext(UserContext);
 	const dispatch = useDispatch()
 
 	const [state, setState] = useState<CashoutState>({

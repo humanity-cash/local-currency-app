@@ -17,7 +17,7 @@ import {
 	TouchableOpacity
 } from "react-native";
 import { Drawer } from "react-native-paper";
-import { AuthContext } from "src/auth";
+import { AuthContext } from "src/contexts";
 import { UserType } from "src/auth/types";
 import { useUserDetails } from "src/hooks";
 import * as Routes from "src/navigation/constants";

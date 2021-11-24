@@ -3,7 +3,7 @@ import { useNavigation } from '@react-navigation/native';
 import React, { useContext } from 'react';
 import { KeyboardAvoidingView, Platform, ScrollView, StyleSheet, View } from 'react-native';
 import { Text } from 'react-native-elements';
-import { AuthContext } from "src/auth";
+import { UserContext } from "src/contexts";
 import { BUTTON_TYPES } from 'src/constants';
 import * as Routes from 'src/navigation/constants';
 import { Button, CancelBtn, Header } from "src/shared/uielements";
@@ -30,7 +30,7 @@ const styles = StyleSheet.create({
 
 const ReportSuccess = (): JSX.Element => {
 	const navigation = useNavigation();
-	const { userType } = useContext(AuthContext);
+	const { userType } = useContext(UserContext);
 
 	const onConfirm = () => {
 		if (userType === UserType.Business) {
