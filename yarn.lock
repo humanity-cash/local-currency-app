@@ -1747,10 +1747,10 @@
   dependencies:
     "@hapi/hoek" "^8.3.0"
 
-"@humanity.cash/types@^0.0.1":
-  version "0.0.1"
-  resolved "https://registry.yarnpkg.com/@humanity.cash/types/-/types-0.0.1.tgz#e76148562187550252a6418a4eb66f08313c9df3"
-  integrity sha512-sFqzLkSAlKI6ao62Dht1gy/SZEmWO9tI0NKjDJ53YOPc6L+MNNXd+sgOZOd7DNQvCMxkR52KS+PGdZNDXELO8A==
+"@humanity.cash/types@^0.0.2":
+  version "0.0.2"
+  resolved "https://registry.yarnpkg.com/@humanity.cash/types/-/types-0.0.2.tgz#5f4c16c3236b111fa4022400206ec07865ad1707"
+  integrity sha512-8IvheCCYDH871AElLQj6iJN5GrLED5UR8qliGeuwjh7rTV5+9qJwl4ycQLnf2JeVcQDV6dPiFd/0LsgMpV59JQ==
   dependencies:
     abab "^2.0.5"
     acorn "^7.4.1"
