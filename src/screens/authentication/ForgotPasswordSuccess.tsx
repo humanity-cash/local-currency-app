@@ -5,6 +5,9 @@ import { Text } from 'react-native-elements';
 import { AuthContext } from 'src/auth';
 import { BackBtn, Button, CancelBtn, Header } from "src/shared/uielements";
 import { baseHeader, viewBase, wrappingContainerBase } from "src/theme/elements";
+import { useDispatch } from 'react-redux';
+import { showLoadingProgress, hideLoadingProgress } from '../../store/loading/loading.actions';
+import { LoadingScreenTypes } from "src/utils/types";
 
 const styles = StyleSheet.create({
 	modalHeader: {
@@ -21,6 +24,13 @@ const styles = StyleSheet.create({
 const ForgotPasswordSuccess = () => {
 	const navigation = useNavigation()
 	const { signIn, forgotPasswordDetails } = useContext(AuthContext);
+	const dispatch = useDispatch()
+
+	const onPressComplete = () => {
+		dispatch(showLoadingProgress(LoadingScreenTypes.LOADING_DATA))
+		signIn(forgotPasswordDetails.email, forgotPasswordDetails.newPassword);
+		dispatch(hideLoadingProgress())
+	}
 
 	return (
 		<View style={viewBase}>
@@ -37,9 +47,7 @@ const ForgotPasswordSuccess = () => {
 				<Button
 					type="darkGreen"
 					title="DONE"
-					onPress={() => {
-						signIn(forgotPasswordDetails.email, forgotPasswordDetails.newPassword);
-					}}
+					onPress={onPressComplete}
 				/>
 			</View>
 			

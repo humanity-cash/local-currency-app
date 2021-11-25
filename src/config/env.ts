@@ -1,5 +1,5 @@
-const DEV_CORE_API_URL = "https://alfajores2.api.humanity.cash";
-const PROD_CORE_API_URL = "https://alfajores2.api.humanity.cash";
+const DEV_CORE_API_URL = "https://alfajores.api.humanity.cash";
+const PROD_CORE_API_URL = "https://alfajores.api.humanity.cash";
 
 export const DWOLLA_PRIVACY_URL = "https://www.dwolla.com/legal/privacy/";
 export const DWOLLA_TERMS_URL = "https://www.dwolla.com/legal/tos/";

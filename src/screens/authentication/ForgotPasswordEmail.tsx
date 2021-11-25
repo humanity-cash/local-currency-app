@@ -1,14 +1,15 @@
 import { useNavigation } from "@react-navigation/native";
 import React, { useContext } from "react";
-import {
-  KeyboardAvoidingView, Platform, ScrollView, StyleSheet, View
-} from "react-native";
+import { KeyboardAvoidingView, Platform, ScrollView, StyleSheet, View, SafeAreaView } from 'react-native';
 import { Text } from "react-native-elements";
 import { AuthContext } from 'src/auth';
 import { ForgotPassword } from "src/auth/types";
 import { BackBtn, BlockInput, Button, CancelBtn, Header } from "src/shared/uielements";
 import { baseHeader, viewBase } from "src/theme/elements";
 import { isEmailValid } from "src/utils/validation";
+import { useDispatch } from 'react-redux';
+import { showLoadingProgress, hideLoadingProgress } from '../../store/loading/loading.actions';
+import { LoadingScreenTypes } from "src/utils/types";
 
 const styles = StyleSheet.create({
   container: { 
@@ -23,21 +24,24 @@ const styles = StyleSheet.create({
     paddingBottom: 30,
   },
   bottomView: {
-		padding: 20,
-		paddingBottom: 45
+		marginHorizontal: 20,
+		marginBottom: 20
 	},
 });
 
 const ForgotPasswordEmail = (): React.ReactElement => {
   const { forgotPasswordDetails, setForgotPasswordDetails, startForgotPasswordFlow } = useContext(AuthContext)
   const navigation = useNavigation();
+  const dispatch = useDispatch()
 
   const onValueChange = (name: string, change: string) => {
     setForgotPasswordDetails((pv: ForgotPassword) => ({ ...pv, email: change }));
   };
 
   const handleNext = async () => {
-    const response = await startForgotPasswordFlow();
+	dispatch(showLoadingProgress(LoadingScreenTypes.LOADING_DATA))
+	const response = await startForgotPasswordFlow();
+	dispatch(hideLoadingProgress())
     if(response.success) {
       /**Email exist and a verification code was sent */
       navigation.navigate("ForgotPasswordVerification")
@@ -76,14 +80,14 @@ const ForgotPasswordEmail = (): React.ReactElement => {
 			</ScrollView>
 			<KeyboardAvoidingView
 				behavior={Platform.OS == "ios" ? "padding" : "height"}>
-				<View style={styles.bottomView}>
+				<SafeAreaView style={styles.bottomView}>
 					<Button
 						type="darkGreen"
 						title="NEXT"
 						disabled={!isEmailValid(forgotPasswordDetails.email)}
 						onPress={handleNext}
 					/>
-				</View>
+				</SafeAreaView>
 			</KeyboardAvoidingView>
 		</View>
   );

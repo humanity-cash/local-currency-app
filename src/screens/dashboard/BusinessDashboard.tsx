@@ -317,7 +317,6 @@ const BusinessDashboard = (): JSX.Element => {
 	}, [businessDwollaId]);
 
 	useEffect(() => {
-		console.log("isSignUp", isSignUp)
 		if(isSignUp) {
 			setIsSignUp(false)
 			navigation.navigate(Routes.BUSINESS_WELCOME);

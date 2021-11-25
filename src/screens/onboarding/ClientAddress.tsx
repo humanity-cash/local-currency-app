@@ -92,8 +92,10 @@ const ClientAddress = (): React.ReactElement => {
 
 			const resApi = await UserAPI.user(request);
 			if (completeCustomerDwollaInfo && resApi.data) {
-				setCustomerDwollaId!(resApi.data.userId as string)
-				await completeCustomerDwollaInfo(resApi.data as DwollaInfo);
+				await completeCustomerDwollaInfo({
+					dwollaId: resApi.data.userId,
+					resourceUri: ""
+				});
 				await getAttributes()
 			}
 		} else {

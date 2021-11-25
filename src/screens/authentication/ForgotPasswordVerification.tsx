@@ -6,8 +6,10 @@ import {
 	Platform,
 	StyleSheet,
 	TouchableOpacity,
-	View
+	View,
+	SafeAreaView
 } from "react-native";
+import { useDispatch } from 'react-redux';
 import { Text } from "react-native-elements";
 import { AuthContext } from "src/auth";
 import { ForgotPassword } from "src/auth/types";
@@ -22,6 +24,8 @@ import {
 	viewBase,
 	wrappingContainerBase
 } from "src/theme/elements";
+import { showLoadingProgress, hideLoadingProgress } from '../../store/loading/loading.actions';
+import { LoadingScreenTypes } from "src/utils/types";
 
 const styles = StyleSheet.create({
 	modalHeader: {
@@ -33,8 +37,8 @@ const styles = StyleSheet.create({
 		paddingBottom: 30,
 	},
 	bottomView: {
-		padding: 20,
-		paddingBottom: 45,
+		marginHorizontal: 20,
+		marginBottom: 20
 	},
 	bottomNavigation: {
 		alignSelf: "center",
@@ -45,11 +49,13 @@ const styles = StyleSheet.create({
 });
 
 const ForgotPasswordVerification = () => {
+	const { startForgotPasswordFlow } = useContext(AuthContext)
 	const navigation = useNavigation();
 	const {
 		forgotPasswordDetails: { email },
 		setForgotPasswordDetails,
 	} = useContext(AuthContext);
+	const dispatch = useDispatch()
 
 	const onComplete = async (text: string) => {
 		setForgotPasswordDetails((pv: ForgotPassword) => ({
@@ -59,6 +65,13 @@ const ForgotPasswordVerification = () => {
 		navigation.navigate("ForgotPasswordNewCode");
 		return;
 	};
+
+	const onPressSendAgain = async () => {
+		Keyboard.dismiss();
+		dispatch(showLoadingProgress(LoadingScreenTypes.LOADING_DATA))
+		await startForgotPasswordFlow()
+		dispatch(hideLoadingProgress())
+	}
 
 	return (
 		<View style={viewBase}>
@@ -87,17 +100,15 @@ const ForgotPasswordVerification = () => {
 			</View>
 			<KeyboardAvoidingView
 				behavior={Platform.OS == "ios" ? "padding" : "height"}>
-				<View style={styles.bottomView}>
+				<SafeAreaView style={styles.bottomView}>
 					<TouchableOpacity
 						style={styles.sendCodeBtn}
-						onPress={() => {
-							Keyboard.dismiss();
-						}}>
+						onPress={onPressSendAgain}>
 						<Text style={styles.bottomNavigation}>
 							Send code again
 						</Text>
 					</TouchableOpacity>
-				</View>
+				</SafeAreaView>
 			</KeyboardAvoidingView>
 		</View>
 	);

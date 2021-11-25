@@ -1,14 +1,16 @@
 import { useNavigation } from '@react-navigation/native';
-import React, { useContext, useEffect, useState } from 'react';
-import { KeyboardAvoidingView, Platform, StyleSheet, View, ScrollView } from 'react-native';
+import React, { useContext, useEffect, useState, RefObject, createRef } from 'react';
+import { KeyboardAvoidingView, Platform, StyleSheet, View, ScrollView, TextInput, SafeAreaView } from 'react-native';
 import { Text } from 'react-native-elements';
 import { AuthContext } from 'src/auth';
 import { ForgotPassword } from 'src/auth/types';
 import { BackBtn, BlockInput, Button, CancelBtn, Header } from "src/shared/uielements";
 import { colors } from "src/theme/colors";
 import { baseHeader, viewBase, wrappingContainerBase } from "src/theme/elements";
-import { IMap } from "src/utils/types";
+import { IMap, LoadingScreenTypes } from "src/utils/types";
 import Translation from 'src/translation/en.json';
+import { useDispatch } from 'react-redux';
+import { showLoadingProgress, hideLoadingProgress } from '../../store/loading/loading.actions';
 
 interface PasswordForm extends IMap {
 	confirmPassword: string
@@ -44,8 +46,8 @@ const styles = StyleSheet.create({
 		color: colors.bodyText
 	},
 	bottomView: {
-		padding: 20,
-		paddingBottom: 45
+		marginHorizontal: 20,
+		marginBottom: 20
 	},
 	bottomNavigation: {
 		justifyContent: "center"
@@ -59,6 +61,8 @@ const ForgotPasswordNewPassword = (): React.ReactElement => {
 	const [state, setState] = useState<PasswordForm>({
 		confirmPassword: "",
 	});
+	const confrimPwRef: RefObject<TextInput> = createRef()
+	const dispatch = useDispatch()
 
 	useEffect(() => {
 		setIsMatch(forgotPasswordDetails.newPassword === state.confirmPassword);
@@ -72,7 +76,9 @@ const ForgotPasswordNewPassword = (): React.ReactElement => {
 	};
 	
 	const onPress = async () => {
+		dispatch(showLoadingProgress(LoadingScreenTypes.LOADING_DATA))
 		const response = await completeForgotPasswordFlow();
+		dispatch(hideLoadingProgress())
 		if(response.success){
 			navigation.navigate("ForgotPasswordSuccess");
 		} else {
@@ -112,6 +118,10 @@ const ForgotPasswordNewPassword = (): React.ReactElement => {
 							value={forgotPasswordDetails.newPassword}
 							secureTextEntry={true}
 							onChange={onValueChange}
+							returnKeyType='next'
+							onSubmitEditing={() => {
+								confrimPwRef.current?.focus()
+							}}
 						/>
 						<View style={styles.inlineView}>
 							<Text style={styles.label}>Confirm password</Text>
@@ -120,6 +130,7 @@ const ForgotPasswordNewPassword = (): React.ReactElement => {
 							)}
 						</View>
 						<BlockInput
+							reff={confrimPwRef}
 							name="confirmPassword"
 							placeholder="confirm password"
 							value={state.confirmPassword}
@@ -133,7 +144,7 @@ const ForgotPasswordNewPassword = (): React.ReactElement => {
 			</ScrollView>
 			<KeyboardAvoidingView
 				behavior={Platform.OS == "ios" ? "padding" : "height"}>
-				<View style={styles.bottomView}>
+				<SafeAreaView style={styles.bottomView}>
 					<Button
 						type="darkGreen"
 						title="NEXT"
@@ -143,7 +154,7 @@ const ForgotPasswordNewPassword = (): React.ReactElement => {
 						}
 						onPress={onPress}
 					/>
-				</View>
+				</SafeAreaView>
 			</KeyboardAvoidingView>
 		</View>
 	);

@@ -220,7 +220,6 @@ const Dashboard = (): JSX.Element => {
 	}, [customerDwollaId]);
 
 	useEffect(() => {
-		console.log("isSignUp", isSignUp)
 		if(isSignUp) {
 			setIsSignUp(false)
 			navigation.navigate(Routes.LINK_BANK_ACCOUNT);
@@ -228,6 +227,7 @@ const Dashboard = (): JSX.Element => {
 	}, [isSignUp])
 
 	const updateNotification = async () => {
+		console.log('customerDwollaId', customerDwollaId)
 		if(customerDwollaId) {
 			dispatch(loadClientWallet(customerDwollaId));
 			const notis = await UserAPI.getNotifications(customerDwollaId)

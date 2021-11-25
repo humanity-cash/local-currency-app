@@ -101,8 +101,10 @@ const BusinessAddress = (): ReactElement => {
 			const resApi = await UserAPI.user(request);
 
 			if (resApi.data && completeBusinessDwollaInfo) {
-				setBusinessDwollaId!(resApi.data.userId as string);
-				await completeBusinessDwollaInfo(resApi.data! as DwollaInfo);
+				await completeBusinessDwollaInfo({
+					dwollaId: resApi.data.userId,
+					resourceUri: ""
+				});
 				await getAttributes()
 			}
 		} else {

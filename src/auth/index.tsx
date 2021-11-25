@@ -81,6 +81,7 @@ const AuthProvider: React.FunctionComponent = ({ children }) => {
 		const isVerifiedBusiness =
 			userAttributes?.["custom:basicBusinessV"] === "true";
 		
+		console.log(userAttributes)
 		setCompletedCustomerVerification(isVerifiedCustomer);
 		setCompletedBusinessVerification(isVerifiedBusiness);
 		setCognitoId(userAttributes?.["sub"]);
@@ -341,6 +342,11 @@ const AuthProvider: React.FunctionComponent = ({ children }) => {
 		userController.signOut();
 		setSignUpDetails(signUpInitialState);
 		setSignInDetails(signInInitialState);
+		setForgotPasswordDetails({
+			email: "",
+			verificationCode: "",
+			newPassword: "",
+		})
 		setCustomerBasicVerificationDetails(customerBasicVerificationInitialState)
 		setBuisnessBasicVerification(buisnessBasicVerificationInitialState)
 		setAuthStatus(AuthStatus.SignedOut);
