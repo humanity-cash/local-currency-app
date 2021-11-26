@@ -52,15 +52,25 @@ export const webhook = async (): Promise<AxiosPromiseResponse> => {
 };
 
 export const getUserByEmail = async (email: string): Promise<IDBUser> => {
-  const response: AxiosPromiseResponse<IDBUser[]> = await getRequest(`/users/email/${email}`);
-  const data = response?.data[0];
-  return data;
+  try {
+    const response: AxiosPromiseResponse<IDBUser[]> = await getRequest(`/users/email/${email}`);
+    const data = response?.data[0];
+    return data;
+  } catch (err) {
+    console.log(err)
+    return {} as IDBUser;
+  }
 };
 
 // Retrieve user information and balances
 export const getUser = async (userId: UserId): Promise<IWallet> => {
-  const response: AxiosPromiseResponse<IWallet> = await getRequest(`/users/${userId}`);
-  return userData(response);
+  try {
+    const response: AxiosPromiseResponse<IWallet> = await getRequest(`/users/${userId}`);
+    return userData(response);
+  } catch (err) {
+    console.log(err)
+    return {} as IWallet;
+  }
 };
 
 // Get all deposits for a single user

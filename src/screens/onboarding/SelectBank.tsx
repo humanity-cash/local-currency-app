@@ -7,7 +7,6 @@ import { viewBaseWhite, wrappingContainerBase } from "src/theme/elements";
 import * as Routes from 'src/navigation/constants';
 import { colors } from "src/theme/colors";
 import { UserAPI } from 'src/api';
-import { loadPersonalFundingSource } from 'src/store/funding-source/funding-source.actions';
 import { useDispatch } from 'react-redux';
 import { UserContext } from 'src/contexts';
 
@@ -49,7 +48,7 @@ const SelectBank = (): JSX.Element => {
 
 	const onClose = () => {
 		if (customerDwollaId) {
-			dispatch(loadPersonalFundingSource(customerDwollaId));
+			console.log('load funding source not implement here')
 		}
 		navigation.navigate(Routes.DASHBOARD);
 	}

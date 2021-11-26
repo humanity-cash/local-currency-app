@@ -15,14 +15,10 @@ import { UserAPI } from 'src/api';
 import { ITransactionRequest } from 'src/api/types';
 import { calcFee, showToast } from 'src/utils/common';
 import { isQRCodeValid } from 'src/utils/validation';
-import { loadBusinessWallet } from 'src/store/wallet/wallet.actions';
 import { updateLoadingStatus } from 'src/store/loading/loading.actions';
 import { loadBusinessTransactions } from 'src/store/transaction/transaction.actions';
 import { useDispatch } from 'react-redux';
-import { WalletState } from 'src/store/wallet/wallet.reducer';
-import { useSelector } from 'react-redux';
-import { AppState } from 'src/store';
-import { UserContext } from 'src/contexts';
+import { UserContext, WalletContext } from 'src/contexts';
 
 type HandleScaned = {
 	type: string,
@@ -209,8 +205,8 @@ const MerchantQRCodeScan = (): JSX.Element => {
 		mode: PaymentMode.SELECT_AMOUNT
 	});
 	const [goNext, setGoNext] = useState<boolean>(false);
+	const { walletData } = useContext(WalletContext);
 
-	const { businessWallet } = useSelector((state: AppState) => state.walletReducer) as WalletState;
 
 	useEffect(() => {
 		setIsScanned(false);
@@ -245,7 +241,7 @@ const MerchantQRCodeScan = (): JSX.Element => {
 		setIsScanned(false);
 		const amountCalcedFee = state.amount + calcFee(state.amount);
 
-		if (businessWallet.availableBalance <= state.amount) {
+		if (walletData.availableBalance <= state.amount) {
 			showToast(ToastType.ERROR, "Whoooops. You cannot the payment.", "You have too little funds available. Please load up your balance first.");
 			return;
 		}
@@ -263,7 +259,6 @@ const MerchantQRCodeScan = (): JSX.Element => {
 			}));
 			const response = await UserAPI.transferTo(businessDwollaId, request);
 			if (response.data) {
-				await dispatch(loadBusinessWallet(businessDwollaId));
 				await dispatch(loadBusinessTransactions(businessDwollaId));
 				navigation.navigate(Routes.MERCHANT_PAYMENT_SUCCESS);
 			} else {
@@ -282,7 +277,7 @@ const MerchantQRCodeScan = (): JSX.Element => {
 	const handleOpenPay = async () => {
 		setIsOpenPayment(false);
 		// check balance
-		if (businessWallet.availableBalance <= state.amount) {
+		if (walletData.availableBalance <= state.amount) {
 			showToast(ToastType.ERROR, "Whoooops. You cannot the payment.", "You have too little funds available. Please load up your balance first.");
 			return;
 		}
@@ -300,7 +295,6 @@ const MerchantQRCodeScan = (): JSX.Element => {
 			}));
 			const response = await UserAPI.transferTo(businessDwollaId, request);
 			if (response.data) {
-				await dispatch(loadBusinessWallet(businessDwollaId));
 				await dispatch(loadBusinessTransactions(businessDwollaId));
 				navigation.navigate(Routes.MERCHANT_PAYMENT_SUCCESS);
 			} else {

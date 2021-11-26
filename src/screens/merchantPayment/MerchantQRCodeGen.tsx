@@ -6,13 +6,10 @@ import { Dialog } from "src/shared/uielements";
 import { dialogViewBase } from "src/theme/elements";
 import { colors } from "src/theme/colors";
 import { PaymentMode, SECURITY_ID } from "src/utils/types";
-import { loadBusinessWallet } from 'src/store/wallet/wallet.actions';
-import { WalletState } from 'src/store/wallet/wallet.reducer';
 import { useBrightness } from "src/hooks";
-import { useSelector, useDispatch } from 'react-redux';
-import { AppState } from 'src/store';
+import { useDispatch } from 'react-redux';
 import { loadBusinessTransactions } from 'src/store/transaction/transaction.actions';
-import { UserContext } from 'src/contexts';
+import { UserContext, WalletContext } from 'src/contexts';
 
 const styles = StyleSheet.create({
     dialog: {
@@ -65,12 +62,12 @@ type MerchantQRCodeGenProps = {
 }
 
 const MerchantQRCodeGen = (props: MerchantQRCodeGenProps): JSX.Element => {
-    const { businessWallet } = useSelector((state: AppState) => state.walletReducer) as WalletState;
     const { user, businessDwollaId } = useContext(UserContext);
     const dispatch = useDispatch();
     const { hasPermission, setMaxBrightness, setDefaultBrightness} = useBrightness();
+    const { walletData } = useContext(WalletContext);
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const [initBalance, setInitBalance] = useState<number>(businessWallet.availableBalance);
+    const [initBalance, setInitBalance] = useState<number>(walletData.availableBalance);
     const [isSuccess, setIsSuccess] = useState<boolean>(false);
     const addressStr = JSON.stringify({
         securityId: SECURITY_ID,
@@ -82,7 +79,7 @@ const MerchantQRCodeGen = (props: MerchantQRCodeGenProps): JSX.Element => {
     useEffect(() => {
         const timerId = setInterval(async () => {
             if (businessDwollaId) {
-                await dispatch(loadBusinessWallet(businessDwollaId));
+                console.log('ne')
             }
         }, 1500);
         return () => clearInterval(timerId);
@@ -106,11 +103,11 @@ const MerchantQRCodeGen = (props: MerchantQRCodeGenProps): JSX.Element => {
                 await dispatch(loadBusinessTransactions(businessDwollaId));
             }
             setDefaultBrightness();
-            props.onSuccess(businessWallet.availableBalance - initBalance);
+            props.onSuccess(walletData.availableBalance - initBalance);
         }
     }
 
-    if (businessWallet.availableBalance > initBalance) {
+    if (walletData.availableBalance > initBalance) {
         onSuccess();
     }
 

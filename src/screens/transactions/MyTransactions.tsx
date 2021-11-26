@@ -1,6 +1,6 @@
 import { useNavigation } from '@react-navigation/native';
 import React, { useState, useEffect, useContext } from 'react';
-import { UserContext } from "src/contexts";
+import { UserContext, WalletContext } from "src/contexts";
 import { StyleSheet, View, ScrollView, TouchableOpacity } from 'react-native';
 import { Text, Image } from 'react-native-elements';
 import { Octicons } from '@expo/vector-icons';
@@ -20,7 +20,6 @@ import { TransactionState } from 'src/store/transaction/transaction.reducer';
 import { useSelector, useDispatch } from 'react-redux';
 import { AppState } from 'src/store';
 import moment from 'moment';
-import { WalletState } from 'src/store/wallet/wallet.reducer';
 import { updateLoadingStatus } from 'src/store/loading/loading.actions';
 import { BUTTON_TYPES } from 'src/constants';
 import PaymentRequestSuccess from 'src/screens/payment/PaymentRequestSuccess';
@@ -202,6 +201,7 @@ const MyTransactions = (): JSX.Element => {
 	const dispatch = useDispatch();
 	const navigation = useNavigation();
 	const { customerDwollaId } = useContext(UserContext);
+	const { walletData } = useContext(WalletContext);
 	const [isFilterVisible, setIsFilterVisible] = useState<boolean>(false);
 	const [searchText, setSearchText] = useState<string>("");
 	const [isDetailView, setIsDetailView] = useState<boolean>(false);
@@ -211,7 +211,6 @@ const MyTransactions = (): JSX.Element => {
 	const [receivedAmount, setReceivedAmount] = useState<number>(0);
 
 	const { personalTransactions } = useSelector((state: AppState) => state.transactionReducer) as TransactionState;
-	const { personalWallet } = useSelector((state: AppState) => state.walletReducer) as WalletState;
 
 	useEffect(() => {
 		if (customerDwollaId) {
@@ -269,7 +268,7 @@ const MyTransactions = (): JSX.Element => {
 					<Text style={styles.headerText}>{Translation.PAYMENT.MY_TRANSACTIONS}</Text>
 				</View>
 				<View style={styles.totalAmountView}>
-					<Text style={styles.amountText}>B$ {personalWallet.availableBalance}</Text>
+					<Text style={styles.amountText}>B$ {walletData.availableBalance}</Text>
 				</View>
 				
 				<ScrollView>

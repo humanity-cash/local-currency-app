@@ -17,7 +17,6 @@ import { BUTTON_TYPES } from 'src/constants';
 import { ITransactionRequest } from 'src/api/types';
 import { UserAPI } from 'src/api';
 import { updateLoadingStatus } from 'src/store/loading/loading.actions';
-import { loadBusinessWallet } from 'src/store/wallet/wallet.actions';
 import { loadBusinessTransactions } from 'src/store/transaction/transaction.actions';
 import { useDispatch } from 'react-redux';
 import { isQRCodeValid } from 'src/utils/validation';
@@ -144,7 +143,6 @@ const MerchantReturnQRCodeScan = (): JSX.Element => {
 			}));
 			const response = await UserAPI.transferTo(businessDwollaId, request);
 			if (response.data) {
-				await dispatch(loadBusinessWallet(businessDwollaId));
 				await dispatch(loadBusinessTransactions(businessDwollaId));
 				dispatch(updateLoadingStatus({
 					isLoading: false,

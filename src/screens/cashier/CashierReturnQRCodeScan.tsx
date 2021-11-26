@@ -15,7 +15,6 @@ import { UserAPI } from 'src/api';
 import { ITransactionRequest } from 'src/api/types';
 import { showToast } from 'src/utils/common';
 import { BUTTON_TYPES } from 'src/constants';
-import { loadBusinessWallet } from 'src/store/wallet/wallet.actions';
 import { loadBusinessTransactions } from 'src/store/transaction/transaction.actions';
 import { useDispatch } from 'react-redux';
 import { updateLoadingStatus } from 'src/store/loading/loading.actions';
@@ -129,8 +128,6 @@ const CashierReturnQRCodeScan = (): JSX.Element => {
 	}
 
 	const onReturn = async () => {
-		// const amountCalcedFee = state.amount + calcFee(state.amount);
-
 		if (businessDwollaId) {
 			const request: ITransactionRequest = {
 				toUserId: state.to,
@@ -144,7 +141,6 @@ const CashierReturnQRCodeScan = (): JSX.Element => {
 			}));
 			const response = await UserAPI.transferTo(businessDwollaId, request);
 			if (response.data) {
-				await dispatch(loadBusinessWallet(businessDwollaId));
 				await dispatch(loadBusinessTransactions(businessDwollaId));
 				dispatch(updateLoadingStatus({
 					isLoading: false,
