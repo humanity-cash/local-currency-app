@@ -21,11 +21,7 @@ import MerchantReturnQRCodeScan from "../merchantPayment/MerchantReturnQRCodeSca
 import MerchantDashboard from "./MerchantDashboard";
 import MerchantSettings from "src/screens/merchantSettings/MerchantSettings";
 import MerchantSettingsHelpAndContact from 'src/screens/merchantSettings/MerchantSettingsHelpAndContact';
-import { WalletState } from 'src/store/wallet/wallet.reducer';
-import { FundingSourceState } from 'src/store/funding-source/funding-source.reducer';
-import { useSelector } from 'react-redux';
-import { AppState } from 'src/store';
-import { UserContext, AuthContext } from 'src/contexts';
+import { UserContext, AuthContext, WalletContext } from 'src/contexts';
 
 const styles = StyleSheet.create({
 	headerText: {
@@ -188,14 +184,13 @@ const BankLinkDialog = (props: BankLinkDialogProps) => {
 const DrawerContent = (props: DrawerContentComponentProps) => {
 	const { signOut } = useContext(AuthContext);
 	const { user, updateUserType } = useContext(UserContext);
+	const { walletData } = useContext(WalletContext);
 	// const { authorization } = useUserDetails();
 	const authorization = { cashierView: user?.verifiedBusiness };
 	const [isExpanded, setIsExpanded] = useState<boolean>(false);
 	const [isVisible, setIsVisible] = useState<boolean>(false);
 	const [isCashierView, setIsCashierView] = useState<boolean>(false);
 	const [isBankDialog, setIsBankDialog] = useState<boolean>(false);
-	const { businessWallet } = useSelector((state: AppState) => state.walletReducer) as WalletState;
-	const { businessFundingSource } = useSelector((state: AppState) => state.fundingSourceReducer) as FundingSourceState;
 	const isVerifiedCustomer = user?.verifiedCustomer;
 
 	const onScanConfirm = () => {
@@ -306,31 +301,31 @@ const DrawerContent = (props: DrawerContentComponentProps) => {
 							</View>
 						)}
 					</View>
-					<Text style={styles.berkAmount}>B$ {businessWallet?.availableBalance}</Text>
+					<Text style={styles.berkAmount}>B$ {walletData?.availableBalance}</Text>
 					<Drawer.Section>
 						<DrawerItem
 							label={Translation.TABS.RECEIVE_PAYMENT}
-							onPress={() => businessFundingSource ?  props.navigation.navigate(Routes.MERCHANT_REQUEST) : setIsBankDialog(true)}
+							onPress={() => walletData?.availableBalance ?  props.navigation.navigate(Routes.MERCHANT_REQUEST) : setIsBankDialog(true)}
 						/>
 						<DrawerItem
 							label={Translation.TABS.SCAN_TO_PAY}
-							onPress={() => businessFundingSource ?  props.navigation.navigate(Routes.MERCHANT_QRCODE_SCAN) : setIsBankDialog(true)}
+							onPress={() => walletData?.availableBalance ?  props.navigation.navigate(Routes.MERCHANT_QRCODE_SCAN) : setIsBankDialog(true)}
 						/>
 						<DrawerItem
 							label={Translation.TABS.MAKE_RETURN}
-							onPress={() => businessFundingSource ?  setIsVisible(true) : setIsBankDialog(true)}
+							onPress={() => walletData?.availableBalance ?  setIsVisible(true) : setIsBankDialog(true)}
 						/>
 						<DrawerItem
 							label={Translation.TABS.LOADUP}
-							onPress={() => businessFundingSource ?  props.navigation.navigate(Routes.MERCHANT_LOADUP) : setIsBankDialog(true)}
+							onPress={() => walletData?.availableBalance ?  props.navigation.navigate(Routes.MERCHANT_LOADUP) : setIsBankDialog(true)}
 						/>
 						<DrawerItem
 							label={Translation.TABS.SEND_TO_SOMEONE}
-							onPress={() => businessFundingSource ?  props.navigation.navigate(Routes.MERCHANT_PAYOUT_SELECTION) : setIsBankDialog(true)}
+							onPress={() => walletData?.availableBalance ?  props.navigation.navigate(Routes.MERCHANT_PAYOUT_SELECTION) : setIsBankDialog(true)}
 						/>
 						<DrawerItem
 							label={Translation.TABS.CASHOUT}
-							onPress={() => businessFundingSource ?  props.navigation.navigate(Routes.MERCHANT_CASHOUT_AMOUNT) : setIsBankDialog(true)}
+							onPress={() => walletData?.availableBalance ?  props.navigation.navigate(Routes.MERCHANT_CASHOUT_AMOUNT) : setIsBankDialog(true)}
 						/>
 					</Drawer.Section>
 					<Drawer.Section>

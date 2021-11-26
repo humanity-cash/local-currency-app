@@ -1,15 +1,14 @@
 import { AntDesign, Entypo, Octicons } from "@expo/vector-icons";
 import { useNavigation, DrawerActions } from "@react-navigation/native";
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useState, useContext } from 'react';
 import { StyleSheet, TouchableWithoutFeedback, View, ScrollView, TouchableOpacity } from 'react-native';
 import { Text, Image } from "react-native-elements";
-import { UserType } from "src/auth/types";
 import { colors } from "src/theme/colors";
 import { viewBaseB, wrappingContainerBase, baseHeader, dialogViewBase, FontFamily } from "src/theme/elements";
 import { SearchInput, Header, Dialog, Button } from "src/shared/uielements";
 import MerchantTransactionList from "./MerchantTransactionList";
 import MerchantTransactionsFilter from "./MerchantTransactionsFilter";
-import { TransactionType, LoadingScreenTypes } from "src/utils/types";
+import { TransactionType } from "src/utils/types";
 import Translation from 'src/translation/en.json';
 import * as Routes from 'src/navigation/constants';
 import { getBerksharePrefix } from "src/utils/common";
@@ -17,16 +16,10 @@ import DwollaDialog from './DwollaDialog';
 import { BUTTON_TYPES } from "src/constants";
 import moment from "moment";
 import { ITransaction } from 'src/api/types';
-import { updateLoadingStatus } from 'src/store/loading/loading.actions';
-import { loadBusinessTransactions } from 'src/store/transaction/transaction.actions';
-import { loadBusinessWallet } from 'src/store/wallet/wallet.actions';
-import { loadBusinessFundingSource } from 'src/store/funding-source/funding-source.actions';
 import { TransactionState } from 'src/store/transaction/transaction.reducer';
-import { WalletState } from 'src/store/wallet/wallet.reducer';
-import { FundingSourceState } from 'src/store/funding-source/funding-source.reducer';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { AppState } from 'src/store';
-import { UserContext } from "src/contexts";
+import { WalletContext, UserContext } from "src/contexts";
 
 const styles = StyleSheet.create({
 	mainTextColor: {
@@ -230,6 +223,8 @@ const defaultTransaction = {
 	transactionHash: "",
 	toUserId: "",
 	toAddress: "",
+	toName: "",
+	fromName: "",
 	fromAddress: "",
 	fromUserId: "",
 	type: "",
@@ -240,8 +235,8 @@ const defaultTransaction = {
 
 const MerchantDashboard = (): JSX.Element => {
 	const navigation = useNavigation();
-	const dispatch = useDispatch();
-	const { user, businessDwollaId } = useContext(UserContext);
+	const { walletData } = useContext(WalletContext);
+	const { user } = useContext(UserContext);
 	const completedCustomerVerification = user?.verifiedCustomer;
 	const [isFilterVisible, setIsFilterVisible] = useState<boolean>(false);
 	const [searchText, setSearchText] = useState<string>("");
@@ -249,28 +244,7 @@ const MerchantDashboard = (): JSX.Element => {
 	const [selectedItem, setSelectedItem] = useState<ITransaction>(defaultTransaction);
 	const [isDwollaVisible, setIsDwollaVisible] = useState<boolean>(false);
 	const [isPayment, setIsPayment] = useState<boolean>(false);
-
 	const { businessTransactions } = useSelector((state: AppState) => state.transactionReducer) as TransactionState;
-	const { businessWallet } = useSelector((state: AppState) => state.walletReducer) as WalletState;
-	const { businessFundingSource } = useSelector((state: AppState) => state.fundingSourceReducer) as FundingSourceState;
-
-	useEffect(() => {
-		if (businessDwollaId) {
-			(async () => {
-				dispatch(loadBusinessFundingSource(businessDwollaId));
-				dispatch(updateLoadingStatus({
-					isLoading: true,
-					screen: LoadingScreenTypes.LOADING_DATA
-				}));
-				await dispatch(loadBusinessWallet(businessDwollaId));
-				await dispatch(loadBusinessTransactions(businessDwollaId));
-				dispatch(updateLoadingStatus({
-					isLoading: false,
-					screen: LoadingScreenTypes.LOADING_DATA
-				}));
-			})();
-		}
-	}, []);
 
 	const onSearchChange = (name: string, change: string) => {
 		setSearchText(change);
@@ -295,6 +269,9 @@ const MerchantDashboard = (): JSX.Element => {
 		onClose();
 	}
 
+	const businessFundingSource = walletData?.availableFundingSource;
+	const availableBalance = walletData?.availableBalance;
+
 	return (
 		<View style={viewBaseB}>
 			<Header
@@ -316,7 +293,7 @@ const MerchantDashboard = (): JSX.Element => {
 					<Text style={styles.headerText}>{Translation.LANDING_PAGE.TITLE}</Text>
 				</View>
 				<View style={styles.amountView}>
-					<Text style={styles.amountTxt}>B$ {businessFundingSource ? businessWallet.availableBalance : '-'}</Text>
+					<Text style={styles.amountTxt}>B$ {businessFundingSource ? availableBalance : '0'}</Text>
 				</View>
 
 				<ScrollView>
@@ -383,7 +360,7 @@ const MerchantDashboard = (): JSX.Element => {
 			</TouchableOpacity>
 			{isDetailViewOpen && <TransactionDetail visible={isDetailViewOpen} data={selectedItem} onConfirm={onConfirm} />}
 			{isDwollaVisible && (
-				<DwollaDialog visible={isDwollaVisible} onClose={onClose} userType={UserType.Business} />
+				<DwollaDialog visible={isDwollaVisible} onClose={onClose} />
 			)}
 			{(isPayment) && (
 				<Dialog visible={isPayment} onClose={onClose} backgroundStyle={styles.dialog}>

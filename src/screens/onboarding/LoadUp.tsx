@@ -22,7 +22,6 @@ import { BUTTON_TYPES } from 'src/constants';
 import { UserAPI } from 'src/api';
 import { showToast } from 'src/utils/common';
 import { ToastType, LoadingScreenTypes } from 'src/utils/types';
-import { loadPersonalWallet } from 'src/store/wallet/wallet.actions';
 import { updateLoadingStatus } from 'src/store/loading/loading.actions';
 import { UserContext } from "src/contexts";
 
@@ -121,7 +120,6 @@ const LoadUp = (): JSX.Element => {
     );
 
     if (response.data) {
-      await dispatch(loadPersonalWallet(customerDwollaId));
       navigation.navigate(Routes.LOADUP_SUCCESS);
     } else {
       showToast(ToastType.ERROR, "Whoops, something went wrong.", "Connection failed.");

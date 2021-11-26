@@ -16,13 +16,9 @@ import { UserAPI } from 'src/api';
 import { ITransactionRequest } from 'src/api/types';
 import { calcFee, showToast } from 'src/utils/common';
 import { isQRCodeValid } from 'src/utils/validation';
-import { UserContext } from 'src/contexts';
-import { loadPersonalWallet } from 'src/store/wallet/wallet.actions';
+import { UserContext, WalletContext } from 'src/contexts';
 import { loadPersonalTransactions } from 'src/store/transaction/transaction.actions';
 import { updateLoadingStatus } from 'src/store/loading/loading.actions';
-import { WalletState } from 'src/store/wallet/wallet.reducer';
-import { useSelector } from 'react-redux';
-import { AppState } from 'src/store';
 
 type HandleScaned = {
 	type: string,
@@ -218,14 +214,13 @@ const QRCodeScan = (): JSX.Element => {
 	const [isOpenPayment, setIsOpenPayment] = useState<boolean>(false);
 	const [openAmount, setOpenAmount] = useState<string>("");
 	const [goNext, setGoNext] = useState<boolean>(false);
+	const { walletData } = useContext(WalletContext);
 	const [state, setState] = useState<QRCodeEntry>({
 		securityId: SECURITY_ID,
 		to: "",
 		amount: 0,
 		mode: PaymentMode.SELECT_AMOUNT
 	});
-
-	const { personalWallet } = useSelector((state: AppState) => state.walletReducer) as WalletState;
 
 	useEffect(() => {
 		setIsScanned(false);
@@ -259,7 +254,7 @@ const QRCodeScan = (): JSX.Element => {
 		setIsPaymentDialog(false);
 		
 		// check balance
-		if (personalWallet.availableBalance <= state.amount) {
+		if (walletData?.availableBalance <= state.amount) {
 			setIsLowAmountDialog(true);
 		} else {
 			if (customerDwollaId) {
@@ -277,7 +272,6 @@ const QRCodeScan = (): JSX.Element => {
 				
 				if (response.data) {
 					// Update user info
-					await dispatch(loadPersonalWallet(customerDwollaId));
 					await dispatch(loadPersonalTransactions(customerDwollaId));
 					navigation.navigate(Routes.PAYMENT_SUCCESS);
 				} else {
@@ -301,7 +295,7 @@ const QRCodeScan = (): JSX.Element => {
 	const handleOpenPay = async () => {
 		setIsOpenPayment(false);
 		// check balance
-		if (personalWallet.availableBalance <= state.amount) {
+		if (walletData?.availableBalance <= state.amount) {
 			setIsLowAmountDialog(true);
 		} else {
 			if (customerDwollaId) {
@@ -317,7 +311,6 @@ const QRCodeScan = (): JSX.Element => {
 				}));
 				const response = await UserAPI.transferTo(customerDwollaId, request);
 				if (response.data) {
-					await dispatch(loadPersonalWallet(customerDwollaId));
 					await dispatch(loadPersonalTransactions(customerDwollaId));
 					navigation.navigate(Routes.PAYMENT_SUCCESS);
 				} else {

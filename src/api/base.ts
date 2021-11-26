@@ -24,23 +24,23 @@ export interface SettlementRequest {
 
 type HttpResponse = Promise<AxiosResponse>;
 
-const _getRequest = (query: Query) => (): HttpResponse =>
+const _getRequest = (query: Query): HttpResponse =>
   httpRequest.get(query);
 const _postRequest = (path: Path, body: Body) => (): HttpResponse =>
   httpRequest.post(path, body);
 const _deleteRequest = (path: Path, body: Body) => (): HttpResponse =>
   httpRequest.delete(path, body);
 
-export const getRequest = (query: Query): Promise<AxiosResponse> =>
-  ErrorHandler(_getRequest(query));
-export const postRequest = (path: Path, body: Body): Promise<AxiosResponse> =>
+export const getRequest = (query: Query): HttpResponse =>
+  _getRequest(query);
+export const postRequest = (path: Path, body: Body): HttpResponse =>
   ErrorHandler(_postRequest(path, body));
-export const deleteRequest = (path: Path, body: Body): Promise<AxiosResponse> =>
+export const deleteRequest = (path: Path, body: Body): HttpResponse =>
   ErrorHandler(_deleteRequest(path, body));
 
 const ErrorHandler = async (
   requestHandler: () => HttpResponse
-): Promise<AxiosResponse> => {
+): HttpResponse => {
   try {
     const response: AxiosResponse = await requestHandler();
     return response;

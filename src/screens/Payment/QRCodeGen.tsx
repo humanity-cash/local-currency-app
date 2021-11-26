@@ -6,12 +6,9 @@ import { Dialog } from "src/shared/uielements";
 import { dialogViewBase } from "src/theme/elements";
 import { PaymentMode, SECURITY_ID } from "src/utils/types";
 import { useBrightness } from "src/hooks";
-import { loadPersonalWallet } from 'src/store/wallet/wallet.actions';
-import { WalletState } from 'src/store/wallet/wallet.reducer';
-import { useSelector, useDispatch } from 'react-redux';
-import { AppState } from 'src/store';
+import { useDispatch } from 'react-redux';
 import { loadPersonalTransactions } from 'src/store/transaction/transaction.actions';
-import { UserContext } from 'src/contexts';
+import { UserContext, WalletContext } from 'src/contexts';
 
 const styles = StyleSheet.create({
     dialog: {
@@ -61,11 +58,11 @@ type QRCodeGenProps = {
 }
 
 const QRCodeGen = (props: QRCodeGenProps): JSX.Element => {
-    const { personalWallet } = useSelector((state: AppState) => state.walletReducer) as WalletState;
     const dispatch = useDispatch();
     const { user, customerDwollaId } = useContext(UserContext);
+    const { walletData } = useContext(WalletContext);
     const { hasPermission, setMaxBrightness, setDefaultBrightness} = useBrightness();
-    const [initBalance] = useState<number>(personalWallet.availableBalance);
+    const [initBalance] = useState<number>(walletData.availableBalance);
     const [isSuccess, setIsSuccess] = useState<boolean>(false);
     const addressStr = JSON.stringify({
         securityId: SECURITY_ID,
@@ -77,7 +74,7 @@ const QRCodeGen = (props: QRCodeGenProps): JSX.Element => {
     useEffect(() => {
         const timerId = setInterval(async () => {
             if (customerDwollaId) {
-                await dispatch(loadPersonalWallet(customerDwollaId));
+                console.log('heyyy')
             }
         }, 1500);
         return () => clearInterval(timerId);
@@ -101,11 +98,11 @@ const QRCodeGen = (props: QRCodeGenProps): JSX.Element => {
                 await dispatch(loadPersonalTransactions(customerDwollaId));
             }
             setDefaultBrightness();
-            props.onSuccess(personalWallet.availableBalance - initBalance);
+            props.onSuccess(walletData.availableBalance - initBalance);
         }
     }
 
-    if (personalWallet.availableBalance > initBalance) {
+    if (walletData.availableBalance > initBalance) {
         onSuccess();
     }
 

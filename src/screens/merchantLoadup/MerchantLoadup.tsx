@@ -13,7 +13,6 @@ import { UserAPI } from 'src/api';
 import { showToast } from 'src/utils/common';
 import { ToastType, LoadingScreenTypes } from 'src/utils/types';
 import { updateLoadingStatus } from 'src/store/loading/loading.actions';
-import { loadBusinessWallet } from 'src/store/wallet/wallet.actions';
 import { useDispatch } from 'react-redux';
 import { UserContext } from "src/contexts";
 
@@ -126,7 +125,6 @@ const MerchantLoadup = (): JSX.Element => {
     );
     
     if (response.data) {
-      await dispatch(loadBusinessWallet(businessDwollaId));
       navigation.navigate(Routes.MERCHANT_LOADUP_SUCCESS);
     } else {
       showToast(ToastType.ERROR, "Whoops, something went wrong.", "Connection failed.");

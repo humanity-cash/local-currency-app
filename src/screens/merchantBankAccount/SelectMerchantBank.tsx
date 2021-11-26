@@ -8,7 +8,6 @@ import { viewBaseWhite, wrappingContainerBase } from "src/theme/elements";
 import Translation from 'src/translation/en.json';
 import * as Routes from 'src/navigation/constants';
 import { UserAPI } from 'src/api';
-import { loadBusinessFundingSource } from 'src/store/funding-source/funding-source.actions';
 import { useDispatch } from 'react-redux';
 import { UserContext } from 'src/contexts';
 
@@ -51,7 +50,7 @@ const SelectMerchantBank = (): JSX.Element => {
 
 	const onClose = () => {
 		if (businessDwollaId) {
-			dispatch(loadBusinessFundingSource(businessDwollaId));
+			console.log("nono")
 		}
 		navigation.navigate(Routes.MERCHANT_DASHBOARD);
 	}

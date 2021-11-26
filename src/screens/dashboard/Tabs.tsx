@@ -17,9 +17,8 @@ import {
 	TouchableOpacity
 } from "react-native";
 import { Drawer } from "react-native-paper";
-import { AuthContext } from "src/contexts";
+import {  } from "src/contexts";
 import { UserType } from "src/auth/types";
-import { useUserDetails } from "src/hooks";
 import * as Routes from "src/navigation/constants";
 import { colors } from "src/theme/colors";
 import Translation from "src/translation/en.json";
@@ -35,11 +34,7 @@ import Dashboard from "./Dashboard";
 import { Button, Dialog } from "src/shared/uielements";
 import { baseHeader, dialogViewBase, wrappingContainerBase } from "src/theme/elements";
 import { BUTTON_TYPES } from "src/constants";
-import { WalletState } from 'src/store/wallet/wallet.reducer';
-import { FundingSourceState } from 'src/store/funding-source/funding-source.reducer';
-import { useSelector } from 'react-redux';
-import { AppState } from 'src/store';
-import { UserContext } from "src/contexts";
+import { UserContext, WalletContext, AuthContext } from "src/contexts";
 
 const styles = StyleSheet.create({
 	headerText: {
@@ -138,14 +133,12 @@ const DrawerContent = (
 	props: DrawerContentComponentProps<DrawerContentOptions>
 ) => {
 	const { signOut } = useContext(AuthContext);
+	const { walletData } = useContext(WalletContext);
 	const { user, updateUserType } = useContext(UserContext)
 	// const { authorization } = useUserDetails();
 	const authorization = { cashierView: user?.verifiedBusiness };
 	const [isExpanded, setIsExpanded] = useState<boolean>(false);
 	const [isBankDialog, setIsBankDialog] = useState<boolean>(false);
-
-	const { personalWallet } = useSelector((state: AppState) => state.walletReducer) as WalletState;
-	const { personalFundingSource } = useSelector((state: AppState) => state.fundingSourceReducer) as FundingSourceState;
 
 	const onMerchant = () => {
 		updateUserType(UserType.Business);
@@ -251,23 +244,23 @@ const DrawerContent = (
 							</View>
 						)}
 					</View>
-					<Text style={styles.berkAmount}>B$ {personalWallet?.availableBalance}</Text>
+					<Text style={styles.berkAmount}>B$ {walletData?.availableBalance}</Text>
 					<Drawer.Section>
 						<DrawerItem
 							label="Scan to pay"
-							onPress={() => personalFundingSource ? props.navigation.navigate(Routes.QRCODE_SCAN) : setIsBankDialog(true)}
+							onPress={() => walletData?.availableFundingSource ? props.navigation.navigate(Routes.QRCODE_SCAN) : setIsBankDialog(true)}
 						/>
 						<DrawerItem
 							label="Receive payment"
-							onPress={() => personalFundingSource ? props.navigation.navigate(Routes.RECEIVE_PAYMENT) : setIsBankDialog(true)}
+							onPress={() => walletData?.availableFundingSource ? props.navigation.navigate(Routes.RECEIVE_PAYMENT) : setIsBankDialog(true)}
 						/>
 						<DrawerItem
 							label="Load up B$"
-							onPress={() => personalFundingSource ? props.navigation.navigate(Routes.LOAD_UP) : setIsBankDialog(true)}
+							onPress={() => walletData?.availableFundingSource ? props.navigation.navigate(Routes.LOAD_UP) : setIsBankDialog(true)}
 						/>
 						<DrawerItem
 							label="Cash out to USD"
-							onPress={() => personalFundingSource ? props.navigation.navigate(Routes.CASHOUT_AMOUNT) : setIsBankDialog(true)}
+							onPress={() => walletData?.availableFundingSource ? props.navigation.navigate(Routes.CASHOUT_AMOUNT) : setIsBankDialog(true)}
 						/>
 					</Drawer.Section>
 					<Drawer.Section>

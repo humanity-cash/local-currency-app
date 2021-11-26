@@ -1,12 +1,12 @@
 import { AntDesign, Entypo } from '@expo/vector-icons';
 import { DrawerActions, useNavigation } from '@react-navigation/native';
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useState, useContext } from 'react';
 import {
 	ScrollView,
 	StyleSheet,
 	TouchableWithoutFeedback,
 	View,
-	TouchableOpacity
+	TouchableOpacity,
 } from 'react-native';
 import { Image, Text } from 'react-native-elements';
 import * as Routes from 'src/navigation/constants';
@@ -18,16 +18,7 @@ import DwollaDialog from './DwollaDialog';
 import { Button, Dialog } from "src/shared/uielements";
 import { dialogViewBase } from "src/theme/elements";
 import { BUTTON_TYPES } from "src/constants";
-import { LoadingScreenTypes } from 'src/utils/types';
-import { loadPersonalWallet } from 'src/store/wallet/wallet.actions';
-import { loadPersonalFundingSource } from 'src/store/funding-source/funding-source.actions';
-import { WalletState } from 'src/store/wallet/wallet.reducer';
-import { FundingSourceState } from 'src/store/funding-source/funding-source.reducer';
-import { useSelector, useDispatch } from 'react-redux';
-import { AppState } from 'src/store';
-import { UserType } from 'src/auth/types';
-import { showLoadingProgress, hideLoadingProgress } from '../../store/loading/loading.actions';
-import { UserContext } from 'src/contexts';
+import { WalletContext } from 'src/contexts';
 
 const styles = StyleSheet.create({
 	content: { paddingBottom: 80 },
@@ -156,25 +147,11 @@ const feedData = [
 
 const Dashboard = (): JSX.Element => {
 	const navigation = useNavigation();
-	const dispatch = useDispatch();
-	const { customerDwollaId } = useContext(UserContext);
 	const [isVisible, setIsVisible] = useState<boolean>(false);
 	const [isLoadup, setIsLoadup] = useState<boolean>(false);
 	const [isPayment, setIsPayment] = useState<boolean>(false);
-
-	const { personalWallet } = useSelector((state: AppState) => state.walletReducer) as WalletState;
-	const { personalFundingSource } = useSelector((state: AppState) => state.fundingSourceReducer) as FundingSourceState;
-
-	useEffect(() => {
-		if (customerDwollaId) {
-			(async () => {
-				dispatch(loadPersonalWallet(customerDwollaId));
-				dispatch(showLoadingProgress(LoadingScreenTypes.LOADING_DATA))
-				await dispatch(loadPersonalFundingSource(customerDwollaId));
-				dispatch(hideLoadingProgress())
-			})();
-		}
-	}, []);
+	const { walletData } = useContext(WalletContext)
+  console.log("🚀 ~ file: Dashboard.tsx ~ line 154 ~ walletData", walletData)
 
 	const selectBank = () => {
 		navigation.navigate(Routes.SELECT_BANK);
@@ -186,6 +163,8 @@ const Dashboard = (): JSX.Element => {
 		setIsPayment(false);
 		setIsLoadup(false);
 	};
+	const personalFundingSource = walletData?.availableFundingSource;
+	const availableBalance = walletData?.availableBalance;
 
 	return (
 		<View style={viewBase}>
@@ -213,7 +192,7 @@ const Dashboard = (): JSX.Element => {
 					</Text>
 				</View>
 				<View style={styles.amountView}>
-					<Text style={styles.text}>B$ {personalFundingSource ? personalWallet.availableBalance : '-'}</Text>
+					<Text style={styles.text}>B$ {personalFundingSource ? availableBalance : '0'}</Text>
 					<TouchableOpacity
 						style={styles.topupButton}
 						onPress={() => { navigation.navigate(Routes.LOAD_UP) }}>
@@ -277,7 +256,7 @@ const Dashboard = (): JSX.Element => {
 				<Text style={styles.scanBtnText}>{Translation.BUTTON.SCAN}</Text>
 			</TouchableOpacity>
 			{isVisible && (
-				<DwollaDialog visible={isVisible} onClose={onClose} userType={UserType.Customer} />
+				<DwollaDialog visible={isVisible} onClose={onClose} />
 			)}
 			{(isLoadup || isPayment) && (
 				<Dialog visible={isLoadup || isPayment} onClose={onClose} style={styles.dialog}>
