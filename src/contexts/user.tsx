@@ -12,7 +12,8 @@ import { ObjectId } from "mongoose";
 
 export const UserContext = React.createContext<IState>({
 	user: {} as IDBUser,
-	userType: null,
+	isLoading: false,
+	userType: UserType.NotVerified,
 	businessDwollaId: "",
 	customerDwollaId: "",
 	//@ts-ignore
@@ -77,29 +78,33 @@ const initialUserState = {
 }
 
 interface IState {
+	isLoading: boolean;
 	getBusinessData: () => Business | undefined,
 	updateBusinessData: (u: any) => void,
 	createCustomer: () => Promise<boolean>,
-	updateUserType: (i: UserType | 'notApplicable' | null) => void,
+	updateUserType: (i: UserType) => void,
 	createBusiness: () => Promise<boolean>,
 	getCustomerData: () => Customer | undefined,
 	updateCustomerData: (u: any) => void,
 	user: IDBUser | undefined;
 	businessDwollaId: string;
 	customerDwollaId: string;
-	userType: UserType | null | "notApplicable";
+	userType: UserType;
 }
 
 export const UserProvider: React.FunctionComponent = ({ children }) => {
 	const { authStatus, userEmail: userEmailFromCognito } = useContext(AuthContext);
-	const [user, setUser] = useState<IDBUser>(initialUserState);
+	//@ts-ignore
+	const [user, setUser] = useState<IDBUser>('initial');
+	const [isLoading, setLoading] = useState<boolean>(false);
 	const dispatch = useDispatch();
-	const [userType, setUserType] = useState<UserType | null | "notApplicable">(null);
+	//@ts-ignore
+	const [userType, setUserType] = useState<UserType>(null);
 	const verifiedCustomer = user?.verifiedCustomer;
 	const verifiedBusiness = user?.verifiedBusiness;
-	const [customerDwollaId, setCustomerDwollaId] = useState("")
-	const [businessDwollaId, setBusinessDwollaId] = useState("")
-	const userEmail = user?.email?.length ? user.email : userEmailFromCognito;
+	const [customerDwollaId, setCustomerDwollaId] = useState("");
+	const [businessDwollaId, setBusinessDwollaId] = useState("");
+	const userEmail = user?.email?.length > 0 ? user.email : userEmailFromCognito;
 	const updateCustomerData = (u: any) => {
 		setUser((pv: IDBUser) => ({ ...pv, customer: { ...pv.customer, ...u } }))
 	}
@@ -108,31 +113,31 @@ export const UserProvider: React.FunctionComponent = ({ children }) => {
 	}
 	const getCustomerData = (): Customer | undefined => user?.customer;
 	const getBusinessData = (): Business | undefined => user?.business;
-	const updateUserType = (newType: UserType | null | "notApplicable", uEmail = userEmail): void => {
+	const updateUserType = (newType: UserType, uEmail = userEmail): void => {
 		setUserType(newType);
-		if (newType && newType != "notApplicable") { 
-			saveUserTypeToStorage(uEmail, newType);
-		}
+		saveUserTypeToStorage(uEmail, newType);
 	};
-
 
 	useEffect(() => {
 		const updateUserData = async () => {
+			setLoading(true);
 			if ((authStatus === AuthStatus.SignedIn) && userEmail) {
 				const userData = await getUserByEmail(userEmail);
-				setUser({ ...userData })
-				return;
+				if (userData) {
+					setUser({ ...userData })
+					return;
+				} else {
+					setUser(initialUserState)
+				}
 			}
+			setLoading(false);
 		}
 		updateUserData();
 	}, [authStatus, userEmail])
 
 	useEffect(() => {
-		if (!(authStatus === AuthStatus.SignedIn) || !userEmail) {
-			updateUserType(null)
-			return;
-		}
-		if (userEmail) {
+		setLoading(true);
+		if (userEmail && authStatus === AuthStatus.SignedIn) {
 			if (verifiedBusiness || verifiedCustomer) {
 				if (verifiedBusiness && verifiedCustomer) {
 					const latestSelectedType = UserType.Customer; // :FIXME
@@ -142,17 +147,23 @@ export const UserProvider: React.FunctionComponent = ({ children }) => {
 				} else if (verifiedBusiness) {
 					updateUserType(UserType.Business)
 				}
+				//@ts-ignore
+			} else if(user != "initial") {
+				updateUserType(UserType.NotVerified);
 			}
 		}
+		setLoading(false);
 	}, [authStatus, user, userEmail])
 
 	useEffect(() => {
+		setLoading(true);
 		if (verifiedBusiness) {
 			setBusinessDwollaId(user?.business?.dwollaId || "")
 		}
 		if (verifiedCustomer) {
 			setCustomerDwollaId(user?.customer?.dwollaId || "")
 		}
+		setLoading(false);
 	}, [verifiedCustomer, verifiedBusiness, user])
 
 	const createBusiness = async (): Promise<boolean> => {
@@ -188,7 +199,6 @@ export const UserProvider: React.FunctionComponent = ({ children }) => {
 		}
 		user.customer.avatar = "avatarlink";
 		const response = await createCus(user);
-    console.log("🚀 ~ file: user.tsx ~ line 181 ~ createCustomer ~ response", response)
 		if (isSuccessResponse(response)) {
 			const newUser: IDBUser = response?.data
 			if (newUser?.verifiedCustomer) {
@@ -204,6 +214,7 @@ export const UserProvider: React.FunctionComponent = ({ children }) => {
 
 	const state: IState = {
 		user,
+		isLoading,
 		userType,
 		updateUserType,
 		getCustomerData,
@@ -249,6 +260,7 @@ const createBus = async (user: IDBUser): Promise<AxiosPromiseResponse<IDBUser>> 
 		}
 	} catch (error) {
 		console.log("error creating business", error)
+		return {} as AxiosPromiseResponse<IDBUser>;
 	}
 }
 
@@ -271,5 +283,6 @@ const createCus = async (user: IDBUser): Promise<AxiosPromiseResponse<IDBUser>> 
 		}
 	} catch (error) {
 		console.log("error creating business", error)
+		return {} as AxiosPromiseResponse<IDBUser>;
 	}
 }

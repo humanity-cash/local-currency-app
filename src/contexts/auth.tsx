@@ -36,9 +36,9 @@ export const AuthProvider: React.FunctionComponent = ({ children }) => {
 			const response: BaseResponse<CognitoUserSession | undefined> =
 				await userController.getSession();
 			if (response.success && response.data && response.data.isValid()) {
-				setAuthStatus(AuthStatus.SignedIn);
 				const email = response.data.getAccessToken().decodePayload().username;
 				setUserEmail(email);
+				setAuthStatus(AuthStatus.SignedIn);
 			} else {
 				setAuthStatus(AuthStatus.SignedOut);
 			}
@@ -72,10 +72,13 @@ export const AuthProvider: React.FunctionComponent = ({ children }) => {
 		email = signInDetails.email,
 		password = signInDetails.password
 	) => {
+		setAuthStatus(AuthStatus.Loading);
 		const response: BaseResponse<CognitoUserSession> =
 			await userController.signIn({ email, password });
 		if (response?.success) {
 			await getSessionInfo();
+		} else {
+			setAuthStatus(AuthStatus.SignedOut);
 		}
 		return response;
 	};
