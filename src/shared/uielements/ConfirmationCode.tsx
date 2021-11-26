@@ -146,6 +146,7 @@ class ConfirmationCode extends React.Component<ConfirmationCodeProps, Confirmati
 						onChangeText={text => this.onChange(text, index)}
 						onKeyPress={this.onKeyPress}
 						maxLength={1}
+						autoCapitalize='none'
 					/>
 				))}
 				<Text style={styles.dividingLine}>-</Text>
@@ -160,6 +161,7 @@ class ConfirmationCode extends React.Component<ConfirmationCodeProps, Confirmati
 						onChangeText={text => this.onChange(text, index + CODE_LENGTH/2)}
 						onKeyPress={this.onKeyPress}
 						maxLength={1}
+						autoCapitalize='none'
 					/>
 				))}
 			</View>

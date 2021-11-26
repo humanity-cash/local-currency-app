@@ -326,6 +326,7 @@ export const MerchantSettingsProfile = (): JSX.Element => {
 						// }))
 						style={styles.storyText}
 						numberOfLines={4}
+						autoCapitalize='none'
 					/>
 
 					<Text style={styles.smallLabel}>WEBSITE - OPTIONAL</Text>
