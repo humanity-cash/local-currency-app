@@ -14,6 +14,7 @@ jobs:
           node-version: '16.2'
       - name: Pre-install
         run: |
+          yarn config set ignore-engines true
           yarn
           yarn global add expo-cli
       - name: Run Checks
