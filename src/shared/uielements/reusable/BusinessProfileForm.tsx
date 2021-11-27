@@ -61,7 +61,7 @@ const BusinessProfileForm = (): ReactElement => {
 	const { getBusinessData, updateBusinessData } = useContext(UserContext)
 	const business = getBusinessData();
 
-	useMediaLibraryPermission();
+	// useMediaLibraryPermission();
 
 	const onValueChange = (name: string, change: string) => {
 		updateBusinessData({ [name]: change });

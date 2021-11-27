@@ -58,7 +58,7 @@ const PersonalProfileForm = (): ReactElement => {
 	const tag = customer?.tag;
 	const avatar = customer?.avatar;
 
-	useMediaLibraryPermission();
+	// useMediaLibraryPermission();
 
 	const pickImage = async () => {
 		const result = await ImagePicker.launchImageLibraryAsync({
