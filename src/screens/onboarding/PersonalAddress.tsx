@@ -25,7 +25,11 @@ import {
 	wrappingContainerBase
 } from "src/theme/elements";
 import Translation from "src/translation/en.json";
-import { LINK_BANK_ACCOUNT } from "src/navigation/constants";
+import { UserAPI } from "src/api";
+import { IDBUser } from "@humanity.cash/types";
+import { isSuccessResponse} from "src/utils/http";
+import { NavigationViewContext, ViewState } from "src/contexts/navigation";
+import DataLoading from 'src/screens/loadings/DataLoading';
 
 const styles = StyleSheet.create({
 	content: {
@@ -43,10 +47,12 @@ const styles = StyleSheet.create({
 });
 
 const PersonalAddress = (): React.ReactElement => {
-	const { getCustomerData, createCustomer } = useContext(UserContext);
-	const customer = getCustomerData();
+	const { user, updateUserData, updateUserType } = useContext(UserContext);
+	const customer = user?.customer;
 	const [goNext, setGoNext] = useState<boolean>(false);
-	const { signOut } = useContext(AuthContext);
+	const [ isLoading, setIsLoading ] = useState<boolean>(false);
+	const { signOut, userEmail } = useContext(AuthContext);
+	const { updateSelectedView } = useContext(NavigationViewContext);
 	const navigation = useNavigation();
 	const address1 = customer?.address1;
 	const city = customer?.city;
@@ -60,14 +66,29 @@ const PersonalAddress = (): React.ReactElement => {
 	}, [address1,city, postalCode]);
 
 	const onNextPress = async () => {
-		const response = await createCustomer()
-		if(response) {
-			navigation.navigate(LINK_BANK_ACCOUNT)
+		if (!user) return
+		setIsLoading(true)
+		user.email = userEmail;
+		//@ts-ignore
+		user.customer.avatar = "hee";
+		const response = await UserAPI.createCustomer(user);
+		if (isSuccessResponse(response)) {
+			const newUser: IDBUser = response?.data
+      console.log("🚀 ~ file: PersonalAddress.tsx ~ line 73 ~ onNextPress ~ newUser", newUser)
+			updateUserData(newUser);
+			updateUserType(UserType.Customer, newUser.email);
+			updateSelectedView(ViewState.CustomerLinkBank);
 		}
-	}
+		setIsLoading(false)
+	};
 
+	// if(isLoading){
+	// 	return (
+	// 	)
+	// }
 	return (
 		<View style={viewBase}>
+			<DataLoading visible={isLoading} />
 			<Header
 				leftComponent={<BackBtn onClick={() => navigation.goBack()} />}
 				rightComponent={

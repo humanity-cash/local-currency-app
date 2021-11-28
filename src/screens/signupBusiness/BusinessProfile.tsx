@@ -34,8 +34,8 @@ const styles = StyleSheet.create({
 
 const BusinessProfile = (): ReactElement => {
 	const navigation = useNavigation();
-	const { getBusinessData } = useContext(UserContext);
-	const business = getBusinessData();
+	const { user } = useContext(UserContext);
+	const business = user?.business;
 	const { signOut } = useContext(AuthContext);
 	const [goNext, setGoNext] = useState<boolean>(false);
 

@@ -21,7 +21,8 @@ import MerchantReturnQRCodeScan from "../merchantPayment/MerchantReturnQRCodeSca
 import MerchantDashboard from "./MerchantDashboard";
 import MerchantSettings from "src/screens/merchantSettings/MerchantSettings";
 import MerchantSettingsHelpAndContact from 'src/screens/merchantSettings/MerchantSettingsHelpAndContact';
-import { UserContext, AuthContext, WalletContext } from 'src/contexts';
+import { UserContext, AuthContext, NavigationViewContext, WalletContext } from 'src/contexts';
+import { ViewState } from "src/contexts/navigation";
 
 const styles = StyleSheet.create({
 	headerText: {
@@ -182,10 +183,10 @@ const BankLinkDialog = (props: BankLinkDialogProps) => {
 }
 
 const DrawerContent = (props: DrawerContentComponentProps) => {
-	const { signOut } = useContext(AuthContext);
+	const { signOut, userEmail } = useContext(AuthContext);
 	const { user, updateUserType } = useContext(UserContext);
+	const { updateSelectedView } = useContext(NavigationViewContext);
 	const { walletData } = useContext(WalletContext);
-	// const { authorization } = useUserDetails();
 	const authorization = { cashierView: user?.verifiedBusiness };
 	const [isExpanded, setIsExpanded] = useState<boolean>(false);
 	const [isVisible, setIsVisible] = useState<boolean>(false);
@@ -204,7 +205,8 @@ const DrawerContent = (props: DrawerContentComponentProps) => {
 
 	const onCashierViewConfirm = () => {
 		setIsCashierView(false);
-		updateUserType(UserType.Cashier);
+		updateUserType(UserType.Cashier, userEmail);
+		updateSelectedView(ViewState.Cashier);
 	}
 
 	const onCashierViewCancel = () => {
@@ -221,7 +223,8 @@ const DrawerContent = (props: DrawerContentComponentProps) => {
 	}
 
 	const onPersonal = () => {
-		updateUserType(UserType.Customer);
+		updateUserType(UserType.Customer, userEmail);
+		updateSelectedView(ViewState.Customer);
 	}
 
 	const userTag = user?.customer?.tag || undefined

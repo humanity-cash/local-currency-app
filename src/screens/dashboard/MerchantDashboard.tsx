@@ -20,6 +20,7 @@ import { TransactionState } from 'src/store/transaction/transaction.reducer';
 import { useSelector } from 'react-redux';
 import { AppState } from 'src/store';
 import { WalletContext, UserContext } from "src/contexts";
+import { useWallet } from "src/hooks";
 
 const styles = StyleSheet.create({
 	mainTextColor: {
@@ -235,7 +236,8 @@ const defaultTransaction = {
 
 const MerchantDashboard = (): JSX.Element => {
 	const navigation = useNavigation();
-	const { walletData } = useContext(WalletContext);
+	const { walletData  } = useContext(WalletContext);
+	const { businessDwollaId } = useContext(UserContext);
 	const { user } = useContext(UserContext);
 	const completedCustomerVerification = user?.verifiedCustomer;
 	const [isFilterVisible, setIsFilterVisible] = useState<boolean>(false);
@@ -245,6 +247,8 @@ const MerchantDashboard = (): JSX.Element => {
 	const [isDwollaVisible, setIsDwollaVisible] = useState<boolean>(false);
 	const [isPayment, setIsPayment] = useState<boolean>(false);
 	const { businessTransactions } = useSelector((state: AppState) => state.transactionReducer) as TransactionState;
+
+	useWallet(businessDwollaId);
 
 	const onSearchChange = (name: string, change: string) => {
 		setSearchText(change);
@@ -306,7 +310,7 @@ const MerchantDashboard = (): JSX.Element => {
 							</Text>
 						</View>}
 
-						{!businessFundingSource && (
+						{!businessFundingSource || !walletData.userId  ? (
 							<View style={styles.alertView}>
 								<AntDesign
 									name='exclamationcircleo'
@@ -318,12 +322,12 @@ const MerchantDashboard = (): JSX.Element => {
 									<Text
 										style={styles.alertIcon}
 										onPress={() => setIsDwollaVisible(true)}>
-										{Translation.BANK_ACCOUNT.ACCOUNT_LINK_TEXT}{' '}
+										{Translation.BANK_ACCOUNT.ACCOUNT_LINK_TEXT}
 										&gt;
 									</Text>
 								</Text>
 							</View>
-						)}
+						): null}
 
 						<View style={styles.filterView}>
 							<View style={styles.filterInput}>

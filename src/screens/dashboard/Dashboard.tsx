@@ -18,7 +18,8 @@ import DwollaDialog from './DwollaDialog';
 import { Button, Dialog } from "src/shared/uielements";
 import { dialogViewBase } from "src/theme/elements";
 import { BUTTON_TYPES } from "src/constants";
-import { WalletContext } from 'src/contexts';
+import { WalletContext, UserContext } from 'src/contexts';
+import { useWallet } from 'src/hooks';
 
 const styles = StyleSheet.create({
 	content: { paddingBottom: 80 },
@@ -150,19 +151,22 @@ const Dashboard = (): JSX.Element => {
 	const [isVisible, setIsVisible] = useState<boolean>(false);
 	const [isLoadup, setIsLoadup] = useState<boolean>(false);
 	const [isPayment, setIsPayment] = useState<boolean>(false);
+	const { customerDwollaId } = useContext(UserContext)
 	const { walletData } = useContext(WalletContext)
-  console.log("🚀 ~ file: Dashboard.tsx ~ line 154 ~ walletData", walletData)
 
 	const selectBank = () => {
 		navigation.navigate(Routes.SELECT_BANK);
 		onClose();
 	}
 
+	useWallet(customerDwollaId);
+
 	const onClose = () => {
 		setIsVisible(false);
 		setIsPayment(false);
 		setIsLoadup(false);
 	};
+
 	const personalFundingSource = walletData?.availableFundingSource;
 	const availableBalance = walletData?.availableBalance;
 
