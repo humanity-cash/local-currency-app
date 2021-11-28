@@ -58,8 +58,8 @@ const styles = StyleSheet.create({
 });
 
 const PersonalAddressForm = (props: PersonalAddressProps): ReactElement => {
-	const { getCustomerData, updateCustomerData } = useContext(UserContext);
-	const customer = getCustomerData();
+	const { user, updateCustomerData } = useContext(UserContext);
+	const customer = user?.customer;
 	const postalCode = customer?.postalCode;
 	const city = customer?.city;
 	const address1 = customer?.address1;
