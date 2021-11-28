@@ -2,7 +2,6 @@ import { useNavigation } from "@react-navigation/native";
 import React, { ReactElement, useContext, useEffect, useState } from "react";
 import { ScrollView, StyleSheet, View } from "react-native";
 import { Text } from "react-native-elements";
-import { LINK_BANK_ACCOUNT } from "src/navigation/constants";
 import { UserContext, AuthContext } from "src/contexts";
 import {
 	BackBtn,
@@ -16,6 +15,12 @@ import {
 	wrappingContainerBase
 } from "src/theme/elements";
 import Translation from "src/translation/en.json";
+import { UserAPI } from "src/api";
+import { UserType } from "src/auth/types";
+import { IDBUser } from "@humanity.cash/types";
+import { isSuccessResponse } from "src/utils/http";
+import { NavigationViewContext, ViewState } from "src/contexts/navigation";
+import DataLoading from 'src/screens/loadings/DataLoading';
 
 const styles = StyleSheet.create({
 	headerText: {
@@ -55,13 +60,16 @@ const BusinessAddress = (): ReactElement => {
 	const [goNext, setGoNext] = useState<boolean>(false);
 	const {
 		signOut,
+		userEmail,
 	} = useContext(AuthContext);
 	const navigation = useNavigation();
-	const { getBusinessData, createBusiness } = useContext(UserContext);
-	const business = getBusinessData();
+	const { user, updateUserData, updateUserType } = useContext(UserContext);
+	const business = user?.business;
+	const [ isLoading, setIsLoading ] = useState<boolean>(false);
 	const address1 = business?.address1;
 	const city = business?.city;
 	const postalCode = business?.postalCode;
+	const { updateSelectedView } = useContext(NavigationViewContext);
 
 	useEffect(() => {
 		const allInputsFilled =
@@ -72,14 +80,24 @@ const BusinessAddress = (): ReactElement => {
 	}, [address1, city, postalCode]);
 
 	const onNextPress = async () => {
-		const response = await createBusiness();
-		if (response) {
-			navigation.navigate(LINK_BANK_ACCOUNT)
+		if (!user) return
+		setIsLoading(true);
+		user.email = userEmail;
+		const response = await UserAPI.createBusiness(user);
+    console.log("🚀 ~ file: BusinessAddress.tsx ~ line 87 ~ onNextPress ~ response", response)
+		if (isSuccessResponse(response)) {
+			//@ts-ignore
+			const newUser: IDBUser = response?.data
+			updateUserData(newUser);
+			updateUserType(UserType.Business, newUser.email);
+			updateSelectedView(ViewState.BusinessLinkBank);
 		}
+		setIsLoading(false);
 	};
 
 	return (
 		<View style={viewBaseB}>
+			<DataLoading visible={isLoading} />
 			<Header
 				leftComponent={
 					<BackBtn

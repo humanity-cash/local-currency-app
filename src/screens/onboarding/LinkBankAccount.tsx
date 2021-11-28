@@ -1,7 +1,6 @@
 import React, { useContext, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { Text } from 'react-native-elements';
-import { AuthContext } from "src/contexts";
 import { BUTTON_TYPES } from 'src/constants';
 import * as Routes from 'src/navigation/constants';
 import { Button, Header } from "src/shared/uielements";
@@ -9,6 +8,8 @@ import { colors } from "src/theme/colors";
 import { baseHeader, viewBase, wrappingContainerBase } from "src/theme/elements";
 import Translation from 'src/translation/en.json';
 import DwollaDialog from 'src/screens/dashboard/DwollaDialog';
+import { NavigationViewContext, ViewState } from "src/contexts/navigation";
+import { useNavigation } from '@react-navigation/core';
 
 const styles = StyleSheet.create({
 	headerText: {
@@ -26,18 +27,19 @@ const styles = StyleSheet.create({
 });
 
 const LinkBankAccount = (): JSX.Element => {
+	const navigation = useNavigation();
 	const [isVisible, setIsVisible] = useState<boolean>(false);
-	const { signUpDetails: { email, password }, signIn } = useContext(AuthContext);
+	const { updateSelectedView } = useContext(NavigationViewContext);
 
-	const selectBank = () => {
+	const selectBank = async () => {
 		setIsVisible(true);
 	}
 
 	const onSkip = async () => { 
-		await signIn(email, password) 
+		updateSelectedView(ViewState.Customer);
+		navigation.navigate(Routes.TABS)
 	};
 	
-
 	return (
 		<View style={viewBase}>
 			<Header />

@@ -12,7 +12,7 @@ const LoadingPage = (): JSX.Element => {
     return loadingState.screen === LoadingScreenTypes.PAYMENT_PENDING ? (
         <PaymentPending visible={loadingState?.isLoading} />
     ) : (
-        <DataLoading visible={false} />
+            <DataLoading visible={loadingState.isLoading} />
     )
 }
 

@@ -48,8 +48,8 @@ const BusinessOwnerDetail = (): JSX.Element => {
 	const navigation = useNavigation()
 	const { signOut } = useContext(AuthContext);
 	const [goNext, setGoNext] = useState<boolean>(false);
-	const { getBusinessData } = useContext(UserContext);
-	const business = getBusinessData();
+	const { user } = useContext(UserContext);
+	const business = user?.business;
 
 	useEffect(() => {
 		setGoNext(business?.owner?.firstName !== "" && business?.owner?.lastName !== "");

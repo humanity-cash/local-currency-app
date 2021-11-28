@@ -3,19 +3,16 @@ import React, { useContext, useEffect, useState } from 'react';
 import { KeyboardAvoidingView, Platform, ScrollView, StyleSheet, View } from 'react-native';
 import { Text } from 'react-native-elements';
 import { AuthContext } from "src/contexts";
-import { SignInInput } from 'src/auth/types';
+import { AuthStatus, SignInInput } from 'src/auth/types';
 import { BUTTON_TYPES } from 'src/constants';
 import * as Routes from 'src/navigation/constants';
 import { BackBtn, BlockInput, Button, Header } from "src/shared/uielements";
 import { colors } from "src/theme/colors";
 import { baseHeader, viewBase, wrappingContainerBase } from "src/theme/elements";
 import Translation from 'src/translation/en.json';
-import { LoadingScreenTypes } from 'src/utils/types';
 import { isPasswordValid } from 'src/utils/validation';
+import DataLoading from 'src/screens/loadings/DataLoading';
 
-import { updateLoadingStatus } from 'src/store/loading/loading.actions';
-import { useDispatch } from 'react-redux';
-import { showLoadingProgress, hideLoadingProgress } from '../../store/loading/loading.actions';
 
 const styles = StyleSheet.create({
 	headerText: {
@@ -43,8 +40,7 @@ const styles = StyleSheet.create({
 
 const Login = (): JSX.Element => {
 	const navigation = useNavigation();
-	const dispatch = useDispatch();
-	const { signIn, signInDetails, setSignInDetails } = useContext(AuthContext);
+	const { signIn, signInDetails, setSignInDetails, authStatus } = useContext(AuthContext);
 	const [goNext, setGoNext] = useState<boolean>(false);
 
 	useEffect(() => {
@@ -59,13 +55,12 @@ const Login = (): JSX.Element => {
 	};
 
 	const handleSignin = async () => {
-		dispatch(showLoadingProgress(LoadingScreenTypes.LOADING_DATA))
 		await signIn();
-		dispatch(hideLoadingProgress())
 	}
 
 	return (
 		<View style={viewBase}>
+			<DataLoading visible={authStatus === AuthStatus.Loading} />
 			<Header
 				leftComponent={<BackBtn onClick={() => navigation.goBack()} />}
 			/>
@@ -99,6 +94,7 @@ const Login = (): JSX.Element => {
 				<View style={styles.bottomView}>
 					<Button
 						type={BUTTON_TYPES.TRANSPARENT}
+						disabled={AuthStatus.Loading === authStatus}
 						title='Forgot password'
 						onPress={() =>
 							navigation.navigate(Routes.FORGOT_PASSWORD)
@@ -107,7 +103,7 @@ const Login = (): JSX.Element => {
 					<Button
 						type={BUTTON_TYPES.DARK_GREEN}
 						title='Log in'
-						disabled={!goNext}
+						disabled={!goNext || AuthStatus.Loading === authStatus}
 						onPress={handleSignin}
 					/>
 				</View>
