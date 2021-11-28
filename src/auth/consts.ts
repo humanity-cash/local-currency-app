@@ -41,15 +41,14 @@ export const dwollaInfoInitialState: DwollaInfo = {
 	dwollaId: "",
 	resourceUri: "",
 }
-// email: "esraa+0000090101@humanity.cash",
 
 export const signInInitialState = {
-	email: "esraa+000009017231@humanity.cash",
+	email: "esraa+a2@humanity.cash",
 	password: "HumanityCash1122@",
 }
 
 export const signUpInitialState = {
-	email: "esraa+000009017231@humanity.cash",
+	email: "esraa+a2@humanity.cash",
 	password: "HumanityCash1122@",
 	confirmPassword: "HumanityCash1122@",
 }
