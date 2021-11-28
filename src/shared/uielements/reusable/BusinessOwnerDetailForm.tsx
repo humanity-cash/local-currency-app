@@ -60,8 +60,8 @@ const Header = () => {
 const BusinessOwnerDetailsForm = (
 	props: PersonalDetailsProps
 ): ReactElement => {
-	const { getBusinessData, updateBusinessData } = useContext(UserContext)
-	const business = getBusinessData();
+	const { user, updateBusinessData } = useContext(UserContext)
+	const business = user?.business;
 
 	const onValueChange = (name: string, change: string) => {
 		updateBusinessData({

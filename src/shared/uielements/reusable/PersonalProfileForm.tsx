@@ -53,8 +53,8 @@ const styles = StyleSheet.create({
 });
 
 const PersonalProfileForm = (): ReactElement => {
-	const { getCustomerData, updateCustomerData } = useContext(UserContext);
-	const customer = getCustomerData();
+	const { user, updateCustomerData } = useContext(UserContext);
+	const customer = user?.customer;
 	const tag = customer?.tag;
 	const avatar = customer?.avatar;
 
