@@ -1,7 +1,9 @@
 import {
 	CognitoUserSession
 } from "amazon-cognito-identity-js";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
+import { getLatestSelectedAccountType } from "src/auth/localStorage";
+import { UserAPI } from "src/api";
 import * as userController from "src/auth/cognito";
 import {
 	signInInitialState,
@@ -9,17 +11,24 @@ import {
 } from "src/auth/consts";
 import {
 	AuthStatus,
-	BaseResponse, ChangePasswordInput, defaultState, ForgotPassword, IAuth, SignUpInput
+	BaseResponse, ChangePasswordInput, defaultState, ForgotPassword, IAuth, SignUpInput, UserType
 } from "src/auth/types";
+import { UserContext } from "./user";
+import { WalletContext } from "./wallet";
+import { NavigationViewContext, ViewState } from "./navigation";
 
 export const AuthContext = React.createContext(defaultState);
 
 export const AuthProvider: React.FunctionComponent = ({ children }) => {
 	const [authStatus, setAuthStatus] = useState(AuthStatus.SignedOut);
+	const { user, userType, updateUserData, updateUserType } = useContext(UserContext)
+	const { walletData } = useContext(WalletContext)
+	const { updateSelectedView } = useContext(NavigationViewContext)
 	const [userEmail, setUserEmail] = useState<string>("");
 	const [signInDetails, setSignInDetails] = useState(signInInitialState);
 	const [signUpDetails, setSignUpDetails] =
 		useState<SignUpInput>(signUpInitialState);
+
 	const [forgotPasswordDetails, setForgotPasswordDetails] = useState<ForgotPassword>({
 		email: "",
 		verificationCode: "",
@@ -29,6 +38,10 @@ export const AuthProvider: React.FunctionComponent = ({ children }) => {
 	const updateSignUpDetails = (i: Partial<SignUpInput>): void => {
 		setSignUpDetails((pv: SignUpInput) => ({ ...pv, ...i }))
 	}
+
+	useEffect(() => {
+		getSessionInfo();
+	}, []);
 
 	const getSessionInfo = async () => {
 		try {
@@ -46,10 +59,6 @@ export const AuthProvider: React.FunctionComponent = ({ children }) => {
 			setAuthStatus(AuthStatus.SignedOut);
 		}
 	}
-
-	useEffect(() => {
-		getSessionInfo();
-	}, []);
 
 	const confirmEmailVerification = (verificationCode: string) =>
 		userController.confirmEmailVerificationCode(
@@ -77,7 +86,23 @@ export const AuthProvider: React.FunctionComponent = ({ children }) => {
 			await userController.signIn({ email, password });
 		if (response?.success) {
 			await getSessionInfo();
+			const user = await UserAPI.getUserByEmail(email);
+      console.log("🚀 ~ file: auth.tsx ~ line 90 ~ user", user)
+			if (!user) {
+				updateUserType(UserType.NotVerified, email)
+				updateSelectedView(ViewState.NotVerified)
+				return response;
+			} else {
+				const latestType = await getLatestSelectedAccountType(email);
+				if(latestType === UserType.Business) updateSelectedView(ViewState.Business)
+				else if(latestType === UserType.Customer) updateSelectedView(ViewState.Customer)
+				else if(user.verifiedBusiness) updateSelectedView(ViewState.Business)
+				else if(user.verifiedCustomer) updateSelectedView(ViewState.Customer)
+				updateUserData(user);
+				updateUserType(latestType as UserType, email);
+			}
 		} else {
+			console.log('here');
 			setAuthStatus(AuthStatus.SignedOut);
 		}
 		return response;
@@ -119,6 +144,8 @@ export const AuthProvider: React.FunctionComponent = ({ children }) => {
 	const signOut = () => {
 		userController.signOut();
 		setAuthStatus(AuthStatus.SignedOut);
+		updateSelectedView(ViewState.Onboarding);
+		updateUserData({});
 		setUserEmail("");
 	};
 

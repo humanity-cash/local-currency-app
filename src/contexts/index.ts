@@ -1,5 +1,15 @@
 import { UserContext, UserProvider } from "./user";
 import { AuthContext, AuthProvider } from "./auth";
 import { WalletContext, WalletProvider } from "./wallet";
+import { NavigationViewContext, NavigationProvider } from "./navigation";
 
-export { WalletContext, WalletProvider, UserContext, UserProvider, AuthContext, AuthProvider };
+export {
+	WalletContext,
+	WalletProvider,
+	NavigationViewContext,
+	NavigationProvider,
+	UserContext,
+	UserProvider,
+	AuthContext,
+	AuthProvider
+};
