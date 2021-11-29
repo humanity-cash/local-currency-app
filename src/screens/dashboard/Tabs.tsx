@@ -17,7 +17,6 @@ import {
 	TouchableOpacity
 } from "react-native";
 import { Drawer } from "react-native-paper";
-import {  } from "src/contexts";
 import { UserType } from "src/auth/types";
 import * as Routes from "src/navigation/constants";
 import { colors } from "src/theme/colors";
@@ -34,7 +33,8 @@ import Dashboard from "./Dashboard";
 import { Button, Dialog } from "src/shared/uielements";
 import { baseHeader, dialogViewBase, wrappingContainerBase } from "src/theme/elements";
 import { BUTTON_TYPES } from "src/constants";
-import { UserContext, WalletContext, AuthContext } from "src/contexts";
+import { UserContext, WalletContext, AuthContext, NavigationViewContext } from "src/contexts";
+import { ViewState} from "src/contexts/navigation";
 
 const styles = StyleSheet.create({
 	headerText: {
@@ -132,20 +132,22 @@ const BankLinkDialog = (props: BankLinkDialogProps) => {
 const DrawerContent = (
 	props: DrawerContentComponentProps<DrawerContentOptions>
 ) => {
-	const { signOut } = useContext(AuthContext);
+	const { signOut, userEmail } = useContext(AuthContext);
 	const { walletData } = useContext(WalletContext);
+	const { updateSelectedView } = useContext(NavigationViewContext);
 	const { user, updateUserType } = useContext(UserContext)
-	// const { authorization } = useUserDetails();
 	const authorization = { cashierView: user?.verifiedBusiness };
 	const [isExpanded, setIsExpanded] = useState<boolean>(false);
 	const [isBankDialog, setIsBankDialog] = useState<boolean>(false);
 
 	const onMerchant = () => {
-		updateUserType(UserType.Business);
+		updateUserType(UserType.Business, userEmail);
+		updateSelectedView(ViewState.Business);
 	};
 
 	const onCashier = () => {
-		updateUserType(UserType.Cashier);
+		updateUserType(UserType.Cashier, userEmail);
+		updateSelectedView(ViewState.Cashier);
 	};
 
 	const onBankDialogConfirm = () => {
@@ -280,14 +282,16 @@ const DrawerContent = (
 								);
 							}}
 						/>
-						<DrawerItem
-							label="Sign up your business"
-							onPress={() => {
-								props.navigation.navigate(
-									Routes.BUSINESS_ACCOUNT
-								);
-							}}
-						/>
+						{
+							!user?.verifiedBusiness && <DrawerItem
+								label="Sign up your business"
+								onPress={() => {
+									props.navigation.navigate(
+										Routes.BUSINESS_ACCOUNT
+									);
+								}}
+							/>
+						}
 						<DrawerItem
 							label="Settings"
 							onPress={() => {
@@ -313,7 +317,7 @@ const DrawerContent = (
 				/>
 			</Drawer.Section>
 			{isBankDialog && (
-				<BankLinkDialog 
+				<BankLinkDialog
 					visible={isBankDialog}
 					onConfirm={onBankDialogConfirm}
 					onCancel={onBankDialogCancel}

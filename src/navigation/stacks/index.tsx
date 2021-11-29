@@ -63,6 +63,9 @@ import SettingsPersonalProfile from "src/screens/settings/SettingsPersonalProfil
 import SettingsSecurity from "src/screens/settings/SettingsSecurity";
 import SettingsTermsAndConditions from "src/screens/settings/SettingsTermsAndConditions";
 import * as Routes from "../constants";
+import SelectMerchantBank from "src/screens/merchantBankAccount/SelectMerchantBank";
+import BusinessWelcome from "src/screens/signupBusiness/BusinessWelcome";
+import MyTransactions from "src/screens/transactions/MyTransactions";
 
 const PrimaryStack = createStackNavigator();
 
@@ -92,12 +95,12 @@ export const CustomerUserStack = ({ isVerifiedBusiness }: { isVerifiedBusiness: 
 				component={CashoutNavigator}
 			/>
 			<PrimaryStack.Screen
-				name={Routes.LOAD_UP}
-				component={LoadUp}
-			/>
-			<PrimaryStack.Screen
 				name={Routes.LOADUP_SUCCESS}
 				component={LoadUpSuccess}
+			/>
+			<PrimaryStack.Screen
+				name={Routes.LOAD_UP}
+				component={LoadUp}
 			/>
 			<PrimaryStack.Screen
 				name={Routes.SETTING_TERMS_CONDITIONS}
@@ -106,6 +109,10 @@ export const CustomerUserStack = ({ isVerifiedBusiness }: { isVerifiedBusiness: 
 			<PrimaryStack.Screen
 				name={Routes.SETTING_PERSONAL_PROFILE}
 				component={SettingsPersonalProfile}
+			/>
+			<PrimaryStack.Screen
+			name={Routes.MY_TRANSACTIONS}
+			component={MyTransactions}
 			/>
 			<PrimaryStack.Screen
 				name={Routes.SETTING_SECURITY}
@@ -118,10 +125,6 @@ export const CustomerUserStack = ({ isVerifiedBusiness }: { isVerifiedBusiness: 
 			<PrimaryStack.Screen
 				name={Routes.SETTING_DELETE_ACCOUNT}
 				component={SettingsDeleteAccount}
-			/>
-			<PrimaryStack.Screen
-				name={Routes.LINK_BANK_ACCOUNT}
-				component={LinkBankAccount}
 			/>
 			<PrimaryStack.Screen
 				name={Routes.SELECT_BANK}
@@ -340,6 +343,18 @@ export const BusinessUserStack = ({ isVerifiedCustomer }: { isVerifiedCustomer: 
 				name={Routes.MERCHANT_SETTINGS_SECURITY}
 				component={MerchantSettingsSecurity}
 			/>
+			<PrimaryStack.Screen
+				name={Routes.SETTING_BANK_ACCOUNT}
+				component={SettingsBankAccount}
+			/>
+			<PrimaryStack.Screen
+				name={Routes.SETTING_DELETE_ACCOUNT}
+				component={SettingsDeleteAccount}
+			/>
+			<PrimaryStack.Screen
+				name={Routes.SELECT_MERCHANT_BANK_ACCOUNT}
+				component={SelectMerchantBank}
+			/>
 			{!isVerifiedCustomer && (
 				<>
 					<PrimaryStack.Screen
@@ -399,6 +414,42 @@ export const NotVerifiedUserStack = () => {
 		</>
 	)
 }
+
+export const CustomerLinkBankAccount = () => {
+
+	return (
+		<>
+			<PrimaryStack.Screen
+				name={Routes.LINK_BANK_ACCOUNT}
+				component={LinkBankAccount}
+			/>
+			<PrimaryStack.Screen
+				name={Routes.SELECT_BANK}
+				component={SelectBank}
+			/>
+		</>
+	)
+}
+
+export const BusinessLinkBankAccount = () => {
+
+	return (
+		<>
+			<PrimaryStack.Screen
+				name={Routes.BUSINESS_WELCOME}
+				component={BusinessWelcome}
+			/>
+			<PrimaryStack.Screen
+				name={Routes.MERCHANT_BANK_ACCOUNT}
+				component={SelectMerchantBank}
+			/>
+		</>
+	)
+}
+
+
+
+
 {/* <PrimaryStack.Screen name={'TouchId'} component={TouchId} /> */}
 
 {/* <PrimaryStack.Screen

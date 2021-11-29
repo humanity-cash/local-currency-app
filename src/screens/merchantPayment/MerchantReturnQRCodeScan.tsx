@@ -15,7 +15,7 @@ import { modalViewBase, wrappingContainerBase, underlineHeaderB } from "src/them
 import { Modal, ModalHeader, BorderedInput, Button } from "src/shared/uielements";
 import { BUTTON_TYPES } from 'src/constants';
 import { ITransactionRequest } from 'src/api/types';
-import { UserAPI } from 'src/api';
+import { TransactionsAPI } from 'src/api';
 import { updateLoadingStatus } from 'src/store/loading/loading.actions';
 import { loadBusinessTransactions } from 'src/store/transaction/transaction.actions';
 import { useDispatch } from 'react-redux';
@@ -141,7 +141,7 @@ const MerchantReturnQRCodeScan = (): JSX.Element => {
 				isLoading: true,
 				screen: LoadingScreenTypes.PAYMENT_PENDING
 			}));
-			const response = await UserAPI.transferTo(businessDwollaId, request);
+			const response = await TransactionsAPI.transferTo(businessDwollaId, request);
 			if (response.data) {
 				await dispatch(loadBusinessTransactions(businessDwollaId));
 				dispatch(updateLoadingStatus({

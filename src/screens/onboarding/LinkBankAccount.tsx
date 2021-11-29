@@ -1,7 +1,6 @@
 import React, { useContext, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { Text } from 'react-native-elements';
-import { AuthContext } from "src/contexts";
 import { BUTTON_TYPES } from 'src/constants';
 import * as Routes from 'src/navigation/constants';
 import { Button, Header } from "src/shared/uielements";
@@ -9,6 +8,10 @@ import { colors } from "src/theme/colors";
 import { baseHeader, viewBase, wrappingContainerBase } from "src/theme/elements";
 import Translation from 'src/translation/en.json';
 import DwollaDialog from 'src/screens/dashboard/DwollaDialog';
+import { WalletContext, UserContext } from "src/contexts";
+import { NavigationViewContext, ViewState } from "src/contexts/navigation";
+import { useWallet } from "src/hooks";
+import { useNavigation } from '@react-navigation/core';
 
 const styles = StyleSheet.create({
 	headerText: {
@@ -26,18 +29,23 @@ const styles = StyleSheet.create({
 });
 
 const LinkBankAccount = (): JSX.Element => {
+	const navigation = useNavigation();
 	const [isVisible, setIsVisible] = useState<boolean>(false);
-	const { signUpDetails: { email, password }, signIn } = useContext(AuthContext);
+	const { walletData } = useContext(WalletContext)
+	const { customerDwollaId } = useContext(UserContext)
+	const { updateSelectedView } = useContext(NavigationViewContext);
 
-	const selectBank = () => {
+	const selectBank = async () => {
 		setIsVisible(true);
 	}
 
+	useWallet(customerDwollaId);
+
 	const onSkip = async () => { 
-		await signIn(email, password) 
+		updateSelectedView(ViewState.Customer);
+		// navigation.navigate(Routes.TABS)
 	};
 	
-
 	return (
 		<View style={viewBase}>
 			<Header />
@@ -59,6 +67,7 @@ const LinkBankAccount = (): JSX.Element => {
 				<Button
 					type={BUTTON_TYPES.DARK_GREEN}
 					title={Routes.LINK_BANK_ACCOUNT}
+					disabled={!walletData?.userId?.length}
 					onPress={selectBank}
 				/>
 			</View>

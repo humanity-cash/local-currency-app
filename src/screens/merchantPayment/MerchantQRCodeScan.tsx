@@ -11,7 +11,7 @@ import Translation from 'src/translation/en.json';
 import * as Routes from 'src/navigation/constants';
 import { BUTTON_TYPES } from 'src/constants';
 import { QRCodeEntry, SECURITY_ID, PaymentMode, ToastType, LoadingScreenTypes } from 'src/utils/types';
-import { UserAPI } from 'src/api';
+import { TransactionsAPI } from 'src/api';
 import { ITransactionRequest } from 'src/api/types';
 import { calcFee, showToast } from 'src/utils/common';
 import { isQRCodeValid } from 'src/utils/validation';
@@ -257,7 +257,7 @@ const MerchantQRCodeScan = (): JSX.Element => {
 				isLoading: true,
 				screen: LoadingScreenTypes.PAYMENT_PENDING
 			}));
-			const response = await UserAPI.transferTo(businessDwollaId, request);
+			const response = await TransactionsAPI.transferTo(businessDwollaId, request);
 			if (response.data) {
 				await dispatch(loadBusinessTransactions(businessDwollaId));
 				navigation.navigate(Routes.MERCHANT_PAYMENT_SUCCESS);
@@ -293,7 +293,7 @@ const MerchantQRCodeScan = (): JSX.Element => {
 				isLoading: true,
 				screen: LoadingScreenTypes.PAYMENT_PENDING
 			}));
-			const response = await UserAPI.transferTo(businessDwollaId, request);
+			const response = await TransactionsAPI.transferTo(businessDwollaId, request);
 			if (response.data) {
 				await dispatch(loadBusinessTransactions(businessDwollaId));
 				navigation.navigate(Routes.MERCHANT_PAYMENT_SUCCESS);

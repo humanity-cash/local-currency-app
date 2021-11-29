@@ -56,8 +56,8 @@ const styles = StyleSheet.create({
 });
 
 const BusinessAddressForm = (props: BusinessAddressProps): JSX.Element => {
-	const { getBusinessData, updateBusinessData } = useContext(UserContext)
-	const business = getBusinessData();
+	const { user, updateBusinessData } = useContext(UserContext)
+	const business = user?.business;
 
 	const onValueChange = (name: string, change: string) => {
 		updateBusinessData({

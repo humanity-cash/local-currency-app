@@ -62,8 +62,8 @@ const styles = StyleSheet.create({
 const BusinessOwnerAddressForm = (
 	props: BusinessOwnerAddressFormProps
 ): ReactElement => {
-	const { getBusinessData, updateBusinessData } = useContext(UserContext)
-	const business = getBusinessData();
+	const { user, updateBusinessData } = useContext(UserContext)
+	const business = user?.business;
 
 	const onValueChange = (name: string, change: string) => {
 		updateBusinessData({

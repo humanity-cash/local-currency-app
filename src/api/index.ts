@@ -1,3 +1,5 @@
 import * as UserAPI from './user';
+import * as DwollaAPI from './dwolla';
+import * as TransactionsAPI from './transactions';
 
-export { UserAPI };
+export { UserAPI, TransactionsAPI, DwollaAPI };

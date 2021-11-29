@@ -12,7 +12,7 @@ import { showToast } from '../../utils/common';
 import { ToastType } from '../../utils/types';
 import { useDispatch } from 'react-redux';
 import { showLoadingProgress, hideLoadingProgress } from '../../store/loading/loading.actions';
-import { UserAPI } from 'src/api';
+import { TransactionsAPI } from 'src/api';
 import { LoadingScreenTypes } from 'src/utils/types';
 import { UserContext } from 'src/contexts';
 
@@ -109,7 +109,7 @@ const MerchantCashoutAmount = (): JSX.Element => {
 
 		setIsVisible(false);
 		dispatch(showLoadingProgress(LoadingScreenTypes.LOADING_DATA))
-		const response = await UserAPI.withdraw(
+		const response = await TransactionsAPI.withdraw(
 			businessDwollaId, 
 			{amount: amount}
 		);

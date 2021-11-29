@@ -215,15 +215,7 @@ const MyTransactions = (): JSX.Element => {
 	useEffect(() => {
 		if (customerDwollaId) {
 			(async () => {
-				dispatch(updateLoadingStatus({
-					isLoading: true,
-					screen: LoadingScreenTypes.LOADING_DATA
-				}));
 				await dispatch(loadPersonalTransactions(customerDwollaId));
-				dispatch(updateLoadingStatus({
-					isLoading: false,
-					screen: LoadingScreenTypes.LOADING_DATA
-				}));
 			})();
 		}
 	}, []);

@@ -62,7 +62,7 @@ const styles = StyleSheet.create({
 const MerchantCashoutAmount = (): JSX.Element => {
 	const navigation = useNavigation();
 	const [amount, setAmount] = useState<string>('');
-    const [isVisible, setIsVisible] = useState<boolean>(false);
+	const [isVisible, setIsVisible] = useState<boolean>(false);
 	const [goNext, setGoNext] = useState(false);
 
 	useEffect(() => {
@@ -73,10 +73,10 @@ const MerchantCashoutAmount = (): JSX.Element => {
 		setAmount(change);
 	};
 
-    const doScan = () => {
-        setIsVisible(false);
-        navigation.navigate(Routes.MERCHANT_PAYOUT_QR_SCAN);
-    }
+	const doScan = () => {
+		setIsVisible(false);
+		navigation.navigate(Routes.MERCHANT_PAYOUT_QR_SCAN);
+	}
 
 	return (
 		<View style={viewBaseB}>
@@ -120,8 +120,8 @@ const MerchantCashoutAmount = (): JSX.Element => {
 				</View>
 			</KeyboardAvoidingView>
 
-            { isVisible && (
-				<Dialog visible={isVisible} onClose={()=>setIsVisible(false)} backgroundStyle={styles.dialogBg}>
+			{isVisible && (
+				<Dialog visible={isVisible} onClose={() => setIsVisible(false)} backgroundStyle={styles.dialogBg}>
 					<View style={dialogViewBase}>
 						<View style={styles.dialogWrap}>
 							<Text style={styles.dialogHeader}>{Translation.PAYMENT.SCAN_QR}</Text>

@@ -58,10 +58,10 @@ const styles = StyleSheet.create({
 });
 
 const BusinessProfileForm = (): ReactElement => {
-	const { getBusinessData, updateBusinessData } = useContext(UserContext)
-	const business = getBusinessData();
+	const { user, updateBusinessData } = useContext(UserContext)
+	const business = user?.business;
 
-	useMediaLibraryPermission();
+	// useMediaLibraryPermission();
 
 	const onValueChange = (name: string, change: string) => {
 		updateBusinessData({ [name]: change });
