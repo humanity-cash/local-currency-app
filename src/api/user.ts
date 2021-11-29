@@ -21,7 +21,7 @@ const addBusinessVerification = async (customerDwollaId: string, request: Busine
 
 export const getUserByEmail = async (email: string): Promise<IDBUser> => {
   try {
-    const response: AxiosPromiseResponse<IDBUser[]> = await getRequest(`/users/email/${email}`);
+    const response: AxiosPromiseResponse<IDBUser[]> = await getRequest(`/users/email/${email.toLowerCase()}`);
     const data = response?.data[0];
     return data;
   } catch (err) {
