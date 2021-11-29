@@ -5,13 +5,11 @@ interface PersonalFundingSource { availableFundingSource: boolean };
 
 export const WalletContext = React.createContext<IState>({} as IState);
 interface IState {
-	isLoading: boolean
 	updateWalletData: (u: any) => void
 	walletData: IWallet & PersonalFundingSource
 }
 
 export const WalletProvider: React.FunctionComponent = ({ children }) => {
-	const [isLoading, setIsLoading] = useState<boolean>(false);
 	const [walletData, setWalletData] = useState<IWallet & PersonalFundingSource>({
 		totalBalance: 0,
 		createdTimestamp: "",
@@ -26,7 +24,6 @@ export const WalletProvider: React.FunctionComponent = ({ children }) => {
 	const state: IState = {
 		walletData,
 		updateWalletData,
-		isLoading
 	}
 
 	return (
