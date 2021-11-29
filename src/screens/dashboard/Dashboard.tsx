@@ -1,6 +1,6 @@
 import { AntDesign, Entypo } from '@expo/vector-icons';
 import { DrawerActions, useNavigation } from '@react-navigation/native';
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import {
 	ScrollView,
 	StyleSheet,
@@ -20,6 +20,7 @@ import { dialogViewBase } from "src/theme/elements";
 import { BUTTON_TYPES } from "src/constants";
 import { WalletContext, UserContext } from 'src/contexts';
 import { useWallet } from 'src/hooks';
+import { DwollaAPI } from 'src/api';
 
 const styles = StyleSheet.create({
 	content: { paddingBottom: 80 },
@@ -115,8 +116,8 @@ const styles = StyleSheet.create({
 	},
 	topupText: { color: colors.white, fontSize: 16 },
 	dialog: {
-        height: 320
-    },
+		height: 320
+	},
 	dialogWrap: {
 		paddingHorizontal: 10,
 		flex: 1
@@ -151,13 +152,24 @@ const Dashboard = (): JSX.Element => {
 	const [isVisible, setIsVisible] = useState<boolean>(false);
 	const [isLoadup, setIsLoadup] = useState<boolean>(false);
 	const [isPayment, setIsPayment] = useState<boolean>(false);
-	const { customerDwollaId } = useContext(UserContext)
-	const { walletData } = useContext(WalletContext)
+	const { customerDwollaId, user } = useContext(UserContext)
+	const { walletData, updateWalletData } = useContext(WalletContext)
 
 	const selectBank = () => {
 		navigation.navigate(Routes.SELECT_BANK);
 		onClose();
 	}
+
+	useEffect(() => {
+		const timerId = setInterval(async () => {
+			if (walletData?.address !== user?.customer?.walletAddress) {
+				const userWallet = await DwollaAPI.loadWallet(customerDwollaId)
+				const fundingSource = await DwollaAPI.loadFundingSource(customerDwollaId)
+				updateWalletData(({ ...userWallet, availableFundingSource: fundingSource }))
+			}
+		}, 1500);
+		return () => clearInterval(timerId);
+	}, [walletData?.address, user?.customer?.walletAddress])
 
 	useWallet(customerDwollaId);
 
@@ -196,7 +208,7 @@ const Dashboard = (): JSX.Element => {
 					</Text>
 				</View>
 				<View style={styles.amountView}>
-					<Text style={styles.text}>B$ {personalFundingSource ? availableBalance : '0'}</Text>
+					<Text style={styles.text}>B$ {personalFundingSource ? availableBalance : '-'}</Text>
 					<TouchableOpacity
 						style={styles.topupButton}
 						onPress={() => { personalFundingSource ? navigation.navigate(Routes.LOAD_UP) : setIsVisible(true) }}>

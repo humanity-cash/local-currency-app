@@ -1,6 +1,6 @@
 import { AntDesign, Entypo, Octicons } from "@expo/vector-icons";
 import { useNavigation, DrawerActions } from "@react-navigation/native";
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { StyleSheet, TouchableWithoutFeedback, View, ScrollView, TouchableOpacity } from 'react-native';
 import { Text, Image } from "react-native-elements";
 import { colors } from "src/theme/colors";
@@ -18,6 +18,7 @@ import moment from "moment";
 import { ITransaction } from 'src/api/types';
 import { WalletContext, UserContext } from "src/contexts";
 import { useWallet } from "src/hooks";
+import { DwollaAPI } from "src/api"
 
 const styles = StyleSheet.create({
 	mainTextColor: {
@@ -233,7 +234,7 @@ const defaultTransaction = {
 
 const MerchantDashboard = (): JSX.Element => {
 	const navigation = useNavigation();
-	const { walletData  } = useContext(WalletContext);
+	const { walletData, updateWalletData  } = useContext(WalletContext);
 	const { businessDwollaId } = useContext(UserContext);
 	const { user } = useContext(UserContext);
 	const completedCustomerVerification = user?.verifiedCustomer;
@@ -245,6 +246,18 @@ const MerchantDashboard = (): JSX.Element => {
 	const [isPayment, setIsPayment] = useState<boolean>(false);
 
 	useWallet(businessDwollaId);
+
+
+	useEffect(() => {
+		const timerId = setInterval(async () => {
+			if (walletData?.address !== user?.business?.walletAddress) {
+				const userWallet = await DwollaAPI.loadWallet(businessDwollaId)
+				const fundingSource = await DwollaAPI.loadFundingSource(businessDwollaId)
+				updateWalletData(({ ...userWallet, availableFundingSource: fundingSource }))
+			}
+		}, 1500);
+		return () => clearInterval(timerId);
+	}, [walletData?.address, user?.customer?.walletAddress])
 
 	const onSearchChange = (name: string, change: string) => {
 		setSearchText(change);
