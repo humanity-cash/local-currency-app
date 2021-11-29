@@ -11,7 +11,7 @@ import { modalViewBase, wrappingContainerBase, underlineHeaderB, viewBase } from
 import { Header, CancelBtn, BackBtn, Modal, ModalHeader, BorderedInput, Button } from "src/shared/uielements";
 import { QRCodeEntry, SECURITY_ID, PaymentMode, ToastType, LoadingScreenTypes } from 'src/utils/types';
 import { isQRCodeValid } from 'src/utils/validation';
-import { UserAPI } from 'src/api';
+import { TransactionsAPI, UserAPI } from 'src/api';
 import { ITransactionRequest } from 'src/api/types';
 import { showToast } from 'src/utils/common';
 import { BUTTON_TYPES } from 'src/constants';
@@ -139,7 +139,7 @@ const CashierReturnQRCodeScan = (): JSX.Element => {
 				isLoading: true,
 				screen: LoadingScreenTypes.PAYMENT_PENDING
 			}));
-			const response = await UserAPI.transferTo(businessDwollaId, request);
+			const response = await TransactionsAPI.transferTo(businessDwollaId, request);
 			if (response.data) {
 				await dispatch(loadBusinessTransactions(businessDwollaId));
 				dispatch(updateLoadingStatus({
