@@ -119,7 +119,7 @@ export interface ITransaction {
     fromAddress: string;
     toUserId: string;
     toAddress: string;
-    type: string;
+    type: "IN" | "OUT";
     value: string;
 }
 
