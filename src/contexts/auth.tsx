@@ -62,12 +62,12 @@ export const AuthProvider: React.FunctionComponent = ({ children }) => {
 
 	const confirmEmailVerification = (verificationCode: string) =>
 		userController.confirmEmailVerificationCode(
-			signUpDetails.email,
+			signUpDetails.email.toLowerCase(),
 			verificationCode
 		);
 
 	const resendEmailVerificationCode = async () =>
-		userController.resendEmailVerificationCode(signUpDetails.email);
+		userController.resendEmailVerificationCode(signUpDetails.email.toLowerCase());
 
 	const signUp = async () => {
 		const response = await userController.signUp(
@@ -83,7 +83,7 @@ export const AuthProvider: React.FunctionComponent = ({ children }) => {
 	) => {
 		setAuthStatus(AuthStatus.Loading);
 		const response: BaseResponse<CognitoUserSession> =
-			await userController.signIn({ email, password });
+			await userController.signIn({ email: email.toLowerCase(), password });
 		if (response?.success) {
 			await getSessionInfo();
 			const user = await UserAPI.getUserByEmail(email);
@@ -112,7 +112,7 @@ export const AuthProvider: React.FunctionComponent = ({ children }) => {
 	const startForgotPasswordFlow = async (): Promise<BaseResponse<unknown>> => {
 		const { email } = forgotPasswordDetails;
 		const response: BaseResponse<unknown> =
-			await userController.startForgotPasswordFlow({ email });
+			await userController.startForgotPasswordFlow({ email: email.toLowerCase() });
 		return response;
 	};
 
