@@ -23,6 +23,7 @@ import MerchantSettings from "src/screens/merchantSettings/MerchantSettings";
 import MerchantSettingsHelpAndContact from 'src/screens/merchantSettings/MerchantSettingsHelpAndContact';
 import { UserContext, AuthContext, NavigationViewContext, WalletContext } from 'src/contexts';
 import { ViewState } from "src/contexts/navigation";
+import { useWallet } from 'src/hooks';
 
 const styles = StyleSheet.create({
 	headerText: {
@@ -184,7 +185,7 @@ const BankLinkDialog = (props: BankLinkDialogProps) => {
 
 const DrawerContent = (props: DrawerContentComponentProps) => {
 	const { signOut, userEmail } = useContext(AuthContext);
-	const { user, updateUserType } = useContext(UserContext);
+	const { user, updateUserType, businessDwollaId } = useContext(UserContext);
 	const { updateSelectedView } = useContext(NavigationViewContext);
 	const { walletData } = useContext(WalletContext);
 	const authorization = { cashierView: user?.verifiedBusiness };
@@ -203,6 +204,7 @@ const DrawerContent = (props: DrawerContentComponentProps) => {
 		setIsVisible(false);
 	}
 
+	useWallet(businessDwollaId);
 	const onCashierViewConfirm = () => {
 		setIsCashierView(false);
 		updateUserType(UserType.Cashier, userEmail);
@@ -234,8 +236,8 @@ const DrawerContent = (props: DrawerContentComponentProps) => {
 		<View style={styles.drawerWrap}>
 			<DrawerContentScrollView {...props}>
 				<View>
-					<TouchableOpacity 
-						onPress={() => 
+					<TouchableOpacity
+						onPress={() =>
 							props.navigation.dispatch(DrawerActions.toggleDrawer())
 						}>
 						<View style={styles.closeBtnView}>
@@ -308,27 +310,32 @@ const DrawerContent = (props: DrawerContentComponentProps) => {
 					<Drawer.Section>
 						<DrawerItem
 							label={Translation.TABS.RECEIVE_PAYMENT}
-							onPress={() => walletData?.availableBalance ?  props.navigation.navigate(Routes.MERCHANT_REQUEST) : setIsBankDialog(true)}
+							onPress={() => {
+								if (walletData?.address !== user?.business?.walletAddress) return
+								walletData?.availableFundingSource
+									? props.navigation.navigate(Routes.MERCHANT_REQUEST)
+									: setIsBankDialog(true)
+							}}
 						/>
 						<DrawerItem
 							label={Translation.TABS.SCAN_TO_PAY}
-							onPress={() => walletData?.availableBalance ?  props.navigation.navigate(Routes.MERCHANT_QRCODE_SCAN) : setIsBankDialog(true)}
+							onPress={() => walletData?.availableBalance ? props.navigation.navigate(Routes.MERCHANT_QRCODE_SCAN) : setIsBankDialog(true)}
 						/>
 						<DrawerItem
 							label={Translation.TABS.MAKE_RETURN}
-							onPress={() => walletData?.availableBalance ?  setIsVisible(true) : setIsBankDialog(true)}
+							onPress={() => walletData?.availableBalance ? setIsVisible(true) : setIsBankDialog(true)}
 						/>
 						<DrawerItem
 							label={Translation.TABS.LOADUP}
-							onPress={() => walletData?.availableBalance ?  props.navigation.navigate(Routes.MERCHANT_LOADUP) : setIsBankDialog(true)}
+							onPress={() => walletData?.availableBalance ? props.navigation.navigate(Routes.MERCHANT_LOADUP) : setIsBankDialog(true)}
 						/>
 						<DrawerItem
 							label={Translation.TABS.SEND_TO_SOMEONE}
-							onPress={() => walletData?.availableBalance ?  props.navigation.navigate(Routes.MERCHANT_PAYOUT_SELECTION) : setIsBankDialog(true)}
+							onPress={() => walletData?.availableBalance ? props.navigation.navigate(Routes.MERCHANT_PAYOUT_SELECTION) : setIsBankDialog(true)}
 						/>
 						<DrawerItem
 							label={Translation.TABS.CASHOUT}
-							onPress={() => walletData?.availableBalance ?  props.navigation.navigate(Routes.MERCHANT_CASHOUT_AMOUNT) : setIsBankDialog(true)}
+							onPress={() => walletData?.availableBalance ? props.navigation.navigate(Routes.MERCHANT_CASHOUT_AMOUNT) : setIsBankDialog(true)}
 						/>
 					</Drawer.Section>
 					<Drawer.Section>
@@ -385,7 +392,7 @@ const DrawerContent = (props: DrawerContentComponentProps) => {
 				/>
 			)}
 			{isBankDialog && (
-				<BankLinkDialog 
+				<BankLinkDialog
 					visible={isBankDialog}
 					onConfirm={onBankDialogConfirm}
 					onCancel={onBankDialogCancel}

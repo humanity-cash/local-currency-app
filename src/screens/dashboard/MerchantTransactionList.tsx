@@ -1,4 +1,6 @@
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect, useContext } from 'react';
+import { TransactionState } from 'src/store/transaction/transaction.reducer';
+import { AppState } from 'src/store';
 import { StyleSheet, View } from 'react-native';
 import { Text } from 'react-native-elements';
 import { colors } from "src/theme/colors";
@@ -7,6 +9,10 @@ import { TransactionType } from "src/utils/types";
 import { getBerksharePrefix } from "src/utils/common";
 import { ITransaction } from 'src/api/types';
 import moment from 'moment';
+import { useDispatch, useSelector } from 'react-redux';
+import { WalletContext, UserContext } from 'src/contexts';
+import { loadBusinessTransactions } from 'src/store/transaction/transaction.actions';
+import { TransactionsAPI} from 'src/api';
 
 const styles = StyleSheet.create({
 	transactionType: {
@@ -56,7 +62,8 @@ type TransactionItemProps = {
 }
 
 const TransactionItem = (props: TransactionItemProps) => {
-	const {item, selected} = props;
+	const { item, selected } = props;
+  console.log("🚀 ~ file: MerchantTransactionList.tsx ~ line 66 ~ TransactionItem ~ item", item)
 
 	const getStyle = (type: string) => {
 		if (type === TransactionType.SALE || type === TransactionType.RETURN || type === TransactionType.IN) {
@@ -73,6 +80,7 @@ const TransactionItem = (props: TransactionItemProps) => {
 					{item.type}
 				</Text>
 				<Text style={styles.timeText}>{moment(item.timestamp).format('HH:mm, MMM D, YYYY')}</Text>
+				<Text style={styles.timeText}>{item.type === "OUT" ? `To: ${item.toName}` : `From: ${item.fromName}`}</Text>
 			</View>
 			<Text style={getStyle(item.type)}>{getBerksharePrefix(item.type)}  {item.value}</Text>
 		</View>
@@ -80,30 +88,34 @@ const TransactionItem = (props: TransactionItemProps) => {
 }
 
 type MerchantTransactionListProps = {
-	data: ITransaction[],
+	data?: ITransaction[],
 	onSelect: (item: ITransaction) => void
 }
 
 const MerchantTransactionList = (props: MerchantTransactionListProps): JSX.Element => {
-
+	const { businessTransactions } = useSelector((state: AppState) => state.transactionReducer) as TransactionState;
 	const [list, setList] = useState<ITransaction[]>([]);
 	const [selected, setSelected] = useState<string>("");
 
+	const dispatch = useDispatch();
+	const { walletData } = useContext(WalletContext);
+	const { businessDwollaId } = useContext(UserContext);
 	useEffect(() => {
-		const data: ITransaction[] = props.data;
-
-		if (!data) {
-			return;
+		const handler = async () => {
+			if(!businessDwollaId) return
+			const transactions: ITransaction[] = await TransactionsAPI.getTransactions(businessDwollaId);
+			if (transactions?.length) {
+				transactions.sort(function (a: ITransaction, b: ITransaction) {
+					if (moment(a.timestamp).isAfter(b.timestamp)) return -1;
+					else if (moment(a.timestamp).isBefore(b.timestamp)) return 1;
+					else return 0;
+				});
+			}
+			setList(transactions);
 		}
+		handler();
 
-		data.sort(function(a: ITransaction, b: ITransaction) {
-			if (moment(a.timestamp).isAfter(b.timestamp)) return -1;
-			else if (moment(a.timestamp).isBefore(b.timestamp)) return 1;
-			else return 0;
-		});
-
-		setList(data);
-	}, [props.data]);
+	}, [walletData, businessDwollaId]);
 
 	const handleSelect = (item: ITransaction) => {
 		setSelected(item.transactionHash);
@@ -112,13 +124,13 @@ const MerchantTransactionList = (props: MerchantTransactionListProps): JSX.Eleme
 
 	return (
 		<View>
-		{
-			list.map((item: ITransaction, i: number) => 
-				<TouchableOpacity onPress={()=>handleSelect(item)} key={i}>
-					<TransactionItem item={item} selected={selected} />
-				</TouchableOpacity>
-			)
-		}
+			{
+				list.map((item: ITransaction, i: number) =>
+					<TouchableOpacity onPress={() => handleSelect(item)} key={i}>
+						<TransactionItem item={item} selected={selected} />
+					</TouchableOpacity>
+				)
+			}
 		</View>
 	);
 }

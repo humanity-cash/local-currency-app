@@ -16,9 +16,6 @@ import DwollaDialog from './DwollaDialog';
 import { BUTTON_TYPES } from "src/constants";
 import moment from "moment";
 import { ITransaction } from 'src/api/types';
-import { TransactionState } from 'src/store/transaction/transaction.reducer';
-import { useSelector } from 'react-redux';
-import { AppState } from 'src/store';
 import { WalletContext, UserContext } from "src/contexts";
 import { useWallet } from "src/hooks";
 
@@ -228,7 +225,7 @@ const defaultTransaction = {
 	fromName: "",
 	fromAddress: "",
 	fromUserId: "",
-	type: "",
+	type: "IN",
 	value: "",
 	timestamp: new Date().getTime(),
 	blockNumber: 0
@@ -243,10 +240,9 @@ const MerchantDashboard = (): JSX.Element => {
 	const [isFilterVisible, setIsFilterVisible] = useState<boolean>(false);
 	const [searchText, setSearchText] = useState<string>("");
 	const [isDetailViewOpen, setIsDetailViewOpen] = useState<boolean>(false);
-	const [selectedItem, setSelectedItem] = useState<ITransaction>(defaultTransaction);
+	const [selectedItem, setSelectedItem] = useState<ITransaction>(defaultTransaction as ITransaction);
 	const [isDwollaVisible, setIsDwollaVisible] = useState<boolean>(false);
 	const [isPayment, setIsPayment] = useState<boolean>(false);
-	const { businessTransactions } = useSelector((state: AppState) => state.transactionReducer) as TransactionState;
 
 	useWallet(businessDwollaId);
 
@@ -310,7 +306,7 @@ const MerchantDashboard = (): JSX.Element => {
 							</Text>
 						</View>}
 
-						{!businessFundingSource || !walletData.userId  ? (
+						{!businessFundingSource && walletData?.address === user?.business?.walletAddress ? (
 							<View style={styles.alertView}>
 								<AntDesign
 									name='exclamationcircleo'
@@ -350,12 +346,16 @@ const MerchantDashboard = (): JSX.Element => {
 								/>
 							</TouchableOpacity>
 						</View>
-						{isFilterVisible && <MerchantTransactionsFilter></MerchantTransactionsFilter>}
-						<MerchantTransactionList data={businessTransactions} onSelect={viewDetail} />
+						{isFilterVisible && <MerchantTransactionsFilter/>}
+						<MerchantTransactionList onSelect={viewDetail} />
 					</View>
 				</ScrollView>
 			</View>
-			<TouchableOpacity onPress={() => businessFundingSource ? navigation.navigate(Routes.MERCHANT_QRCODE_SCAN) : setIsPayment(true)} style={styles.scanButton}>
+			<TouchableOpacity onPress={() => { 
+				businessFundingSource 
+				? navigation.navigate(Routes.MERCHANT_QRCODE_SCAN) 
+				: setIsPayment(true) }} 
+				style={styles.scanButton}>
 				<Image
 					source={require('../../../assets/images/qr_code_merchant.png')}
 					containerStyle={styles.qrIcon}
