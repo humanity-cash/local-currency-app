@@ -43,11 +43,9 @@ const LinkBankAccount = (): JSX.Element => {
 
 	const onSkip = async () => { 
 		updateSelectedView(ViewState.Customer);
-		navigation.navigate(Routes.TABS)
+		// navigation.navigate(Routes.TABS)
 	};
 	
-	console.log("🚀 ~ file: LinkBankAccount.tsx ~ line 81 ~ customerDwollaId", customerDwollaId)
-	console.log("🚀 ~ file: LinkBankAccount.tsx ~ line 80 ~ walletData?.userId", walletData?.userId)
 	return (
 		<View style={viewBase}>
 			<Header />
