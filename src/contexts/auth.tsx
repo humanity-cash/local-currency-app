@@ -14,15 +14,13 @@ import {
 	BaseResponse, ChangePasswordInput, defaultState, ForgotPassword, IAuth, SignUpInput, UserType
 } from "src/auth/types";
 import { UserContext } from "./user";
-import { WalletContext } from "./wallet";
 import { NavigationViewContext, ViewState } from "./navigation";
 
 export const AuthContext = React.createContext(defaultState);
 
 export const AuthProvider: React.FunctionComponent = ({ children }) => {
 	const [authStatus, setAuthStatus] = useState(AuthStatus.SignedOut);
-	const { user, userType, updateUserData, updateUserType } = useContext(UserContext)
-	const { walletData } = useContext(WalletContext)
+	const { updateUserData, updateUserType } = useContext(UserContext)
 	const { updateSelectedView } = useContext(NavigationViewContext)
 	const [userEmail, setUserEmail] = useState<string>("");
 	const [signInDetails, setSignInDetails] = useState(signInInitialState);
