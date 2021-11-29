@@ -121,10 +121,10 @@ export const CustomerUserStack = ({ isVerifiedBusiness }: { isVerifiedBusiness: 
 				name={Routes.SETTING_DELETE_ACCOUNT}
 				component={SettingsDeleteAccount}
 			/>
-			<PrimaryStack.Screen
+			{/* <PrimaryStack.Screen
 				name={Routes.LINK_BANK_ACCOUNT}
 				component={LinkBankAccount}
-			/>
+			/> */}
 			<PrimaryStack.Screen
 				name={Routes.SELECT_BANK}
 				component={SelectBank}

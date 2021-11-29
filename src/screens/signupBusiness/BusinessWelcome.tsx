@@ -16,6 +16,7 @@ import { viewBaseB, wrappingContainerBase } from "src/theme/elements";
 import Translation from "src/translation/en.json";
 import { useNavigation } from "@react-navigation/core";
 import * as Routes from "src/navigation/constants";
+import { NavigationViewContext, ViewState } from "src/contexts/navigation";
 import { useWallet } from "src/hooks";
 
 const styles = StyleSheet.create({
@@ -35,17 +36,16 @@ const styles = StyleSheet.create({
 });
 
 const BusinessWelcome = (): ReactElement => {
-	const navigation = useNavigation();
 	const { updateUserType, user, businessDwollaId } = useContext(UserContext);
-	const {walletData} = useContext(WalletContext);
-	const { signUpDetails: { email, password }, signIn } = useContext(AuthContext);
+	const { walletData } = useContext(WalletContext);
+	const { userEmail } = useContext(AuthContext);
 	const [isVisible, setIsVisible] = useState<boolean>(false);
+	const { updateSelectedView } = useContext(NavigationViewContext);
 
 	useWallet(businessDwollaId);
 	const onSkip = async () => {
-		await signIn(email, password);
-		updateUserType(UserType.Business, email);
-		navigation.navigate(Routes.MERCHANT_TABS);
+		updateUserType(UserType.Business, userEmail);
+		updateSelectedView(ViewState.Business)
 	}
 
 	return (
