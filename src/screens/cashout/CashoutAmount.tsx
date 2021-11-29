@@ -8,7 +8,7 @@ import { IMap, LoadingScreenTypes } from "src/utils/types";
 import Translation from 'src/translation/en.json';
 import * as Routes from 'src/navigation/constants';
 import { useNavigation } from '@react-navigation/core';
-import { UserAPI } from 'src/api';
+import { TransactionsAPI } from 'src/api';
 import { UserContext } from 'src/contexts';
 import { showToast } from '../../utils/common';
 import { ToastType } from '../../utils/types';
@@ -103,7 +103,7 @@ const CashoutAmount = (): JSX.Element => {
 
 		setIsVisible(false);
 		dispatch(showLoadingProgress(LoadingScreenTypes.LOADING_DATA))
-		const response = await UserAPI.withdraw(
+		const response = await TransactionsAPI.withdraw(
 			customerDwollaId, 
 			{amount: state.amount}
 		);

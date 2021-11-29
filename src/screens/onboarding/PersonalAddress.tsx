@@ -66,15 +66,13 @@ const PersonalAddress = (): React.ReactElement => {
 	}, [address1,city, postalCode]);
 
 	const onNextPress = async () => {
-		if (!user) return
+		if (!user || !user?.customer) return
 		setIsLoading(true)
 		user.email = userEmail;
-		//@ts-ignore
 		user.customer.avatar = "hee";
 		const response = await UserAPI.createCustomer(user);
 		if (isSuccessResponse(response)) {
 			const newUser: IDBUser = response?.data
-      console.log("🚀 ~ file: PersonalAddress.tsx ~ line 73 ~ onNextPress ~ newUser", newUser)
 			updateUserData(newUser);
 			updateUserType(UserType.Customer, newUser.email);
 			updateSelectedView(ViewState.CustomerLinkBank);
@@ -82,10 +80,6 @@ const PersonalAddress = (): React.ReactElement => {
 		setIsLoading(false)
 	};
 
-	// if(isLoading){
-	// 	return (
-	// 	)
-	// }
 	return (
 		<View style={viewBase}>
 			<DataLoading visible={isLoading} />
@@ -127,37 +121,3 @@ const PersonalAddress = (): React.ReactElement => {
 };
 
 export default PersonalAddress;
-
-			// const request: IUserRequest = {
-			// 	firstName: customer.firstName,
-			// 	lastName: customer.lastName,
-			// 	email: signInDetails.email,
-			// 	address1: customer.address1,
-			// 	address2: customer.address2,
-			// 	city: customer.city,
-			// 	state: customer.state,
-			// 	postalCode: customer.postalCode,
-			// };
-
-		// 	dispatch(updateLoadingStatus({
-		// 		isLoading: true,
-		// 		screen: LoadingScreenTypes.LOADING_DATA
-		// 	}));
-		// 	const resApi = await UserAPI.user(request);
-		// 	if (resApi.data) {
-		// 		await completeCustomerDwollaInfo({
-		// 			dwollaId: resApi.data.userId,
-		// 			resourceUri: ""
-		// 		});
-
-		// 		navigation.navigate(Routes.LINK_BANK_ACCOUNT);
-		// 	}
-
-		// 	dispatch(updateLoadingStatus({
-		// 		isLoading: false,
-		// 		screen: LoadingScreenTypes.LOADING_DATA
-		// 	}));
-		// } else {
-		// 	showToast(ToastType.ERROR, "Whooops, something went wrong.", "Connection failed.");
-		// }
-		// const response = await completeCustomerBasicVerification();

@@ -84,9 +84,7 @@ const BusinessAddress = (): ReactElement => {
 		setIsLoading(true);
 		user.email = userEmail;
 		const response = await UserAPI.createBusiness(user);
-    console.log("🚀 ~ file: BusinessAddress.tsx ~ line 87 ~ onNextPress ~ response", response)
 		if (isSuccessResponse(response)) {
-			//@ts-ignore
 			const newUser: IDBUser = response?.data
 			updateUserData(newUser);
 			updateUserType(UserType.Business, newUser.email);
@@ -140,42 +138,3 @@ const BusinessAddress = (): ReactElement => {
 };
 
 export default BusinessAddress;
-
-// const response: BaseResponse<string | undefined> =
-// 	await completeBusniessBasicVerification();
-// if (response.success && cognitoId) {
-// 	const request: IUserRequest = {
-// 		firstName: buisnessBasicVerification.owner?.firstName,
-// 		lastName: buisnessBasicVerification.owner?.lastName,
-// 		businessName: buisnessBasicVerification.tag,
-// 		email: cognitoId + "@humanity.cash",
-// 		address1: buisnessBasicVerification.address1,
-// 		address2: buisnessBasicVerification.address2,
-// 		city: buisnessBasicVerification.city,
-// 		state: buisnessBasicVerification.state,
-// 		postalCode: buisnessBasicVerification.postalCode,
-// 		authUserId: "m_" + cognitoId
-// 	};
-
-// 	dispatch(updateLoadingStatus({
-// 		isLoading: true,
-// 		screen: LoadingScreenTypes.LOADING_DATA
-// 	}));
-// 	const resApi = await UserAPI.user(request);
-
-// 	if (resApi.data) {
-// 		await completeBusinessDwollaInfo({
-// 			dwollaId: resApi.data.userId,
-// 			resourceUri: ""
-// 		});
-
-// 		navigation.navigate(Routes.BUSINESS_WELCOME);
-// 	}
-
-// 	dispatch(updateLoadingStatus({
-// 		isLoading: false,
-// 		screen: LoadingScreenTypes.LOADING_DATA
-// 	}));
-// } else {
-// 	showToast(ToastType.ERROR, "Whooops, something went wrong.", "Connection failed.");
-// }
