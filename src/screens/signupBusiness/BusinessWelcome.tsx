@@ -1,4 +1,4 @@
-import React, { ReactElement, useContext, useState } from "react";
+import React, { ReactElement, useContext, useState, useEffect } from "react";
 import {
 	KeyboardAvoidingView,
 	Platform,
@@ -6,17 +6,18 @@ import {
 	StyleSheet,
 	View
 } from "react-native";
-import { UserContext } from "src/contexts";
+import { UserContext, AuthContext, WalletContext } from "src/contexts";
 import { Text } from "react-native-elements";
-import { useDispatch } from 'react-redux';
 import { UserType } from "src/auth/types";
 import DwollaDialog from 'src/screens/dashboard/DwollaDialog';
 import { Button, Header } from "src/shared/uielements";
-import { updateLoadingStatus } from 'src/store/loading/loading.actions';
 import { colors } from "src/theme/colors";
 import { viewBaseB, wrappingContainerBase } from "src/theme/elements";
 import Translation from "src/translation/en.json";
-import { LoadingScreenTypes } from 'src/utils/types';
+import { useNavigation } from "@react-navigation/core";
+import * as Routes from "src/navigation/constants";
+import { NavigationViewContext, ViewState } from "src/contexts/navigation";
+import { useWallet } from "src/hooks";
 
 const styles = StyleSheet.create({
 	headerText: {
@@ -35,16 +36,16 @@ const styles = StyleSheet.create({
 });
 
 const BusinessWelcome = (): ReactElement => {
-	const { updateUserType } = useContext(UserContext);
+	const { updateUserType, user, businessDwollaId } = useContext(UserContext);
+	const { walletData } = useContext(WalletContext);
+	const { userEmail } = useContext(AuthContext);
 	const [isVisible, setIsVisible] = useState<boolean>(false);
-	const dispatch = useDispatch();
+	const { updateSelectedView } = useContext(NavigationViewContext);
 
-	const onSkip = () => {
-		dispatch(updateLoadingStatus({
-			isLoading: true,
-			screen: LoadingScreenTypes.LOADING_DATA
-		}));
-		updateUserType(UserType.Business);
+	useWallet(businessDwollaId);
+	const onSkip = async () => {
+		updateUserType(UserType.Business, userEmail);
+		updateSelectedView(ViewState.Business)
 	}
 
 	return (
@@ -68,13 +69,16 @@ const BusinessWelcome = (): ReactElement => {
 					<Button
 						type="purple"
 						title={Translation.BUTTON.LINK_BUSINESS_BANK}
-						onPress={() => setIsVisible(true)}
+						disabled={!user?.verifiedBusiness || !walletData?.userId}
+						onPress={() => {
+							setIsVisible(true)
+						}}
 					/>
 				</View>
 			</KeyboardAvoidingView>
 
 			{isVisible && (
-				<DwollaDialog visible={isVisible} onClose={() => setIsVisible(false)} userType={UserType.Business} />
+				<DwollaDialog visible={isVisible} onClose={() => setIsVisible(false)} />
 			)}
 		</View>
 	);

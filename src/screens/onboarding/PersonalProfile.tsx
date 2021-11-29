@@ -26,9 +26,9 @@ const styles = StyleSheet.create({
 const PersonalProfile = (): ReactElement => {
 	const navigation = useNavigation();
 	const [goNext, setGoNext] = useState<boolean>(false);
-	const { getCustomerData } = useContext(UserContext);
+	const { user } = useContext(UserContext);
 	const { signOut  } = useContext(AuthContext);
-	const customer = getCustomerData();
+	const customer = user?.customer;
 	const tag = customer?.tag;
 
 	useEffect(() => {

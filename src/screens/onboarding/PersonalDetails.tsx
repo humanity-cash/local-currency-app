@@ -41,8 +41,8 @@ const styles = StyleSheet.create({
 });
 
 const PersonalDetails = (): JSX.Element => {
-	const { getCustomerData } = useContext(UserContext);
-	const customer = getCustomerData();
+	const { user } = useContext(UserContext);
+	const customer = user?.customer;
 	const { signOut } = useContext(AuthContext);
 	const [goNext, setGoNext] = useState<boolean>(false);
 	const navigation = useNavigation();

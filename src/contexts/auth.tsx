@@ -1,7 +1,9 @@
 import {
 	CognitoUserSession
 } from "amazon-cognito-identity-js";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
+import { getLatestSelectedAccountType } from "src/auth/localStorage";
+import { UserAPI } from "src/api";
 import * as userController from "src/auth/cognito";
 import {
 	signInInitialState,
@@ -9,17 +11,22 @@ import {
 } from "src/auth/consts";
 import {
 	AuthStatus,
-	BaseResponse, ChangePasswordInput, defaultState, ForgotPassword, IAuth, SignUpInput
+	BaseResponse, ChangePasswordInput, defaultState, ForgotPassword, IAuth, SignUpInput, UserType
 } from "src/auth/types";
+import { UserContext } from "./user";
+import { NavigationViewContext, ViewState } from "./navigation";
 
 export const AuthContext = React.createContext(defaultState);
 
 export const AuthProvider: React.FunctionComponent = ({ children }) => {
 	const [authStatus, setAuthStatus] = useState(AuthStatus.SignedOut);
+	const { updateUserData, updateUserType } = useContext(UserContext)
+	const { updateSelectedView } = useContext(NavigationViewContext)
 	const [userEmail, setUserEmail] = useState<string>("");
 	const [signInDetails, setSignInDetails] = useState(signInInitialState);
 	const [signUpDetails, setSignUpDetails] =
 		useState<SignUpInput>(signUpInitialState);
+
 	const [forgotPasswordDetails, setForgotPasswordDetails] = useState<ForgotPassword>({
 		email: "",
 		verificationCode: "",
@@ -29,6 +36,10 @@ export const AuthProvider: React.FunctionComponent = ({ children }) => {
 	const updateSignUpDetails = (i: Partial<SignUpInput>): void => {
 		setSignUpDetails((pv: SignUpInput) => ({ ...pv, ...i }))
 	}
+
+	useEffect(() => {
+		getSessionInfo();
+	}, []);
 
 	const getSessionInfo = async () => {
 		try {
@@ -47,18 +58,14 @@ export const AuthProvider: React.FunctionComponent = ({ children }) => {
 		}
 	}
 
-	useEffect(() => {
-		getSessionInfo();
-	}, []);
-
 	const confirmEmailVerification = (verificationCode: string) =>
 		userController.confirmEmailVerificationCode(
-			signUpDetails.email,
+			signUpDetails.email.toLowerCase(),
 			verificationCode
 		);
 
 	const resendEmailVerificationCode = async () =>
-		userController.resendEmailVerificationCode(signUpDetails.email);
+		userController.resendEmailVerificationCode(signUpDetails.email.toLowerCase());
 
 	const signUp = async () => {
 		const response = await userController.signUp(
@@ -74,10 +81,26 @@ export const AuthProvider: React.FunctionComponent = ({ children }) => {
 	) => {
 		setAuthStatus(AuthStatus.Loading);
 		const response: BaseResponse<CognitoUserSession> =
-			await userController.signIn({ email, password });
+			await userController.signIn({ email: email.toLowerCase(), password });
 		if (response?.success) {
 			await getSessionInfo();
+			const user = await UserAPI.getUserByEmail(email);
+      console.log("🚀 ~ file: auth.tsx ~ line 90 ~ user", user)
+			if (!user) {
+				updateUserType(UserType.NotVerified, email)
+				updateSelectedView(ViewState.NotVerified)
+				return response;
+			} else {
+				const latestType = await getLatestSelectedAccountType(email);
+				if(latestType === UserType.Business) updateSelectedView(ViewState.Business)
+				else if(latestType === UserType.Customer) updateSelectedView(ViewState.Customer)
+				else if(user.verifiedBusiness) updateSelectedView(ViewState.Business)
+				else if(user.verifiedCustomer) updateSelectedView(ViewState.Customer)
+				updateUserData(user);
+				updateUserType(latestType as UserType, email);
+			}
 		} else {
+			console.log('here');
 			setAuthStatus(AuthStatus.SignedOut);
 		}
 		return response;
@@ -87,7 +110,7 @@ export const AuthProvider: React.FunctionComponent = ({ children }) => {
 	const startForgotPasswordFlow = async (): Promise<BaseResponse<unknown>> => {
 		const { email } = forgotPasswordDetails;
 		const response: BaseResponse<unknown> =
-			await userController.startForgotPasswordFlow({ email });
+			await userController.startForgotPasswordFlow({ email: email.toLowerCase() });
 		return response;
 	};
 
@@ -119,6 +142,8 @@ export const AuthProvider: React.FunctionComponent = ({ children }) => {
 	const signOut = () => {
 		userController.signOut();
 		setAuthStatus(AuthStatus.SignedOut);
+		updateSelectedView(ViewState.Onboarding);
+		updateUserData({});
 		setUserEmail("");
 	};
 

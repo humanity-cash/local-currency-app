@@ -3,6 +3,7 @@ import { ThemeProvider } from "react-native-elements";
 import 'react-native-gesture-handler';
 import Toast from 'react-native-toast-message';
 import { Provider } from 'react-redux';
+import { NavigationProvider } from 'src/contexts';
 import { UserProvider, AuthProvider, WalletProvider } from './contexts';
 import useCachedResources from "./hooks/useCachedResources";
 import { MainNavigationStack } from './navigation/MainNavigationStack';
@@ -18,17 +19,19 @@ export default function App(): ReactElement | null {
 
 	return (
 		<Provider store={store}>
-			<AuthProvider>
-					<UserProvider>
+			<NavigationProvider>
+				<UserProvider>
+					<AuthProvider>
 						<WalletProvider>
-						<ThemeProvider theme={theme}>
-							<MainNavigationStack />
-							<LoadingPage />
-							<Toast ref={(ref) => Toast.setRef(ref)} />
-						</ThemeProvider>
+							<ThemeProvider theme={theme}>
+								<MainNavigationStack />
+								<LoadingPage />
+								<Toast ref={(ref) => Toast.setRef(ref)} />
+							</ThemeProvider>
 						</WalletProvider>
-					</UserProvider>
-			</AuthProvider>
+					</AuthProvider>
+				</UserProvider>
+			</NavigationProvider>
 		</Provider>
 	);
 }

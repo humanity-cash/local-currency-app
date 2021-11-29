@@ -12,13 +12,14 @@ import Translation from 'src/translation/en.json';
 import * as Routes from 'src/navigation/constants';
 import { BUTTON_TYPES } from 'src/constants';
 import { QRCodeEntry, SECURITY_ID, PaymentMode, ToastType, LoadingScreenTypes } from 'src/utils/types';
-import { UserAPI } from 'src/api';
+import { TransactionsAPI } from 'src/api';
 import { ITransactionRequest } from 'src/api/types';
 import { calcFee, showToast } from 'src/utils/common';
 import { isQRCodeValid } from 'src/utils/validation';
 import { UserContext, WalletContext } from 'src/contexts';
 import { loadPersonalTransactions } from 'src/store/transaction/transaction.actions';
 import { updateLoadingStatus } from 'src/store/loading/loading.actions';
+import DataLoading from 'src/screens/loadings/DataLoading';
 
 type HandleScaned = {
 	type: string,
@@ -207,6 +208,7 @@ const QRCodeScan = (): JSX.Element => {
 	const navigation = useNavigation();
 	const dispatch = useDispatch();
 	const { customerDwollaId } = useContext(UserContext);
+	const [isLoading, setIsLoading] = useState<boolean>(false);
 	const hasPermission = useCameraPermission();
 	const [isScanned, setIsScanned] = useState<boolean>(false);
 	const [isPaymentDialog, setIsPaymentDialog] = useState<boolean>(false);
@@ -250,6 +252,7 @@ const QRCodeScan = (): JSX.Element => {
 	}
 
 	const onPayConfirm = async (isRoundUp: boolean) => {
+		setIsLoading(true);
 		const amountCalcedFee = state.amount + calcFee(state.amount);
 		setIsPaymentDialog(false);
 		
@@ -264,11 +267,7 @@ const QRCodeScan = (): JSX.Element => {
 					comment: ''
 				};
 
-				dispatch(updateLoadingStatus({
-					isLoading: true,
-					screen: LoadingScreenTypes.PAYMENT_PENDING
-				}));
-				const response = await UserAPI.transferTo(customerDwollaId, request);
+				const response = await TransactionsAPI.transferTo(customerDwollaId, request);
 				
 				if (response.data) {
 					// Update user info
@@ -277,14 +276,12 @@ const QRCodeScan = (): JSX.Element => {
 				} else {
 					navigation.navigate(Routes.PAYMENT_FAILED);
 				}
-				dispatch(updateLoadingStatus({
-					isLoading: false,
-					screen: LoadingScreenTypes.PAYMENT_PENDING
-				}));
 			} else {
 				showToast(ToastType.ERROR, "Failed", "Whooops, something went wrong.");
 			}
 		}
+
+		setIsLoading(false);
 	}
 
 	const onLoadUp = () => {
@@ -305,21 +302,15 @@ const QRCodeScan = (): JSX.Element => {
 					comment: ''
 				};
 
-				dispatch(updateLoadingStatus({
-					isLoading: true,
-					screen: LoadingScreenTypes.PAYMENT_PENDING
-				}));
-				const response = await UserAPI.transferTo(customerDwollaId, request);
+				setIsLoading(true)
+				const response = await TransactionsAPI.transferTo(customerDwollaId, request);
 				if (response.data) {
 					await dispatch(loadPersonalTransactions(customerDwollaId));
 					navigation.navigate(Routes.PAYMENT_SUCCESS);
 				} else {
 					navigation.navigate(Routes.PAYMENT_FAILED);
 				}
-				dispatch(updateLoadingStatus({
-					isLoading: false,
-					screen: LoadingScreenTypes.PAYMENT_PENDING
-				}));
+				setIsLoading(false)
 			} else {
 				showToast(ToastType.ERROR, "Failed", "Whooops, something went wrong.");
 			}
@@ -335,6 +326,7 @@ const QRCodeScan = (): JSX.Element => {
 
 	return (
 		<View style={viewBase}>
+			<DataLoading visible={isLoading} />
 			<View style={styles.container}>
 				<BarCodeScanner
 					onBarCodeScanned={isScanned ? undefined : handleBarCodeScanned}

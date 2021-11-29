@@ -6,9 +6,9 @@ import { Header, CancelBtn } from "src/shared/uielements";
 import { viewBaseWhite, wrappingContainerBase } from "src/theme/elements";
 import * as Routes from 'src/navigation/constants';
 import { colors } from "src/theme/colors";
-import { UserAPI } from 'src/api';
-import { useDispatch } from 'react-redux';
+import { DwollaAPI } from 'src/api';
 import { UserContext } from 'src/contexts';
+import { NavigationViewContext, ViewState } from "src/contexts/navigation";
 
 export const WEBVIEW_SCREEN = Dimensions.get('screen').height - 150;
 
@@ -29,15 +29,15 @@ const styles = StyleSheet.create({
 
 const SelectBank = (): JSX.Element => {
 	const navigation = useNavigation();
-	const dispatch = useDispatch();
 	const { customerDwollaId } = useContext(UserContext);
 	const [iavToken, setIAVToken] = useState<string>("");
+	const { updateSelectedView } = useContext(NavigationViewContext);
 	let webview: WebView<{ ref: unknown; style: { flex: number; height: number; paddingBottom: number; }; source: { uri: string; }; }> | null = null;
 
 	useEffect(() => {
 		if (customerDwollaId) {
 			(async () => {
-				const response: any = await UserAPI.iavToken(customerDwollaId);
+				const response: any = await DwollaAPI.iavToken(customerDwollaId);
 				if (response?.data) {
 					setIAVToken(response?.data?.iavToken);
 					webview?.reload();
@@ -47,10 +47,8 @@ const SelectBank = (): JSX.Element => {
 	}, [customerDwollaId]);
 
 	const onClose = () => {
-		if (customerDwollaId) {
-			console.log('load funding source not implement here')
-		}
-		navigation.navigate(Routes.DASHBOARD);
+		updateSelectedView(ViewState.Customer)
+		setTimeout(() => navigation.navigate(Routes.TABS), 2000)
 	}
 
 	return (

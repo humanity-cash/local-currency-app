@@ -6,10 +6,10 @@ import { Header, CancelBtn } from "src/shared/uielements";
 import { colors } from "src/theme/colors";
 import { viewBaseWhite, wrappingContainerBase } from "src/theme/elements";
 import Translation from 'src/translation/en.json';
-import * as Routes from 'src/navigation/constants';
-import { UserAPI } from 'src/api';
-import { useDispatch } from 'react-redux';
+import { DwollaAPI } from 'src/api';
 import { UserContext } from 'src/contexts';
+import * as Routes from "src/navigation/constants";
+import { NavigationViewContext, ViewState } from "src/contexts/navigation";
 
 export const WEBVIEW_SCREEN = Dimensions.get('screen').height - 150;
 
@@ -31,15 +31,15 @@ const styles = StyleSheet.create({
 
 const SelectMerchantBank = (): JSX.Element => {
 	const navigation = useNavigation();
-	const dispatch = useDispatch();
 	const { businessDwollaId } = useContext(UserContext);
 	const [iavToken, setIAVToken] = useState<string>("");
+	const { updateSelectedView } = useContext(NavigationViewContext);
 	let webview: WebView<{ ref: unknown; style: { flex: number; height: number; paddingBottom: number; }; source: { uri: string; }; }> | null = null;
 
 	useEffect(() => {
 		if (businessDwollaId) {
 			(async () => {
-				const response: any = await UserAPI.iavToken(businessDwollaId);
+				const response: any = await DwollaAPI.iavToken(businessDwollaId);
 				if (response.data) {
 					setIAVToken(response?.data?.iavToken);
 					webview?.reload();
@@ -49,11 +49,12 @@ const SelectMerchantBank = (): JSX.Element => {
 	}, [businessDwollaId]);
 
 	const onClose = () => {
-		if (businessDwollaId) {
-			console.log("nono")
-		}
-		navigation.navigate(Routes.MERCHANT_DASHBOARD);
+		updateSelectedView(ViewState.Business)
+		setTimeout(() =>
+			navigation.navigate(Routes.MERCHANT_TABS)
+			, 2000)
 	}
+
 
 	return (
 		<View style={viewBaseWhite}>

@@ -83,9 +83,9 @@ const styles = StyleSheet.create({
 const BusinessInfo = (): ReactElement => {
 	const [goNext, setGoNext] = useState<boolean>(false);
 	const navigation = useNavigation();
-	const { getBusinessData, updateBusinessData } = useContext(UserContext);
+	const { user, updateBusinessData } = useContext(UserContext);
 	const { signOut } = useContext(AuthContext);
-	const business = getBusinessData();
+	const business = user?.business;
 
 	useEffect(() => {
 		setGoNext(business?.rbn !== "");
