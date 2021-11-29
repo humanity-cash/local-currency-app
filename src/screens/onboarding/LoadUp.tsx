@@ -19,7 +19,7 @@ import {
 import Translation from 'src/translation/en.json';
 import * as Routes from 'src/navigation/constants';
 import { BUTTON_TYPES } from 'src/constants';
-import { UserAPI } from 'src/api';
+import { TransactionsAPI, UserAPI } from 'src/api';
 import { showToast } from 'src/utils/common';
 import { ToastType, LoadingScreenTypes } from 'src/utils/types';
 import { updateLoadingStatus } from 'src/store/loading/loading.actions';
@@ -114,7 +114,7 @@ const LoadUp = (): JSX.Element => {
       isLoading: true,
       screen: LoadingScreenTypes.PAYMENT_PENDING
     }));
-    const response = await UserAPI.deposit(
+    const response = await TransactionsAPI.deposit(
       customerDwollaId,
       {amount: amount}
     );
