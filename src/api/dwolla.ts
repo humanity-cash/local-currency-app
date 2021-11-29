@@ -1,28 +1,35 @@
-import { UserId, AxiosPromiseResponse, IUserRequest, IDepositRequest, IWithdrawalRequest, ITransactionRequest, ITransaction } from './types';
+import { UserId, AxiosPromiseResponse } from './types';
 import { getRequest, postRequest } from './base';
-import { userData, transactionDatas, fundingSource } from './formatters';
-import { delay } from 'src/utils/http';
-import { Business, Customer, IDBUser, IWallet } from '@humanity.cash/types';
-import { getUser} from './user';
+import { fundingSource } from './formatters';
+import { IWallet } from '@humanity.cash/types';
+import { getUser } from './user';
 
 export const iavToken = async (userId: UserId): Promise<AxiosPromiseResponse> => {
-  const response = await postRequest(`/users/${userId}/iav-token`, {});
-  return response;
+  try {
+    const response = await postRequest(`/users/${userId}/iav-token`, {});
+    return response;
+  } catch (err) {
+    return {} as any;
+  }
 };
 
 export const loadFundingSource = async (userId: UserId): Promise<boolean> => {
-try { 
-  const response = await getRequest(`/users/${userId}/funding-sources`);
-  return fundingSource(response);
- } catch(err){
-   console.log("error in getFundingSources", err);
-   return false;
- }
+  try {
+    const response = await getRequest(`/users/${userId}/funding-sources`);
+    return fundingSource(response);
+  } catch (err) {
+    console.log("error in getFundingSources", err);
+    return false;
+  }
 };
 
 export const webhook = async (): Promise<AxiosPromiseResponse> => {
-  const response = await postRequest(`/webhook`, {});
-  return response;
+  try {
+    const response = await postRequest(`/webhook`, {});
+    return response;
+  } catch (err) {
+    return {} as any;
+  }
 };
 
 export const loadWallet = async (uId: string): Promise<IWallet> => {

@@ -1,22 +1,34 @@
-import { UserId, AxiosPromiseResponse, IUserRequest, IDepositRequest, IWithdrawalRequest, ITransactionRequest, ITransaction } from './types';
+import { UserId, AxiosPromiseResponse, IUserRequest } from './types';
 import { getRequest, postRequest } from './base';
-import { userData, transactionDatas, fundingSource } from './formatters';
+import { userData } from './formatters';
 import { delay } from 'src/utils/http';
 import { Business, Customer, IDBUser, IWallet } from '@humanity.cash/types';
 
 const createUser = async (request: IUserRequest): Promise<AxiosPromiseResponse<IDBUser>> => {
-  const response = await postRequest(`/users`, request);
-  return response;
+  try {
+    const response = await postRequest(`/users`, request);
+    return response;
+  } catch (err) {
+    return {} as any;
+  }
 };
 
 const addCustomerVerification = async (businessDwollaId: string, request: Customer): Promise<AxiosPromiseResponse<IDBUser>> => {
-  const response = await postRequest(`/users/${businessDwollaId}/customer`, { customer: request });
-  return response;
+  try {
+    const response = await postRequest(`/users/${businessDwollaId}/customer`, { customer: request });
+    return response;
+  } catch (err) {
+    return {} as Promise<AxiosPromiseResponse<IDBUser>>;
+  }
 };
 
 const addBusinessVerification = async (customerDwollaId: string, request: Business): Promise<AxiosPromiseResponse<IDBUser>> => {
-  const response = await postRequest(`/users/${customerDwollaId}/business`, { business: request });
-  return response;
+  try {
+    const response = await postRequest(`/users/${customerDwollaId}/business`, { business: request });
+    return response;
+  } catch (err) {
+    return {} as Promise<AxiosPromiseResponse<IDBUser>>;
+  }
 };
 
 export const getUserByEmail = async (email: string): Promise<IDBUser> => {
@@ -46,8 +58,8 @@ export const getUser = async (userId: UserId): Promise<IWallet> => {
   }
 };
 
-export const createBusiness = async (user: IDBUser): Promise<{status: number, data:IDBUser}> => {
-	try {
+export const createBusiness = async (user: IDBUser): Promise<{ status: number, data: IDBUser }> => {
+  try {
     if (user?.verifiedCustomer
       && user?.customer?.dwollaId
       && user?.business) {
@@ -69,7 +81,7 @@ export const createBusiness = async (user: IDBUser): Promise<{status: number, da
     }
   } catch (error) {
     console.log("error creating business", error)
-    return {status: 500, data: {} as IDBUser};
+    return { status: 500, data: {} as IDBUser };
   }
 }
 
@@ -78,7 +90,7 @@ export const createCustomer = async (user: IDBUser): Promise<{ status: number, d
     if (user?.verifiedBusiness && user?.business?.dwollaId && user?.dbId && user?.customer) {
       const response: AxiosPromiseResponse<IDBUser> =
         await addCustomerVerification(user.business.dwollaId, user?.customer);
-        //@ts-ignore
+      //@ts-ignore
       return { status: response.status, data: response.data.data };
     } else {
       const response = await createUser({
