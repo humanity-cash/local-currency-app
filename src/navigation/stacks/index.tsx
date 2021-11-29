@@ -65,6 +65,7 @@ import SettingsTermsAndConditions from "src/screens/settings/SettingsTermsAndCon
 import * as Routes from "../constants";
 import SelectMerchantBank from "src/screens/merchantBankAccount/SelectMerchantBank";
 import BusinessWelcome from "src/screens/signupBusiness/BusinessWelcome";
+import MyTransactions from "src/screens/transactions/MyTransactions";
 
 const PrimaryStack = createStackNavigator();
 
@@ -94,12 +95,12 @@ export const CustomerUserStack = ({ isVerifiedBusiness }: { isVerifiedBusiness: 
 				component={CashoutNavigator}
 			/>
 			<PrimaryStack.Screen
-				name={Routes.LOAD_UP}
-				component={LoadUp}
-			/>
-			<PrimaryStack.Screen
 				name={Routes.LOADUP_SUCCESS}
 				component={LoadUpSuccess}
+			/>
+			<PrimaryStack.Screen
+				name={Routes.LOAD_UP}
+				component={LoadUp}
 			/>
 			<PrimaryStack.Screen
 				name={Routes.SETTING_TERMS_CONDITIONS}
@@ -108,6 +109,10 @@ export const CustomerUserStack = ({ isVerifiedBusiness }: { isVerifiedBusiness: 
 			<PrimaryStack.Screen
 				name={Routes.SETTING_PERSONAL_PROFILE}
 				component={SettingsPersonalProfile}
+			/>
+			<PrimaryStack.Screen
+			name={Routes.MY_TRANSACTIONS}
+			component={MyTransactions}
 			/>
 			<PrimaryStack.Screen
 				name={Routes.SETTING_SECURITY}
@@ -121,10 +126,6 @@ export const CustomerUserStack = ({ isVerifiedBusiness }: { isVerifiedBusiness: 
 				name={Routes.SETTING_DELETE_ACCOUNT}
 				component={SettingsDeleteAccount}
 			/>
-			{/* <PrimaryStack.Screen
-				name={Routes.LINK_BANK_ACCOUNT}
-				component={LinkBankAccount}
-			/> */}
 			<PrimaryStack.Screen
 				name={Routes.SELECT_BANK}
 				component={SelectBank}

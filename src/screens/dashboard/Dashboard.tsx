@@ -151,7 +151,7 @@ const Dashboard = (): JSX.Element => {
 	const [isVisible, setIsVisible] = useState<boolean>(false);
 	const [isLoadup, setIsLoadup] = useState<boolean>(false);
 	const [isPayment, setIsPayment] = useState<boolean>(false);
-	const { customerDwollaId } = useContext(UserContext)
+	const { customerDwollaId, user } = useContext(UserContext)
 	const { walletData } = useContext(WalletContext)
 
 	const selectBank = () => {
@@ -205,7 +205,7 @@ const Dashboard = (): JSX.Element => {
 				</View>
 				<ScrollView>
 					<View style={styles.content}>
-						{!personalFundingSource && (
+						{!personalFundingSource && walletData?.address === user?.customer?.walletAddress && (
 							<View style={styles.alertView}>
 								<AntDesign
 									name='exclamationcircleo'

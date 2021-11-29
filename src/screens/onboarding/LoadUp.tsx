@@ -24,6 +24,7 @@ import { showToast } from 'src/utils/common';
 import { ToastType, LoadingScreenTypes } from 'src/utils/types';
 import { updateLoadingStatus } from 'src/store/loading/loading.actions';
 import { UserContext } from "src/contexts";
+import DataLoading from 'src/screens/loadings/DataLoading';
 
 const styles = StyleSheet.create({
   container: { 
@@ -91,6 +92,7 @@ const MIN_AMOUNT = 1;
 
 const LoadUp = (): JSX.Element => {
   const navigation = useNavigation();
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const dispatch = useDispatch();
   const { customerDwollaId } = useContext(UserContext);
   const [amount, setAmount] = useState<string>("");
@@ -105,15 +107,16 @@ const LoadUp = (): JSX.Element => {
   };
 
   const onLoadUp = async () => {
+    setIsLoading(true);
     if (!customerDwollaId) {
       showToast(ToastType.ERROR, "Whoops, something went wrong.", "Connection failed.");
       return;
     }
 
-    dispatch(updateLoadingStatus({
-      isLoading: true,
-      screen: LoadingScreenTypes.PAYMENT_PENDING
-    }));
+    // dispatch(updateLoadingStatus({
+    //   isLoading: true,
+    //   screen: LoadingScreenTypes.PAYMENT_PENDING
+    // }));
     const response = await TransactionsAPI.deposit(
       customerDwollaId,
       {amount: amount}
@@ -125,14 +128,16 @@ const LoadUp = (): JSX.Element => {
       showToast(ToastType.ERROR, "Whoops, something went wrong.", "Connection failed.");
       navigation.navigate(Routes.DASHBOARD);
     }
-    dispatch(updateLoadingStatus({
-      isLoading: false,
-      screen: LoadingScreenTypes.PAYMENT_PENDING
-    }));
+    setIsLoading(false);
+    // dispatch(updateLoadingStatus({
+    //   isLoading: false,
+    //   screen: LoadingScreenTypes.PAYMENT_PENDING
+    // }));
   }
 
   return (
     <View style={viewBase}>
+			<DataLoading visible={isLoading} />
       <Header
         leftComponent={<BackBtn text="Home" onClick={() => navigation.goBack()} />}
         rightComponent={
