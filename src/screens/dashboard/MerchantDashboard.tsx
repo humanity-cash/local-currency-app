@@ -306,7 +306,7 @@ const MerchantDashboard = (): JSX.Element => {
 							</Text>
 						</View>}
 
-						{!businessFundingSource && walletData?.address === user?.business?.walletAddress ? (
+						{!businessFundingSource ? (
 							<View style={styles.alertView}>
 								<AntDesign
 									name='exclamationcircleo'
