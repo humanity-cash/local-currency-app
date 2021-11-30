@@ -5,7 +5,8 @@ import {
 	Platform,
 	ScrollView,
 	StyleSheet,
-	View
+	View,
+	SafeAreaView
 } from "react-native";
 import { Text } from "react-native-elements";
 import { UserContext, AuthContext } from "src/contexts";
@@ -35,8 +36,8 @@ const styles = StyleSheet.create({
 		lineHeight: 35,
 	},
 	bottomView: {
-		paddingHorizontal: 20,
-		paddingBottom: 50,
+		marginHorizontal: 20,
+		marginBottom: 20,
 	},
 });
 
@@ -83,14 +84,14 @@ const PersonalDetails = (): JSX.Element => {
 			</View>
 			<KeyboardAvoidingView
 				behavior={Platform.OS == "ios" ? "padding" : "height"}>
-				<View style={styles.bottomView}>
+				<SafeAreaView style={styles.bottomView}>
 					<Button
 						type="darkGreen"
 						title={Translation.BUTTON.NEXT}
 						disabled={!goNext}
 						onPress={onNextPress}
 					/>
-				</View>
+				</SafeAreaView>
 			</KeyboardAvoidingView>
 		</View>
 	);

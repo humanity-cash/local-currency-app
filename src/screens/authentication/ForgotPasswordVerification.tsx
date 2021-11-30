@@ -6,7 +6,8 @@ import {
 	Platform,
 	StyleSheet,
 	TouchableOpacity,
-	View
+	View,
+	SafeAreaView
 } from "react-native";
 import { Text } from "react-native-elements";
 import { AuthContext } from "src/contexts";
@@ -33,8 +34,8 @@ const styles = StyleSheet.create({
 		paddingBottom: 30,
 	},
 	bottomView: {
-		padding: 20,
-		paddingBottom: 45,
+		marginHorizontal: 20,
+		marginBottom: 20,
 	},
 	bottomNavigation: {
 		alignSelf: "center",
@@ -87,7 +88,7 @@ const ForgotPasswordVerification = () => {
 			</View>
 			<KeyboardAvoidingView
 				behavior={Platform.OS == "ios" ? "padding" : "height"}>
-				<View style={styles.bottomView}>
+				<SafeAreaView style={styles.bottomView}>
 					<TouchableOpacity
 						style={styles.sendCodeBtn}
 						onPress={() => {
@@ -97,7 +98,7 @@ const ForgotPasswordVerification = () => {
 							Send code again
 						</Text>
 					</TouchableOpacity>
-				</View>
+				</SafeAreaView>
 			</KeyboardAvoidingView>
 		</View>
 	);

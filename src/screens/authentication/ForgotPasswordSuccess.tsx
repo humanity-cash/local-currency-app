@@ -1,6 +1,6 @@
 import { useNavigation } from '@react-navigation/native';
 import React, { useContext } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, View, SafeAreaView } from 'react-native';
 import { Text } from 'react-native-elements';
 import { AuthContext } from "src/contexts";
 import { BackBtn, Button, CancelBtn, Header } from "src/shared/uielements";
@@ -13,8 +13,8 @@ const styles = StyleSheet.create({
 		lineHeight: 40
 	},
 	bottomView: {
-		padding: 20,
-		paddingBottom: 45
+		marginHorizontal: 20,
+		marginBottom: 45
 	}
 });
 
@@ -33,7 +33,7 @@ const ForgotPasswordSuccess = () => {
 					<Text style={styles.modalHeader}>Create a new password</Text>
 				</View>
 			</View>
-			<View style={styles.bottomView}>
+			<SafeAreaView style={styles.bottomView}>
 				<Button
 					type="darkGreen"
 					title="DONE"
@@ -44,7 +44,7 @@ const ForgotPasswordSuccess = () => {
 						);
 					}}
 				/>
-			</View>
+			</SafeAreaView>
 			
 		</View>
 	);

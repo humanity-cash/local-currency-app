@@ -1,4 +1,4 @@
-import { StyleSheet, View, ScrollView } from 'react-native';
+import { StyleSheet, View, ScrollView, KeyboardAvoidingView, SafeAreaView, Platform } from 'react-native';
 import React, { ReactElement, useContext } from 'react';
 import { Text } from 'react-native-elements';
 import { AuthContext } from "src/contexts";
@@ -40,7 +40,11 @@ const styles = StyleSheet.create({
 		position: 'absolute',
 		bottom: 45,
 		left: '5%'
-	}
+	},
+    bottomView: {
+		marginHorizontal: 20,
+        marginBottom: 20
+	},
 });
 
 const BusinessOwnerAddress = (): ReactElement => {
@@ -65,13 +69,18 @@ const BusinessOwnerAddress = (): ReactElement => {
 					<BusinessOwnerAddressForm style={styles.input} />
 				</View>
 			</ScrollView>
-			<Button
-				type="purple"
-				title={Translation.BUTTON.NEXT}
-				disabled={false}
-				style={styles.bottomButton}
-				onPress={onNextPress}
-			/>
+			
+			<KeyboardAvoidingView
+				behavior={Platform.OS == "ios" ? "padding" : "height"}>
+				<SafeAreaView style={styles.bottomView}>
+					<Button
+						type="purple"
+						title={Translation.BUTTON.NEXT}
+						disabled={false}
+						onPress={onNextPress}
+					/>
+				</SafeAreaView>
+			</KeyboardAvoidingView>
 		</View>
 	);
 }
