@@ -3,17 +3,17 @@ import * as ImagePicker from 'expo-image-picker';
 import React, { useContext, useState } from 'react';
 import { Image, KeyboardAvoidingView, Platform, ScrollView, StyleSheet, TouchableOpacity, View } from "react-native";
 import { Text } from "react-native-elements";
-import { UserContext } from 'src/contexts';
+import { UserAPI } from "src/api";
 import { BUTTON_TYPES } from 'src/constants';
+import { UserContext } from 'src/contexts';
+import DataLoading from 'src/screens/loadings/DataLoading';
 import { BackBtn, BlockInput, Button, Header } from "src/shared/uielements";
 import { colors } from "src/theme/colors";
 import { underlineHeader, viewBase } from "src/theme/elements";
 import Translation from 'src/translation/en.json';
-import { ToastType, LoadingScreenTypes } from 'src/utils/types';
 import { showToast } from 'src/utils/common';
-import { useMediaLibraryPermission } from 'src/hooks';
-import { updateLoadingStatus } from 'src/store/loading/loading.actions';
-import { useDispatch } from 'react-redux';
+import { isSuccessResponse } from 'src/utils/http';
+import { ToastType } from 'src/utils/types';
 
 const styles = StyleSheet.create({
 	container: {
@@ -57,16 +57,13 @@ const styles = StyleSheet.create({
 });
 
 export const SettingsPersonalDetails = (): JSX.Element => {
-	const { user } = useContext(UserContext);
+	const { user, customerDwollaId, updateUserData } = useContext(UserContext);
+	const [ isLoading, setIsLoading ] = useState<boolean>(false);
 	const navigation = useNavigation();
-	const dispatch = useDispatch();
-	const username =  user?.customer?.tag;
 	const [state, setState] = useState({
-		avatar: '',
-		username
+		avatar: user?.customer?.avatar || '',
+		username: user?.customer?.tag || ''
 	});
-
-	useMediaLibraryPermission();
 
 	const onValueChange = (name: string, change: string) => {
 		setState({
@@ -89,37 +86,26 @@ export const SettingsPersonalDetails = (): JSX.Element => {
 	};
 
 	const handleSave = async () => {
-		// const attr: CognitoCustomerAttributesUpdate = {
-		// 	"custom:personal.tag": state.username,
-		// };
-		const response = {
-			success: true
-		}
-
-		dispatch(updateLoadingStatus({
-			isLoading: true,
-			screen: LoadingScreenTypes.LOADING_DATA
-		}));
-		// const response = await updateAttributes(attr);
-		dispatch(updateLoadingStatus({
-			isLoading: false,
-			screen: LoadingScreenTypes.LOADING_DATA
-		}));
-
-		if (response.success) {
-			navigation.goBack();
+		setIsLoading(true);
+		const response = await UserAPI.updateCustomerProfile({ customerDwollaId, customer: { tag: state.username, avatar: state.avatar } })
+		if (isSuccessResponse(response)) {
+			//@ts-ignore
+			updateUserData({ ...response.data.data });
+			showToast(ToastType.SUCCESS, "Updated Successfully", "");
 		} else {
 			showToast(ToastType.ERROR, "Whooops, something went wrong.", "Connection failed.");
 		}
+		setIsLoading(false);
 	}
 
 	return (
 		<View style={viewBase}>
+			<DataLoading visible={isLoading} />
 			<Header
 				leftComponent={<BackBtn onClick={() => navigation.goBack()} />}
 			/>
 			<ScrollView style={styles.container}>
-				<View style={ underlineHeader }>
+				<View style={underlineHeader}>
 					<Text style={styles.headerText}>{Translation.PROFILE.MY_PROFILE}</Text>
 				</View>
 				<Text>{Translation.COMMUNITY_CHEST.INFORMATION_SHARE}</Text>
@@ -154,7 +140,7 @@ export const SettingsPersonalDetails = (): JSX.Element => {
 					<Button
 						type={BUTTON_TYPES.DARK_GREEN}
 						title={Translation.BUTTON.SAVE_CHANGE}
-						disabled={state.username === username}
+						disabled={state.username === user?.customer?.tag}
 						onPress={handleSave}
 					/>
 				</View>

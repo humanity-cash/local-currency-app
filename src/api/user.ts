@@ -1,6 +1,6 @@
 import { Business, Customer, IDBUser, IWallet } from '@humanity.cash/types';
 import { delay } from 'src/utils/http';
-import { getRequest, postRequest } from './base';
+import { getRequest, postRequest, putRequest } from './base';
 import { userData } from './formatters';
 import { AxiosPromiseResponse, IUserRequest, UserId } from './types';
 
@@ -104,3 +104,52 @@ export const createCustomer = async (user: IDBUser): Promise<{ status: number, d
     return { status: 500, data: {} as IDBUser };
   }
 }
+
+interface UpdateCustomerProfile {
+  customerDwollaId: string;
+  customer: {
+    avatar: string;
+    tag: string;
+  }
+}
+
+export const updateCustomerProfile = async ({ customerDwollaId, customer }: UpdateCustomerProfile): Promise<AxiosPromiseResponse> => {
+  try {
+    const response: AxiosPromiseResponse =
+      await putRequest(`/users/${customerDwollaId}/customer/profile`, { customer });
+    return response;
+  } catch (err) {
+    console.log("Error: getUserByEmail:", err)
+    return {} as AxiosPromiseResponse;
+  }
+};
+
+export interface UpdateBusinessProfile {
+  businessDwollaId: string;
+  business: {
+    tag: string;
+    avatar: string;
+    story: string;
+    address1: string;
+    address2: string;
+    city: string;
+    postalCode: string;
+    state: string;
+    website: string;
+    phoneNumber: string;
+  }
+}
+
+export const updateBusinessProfile = async ({
+  businessDwollaId,
+  business
+}: UpdateBusinessProfile): Promise<AxiosPromiseResponse> => {
+  try {
+    const response: AxiosPromiseResponse<IDBUser[]> =
+      await putRequest(`/users/${businessDwollaId}/business/profile`, { business });
+    return response;
+  } catch (err) {
+    console.log("Error: getUserByEmail:", err)
+    return {} as AxiosPromiseResponse;
+  }
+};
