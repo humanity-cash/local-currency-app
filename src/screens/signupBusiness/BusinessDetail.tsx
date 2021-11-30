@@ -22,6 +22,7 @@ import {
 } from "src/theme/elements";
 import Translation from "src/translation/en.json";
 import { BusinessType } from "src/utils/types";
+import { SafeAreaView } from 'react-native';
 
 const businessTypes = [
 	BusinessType.SOLE_PROPRIETORSHIP,
@@ -66,8 +67,8 @@ const styles = StyleSheet.create({
     },
     dropdownContainer: {marginTop: -22},
 	bottomView: {
-		paddingHorizontal: 20,
-		paddingBottom: 50,
+		marginHorizontal: 20,
+		marginBottom: 20,
 	},
 });
 
@@ -140,7 +141,7 @@ const BusinessDetail = (): ReactElement => {
 			</ScrollView>
 			<KeyboardAvoidingView
 				behavior={Platform.OS == "ios" ? "padding" : "height"}>
-				<View style={styles.bottomView}>
+				<SafeAreaView style={styles.bottomView}>
 					<Button
 						type="purple"
 						title={Translation.BUTTON.NEXT}
@@ -148,7 +149,7 @@ const BusinessDetail = (): ReactElement => {
 							navigation.navigate(Routes.BUSINESS_OWNER_DETAIL)
 						}
 					/>
-				</View>
+				</SafeAreaView>
 			</KeyboardAvoidingView>
 		</View>
 	);

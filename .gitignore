@@ -66,3 +66,4 @@ buck-out/
 web-build/
 
 *.swp
+*.jks

@@ -1,8 +1,6 @@
 import { useNavigation } from "@react-navigation/native";
 import React, { useContext } from "react";
-import {
-  KeyboardAvoidingView, Platform, ScrollView, StyleSheet, View
-} from "react-native";
+import { KeyboardAvoidingView, Platform, ScrollView, StyleSheet, View, SafeAreaView } from 'react-native';
 import { Text } from "react-native-elements";
 import { AuthContext } from 'src/contexts';
 import { ForgotPassword } from "src/auth/types";
@@ -23,8 +21,8 @@ const styles = StyleSheet.create({
     paddingBottom: 30,
   },
   bottomView: {
-		padding: 20,
-		paddingBottom: 45
+		marginHorizontal: 20,
+		marginBottom: 20
 	},
 });
 
@@ -76,14 +74,14 @@ const ForgotPasswordEmail = (): React.ReactElement => {
 			</ScrollView>
 			<KeyboardAvoidingView
 				behavior={Platform.OS == "ios" ? "padding" : "height"}>
-				<View style={styles.bottomView}>
+				<SafeAreaView style={styles.bottomView}>
 					<Button
 						type="darkGreen"
 						title="NEXT"
 						disabled={!isEmailValid(forgotPasswordDetails.email)}
 						onPress={handleNext}
 					/>
-				</View>
+				</SafeAreaView>
 			</KeyboardAvoidingView>
 		</View>
   );

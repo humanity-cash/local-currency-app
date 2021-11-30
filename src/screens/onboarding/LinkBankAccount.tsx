@@ -1,5 +1,5 @@
 import React, { useContext, useState } from 'react';
-import { StyleSheet, View } from 'react-native';
+import { StyleSheet, View, SafeAreaView } from 'react-native';
 import { Text } from 'react-native-elements';
 import { BUTTON_TYPES } from 'src/constants';
 import * as Routes from 'src/navigation/constants';
@@ -20,8 +20,8 @@ const styles = StyleSheet.create({
 		lineHeight: 35
 	},
 	bottomView: {
-		paddingHorizontal: 20,
-		paddingBottom: 50
+		marginHorizontal: 20,
+		marginBottom: 20
 	},
 	skipBtn: {
 		marginBottom: 10
@@ -57,7 +57,7 @@ const LinkBankAccount = (): JSX.Element => {
 					</Text>
 				</View>
 			</View>
-			<View style={styles.bottomView}>
+			<SafeAreaView style={styles.bottomView}>
 				<Button
 					type={BUTTON_TYPES.TRANSPARENT}
 					title={Translation.BUTTON.SKIP_NOW}
@@ -70,7 +70,7 @@ const LinkBankAccount = (): JSX.Element => {
 					disabled={!walletData?.userId?.length}
 					onPress={selectBank}
 				/>
-			</View>
+			</SafeAreaView>
 
 			{isVisible && (
 				<DwollaDialog visible={isVisible} onClose={() => setIsVisible(false)} />
