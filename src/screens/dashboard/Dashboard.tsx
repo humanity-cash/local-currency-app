@@ -1,26 +1,21 @@
 import { AntDesign, Entypo } from '@expo/vector-icons';
 import { DrawerActions, useNavigation } from '@react-navigation/native';
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useContext, useState } from 'react';
 import {
 	ScrollView,
-	StyleSheet,
-	TouchableWithoutFeedback,
-	View,
-	TouchableOpacity,
+	StyleSheet, TouchableOpacity, TouchableWithoutFeedback,
+	View
 } from 'react-native';
 import { Image, Text } from 'react-native-elements';
+import { BUTTON_TYPES } from "src/constants";
+import { UserContext, WalletContext } from 'src/contexts';
+import { useUpdateCustomerWalletData, useWallet } from 'src/hooks';
 import * as Routes from 'src/navigation/constants';
-import { Header } from 'src/shared/uielements';
+import { Button, Dialog, Header } from 'src/shared/uielements';
 import { colors } from 'src/theme/colors';
-import { baseHeader, viewBase, wrappingContainerBase } from 'src/theme/elements';
+import { baseHeader, dialogViewBase, viewBase, wrappingContainerBase } from 'src/theme/elements';
 import Translation from 'src/translation/en.json';
 import DwollaDialog from './DwollaDialog';
-import { Button, Dialog } from "src/shared/uielements";
-import { dialogViewBase } from "src/theme/elements";
-import { BUTTON_TYPES } from "src/constants";
-import { WalletContext, UserContext } from 'src/contexts';
-import { useWallet } from 'src/hooks';
-import { DwollaAPI } from 'src/api';
 
 const styles = StyleSheet.create({
 	content: { paddingBottom: 80 },
@@ -147,31 +142,22 @@ const feedData = [
 	}
 ];
 
+
 const Dashboard = (): JSX.Element => {
 	const navigation = useNavigation();
 	const [isVisible, setIsVisible] = useState<boolean>(false);
 	const [isLoadup, setIsLoadup] = useState<boolean>(false);
 	const [isPayment, setIsPayment] = useState<boolean>(false);
-	const { customerDwollaId, user } = useContext(UserContext)
-	const { walletData, updateWalletData } = useContext(WalletContext)
+	const { customerDwollaId } = useContext(UserContext)
+	const { walletData } = useContext(WalletContext)
 
 	const selectBank = () => {
 		navigation.navigate(Routes.SELECT_BANK);
 		onClose();
 	}
 
-	useEffect(() => {
-		const timerId = setInterval(async () => {
-			if (walletData?.address !== user?.customer?.walletAddress) {
-				const userWallet = await DwollaAPI.loadWallet(customerDwollaId)
-				const fundingSource = await DwollaAPI.loadFundingSource(customerDwollaId)
-				updateWalletData(({ ...userWallet, availableFundingSource: fundingSource }))
-			}
-		}, 1500);
-		return () => clearInterval(timerId);
-	}, [walletData?.address, user?.customer?.walletAddress])
-
 	useWallet(customerDwollaId);
+	useUpdateCustomerWalletData();
 
 	const onClose = () => {
 		setIsVisible(false);
