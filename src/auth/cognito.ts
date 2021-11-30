@@ -16,8 +16,7 @@ const poolData = {
 	ClientId: CLIENT_ID
 };
 
-const userPool = new CognitoUserPool(poolData);
-
+export const userPool = new CognitoUserPool(poolData);
 let currentUser: CognitoUser | null = userPool.getCurrentUser();
 
 const getCognitoUser = (email: string): CognitoUser => new CognitoUser({
@@ -27,10 +26,19 @@ const getCognitoUser = (email: string): CognitoUser => new CognitoUser({
 
 export const getSession = async (): CognitoResponse<CognitoUserSession | undefined> => {
 	return new Promise(function (resolve) {
-		if (!currentUser) resolve({ ...NOT_AUTHENTICATED });
-		else currentUser.getSession(function (err: CognitoError, session: CognitoUserSession | undefined) {
-			if (err || !session?.isValid()) resolve({ success: false, error: err.code })
-			else resolve({ success: true, data: session })
+		//@ts-ignore
+		userPool?.storage.sync(async function (err, result) {
+			if (err) {
+				console.log("Cognito: Error syncing to storage", err)
+				return resolve({ ...NOT_AUTHENTICATED });
+			} else if (result === 'SUCCESS') {
+				currentUser = userPool.getCurrentUser();
+				if (!currentUser) return resolve({ ...NOT_AUTHENTICATED });
+				currentUser.getSession(function (err: CognitoError, session: CognitoUserSession | undefined) {
+					if (err || !session?.isValid()) resolve({ success: false, error: err.code })
+					else resolve({ success: true, data: session })
+				})
+			};
 		})
 	})
 }

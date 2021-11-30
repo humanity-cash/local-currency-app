@@ -164,7 +164,6 @@ export interface IAuth {
 	forgotPasswordDetails: ForgotPassword, 
 	setForgotPasswordDetails: any,
 	userEmail: string,
-	setAuthStatus: any,
 	startForgotPasswordFlow: () => Promise<BaseResponse<unknown>>,
 	completeForgotPasswordFlow: () => Promise<BaseResponse<unknown>>,
 	resendEmailVerificationCode: any;
