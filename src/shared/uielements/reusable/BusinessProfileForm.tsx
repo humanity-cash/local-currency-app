@@ -129,6 +129,8 @@ const BusinessProfileForm = (): ReactElement => {
 				}
 				style={styles.storyText}
 				numberOfLines={6}
+				autoCapitalize='none'
+				autoCorrect={false}
 			/>
 		</View>
   	);

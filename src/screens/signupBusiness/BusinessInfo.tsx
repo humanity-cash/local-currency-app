@@ -27,6 +27,7 @@ import {
 } from "src/theme/elements";
 import Translation from "src/translation/en.json";
 import { Industry } from "src/utils/types";
+import { SafeAreaView } from 'react-native';
 
 const Industries = [
 	Industry.ARTS_ENTERTAINMENT,
@@ -75,8 +76,8 @@ const styles = StyleSheet.create({
 		paddingBottom: 40,
 	},
 	bottomView: {
-		paddingHorizontal: 20,
-		paddingBottom: 50,
+		marginHorizontal: 20,
+		marginBottom: 20,
 	},
 });
 
@@ -177,7 +178,7 @@ const BusinessInfo = (): ReactElement => {
 			</View>
 			<KeyboardAvoidingView
 				behavior={Platform.OS == "ios" ? "padding" : "height"}>
-				<View style={styles.bottomView}>
+				<SafeAreaView style={styles.bottomView}>
 					<Button
 						type="purple"
 						title={Translation.BUTTON.NEXT}
@@ -186,7 +187,7 @@ const BusinessInfo = (): ReactElement => {
 							navigation.navigate(Routes.BUSINESS_ADDRESS)
 						}
 					/>
-				</View>
+				</SafeAreaView>
 			</KeyboardAvoidingView>
 		</View>
 	);

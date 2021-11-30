@@ -4,7 +4,8 @@ import {
 	Platform,
 	ScrollView,
 	StyleSheet,
-	View
+	View,
+	SafeAreaView
 } from "react-native";
 import { UserContext, AuthContext, WalletContext } from "src/contexts";
 import { Text } from "react-native-elements";
@@ -26,8 +27,8 @@ const styles = StyleSheet.create({
 		color: colors.purple,
 	},
 	bottomView: {
-		paddingHorizontal: 20,
-		paddingBottom: 50,
+		marginHorizontal: 20,
+		marginBottom: 20,
 	},
 	skipBtn: {
 		marginBottom: 10,
@@ -58,7 +59,7 @@ const BusinessWelcome = (): ReactElement => {
 			</ScrollView>
 			<KeyboardAvoidingView
 				behavior={Platform.OS == "ios" ? "padding" : "height"}>
-				<View style={styles.bottomView}>
+				<SafeAreaView style={styles.bottomView}>
 					<Button
 						type="transparent"
 						title={Translation.BUTTON.SKIP_NOW}
@@ -74,7 +75,7 @@ const BusinessWelcome = (): ReactElement => {
 							setIsVisible(true)
 						}}
 					/>
-				</View>
+				</SafeAreaView>
 			</KeyboardAvoidingView>
 
 			{isVisible && (

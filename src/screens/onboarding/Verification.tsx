@@ -6,7 +6,8 @@ import {
 	ScrollView,
 	StyleSheet,
 	TouchableOpacity,
-	View
+	View,
+	SafeAreaView
 } from 'react-native';
 import { Text } from 'react-native-elements';
 import { AuthContext } from "src/contexts";
@@ -49,8 +50,8 @@ const styles = StyleSheet.create({
 		paddingVertical: 30,
 	},
 	bottomView: {
-		paddingHorizontal: 20,
-		paddingBottom: 50,
+		marginHorizontal: 20,
+		marginBottom: 20,
 	},
 });
 
@@ -60,7 +61,7 @@ const Verification = (): JSX.Element => {
 		useContext(AuthContext);
 	const [noCodeReceived, setNoCodeReceived] = useState<boolean>(false);
 	const [goNext, setGoNext] = useState<boolean>(false);
-	const { personalDetails } = useUserDetails();
+	const { signUpDetails: { email } } = useContext(AuthContext);
 
 	const onComplete = async (text: string) => {
 		if(text?.length < 5) return;
@@ -93,13 +94,13 @@ const Verification = (): JSX.Element => {
 					{!noCodeReceived && (
 						<Text style={styles.bodyText}>
 							We have sent an email with a verification code to{' '}
-							{personalDetails.email}
+							{email}
 						</Text>
 					)}
 					{noCodeReceived && (
 						<Text style={styles.bodyText}>
 							We have sent another message with a new verification
-							code to {personalDetails.email}
+							code to {email}
 						</Text>
 					)}
 					<View style={styles.codeView}>
@@ -110,7 +111,7 @@ const Verification = (): JSX.Element => {
 
 			<KeyboardAvoidingView
 				behavior={Platform.OS == 'ios' ? 'padding' : 'height'}>
-				<View style={styles.bottomView}>
+				<SafeAreaView style={styles.bottomView}>
 					{!noCodeReceived && (
 						<TouchableOpacity onPress={resendEmailVerificationCode}>
 							<Text style={styles.bottomNavigation}>
@@ -136,7 +137,7 @@ const Verification = (): JSX.Element => {
 							navigation.navigate(Routes.EMAIL_CONFIRMED)
 						}
 					/>
-				</View>
+				</SafeAreaView>
 			</KeyboardAvoidingView>
 		</View>
 	);

@@ -1,6 +1,6 @@
 import { useNavigation } from '@react-navigation/native';
 import React, { ReactElement, useContext, useEffect, useState } from 'react';
-import { KeyboardAvoidingView, Platform, ScrollView, StyleSheet, View } from 'react-native';
+import { KeyboardAvoidingView, Platform, ScrollView, StyleSheet, View, SafeAreaView } from 'react-native';
 import { Text } from 'react-native-elements';
 import { AuthContext, UserContext } from "src/contexts";
 import { BUTTON_TYPES } from 'src/constants';
@@ -17,8 +17,8 @@ const styles = StyleSheet.create({
 		lineHeight: 35
 	},
 	bottomView: {
-		paddingHorizontal: 20,
-    	paddingBottom: 50,
+		marginHorizontal: 20,
+    	marginBottom: 20,
 		backgroundColor: 'transparent'
 	},
 });
@@ -57,14 +57,14 @@ const PersonalProfile = (): ReactElement => {
 			<KeyboardAvoidingView
 				behavior={Platform.OS == "ios" ? "padding" : "height"}
 			>
-				<View style={styles.bottomView}>
+				<SafeAreaView style={styles.bottomView}>
 					<Button
 						type={BUTTON_TYPES.DARK_GREEN}
 						title={Translation.BUTTON.NEXT}
 						disabled={!goNext}
 						onPress={onNextPress}
 					/>
-				</View>
+				</SafeAreaView>
 			</KeyboardAvoidingView>
 		</View>
 	);

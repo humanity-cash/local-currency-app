@@ -1,6 +1,6 @@
 import { useNavigation } from '@react-navigation/native';
 import React, { useContext, useEffect, useState } from 'react';
-import { KeyboardAvoidingView, Platform, StyleSheet, View } from 'react-native';
+import { KeyboardAvoidingView, Platform, StyleSheet, View, SafeAreaView, ScrollView } from 'react-native';
 import { Text } from 'react-native-elements';
 import { AuthContext } from "src/contexts";
 import { BUTTON_TYPES } from 'src/constants';
@@ -42,8 +42,8 @@ const styles = StyleSheet.create({
 		color: colors.bodyText,
 	},
 	bottomView: {
-		paddingHorizontal: 20,
-		paddingBottom: 50,
+		marginHorizontal: 20,
+		marginBottom: 20,
 	},
 });
 
@@ -75,7 +75,7 @@ const Password = (): JSX.Element => {
 			<Header
 				leftComponent={<BackBtn onClick={() => navigation.goBack()} />}
 			/>
-			<View style={wrappingContainerBase}>
+			<ScrollView style={wrappingContainerBase}>
 				<View style={baseHeader}>
 					<Text style={styles.headerText}>{Translation.EMAIL_VERIFICATION.CREATE_PASSWORD}</Text>
 				</View>
@@ -111,24 +111,24 @@ const Password = (): JSX.Element => {
 						/>
 					</View>
 				</View>
-			</View>
+			</ScrollView>
 
 			<KeyboardAvoidingView
 				behavior={Platform.OS == 'ios' ? 'padding' : 'height'}>
-				<View style={styles.bottomView}>
+				<SafeAreaView style={styles.bottomView}>
 					<Button
 						type={BUTTON_TYPES.DARK_GREEN}
 						title='NEXT'
 						disabled={!isValidPassword}
 						onPress={async () => {
 							const response = await signUp();
-              console.log(" onPress={ ~ response", response)
+              				console.log(" onPress={ ~ response", response)
 							if (response.success) {
 								navigation.navigate(Routes.VERIFICATION);
 							}
 						}}
 					/>
-				</View>
+				</SafeAreaView>
 			</KeyboardAvoidingView>
 		</View>
 	);

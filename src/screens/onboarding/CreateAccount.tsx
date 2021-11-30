@@ -6,7 +6,8 @@ import {
 	ScrollView,
 	StyleSheet,
 	View,
-	Linking
+	Linking,
+	SafeAreaView
 } from 'react-native';
 import { CheckBox, Text } from 'react-native-elements';
 import { AuthContext } from "src/contexts";
@@ -45,8 +46,8 @@ const styles = StyleSheet.create({
 		fontSize: 10,
 	},
 	bottomView: {
-		paddingHorizontal: 20,
-		paddingBottom: 50,
+		marginHorizontal: 20,
+		marginBottom: 20,
 	},
 	checkboxTextView: {
 		fontWeight: '400',
@@ -106,7 +107,7 @@ const CreateAccount = (): JSX.Element => {
 			</ScrollView>
 			<KeyboardAvoidingView
 				behavior={Platform.OS == 'ios' ? 'padding' : 'height'}>
-				<View style={styles.bottomView}>
+				<SafeAreaView style={styles.bottomView}>
 					<View style={styles.terms}>
 						<CheckBox
 							checked={isSelected}
@@ -130,7 +131,7 @@ const CreateAccount = (): JSX.Element => {
 						}
 						onPress={() => navigation.navigate(Routes.PASSWORD)}
 					/>
-				</View>
+				</SafeAreaView>
 			</KeyboardAvoidingView>
 		</View>
 	);

@@ -1,6 +1,6 @@
 import { useNavigation } from '@react-navigation/native';
 import React, { useContext, useEffect, useState } from 'react';
-import { KeyboardAvoidingView, Platform, ScrollView, StyleSheet, View } from 'react-native';
+import { KeyboardAvoidingView, Platform, ScrollView, StyleSheet, View, SafeAreaView } from 'react-native';
 import { Text } from 'react-native-elements';
 import { AuthContext } from "src/contexts";
 import { AuthStatus, SignInInput } from 'src/auth/types';
@@ -12,7 +12,6 @@ import { baseHeader, viewBase, wrappingContainerBase } from "src/theme/elements"
 import Translation from 'src/translation/en.json';
 import { isPasswordValid } from 'src/utils/validation';
 import DataLoading from 'src/screens/loadings/DataLoading';
-
 
 const styles = StyleSheet.create({
 	headerText: {
@@ -33,8 +32,8 @@ const styles = StyleSheet.create({
 		paddingTop: 10
 	},
 	bottomView: {
-		paddingHorizontal: 20,
-		paddingBottom: 50,
+		marginHorizontal: 20,
+		marginBottom: 20,
 	},
 });
 
@@ -91,7 +90,7 @@ const Login = (): JSX.Element => {
 
 			<KeyboardAvoidingView
 				behavior={Platform.OS == 'ios' ? 'padding' : 'height'}>
-				<View style={styles.bottomView}>
+				<SafeAreaView style={styles.bottomView}>
 					<Button
 						type={BUTTON_TYPES.TRANSPARENT}
 						disabled={AuthStatus.Loading === authStatus}
@@ -106,7 +105,7 @@ const Login = (): JSX.Element => {
 						disabled={!goNext || AuthStatus.Loading === authStatus}
 						onPress={handleSignin}
 					/>
-				</View>
+				</SafeAreaView>
 			</KeyboardAvoidingView>
 		</View>
 	);
