@@ -320,12 +320,10 @@ export const MerchantSettingsProfile = (): JSX.Element => {
 						value={user?.business?.story}
 						multiline={true}
 						onChangeText={(newValue: string) => { console.log('newValue', newValue) }}
-						// setState((pv) => ({
-						// 	...pv,
-						// 	businessStory: newValue,
-						// }))
 						style={styles.storyText}
 						numberOfLines={4}
+						autoCapitalize='none'
+						autoCorrect={false}
 					/>
 
 					<Text style={styles.smallLabel}>WEBSITE - OPTIONAL</Text>
