@@ -1,9 +1,6 @@
 import { useContext, useEffect } from 'react';
-import { LoadingScreenTypes } from 'src/utils/types';
-import { WalletContext } from "src/contexts";
 import { DwollaAPI } from "src/api";
-import { useDispatch } from 'react-redux';
-import { showLoadingProgress, hideLoadingProgress } from 'src/store/loading/loading.actions';
+import { UserContext, WalletContext } from "src/contexts";
 
 export const useWallet = (dwollaId: string) => {
 	const { updateWalletData } = useContext(WalletContext);
@@ -22,4 +19,21 @@ export const useWallet = (dwollaId: string) => {
 		handler()
 	}, [dwollaId])
 }
+
+export const useUpdateCustomerWalletData = () => {
+	const { customerDwollaId, user } = useContext(UserContext)
+	const { walletData, updateWalletData } = useContext(WalletContext)
+
+	useEffect(() => {
+		const timerId = setInterval(async () => {
+			if (walletData?.address !== user?.customer?.walletAddress && customerDwollaId) {
+				const userWallet = await DwollaAPI.loadWallet(customerDwollaId)
+				const fundingSource = await DwollaAPI.loadFundingSource(customerDwollaId)
+				updateWalletData(({ ...userWallet, availableFundingSource: fundingSource }))
+			}
+		}, 1500);
+		return () => clearInterval(timerId);
+	}, [walletData?.address, user?.customer?.walletAddress])
+}
+
 
