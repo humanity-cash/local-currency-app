@@ -1,6 +1,6 @@
 import { useNavigation } from '@react-navigation/native';
 import React, { useContext, useEffect, useState } from 'react';
-import { KeyboardAvoidingView, Platform, ScrollView, StyleSheet, View } from 'react-native';
+import { KeyboardAvoidingView, Platform, ScrollView, StyleSheet, View, SafeAreaView } from 'react-native';
 import { Text } from 'react-native-elements';
 import { UserContext, AuthContext } from 'src/contexts';
 import * as Routes from 'src/navigation/constants';
@@ -39,8 +39,8 @@ const styles = StyleSheet.create({
 		paddingBottom: 40
 	},
     bottomView: {
-		paddingHorizontal: 20,
-        paddingBottom: 50
+		marginHorizontal: 20,
+        marginBottom: 20
 	},
 });
 
@@ -66,28 +66,26 @@ const BusinessOwnerDetail = (): JSX.Element => {
 				leftComponent={<BackBtn color={colors.purple} onClick={() => navigation.goBack()} />}
 				rightComponent={<CancelBtn color={colors.purple} text={Translation.BUTTON.LOGOUT} onClick={signOut} />}
 			/>
-			<View style={wrappingContainerBase}>
+			<ScrollView style={wrappingContainerBase}>
 				<View style={underlineHeaderB}>
 					<Text style={styles.headerText}>
 						{Translation.PROFILE.BUSINESS_OWNER}
 					</Text>
 				</View>
-				<ScrollView>
-					<View style={styles.formView}>
-						<BusinessOwnerDetailsForm style={styles.input} />
-					</View>
-				</ScrollView>
-			</View>
+				<View style={styles.formView}>
+					<BusinessOwnerDetailsForm style={styles.input} />
+				</View>
+			</ScrollView>
 			<KeyboardAvoidingView
 				behavior={Platform.OS == "ios" ? "padding" : "height"}>
-				<View style={styles.bottomView}>
+				<SafeAreaView style={styles.bottomView}>
 					<Button
 						type="purple"
 						title={Translation.BUTTON.NEXT}
 						disabled={!goNext}
 						onPress={onNextPress}
 					/>
-				</View>
+				</SafeAreaView>
 			</KeyboardAvoidingView>
 		</View>
 	);

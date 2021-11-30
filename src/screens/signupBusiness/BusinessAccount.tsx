@@ -1,6 +1,6 @@
 import { useNavigation } from '@react-navigation/core';
 import React, { useContext } from 'react';
-import { KeyboardAvoidingView, Platform, ScrollView, StyleSheet, View } from 'react-native';
+import { KeyboardAvoidingView, Platform, ScrollView, StyleSheet, View, SafeAreaView } from 'react-native';
 import { Text } from 'react-native-elements';
 import { UserContext } from "src/contexts";
 import * as Routes from 'src/navigation/constants';
@@ -23,8 +23,8 @@ const styles = StyleSheet.create({
         textAlign: 'center'
     },
     bottomView: {
-		paddingHorizontal: 20,
-        paddingBottom: 50
+		marginHorizontal: 20,
+        marginBottom: 20
 	},
 });
 
@@ -53,14 +53,14 @@ const BusinessAccount = (): JSX.Element => {
 			</ScrollView>
 			<KeyboardAvoidingView
 				behavior={Platform.OS == "ios" ? "padding" : "height"} >
-				<View style={styles.bottomView}>
+				<SafeAreaView style={styles.bottomView}>
 					<Button
 						type="darkGreen"
 						disabled={user?.verifiedBusiness}
 						title={Translation.BUTTON.SIGNUP_BUSINESS}
 						onPress={signupBusiness}
 					/>
-				</View>
+				</SafeAreaView>
 			</KeyboardAvoidingView>
 		</View>
 	);

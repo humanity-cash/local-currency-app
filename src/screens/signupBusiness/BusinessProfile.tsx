@@ -1,6 +1,6 @@
 import { useNavigation } from '@react-navigation/native';
 import React, { ReactElement, useContext, useEffect, useState } from 'react';
-import { ScrollView, StyleSheet, View } from 'react-native';
+import { ScrollView, StyleSheet, View, KeyboardAvoidingView, SafeAreaView, Platform } from 'react-native';
 import { Text } from 'react-native-elements';
 import { UserContext, AuthContext } from 'src/contexts';
 import * as Routes from 'src/navigation/constants';
@@ -24,11 +24,10 @@ const styles = StyleSheet.create({
 	formView: {
 		paddingBottom: 80
 	},
-	bottomButton: {
-		width: '90%',
-		position: 'absolute',
-		bottom: 45,
-		left: '5%'
+	bottomView: {
+		marginHorizontal: 20,
+    	marginBottom: 20,
+		backgroundColor: 'transparent'
 	},
 });
 
@@ -54,24 +53,27 @@ const BusinessProfile = (): ReactElement => {
 				rightComponent={<CancelBtn color={colors.purple} text={Translation.BUTTON.LOGOUT} onClick={signOut} />}
 			/>
 
-			<View style={wrappingContainerBase}>
+			<ScrollView style={wrappingContainerBase}>
 				<View style={underlineHeaderB}>
 					<Text style={styles.headerText}>{Translation.PROFILE.SETUP_PROFILE}</Text>
 				</View>
-				<ScrollView>
-					<View style={styles.formView}>
-						<BusinessProfileForm
-						/>
-					</View>
-				</ScrollView>
-			</View>
-			<Button
-				type="purple"
-				title={Translation.BUTTON.NEXT}
-				disabled={!goNext}
-				onPress={onNextPress}
-				style={styles.bottomButton}
-			/>
+				<View style={styles.formView}>
+					<BusinessProfileForm
+					/>
+				</View>
+			</ScrollView>
+			<KeyboardAvoidingView
+				behavior={Platform.OS == "ios" ? "padding" : "height"}
+			>
+				<SafeAreaView style={styles.bottomView}>
+					<Button
+						type="purple"
+						title={Translation.BUTTON.NEXT}
+						disabled={!goNext}
+						onPress={onNextPress}
+					/>
+				</SafeAreaView>
+			</KeyboardAvoidingView>
 		</View>
 	);
 }
