@@ -1,8 +1,6 @@
-import { UserId, AxiosPromiseResponse, IDepositRequest, IWithdrawalRequest, ITransactionRequest, ITransaction } from './types';
 import { getRequest, postRequest } from './base';
-import { userData, transactionDatas, fundingSource } from './formatters';
-import { delay } from 'src/utils/http';
-import { Business, Customer, IDBUser, IWallet } from '@humanity.cash/types';
+import { transactionDatas } from './formatters';
+import { AxiosPromiseResponse, IDepositRequest, ITransaction, ITransactionRequest, IWithdrawalRequest, UserId } from './types';
 
 
 export const getDeposits = async (userId: UserId): Promise<AxiosPromiseResponse> => {
