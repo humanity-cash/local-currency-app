@@ -12,10 +12,12 @@ import {
 } from "react-native";
 import { Image, Text } from "react-native-elements";
 import SelectDropdown from "react-native-select-dropdown";
+import { UserAPI } from 'src/api';
 import { BUTTON_TYPES } from "src/constants";
-import { useMediaLibraryPermission } from "src/hooks";
+import { UserContext } from "src/contexts";
 import countries from "src/mocks/countries";
 import * as Routes from "src/navigation/constants";
+import DataLoading from "src/screens/loadings/DataLoading";
 import {
 	BackBtn,
 	BlockInput,
@@ -30,11 +32,9 @@ import {
 	viewBaseB
 } from "src/theme/elements";
 import Translation from "src/translation/en.json";
-import { ToastType, LoadingScreenTypes } from 'src/utils/types';
 import { showToast } from 'src/utils/common';
-import { updateLoadingStatus } from 'src/store/loading/loading.actions';
-import { useDispatch } from 'react-redux';
-import { UserContext } from "src/contexts";
+import { isSuccessResponse } from "src/utils/http";
+import { ToastType } from 'src/utils/types';
 
 const businessAddressFormStyles = StyleSheet.create({
 	bodyText: {
@@ -185,46 +185,53 @@ const styles = StyleSheet.create({
 	},
 });
 
-// enum BusinessUpdate {
-// 	Story = "custom:business.story",
-// 	Address1 = "custom:business.address1",
-// 	Address2 = "custom:business.address2",
-// 	PostalCode = "custom:business.postalCode",
-// 	Tag = "custom:business.tag",
-// 	State = "custom:business.state",
-// 	City = "custom:business.city",
-// 	PhoneNumber = "custom:business.phoneNumber",
-// 	Website = "custom:business.website",
-// }
 
 export const MerchantSettingsProfile = (): JSX.Element => {
 	const navigation = useNavigation();
-	const { user } = useContext(UserContext);
-	const dispatch = useDispatch();
+	const { user, updateUserData, businessDwollaId } = useContext(UserContext);
 	const [bannerImage, setBannerImage] = useState<string>("");
+	const [isLoading, setIsLoading] = useState<boolean>(false);
 	const [isVisible, setIsVisible] = useState<boolean>(false);
+	const business = user?.business;
+	const [businessData, setBusinessData] = useState({
+		tag: business?.tag || "",
+		avatar: business?.avatar || "",
+		story: business?.story || "",
+		address1: business?.address1 || "",
+		address2: business?.address2 || "",
+		state: business?.state || "",
+		city: business?.city || "",
+		phoneNumber: business?.phoneNumber || "",
+		postalCode: business?.postalCode || "",
+		website: business?.website || "",
+	})
+
+	const updateBusinessProfileData = (prop: string, newValue: string) => setBusinessData((pv) => {
+		const newState: any = {
+			...pv
+		}
+		newState[prop] = newValue
+		return newState
+	})
+
 
 	const handleSave = async () => {
-		const changedData = {};
-		dispatch(updateLoadingStatus({
-			isLoading: true,
-			screen: LoadingScreenTypes.LOADING_DATA
-		}));
-		// const response = await updateAttributes(changedData); // :FIXME - not implemtend in API yet
-		const response = { success: false };
-		dispatch(updateLoadingStatus({
-			isLoading: false,
-			screen: LoadingScreenTypes.LOADING_DATA
-		}));
-
-		if (response.success) {
-			navigation.goBack();
+		setIsLoading(true);
+		const response = await UserAPI.updateBusinessProfile({
+			businessDwollaId,
+			business: {
+				...businessData
+			}
+		});
+		if (isSuccessResponse(response)) {
+			showToast(ToastType.SUCCESS, "Updated Successfully!", "");
+			//@ts-ignore
+			updateUserData({ ...response.data.data });
 		} else {
 			showToast(ToastType.ERROR, "Whooops, something went wrong.", "Connection failed.");
 		}
+		setIsLoading(false);
 	};
-
-	useMediaLibraryPermission();
 
 	const handleBakcHome = () => {
 		setIsVisible(false);
@@ -246,6 +253,7 @@ export const MerchantSettingsProfile = (): JSX.Element => {
 
 	return (
 		<View style={viewBaseB}>
+			<DataLoading visible={isLoading} />
 			<Header
 				leftComponent={
 					<BackBtn
@@ -304,12 +312,13 @@ export const MerchantSettingsProfile = (): JSX.Element => {
 						BUSINESS NAME - THIS NAME WILL BE PUBLIC*
 					</Text>
 					<BlockInput
-						name="businessname"
+						name="tag"
 						placeholder="Business name"
 						placeholderTextColor={colors.greyedPurple}
-						value={user?.business?.tag}
-						onChange={(_: string, newValue: string) => { console.log('newValue', newValue) }}
-							// setState((pv) => ({ ...pv, businessTag: newValue }))
+						value={businessData.tag}
+						onChange={(name: string, newValue: string) =>
+							updateBusinessProfileData(name, newValue)
+						}
 						style={styles.inputBg}
 					/>
 					<Text style={styles.smallLabel}>
@@ -317,9 +326,9 @@ export const MerchantSettingsProfile = (): JSX.Element => {
 					</Text>
 					<TextInput
 						placeholder="Tell the world about your business. What gives you joy as an entrepreneur? What do you love about the Berkshires?"
-						value={user?.business?.story}
+						value={businessData.story}
 						multiline={true}
-						onChangeText={(newValue: string) => { console.log('newValue', newValue) }}
+						onChangeText={(newValue: string) => { updateBusinessProfileData('story', newValue) }}
 						style={styles.storyText}
 						numberOfLines={4}
 						autoCapitalize='none'
@@ -331,45 +340,29 @@ export const MerchantSettingsProfile = (): JSX.Element => {
 						name="website"
 						placeholder="www.shop.com"
 						placeholderTextColor={colors.greyedPurple}
-						value={"NOT DEFINED"}
-						onChange={(_: string, newValue: string) => { console.log('newValue', newValue) }
-							// setState((pv) => ({
-							// 	...pv,
-							// 	businessWebsite: newValue,
-							// }))
-						}
+						value={businessData.website}
+						onChange={(name: string, newValue: string) => updateBusinessProfileData(name, newValue)}
 						style={styles.inputBg}
 					/>
-
 					<View>
 						<Text style={businessAddressFormStyles.label}>
 							ADDRESS 1
 						</Text>
 						<BlockInput
-							name="addressLine"
+							name="address1"
 							placeholder="Street number, street name"
-							value={user?.business?.address1}
-							onChange={(_name: string, newValue: string) => {
-								// setState((pv) => ({
-								// 	...pv,
-								// 	businessAddress1: newValue,
-								// }));
-							}}
+							value={businessData.address1}
+							onChange={(name: string, newValue: string) => updateBusinessProfileData(name, newValue)}
 							style={businessAddressFormStyles.inputBg}
 						/>
 						<Text style={businessAddressFormStyles.label}>
 							ADDRESS 2
 						</Text>
 						<BlockInput
-							name="addressLine2"
+							name="address2"
 							placeholder="Apt."
-							value={user?.business?.address2}
-							onChange={(_name: string, newValue: string) => {
-								// setState((pv) => ({
-								// 	...pv,
-								// 	businessAddress2: newValue,
-								// }));
-							}}
+							value={businessData.address2}
+							onChange={(name: string, newValue: string) => updateBusinessProfileData(name, newValue)}
 							style={businessAddressFormStyles.inputBg}
 						/>
 
@@ -381,16 +374,8 @@ export const MerchantSettingsProfile = (): JSX.Element => {
 								<BlockInput
 									name="city"
 									placeholder="City"
-									value={user?.business?.city}
-									onChange={(
-										_name: string,
-										newValue: string
-									) => {
-										// setState((pv) => ({
-										// 	...pv,
-										// 	businessCity: newValue,
-										// }));
-									}}
+									value={businessData.city}
+									onChange={(name: string, newValue: string) => updateBusinessProfileData(name, newValue)}
 									style={businessAddressFormStyles.inputBg}
 								/>
 							</View>
@@ -404,12 +389,7 @@ export const MerchantSettingsProfile = (): JSX.Element => {
 									<SelectDropdown
 										data={countries}
 										defaultValueByIndex={0}
-										onSelect={(selectedItem) => {
-											// setState((pv) => ({
-											// 	...pv,
-											// 	businessState: selectedItem,
-											// }));
-										}}
+										onSelect={(selectedItem) => updateBusinessProfileData('state', selectedItem)}
 										buttonTextAfterSelection={(
 											selectedItem
 										) => {
@@ -454,16 +434,11 @@ export const MerchantSettingsProfile = (): JSX.Element => {
 							POSTAL CODE
 						</Text>
 						<BlockInput
-							name="zipCode"
+							name="postalCode"
 							placeholder="00000"
 							keyboardType="number-pad"
-							value={user?.business?.postalCode}
-							onChange={(_name: string, newValue: string) => {
-								// setState((pv) => ({
-								// 	...pv,
-								// 	businessPostalCode: newValue,
-								// }));
-							}}
+							value={businessData.postalCode}
+							onChange={(name: string, newValue: string) => updateBusinessProfileData(name, newValue)}
 							style={businessAddressFormStyles.inputBg}
 						/>
 						<Text style={businessAddressFormStyles.label}>
@@ -472,13 +447,8 @@ export const MerchantSettingsProfile = (): JSX.Element => {
 						<BlockInput
 							name="phoneNumber"
 							placeholder="+00 0987 6543 21"
-							value={user?.business?.phoneNumber}
-							onChange={(_name: string, newValue: string) => {
-								// setState((pv) => ({
-								// 	...pv,
-								// 	businessPhoneNumber: newValue,
-								// }));
-							}}
+							value={businessData.phoneNumber}
+							onChange={(name: string, newValue: string) => updateBusinessProfileData(name, newValue)}
 							style={businessAddressFormStyles.inputBg}
 						/>
 					</View>
