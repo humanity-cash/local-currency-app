@@ -1,11 +1,11 @@
-import React, {useState, useEffect} from 'react';
+import moment from 'moment';
+import React, { useEffect, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
-import { Text, Image } from 'react-native-elements';
-import { colors } from "src/theme/colors";
-import { FontFamily } from "src/theme/elements";
+import { Image, Text } from 'react-native-elements';
 import { TouchableOpacity } from 'react-native-gesture-handler';
 import { ITransaction } from "src/api/types";
-import moment from 'moment';
+import { colors } from "src/theme/colors";
+import { FontFamily } from "src/theme/elements";
 import { getBerksharePrefix } from "src/utils/common";
 import { TransactionType } from "src/utils/types";
 
@@ -65,9 +65,6 @@ type MyTransactionItemProps = {
 
 const TransactionItem = (props: MyTransactionItemProps) => {
 	const {item, selected} = props;
-  console.log("transaction type", item.type)
-  console.log("transaction fromname", item.fromName)
-  console.log("transaction toname", item.toName)
 	
 	const getStyle = (type: string) => {
 		if (type === TransactionType.SALE || type === TransactionType.RETURN || type === TransactionType.IN) {
