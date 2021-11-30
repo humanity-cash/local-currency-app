@@ -1,8 +1,8 @@
-import { UserId, AxiosPromiseResponse, IUserRequest } from './types';
+import { Business, Customer, IDBUser, IWallet } from '@humanity.cash/types';
+import { delay } from 'src/utils/http';
 import { getRequest, postRequest } from './base';
 import { userData } from './formatters';
-import { delay } from 'src/utils/http';
-import { Business, Customer, IDBUser, IWallet } from '@humanity.cash/types';
+import { AxiosPromiseResponse, IUserRequest, UserId } from './types';
 
 const createUser = async (request: IUserRequest): Promise<AxiosPromiseResponse<IDBUser>> => {
   try {
@@ -37,7 +37,7 @@ export const getUserByEmail = async (email: string): Promise<IDBUser> => {
     const data = response?.data[0];
     return data;
   } catch (err) {
-    console.log("userbyemail", err)
+    console.log("Error: getUserByEmail:", err)
     return {} as IDBUser;
   }
 };
@@ -66,7 +66,6 @@ export const createBusiness = async (user: IDBUser): Promise<{ status: number, d
       const response: AxiosPromiseResponse<IDBUser> = await addBusinessVerification(
         user.customer.dwollaId
         , { ...user?.business, avatar: "avatar" });
-      console.log("🚀 ~ file: user.ts ~ line 55 ~ createBusiness ~ response", response)
       //@ts-ignore
       return { status: response.status, data: response.data.data };
     } else {
@@ -76,7 +75,6 @@ export const createBusiness = async (user: IDBUser): Promise<{ status: number, d
         type: 'business',
         business: user.business
       });
-      console.log("🚀 ~ file: user.ts ~ line 66 ~ createBusiness ~ response", response)
       return { status: response.status, data: response.data };
     }
   } catch (error) {
