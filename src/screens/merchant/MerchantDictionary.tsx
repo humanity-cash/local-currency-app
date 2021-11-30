@@ -1,16 +1,18 @@
-import React, { useState } from 'react';
-import { StyleSheet, View, ScrollView } from 'react-native';
-import { Text, Image } from 'react-native-elements';
-import { Modal, ModalHeader, Header, CancelBtn, BackBtn } from "src/shared/uielements";
-import { underlineHeader, viewBase, wrappingContainerBase, modalViewBase } from "src/theme/elements";
-import { colors } from "src/theme/colors";
-import list from "src/mocks/merchants";
-import { MerchantCategory, MerchantEntry } from "src/utils/types";
-import { TouchableOpacity } from 'react-native-gesture-handler';
+import { Business } from '@humanity.cash/types';
 import { useNavigation } from '@react-navigation/core';
+import React, { useState } from 'react';
+import { ScrollView, StyleSheet, View } from 'react-native';
+import { Image, Text } from 'react-native-elements';
+import { TouchableOpacity } from 'react-native-gesture-handler';
+import { useBusinesses } from 'src/hooks';
+import { BackBtn, CancelBtn, Header, Modal, ModalHeader } from "src/shared/uielements";
+import { colors } from "src/theme/colors";
+import { modalViewBase, underlineHeader, viewBase, wrappingContainerBase } from "src/theme/elements";
+import { MerchantEntry } from "src/utils/types";
 
 type CategoryViewProps = {
-	category: MerchantCategory,
+	category: string,
+	businesses: MerchantEntry[],
 	onSelect: (item: MerchantEntry) => void
 }
 
@@ -108,16 +110,17 @@ const styles = StyleSheet.create({
 });
 
 const CategoryView = (props: CategoryViewProps) => {
-	const data: MerchantCategory = props.category;
+	const category: string = props.category;
+	const businesses: MerchantEntry[] = props.businesses;
 
 	return (
 		<View>
 			<View style={ styles.underlineView }>
-				<Text style={styles.categoryText}>{ data.name }</Text>
+				<Text style={styles.categoryText}>{category}</Text>
 			</View>
 			<ScrollView horizontal={true} style={ styles.merchantsView }>
 				{
-					data.merchants.map((item: MerchantEntry, idx: number) => (
+					businesses.map((item: MerchantEntry, idx: number) => (
 						<TouchableOpacity style={styles.merchantItem} key={idx} onPress={() => props.onSelect(item)}>
 							<Image
 								source={require('../../../assets/images/feed1.png')}
@@ -143,7 +146,29 @@ const MerchantDictionary = (): JSX.Element => {
 		addressLine2: "",
 		phone: ""
 	});
-	const merchantList: MerchantCategory[] = list;
+	const businesses = useBusinesses();
+
+	const bussinessByCategories = businesses.reduce<any>((acc, curr: Business) => {
+		const formattedCurr = {
+			title: curr.tag,
+			description: curr.story,
+			image: '',
+			addressLine1: curr.address1,
+			addressLine2: curr.address2,
+			phone: curr.phoneNumber
+		}
+		if (curr.industry) {
+			if (acc[curr.industry]) {
+				const newValue = [...acc[curr.industry], formattedCurr];
+				acc[curr.industry] = newValue;
+			}
+			else {
+				acc[curr.industry] = [formattedCurr]
+			}
+		}
+		return acc;
+	}, {})
+
 
 	const handleSelect = (item: MerchantEntry) => {
 		setSelected(item);
@@ -178,8 +203,8 @@ const MerchantDictionary = (): JSX.Element => {
 						</View>
 						<View style={styles.popularMerchantView}>
 							<View style={styles.popularTextView}>
-								<Text style={styles.popularTitle}>{merchantList[0].merchants[0].title}</Text>
-								<Text style={styles.popularText}>{merchantList[0].merchants[0].description}</Text>
+								<Text style={styles.popularTitle}>{"Best Of The Month Title"}</Text>
+								<Text style={styles.popularText}>{"Best Of The Month Description"}</Text>
 							</View>
 							<Image
 								source={require('../../../assets/images/feed1.png')}
@@ -187,8 +212,8 @@ const MerchantDictionary = (): JSX.Element => {
 							/>
 						</View>
 						{
-							merchantList.map((category: MerchantCategory, idx: number) => (
-								<CategoryView category={category} onSelect={handleSelect} key={idx} />
+							Object.keys(bussinessByCategories).map((category: string, idx: number) => (
+								<CategoryView businesses={bussinessByCategories[category]} category={category} onSelect={handleSelect} key={idx} />
 							))
 						}
 					</View>

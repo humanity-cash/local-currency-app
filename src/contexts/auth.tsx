@@ -68,7 +68,7 @@ export const AuthProvider: React.FunctionComponent = ({ children }) => {
 					const email = response.data.getAccessToken().decodePayload().username;
 					setUserEmail(email);
 					const user = await UserAPI.getUserByEmail(email);
-					if (!user) {
+					if (!Object.keys(user).length) {
 						updateUserType(UserType.NotVerified, email)
 						updateSelectedView(ViewState.NotVerified)
 						updateAuthStatus(AuthStatus.SignedOut);
