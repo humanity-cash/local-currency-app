@@ -28,6 +28,8 @@ const _getRequest = (query: Query): HttpResponse =>
   httpRequest.get(query);
 const _postRequest = (path: Path, body: Body) => (): HttpResponse =>
   httpRequest.post(path, body);
+const _putRequest = (path: Path, body: Body) => (): HttpResponse =>
+  httpRequest.put(path, body);
 const _deleteRequest = (path: Path, body: Body) => (): HttpResponse =>
   httpRequest.delete(path, body);
 
@@ -35,6 +37,8 @@ export const getRequest = (query: Query): HttpResponse =>
   _getRequest(query);
 export const postRequest = (path: Path, body: Body): HttpResponse =>
   ErrorHandler(_postRequest(path, body));
+export const putRequest = (path: Path, body: Body): HttpResponse =>
+  ErrorHandler(_putRequest(path, body));
 export const deleteRequest = (path: Path, body: Body): HttpResponse =>
   ErrorHandler(_deleteRequest(path, body));
 
