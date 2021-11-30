@@ -1,30 +1,22 @@
 import { DefaultTheme, NavigationContainer } from "@react-navigation/native";
-import { LoadingPageState } from 'src/store/loading/loading.reducer';
-import { AppState } from 'src/store';
-import { useSelector } from 'react-redux';
 import { createStackNavigator } from "@react-navigation/stack";
-import React, { useContext, useState, useEffect } from "react";
+import React, { useContext } from "react";
 import "react-native-gesture-handler";
-import { UserContext, AuthContext, NavigationViewContext } from "src/contexts";
-import { AuthStatus, UserType } from "src/auth/types";
-import { useRouteTracking } from "src/hooks";
-import {
-  OnboardingStack,
-  CustomerUserStack,
-  CashierUserStack,
-  BusinessUserStack,
-  NotVerifiedUserStack,
-  LoadingStack,
-  CustomerLinkBankAccount,
-  BusinessLinkBankAccount
-} from "./stacks";
+import { useSelector } from 'react-redux';
+import { NavigationViewContext, UserContext } from "src/contexts";
 import { ViewState } from "src/contexts/navigation";
+import { useRouteTracking } from "src/hooks";
+import { AppState } from 'src/store';
+import { LoadingPageState } from 'src/store/loading/loading.reducer';
+import {
+  BusinessLinkBankAccount, BusinessUserStack, CashierUserStack, CustomerLinkBankAccount, CustomerUserStack, LoadingStack, NotVerifiedUserStack, OnboardingStack
+} from "./stacks";
 
 const PrimaryStack = createStackNavigator();
 
 const PrimaryStackScreen = () => {
   const { selectedView } = useContext(NavigationViewContext)
-  console.log("🚀 ~ file: MainNavigationStack.tsx ~ line 27 ~ PrimaryStackScreen ~ selectedView", selectedView)
+  console.log(":PrimaryStackScreen ~ selectedView", selectedView)
   const { user } = useContext(UserContext);
   const { loadingState } = useSelector((state: AppState) => state.loadingReducer) as LoadingPageState;
 
