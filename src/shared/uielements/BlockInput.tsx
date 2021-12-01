@@ -1,5 +1,5 @@
-import React from 'react';
-import { TextInput, StyleSheet } from 'react-native';
+import React, { RefObject } from 'react';
+import { TextInput, StyleSheet, ReturnKeyTypeOptions, KeyboardTypeOptions, Keyboard } from 'react-native';
 import { colors } from "src/theme/colors";
 
 type BlockInputProps = {
@@ -10,9 +10,12 @@ type BlockInputProps = {
 	value: any,
 	style?: any
 	secureTextEntry?: boolean
-	keyboardType?: any
+	keyboardType?: KeyboardTypeOptions
 	onKeyPress?: any
 	maxLength?: number
+	inputRef?: RefObject<TextInput>
+	returnKeyType?: ReturnKeyTypeOptions
+	onSubmitEditing?: (()=>void)
 }
 
 const styles = StyleSheet.create({
@@ -25,7 +28,7 @@ const styles = StyleSheet.create({
 		paddingVertical: 8,
 		marginVertical: 8,
 		borderWidth: 0,
-		color: colors.text
+		color: colors.text,
 	}
 });
 
@@ -33,6 +36,7 @@ class BlockInput extends React.Component<BlockInputProps>{
 	render() {
 		return (
 			<TextInput
+				ref={this.props.inputRef}
 				style={{
 					...styles.container,
 					...this.props.style,
@@ -47,6 +51,9 @@ class BlockInput extends React.Component<BlockInputProps>{
 				maxLength={this.props.maxLength}
 				autoCapitalize='none'
 				autoCorrect={false}
+				blurOnSubmit={false}
+				returnKeyType={this.props.returnKeyType || 'done'}
+				onSubmitEditing={this.props.onSubmitEditing || Keyboard.dismiss}
 			/>
 		)
 	}

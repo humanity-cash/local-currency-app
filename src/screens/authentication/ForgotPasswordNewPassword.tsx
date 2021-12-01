@@ -1,6 +1,6 @@
 import { useNavigation } from '@react-navigation/native';
-import React, { useContext, useEffect, useState } from 'react';
-import { KeyboardAvoidingView, Platform, StyleSheet, View, SafeAreaView } from 'react-native';
+import React, { createRef, RefObject, useContext, useEffect, useState } from 'react';
+import { KeyboardAvoidingView, Platform, StyleSheet, View, SafeAreaView, TextInput, Keyboard, ScrollView } from 'react-native';
 import { Text } from 'react-native-elements';
 import { AuthContext } from 'src/contexts';
 import { ForgotPassword } from 'src/auth/types';
@@ -60,6 +60,8 @@ const ForgotPasswordNewPassword = (): React.ReactElement => {
 		confirmPassword: "",
 	});
 
+	const confirmPasswordRef = createRef<TextInput>()
+
 	useEffect(() => {
 		setIsMatch(forgotPasswordDetails.newPassword === state.confirmPassword);
 	}, [state, forgotPasswordDetails.newPassword]);
@@ -91,7 +93,7 @@ const ForgotPasswordNewPassword = (): React.ReactElement => {
 					/>
 				}
 			/>
-			<View style={wrappingContainerBase}>
+			<ScrollView style={wrappingContainerBase}>
 				<View style={baseHeader}>
 					<Text style={styles.modalHeader}>
 						Create a new password
@@ -112,6 +114,8 @@ const ForgotPasswordNewPassword = (): React.ReactElement => {
 							value={forgotPasswordDetails.newPassword}
 							secureTextEntry={true}
 							onChange={onValueChange}
+							returnKeyType='next'
+							onSubmitEditing={() => confirmPasswordRef.current?.focus()}
 						/>
 						<View style={styles.inlineView}>
 							<Text style={styles.label}>Confirm password</Text>
@@ -120,6 +124,7 @@ const ForgotPasswordNewPassword = (): React.ReactElement => {
 							)}
 						</View>
 						<BlockInput
+							inputRef={confirmPasswordRef}
 							name="confirmPassword"
 							placeholder="confirm password"
 							value={state.confirmPassword}
@@ -130,7 +135,7 @@ const ForgotPasswordNewPassword = (): React.ReactElement => {
 						/>
 					</View>
 				</View>
-			</View>
+			</ScrollView>
 			<KeyboardAvoidingView
 				behavior={Platform.OS == "ios" ? "padding" : "height"}>
 				<SafeAreaView style={styles.bottomView}>
