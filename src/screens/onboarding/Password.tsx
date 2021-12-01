@@ -1,6 +1,6 @@
 import { useNavigation } from '@react-navigation/native';
-import React, { useContext, useEffect, useState } from 'react';
-import { KeyboardAvoidingView, Platform, StyleSheet, View, SafeAreaView, ScrollView } from 'react-native';
+import React, { useContext, useEffect, useState, createRef } from 'react';
+import { KeyboardAvoidingView, Platform, StyleSheet, View, SafeAreaView, ScrollView, TextInput, Keyboard } from 'react-native';
 import { Text } from 'react-native-elements';
 import { AuthContext } from "src/contexts";
 import { BUTTON_TYPES } from 'src/constants';
@@ -52,6 +52,8 @@ const Password = (): JSX.Element => {
 	const { updateSignUpDetails, signUpDetails, signUp } = useContext(AuthContext);
 	const [isValidPassword, setIsValidPassword] = useState<boolean>(false);
 
+	const confirmPasswordRef = createRef<TextInput>()
+
 	useEffect(() => {
 		if (
 			isPasswordValid(signUpDetails.password) &&
@@ -94,6 +96,8 @@ const Password = (): JSX.Element => {
 							value={signUpDetails.password}
 							secureTextEntry={true}
 							onChange={onValueChange}
+							returnKeyType='next'
+							onSubmitEditing={() => {confirmPasswordRef.current?.focus()}}
 						/>
 
 						<View style={styles.inlineView}>
@@ -103,6 +107,7 @@ const Password = (): JSX.Element => {
 							)}
 						</View>
 						<BlockInput
+							inputRef={confirmPasswordRef}
 							name='confirmPassword'
 							placeholder='confirm password'
 							value={signUpDetails.confirmPassword}

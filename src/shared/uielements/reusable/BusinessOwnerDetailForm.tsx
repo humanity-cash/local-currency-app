@@ -1,5 +1,5 @@
-import React, { ReactElement, useContext } from "react";
-import { StyleSheet, View } from "react-native";
+import React, { ReactElement, useContext, createRef } from "react";
+import { StyleSheet, View, TextInput } from 'react-native';
 import { Text } from "react-native-elements";
 import { UserContext } from "src/contexts";
 import { IMap } from "src/utils/types";
@@ -32,16 +32,22 @@ const BasicInputWithLabel = ({
 	inputValue,
 	placeHolder,
 	name,
+	inputRef,
+	returnKeyType,
+	onSubmitEditing
 }: any) => {
 	return (
 		<>
 			<Text style={labelStyle}>{label}</Text>
 			<BlockInput
+				inputRef={inputRef}
 				name={name}
 				placeholder={placeHolder}
 				value={inputValue}
 				onChange={onInputChange}
 				style={inputStyle}
+				returnKeyType={returnKeyType}
+				onSubmitEditing={onSubmitEditing}
 			/>
 		</>
 	);
@@ -61,6 +67,8 @@ const BusinessOwnerDetailsForm = (
 	props: PersonalDetailsProps
 ): ReactElement => {
 	const { user, updateBusinessData } = useContext(UserContext)
+
+	const lastNameRef = createRef<TextInput>()
 	const business = user?.business;
 
 	const onValueChange = (name: string, change: string) => {
@@ -81,8 +89,11 @@ const BusinessOwnerDetailsForm = (
 				placeHolder="First Name"
 				inputValue={business?.owner?.firstName}
 				onInputChange={onValueChange}
+				returnKeyType='next'
+				onSubmitEditing={() => {lastNameRef.current?.focus()}}
 			/>
 			<BasicInputWithLabel
+				inputRef={lastNameRef}
 				labelStyle={styles.label}
 				inputStyle={props.style}
 				label={Translation.LABEL.LAST_NAME_BUSINESS}
