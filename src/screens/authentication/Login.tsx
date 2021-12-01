@@ -1,6 +1,6 @@
 import { useNavigation } from '@react-navigation/native';
-import React, { useContext, useEffect, useState } from 'react';
-import { KeyboardAvoidingView, Platform, ScrollView, StyleSheet, View, SafeAreaView } from 'react-native';
+import React, { createRef, useContext, useEffect, useState } from 'react';
+import { KeyboardAvoidingView, Platform, ScrollView, StyleSheet, View, SafeAreaView, TextInput, Keyboard } from 'react-native';
 import { Text } from 'react-native-elements';
 import { AuthContext } from "src/contexts";
 import { AuthStatus, SignInInput } from 'src/auth/types';
@@ -41,6 +41,7 @@ const Login = (): JSX.Element => {
 	const navigation = useNavigation();
 	const { signIn, signInDetails, setSignInDetails, authStatus } = useContext(AuthContext);
 	const [goNext, setGoNext] = useState<boolean>(false);
+	const passwordRef = createRef<TextInput>()
 
 	useEffect(() => {
 		setGoNext(isPasswordValid(signInDetails ? signInDetails.password : ""));
@@ -76,9 +77,12 @@ const Login = (): JSX.Element => {
 						placeholder='Email'
 						value={signInDetails?.email}
 						onChange={onValueChange}
+						returnKeyType='next'
+						onSubmitEditing={() => {passwordRef.current?.focus()}}
 					/>
 					<Text style={styles.label}>{Translation.LABEL.CONFIRM_PASSWORD}</Text>
 					<BlockInput
+						inputRef={passwordRef}
 						name='password'
 						placeholder='Password'
 						value={signInDetails?.password}
