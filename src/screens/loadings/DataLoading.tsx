@@ -48,7 +48,7 @@ const DataLoading = ({visible = false}: DataLoadingProps): JSX.Element => {
 			backdropStyle={{
 				backgroundColor: 'transparent'
 			}}
-			animationType="slide"
+			animationType="fade"
 		>
 			<View style={styles.container}>
 				<View style={styles.dialogWrap}>
