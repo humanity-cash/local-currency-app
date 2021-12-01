@@ -19,6 +19,7 @@ import { useNavigation } from "@react-navigation/core";
 import * as Routes from "src/navigation/constants";
 import { NavigationViewContext, ViewState } from "src/contexts/navigation";
 import { useWallet } from "src/hooks";
+import DataLoading from 'src/screens/loadings/DataLoading';
 
 const styles = StyleSheet.create({
 	headerText: {
@@ -42,8 +43,14 @@ const BusinessWelcome = (): ReactElement => {
 	const { userEmail } = useContext(AuthContext);
 	const [isVisible, setIsVisible] = useState<boolean>(false);
 	const { updateSelectedView } = useContext(NavigationViewContext);
+	const [isLoading, setLoading] = useState<boolean>(true)
 
 	useWallet(businessDwollaId);
+
+	useEffect(() => {
+		setLoading(!user?.verifiedBusiness || !walletData?.userId)
+	}, [user?.verifiedBusiness, walletData?.userId])
+
 	const onSkip = async () => {
 		updateUserType(UserType.Business, userEmail);
 		updateSelectedView(ViewState.Business)
@@ -51,6 +58,7 @@ const BusinessWelcome = (): ReactElement => {
 
 	return (
 		<View style={viewBaseB}>
+			<DataLoading visible={isLoading} />
 			<Header />
 			<ScrollView style={wrappingContainerBase}>
 				<Text style={styles.headerText}>
@@ -70,7 +78,7 @@ const BusinessWelcome = (): ReactElement => {
 					<Button
 						type="purple"
 						title={Translation.BUTTON.LINK_BUSINESS_BANK}
-						disabled={!user?.verifiedBusiness || !walletData?.userId}
+						disabled={isLoading}
 						onPress={() => {
 							setIsVisible(true)
 						}}
