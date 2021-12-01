@@ -7,12 +7,14 @@ import useModalStatusBar from "./useModalStatusBar";
 import useNotifications from "./useNotifications";
 import useRouteTracking from "./useRouteTracking";
 import useUserDetails from "./useUserDetails";
-import { useUpdateCustomerWalletData, useWallet } from "./useWallet";
+import { useBusinessWallet, useCustomerWallet, useUpdateBusinessWalletData, useUpdateCustomerWalletData } from "./useWallet";
 
 export {
 	useMediaLibraryPermission,
 	useUpdateCustomerWalletData,
-	useWallet,
+	useBusinessWallet,
+	useCustomerWallet,
+	useUpdateBusinessWalletData,
 	useUserDetails,
 	useCachedResources,
 	useModalStatusBar,
