@@ -1,24 +1,23 @@
 import { AntDesign, Entypo, Octicons } from "@expo/vector-icons";
-import { useNavigation, DrawerActions } from "@react-navigation/native";
-import React, { useState, useContext, useEffect } from 'react';
-import { StyleSheet, TouchableWithoutFeedback, View, ScrollView, TouchableOpacity } from 'react-native';
-import { Text, Image } from "react-native-elements";
+import { DrawerActions, useNavigation } from "@react-navigation/native";
+import moment from "moment";
+import React, { useContext, useState } from 'react';
+import { ScrollView, StyleSheet, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native';
+import { Image, Text } from "react-native-elements";
+import { ITransaction } from 'src/api/types';
+import { BUTTON_TYPES } from "src/constants";
+import { UserContext, WalletContext } from "src/contexts";
+import { useBusinessWallet, useUpdateBusinessWalletData } from "src/hooks";
+import * as Routes from 'src/navigation/constants';
+import { Button, Dialog, Header, SearchInput } from "src/shared/uielements";
 import { colors } from "src/theme/colors";
-import { viewBaseB, wrappingContainerBase, baseHeader, dialogViewBase, FontFamily } from "src/theme/elements";
-import { SearchInput, Header, Dialog, Button } from "src/shared/uielements";
+import { baseHeader, dialogViewBase, FontFamily, viewBaseB, wrappingContainerBase } from "src/theme/elements";
+import Translation from 'src/translation/en.json';
+import { getBerksharePrefix } from "src/utils/common";
+import { TransactionType } from "src/utils/types";
+import DwollaDialog from './DwollaDialog';
 import MerchantTransactionList from "./MerchantTransactionList";
 import MerchantTransactionsFilter from "./MerchantTransactionsFilter";
-import { TransactionType } from "src/utils/types";
-import Translation from 'src/translation/en.json';
-import * as Routes from 'src/navigation/constants';
-import { getBerksharePrefix } from "src/utils/common";
-import DwollaDialog from './DwollaDialog';
-import { BUTTON_TYPES } from "src/constants";
-import moment from "moment";
-import { ITransaction } from 'src/api/types';
-import { WalletContext, UserContext } from "src/contexts";
-import { useWallet } from "src/hooks";
-import { DwollaAPI } from "src/api"
 
 const styles = StyleSheet.create({
 	mainTextColor: {
@@ -234,8 +233,7 @@ const defaultTransaction = {
 
 const MerchantDashboard = (): JSX.Element => {
 	const navigation = useNavigation();
-	const { walletData, updateWalletData  } = useContext(WalletContext);
-	const { businessDwollaId } = useContext(UserContext);
+	const { businessWalletData  } = useContext(WalletContext);
 	const { user } = useContext(UserContext);
 	const completedCustomerVerification = user?.verifiedCustomer;
 	const [isFilterVisible, setIsFilterVisible] = useState<boolean>(false);
@@ -244,20 +242,8 @@ const MerchantDashboard = (): JSX.Element => {
 	const [selectedItem, setSelectedItem] = useState<ITransaction>(defaultTransaction as ITransaction);
 	const [isDwollaVisible, setIsDwollaVisible] = useState<boolean>(false);
 	const [isPayment, setIsPayment] = useState<boolean>(false);
-
-	useWallet(businessDwollaId);
-
-
-	useEffect(() => {
-		const timerId = setInterval(async () => {
-			if (walletData?.address !== user?.business?.walletAddress) {
-				const userWallet = await DwollaAPI.loadWallet(businessDwollaId)
-				const fundingSource = await DwollaAPI.loadFundingSource(businessDwollaId)
-				updateWalletData(({ ...userWallet, availableFundingSource: fundingSource }))
-			}
-		}, 1500);
-		return () => clearInterval(timerId);
-	}, [walletData?.address, user?.customer?.walletAddress])
+	useBusinessWallet();
+	useUpdateBusinessWalletData();
 
 	const onSearchChange = (name: string, change: string) => {
 		setSearchText(change);
@@ -282,8 +268,8 @@ const MerchantDashboard = (): JSX.Element => {
 		onClose();
 	}
 
-	const businessFundingSource = walletData?.availableFundingSource;
-	const availableBalance = walletData?.availableBalance;
+	const businessFundingSource = businessWalletData?.availableFundingSource;
+	const availableBalance = businessWalletData?.availableBalance;
 
 	return (
 		<View style={viewBaseB}>

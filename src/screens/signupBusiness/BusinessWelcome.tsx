@@ -1,24 +1,20 @@
-import React, { ReactElement, useContext, useState, useEffect } from "react";
+import React, { ReactElement, useContext, useState } from "react";
 import {
 	KeyboardAvoidingView,
-	Platform,
-	ScrollView,
+	Platform, SafeAreaView, ScrollView,
 	StyleSheet,
-	View,
-	SafeAreaView
+	View
 } from "react-native";
-import { UserContext, AuthContext, WalletContext } from "src/contexts";
 import { Text } from "react-native-elements";
 import { UserType } from "src/auth/types";
+import { AuthContext, UserContext, WalletContext } from "src/contexts";
+import { NavigationViewContext, ViewState } from "src/contexts/navigation";
+import { useBusinessWallet } from "src/hooks";
 import DwollaDialog from 'src/screens/dashboard/DwollaDialog';
 import { Button, Header } from "src/shared/uielements";
 import { colors } from "src/theme/colors";
 import { viewBaseB, wrappingContainerBase } from "src/theme/elements";
 import Translation from "src/translation/en.json";
-import { useNavigation } from "@react-navigation/core";
-import * as Routes from "src/navigation/constants";
-import { NavigationViewContext, ViewState } from "src/contexts/navigation";
-import { useWallet } from "src/hooks";
 
 const styles = StyleSheet.create({
 	headerText: {
@@ -37,13 +33,13 @@ const styles = StyleSheet.create({
 });
 
 const BusinessWelcome = (): ReactElement => {
-	const { updateUserType, user, businessDwollaId } = useContext(UserContext);
-	const { walletData } = useContext(WalletContext);
+	const { updateUserType, user } = useContext(UserContext);
+	const { businessWalletData } = useContext(WalletContext);
 	const { userEmail } = useContext(AuthContext);
 	const [isVisible, setIsVisible] = useState<boolean>(false);
 	const { updateSelectedView } = useContext(NavigationViewContext);
 
-	useWallet(businessDwollaId);
+	useBusinessWallet();
 	const onSkip = async () => {
 		updateUserType(UserType.Business, userEmail);
 		updateSelectedView(ViewState.Business)
@@ -70,7 +66,7 @@ const BusinessWelcome = (): ReactElement => {
 					<Button
 						type="purple"
 						title={Translation.BUTTON.LINK_BUSINESS_BANK}
-						disabled={!user?.verifiedBusiness || !walletData?.userId}
+						disabled={!user?.verifiedBusiness || !businessWalletData?.userId}
 						onPress={() => {
 							setIsVisible(true)
 						}}

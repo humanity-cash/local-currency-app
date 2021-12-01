@@ -1,15 +1,20 @@
-import { EvilIcons, Feather, AntDesign } from '@expo/vector-icons';
+import { AntDesign, EvilIcons, Feather } from '@expo/vector-icons';
 import { createDrawerNavigator, DrawerContentComponentProps, DrawerContentScrollView, DrawerItem } from '@react-navigation/drawer';
-import React, { useContext, useState } from 'react';
-import { Image, StyleSheet, Text, TouchableWithoutFeedback, View, TouchableOpacity } from 'react-native';
 import { DrawerActions } from '@react-navigation/native';
+import React, { useContext, useState } from 'react';
+import { Image, StyleSheet, Text, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native';
 import { Drawer } from 'react-native-paper';
 import { UserType } from 'src/auth/types';
 import { BUTTON_TYPES } from 'src/constants';
+import { AuthContext, NavigationViewContext, UserContext, WalletContext } from 'src/contexts';
+import { ViewState } from "src/contexts/navigation";
+import { useBusinessWallet } from 'src/hooks';
 import * as Routes from 'src/navigation/constants';
 import MerchantCashoutAmount from "src/screens/merchantCashout/MerchantCashoutAmount";
 import MerchantLoadup from "src/screens/merchantLoadup/MerchantLoadup";
 import MerchantPayoutSelection from 'src/screens/merchantPayout/MerchantPayoutSelection';
+import MerchantSettings from "src/screens/merchantSettings/MerchantSettings";
+import MerchantSettingsHelpAndContact from 'src/screens/merchantSettings/MerchantSettingsHelpAndContact';
 import Report from 'src/screens/report/Report';
 import { Button, Dialog } from "src/shared/uielements";
 import { colors } from "src/theme/colors";
@@ -19,11 +24,6 @@ import MerchantQRCodeScan from "../merchantPayment/MerchantQRCodeScan";
 import MerchantRequest from "../merchantPayment/MerchantRequest";
 import MerchantReturnQRCodeScan from "../merchantPayment/MerchantReturnQRCodeScan";
 import MerchantDashboard from "./MerchantDashboard";
-import MerchantSettings from "src/screens/merchantSettings/MerchantSettings";
-import MerchantSettingsHelpAndContact from 'src/screens/merchantSettings/MerchantSettingsHelpAndContact';
-import { UserContext, AuthContext, NavigationViewContext, WalletContext } from 'src/contexts';
-import { ViewState } from "src/contexts/navigation";
-import { useWallet } from 'src/hooks';
 
 const styles = StyleSheet.create({
 	headerText: {
@@ -187,7 +187,7 @@ const DrawerContent = (props: DrawerContentComponentProps) => {
 	const { signOut, userEmail } = useContext(AuthContext);
 	const { user, updateUserType, businessDwollaId } = useContext(UserContext);
 	const { updateSelectedView } = useContext(NavigationViewContext);
-	const { walletData } = useContext(WalletContext);
+	const { businessWalletData } = useContext(WalletContext);
 	const authorization = { cashierView: user?.verifiedBusiness };
 	const [isExpanded, setIsExpanded] = useState<boolean>(false);
 	const [isVisible, setIsVisible] = useState<boolean>(false);
@@ -204,7 +204,7 @@ const DrawerContent = (props: DrawerContentComponentProps) => {
 		setIsVisible(false);
 	}
 
-	useWallet(businessDwollaId);
+	useBusinessWallet();
 	const onCashierViewConfirm = () => {
 		setIsCashierView(false);
 		updateUserType(UserType.Cashier, userEmail);
@@ -306,36 +306,36 @@ const DrawerContent = (props: DrawerContentComponentProps) => {
 							</View>
 						)}
 					</View>
-					<Text style={styles.berkAmount}>B$ {walletData?.availableBalance}</Text>
+					<Text style={styles.berkAmount}>B$ {businessWalletData?.availableBalance}</Text>
 					<Drawer.Section>
 						<DrawerItem
 							label={Translation.TABS.RECEIVE_PAYMENT}
 							onPress={() => {
-								if (walletData?.address !== user?.business?.walletAddress) return
-								walletData?.availableFundingSource
+								if (businessWalletData?.address !== user?.business?.walletAddress) return
+								businessWalletData?.availableFundingSource
 									? props.navigation.navigate(Routes.MERCHANT_REQUEST)
 									: setIsBankDialog(true)
 							}}
 						/>
 						<DrawerItem
 							label={Translation.TABS.SCAN_TO_PAY}
-							onPress={() => walletData?.availableBalance ? props.navigation.navigate(Routes.MERCHANT_QRCODE_SCAN) : setIsBankDialog(true)}
+							onPress={() => businessWalletData?.availableBalance ? props.navigation.navigate(Routes.MERCHANT_QRCODE_SCAN) : setIsBankDialog(true)}
 						/>
 						<DrawerItem
 							label={Translation.TABS.MAKE_RETURN}
-							onPress={() => walletData?.availableBalance ? setIsVisible(true) : setIsBankDialog(true)}
+							onPress={() => businessWalletData?.availableBalance ? setIsVisible(true) : setIsBankDialog(true)}
 						/>
 						<DrawerItem
 							label={Translation.TABS.LOADUP}
-							onPress={() => walletData?.availableBalance ? props.navigation.navigate(Routes.MERCHANT_LOADUP) : setIsBankDialog(true)}
+							onPress={() => businessWalletData?.availableBalance ? props.navigation.navigate(Routes.MERCHANT_LOADUP) : setIsBankDialog(true)}
 						/>
 						<DrawerItem
 							label={Translation.TABS.SEND_TO_SOMEONE}
-							onPress={() => walletData?.availableBalance ? props.navigation.navigate(Routes.MERCHANT_PAYOUT_SELECTION) : setIsBankDialog(true)}
+							onPress={() => businessWalletData?.availableBalance ? props.navigation.navigate(Routes.MERCHANT_PAYOUT_SELECTION) : setIsBankDialog(true)}
 						/>
 						<DrawerItem
 							label={Translation.TABS.CASHOUT}
-							onPress={() => walletData?.availableBalance ? props.navigation.navigate(Routes.MERCHANT_CASHOUT_AMOUNT) : setIsBankDialog(true)}
+							onPress={() => businessWalletData?.availableBalance ? props.navigation.navigate(Routes.MERCHANT_CASHOUT_AMOUNT) : setIsBankDialog(true)}
 						/>
 					</Drawer.Section>
 					<Drawer.Section>
