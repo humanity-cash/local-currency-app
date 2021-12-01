@@ -1,6 +1,6 @@
 import { AntDesign } from '@expo/vector-icons';
 import { useNavigation } from "@react-navigation/native";
-import React, { ReactElement, useContext, useEffect, useState } from "react";
+import React, { ReactElement, useContext, useEffect, useState, createRef } from "react";
 import {
 	KeyboardAvoidingView,
 	Platform,
@@ -27,7 +27,7 @@ import {
 } from "src/theme/elements";
 import Translation from "src/translation/en.json";
 import { Industry } from "src/utils/types";
-import { SafeAreaView } from 'react-native';
+import { SafeAreaView, Keyboard } from 'react-native';
 
 const Industries = [
 	Industry.ARTS_ENTERTAINMENT,
@@ -88,6 +88,8 @@ const BusinessInfo = (): ReactElement => {
 	const { signOut } = useContext(AuthContext);
 	const business = user?.business;
 
+	const industryRef = createRef<SelectDropdown>()
+
 	useEffect(() => {
 		setGoNext(business?.rbn !== "");
 	}, [business?.rbn])
@@ -133,6 +135,11 @@ const BusinessInfo = (): ReactElement => {
 							value={business?.rbn}
 							onChange={onValueChange}
 							style={styles.input}
+							returnKeyType='next'
+							onSubmitEditing={() => {
+								Keyboard.dismiss()
+								industryRef.current?.openDropdown()
+							}}
 						/>
 
 						<Text style={styles.label}>
@@ -140,6 +147,7 @@ const BusinessInfo = (): ReactElement => {
 						</Text>
 						<View style={styles.picker}>
 							<SelectDropdown
+								ref={industryRef}
 								data={Industries}
 								defaultValueByIndex={0}
 								onSelect={(selectedItem) => {
