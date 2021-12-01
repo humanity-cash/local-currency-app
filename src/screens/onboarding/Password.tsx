@@ -14,6 +14,7 @@ import {
 } from 'src/theme/elements';
 import Translation from 'src/translation/en.json';
 import { isPasswordValid } from 'src/utils/validation';
+import DataLoading from 'src/screens/loadings/DataLoading';
 
 const styles = StyleSheet.create({
 	headerText: {
@@ -51,6 +52,7 @@ const Password = (): JSX.Element => {
 	const navigation = useNavigation();
 	const { updateSignUpDetails, signUpDetails, signUp } = useContext(AuthContext);
 	const [isValidPassword, setIsValidPassword] = useState<boolean>(false);
+	const [isLoading, setLoading] = useState<boolean>(false)
 
 	const confirmPasswordRef = createRef<TextInput>()
 
@@ -72,8 +74,20 @@ const Password = (): JSX.Element => {
 		updateSignUpDetails({ [name]: change });
 	};
 
+	const onNext = async () => {
+		setLoading(true)
+		const response = await signUp();
+		setLoading(false)
+		
+		console.log(" onPress={ ~ response", response)
+		if (response.success) {
+			navigation.navigate(Routes.VERIFICATION);
+		}
+	}
+
 	return (
 		<View style={viewBaseWhite}>
+			<DataLoading visible={isLoading} />
 			<Header
 				leftComponent={<BackBtn onClick={() => navigation.goBack()} />}
 			/>
@@ -125,13 +139,7 @@ const Password = (): JSX.Element => {
 						type={BUTTON_TYPES.DARK_GREEN}
 						title='NEXT'
 						disabled={!isValidPassword}
-						onPress={async () => {
-							const response = await signUp();
-              				console.log(" onPress={ ~ response", response)
-							if (response.success) {
-								navigation.navigate(Routes.VERIFICATION);
-							}
-						}}
+						onPress={onNext}
 					/>
 				</SafeAreaView>
 			</KeyboardAvoidingView>

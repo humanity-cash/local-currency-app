@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { StyleSheet, View, SafeAreaView } from 'react-native';
 import { Text } from 'react-native-elements';
 import { BUTTON_TYPES } from 'src/constants';
@@ -12,6 +12,7 @@ import { WalletContext, UserContext } from "src/contexts";
 import { NavigationViewContext, ViewState } from "src/contexts/navigation";
 import { useWallet } from "src/hooks";
 import { useNavigation } from '@react-navigation/core';
+import DataLoading from 'src/screens/loadings/DataLoading';
 
 const styles = StyleSheet.create({
 	headerText: {
@@ -34,6 +35,11 @@ const LinkBankAccount = (): JSX.Element => {
 	const { walletData } = useContext(WalletContext)
 	const { customerDwollaId } = useContext(UserContext)
 	const { updateSelectedView } = useContext(NavigationViewContext);
+	const [ isLoading, setIsLoading ] = useState<boolean>(true);
+
+	useEffect(() => {
+		setIsLoading(!walletData?.userId?.length)
+	}, [walletData?.userId])
 
 	const selectBank = async () => {
 		setIsVisible(true);
@@ -48,6 +54,7 @@ const LinkBankAccount = (): JSX.Element => {
 	
 	return (
 		<View style={viewBase}>
+			<DataLoading visible={isLoading} />
 			<Header />
 
 			<View style={wrappingContainerBase}>
@@ -67,7 +74,7 @@ const LinkBankAccount = (): JSX.Element => {
 				<Button
 					type={BUTTON_TYPES.DARK_GREEN}
 					title={Routes.LINK_BANK_ACCOUNT}
-					disabled={!walletData?.userId?.length}
+					disabled={isLoading}
 					onPress={selectBank}
 				/>
 			</SafeAreaView>
