@@ -9,6 +9,7 @@ import { colors } from "src/theme/colors";
 import { baseHeader, viewBase, wrappingContainerBase } from "src/theme/elements";
 import { IMap } from "src/utils/types";
 import Translation from 'src/translation/en.json';
+import DataLoading from 'src/screens/loadings/DataLoading';
 
 interface PasswordForm extends IMap {
 	confirmPassword: string
@@ -59,6 +60,7 @@ const ForgotPasswordNewPassword = (): React.ReactElement => {
 	const [state, setState] = useState<PasswordForm>({
 		confirmPassword: "",
 	});
+	const [isLoading, setLoading] = useState<boolean>(false)
 
 	const confirmPasswordRef = createRef<TextInput>()
 
@@ -74,7 +76,9 @@ const ForgotPasswordNewPassword = (): React.ReactElement => {
 	};
 	
 	const onPress = async () => {
+		setLoading(true)
 		const response = await completeForgotPasswordFlow();
+		setLoading(false)
 		if(response.success){
 			navigation.navigate("ForgotPasswordSuccess");
 		} else {
@@ -84,6 +88,7 @@ const ForgotPasswordNewPassword = (): React.ReactElement => {
 
 	return (
 		<View style={viewBase}>
+			<DataLoading visible={isLoading} />
 			<Header
 				leftComponent={<BackBtn onClick={() => navigation.goBack()} />}
 				rightComponent={

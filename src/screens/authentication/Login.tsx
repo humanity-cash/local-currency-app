@@ -41,11 +41,16 @@ const Login = (): JSX.Element => {
 	const navigation = useNavigation();
 	const { signIn, signInDetails, setSignInDetails, authStatus } = useContext(AuthContext);
 	const [goNext, setGoNext] = useState<boolean>(false);
+	const [isLoading, setLoading] = useState<boolean>(false)
 	const passwordRef = createRef<TextInput>()
 
 	useEffect(() => {
 		setGoNext(isPasswordValid(signInDetails ? signInDetails.password : ""));
 	}, [signInDetails]);
+
+	useEffect(() => {
+		setLoading(authStatus === AuthStatus.Loading)
+	}, [authStatus])
 
 	const onValueChange = (name: 'email' | 'password', change: string) => {
 		setSignInDetails((pv: SignInInput) => ({
@@ -55,12 +60,14 @@ const Login = (): JSX.Element => {
 	};
 
 	const handleSignin = async () => {
+		setLoading(true)
 		await signIn();
+		setLoading(false)
 	}
 
 	return (
 		<View style={viewBase}>
-			<DataLoading visible={authStatus === AuthStatus.Loading} />
+			<DataLoading visible={isLoading} />
 			<Header
 				leftComponent={<BackBtn onClick={() => navigation.goBack()} />}
 			/>

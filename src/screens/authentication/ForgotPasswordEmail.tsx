@@ -1,5 +1,5 @@
 import { useNavigation } from "@react-navigation/native";
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { KeyboardAvoidingView, Platform, ScrollView, StyleSheet, View, SafeAreaView } from 'react-native';
 import { Text } from "react-native-elements";
 import { AuthContext } from 'src/contexts';
@@ -7,6 +7,7 @@ import { ForgotPassword } from "src/auth/types";
 import { BackBtn, BlockInput, Button, CancelBtn, Header } from "src/shared/uielements";
 import { baseHeader, viewBase } from "src/theme/elements";
 import { isEmailValid } from "src/utils/validation";
+import DataLoading from 'src/screens/loadings/DataLoading';
 
 const styles = StyleSheet.create({
   container: { 
@@ -29,13 +30,16 @@ const styles = StyleSheet.create({
 const ForgotPasswordEmail = (): React.ReactElement => {
   const { forgotPasswordDetails, setForgotPasswordDetails, startForgotPasswordFlow } = useContext(AuthContext)
   const navigation = useNavigation();
+  const [isLoading, setLoading] = useState<boolean>(false)
 
   const onValueChange = (name: string, change: string) => {
     setForgotPasswordDetails((pv: ForgotPassword) => ({ ...pv, email: change }));
   };
 
   const handleNext = async () => {
-    const response = await startForgotPasswordFlow();
+	setLoading(true)
+	const response = await startForgotPasswordFlow();
+	setLoading(false)
     if(response.success) {
       /**Email exist and a verification code was sent */
       navigation.navigate("ForgotPasswordVerification")
@@ -44,6 +48,7 @@ const ForgotPasswordEmail = (): React.ReactElement => {
 
   return (
 		<View style={viewBase}>
+			<DataLoading visible={isLoading} />
 			<Header
 				leftComponent={<BackBtn onClick={() => navigation.goBack()} />}
 				rightComponent={
