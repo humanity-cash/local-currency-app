@@ -15,6 +15,7 @@ import {
 import Translation from 'src/translation/en.json';
 import { isPasswordValid } from 'src/utils/validation';
 import DataLoading from 'src/screens/loadings/DataLoading';
+import SecurityEyeButton from 'src/shared/uielements/SecurityEyeButton';
 
 const styles = StyleSheet.create({
 	headerText: {
@@ -46,6 +47,13 @@ const styles = StyleSheet.create({
 		marginHorizontal: 20,
 		marginBottom: 20,
 	},
+	eyeView: {
+		position: 'absolute',
+		right: 10,
+		top: 0,
+		bottom: 0,
+		justifyContent: 'center'
+	}
 });
 
 const Password = (): JSX.Element => {
@@ -53,6 +61,8 @@ const Password = (): JSX.Element => {
 	const { updateSignUpDetails, signUpDetails, signUp } = useContext(AuthContext);
 	const [isValidPassword, setIsValidPassword] = useState<boolean>(false);
 	const [isLoading, setLoading] = useState<boolean>(false)
+	const [isShowPassword, setShowPassword] = useState<boolean>(true)
+	const [isShowConPassword, setShowConPassword] = useState<boolean>(true)
 
 	const confirmPasswordRef = createRef<TextInput>()
 
@@ -104,15 +114,23 @@ const Password = (): JSX.Element => {
 						<Text style={styles.label}>
 							{Translation.LABEL.PASSWORD_REG}
 						</Text>
-						<BlockInput
-							name='password'
-							placeholder='Password'
-							value={signUpDetails.password}
-							secureTextEntry={true}
-							onChange={onValueChange}
-							returnKeyType='next'
-							onSubmitEditing={() => {confirmPasswordRef.current?.focus()}}
-						/>
+						<View>
+							<BlockInput
+								name='password'
+								placeholder='Password'
+								value={signUpDetails.password}
+								secureTextEntry={isShowPassword}
+								onChange={onValueChange}
+								returnKeyType='next'
+								onSubmitEditing={() => {confirmPasswordRef.current?.focus()}}
+								/>
+							<View style={styles.eyeView}>
+								<SecurityEyeButton
+									isSecurity={isShowPassword}
+									onPress={() => setShowPassword(!isShowPassword)}
+									/>
+							</View>
+						</View>
 
 						<View style={styles.inlineView}>
 							<Text style={styles.label}>Confirm password</Text>
@@ -120,14 +138,22 @@ const Password = (): JSX.Element => {
 								<Text style={styles.errorText}>No match</Text>
 							)}
 						</View>
-						<BlockInput
-							inputRef={confirmPasswordRef}
-							name='confirmPassword'
-							placeholder='confirm password'
-							value={signUpDetails.confirmPassword}
-							secureTextEntry={true}
-							onChange={onValueChange}
-						/>
+						<View>
+							<BlockInput
+								inputRef={confirmPasswordRef}
+								name='confirmPassword'
+								placeholder='confirm password'
+								value={signUpDetails.confirmPassword}
+								secureTextEntry={isShowConPassword}
+								onChange={onValueChange}
+							/>
+							<View style={styles.eyeView}>
+								<SecurityEyeButton
+									isSecurity={isShowConPassword}
+									onPress={() => setShowConPassword(!isShowConPassword)}
+								/>
+							</View>
+						</View>
 					</View>
 				</View>
 			</ScrollView>
