@@ -1,6 +1,6 @@
 import { AntDesign } from '@expo/vector-icons';
-import React, { useContext } from "react";
-import { StyleSheet, View } from "react-native";
+import React, { useContext, createRef } from "react";
+import { StyleSheet, View, TextInput, Keyboard } from 'react-native';
 import { Text } from "react-native-elements";
 import SelectDropdown from 'react-native-select-dropdown';
 import { UserContext } from "src/contexts";
@@ -59,6 +59,11 @@ const BusinessAddressForm = (props: BusinessAddressProps): JSX.Element => {
 	const { user, updateBusinessData } = useContext(UserContext)
 	const business = user?.business;
 
+	const address2Ref = createRef<TextInput>()
+	const cityRef = createRef<TextInput>()
+	const stateRef = createRef<SelectDropdown>()
+	const phoneRef = createRef<TextInput>()
+
 	const onValueChange = (name: string, change: string) => {
 		updateBusinessData({
 			[name]: change,
@@ -74,31 +79,47 @@ const BusinessAddressForm = (props: BusinessAddressProps): JSX.Element => {
 				value={business?.address1}
 				onChange={onValueChange}
 				style={props.style}
+				returnKeyType='next'
+				onSubmitEditing={() => {
+					address2Ref.current?.focus()
+				}}
 			/>
 			<Text style={styles.label}>ADDRESS 2</Text>
 			<BlockInput
+				inputRef={address2Ref}
 				name="address2"
 				placeholder="Apt."
 				value={business?.address2}
 				onChange={onValueChange}
 				style={props.style}
+				returnKeyType='next'
+				onSubmitEditing={() => {
+					cityRef.current?.focus()
+				}}
 			/>
 
 			<View style={styles.inlineView}>
 				<View style={styles.cityView}>
 					<Text style={styles.label}>CITY *</Text>
 					<BlockInput
+						inputRef={cityRef}
 						name="city"
 						placeholder="City"
 						value={business?.city}
 						onChange={onValueChange}
 						style={props.style}
+						returnKeyType='next'
+						onSubmitEditing={() => {
+							Keyboard.dismiss()
+							stateRef.current?.openDropdown()
+						}}
 					/>
 				</View>
 				<View style={styles.stateContent}>
 					<Text style={styles.label}>STATE</Text>
 					<View style={styles.stateView}>
 						<SelectDropdown
+							ref={stateRef}
 							data={countries}
 							defaultValueByIndex={0}
 							onSelect={(selectedItem) => {
@@ -133,10 +154,14 @@ const BusinessAddressForm = (props: BusinessAddressProps): JSX.Element => {
 				value={business?.postalCode}
 				onChange={onValueChange}
 				style={props.style}
+				onSubmitEditing={() => {
+					phoneRef.current?.focus()
+				}}
 			/>
 
 			<Text style={styles.label}>PHONE NUMBER - OPTIONAL</Text>
 			<BlockInput
+				inputRef={phoneRef}
 				name="phoneNumber"
 				placeholder="000987654321"
 				keyboardType="number-pad"

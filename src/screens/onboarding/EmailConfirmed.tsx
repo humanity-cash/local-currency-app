@@ -1,5 +1,5 @@
 import { useNavigation } from '@react-navigation/native';
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import { StyleSheet, View, SafeAreaView } from 'react-native';
 import { Text } from 'react-native-elements';
 import { AuthContext } from "src/contexts";
@@ -7,6 +7,7 @@ import { BUTTON_TYPES } from 'src/constants';
 import { BackBtn, Button, Header } from "src/shared/uielements";
 import { colors } from "src/theme/colors";
 import { baseHeader, viewBase, wrappingContainerBase } from "src/theme/elements";
+import DataLoading from 'src/screens/loadings/DataLoading';
 
 const styles = StyleSheet.create({
 	headerText: {
@@ -39,9 +40,17 @@ const styles = StyleSheet.create({
 const EmailConfirmed = (): JSX.Element => {
 	const navigation = useNavigation();
 	const { signUpDetails: { email, password }, signIn } = useContext(AuthContext);
+	const [isLoading, setLoading] = useState<boolean>(false)
+
+	const onNext = async () => {
+		setLoading(true)
+		await signIn(email, password)
+		setLoading(false)
+	}
 
 	return (
 		<View style={viewBase}>
+			<DataLoading visible={isLoading} />
 			<Header
 				leftComponent={
 					<BackBtn onClick={() => navigation.goBack()} />
@@ -61,7 +70,7 @@ const EmailConfirmed = (): JSX.Element => {
 				<Button
 					type={BUTTON_TYPES.DARK_GREEN}
 					title='NEXT'
-					onPress={() => signIn(email, password)}
+					onPress={onNext}
 				/>
 			</SafeAreaView>
 		</View>

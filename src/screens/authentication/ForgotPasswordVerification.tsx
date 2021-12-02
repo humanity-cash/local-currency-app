@@ -35,14 +35,11 @@ const styles = StyleSheet.create({
 	},
 	bottomView: {
 		marginHorizontal: 20,
-		marginBottom: 20,
+		marginBottom: 30,
 	},
 	bottomNavigation: {
 		alignSelf: "center",
-	},
-	sendCodeBtn: {
-		marginBottom: 30,
-	},
+	}
 });
 
 const ForgotPasswordVerification = () => {
@@ -90,7 +87,6 @@ const ForgotPasswordVerification = () => {
 				behavior={Platform.OS == "ios" ? "padding" : "height"}>
 				<SafeAreaView style={styles.bottomView}>
 					<TouchableOpacity
-						style={styles.sendCodeBtn}
 						onPress={() => {
 							Keyboard.dismiss();
 						}}>
