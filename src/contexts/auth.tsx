@@ -65,7 +65,7 @@ export const AuthProvider: React.FunctionComponent = ({ children }) => {
 				const response: BaseResponse<CognitoUserSession | undefined> =
 					await userController.getSession();
 				if (response.success && response.data && response.data.isValid()) {
-					const email = response.data.getAccessToken().decodePayload().username;
+					const email = response.data.getIdToken().decodePayload().email;
 					setUserEmail(email);
 					const user = await UserAPI.getUserByEmail(email);
 					if (!Object.keys(user).length) {
