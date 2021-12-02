@@ -1,16 +1,18 @@
-import React, { useState } from "react";
 import { IWallet } from "@humanity.cash/types";
+import React, { useState } from "react";
 
 interface PersonalFundingSource { availableFundingSource: boolean };
 
 export const WalletContext = React.createContext<IState>({} as IState);
 interface IState {
-	updateWalletData: (u: any) => void
-	walletData: IWallet & PersonalFundingSource
+	customerWalletData: IWallet & PersonalFundingSource,
+	businessWalletData: IWallet & PersonalFundingSource,
+	updateBusinessWalletData: (u: any) => void,
+	updateCustomerWalletData: (u: any) => void,
 }
 
 export const WalletProvider: React.FunctionComponent = ({ children }) => {
-	const [walletData, setWalletData] = useState<IWallet & PersonalFundingSource>({
+	const [customerWalletData, setCustomerWalletData] = useState<IWallet & PersonalFundingSource>({
 		totalBalance: 0,
 		createdTimestamp: "",
 		availableBalance: 0,
@@ -19,11 +21,23 @@ export const WalletProvider: React.FunctionComponent = ({ children }) => {
 		createdBlock: "",
 		availableFundingSource: false,
 	});
-	const updateWalletData = (u: any) => setWalletData({ ...u });
+	const [businessWalletData, setBusinessWalletData] = useState<IWallet & PersonalFundingSource>({
+		totalBalance: 0,
+		createdTimestamp: "",
+		availableBalance: 0,
+		userId: "",
+		address: "",
+		createdBlock: "",
+		availableFundingSource: false,
+	});
+	const updateBusinessWalletData = (u: any) => setBusinessWalletData({ ...u });
+	const updateCustomerWalletData = (u: any) => setCustomerWalletData({ ...u });
 
 	const state: IState = {
-		walletData,
-		updateWalletData,
+		customerWalletData,
+		businessWalletData,
+		updateBusinessWalletData,
+		updateCustomerWalletData
 	}
 
 	return (
