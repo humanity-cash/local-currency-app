@@ -8,8 +8,8 @@ import {
 } from 'react-native';
 import { Image, Text } from 'react-native-elements';
 import { BUTTON_TYPES } from "src/constants";
-import { UserContext, WalletContext } from 'src/contexts';
-import { useUpdateCustomerWalletData, useWallet } from 'src/hooks';
+import { WalletContext } from 'src/contexts';
+import { useCustomerWallet, useUpdateCustomerWalletData } from 'src/hooks';
 import * as Routes from 'src/navigation/constants';
 import { Button, Dialog, Header } from 'src/shared/uielements';
 import { colors } from 'src/theme/colors';
@@ -148,15 +148,14 @@ const Dashboard = (): JSX.Element => {
 	const [isVisible, setIsVisible] = useState<boolean>(false);
 	const [isLoadup, setIsLoadup] = useState<boolean>(false);
 	const [isPayment, setIsPayment] = useState<boolean>(false);
-	const { customerDwollaId } = useContext(UserContext)
-	const { walletData } = useContext(WalletContext)
+	const { customerWalletData } = useContext(WalletContext)
 
 	const selectBank = () => {
 		navigation.navigate(Routes.SELECT_BANK);
 		onClose();
 	}
 
-	useWallet(customerDwollaId);
+	useCustomerWallet();
 	useUpdateCustomerWalletData();
 
 	const onClose = () => {
@@ -165,8 +164,8 @@ const Dashboard = (): JSX.Element => {
 		setIsLoadup(false);
 	};
 
-	const personalFundingSource = walletData?.availableFundingSource;
-	const availableBalance = walletData?.availableBalance;
+	const personalFundingSource = customerWalletData?.availableFundingSource;
+	const availableBalance = customerWalletData?.availableBalance;
 
 	return (
 		<View style={viewBase}>

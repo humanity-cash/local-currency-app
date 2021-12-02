@@ -1,25 +1,21 @@
-import React, { ReactElement, useContext, useState, useEffect } from "react";
+import React, { ReactElement, useContext, useEffect, useState } from "react";
 import {
 	KeyboardAvoidingView,
-	Platform,
-	ScrollView,
+	Platform, SafeAreaView, ScrollView,
 	StyleSheet,
-	View,
-	SafeAreaView
+	View
 } from "react-native";
-import { UserContext, AuthContext, WalletContext } from "src/contexts";
 import { Text } from "react-native-elements";
 import { UserType } from "src/auth/types";
+import { AuthContext, UserContext, WalletContext } from "src/contexts";
+import { NavigationViewContext, ViewState } from "src/contexts/navigation";
+import { useBusinessWallet } from "src/hooks";
 import DwollaDialog from 'src/screens/dashboard/DwollaDialog';
+import DataLoading from 'src/screens/loadings/DataLoading';
 import { Button, Header } from "src/shared/uielements";
 import { colors } from "src/theme/colors";
 import { viewBaseB, wrappingContainerBase } from "src/theme/elements";
 import Translation from "src/translation/en.json";
-import { useNavigation } from "@react-navigation/core";
-import * as Routes from "src/navigation/constants";
-import { NavigationViewContext, ViewState } from "src/contexts/navigation";
-import { useWallet } from "src/hooks";
-import DataLoading from 'src/screens/loadings/DataLoading';
 
 const styles = StyleSheet.create({
 	headerText: {
@@ -38,18 +34,18 @@ const styles = StyleSheet.create({
 });
 
 const BusinessWelcome = (): ReactElement => {
-	const { updateUserType, user, businessDwollaId } = useContext(UserContext);
-	const { walletData } = useContext(WalletContext);
+	const { updateUserType, user } = useContext(UserContext);
+	const { businessWalletData } = useContext(WalletContext);
 	const { userEmail } = useContext(AuthContext);
 	const [isVisible, setIsVisible] = useState<boolean>(false);
 	const { updateSelectedView } = useContext(NavigationViewContext);
 	const [isLoading, setLoading] = useState<boolean>(true)
 
-	useWallet(businessDwollaId);
+	useBusinessWallet();
 
 	useEffect(() => {
-		setLoading(!user?.verifiedBusiness || !walletData?.userId)
-	}, [user?.verifiedBusiness, walletData?.userId])
+		setLoading(!user?.verifiedBusiness || !businessWalletData?.userId)
+	}, [user?.verifiedBusiness, businessWalletData?.userId])
 
 	const onSkip = async () => {
 		updateUserType(UserType.Business, userEmail);
