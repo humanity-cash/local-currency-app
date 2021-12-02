@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { SafeAreaView, StyleSheet, View } from 'react-native';
 import { Text } from 'react-native-elements';
 import { BUTTON_TYPES } from 'src/constants';
@@ -7,6 +7,7 @@ import { NavigationViewContext, ViewState } from "src/contexts/navigation";
 import { useCustomerWallet, useUpdateCustomerWalletData } from "src/hooks";
 import * as Routes from 'src/navigation/constants';
 import DwollaDialog from 'src/screens/dashboard/DwollaDialog';
+import DataLoading from 'src/screens/loadings/DataLoading';
 import { Button, Header } from "src/shared/uielements";
 import { colors } from "src/theme/colors";
 import { baseHeader, viewBase, wrappingContainerBase } from "src/theme/elements";
@@ -31,6 +32,11 @@ const LinkBankAccount = (): JSX.Element => {
 	const [isVisible, setIsVisible] = useState<boolean>(false);
 	const { customerWalletData} = useContext(WalletContext);
 	const { updateSelectedView } = useContext(NavigationViewContext);
+	const [ isLoading, setIsLoading ] = useState<boolean>(true);
+
+	useEffect(() => {
+		setIsLoading(!customerWalletData?.userId?.length)
+	}, [customerWalletData?.userId])
 
 	const selectBank = async () => {
 		setIsVisible(true);
@@ -45,6 +51,7 @@ const LinkBankAccount = (): JSX.Element => {
 	
 	return (
 		<View style={viewBase}>
+			<DataLoading visible={isLoading} />
 			<Header />
 
 			<View style={wrappingContainerBase}>
@@ -64,7 +71,7 @@ const LinkBankAccount = (): JSX.Element => {
 				<Button
 					type={BUTTON_TYPES.DARK_GREEN}
 					title={Routes.LINK_BANK_ACCOUNT}
-					disabled={!customerWalletData?.userId?.length}
+					disabled={isLoading}
 					onPress={selectBank}
 				/>
 			</SafeAreaView>

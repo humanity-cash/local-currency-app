@@ -1,4 +1,4 @@
-import React, { ReactElement, useContext, useState } from "react";
+import React, { ReactElement, useContext, useEffect, useState } from "react";
 import {
 	KeyboardAvoidingView,
 	Platform, SafeAreaView, ScrollView,
@@ -11,6 +11,7 @@ import { AuthContext, UserContext, WalletContext } from "src/contexts";
 import { NavigationViewContext, ViewState } from "src/contexts/navigation";
 import { useBusinessWallet } from "src/hooks";
 import DwollaDialog from 'src/screens/dashboard/DwollaDialog';
+import DataLoading from 'src/screens/loadings/DataLoading';
 import { Button, Header } from "src/shared/uielements";
 import { colors } from "src/theme/colors";
 import { viewBaseB, wrappingContainerBase } from "src/theme/elements";
@@ -38,8 +39,14 @@ const BusinessWelcome = (): ReactElement => {
 	const { userEmail } = useContext(AuthContext);
 	const [isVisible, setIsVisible] = useState<boolean>(false);
 	const { updateSelectedView } = useContext(NavigationViewContext);
+	const [isLoading, setLoading] = useState<boolean>(true)
 
 	useBusinessWallet();
+
+	useEffect(() => {
+		setLoading(!user?.verifiedBusiness || !businessWalletData?.userId)
+	}, [user?.verifiedBusiness, businessWalletData?.userId])
+
 	const onSkip = async () => {
 		updateUserType(UserType.Business, userEmail);
 		updateSelectedView(ViewState.Business)
@@ -47,6 +54,7 @@ const BusinessWelcome = (): ReactElement => {
 
 	return (
 		<View style={viewBaseB}>
+			<DataLoading visible={isLoading} />
 			<Header />
 			<ScrollView style={wrappingContainerBase}>
 				<Text style={styles.headerText}>
@@ -66,7 +74,7 @@ const BusinessWelcome = (): ReactElement => {
 					<Button
 						type="purple"
 						title={Translation.BUTTON.LINK_BUSINESS_BANK}
-						disabled={!user?.verifiedBusiness || !businessWalletData?.userId}
+						disabled={isLoading}
 						onPress={() => {
 							setIsVisible(true)
 						}}

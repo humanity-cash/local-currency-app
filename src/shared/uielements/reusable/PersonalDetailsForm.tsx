@@ -1,5 +1,5 @@
-import React, { ReactElement, useContext } from "react";
-import { StyleSheet, View } from "react-native";
+import React, { ReactElement, useContext, createRef } from "react";
+import { StyleSheet, View, TextInput, Keyboard } from 'react-native';
 import { Text } from "react-native-elements";
 import { UserContext } from "src/contexts";
 import { colors } from "src/theme/colors";
@@ -31,16 +31,22 @@ const BasicInputWithLabel = ({
 	inputValue,
 	placeHolder,
 	name,
+	inputRef,
+	returnKeyType,
+	onSubmitEditing
 }: any) => {
 	return (
 		<>
 			<Text style={labelStyle}>{label}</Text>
 			<BlockInput
+				inputRef={inputRef}
 				name={name}
 				placeholder={placeHolder}
 				value={inputValue}
 				onChange={onInputChange}
 				style={inputStyle}
+				returnKeyType={returnKeyType}
+				onSubmitEditing={onSubmitEditing}
 			/>
 		</>
 	);
@@ -98,6 +104,8 @@ const PersonalDetailsForm = (props: PersonalDetailsProps): ReactElement => {
 	const firstName = customer?.firstName;
 	const lastName = customer?.lastName;
 
+	const lastNameRef = createRef<TextInput>()
+
 	const onValueChange = (name: string, change: string) => {
 		updateCustomerData({
 			[name]: change
@@ -115,8 +123,11 @@ const PersonalDetailsForm = (props: PersonalDetailsProps): ReactElement => {
 				placeHolder="First Name"
 				inputValue={firstName}
 				onInputChange={onValueChange}
+				returnKeyType='next'
+				onSubmitEditing={() => {lastNameRef.current?.focus()}}
 			/>
 			<BasicInputWithLabel
+				inputRef={lastNameRef}
 				labelStyle={styles.label}
 				inputStyle={props.style}
 				label={Translation.LABEL.LAST_NAME}
