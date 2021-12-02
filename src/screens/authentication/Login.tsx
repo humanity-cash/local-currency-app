@@ -1,6 +1,6 @@
 import { useNavigation } from '@react-navigation/native';
-import React, { useContext, useEffect, useState } from 'react';
-import { KeyboardAvoidingView, Platform, ScrollView, StyleSheet, View, SafeAreaView } from 'react-native';
+import React, { createRef, useContext, useEffect, useState } from 'react';
+import { KeyboardAvoidingView, Platform, ScrollView, StyleSheet, View, SafeAreaView, TextInput, Keyboard } from 'react-native';
 import { Text } from 'react-native-elements';
 import { AuthContext } from "src/contexts";
 import { AuthStatus, SignInInput } from 'src/auth/types';
@@ -12,6 +12,7 @@ import { baseHeader, viewBase, wrappingContainerBase } from "src/theme/elements"
 import Translation from 'src/translation/en.json';
 import { isPasswordValid } from 'src/utils/validation';
 import DataLoading from 'src/screens/loadings/DataLoading';
+import SecurityEyeButton from 'src/shared/uielements/SecurityEyeButton';
 
 const styles = StyleSheet.create({
 	headerText: {
@@ -35,16 +36,30 @@ const styles = StyleSheet.create({
 		marginHorizontal: 20,
 		marginBottom: 20,
 	},
+	eyeView: {
+		position: 'absolute',
+		right: 10,
+		top: 0,
+		bottom: 0,
+		justifyContent: 'center'
+	}
 });
 
 const Login = (): JSX.Element => {
 	const navigation = useNavigation();
 	const { signIn, signInDetails, setSignInDetails, authStatus } = useContext(AuthContext);
 	const [goNext, setGoNext] = useState<boolean>(false);
+	const [isLoading, setLoading] = useState<boolean>(false)
+	const passwordRef = createRef<TextInput>()
+	const [isSecurity, setSecurity] = useState(true)
 
 	useEffect(() => {
 		setGoNext(isPasswordValid(signInDetails ? signInDetails.password : ""));
 	}, [signInDetails]);
+
+	useEffect(() => {
+		setLoading(authStatus === AuthStatus.Loading)
+	}, [authStatus])
 
 	const onValueChange = (name: 'email' | 'password', change: string) => {
 		setSignInDetails((pv: SignInInput) => ({
@@ -54,12 +69,14 @@ const Login = (): JSX.Element => {
 	};
 
 	const handleSignin = async () => {
+		setLoading(true)
 		await signIn();
+		setLoading(false)
 	}
 
 	return (
 		<View style={viewBase}>
-			<DataLoading visible={authStatus === AuthStatus.Loading} />
+			<DataLoading visible={isLoading} />
 			<Header
 				leftComponent={<BackBtn onClick={() => navigation.goBack()} />}
 			/>
@@ -76,15 +93,26 @@ const Login = (): JSX.Element => {
 						placeholder='Email'
 						value={signInDetails?.email}
 						onChange={onValueChange}
+						returnKeyType='next'
+						onSubmitEditing={() => {passwordRef.current?.focus()}}
 					/>
 					<Text style={styles.label}>{Translation.LABEL.CONFIRM_PASSWORD}</Text>
-					<BlockInput
-						name='password'
-						placeholder='Password'
-						value={signInDetails?.password}
-						secureTextEntry={true}
-						onChange={onValueChange}
-					/>
+					<View>
+						<BlockInput
+							inputRef={passwordRef}
+							name='password'
+							placeholder='Password1'
+							value={signInDetails?.password}
+							secureTextEntry={isSecurity}
+							onChange={onValueChange}
+						/>
+						<View style={styles.eyeView}>
+							<SecurityEyeButton
+								isSecurity={isSecurity}
+								onPress={() => setSecurity(!isSecurity)}
+							/>
+						</View>
+					</View>
 				</View>
 			</ScrollView>
 
