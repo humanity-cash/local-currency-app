@@ -15,24 +15,22 @@ const styles = StyleSheet.create({
 	}
 });
 
-class SecurityEyeButton extends React.Component<SecurityEyeButtonProps>{
-	render() {
-		return (
-			<TouchableOpacity 
-				onPress={this.props.onPress} 
-				style={{
-					...styles.container,
-					...this.props.style,
-				}}
-			>
-				<Ionicons 
-					name={this.props.isSecurity ? "eye" : "eye-off"}
-					size={24}
-					color={colors.grey}
-				/>
-			</TouchableOpacity>
-		)
-	}
+const SecurityEyeButton = (props: SecurityEyeButtonProps) => {
+	return (
+		<TouchableOpacity 
+			onPress={props.onPress} 
+			style={{
+				...styles.container,
+				...props.style,
+			}}
+		>
+			<Ionicons 
+				name={props.isSecurity ? "eye" : "eye-off"}
+				size={24}
+				color={colors.grey}
+			/>
+		</TouchableOpacity>
+	)
 }
 
 export default SecurityEyeButton;
