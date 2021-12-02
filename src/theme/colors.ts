@@ -11,6 +11,7 @@ export const colors: any = {
 	lightBrown: '#E0D4B7',
 	lightGold: '#EBE5DC',
 	black: '#000000',
+	grey: '#808080',
 	green: '#4CD964',
 	transparent: 'transparent',
 	azure: '#f0eef5',

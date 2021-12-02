@@ -12,6 +12,7 @@ import { baseHeader, viewBase, wrappingContainerBase } from "src/theme/elements"
 import Translation from 'src/translation/en.json';
 import { isPasswordValid } from 'src/utils/validation';
 import DataLoading from 'src/screens/loadings/DataLoading';
+import SecurityEyeButton from 'src/shared/uielements/SecurityEyeButton';
 
 const styles = StyleSheet.create({
 	headerText: {
@@ -35,6 +36,13 @@ const styles = StyleSheet.create({
 		marginHorizontal: 20,
 		marginBottom: 20,
 	},
+	eyeView: {
+		position: 'absolute',
+		right: 10,
+		top: 0,
+		bottom: 0,
+		justifyContent: 'center'
+	}
 });
 
 const Login = (): JSX.Element => {
@@ -43,6 +51,7 @@ const Login = (): JSX.Element => {
 	const [goNext, setGoNext] = useState<boolean>(false);
 	const [isLoading, setLoading] = useState<boolean>(false)
 	const passwordRef = createRef<TextInput>()
+	const [isSecurity, setSecurity] = useState(true)
 
 	useEffect(() => {
 		setGoNext(isPasswordValid(signInDetails ? signInDetails.password : ""));
@@ -88,14 +97,22 @@ const Login = (): JSX.Element => {
 						onSubmitEditing={() => {passwordRef.current?.focus()}}
 					/>
 					<Text style={styles.label}>{Translation.LABEL.CONFIRM_PASSWORD}</Text>
-					<BlockInput
-						inputRef={passwordRef}
-						name='password'
-						placeholder='Password'
-						value={signInDetails?.password}
-						secureTextEntry={true}
-						onChange={onValueChange}
-					/>
+					<View>
+						<BlockInput
+							inputRef={passwordRef}
+							name='password'
+							placeholder='Password1'
+							value={signInDetails?.password}
+							secureTextEntry={isSecurity}
+							onChange={onValueChange}
+						/>
+						<View style={styles.eyeView}>
+							<SecurityEyeButton
+								isSecurity={isSecurity}
+								onPress={() => setSecurity(!isSecurity)}
+							/>
+						</View>
+					</View>
 				</View>
 			</ScrollView>
 
