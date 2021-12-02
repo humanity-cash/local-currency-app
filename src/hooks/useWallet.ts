@@ -15,7 +15,6 @@ export const useBusinessWallet = (): void => {
 					updateBusinessWalletData({ ...wData, availableFundingSource: isFundingSourceAvailable })
 				}
 			}
-			console.log("🚀 ~ Loaded Business wallet for:", businessDwollaId)
 		}
 		handler()
 	}, [businessDwollaId])
@@ -34,7 +33,6 @@ export const useCustomerWallet = (): void => {
 					updateCustomerWalletData({ ...wData, availableFundingSource: isFundingSourceAvailable })
 				}
 			}
-			console.log("🚀 ~ Loaded Customer wallet for:", customerDwollaId)
 		}
 		handler()
 	}, [customerDwollaId])
@@ -52,6 +50,11 @@ export const useUpdateCustomerWalletData = (): void => {
 				updateCustomerWalletData(({ ...userWallet, availableFundingSource: fundingSource }))
 			}
 		}, 1500);
+		if (
+			customerWalletData?.address.length
+			&& customerWalletData?.address === user?.customer?.walletAddress) {
+			clearInterval(timerId)
+		}
 		return () => clearInterval(timerId);
 	}, [customerWalletData?.address, user?.customer?.walletAddress])
 }
@@ -68,6 +71,11 @@ export const useUpdateBusinessWalletData = (): void => {
 				updateBusinessWalletData(({ ...userWallet, availableFundingSource: fundingSource }))
 			}
 		}, 1500);
+		if (
+			businessWalletData?.address.length
+			&& businessWalletData?.address === user?.business?.walletAddress) {
+			clearInterval(timerId)
+		}
 		return () => clearInterval(timerId);
 	}, [businessWalletData?.address, user?.customer?.walletAddress])
 }
