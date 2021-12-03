@@ -143,7 +143,7 @@
         "LOG_OUT_CONFIRM": "Are you sure you want to log out?",
         "LOG_OUT_DETAIL": "Please note that unsaved data will be lost.",
         "PERSIONAL_DETAILS": "Personal details",
-        "PERSIONAL_DETAILS_BODY": "We use your personal details to set up your BerkShares wallet. Don't worry, this information is not shared publicy!",
+        "PERSIONAL_DETAILS_BODY": "We use your personal details to set up your BerkShares wallet. Don't worry, this information is not shared publicly!",
         "WELCOME_BERKSHARES": "Thank you! Welcome to the BerkShares App. Now it is time to add some BerkShares to your wallet!",
         "BUSINESS_ACCOUNT": "Business account",
         "BUSINESS_ACCOUNT_DETAIL": "You do not have a business account linked. If you do have a business that accepts BerkShares you can sign up and link your business!",
@@ -151,7 +151,7 @@
         "USE_BUSINESS_INFOMATION": "We use your business information to set up your Wallet. The type of entity determines the required information.",
         "BUSINESS_OWNER": "Business owner details",
         "BUSINESS_INFORMATION": "Business information",
-        "PERSONAL_PROFILE_ALERT": "Create a personal profile son you can easily switch accounts.",
+        "PERSONAL_PROFILE_ALERT": "Create a personal profile so you can easily switch accounts.",
         "MY_PROFILE": "My profile",
         "CHANGE_PICTURE": "Change profile picture"
     },
@@ -165,7 +165,7 @@
         "AGREE_DWOLLA": "By selecting 'continue' you agree to the Dwolla Privacy Policy",
         "SELECT_BANK": "Select your bank",
         "LOGIN_BANK": "Log in to your bank",
-        "LOGIN_BANK_DETAIL": "By providing your bank credentials to Dwolla, you are enbaling Dwolla to retrieve your financial data.",
+        "LOGIN_BANK_DETAIL": "By providing your bank credentials to Dwolla, you are enabling Dwolla to retrieve your financial data.",
         "SELECT_BANK_ACCOUNT": "Select account",
         "SELECT_BANK_ACCOUNT_DETAIL": "Which account would you like to link to BerkSahres?",
         "WRONG": "Whooops, something went wrong.",
@@ -212,8 +212,8 @@
         "CLEAR_FILTER": "Clear filters",
         "NO_TRANSACTION": "No transactions found.",
         "SHOW_QR_CODE_TO_CASHIER": "Show QR code to the cashier",
-        "PAYMENT_RETURN_SUCCESS": "SUcceeded! You have received B$ {{amount}} in return.",
-        "WHERE_TO_SPEND": "Where t spend",
+        "PAYMENT_RETURN_SUCCESS": "Succeeded! You have received B$ {{amount}} in return.",
+        "WHERE_TO_SPEND": "Where to spend",
         "MERCHANT_MONTH": "MERCHANT OF THE MONTH",
         "PENDING": "Pending...",
         "PENDING_DETAIL": "This usually takes 5-6 seconds",
@@ -256,7 +256,7 @@
         "CHANGE_PASSWORD_SUCCESS": "Password changed successfully."
     },
     "COMMUNITY_CHEST": {
-        "CONTENT": "The BerkShares community want to support the lcal community. Therefor, we ask you at each transaction if you are willing to make a donation. This donation will go to a local project. On this page you will find the current project and its status.",
+        "CONTENT": "The BerkShares community want to support the local community. Therefore, we ask you at each transaction if you are willing to make a donation. This donation will go to a local project. On this page you will find the current project and its status.",
         "INFORMATION_SHARE": "This information is shared publicly.",
         "REMOVE_BANK_ACCOUNT": "Are you sure you want to remove this bank account?",
         "NO_BANK_ACCOUNT": "You do not have a bank account linked. Link your bank account in order to enable buying new BerkShares and/or cash out to USD.",
@@ -296,7 +296,7 @@
         "HOW_TO_WORK_3": "Show this QR code to the customer so they can scan and pay.",
         "HOW_TO_WORK_4": "Wait for the payment confirmation.",
         "HOW_TO_WORK_5": "Done!",
-        "HOW_TO_WORK_6": "If there is no confirmation, check the transaction  in the 'Transactions' section via the home page. Try again if the transaction does not show up in the overview."
+        "HOW_TO_WORK_6": "If there is no confirmation, check the transaction in the 'Transactions' section via the home page. Try again if the transaction does not show up in the overview."
     },
     "TABS": {
         "RECEIVE_PAYMENT": "Receive payment",
