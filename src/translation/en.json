@@ -120,6 +120,7 @@
     },
     "EMAIL_VERIFICATION": {
         "CREATE_ACCOUNT": "Create account",
+        "CREATE_ACCOUNT_DETAIL": "Hello! Tell us how to reach you. We will send a verification code to your email.",
         "HOW_TO_REACH": "Hello! Tell us how to reach you. We will send a verification code to your email.",
         "TERMS_PRIVACY": "I've read and accept the Terms & Conditions and Privacy Policy",
         "ENTER_EMAIL_ADDR": "ENTER EMAIL ADDRESS",
