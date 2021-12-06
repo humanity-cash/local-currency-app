@@ -1,17 +1,19 @@
+import { IDBUser } from "@humanity.cash/types";
 import { useNavigation } from "@react-navigation/native";
 import React, { useContext, useEffect, useState } from "react";
 import {
 	KeyboardAvoidingView,
-	Platform,
-	ScrollView,
+	Platform, SafeAreaView, ScrollView,
 	StyleSheet,
-	View,
-	SafeAreaView
+	View
 } from "react-native";
 import { Text } from "react-native-elements";
-import { UserContext, AuthContext } from "src/contexts";
+import { UserAPI } from "src/api";
 import { UserType } from "src/auth/types";
 import { BUTTON_TYPES } from "src/constants";
+import { AuthContext, UserContext } from "src/contexts";
+import { NavigationViewContext, ViewState } from "src/contexts/navigation";
+import DataLoading from 'src/screens/loadings/DataLoading';
 import {
 	BackBtn,
 	Button,
@@ -26,11 +28,7 @@ import {
 	wrappingContainerBase
 } from "src/theme/elements";
 import Translation from "src/translation/en.json";
-import { UserAPI } from "src/api";
-import { IDBUser } from "@humanity.cash/types";
-import { isSuccessResponse} from "src/utils/http";
-import { NavigationViewContext, ViewState } from "src/contexts/navigation";
-import DataLoading from 'src/screens/loadings/DataLoading';
+import { isSuccessResponse } from "src/utils/http";
 
 const styles = StyleSheet.create({
 	content: {
@@ -60,9 +58,9 @@ const PersonalAddress = (): React.ReactElement => {
 	const postalCode = customer?.postalCode;
 	useEffect(() => {
 		setGoNext(
-			address1 !== "" && 
-			city !== "" && 
-			postalCode !== ""
+			Boolean(address1) &&
+			Boolean(city) &&
+			Boolean(postalCode)
 		);
 	}, [address1,city, postalCode]);
 

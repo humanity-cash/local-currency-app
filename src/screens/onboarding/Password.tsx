@@ -1,11 +1,12 @@
 import { useNavigation } from '@react-navigation/native';
-import React, { useContext, useEffect, useState, createRef } from 'react';
-import { KeyboardAvoidingView, Platform, StyleSheet, View, SafeAreaView, ScrollView, TextInput, Keyboard } from 'react-native';
+import React, { createRef, useContext, useEffect, useState } from 'react';
+import { KeyboardAvoidingView, Platform, SafeAreaView, ScrollView, StyleSheet, TextInput, View } from 'react-native';
 import { Text } from 'react-native-elements';
 import { AuthContext } from "src/contexts";
-import { BUTTON_TYPES } from 'src/constants';
 import * as Routes from 'src/navigation/constants';
-import { BackBtn, BlockInput, Button, Header } from 'src/shared/uielements';
+import DataLoading from 'src/screens/loadings/DataLoading';
+import { BackBtn, BlockInput, Header } from 'src/shared/uielements';
+import SecurityEyeButton from 'src/shared/uielements/SecurityEyeButton';
 import { colors } from 'src/theme/colors';
 import {
 	baseHeader,
@@ -14,8 +15,6 @@ import {
 } from 'src/theme/elements';
 import Translation from 'src/translation/en.json';
 import { isPasswordValid } from 'src/utils/validation';
-import DataLoading from 'src/screens/loadings/DataLoading';
-import SecurityEyeButton from 'src/shared/uielements/SecurityEyeButton';
 
 const styles = StyleSheet.create({
 	headerText: {
@@ -161,12 +160,12 @@ const Password = (): JSX.Element => {
 			<KeyboardAvoidingView
 				behavior={Platform.OS == 'ios' ? 'padding' : 'height'}>
 				<SafeAreaView style={styles.bottomView}>
-					<Button
+					{/* <Button
 						type={BUTTON_TYPES.DARK_GREEN}
 						title='NEXT'
 						disabled={!isValidPassword}
 						onPress={onNext}
-					/>
+					/> */}
 				</SafeAreaView>
 			</KeyboardAvoidingView>
 		</View>

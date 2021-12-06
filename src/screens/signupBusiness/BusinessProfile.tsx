@@ -1,8 +1,8 @@
 import { useNavigation } from '@react-navigation/native';
 import React, { ReactElement, useContext, useEffect, useState } from 'react';
-import { ScrollView, StyleSheet, View, KeyboardAvoidingView, SafeAreaView, Platform } from 'react-native';
+import { KeyboardAvoidingView, Platform, SafeAreaView, ScrollView, StyleSheet, View } from 'react-native';
 import { Text } from 'react-native-elements';
-import { UserContext, AuthContext } from 'src/contexts';
+import { AuthContext, UserContext } from 'src/contexts';
 import * as Routes from 'src/navigation/constants';
 import { BackBtn, BusinessProfileForm, Button, CancelBtn, Header } from 'src/shared/uielements';
 import { colors } from "src/theme/colors";
@@ -39,7 +39,7 @@ const BusinessProfile = (): ReactElement => {
 	const [goNext, setGoNext] = useState<boolean>(false);
 
 	useEffect(() => {
-		setGoNext(business?.tag !== "");
+		setGoNext(Boolean(business?.tag));
 	}, [business?.tag]);
 
 	const onNextPress = () => {

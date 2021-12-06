@@ -1,9 +1,9 @@
 import { useNavigation } from '@react-navigation/native';
 import React, { ReactElement, useContext, useEffect, useState } from 'react';
-import { KeyboardAvoidingView, Platform, ScrollView, StyleSheet, View, SafeAreaView } from 'react-native';
+import { KeyboardAvoidingView, Platform, SafeAreaView, ScrollView, StyleSheet, View } from 'react-native';
 import { Text } from 'react-native-elements';
-import { AuthContext, UserContext } from "src/contexts";
 import { BUTTON_TYPES } from 'src/constants';
+import { AuthContext, UserContext } from "src/contexts";
 import * as Routes from 'src/navigation/constants';
 import { BackBtn, Button, CancelBtn, Header, PersonalProfileForm } from 'src/shared/uielements';
 import { colors } from "src/theme/colors";
@@ -32,7 +32,7 @@ const PersonalProfile = (): ReactElement => {
 	const tag = customer?.tag;
 
 	useEffect(() => {
-		setGoNext(tag !== "");
+		setGoNext(Boolean(tag));
 	}, [tag]);
 
 	const onNextPress = () => {
