@@ -1,8 +1,8 @@
 import { useNavigation } from '@react-navigation/native';
 import React, { useContext, useEffect, useState } from 'react';
-import { KeyboardAvoidingView, Platform, ScrollView, StyleSheet, View, SafeAreaView } from 'react-native';
+import { KeyboardAvoidingView, Platform, SafeAreaView, ScrollView, StyleSheet, View } from 'react-native';
 import { Text } from 'react-native-elements';
-import { UserContext, AuthContext } from 'src/contexts';
+import { AuthContext, UserContext } from 'src/contexts';
 import * as Routes from 'src/navigation/constants';
 import {
 	BackBtn, Button,
@@ -52,7 +52,8 @@ const BusinessOwnerDetail = (): JSX.Element => {
 	const business = user?.business;
 
 	useEffect(() => {
-		setGoNext(business?.owner?.firstName !== "" && business?.owner?.lastName !== "");
+		
+		setGoNext(Boolean(business?.owner?.firstName) && Boolean(business?.owner?.lastName));
 	}, [business?.owner?.firstName, business?.owner?.lastName]);
 
 	const onNextPress = () => {

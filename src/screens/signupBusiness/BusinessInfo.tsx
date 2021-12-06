@@ -1,16 +1,15 @@
 import { AntDesign } from '@expo/vector-icons';
 import { useNavigation } from "@react-navigation/native";
-import React, { ReactElement, useContext, useEffect, useState, createRef } from "react";
+import React, { createRef, ReactElement, useContext, useEffect, useState } from "react";
 import {
-	KeyboardAvoidingView,
-	Platform,
-	ScrollView,
+	Keyboard, KeyboardAvoidingView,
+	Platform, SafeAreaView, ScrollView,
 	StyleSheet,
 	View
 } from "react-native";
 import { Text } from "react-native-elements";
 import SelectDropdown from 'react-native-select-dropdown';
-import { UserContext, AuthContext } from 'src/contexts';
+import { AuthContext, UserContext } from 'src/contexts';
 import * as Routes from "src/navigation/constants";
 import {
 	BackBtn,
@@ -27,7 +26,6 @@ import {
 } from "src/theme/elements";
 import Translation from "src/translation/en.json";
 import { Industry } from "src/utils/types";
-import { SafeAreaView, Keyboard } from 'react-native';
 
 const Industries = [
 	Industry.ARTS_ENTERTAINMENT,
@@ -91,7 +89,7 @@ const BusinessInfo = (): ReactElement => {
 	const industryRef = createRef<SelectDropdown>()
 
 	useEffect(() => {
-		setGoNext(business?.rbn !== "");
+		setGoNext(Boolean(business?.rbn));
 	}, [business?.rbn])
 
 	const onValueChange = (name: string, change: string) => {

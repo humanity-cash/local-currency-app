@@ -1,13 +1,13 @@
-import React, {useState, useEffect} from 'react';
-import { StyleSheet, View, KeyboardAvoidingView, ScrollView, Platform } from 'react-native';
 import { useNavigation } from '@react-navigation/core';
+import React, { useEffect, useState } from 'react';
+import { KeyboardAvoidingView, Platform, ScrollView, StyleSheet, View } from 'react-native';
 import { Text } from 'react-native-elements';
-import { Header, Button, CancelBtn, BackBtn, BorderedInput, Dialog } from "src/shared/uielements";
-import { underlineHeaderB, viewBaseB, dialogViewBase, wrappingContainerBase } from "src/theme/elements";
-import { colors } from "src/theme/colors";
-import Translation from 'src/translation/en.json';
-import * as Routes from 'src/navigation/constants';
 import { BUTTON_TYPES } from 'src/constants';
+import * as Routes from 'src/navigation/constants';
+import { BackBtn, BorderedInput, Button, CancelBtn, Dialog, Header } from "src/shared/uielements";
+import { colors } from "src/theme/colors";
+import { dialogViewBase, underlineHeaderB, viewBaseB, wrappingContainerBase } from "src/theme/elements";
+import Translation from 'src/translation/en.json';
 
 const styles = StyleSheet.create({
 	headerText: {
@@ -66,7 +66,7 @@ const MerchantCashoutAmount = (): JSX.Element => {
 	const [goNext, setGoNext] = useState(false);
 
 	useEffect(() => {
-		setGoNext(amount != "");
+		setGoNext(Boolean(amount));
 	}, [amount]);
 
 	const onValueChange = (name: string, change: string) => {

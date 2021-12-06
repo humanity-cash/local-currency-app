@@ -58,7 +58,7 @@ const ConfirmEmail = (): React.ReactElement => {
 					{noCodeReceived && (<Text>We just sent another email to {email} with a verification link.</Text>)}
 				</View>
 			</View>
-			{!noCodeReceived && (
+			{!noCodeReceived ? (
 				<KeyboardAvoidingView
 					behavior={Platform.OS == "ios" ? "padding" : "height"}
 				>
@@ -70,8 +70,8 @@ const ConfirmEmail = (): React.ReactElement => {
 						</TouchableOpacity>
 					</View>
 				</KeyboardAvoidingView>
-			)}
-			{noCodeReceived && (
+			)
+			: (
 				<KeyboardAvoidingView
 					behavior={Platform.OS == "ios" ? "padding" : "height"}
 				>
