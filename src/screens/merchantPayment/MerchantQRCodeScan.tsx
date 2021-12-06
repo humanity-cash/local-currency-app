@@ -359,13 +359,13 @@ const MerchantQRCodeScan = (): JSX.Element => {
 									label="Amount"
 									name="amount"
 									placeholderTextColor={colors.greyedPurple}
-									keyboardType="number-pad"
+									keyboardType="decimal-pad"
 									placeholder="Amount"
 									prefix="B$"
 									style={styles.input}
 									textStyle={styles.switchText}
 									value={openAmount}
-									onChange={(name: string, amount: string) => setOpenAmount(amount)}
+									onChange={(name: string, amount: string) => setOpenAmount(amount.replace(',', '.'))}
 								/>
 							</View>
 						</ScrollView>
