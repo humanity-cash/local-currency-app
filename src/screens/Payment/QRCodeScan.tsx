@@ -367,11 +367,11 @@ const QRCodeScan = (): JSX.Element => {
 								<BorderedInput
 									label="Amount"
 									name="amount"
-									keyboardType="number-pad"
+									keyboardType="decimal-pad"
 									placeholder="Amount"
 									prefix="B$"
 									value={openAmount}
-									onChange={(name: string, amount: string) => setOpenAmount(amount)}
+									onChange={(name: string, amount: string) => setOpenAmount(amount.replace(',', '.'))}
 								/>
 							</View>
 						</ScrollView>

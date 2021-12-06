@@ -70,7 +70,7 @@ const MerchantCashoutAmount = (): JSX.Element => {
 	}, [amount]);
 
 	const onValueChange = (name: string, change: string) => {
-		setAmount(change);
+		setAmount(change.replace(',', '.'));
 	};
 
 	const doScan = () => {
@@ -97,7 +97,7 @@ const MerchantCashoutAmount = (): JSX.Element => {
 					<BorderedInput
 						label="Amount"
 						name="amount"
-						keyboardType="number-pad"
+						keyboardType="decimal-pad"
 						placeholder="Amount"
 						placeholderTextColor={colors.greyedPurple}
 						prefix="B$"

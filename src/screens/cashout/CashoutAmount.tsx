@@ -86,7 +86,7 @@ const CashoutAmount = (): JSX.Element => {
 	const onValueChange = (name: string, change: string) => {
 		const costs = change;
 		setState({
-		  amount: change,
+		  amount: change.replace(',', '.'),
 		  costs: costs,
 		} as CashoutState);
 	};

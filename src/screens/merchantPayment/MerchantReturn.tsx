@@ -53,7 +53,7 @@ const MerchantReturn = (): JSX.Element => {
 
 
 	const onValueChange = (name: string, change: string) => {
-		setAmount(change);
+		setAmount(change.replace(',', '.'));
 	}
 
 	const onReturn = () => {
@@ -75,7 +75,7 @@ const MerchantReturn = (): JSX.Element => {
 					<BorderedInput
 						label="Amount"
 						name="amount"
-						keyboardType="number-pad"
+						keyboardType="decimal-pad"
 						placeholder="Amount"
 						placeholderTextColor={colors.greyedPurple}
 						prefix="B$"

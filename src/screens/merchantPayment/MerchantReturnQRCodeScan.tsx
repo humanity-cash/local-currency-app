@@ -125,7 +125,7 @@ const MerchantReturnQRCodeScan = (): JSX.Element => {
 	}
 
 	const onValueChange = (name: string, change: string) => {
-		setAmount(change);
+		setAmount(change.replace(',', '.'));
 	}
 
 	const onReturn = async () => {
@@ -215,7 +215,7 @@ const MerchantReturnQRCodeScan = (): JSX.Element => {
 								<BorderedInput
 									label="Amount"
 									name="amount"
-									keyboardType="number-pad"
+									keyboardType="decimal-pad"
 									placeholder="Amount"
 									placeholderTextColor={colors.greyedPurple}
 									prefix="B$"
