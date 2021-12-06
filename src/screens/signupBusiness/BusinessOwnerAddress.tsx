@@ -1,14 +1,14 @@
-import { StyleSheet, View, ScrollView, KeyboardAvoidingView, SafeAreaView, Platform } from 'react-native';
-import React, { ReactElement, useContext } from 'react';
-import { Text } from 'react-native-elements';
-import { AuthContext } from "src/contexts";
-import { Header, Button, CancelBtn, BackBtn } from "src/shared/uielements";
-import { underlineHeaderB, viewBaseB, wrappingContainerBase } from "src/theme/elements";
-import { colors } from "src/theme/colors";
-import Translation from 'src/translation/en.json';
-import * as Routes from 'src/navigation/constants';
 import { useNavigation } from '@react-navigation/native';
+import React, { ReactElement, useContext } from 'react';
+import { KeyboardAvoidingView, Platform, SafeAreaView, ScrollView, StyleSheet, View } from 'react-native';
+import { Text } from 'react-native-elements';
+import { AuthContext, UserContext } from "src/contexts";
+import * as Routes from 'src/navigation/constants';
+import { BackBtn, Button, CancelBtn, Header } from "src/shared/uielements";
 import { BusinessOwnerAddressForm } from 'src/shared/uielements/reusable';
+import { colors } from "src/theme/colors";
+import { underlineHeaderB, viewBaseB, wrappingContainerBase } from "src/theme/elements";
+import Translation from 'src/translation/en.json';
 
 const styles = StyleSheet.create({
 	headerText: {
@@ -50,7 +50,13 @@ const styles = StyleSheet.create({
 const BusinessOwnerAddress = (): ReactElement => {
 	const navigation = useNavigation();
 	const { signOut } = useContext(AuthContext);
-
+	const { user } = useContext(UserContext);
+	const isFormFilled = 
+		Boolean(user?.business?.owner?.address1)
+		&& Boolean(user?.business?.owner?.address2)
+		&& Boolean(user?.business?.owner?.city)
+		&& Boolean(user?.business?.owner?.state)
+		&& Boolean(user?.business?.owner?.postalCode)
 	const onNextPress = () => {
 		navigation.navigate(Routes.BUSINESS_INFO)
 	}
@@ -76,7 +82,7 @@ const BusinessOwnerAddress = (): ReactElement => {
 					<Button
 						type="purple"
 						title={Translation.BUTTON.NEXT}
-						disabled={false}
+						disabled={!isFormFilled}
 						onPress={onNextPress}
 					/>
 				</SafeAreaView>
