@@ -89,8 +89,12 @@ const BusinessInfo = (): ReactElement => {
 	const industryRef = createRef<SelectDropdown>()
 
 	useEffect(() => {
-		setGoNext(Boolean(business?.rbn));
-	}, [business?.rbn])
+		setGoNext(
+			Boolean(business?.rbn)
+			&& Boolean(business?.industry)
+			&& Boolean(business?.ein)
+		);
+	}, [business?.rbn, business?.industry, business?.ein])
 
 	const onValueChange = (name: string, change: string) => {
 		updateBusinessData({

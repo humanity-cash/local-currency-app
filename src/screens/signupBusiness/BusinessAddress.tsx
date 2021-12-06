@@ -65,18 +65,24 @@ const BusinessAddress = (): ReactElement => {
 	const business = user?.business;
 	const [ isLoading, setIsLoading ] = useState<boolean>(false);
 	const address1 = business?.address1;
+	const address2 = business?.address2;
 	const city = business?.city;
 	const postalCode = business?.postalCode;
+	const phoneNumber = business?.phoneNumber;
+	const state = business?.state;
 	const { updateSelectedView } = useContext(NavigationViewContext);
 
 	useEffect(() => {
 		const allInputsFilled =
 			Boolean(address1)
+			&& Boolean(address2)
 			&& Boolean(city)
-			&& Boolean(postalCode);
+			&& Boolean(state)
+			&& Boolean(postalCode)
+			&& Boolean(phoneNumber);
 
 		setGoNext(allInputsFilled);
-	}, [address1, city, postalCode]);
+	}, [address1, address2, city, postalCode, state, phoneNumber]);
 
 	const onNextPress = async () => {
 		if (!user) return

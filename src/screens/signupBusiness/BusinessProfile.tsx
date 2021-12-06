@@ -39,8 +39,8 @@ const BusinessProfile = (): ReactElement => {
 	const [goNext, setGoNext] = useState<boolean>(false);
 
 	useEffect(() => {
-		setGoNext(Boolean(business?.tag));
-	}, [business?.tag]);
+		setGoNext(Boolean(business?.tag) && Boolean(business?.story));
+	}, [business?.tag, business?.story]);
 
 	const onNextPress = () => {
 		navigation.navigate(Routes.BUSINESS_DETAIL);

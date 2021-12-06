@@ -55,14 +55,16 @@ const PersonalAddress = (): React.ReactElement => {
 	const navigation = useNavigation();
 	const address1 = customer?.address1;
 	const city = customer?.city;
+	const state = customer?.state;
 	const postalCode = customer?.postalCode;
 	useEffect(() => {
 		setGoNext(
 			Boolean(address1) &&
 			Boolean(city) &&
+			Boolean(state) &&
 			Boolean(postalCode)
 		);
-	}, [address1,city, postalCode]);
+	}, [address1, city, postalCode, state]);
 
 	const onNextPress = async () => {
 		if (!user || !user?.customer) return
