@@ -1,5 +1,5 @@
 import React, { useRef } from 'react';
-import { TextInput, TouchableWithoutFeedback, View, StyleSheet } from 'react-native';
+import { TextInput, TouchableWithoutFeedback, View, StyleSheet, KeyboardTypeOptions } from 'react-native';
 import { Text } from 'react-native-elements';
 import { colors } from "src/theme/colors";
 
@@ -13,7 +13,7 @@ type BorderedInputProps = {
 	value: any
 	style?: any
 	textStyle?: any
-	keyboardType?: any
+	keyboardType?: KeyboardTypeOptions
 	onKeyPress?: any
 	maxLength?: number
 }
