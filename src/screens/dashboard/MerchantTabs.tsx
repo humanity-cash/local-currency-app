@@ -257,7 +257,7 @@ const DrawerContent = (props: DrawerContentComponentProps) => {
 								</View>
 								<View style={styles.usernameView}>
 									<Text>{businessTag}</Text>
-									{(isVerifiedCustomer || isCashierView) && <View style={styles.inlineView}>
+									{(userTag || authorization.cashierView) && <View style={styles.inlineView}>
 										<Text style={styles.fadeText}>
 											Switch account
 										</Text>

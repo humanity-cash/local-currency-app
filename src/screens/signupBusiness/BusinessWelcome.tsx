@@ -83,7 +83,7 @@ const BusinessWelcome = (): ReactElement => {
 			</KeyboardAvoidingView>
 
 			{isVisible && (
-				<DwollaDialog visible={isVisible} onClose={() => setIsVisible(false)} />
+				<DwollaDialog title={Translation.BANK_ACCOUNT.USE_DWOLLA_BUSINESS} visible={isVisible} onClose={() => setIsVisible(false)} />
 			)}
 		</View>
 	);
