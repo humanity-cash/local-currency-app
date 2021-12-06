@@ -257,7 +257,7 @@ const Dashboard = (): JSX.Element => {
 				<Text style={styles.scanBtnText}>{Translation.BUTTON.SCAN}</Text>
 			</TouchableOpacity>
 			{isVisible && (
-				<DwollaDialog visible={isVisible} onClose={onClose} />
+				<DwollaDialog title={Translation.BANK_ACCOUNT.USE_DWOLLA_PERSONAL} visible={isVisible} onClose={onClose} />
 			)}
 			{(isLoadup || isPayment) && (
 				<Dialog visible={isLoadup || isPayment} onClose={onClose} style={styles.dialog}>
