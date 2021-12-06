@@ -2,10 +2,11 @@ import { useNavigation } from '@react-navigation/native';
 import React, { createRef, useContext, useEffect, useState } from 'react';
 import { KeyboardAvoidingView, Platform, SafeAreaView, ScrollView, StyleSheet, TextInput, View } from 'react-native';
 import { Text } from 'react-native-elements';
+import { BUTTON_TYPES } from 'src/constants';
 import { AuthContext } from "src/contexts";
 import * as Routes from 'src/navigation/constants';
 import DataLoading from 'src/screens/loadings/DataLoading';
-import { BackBtn, BlockInput, Header } from 'src/shared/uielements';
+import { BackBtn, BlockInput, Button, Header } from 'src/shared/uielements';
 import SecurityEyeButton from 'src/shared/uielements/SecurityEyeButton';
 import { colors } from 'src/theme/colors';
 import {
@@ -88,7 +89,6 @@ const Password = (): JSX.Element => {
 		const response = await signUp();
 		setLoading(false)
 		
-		console.log(" onPress={ ~ response", response)
 		if (response.success) {
 			navigation.navigate(Routes.VERIFICATION);
 		}
@@ -160,12 +160,12 @@ const Password = (): JSX.Element => {
 			<KeyboardAvoidingView
 				behavior={Platform.OS == 'ios' ? 'padding' : 'height'}>
 				<SafeAreaView style={styles.bottomView}>
-					{/* <Button
+					<Button
 						type={BUTTON_TYPES.DARK_GREEN}
 						title='NEXT'
 						disabled={!isValidPassword}
 						onPress={onNext}
-					/> */}
+					/>
 				</SafeAreaView>
 			</KeyboardAvoidingView>
 		</View>
