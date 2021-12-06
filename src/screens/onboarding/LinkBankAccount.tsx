@@ -77,7 +77,7 @@ const LinkBankAccount = (): JSX.Element => {
 			</SafeAreaView>
 
 			{isVisible && (
-				<DwollaDialog visible={isVisible} onClose={() => setIsVisible(false)} />
+				<DwollaDialog title={Translation.BANK_ACCOUNT.USE_DWOLLA_PERSONAL} visible={isVisible} onClose={() => setIsVisible(false)} />
 			)}
 		</View>
 	);
