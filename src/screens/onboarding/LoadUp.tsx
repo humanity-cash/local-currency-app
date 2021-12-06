@@ -103,7 +103,7 @@ const LoadUp = (): JSX.Element => {
   }, [amount]);
 
   const onValueChange = (name: string, change: string) => {
-    setAmount(change);
+    setAmount(change.replace(',', '.'));
   };
 
   const onLoadUp = async () => {
@@ -187,7 +187,7 @@ const LoadUp = (): JSX.Element => {
             <BorderedInput
               label="Amount"
               name="amount"
-              keyboardType="number-pad"
+              keyboardType="decimal-pad"
               placeholder="Amount"
               prefix="B$"
               value={amount}
