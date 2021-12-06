@@ -363,7 +363,7 @@ const MerchantDashboard = (): JSX.Element => {
 			</TouchableOpacity>
 			{isDetailViewOpen && <TransactionDetail visible={isDetailViewOpen} data={selectedItem} onConfirm={onConfirm} />}
 			{isDwollaVisible && (
-				<DwollaDialog visible={isDwollaVisible} onClose={onClose} />
+				<DwollaDialog title={Translation.BANK_ACCOUNT.USE_DWOLLA_BUSINESS} visible={isDwollaVisible} onClose={onClose} />
 			)}
 			{(isPayment) && (
 				<Dialog visible={isPayment} onClose={onClose} backgroundStyle={styles.dialog}>
