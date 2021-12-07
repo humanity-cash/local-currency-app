@@ -1,20 +1,19 @@
 import { useNavigation } from "@react-navigation/native";
-import React, { useEffect, useState, useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import { KeyboardAvoidingView, Platform, ScrollView, StyleSheet, View } from "react-native";
 import { Text } from "react-native-elements";
 import { TouchableOpacity } from "react-native-gesture-handler";
-import { BorderedInput, Button, Header, CancelBtn } from "src/shared/uielements";
+import { TransactionsAPI } from 'src/api';
+import { BUTTON_TYPES } from "src/constants";
+import { UserContext } from "src/contexts";
+import * as Routes from 'src/navigation/constants';
+import DataLoading from "src/screens/loadings/DataLoading";
+import { BorderedInput, Button, CancelBtn, Header } from "src/shared/uielements";
 import { colors } from "src/theme/colors";
 import { underlineHeaderB, viewBaseB, wrappingContainerBase } from "src/theme/elements";
 import Translation from 'src/translation/en.json';
-import * as Routes from 'src/navigation/constants';
-import { BUTTON_TYPES } from "src/constants";
-import { TransactionsAPI } from 'src/api';
 import { showToast } from 'src/utils/common';
-import { ToastType, LoadingScreenTypes } from 'src/utils/types';
-import { updateLoadingStatus } from 'src/store/loading/loading.actions';
-import { useDispatch } from 'react-redux';
-import { UserContext } from "src/contexts";
+import { ToastType } from 'src/utils/types';
 
 const styles = StyleSheet.create({
   headerText: {
@@ -96,10 +95,10 @@ const MAX_AMOUNT = 2000;
 
 const MerchantLoadup = (): JSX.Element => {
   const navigation = useNavigation();
-  const dispatch = useDispatch();
   const { businessDwollaId } = useContext(UserContext);
   const [amount, setAmount] = useState<string>("");
   const [goNext, setGoNext] = useState<boolean>(false);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
 
   useEffect(() => {
     setGoNext(Number(amount) > 0 && Number(amount) <= MAX_AMOUNT);
@@ -114,11 +113,8 @@ const MerchantLoadup = (): JSX.Element => {
       showToast(ToastType.ERROR, "Whoops, something went wrong.", "Connection failed.");
       return;
     }
+    setIsLoading(true);
 
-    dispatch(updateLoadingStatus({
-			isLoading: true,
-			screen: LoadingScreenTypes.PAYMENT_PENDING
-		}));
     const response = await TransactionsAPI.deposit(
       businessDwollaId,
       {amount: amount}
@@ -130,14 +126,12 @@ const MerchantLoadup = (): JSX.Element => {
       showToast(ToastType.ERROR, "Whoops, something went wrong.", "Connection failed.");
       navigation.navigate(Routes.MERCHANT_DASHBOARD);
     }
-    dispatch(updateLoadingStatus({
-			isLoading: false,
-			screen: LoadingScreenTypes.PAYMENT_PENDING
-		}));
+    setIsLoading(false);
   }
 
   return (
     <View style={viewBaseB}>
+      <DataLoading visible={isLoading} />
       <Header
         rightComponent={<CancelBtn color={colors.purple} text={Translation.BUTTON.CLOSE} onClick={() => navigation.navigate(Routes.MERCHANT_DASHBOARD)}/>}
       />
