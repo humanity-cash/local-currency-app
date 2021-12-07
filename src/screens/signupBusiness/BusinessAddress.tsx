@@ -1,8 +1,13 @@
+import { IDBUser } from "@humanity.cash/types";
 import { useNavigation } from "@react-navigation/native";
 import React, { ReactElement, useContext, useEffect, useState } from "react";
-import { ScrollView, StyleSheet, View, KeyboardAvoidingView, SafeAreaView, Platform } from "react-native";
+import { KeyboardAvoidingView, Platform, SafeAreaView, ScrollView, StyleSheet, View } from "react-native";
 import { Text } from "react-native-elements";
-import { UserContext, AuthContext } from "src/contexts";
+import { UserAPI } from "src/api";
+import { UserType } from "src/auth/types";
+import { AuthContext, UserContext } from "src/contexts";
+import { NavigationViewContext, ViewState } from "src/contexts/navigation";
+import DataLoading from 'src/screens/loadings/DataLoading';
 import {
 	BackBtn,
 	BusinessAddressForm, Button,
@@ -15,12 +20,7 @@ import {
 	wrappingContainerBase
 } from "src/theme/elements";
 import Translation from "src/translation/en.json";
-import { UserAPI } from "src/api";
-import { UserType } from "src/auth/types";
-import { IDBUser } from "@humanity.cash/types";
 import { isSuccessResponse } from "src/utils/http";
-import { NavigationViewContext, ViewState } from "src/contexts/navigation";
-import DataLoading from 'src/screens/loadings/DataLoading';
 
 const styles = StyleSheet.create({
 	headerText: {
@@ -65,17 +65,24 @@ const BusinessAddress = (): ReactElement => {
 	const business = user?.business;
 	const [ isLoading, setIsLoading ] = useState<boolean>(false);
 	const address1 = business?.address1;
+	const address2 = business?.address2;
 	const city = business?.city;
 	const postalCode = business?.postalCode;
+	const phoneNumber = business?.phoneNumber;
+	const state = business?.state;
 	const { updateSelectedView } = useContext(NavigationViewContext);
 
 	useEffect(() => {
 		const allInputsFilled =
-			address1 !== ""
-			&& city !== ""
-			&& postalCode !== ""
+			Boolean(address1)
+			&& Boolean(address2)
+			&& Boolean(city)
+			&& Boolean(state)
+			&& Boolean(postalCode)
+			&& Boolean(phoneNumber);
+
 		setGoNext(allInputsFilled);
-	}, [address1, city, postalCode]);
+	}, [address1, address2, city, postalCode, state, phoneNumber]);
 
 	const onNextPress = async () => {
 		if (!user) return

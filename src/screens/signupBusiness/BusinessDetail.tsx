@@ -3,15 +3,13 @@ import { useNavigation } from "@react-navigation/native";
 import React, { ReactElement, useContext } from "react";
 import {
 	KeyboardAvoidingView,
-	Platform,
-	ScrollView,
+	Platform, SafeAreaView, ScrollView,
 	StyleSheet,
 	View
 } from "react-native";
 import { Text } from "react-native-elements";
 import SelectDropdown from 'react-native-select-dropdown';
-import { UserContext } from 'src/contexts';
-import { AuthContext } from "src/contexts";
+import { AuthContext, UserContext } from 'src/contexts';
 import * as Routes from "src/navigation/constants";
 import { BackBtn, Button, CancelBtn, Header } from "src/shared/uielements";
 import { colors } from "src/theme/colors";
@@ -22,7 +20,6 @@ import {
 } from "src/theme/elements";
 import Translation from "src/translation/en.json";
 import { BusinessType } from "src/utils/types";
-import { SafeAreaView } from 'react-native';
 
 const businessTypes = [
 	BusinessType.SOLE_PROPRIETORSHIP,
@@ -75,7 +72,8 @@ const styles = StyleSheet.create({
 const BusinessDetail = (): ReactElement => {
 	const { signOut } = useContext(AuthContext);
 	const navigation = useNavigation();
-	const { updateBusinessData } = useContext(UserContext);
+	const { user, updateBusinessData } = useContext(UserContext);
+	const business = user?.business;
 
 	const onValueChange = (name: string, change: string) => {
 		updateBusinessData({
@@ -144,6 +142,7 @@ const BusinessDetail = (): ReactElement => {
 				<SafeAreaView style={styles.bottomView}>
 					<Button
 						type="purple"
+						disabled={!business?.type}
 						title={Translation.BUTTON.NEXT}
 						onPress={() =>
 							navigation.navigate(Routes.BUSINESS_OWNER_DETAIL)
