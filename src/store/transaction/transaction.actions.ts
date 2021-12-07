@@ -1,16 +1,22 @@
-import { Dispatch } from 'redux'
-import { PERSONAL_TRANSACTION_LOAD_ALL, BUSINESS_TRANSACTION_LOAD_ALL } from '../action-types';
-import { TransactionsAPI, UserAPI } from 'src/api';
+import { Dispatch } from 'redux';
+import { TransactionsAPI } from 'src/api';
+import { BUSINESS_TRANSACTION_LOAD_ALL, PERSONAL_TRANSACTION_LOAD_ALL } from '../action-types';
 import errorHandler from '../errorHandler';
 
 export const loadPersonalTransactions = (userId: string) => async (dispatch: Dispatch): Promise<void> => {
     try {
-        const transactions = await TransactionsAPI.getTransactions(userId);
 
+        const [transactions, deposits, withdrawals]=
+            [
+                await TransactionsAPI.getTransactions(userId),
+                await TransactionsAPI.getDeposits(userId),
+                await TransactionsAPI.getWithdrawals(userId),
+            ]
+        const all = [...transactions, ...deposits, ...withdrawals]
         dispatch({
             type: PERSONAL_TRANSACTION_LOAD_ALL,
             payload: {
-                personalTransactions: transactions
+                personalTransactions: all
             },
         });
     } catch (error: any) {
