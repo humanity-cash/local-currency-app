@@ -1,18 +1,12 @@
-import React, { useState, useEffect, useContext } from 'react';
-import { TransactionState } from 'src/store/transaction/transaction.reducer';
-import { AppState } from 'src/store';
+import moment from 'moment';
+import React, { useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { Text } from 'react-native-elements';
-import { colors } from "src/theme/colors";
 import { TouchableOpacity } from 'react-native-gesture-handler';
-import { TransactionType } from "src/utils/types";
-import { getBerksharePrefix } from "src/utils/common";
 import { ITransaction } from 'src/api/types';
-import moment from 'moment';
-import { useDispatch, useSelector } from 'react-redux';
-import { WalletContext, UserContext } from 'src/contexts';
-import { loadBusinessTransactions } from 'src/store/transaction/transaction.actions';
-import { TransactionsAPI} from 'src/api';
+import { colors } from "src/theme/colors";
+import { getBerksharePrefix } from "src/utils/common";
+import { TransactionType } from "src/utils/types";
 
 const styles = StyleSheet.create({
 	transactionType: {
@@ -63,7 +57,6 @@ type TransactionItemProps = {
 
 const TransactionItem = (props: TransactionItemProps) => {
 	const { item, selected } = props;
-  console.log("🚀 ~ file: MerchantTransactionList.tsx ~ line 66 ~ TransactionItem ~ item", item)
 
 	const getStyle = (type: string) => {
 		if (type === TransactionType.SALE || type === TransactionType.RETURN || type === TransactionType.IN) {
@@ -92,30 +85,8 @@ type MerchantTransactionListProps = {
 	onSelect: (item: ITransaction) => void
 }
 
-const MerchantTransactionList = (props: MerchantTransactionListProps): JSX.Element => {
-	const { businessTransactions } = useSelector((state: AppState) => state.transactionReducer) as TransactionState;
-	const [list, setList] = useState<ITransaction[]>([]);
+const MerchantTransactionList = (props = {} as MerchantTransactionListProps): JSX.Element => {
 	const [selected, setSelected] = useState<string>("");
-
-	const dispatch = useDispatch();
-	const { walletData } = useContext(WalletContext);
-	const { businessDwollaId } = useContext(UserContext);
-	useEffect(() => {
-		const handler = async () => {
-			if(!businessDwollaId) return
-			const transactions: ITransaction[] = await TransactionsAPI.getTransactions(businessDwollaId);
-			if (transactions?.length) {
-				transactions.sort(function (a: ITransaction, b: ITransaction) {
-					if (moment(a.timestamp).isAfter(b.timestamp)) return -1;
-					else if (moment(a.timestamp).isBefore(b.timestamp)) return 1;
-					else return 0;
-				});
-			}
-			setList(transactions);
-		}
-		handler();
-
-	}, [walletData, businessDwollaId]);
 
 	const handleSelect = (item: ITransaction) => {
 		setSelected(item.transactionHash);
@@ -125,7 +96,7 @@ const MerchantTransactionList = (props: MerchantTransactionListProps): JSX.Eleme
 	return (
 		<View>
 			{
-				list.map((item: ITransaction, i: number) =>
+				props.data?.map((item: ITransaction, i: number) =>
 					<TouchableOpacity onPress={() => handleSelect(item)} key={i}>
 						<TransactionItem item={item} selected={selected} />
 					</TouchableOpacity>
