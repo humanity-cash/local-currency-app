@@ -1,4 +1,4 @@
-import { EvilIcons, Feather, AntDesign } from "@expo/vector-icons";
+import { AntDesign, EvilIcons, Feather } from "@expo/vector-icons";
 import {
 	createDrawerNavigator,
 	DrawerContentComponentProps,
@@ -11,15 +11,18 @@ import React, { useContext, useState } from "react";
 import {
 	Image,
 	StyleSheet,
-	Text,
-	TouchableWithoutFeedback,
-	View,
-	TouchableOpacity
+	Text, TouchableOpacity, TouchableWithoutFeedback,
+	View
 } from "react-native";
 import { Drawer } from "react-native-paper";
 import { UserType } from "src/auth/types";
+import { BUTTON_TYPES } from "src/constants";
+import { AuthContext, NavigationViewContext, UserContext, WalletContext } from "src/contexts";
+import { ViewState } from "src/contexts/navigation";
 import * as Routes from "src/navigation/constants";
+import { Button, Dialog } from "src/shared/uielements";
 import { colors } from "src/theme/colors";
+import { baseHeader, dialogViewBase, wrappingContainerBase } from "src/theme/elements";
 import Translation from "src/translation/en.json";
 import CashoutAmount from "../cashout/CashoutAmount";
 import MerchantDictionary from "../merchant/MerchantDictionary";
@@ -30,11 +33,6 @@ import SettingsHelpAndContact from "../settings/SettingsHelpAndContact";
 import BusinessAccount from "../signupBusiness/BusinessAccount";
 import MyTransactions from "../transactions/MyTransactions";
 import Dashboard from "./Dashboard";
-import { Button, Dialog } from "src/shared/uielements";
-import { baseHeader, dialogViewBase, wrappingContainerBase } from "src/theme/elements";
-import { BUTTON_TYPES } from "src/constants";
-import { UserContext, WalletContext, AuthContext, NavigationViewContext } from "src/contexts";
-import { ViewState} from "src/contexts/navigation";
 
 const styles = StyleSheet.create({
 	headerText: {
@@ -133,7 +131,7 @@ const DrawerContent = (
 	props: DrawerContentComponentProps<DrawerContentOptions>
 ) => {
 	const { signOut, userEmail } = useContext(AuthContext);
-	const { walletData } = useContext(WalletContext);
+	const { customerWalletData } = useContext(WalletContext);
 	const { updateSelectedView } = useContext(NavigationViewContext);
 	const { user, updateUserType } = useContext(UserContext)
 	const authorization = { cashierView: user?.verifiedBusiness };
@@ -246,23 +244,23 @@ const DrawerContent = (
 							</View>
 						)}
 					</View>
-					<Text style={styles.berkAmount}>B$ {walletData?.availableBalance}</Text>
+					<Text style={styles.berkAmount}>B$ {customerWalletData?.availableBalance}</Text>
 					<Drawer.Section>
 						<DrawerItem
 							label="Scan to pay"
-							onPress={() => walletData?.availableFundingSource ? props.navigation.navigate(Routes.QRCODE_SCAN) : setIsBankDialog(true)}
+							onPress={() => customerWalletData?.availableFundingSource ? props.navigation.navigate(Routes.QRCODE_SCAN) : setIsBankDialog(true)}
 						/>
 						<DrawerItem
 							label="Receive payment"
-							onPress={() => walletData?.availableFundingSource ? props.navigation.navigate(Routes.RECEIVE_PAYMENT) : setIsBankDialog(true)}
+							onPress={() => customerWalletData?.availableFundingSource ? props.navigation.navigate(Routes.RECEIVE_PAYMENT) : setIsBankDialog(true)}
 						/>
 						<DrawerItem
 							label="Load up B$"
-							onPress={() => walletData?.availableFundingSource ? props.navigation.navigate(Routes.LOAD_UP) : setIsBankDialog(true)}
+							onPress={() => customerWalletData?.availableFundingSource ? props.navigation.navigate(Routes.LOAD_UP) : setIsBankDialog(true)}
 						/>
 						<DrawerItem
 							label="Cash out to USD"
-							onPress={() => walletData?.availableFundingSource ? props.navigation.navigate(Routes.CASHOUT_AMOUNT) : setIsBankDialog(true)}
+							onPress={() => customerWalletData?.availableFundingSource ? props.navigation.navigate(Routes.CASHOUT_AMOUNT) : setIsBankDialog(true)}
 						/>
 					</Drawer.Section>
 					<Drawer.Section>
