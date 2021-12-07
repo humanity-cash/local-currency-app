@@ -1,14 +1,17 @@
 import { AntDesign, Entypo, Octicons } from "@expo/vector-icons";
 import { DrawerActions, useNavigation } from "@react-navigation/native";
+import Fuse from 'fuse.js';
 import moment from "moment";
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { ScrollView, StyleSheet, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native';
 import { Image, Text } from "react-native-elements";
+import { TransactionsAPI } from "src/api";
 import { ITransaction } from 'src/api/types';
 import { BUTTON_TYPES } from "src/constants";
 import { UserContext, WalletContext } from "src/contexts";
 import { useBusinessWallet, useUpdateBusinessWalletData } from "src/hooks";
 import * as Routes from 'src/navigation/constants';
+import DataLoading from "src/screens/loadings/DataLoading";
 import { Button, Dialog, Header, SearchInput } from "src/shared/uielements";
 import { colors } from "src/theme/colors";
 import { baseHeader, dialogViewBase, FontFamily, viewBaseB, wrappingContainerBase } from "src/theme/elements";
@@ -231,6 +234,11 @@ const defaultTransaction = {
 	blockNumber: 0
 };
 
+const options = {
+  includeScore: false,
+  keys: ['toName', 'fromName', 'value']
+}
+
 const MerchantDashboard = (): JSX.Element => {
 	const navigation = useNavigation();
 	const { businessWalletData  } = useContext(WalletContext);
@@ -242,10 +250,22 @@ const MerchantDashboard = (): JSX.Element => {
 	const [selectedItem, setSelectedItem] = useState<ITransaction>(defaultTransaction as ITransaction);
 	const [isDwollaVisible, setIsDwollaVisible] = useState<boolean>(false);
 	const [isPayment, setIsPayment] = useState<boolean>(false);
-	useBusinessWallet();
-	useUpdateBusinessWalletData();
+	const [ apiData, setApiData] = useState([]);
+	const [ filteredApiData, setFilteredApiData] = useState([]);
+	const { isLoading: isWalletLoading } = useBusinessWallet();
+	const [isLoading, setIsLoading] = useState<boolean>(false);
+	const { businessDwollaId } = useContext(UserContext);
 
+	useUpdateBusinessWalletData();
+	const fuse = new Fuse(filteredApiData, options)
 	const onSearchChange = (name: string, change: string) => {
+		if (!change) {
+			setFilteredApiData(apiData)
+			setSearchText(change);
+			return
+		}
+		const fuseresult = fuse.search(change)
+		setFilteredApiData(fuseresult.map(i => i.item))
 		setSearchText(change);
 	}
 
@@ -254,6 +274,31 @@ const MerchantDashboard = (): JSX.Element => {
 		setIsDetailViewOpen(true);
 	}
 
+	useEffect(() => {
+		const handler = async () => {
+			if (!businessDwollaId) return
+			setIsLoading(true);
+			const [transactions, deposits, withdrawals]: [ITransaction[], ITransaction[], ITransaction[]] =
+				[
+					await TransactionsAPI.getTransactions(businessDwollaId),
+					await TransactionsAPI.getDeposits(businessDwollaId),
+					await TransactionsAPI.getWithdrawals(businessDwollaId),
+				]
+			const all = [...transactions, ...deposits, ...withdrawals]
+			if (all?.length) {
+				all.sort(function (a: ITransaction, b: ITransaction) {
+					if (moment(a.timestamp).isAfter(b.timestamp)) return -1;
+					else if (moment(a.timestamp).isBefore(b.timestamp)) return 1;
+					else return 0;
+				});
+			}
+			setApiData(all);
+			setFilteredApiData(all)
+			setIsLoading(false);
+		}
+		handler();
+
+	}, [businessWalletData, businessDwollaId]);
 	const onConfirm = () => {
 		setIsDetailViewOpen(false);
 	}
@@ -273,6 +318,7 @@ const MerchantDashboard = (): JSX.Element => {
 
 	return (
 		<View style={viewBaseB}>
+			<DataLoading visible={isWalletLoading || isLoading} />
 			<Header
 				leftComponent={
 					<TouchableWithoutFeedback onPress={() => navigation.dispatch(DrawerActions.toggleDrawer())}>
@@ -292,7 +338,7 @@ const MerchantDashboard = (): JSX.Element => {
 					<Text style={styles.headerText}>{Translation.LANDING_PAGE.TITLE}</Text>
 				</View>
 				<View style={styles.amountView}>
-					<Text style={styles.amountTxt}>B$ {businessFundingSource ? availableBalance : '0'}</Text>
+					<Text style={styles.amountTxt}>B$ {businessFundingSource ? availableBalance : '-'}</Text>
 				</View>
 
 				<ScrollView>
@@ -305,7 +351,7 @@ const MerchantDashboard = (): JSX.Element => {
 							</Text>
 						</View>}
 
-						{!businessFundingSource ? (
+						{!businessFundingSource && !isWalletLoading? (
 							<View style={styles.alertView}>
 								<AntDesign
 									name='exclamationcircleo'
@@ -346,7 +392,7 @@ const MerchantDashboard = (): JSX.Element => {
 							</TouchableOpacity>
 						</View>
 						{isFilterVisible && <MerchantTransactionsFilter/>}
-						<MerchantTransactionList onSelect={viewDetail} />
+						<MerchantTransactionList data={filteredApiData} onSelect={viewDetail} />
 					</View>
 				</ScrollView>
 			</View>
