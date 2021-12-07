@@ -1,41 +1,51 @@
-import { useContext, useEffect } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { DwollaAPI } from "src/api";
 import { UserContext, WalletContext } from "src/contexts";
 
-export const useBusinessWallet = (): void => {
+export const useBusinessWallet = ():  { isLoading: boolean }  => {
+	const [isLoading, setIsLoading] = useState<boolean>(false);
 	const { updateBusinessWalletData } = useContext(WalletContext);
 	const { businessDwollaId } = useContext(UserContext);
 
 	useEffect(() => {
 		const handler = async () => {
 			if (businessDwollaId) {
+				setIsLoading(true);
 				const wData = await DwollaAPI.loadWallet(businessDwollaId);
 				if (wData?.userId?.length) {
 					const isFundingSourceAvailable = await DwollaAPI.loadFundingSource(businessDwollaId);
 					updateBusinessWalletData({ ...wData, availableFundingSource: isFundingSourceAvailable })
 				}
 			}
+			setIsLoading(false);
 		}
 		handler()
 	}, [businessDwollaId])
+
+	return { isLoading };
 }
 
-export const useCustomerWallet = (): void => {
+export const useCustomerWallet = (): { isLoading: boolean } => {
+	const [isLoading, setIsLoading] = useState<boolean>(false);
 	const { updateCustomerWalletData } = useContext(WalletContext);
 	const { customerDwollaId } = useContext(UserContext);
 
 	useEffect(() => {
 		const handler = async () => {
 			if (customerDwollaId) {
+				setIsLoading(true);
 				const wData = await DwollaAPI.loadWallet(customerDwollaId);
 				if (wData?.userId?.length) {
 					const isFundingSourceAvailable = await DwollaAPI.loadFundingSource(customerDwollaId);
 					updateCustomerWalletData({ ...wData, availableFundingSource: isFundingSourceAvailable })
 				}
 			}
+			setIsLoading(false);
 		}
 		handler()
 	}, [customerDwollaId])
+
+	return { isLoading }
 }
 
 export const useUpdateCustomerWalletData = (): void => {

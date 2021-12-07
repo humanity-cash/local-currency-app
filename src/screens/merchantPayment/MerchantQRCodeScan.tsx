@@ -1,24 +1,24 @@
-import React, { useState, useContext, useEffect } from 'react';
-import { StyleSheet, View, Image, ScrollView, KeyboardAvoidingView, Platform } from 'react-native';
 import { useNavigation } from '@react-navigation/core';
-import { Text } from 'react-native-elements';
-import { useCameraPermission } from 'src/hooks';
-import { Header, CancelBtn, Dialog, Button, ToggleButton, Modal, ModalHeader, BorderedInput, BackBtn } from "src/shared/uielements";
-import { colors } from "src/theme/colors";
-import { viewBase, dialogViewBase, modalViewBase, wrappingContainerBase, underlineHeaderB } from "src/theme/elements";
 import { BarCodeScanner } from 'expo-barcode-scanner';
-import Translation from 'src/translation/en.json';
-import * as Routes from 'src/navigation/constants';
-import { BUTTON_TYPES } from 'src/constants';
-import { QRCodeEntry, SECURITY_ID, PaymentMode, ToastType, LoadingScreenTypes } from 'src/utils/types';
+import React, { useContext, useEffect, useState } from 'react';
+import { Image, KeyboardAvoidingView, Platform, ScrollView, StyleSheet, View } from 'react-native';
+import { Text } from 'react-native-elements';
+import { useDispatch } from 'react-redux';
 import { TransactionsAPI } from 'src/api';
 import { ITransactionRequest } from 'src/api/types';
-import { calcFee, showToast } from 'src/utils/common';
-import { isQRCodeValid } from 'src/utils/validation';
+import { BUTTON_TYPES } from 'src/constants';
+import { UserContext, WalletContext } from 'src/contexts';
+import { useCameraPermission } from 'src/hooks';
+import * as Routes from 'src/navigation/constants';
+import { BackBtn, BorderedInput, Button, CancelBtn, Dialog, Header, Modal, ModalHeader, ToggleButton } from "src/shared/uielements";
 import { updateLoadingStatus } from 'src/store/loading/loading.actions';
 import { loadBusinessTransactions } from 'src/store/transaction/transaction.actions';
-import { useDispatch } from 'react-redux';
-import { UserContext, WalletContext } from 'src/contexts';
+import { colors } from "src/theme/colors";
+import { dialogViewBase, modalViewBase, underlineHeaderB, viewBase, wrappingContainerBase } from "src/theme/elements";
+import Translation from 'src/translation/en.json';
+import { calcFee, showToast } from 'src/utils/common';
+import { LoadingScreenTypes, PaymentMode, QRCodeEntry, SECURITY_ID, ToastType } from 'src/utils/types';
+import { isQRCodeValid } from 'src/utils/validation';
 
 type HandleScaned = {
 	type: string,
@@ -205,7 +205,7 @@ const MerchantQRCodeScan = (): JSX.Element => {
 		mode: PaymentMode.SELECT_AMOUNT
 	});
 	const [goNext, setGoNext] = useState<boolean>(false);
-	const { walletData } = useContext(WalletContext);
+	const { businessWalletData } = useContext(WalletContext);
 
 
 	useEffect(() => {
@@ -241,7 +241,7 @@ const MerchantQRCodeScan = (): JSX.Element => {
 		setIsScanned(false);
 		const amountCalcedFee = state.amount + calcFee(state.amount);
 
-		if (walletData.availableBalance <= state.amount) {
+		if (businessWalletData.availableBalance <= state.amount) {
 			showToast(ToastType.ERROR, "Whoooops. You cannot the payment.", "You have too little funds available. Please load up your balance first.");
 			return;
 		}
@@ -277,7 +277,7 @@ const MerchantQRCodeScan = (): JSX.Element => {
 	const handleOpenPay = async () => {
 		setIsOpenPayment(false);
 		// check balance
-		if (walletData.availableBalance <= state.amount) {
+		if (businessWalletData.availableBalance <= state.amount) {
 			showToast(ToastType.ERROR, "Whoooops. You cannot the payment.", "You have too little funds available. Please load up your balance first.");
 			return;
 		}
