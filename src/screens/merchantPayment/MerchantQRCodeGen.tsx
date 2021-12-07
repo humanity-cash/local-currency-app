@@ -1,16 +1,16 @@
-import React, { useEffect, useContext, useState } from 'react';
-import { StyleSheet, View, Image } from 'react-native';
-import QRCode from 'react-native-qrcode-svg';
+import React, { useContext, useEffect, useState } from 'react';
+import { Image, StyleSheet, View } from 'react-native';
 import { Text } from 'react-native-elements';
-import { Dialog } from "src/shared/uielements";
-import { dialogViewBase } from "src/theme/elements";
-import { colors } from "src/theme/colors";
-import { PaymentMode, SECURITY_ID } from "src/utils/types";
-import { useBrightness } from "src/hooks";
+import QRCode from 'react-native-qrcode-svg';
 import { useDispatch } from 'react-redux';
-import { loadBusinessTransactions } from 'src/store/transaction/transaction.actions';
-import { UserContext, WalletContext } from 'src/contexts';
 import { DwollaAPI } from 'src/api';
+import { UserContext, WalletContext } from 'src/contexts';
+import { useBrightness } from "src/hooks";
+import { Dialog } from "src/shared/uielements";
+import { loadBusinessTransactions } from 'src/store/transaction/transaction.actions';
+import { colors } from "src/theme/colors";
+import { dialogViewBase } from "src/theme/elements";
+import { PaymentMode, SECURITY_ID } from "src/utils/types";
 
 const styles = StyleSheet.create({
     dialog: {
@@ -66,9 +66,9 @@ const MerchantQRCodeGen = (props: MerchantQRCodeGenProps): JSX.Element => {
     const { user, businessDwollaId } = useContext(UserContext);
     const dispatch = useDispatch();
     const { hasPermission, setMaxBrightness, setDefaultBrightness} = useBrightness();
-    const { walletData, updateWalletData } = useContext(WalletContext);
+    const { businessWalletData, updateBusinessWalletData } = useContext(WalletContext);
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const [initBalance, setInitBalance] = useState<number>(walletData.availableBalance);
+    const [initBalance, setInitBalance] = useState<number>(businessWalletData.availableBalance);
     const [isSuccess, setIsSuccess] = useState<boolean>(false);
     const addressStr = JSON.stringify({
         securityId: SECURITY_ID,
@@ -82,7 +82,7 @@ const MerchantQRCodeGen = (props: MerchantQRCodeGenProps): JSX.Element => {
             if (businessDwollaId) {
                 const userWallet = await DwollaAPI.loadWallet(businessDwollaId)
                 const fundingSource = await DwollaAPI.loadFundingSource(businessDwollaId)
-                updateWalletData(({ ...userWallet, availableFundingSource: fundingSource }))
+                updateBusinessWalletData(({ ...userWallet, availableFundingSource: fundingSource }))
             }
         }, 1500);
         return () => clearInterval(timerId);
@@ -106,11 +106,11 @@ const MerchantQRCodeGen = (props: MerchantQRCodeGenProps): JSX.Element => {
                 await dispatch(loadBusinessTransactions(businessDwollaId));
             }
             setDefaultBrightness();
-            props.onSuccess(walletData.availableBalance - initBalance);
+            props.onSuccess(businessWalletData.availableBalance - initBalance);
         }
     }
 
-    if (walletData.availableBalance > initBalance) {
+    if (businessWalletData.availableBalance > initBalance) {
         onSuccess();
     }
 
