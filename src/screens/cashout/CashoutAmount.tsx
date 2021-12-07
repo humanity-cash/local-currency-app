@@ -1,19 +1,19 @@
-import React, {useState, useEffect, useContext} from 'react';
-import { StyleSheet, View, KeyboardAvoidingView, ScrollView, Platform } from 'react-native';
-import { Text } from 'react-native-elements';
-import { Header, Button, CancelBtn, BorderedInput, Dialog } from "src/shared/uielements";
-import { underlineHeader, viewBase, dialogViewBase, wrappingContainerBase } from "src/theme/elements";
-import { colors } from "src/theme/colors";
-import { IMap, LoadingScreenTypes } from "src/utils/types";
-import Translation from 'src/translation/en.json';
-import * as Routes from 'src/navigation/constants';
 import { useNavigation } from '@react-navigation/core';
+import React, { useContext, useEffect, useState } from 'react';
+import { KeyboardAvoidingView, Platform, ScrollView, StyleSheet, View } from 'react-native';
+import { Text } from 'react-native-elements';
+import { useDispatch } from 'react-redux';
 import { TransactionsAPI } from 'src/api';
-import { UserContext } from 'src/contexts';
+import { UserContext, WalletContext } from 'src/contexts';
+import * as Routes from 'src/navigation/constants';
+import { BorderedInput, Button, CancelBtn, Dialog, Header } from "src/shared/uielements";
+import { colors } from "src/theme/colors";
+import { dialogViewBase, underlineHeader, viewBase, wrappingContainerBase } from "src/theme/elements";
+import Translation from 'src/translation/en.json';
+import { IMap, LoadingScreenTypes } from "src/utils/types";
+import { hideLoadingProgress, showLoadingProgress } from '../../store/loading/loading.actions';
 import { showToast } from '../../utils/common';
 import { ToastType } from '../../utils/types';
-import { showLoadingProgress, hideLoadingProgress } from '../../store/loading/loading.actions';
-import { useDispatch } from 'react-redux';
 
 interface CashoutState extends IMap {
 	amount: string;
@@ -70,6 +70,7 @@ const styles = StyleSheet.create({
 const CashoutAmount = (): JSX.Element => {
 	const navigation = useNavigation();
 	const { customerDwollaId } = useContext(UserContext);
+	const { customerWalletData } = useContext(WalletContext);
 	const dispatch = useDispatch()
 
 	const [state, setState] = useState<CashoutState>({
@@ -129,7 +130,7 @@ const CashoutAmount = (): JSX.Element => {
 					<Text>{Translation.PAYMENT.CASH_OUT_DETAIL}</Text>
 					<View style={ styles.formLabel }>
 						<Text style={styles.labelText}>{Translation.LABEL.AMOUNT}</Text>
-						<Text style={styles.labelText}>{Translation.LABEL.MAX_BERKSHARES}</Text>
+						<Text style={styles.labelText}>{`${Translation.LABEL.MAX_BERKSHARES} ${customerWalletData?.availableBalance}`}</Text>
 					</View>
 					<BorderedInput
 						label="Amount"
