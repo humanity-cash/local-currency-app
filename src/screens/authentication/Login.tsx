@@ -1,18 +1,18 @@
 import { useNavigation } from '@react-navigation/native';
 import React, { createRef, useContext, useEffect, useState } from 'react';
-import { KeyboardAvoidingView, Platform, ScrollView, StyleSheet, View, SafeAreaView, TextInput, Keyboard } from 'react-native';
+import { KeyboardAvoidingView, Platform, SafeAreaView, ScrollView, StyleSheet, TextInput, View } from 'react-native';
 import { Text } from 'react-native-elements';
-import { AuthContext } from "src/contexts";
 import { AuthStatus, SignInInput } from 'src/auth/types';
 import { BUTTON_TYPES } from 'src/constants';
+import { AuthContext } from "src/contexts";
 import * as Routes from 'src/navigation/constants';
+import DataLoading from 'src/screens/loadings/DataLoading';
 import { BackBtn, BlockInput, Button, Header } from "src/shared/uielements";
+import SecurityEyeButton from 'src/shared/uielements/SecurityEyeButton';
 import { colors } from "src/theme/colors";
 import { baseHeader, viewBase, wrappingContainerBase } from "src/theme/elements";
 import Translation from 'src/translation/en.json';
 import { isPasswordValid } from 'src/utils/validation';
-import DataLoading from 'src/screens/loadings/DataLoading';
-import SecurityEyeButton from 'src/shared/uielements/SecurityEyeButton';
 
 const styles = StyleSheet.create({
 	headerText: {
