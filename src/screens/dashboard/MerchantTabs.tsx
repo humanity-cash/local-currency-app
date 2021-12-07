@@ -185,7 +185,7 @@ const BankLinkDialog = (props: BankLinkDialogProps) => {
 
 const DrawerContent = (props: DrawerContentComponentProps) => {
 	const { signOut, userEmail } = useContext(AuthContext);
-	const { user, updateUserType, businessDwollaId } = useContext(UserContext);
+	const { user, updateUserType } = useContext(UserContext);
 	const { updateSelectedView } = useContext(NavigationViewContext);
 	const { businessWalletData } = useContext(WalletContext);
 	const authorization = { cashierView: user?.verifiedBusiness };
@@ -193,7 +193,6 @@ const DrawerContent = (props: DrawerContentComponentProps) => {
 	const [isVisible, setIsVisible] = useState<boolean>(false);
 	const [isCashierView, setIsCashierView] = useState<boolean>(false);
 	const [isBankDialog, setIsBankDialog] = useState<boolean>(false);
-	const isVerifiedCustomer = user?.verifiedCustomer;
 
 	const onScanConfirm = () => {
 		setIsVisible(false);
