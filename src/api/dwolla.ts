@@ -1,7 +1,7 @@
-import { UserId, AxiosPromiseResponse } from './types';
+import { IWallet } from '@humanity.cash/types';
 import { getRequest, postRequest } from './base';
 import { fundingSource } from './formatters';
-import { IWallet } from '@humanity.cash/types';
+import { AxiosPromiseResponse, UserId } from './types';
 import { getUser } from './user';
 
 export const iavToken = async (userId: UserId): Promise<AxiosPromiseResponse> => {
@@ -9,7 +9,7 @@ export const iavToken = async (userId: UserId): Promise<AxiosPromiseResponse> =>
     const response = await postRequest(`/users/${userId}/iav-token`, {});
     return response;
   } catch (err) {
-    return {} as any;
+    return {} as AxiosPromiseResponse;
   }
 };
 
@@ -28,7 +28,7 @@ export const webhook = async (): Promise<AxiosPromiseResponse> => {
     const response = await postRequest(`/webhook`, {});
     return response;
   } catch (err) {
-    return {} as any;
+    return {} as AxiosPromiseResponse;
   }
 };
 
@@ -44,8 +44,8 @@ export const loadWallet = async (uId: string): Promise<IWallet> => {
       createdBlock: wallet?.createdBlock,
     }
     return walletData;
-  } catch (error: any) {
-    console.log("no here", error)
+  } catch (error: unknown) {
+    console.log("Error loading wallet:", error)
     return {} as IWallet;
   }
 }
