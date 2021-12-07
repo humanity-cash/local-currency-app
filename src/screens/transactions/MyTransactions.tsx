@@ -1,28 +1,26 @@
-import { useNavigation } from '@react-navigation/native';
-import React, { useState, useEffect, useContext } from 'react';
-import { UserContext, WalletContext } from "src/contexts";
-import { StyleSheet, View, ScrollView, TouchableOpacity } from 'react-native';
-import { Text, Image } from 'react-native-elements';
 import { Octicons } from '@expo/vector-icons';
-import { Header, BackBtn, SearchInput, Dialog, Button } from "src/shared/uielements";
-import { baseHeader, viewBase, dialogViewBase, wrappingContainerBase, FontFamily } from "src/theme/elements";
+import { useNavigation } from '@react-navigation/native';
+import Fuse from 'fuse.js';
+import moment from 'moment';
+import React, { useContext, useEffect, useState } from 'react';
+import { ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native';
+import { Image, Text } from 'react-native-elements';
+import { TransactionsAPI } from 'src/api';
+import { ITransaction } from 'src/api/types';
+import { BUTTON_TYPES } from 'src/constants';
+import { UserContext, WalletContext } from "src/contexts";
+import * as Routes from 'src/navigation/constants';
+import DataLoading from 'src/screens/loadings/DataLoading';
+import PaymentRequestSuccess from 'src/screens/payment/PaymentRequestSuccess';
+import { BackBtn, Button, Dialog, Header, SearchInput } from "src/shared/uielements";
 import { colors } from "src/theme/colors";
+import { baseHeader, dialogViewBase, FontFamily, viewBase, wrappingContainerBase } from "src/theme/elements";
+import Translation from 'src/translation/en.json';
+import { getBerksharePrefix } from "src/utils/common";
+import { TransactionType } from "src/utils/types";
 import MyTransactionList from './MyTransactionList';
 import MyTransactionFilter from './MyTransactionsFilter';
 import ReturnQRCodeGen from './ReturnQRCodeGen';
-import Translation from 'src/translation/en.json';
-import * as Routes from 'src/navigation/constants';
-import { getBerksharePrefix } from "src/utils/common";
-import { TransactionType, LoadingScreenTypes } from "src/utils/types";
-import { ITransaction } from 'src/api/types';
-import { loadPersonalTransactions } from 'src/store/transaction/transaction.actions';
-import { TransactionState } from 'src/store/transaction/transaction.reducer';
-import { useSelector, useDispatch } from 'react-redux';
-import { AppState } from 'src/store';
-import moment from 'moment';
-import { updateLoadingStatus } from 'src/store/loading/loading.actions';
-import { BUTTON_TYPES } from 'src/constants';
-import PaymentRequestSuccess from 'src/screens/payment/PaymentRequestSuccess';
 
 const styles = StyleSheet.create({
 	content: {
@@ -191,36 +189,60 @@ const defaultTransaction = {
 	fromName: "",
 	toName: "",
 	fromUserId: "",
-	type: "",
+	type: "IN",
 	value: "",
 	timestamp: new Date().getTime(),
 	blockNumber: 0
 };
 
+const options = {
+  includeScore: false,
+  keys: ['toName', 'fromName', 'value']
+}
+
 const MyTransactions = (): JSX.Element => {
-	const dispatch = useDispatch();
 	const navigation = useNavigation();
 	const { customerDwollaId } = useContext(UserContext);
-	const { walletData } = useContext(WalletContext);
+	const { customerWalletData } = useContext(WalletContext);
 	const [isFilterVisible, setIsFilterVisible] = useState<boolean>(false);
 	const [searchText, setSearchText] = useState<string>("");
 	const [isDetailView, setIsDetailView] = useState<boolean>(false);
 	const [isReturnView, setIsReturnView] = useState<boolean>(false);
-	const [selectedItem, setSelectedItem] = useState<ITransaction>(defaultTransaction);
+	const [selectedItem, setSelectedItem] = useState<ITransaction>(defaultTransaction as ITransaction);
 	const [isRequestSuccess, setIsRequestSuccess] = useState<boolean>(false);
+	const [isLoading, setIsLoading]= useState<boolean>(false);
 	const [receivedAmount, setReceivedAmount] = useState<number>(0);
-
-	const { personalTransactions } = useSelector((state: AppState) => state.transactionReducer) as TransactionState;
+	const [apiData, setAPIData] = useState([]);
+	const [ filteredData, setFilteredData] = useState([]);
+	const fuse = new Fuse(filteredData, options)
 
 	useEffect(() => {
 		if (customerDwollaId) {
-			(async () => {
-				await dispatch(loadPersonalTransactions(customerDwollaId));
-			})();
+			const handler = async () => {
+				setIsLoading(true);
+				const [transactions, deposits, withdrawals] =
+					[await TransactionsAPI.getTransactions(customerDwollaId),
+					await TransactionsAPI.getDeposits(customerDwollaId),
+					await TransactionsAPI.getWithdrawals(customerDwollaId),
+					]
+				const all = [...transactions, ...deposits, ...withdrawals]
+				setAPIData(all);
+				setFilteredData(all);
+				setIsLoading(false);
+			};
+			handler();
 		}
-	}, []);
+	}, [customerDwollaId]);
 
 	const onSearchChange = (name: string, change: string) => {
+		if(!change){
+			setFilteredData(apiData)
+			setSearchText(change);
+			return
+		}
+		const fuseresult = fuse.search(change)
+		//@ts-ignore
+		setFilteredData(fuseresult.map(i => i.item))
 		setSearchText(change);
 	}
 
@@ -252,6 +274,7 @@ const MyTransactions = (): JSX.Element => {
 
 	return (
 		<View style={viewBase}>
+			<DataLoading visible={isLoading}/>
 			<Header
 				leftComponent={<BackBtn text="Home" onClick={() => navigation.goBack()} />}
 			/>
@@ -260,7 +283,7 @@ const MyTransactions = (): JSX.Element => {
 					<Text style={styles.headerText}>{Translation.PAYMENT.MY_TRANSACTIONS}</Text>
 				</View>
 				<View style={styles.totalAmountView}>
-					<Text style={styles.amountText}>B$ {walletData.availableBalance}</Text>
+					<Text style={styles.amountText}>B$ {customerWalletData.availableBalance}</Text>
 				</View>
 				
 				<ScrollView>
@@ -284,8 +307,8 @@ const MyTransactions = (): JSX.Element => {
 								/>
 							</TouchableOpacity>
 						</View>
-						{isFilterVisible && <MyTransactionFilter></MyTransactionFilter>}
-						<MyTransactionList data={personalTransactions} onSelect={viewDetail} />
+						{isFilterVisible && <MyTransactionFilter/>}
+						<MyTransactionList data={filteredData} onSelect={viewDetail} />
 					</View>
 				</ScrollView>
 			</View>
