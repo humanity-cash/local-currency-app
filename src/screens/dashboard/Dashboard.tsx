@@ -11,6 +11,7 @@ import { BUTTON_TYPES } from "src/constants";
 import { WalletContext } from 'src/contexts';
 import { useCustomerWallet, useUpdateCustomerWalletData } from 'src/hooks';
 import * as Routes from 'src/navigation/constants';
+import DataLoading from "src/screens/loadings/DataLoading";
 import { Button, Dialog, Header } from 'src/shared/uielements';
 import { colors } from 'src/theme/colors';
 import { baseHeader, dialogViewBase, viewBase, wrappingContainerBase } from 'src/theme/elements';
@@ -155,7 +156,7 @@ const Dashboard = (): JSX.Element => {
 		onClose();
 	}
 
-	useCustomerWallet();
+	const { isLoading: isWalletLoading } = useCustomerWallet();
 	useUpdateCustomerWalletData();
 
 	const onClose = () => {
@@ -169,6 +170,7 @@ const Dashboard = (): JSX.Element => {
 
 	return (
 		<View style={viewBase}>
+			<DataLoading visible={isWalletLoading} />
 			<Header
 				leftComponent={
 					<TouchableWithoutFeedback
@@ -202,7 +204,7 @@ const Dashboard = (): JSX.Element => {
 				</View>
 				<ScrollView>
 					<View style={styles.content}>
-						{!personalFundingSource && (
+						{!personalFundingSource && !isWalletLoading && (
 							<View style={styles.alertView}>
 								<AntDesign
 									name='exclamationcircleo'

@@ -91,7 +91,7 @@
         "ACCOUNT_NUMBER": "ACCOUNT NUMBER",
         "AMOUNT": "AMOUNT",
         "AMOUNT1": "AMOUNT (B$ 1 = USD 1)",
-        "MAX_BERKSHARES": "MAX B$ 2,000.00",
+        "MAX_BERKSHARES": "MAX B$ ",
         "START_DATE": "START DATE",
         "END_DATE": "END DATE",
         "TRANSACTION_ID": "TRANSACTION ID",

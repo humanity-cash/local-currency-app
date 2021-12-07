@@ -1,15 +1,15 @@
-import React, { useEffect, useContext, useState } from 'react';
-import { StyleSheet, View, Image } from 'react-native';
-import QRCode from 'react-native-qrcode-svg';
-import { UserContext, WalletContext } from 'src/contexts';
+import React, { useContext, useEffect, useState } from 'react';
+import { Image, StyleSheet, View } from 'react-native';
 import { Text } from 'react-native-elements';
-import { Dialog } from "src/shared/uielements";
-import { dialogViewBase } from "src/theme/elements";
-import { PaymentMode, SECURITY_ID } from "src/utils/types";
-import { useBrightness } from "src/hooks";
+import QRCode from 'react-native-qrcode-svg';
 import { useDispatch } from 'react-redux';
+import { UserContext, WalletContext } from 'src/contexts';
+import { useBrightness, useUpdateBusinessWalletData } from "src/hooks";
+import { Dialog } from "src/shared/uielements";
 import { loadBusinessTransactions } from 'src/store/transaction/transaction.actions';
 import { colors } from 'src/theme/colors';
+import { dialogViewBase } from "src/theme/elements";
+import { PaymentMode, SECURITY_ID } from "src/utils/types";
 
 const styles = StyleSheet.create({
     dialog: {
@@ -63,10 +63,10 @@ type QRCodeGenProps = {
 const StaticQRCodeGen = (props: QRCodeGenProps): JSX.Element => {
     const dispatch = useDispatch();
     const { user, businessDwollaId } = useContext(UserContext);
-    const { walletData } = useContext(WalletContext);
+    const { businessWalletData } = useContext(WalletContext);
     const { hasPermission, setMaxBrightness, setDefaultBrightness } = useBrightness();
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const [initBalance, setInitBalance] = useState<number>(walletData.availableBalance);
+    const [initBalance, setInitBalance] = useState<number>(businessWalletData.availableBalance);
     const [isSuccess, setIsSuccess] = useState<boolean>(false);
     const addressStr = JSON.stringify({
         securityId: SECURITY_ID,
@@ -75,14 +75,7 @@ const StaticQRCodeGen = (props: QRCodeGenProps): JSX.Element => {
         mode: PaymentMode.OPEN_AMOUNT
     });
 
-    useEffect(() => {
-        const timerId = setInterval(async () => {
-            if (businessDwollaId) {
-                console.log('som')
-            }
-        }, 1500);
-        return () => clearInterval(timerId);
-    }, [props.visible]);
+    useUpdateBusinessWalletData()
 
     useEffect(() => {
         if (hasPermission) {
@@ -102,11 +95,11 @@ const StaticQRCodeGen = (props: QRCodeGenProps): JSX.Element => {
                 await dispatch(loadBusinessTransactions(businessDwollaId));
             }
             setDefaultBrightness();
-            props.onSuccess(walletData.availableBalance - initBalance);
+            props.onSuccess(businessWalletData.availableBalance - initBalance);
         }
     }
 
-    if (walletData.availableBalance > initBalance) {
+    if (businessWalletData.availableBalance > initBalance) {
         onSuccess();
     }
 

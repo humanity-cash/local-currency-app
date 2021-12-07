@@ -1,15 +1,15 @@
-import React, { useEffect, useContext, useState } from 'react';
-import { StyleSheet, View, Image } from 'react-native';
-import QRCode from 'react-native-qrcode-svg';
+import React, { useContext, useEffect, useState } from 'react';
+import { Image, StyleSheet, View } from 'react-native';
 import { Text } from 'react-native-elements';
-import { Dialog } from "src/shared/uielements";
-import { dialogViewBase } from "src/theme/elements";
-import { colors } from "src/theme/colors";
-import { useBrightness } from "src/hooks";
-import { PaymentMode, SECURITY_ID } from "src/utils/types";
+import QRCode from 'react-native-qrcode-svg';
 import { useDispatch } from 'react-redux';
-import { loadBusinessTransactions } from 'src/store/transaction/transaction.actions';
 import { UserContext, WalletContext } from 'src/contexts';
+import { useBrightness } from "src/hooks";
+import { Dialog } from "src/shared/uielements";
+import { loadBusinessTransactions } from 'src/store/transaction/transaction.actions';
+import { colors } from "src/theme/colors";
+import { dialogViewBase } from "src/theme/elements";
+import { PaymentMode, SECURITY_ID } from "src/utils/types";
 
 const styles = StyleSheet.create({
     dialog: {
@@ -64,9 +64,9 @@ type CashierQRCodeGenProps = {
 const CashierQRCodeGen = (props: CashierQRCodeGenProps): JSX.Element => {
     const { user, businessDwollaId } = useContext(UserContext);
     const dispatch = useDispatch();
-    const { walletData } = useContext(WalletContext);
+    const { customerWalletData } = useContext(WalletContext);
     const { hasPermission, setMaxBrightness, setDefaultBrightness} = useBrightness();
-    const [initBalance] = useState<number>(walletData.availableBalance);
+    const [initBalance] = useState<number>(customerWalletData?.availableBalance);
     const [isSuccess, setIsSuccess] = useState<boolean>(false);
     const addressStr = JSON.stringify({
         securityId: SECURITY_ID,
@@ -102,11 +102,11 @@ const CashierQRCodeGen = (props: CashierQRCodeGenProps): JSX.Element => {
                 await dispatch(loadBusinessTransactions(businessDwollaId));
             }
             setDefaultBrightness();
-            props.onSuccess(walletData.availableBalance - initBalance);
+            props.onSuccess(Number(customerWalletData?.availableBalance) - initBalance);
         }
     }
 
-    if (walletData.availableBalance > initBalance) {
+    if (Number(customerWalletData?.availableBalance) > initBalance) {
         onSuccess();
     }
 
