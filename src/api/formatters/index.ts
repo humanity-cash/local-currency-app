@@ -1,8 +1,6 @@
 import { IWallet } from "@humanity.cash/types";
 import { AxiosPromiseResponse, ITransaction } from "src/api/types";
-
-
-type MiniTransaction = Pick<ITransaction, 'blockNumber' | 'transactionHash' | 'timestamp' | 'toName' | 'type' | 'value' | 'fromName'>
+import { MiniTransaction } from "src/utils/types";
 
 const formatTransactionValue = (value: number | string): string => {
 	return String((Number(value) / 1000000000000000000).toFixed(2))

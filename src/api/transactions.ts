@@ -1,8 +1,9 @@
+import { MiniTransaction } from 'src/utils/types';
 import { getRequest, postRequest } from './base';
 import { formatDeposits, formatTransactions, formatWithdrawals } from './formatters';
 import { AxiosPromiseResponse, IDepositRequest, ITransaction, ITransactionRequest, IWithdrawalRequest, UserId } from './types';
 
-export const getDeposits = async (userId: UserId): Promise<[]> => {
+export const getDeposits = async (userId: UserId): Promise<MiniTransaction[]> => {
   try {
     const response = await getRequest(`/users/${userId}/deposit`);
     return formatDeposits(response) || [];
@@ -12,7 +13,7 @@ export const getDeposits = async (userId: UserId): Promise<[]> => {
   }
 };
 
-export const getWithdrawals = async (userId: UserId): Promise<any[]> => {
+export const getWithdrawals = async (userId: UserId): Promise<MiniTransaction[]> => {
   try {
     const response = await getRequest(`/users/${userId}/withdraw`);
     return formatWithdrawals(response) || [];
@@ -22,7 +23,7 @@ export const getWithdrawals = async (userId: UserId): Promise<any[]> => {
   }
 };
 
-export const getTransactions = async (userId: UserId): Promise<ITransaction[]> => {
+export const getTransactions = async (userId: UserId): Promise<MiniTransaction[]> => {
   try {
     const response = await getRequest(`/users/${userId}/transfer`);
     return formatTransactions(response);
@@ -46,3 +47,13 @@ export const transferTo = async (userId: UserId, request: ITransactionRequest): 
   const response = await postRequest(`/users/${userId}/transfer`, request);
   return response;
 };
+
+export const getAllTransactions = async (userId: UserId): Promise<MiniTransaction[]> => {
+  const response =
+    [...await getTransactions(userId),
+    ...await getDeposits(userId),
+    ...await getWithdrawals(userId),
+    ]
+
+  return response
+}
