@@ -401,8 +401,8 @@ interface TxFilters {
   selectedType: string | undefined
 }
 
-export interface CustomerTxFilterStore extends TxFilters {};
-export interface BusinessTxFilterStore extends TxFilters {};
+export type CustomerTxFilterStore = TxFilters;
+export type BusinessTxFilterStore = TxFilters;
 
 export type MiniTransaction = Pick<ITransaction, 'blockNumber' | 'transactionHash' | 'timestamp' | 'toName' | 'type' | 'value' | 'fromName'>
 
