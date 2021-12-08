@@ -2,16 +2,15 @@ import { useNavigation } from '@react-navigation/core';
 import React, { useContext, useEffect, useState } from 'react';
 import { KeyboardAvoidingView, Platform, ScrollView, StyleSheet, View } from 'react-native';
 import { Text } from 'react-native-elements';
-import { useDispatch } from 'react-redux';
 import { TransactionsAPI } from 'src/api';
 import { UserContext, WalletContext } from 'src/contexts';
 import * as Routes from 'src/navigation/constants';
+import DataLoading from 'src/screens/loadings/DataLoading';
 import { BorderedInput, Button, CancelBtn, Dialog, Header } from "src/shared/uielements";
 import { colors } from "src/theme/colors";
 import { dialogViewBase, underlineHeader, viewBase, wrappingContainerBase } from "src/theme/elements";
 import Translation from 'src/translation/en.json';
-import { IMap, LoadingScreenTypes } from "src/utils/types";
-import { hideLoadingProgress, showLoadingProgress } from '../../store/loading/loading.actions';
+import { IMap } from "src/utils/types";
 import { showToast } from '../../utils/common';
 import { ToastType } from '../../utils/types';
 
@@ -71,17 +70,17 @@ const CashoutAmount = (): JSX.Element => {
 	const navigation = useNavigation();
 	const { customerDwollaId } = useContext(UserContext);
 	const { customerWalletData } = useContext(WalletContext);
-	const dispatch = useDispatch()
+	const [isLoading, setIsLoading] = useState<boolean>(false);
 
 	const [state, setState] = useState<CashoutState>({
-		amount: "1",
-		costs: "1"
+		amount: "",
+		costs: ""
 	});
 	const [goNext, setGoNext] = useState(false);
 	const [isVisible, setIsVisible] = useState(false);
 
 	useEffect(() => {
-		setGoNext(state.costs !== "");
+		setGoNext(Boolean(state.costs));
 	}, [state]);
 
 	const onValueChange = (name: string, change: string) => {
@@ -103,12 +102,12 @@ const CashoutAmount = (): JSX.Element => {
 		}
 
 		setIsVisible(false);
-		dispatch(showLoadingProgress(LoadingScreenTypes.LOADING_DATA))
+		setIsLoading(true);
 		const response = await TransactionsAPI.withdraw(
 			customerDwollaId, 
 			{amount: state.amount}
 		);
-		dispatch(hideLoadingProgress())
+		setIsLoading(false);
 
 		if (response.data) {
 			navigation.navigate(Routes.CASHOUT);
@@ -119,6 +118,7 @@ const CashoutAmount = (): JSX.Element => {
 
 	return (
 		<View style={viewBase}>
+			<DataLoading visible={isLoading} />
 			<Header
 				rightComponent={<CancelBtn text={"Close"} onClick={() => navigation.goBack()} />}
 			/>
@@ -143,11 +143,11 @@ const CashoutAmount = (): JSX.Element => {
 					/>
 					<View style={styles.resultView}>
 						<Text style={styles.resultText}>{Translation.PAYMENT.REDEMPTION_FEE} (1.5%)</Text>
-						<Text style={styles.resultText}>{Translation.COMMON.USD} -</Text>
+						<Text style={styles.resultText}>{Translation.COMMON.USD} {(Number(state.amount) * 0.015).toFixed(2)}</Text>
 					</View>
 					<View style={styles.resultView}>
 						<Text style={{ ...styles.resultText, fontWeight: 'bold' }}>{Translation.LOAD_UP.TOTAL_COSTS}</Text>
-						<Text style={{ ...styles.resultText, fontWeight: 'bold' }}>{Translation.COMMON.USD} -</Text>
+						<Text style={{ ...styles.resultText, fontWeight: 'bold' }}>{Translation.COMMON.USD} {(Number(state.amount) * 0.985).toFixed(2)}</Text>
 					</View>
 				</View>
 			</ScrollView>
