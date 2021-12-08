@@ -1,3 +1,5 @@
+import { ITransaction } from "src/api/types";
+
 export type BirthDate = {
   day: string;
   month: string;
@@ -389,3 +391,52 @@ export interface LoadingState {
   screen: LoadingScreenTypes,
   isLoading: boolean
 }
+
+
+interface TxFilters {
+  startDate: Date | undefined,
+  endDate: Date | undefined,
+  isStartDate: boolean,
+  isEndDate: boolean,
+  selectedType: string | undefined
+}
+
+export interface CustomerTxFilterStore extends TxFilters {};
+export interface BusinessTxFilterStore extends TxFilters {};
+
+export type MiniTransaction = Pick<ITransaction, 'blockNumber' | 'transactionHash' | 'timestamp' | 'toName' | 'type' | 'value' | 'fromName'>
+
+
+export interface CustomerTxDataStore {
+  txs: MiniTransaction[]
+}
+
+export interface BusinessTxDataStore {
+  txs: MiniTransaction[]
+}
+
+export enum BusinessTxDataStoreActions {
+	UpdateTransactions = "updateTransactions",
+}
+
+export enum BusinessTxFilterStoreActions {
+	OpenStartDate = "openStoreDate",
+	OpenEndDate = "openEndDate",
+	UpdateStartDate = "updateStartDate",
+	UpdateEndDate = "updateEndDate",
+	UpdateType = "updateType",
+	ClearAll = "clearAll"
+}
+
+export enum CustomerTxFilterStoreActions {
+	OpenStartDate = "openStoreDate",
+	OpenEndDate = "openEndDate",
+	UpdateStartDate = "updateStartDate",
+	UpdateEndDate = "updateEndDate",
+	UpdateType = "updateType",
+	ClearAll = "clearAll"
+}
+
+export type CustomerTxFilterStoreReducer = { type: CustomerTxFilterStoreActions, payload: { startDate?: Date, endDate?: Date, type?: string } }
+export type BusinessTxFilterStoreReducer = { type: BusinessTxFilterStoreActions, payload: { startDate?: Date, endDate?: Date, type?: string } }
+export type BusinessTxDataStoreReducer = { type: BusinessTxDataStoreActions, payload: { txs: MiniTransaction[] } }
