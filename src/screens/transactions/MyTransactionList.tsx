@@ -3,15 +3,14 @@ import React, { useEffect, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { Image, Text } from 'react-native-elements';
 import { TouchableOpacity } from 'react-native-gesture-handler';
-import { ITransaction } from "src/api/types";
 import { colors } from "src/theme/colors";
 import { FontFamily } from "src/theme/elements";
 import { getBerksharePrefix } from "src/utils/common";
-import { TransactionType } from "src/utils/types";
+import { MiniTransaction, TransactionType } from "src/utils/types";
 
 type MyTransactionListProps = {
-	data: ITransaction[],
-	onSelect: (item: ITransaction) => void
+	data: MiniTransaction[],
+	onSelect: (item: MiniTransaction) => void
 }
 
 const styles = StyleSheet.create({
@@ -59,7 +58,7 @@ const styles = StyleSheet.create({
 });
 
 type MyTransactionItemProps = {
-	item: ITransaction,
+	item: MiniTransaction,
 	selected: string
 }
 
@@ -93,18 +92,17 @@ const TransactionItem = (props: MyTransactionItemProps) => {
 }
 
 const MyTransactionList = (props: MyTransactionListProps): JSX.Element => {
-
-	const [list, setList] = useState<ITransaction[]>([]);
+	const [list, setList] = useState<MiniTransaction[]>([]);
 	const [selected, setSelected] = useState<string>("");
 
 	useEffect(() => {
-		const data: ITransaction[] = props.data;
+		const data: MiniTransaction[] = props.data;
 
 		if (!data) {
 			return;
 		}
 
-		data.sort(function(a: ITransaction, b: ITransaction) {
+		data.sort(function(a: MiniTransaction, b: MiniTransaction) {
 			if (moment(a.timestamp).isAfter(b.timestamp)) return -1;
 			else if (moment(a.timestamp).isBefore(b.timestamp)) return 1;
 			else return 0;
@@ -113,7 +111,7 @@ const MyTransactionList = (props: MyTransactionListProps): JSX.Element => {
 		setList(data);
 	}, [props.data]);
 
-	const handleSelect = (item: ITransaction) => {
+	const handleSelect = (item: MiniTransaction) => {
 		setSelected(item.transactionHash);
 		props.onSelect(item);
 	}
@@ -121,7 +119,7 @@ const MyTransactionList = (props: MyTransactionListProps): JSX.Element => {
 	return (
 		<View style={styles.listView}>
 		{
-			list.map((item: ITransaction, i: number) => 
+				list.map((item: MiniTransaction, i: number) =>
 				<TouchableOpacity onPress={()=>handleSelect(item)} key={i}>
 					<TransactionItem item={item} selected={selected} />
 				</TouchableOpacity>

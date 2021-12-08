@@ -234,8 +234,8 @@ const MyTransactions = (): JSX.Element => {
 			const handler = async () => {
 				setIsLoading(true);
 				const txs = await TransactionsAPI.getAllTransactions(customerDwollaId)
-				setAPIData([ ...txs[0], ...txs[1], ...txs[2] ]);
-				setFilteredData([ ...txs[0], ...txs[1], ...txs[2] ]);
+				setAPIData(txs);
+				setFilteredData(txs);
 				setIsLoading(false);
 			};
 			handler();
