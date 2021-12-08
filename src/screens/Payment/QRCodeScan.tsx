@@ -1,25 +1,24 @@
 import { useNavigation } from '@react-navigation/native';
-import React, { useState, useContext, useEffect } from 'react';
-import { useDispatch } from 'react-redux';
-import { StyleSheet, View, Image, KeyboardAvoidingView, ScrollView, Platform } from 'react-native';
-import { Text } from 'react-native-elements';
-import { useCameraPermission } from 'src/hooks';
-import { Header, CancelBtn, Dialog, Button, ToggleButton, Modal, ModalHeader, BorderedInput, BackBtn } from "src/shared/uielements";
-import { colors } from "src/theme/colors";
-import { baseHeader, viewBase, dialogViewBase, modalViewBase, wrappingContainerBase, underlineHeader } from "src/theme/elements";
 import { BarCodeScanner } from 'expo-barcode-scanner';
-import Translation from 'src/translation/en.json';
-import * as Routes from 'src/navigation/constants';
-import { BUTTON_TYPES } from 'src/constants';
-import { QRCodeEntry, SECURITY_ID, PaymentMode, ToastType, LoadingScreenTypes } from 'src/utils/types';
+import React, { useContext, useEffect, useState } from 'react';
+import { Image, KeyboardAvoidingView, Platform, ScrollView, StyleSheet, View } from 'react-native';
+import { Text } from 'react-native-elements';
+import { useDispatch } from 'react-redux';
 import { TransactionsAPI } from 'src/api';
 import { ITransactionRequest } from 'src/api/types';
-import { calcFee, showToast } from 'src/utils/common';
-import { isQRCodeValid } from 'src/utils/validation';
+import { BUTTON_TYPES } from 'src/constants';
 import { UserContext, WalletContext } from 'src/contexts';
-import { loadPersonalTransactions } from 'src/store/transaction/transaction.actions';
-import { updateLoadingStatus } from 'src/store/loading/loading.actions';
+import { useCameraPermission } from 'src/hooks';
+import * as Routes from 'src/navigation/constants';
 import DataLoading from 'src/screens/loadings/DataLoading';
+import { BackBtn, BorderedInput, Button, CancelBtn, Dialog, Header, Modal, ModalHeader, ToggleButton } from "src/shared/uielements";
+import { loadPersonalTransactions } from 'src/store/transaction/transaction.actions';
+import { colors } from "src/theme/colors";
+import { baseHeader, dialogViewBase, modalViewBase, underlineHeader, viewBase, wrappingContainerBase } from "src/theme/elements";
+import Translation from 'src/translation/en.json';
+import { calcFee, showToast } from 'src/utils/common';
+import { PaymentMode, QRCodeEntry, SECURITY_ID, ToastType } from 'src/utils/types';
+import { isQRCodeValid } from 'src/utils/validation';
 
 type HandleScaned = {
 	type: string,
@@ -132,7 +131,7 @@ const PaymentConfirm = (props: PaymentConfirmProps) => {
 
 	const firstName = user?.customer?.firstName;
 	const lastName = user?.customer?.lastName;
-	const amountCalcedFee = props.payInfo.amount + calcFee(props.payInfo.amount);
+	const amountCalcedFee = props.payInfo.amount;
 
 	return (
 		<Dialog visible={props.visible} onClose={props.onCancel} style={styles.dialog}>
