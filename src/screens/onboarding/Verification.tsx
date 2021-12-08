@@ -109,36 +109,38 @@ const Verification = (): JSX.Element => {
 				</View>
 			</ScrollView>
 
-			<KeyboardAvoidingView
-				behavior={Platform.OS == 'ios' ? 'padding' : 'height'}>
-				<SafeAreaView style={styles.bottomView}>
-					{!noCodeReceived && (
-						<TouchableOpacity onPress={resendEmailVerificationCode}>
-							<Text style={styles.bottomNavigation}>
-								Send code again
-							</Text>
-						</TouchableOpacity>
-					)}
-					{noCodeReceived && (
-						<TouchableOpacity
+			<SafeAreaView>
+				<KeyboardAvoidingView
+					behavior={Platform.OS == 'ios' ? 'padding' : 'height'}>
+					<View style={styles.bottomView}>
+						{!noCodeReceived && (
+							<TouchableOpacity onPress={resendEmailVerificationCode}>
+								<Text style={styles.bottomNavigation}>
+									Send code again
+								</Text>
+							</TouchableOpacity>
+						)}
+						{noCodeReceived && (
+							<TouchableOpacity
+								onPress={() =>
+									navigation.navigate(Routes.VERIFICATION_HELP)
+								}>
+								<Text style={styles.bottomNavigation}>
+									Need help?
+								</Text>
+							</TouchableOpacity>
+						)}
+						<Button
+							type={BUTTON_TYPES.DARK_GREEN}
+							title='NEXT'
+							disabled={!goNext}
 							onPress={() =>
-								navigation.navigate(Routes.VERIFICATION_HELP)
-							}>
-							<Text style={styles.bottomNavigation}>
-								Need help?
-							</Text>
-						</TouchableOpacity>
-					)}
-					<Button
-						type={BUTTON_TYPES.DARK_GREEN}
-						title='NEXT'
-						disabled={!goNext}
-						onPress={() =>
-							navigation.navigate(Routes.EMAIL_CONFIRMED)
-						}
-					/>
-				</SafeAreaView>
-			</KeyboardAvoidingView>
+								navigation.navigate(Routes.EMAIL_CONFIRMED)
+							}
+						/>
+					</View>
+				</KeyboardAvoidingView>
+			</SafeAreaView>
 		</View>
 	);
 };
