@@ -157,17 +157,19 @@ const Password = (): JSX.Element => {
 				</View>
 			</ScrollView>
 
-			<KeyboardAvoidingView
-				behavior={Platform.OS == 'ios' ? 'padding' : 'height'}>
-				<SafeAreaView style={styles.bottomView}>
-					<Button
-						type={BUTTON_TYPES.DARK_GREEN}
-						title='NEXT'
-						disabled={!isValidPassword}
-						onPress={onNext}
-					/>
-				</SafeAreaView>
-			</KeyboardAvoidingView>
+			<SafeAreaView>
+				<KeyboardAvoidingView
+					behavior={Platform.OS == 'ios' ? 'padding' : 'height'}>
+					<View style={styles.bottomView}>
+						<Button
+							type={BUTTON_TYPES.DARK_GREEN}
+							title='NEXT'
+							disabled={!isValidPassword}
+							onPress={onNext}
+						/>
+					</View>
+				</KeyboardAvoidingView>
+			</SafeAreaView>
 		</View>
 	);
 };
