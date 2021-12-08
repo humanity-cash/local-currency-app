@@ -1,8 +1,8 @@
 import React from 'react';
-import { StyleSheet, View, KeyboardAvoidingView, ScrollView, Platform } from 'react-native';
+import { StyleSheet, View, KeyboardAvoidingView, Platform, Image } from 'react-native';
 import { Text } from 'react-native-elements';
 import { Header, Button, CancelBtn } from "src/shared/uielements";
-import { baseHeader, viewBase, wrappingContainerBase } from "src/theme/elements";
+import { baseHeader, viewBase } from "src/theme/elements";
 import { colors } from "src/theme/colors";
 import Translation from 'src/translation/en.json';
 import * as Routes from 'src/navigation/constants';
@@ -19,6 +19,12 @@ const styles = StyleSheet.create({
 	text: {
 		color: colors.bodyText
 	},
+	imageView: {
+		flex: 1, 
+		margin: 15, 
+		justifyContent: 'center', 
+		alignItems: 'center'
+	},
 	bottomView: {
 		padding: 20,
 		paddingBottom: 45
@@ -27,18 +33,26 @@ const styles = StyleSheet.create({
 
 const MerchantPaymentSuccess = (): JSX.Element => {
 	const navigation = useNavigation();
+	const successImg = require("../../../assets/images/burkshare_paper_money.png")
+
 	return (
 		<View style={viewBase}>
 			<Header
 				rightComponent={<CancelBtn text="Close" color={colors.purple} onClick={() => navigation.navigate(Routes.MERCHANT_DASHBOARD)} />}
 			/>
-			<ScrollView style={wrappingContainerBase}>
-				<View style={baseHeader}>
+			<View style={{paddingHorizontal: 10, flex: 1}}>
+				<View style={ baseHeader }>
 					<Text style={styles.headerText}>{Translation.COMMON.SUCCEEDED}</Text>
 					<Text style={styles.headerText}>{Translation.COMMON.THANK_YOU}</Text>
 				</View>
-				<Text style={styles.text}>{Translation.PAYMENT.PAYMENT_SUCCESS_DETAIL}</Text>
-			</ScrollView>
+				<View style={styles.imageView}>
+					<Image
+						source={successImg}
+						style={{justifyContent: 'center', width: '100%'}}
+						resizeMode='contain'
+					/>			
+				</View>
+			</View>
 			<KeyboardAvoidingView
 				behavior={Platform.OS == "ios" ? "padding" : "height"} >
 				<View style={styles.bottomView}>
