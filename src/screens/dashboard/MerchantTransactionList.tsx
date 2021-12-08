@@ -3,10 +3,9 @@ import React, { useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { Text } from 'react-native-elements';
 import { TouchableOpacity } from 'react-native-gesture-handler';
-import { ITransaction } from 'src/api/types';
 import { colors } from "src/theme/colors";
 import { getBerksharePrefix } from "src/utils/common";
-import { TransactionType } from "src/utils/types";
+import { MiniTransaction, TransactionType } from "src/utils/types";
 
 const styles = StyleSheet.create({
 	transactionType: {
@@ -51,7 +50,7 @@ const styles = StyleSheet.create({
 });
 
 type TransactionItemProps = {
-	item: ITransaction,
+	item: MiniTransaction,
 	selected: string
 }
 
@@ -81,14 +80,14 @@ const TransactionItem = (props: TransactionItemProps) => {
 }
 
 type MerchantTransactionListProps = {
-	data?: ITransaction[],
-	onSelect: (item: ITransaction) => void
+	data?: MiniTransaction[],
+	onSelect: (item: MiniTransaction) => void
 }
 
 const MerchantTransactionList = (props = {} as MerchantTransactionListProps): JSX.Element => {
 	const [selected, setSelected] = useState<string>("");
 
-	const handleSelect = (item: ITransaction) => {
+	const handleSelect = (item: MiniTransaction) => {
 		setSelected(item.transactionHash);
 		props.onSelect(item);
 	}
@@ -96,7 +95,7 @@ const MerchantTransactionList = (props = {} as MerchantTransactionListProps): JS
 	return (
 		<View>
 			{
-				props.data?.map((item: ITransaction, i: number) =>
+				props.data?.map((item: MiniTransaction, i: number) =>
 					<TouchableOpacity onPress={() => handleSelect(item)} key={i}>
 						<TransactionItem item={item} selected={selected} />
 					</TouchableOpacity>
