@@ -36,9 +36,14 @@ import Dashboard from "./Dashboard";
 
 const styles = StyleSheet.create({
 	headerText: {
-		fontSize: 40,
+		fontSize: 32,
 		fontWeight: "400",
-		lineHeight: 40,
+		lineHeight: 32,
+	},
+	detailText: {
+		fontSize: 16,
+		lineHeight: 20,
+		paddingTop: 20
 	},
 	drawerWrap: {
 		flex: 1,
@@ -101,6 +106,8 @@ const styles = StyleSheet.create({
 
 type BankLinkDialogProps = {
 	visible: boolean,
+	title: string,
+	description: string
 	onConfirm: ()=>void,
 	onCancel: ()=>void
 }
@@ -111,9 +118,9 @@ const BankLinkDialog = (props: BankLinkDialogProps) => {
 			<View style={dialogViewBase}>
 				<View style={wrappingContainerBase}>
 					<View style={ baseHeader }>
-						<Text style={styles.headerText}>{Translation.PAYMENT.PAYMENT_NO_BANK_TITLE}</Text>
+						<Text style={styles.headerText}>{props.title}</Text>
 					</View>
-					<Text>{Translation.PAYMENT.PAYMENT_NO_BANK_DETAIL}</Text>
+					<Text style={styles.detailText}>{props.description}</Text>
 				</View>
 				<View>
 				<Button
@@ -127,6 +134,18 @@ const BankLinkDialog = (props: BankLinkDialogProps) => {
 	)
 }
 
+type BankLinkDialogStateProps = {
+	visible: boolean,
+	title: string,
+	description: string
+}
+
+const initBankDialogState: BankLinkDialogStateProps = {
+	visible: false, 
+	title: "", 
+	description: ""
+}
+
 const DrawerContent = (
 	props: DrawerContentComponentProps<DrawerContentOptions>
 ) => {
@@ -136,7 +155,8 @@ const DrawerContent = (
 	const { user, updateUserType } = useContext(UserContext)
 	const authorization = { cashierView: user?.verifiedBusiness };
 	const [isExpanded, setIsExpanded] = useState<boolean>(false);
-	const [isBankDialog, setIsBankDialog] = useState<boolean>(false);
+	// const [isBankDialog, setIsBankDialog] = useState<boolean>(false);
+	const [bankDialogState, setBankDialogState] = useState<BankLinkDialogStateProps>(initBankDialogState);
 
 	const onMerchant = () => {
 		updateUserType(UserType.Business, userEmail);
@@ -149,12 +169,12 @@ const DrawerContent = (
 	};
 
 	const onBankDialogConfirm = () => {
-		setIsBankDialog(false);
+		setBankDialogState(initBankDialogState)
 		props.navigation.navigate(Routes.SELECT_BANK);
 	}
 
 	const onBankDialogCancel = () => {
-		setIsBankDialog(false);
+		setBankDialogState(initBankDialogState)
 	}
 
 	const customerTag = user?.customer?.tag || undefined
@@ -247,20 +267,41 @@ const DrawerContent = (
 					<Text style={styles.berkAmount}>B$ {customerWalletData?.availableBalance}</Text>
 					<Drawer.Section>
 						<DrawerItem
-							label="Scan to pay"
-							onPress={() => customerWalletData?.availableFundingSource ? props.navigation.navigate(Routes.QRCODE_SCAN) : setIsBankDialog(true)}
+							label={Translation.TABS.SCAN_TO_PAY}
+							onPress={() => customerWalletData?.availableFundingSource 
+								? props.navigation.navigate(Routes.QRCODE_SCAN)
+								: setBankDialogState({
+									visible: true,
+									title: Translation.PAYMENT.PAYMENT_NO_BANK_TITLE,
+									description: Translation.PAYMENT.PAYMENT_NO_BANK_DETAIL
+								})
+							}
 						/>
 						<DrawerItem
-							label="Receive payment"
-							onPress={() => customerWalletData?.availableFundingSource ? props.navigation.navigate(Routes.RECEIVE_PAYMENT) : setIsBankDialog(true)}
+							label={Translation.TABS.RECEIVE_PAYMENT}
+							onPress={() => props.navigation.navigate(Routes.RECEIVE_PAYMENT)}
 						/>
 						<DrawerItem
-							label="Load up B$"
-							onPress={() => customerWalletData?.availableFundingSource ? props.navigation.navigate(Routes.LOAD_UP) : setIsBankDialog(true)}
+							label={Translation.TABS.LOADUP}
+							onPress={() => customerWalletData?.availableFundingSource 
+								? props.navigation.navigate(Routes.LOAD_UP) 
+								: setBankDialogState({
+									visible: true,
+									title: Translation.LOAD_UP.LOAD_UP_NO_BANK_TITLE,
+									description: Translation.LOAD_UP.LOAD_UP_NO_BANK_DETAIL
+								})
+							}
 						/>
 						<DrawerItem
-							label="Cash out to USD"
-							onPress={() => customerWalletData?.availableFundingSource ? props.navigation.navigate(Routes.CASHOUT_AMOUNT) : setIsBankDialog(true)}
+							label={Translation.TABS.CASHOUT}
+							onPress={() => customerWalletData?.availableFundingSource 
+								? props.navigation.navigate(Routes.CASHOUT_AMOUNT) 
+								: setBankDialogState({
+									visible: true,
+									title: Translation.CASH_OUT.CASH_OUT_NO_BANK_TITLE,
+									description: Translation.CASH_OUT.CASH_OUT_NO_BANK_DETAIL
+								})
+							}
 						/>
 					</Drawer.Section>
 					<Drawer.Section>
@@ -314,13 +355,13 @@ const DrawerContent = (
 					onPress={signOut}
 				/>
 			</Drawer.Section>
-			{isBankDialog && (
-				<BankLinkDialog
-					visible={isBankDialog}
-					onConfirm={onBankDialogConfirm}
-					onCancel={onBankDialogCancel}
-				/>
-			)}
+			<BankLinkDialog
+				visible={bankDialogState.visible}
+				title={bankDialogState.title}
+				description={bankDialogState.description}
+				onConfirm={onBankDialogConfirm}
+				onCancel={onBankDialogCancel}
+			/>
 		</View>
 	);
 };
