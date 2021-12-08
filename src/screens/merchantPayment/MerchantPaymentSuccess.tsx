@@ -33,7 +33,6 @@ const styles = StyleSheet.create({
 
 const MerchantPaymentSuccess = (): JSX.Element => {
 	const navigation = useNavigation();
-	const successImg = require("../../../assets/images/burkshare_paper_money.png")
 
 	return (
 		<View style={viewBase}>
@@ -47,7 +46,7 @@ const MerchantPaymentSuccess = (): JSX.Element => {
 				</View>
 				<View style={styles.imageView}>
 					<Image
-						source={successImg}
+						source={require('../../../assets/images/burkshare_paper_money.png')}
 						style={{justifyContent: 'center', width: '100%'}}
 						resizeMode='contain'
 					/>			
