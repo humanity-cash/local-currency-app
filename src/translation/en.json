@@ -186,6 +186,11 @@
         "LOAD_UP_SUCCESS_DETAIL": "The BerkShares will be available in about 3 business days!",
         "LOAD_UP_SUCCESS_AVAILABLE": "The BerkShares will soon be available in your wallet!"
     },
+    "CASH_OUT": {
+        "TITLE": "Cash out",
+        "CASH_OUT_NO_BANK_TITLE": "Whoooops. You have to link your bank account first",
+        "CASH_OUT_NO_BANK_DETAIL": "Before you cash out, you need to link your bank account."
+    },
     "FORGOT_PASSWORD": {
         "FORGOT_PASSWORD": "Forgot password",
         "FORGOT_PASSWORD_DETAIL": "Enter the email address so we can verify your identity",
