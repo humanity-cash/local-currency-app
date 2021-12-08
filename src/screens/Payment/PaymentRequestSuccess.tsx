@@ -30,8 +30,6 @@ type PaymentRequestSuccessProps = {
 }
 
 const PaymentRequestSuccess = (props: PaymentRequestSuccessProps): JSX.Element => {
-	const successImg = require("../../../assets/images/burkshare_paper_money.png")
-
     return (
         <Modal visible={props.visible}>
             <View style={ modalViewBase }>
@@ -42,7 +40,7 @@ const PaymentRequestSuccess = (props: PaymentRequestSuccessProps): JSX.Element =
                     </Text>
                     <View style={styles.imageView}>
                         <Image
-                            source={successImg}
+                            source={require('../../../assets/images/burkshare_paper_money.png')}
                             style={{justifyContent: 'center', width: '100%'}}
                             resizeMode='contain'
                         />			
