@@ -252,7 +252,7 @@ const QRCodeScan = (): JSX.Element => {
 
 	const onPayConfirm = async (isRoundUp: boolean) => {
 		setIsLoading(true);
-		const amountCalcedFee = state.amount + calcFee(state.amount);
+		const amountCalcedFee = state.amount;
 		setIsPaymentDialog(false);
 		
 		// check balance
