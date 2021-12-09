@@ -105,7 +105,7 @@ const MerchantCashoutAmount = (): JSX.Element => {
 
 	const onValueChange = (name: string, change: string) => {
 		const amount = change.replace(',', '.')
-		if(+amount <= 5) {
+		if(+amount <= +maxAmount) {
 			setAmount(amount);
 		}
 	};
@@ -148,7 +148,7 @@ const MerchantCashoutAmount = (): JSX.Element => {
 					<Text style={styles.bodyText}>{Translation.PAYMENT.CASH_OUT_DETAIL}</Text>
 					<View style={styles.formLabel}>
 						<Text style={styles.labelText}>{Translation.LABEL.AMOUNT}</Text>
-						<Text style={styles.labelText}>{Translation.LABEL.MAX_BERKSHARES}</Text>
+						<Text style={styles.labelText}>{`${Translation.LABEL.MAX_BERKSHARES} ${maxAmount}`}</Text>
 					</View>
 					<BorderedInput
 						label="Amount"

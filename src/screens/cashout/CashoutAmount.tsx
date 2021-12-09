@@ -97,7 +97,7 @@ const CashoutAmount = (): JSX.Element => {
 	const onValueChange = (name: string, change: string) => {
 		const amount = change.replace(',', '.')
 
-		if(+amount <= 5) {
+		if(+amount <= +maxAmount) {
 			setState({
 				amount: amount,
 				costs: amount,

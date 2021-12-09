@@ -201,7 +201,24 @@ const MerchantDictionary = (): JSX.Element => {
 						<View style={ styles.underlineView }>
 							<Text style={styles.categoryText}>MERCHANT OF THE MONTH</Text>
 						</View>
-						<View style={styles.popularMerchantView}>
+						{Object.keys(bussinessByCategories).length > 0 && (
+							<TouchableOpacity 
+								style={styles.popularMerchantView}
+								onPress={() => 
+									handleSelect(bussinessByCategories[Object.keys(bussinessByCategories)[0]][0])
+								}
+							>
+								<View style={styles.popularTextView}>
+									<Text style={styles.popularTitle}>{"Best Of The Month Title"}</Text>
+									<Text style={styles.popularText}>{"Best Of The Month Description"}</Text>
+								</View>
+								<Image
+									source={require('../../../assets/images/feed1.png')}
+									containerStyle={styles.popularImage}
+								/>
+							</TouchableOpacity>
+						)}
+						{/* <View style={styles.popularMerchantView}>
 							<View style={styles.popularTextView}>
 								<Text style={styles.popularTitle}>{"Best Of The Month Title"}</Text>
 								<Text style={styles.popularText}>{"Best Of The Month Description"}</Text>
@@ -210,7 +227,7 @@ const MerchantDictionary = (): JSX.Element => {
 								source={require('../../../assets/images/feed1.png')}
 								containerStyle={styles.popularImage}
 							/>
-						</View>
+						</View> */}
 						{
 							Object.keys(bussinessByCategories).map((category: string, idx: number) => (
 								<CategoryView businesses={bussinessByCategories[category]} category={category} onSelect={handleSelect} key={idx} />
