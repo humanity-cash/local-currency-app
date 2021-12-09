@@ -14,7 +14,7 @@ import { useDispatch } from 'react-redux';
 import { showLoadingProgress, hideLoadingProgress } from '../../store/loading/loading.actions';
 import { TransactionsAPI } from 'src/api';
 import { LoadingScreenTypes } from 'src/utils/types';
-import { UserContext } from 'src/contexts';
+import { UserContext, WalletContext } from 'src/contexts';
 
 const styles = StyleSheet.create({
 	headerText: {
@@ -84,17 +84,30 @@ const styles = StyleSheet.create({
 const MerchantCashoutAmount = (): JSX.Element => {
 	const navigation = useNavigation();
 	const { businessDwollaId } = useContext(UserContext);
+	const { businessWalletData } = useContext(WalletContext);
 	const dispatch = useDispatch()
 	const [amount, setAmount] = useState<string>("");
 	const [goNext, setGoNext] = useState(false);
 	const [isVisible, setIsVisible] = useState(false);
+	const [maxAmount, setMaxAmount] = useState<string>("5.00")
 
 	useEffect(() => {
 		setGoNext(Number(amount) > 0);
 	}, [amount]);
 
+	useEffect(() => {
+		if(businessWalletData && businessWalletData?.availableBalance < 5) {
+			setMaxAmount(`${businessWalletData.availableBalance}`)
+		} else {
+			setMaxAmount('5.00')
+		}
+	}, [businessWalletData])
+
 	const onValueChange = (name: string, change: string) => {
-		setAmount(change.replace(',', '.'));
+		const amount = change.replace(',', '.')
+		if(+amount <= 5) {
+			setAmount(amount);
+		}
 	};
 
 	const viewConfirm = () => {
@@ -176,7 +189,7 @@ const MerchantCashoutAmount = (): JSX.Element => {
 					<View style={dialogViewBase}>
 						<View style={styles.dialogWrap}>
 							<Text style={styles.dialogHeader}>{Translation.PAYMENT.CASH_OUT_CONFIRM}</Text>
-							<Text style={styles.resultText}>{Translation.PAYMENT.CASH_OUT_CONFIRM_DETAIL}</Text>
+							<Text style={styles.resultText}>{`You will redeem ${Number(amount).toFixed(2)} BerkShares for USD ${(Number(amount)*0.985).toFixed(2)} after a 1.5% fee.`}</Text>
 						</View>
 						<Button
 							type={BUTTON_TYPES.PURPLE}

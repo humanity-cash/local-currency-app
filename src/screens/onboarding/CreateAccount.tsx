@@ -101,6 +101,7 @@ const CreateAccount = (): JSX.Element => {
 							value={signUpDetails.email}
 							onChange={onValueChange}
 							placeholderTextColor={colors.lightGreen}
+							keyboardType='email-address'
 						/>
 					</View>
 				</View>

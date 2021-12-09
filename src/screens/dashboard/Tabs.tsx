@@ -155,7 +155,6 @@ const DrawerContent = (
 	const { user, updateUserType } = useContext(UserContext)
 	const authorization = { cashierView: user?.verifiedBusiness };
 	const [isExpanded, setIsExpanded] = useState<boolean>(false);
-	// const [isBankDialog, setIsBankDialog] = useState<boolean>(false);
 	const [bankDialogState, setBankDialogState] = useState<BankLinkDialogStateProps>(initBankDialogState);
 
 	const onMerchant = () => {
