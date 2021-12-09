@@ -95,6 +95,7 @@ const Login = (): JSX.Element => {
 						onChange={onValueChange}
 						returnKeyType='next'
 						onSubmitEditing={() => {passwordRef.current?.focus()}}
+						keyboardType='email-address'
 					/>
 					<Text style={styles.label}>{Translation.LABEL.CONFIRM_PASSWORD}</Text>
 					<View>
