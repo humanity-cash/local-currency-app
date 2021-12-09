@@ -74,6 +74,7 @@ const ForgotPasswordEmail = (): React.ReactElement => {
 						name="email"
 						value={forgotPasswordDetails.email}
 						onChange={onValueChange}
+						keyboardType='email-address'
 					/>
 				</View>
 			</ScrollView>

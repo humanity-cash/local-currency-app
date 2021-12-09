@@ -71,12 +71,14 @@ const CashoutAmount = (): JSX.Element => {
 	const navigation = useNavigation();
 	const { customerDwollaId } = useContext(UserContext);
 	const { customerWalletData } = useContext(WalletContext);
+	const [maxAmount, setMaxAmount] = useState<string>("5.00")
 	const dispatch = useDispatch()
 
 	const [state, setState] = useState<CashoutState>({
-		amount: "1",
-		costs: "1"
+		amount: "",
+		costs: ""
 	});
+
 	const [goNext, setGoNext] = useState(false);
 	const [isVisible, setIsVisible] = useState(false);
 
@@ -84,12 +86,23 @@ const CashoutAmount = (): JSX.Element => {
 		setGoNext(state.costs !== "");
 	}, [state]);
 
+	useEffect(() => {
+		if(customerWalletData && customerWalletData?.availableBalance < 5) {
+			setMaxAmount(`${customerWalletData.availableBalance}`)
+		} else {
+			setMaxAmount('5.00')
+		}
+	}, [customerWalletData])
+
 	const onValueChange = (name: string, change: string) => {
-		const costs = change;
-		setState({
-		  amount: change.replace(',', '.'),
-		  costs: costs,
-		} as CashoutState);
+		const amount = change.replace(',', '.')
+
+		if(+amount <= 5) {
+			setState({
+				amount: amount,
+				costs: amount,
+			  } as CashoutState);
+		}
 	};
 
 	const viewConfirm = () => {
@@ -130,7 +143,7 @@ const CashoutAmount = (): JSX.Element => {
 					<Text>{Translation.PAYMENT.CASH_OUT_DETAIL}</Text>
 					<View style={ styles.formLabel }>
 						<Text style={styles.labelText}>{Translation.LABEL.AMOUNT}</Text>
-						<Text style={styles.labelText}>{`${Translation.LABEL.MAX_BERKSHARES} ${customerWalletData?.availableBalance}`}</Text>
+						<Text style={styles.labelText}>{`${Translation.LABEL.MAX_BERKSHARES} ${maxAmount}`}</Text>
 					</View>
 					<BorderedInput
 						label="Amount"
@@ -168,7 +181,7 @@ const CashoutAmount = (): JSX.Element => {
 					<View style={dialogViewBase}>
 						<View style={styles.dialogWrap}>
 							<Text style={styles.dialogHeader}>{Translation.PAYMENT.CASH_OUT_CONFIRM}</Text>
-							<Text>{Translation.PAYMENT.CASH_OUT_CONFIRM_DETAIL}</Text>
+							<Text>{`You will redeem ${Number(state.amount).toFixed(2)} BerkShares for USD ${(Number(state.amount)*0.985).toFixed(2)} after a 1.5% fee.`}</Text>
 						</View>
 						<View style={styles.dialogBottom}>
 							<Button
