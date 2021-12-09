@@ -349,7 +349,7 @@ const DrawerContent = (props: DrawerContentComponentProps) => {
 						/>
 						<DrawerItem
 							label={Translation.TABS.LOADUP}
-							onPress={() => businessWalletData?.availableBalance 
+							onPress={() => businessWalletData?.address
 								? props.navigation.navigate(Routes.MERCHANT_LOADUP) 
 								: setBankDialogState({
 									visible: true,

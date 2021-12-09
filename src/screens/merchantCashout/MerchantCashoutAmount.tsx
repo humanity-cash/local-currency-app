@@ -1,20 +1,18 @@
-import React, {useState, useEffect, useContext} from 'react';
-import { StyleSheet, View, KeyboardAvoidingView, ScrollView, Platform } from 'react-native';
 import { useNavigation } from '@react-navigation/core';
+import React, { useContext, useEffect, useState } from 'react';
+import { KeyboardAvoidingView, Platform, ScrollView, StyleSheet, View } from 'react-native';
 import { Text } from 'react-native-elements';
-import { Header, Button, CancelBtn, BorderedInput, Dialog } from "src/shared/uielements";
-import { underlineHeaderB, viewBaseB, dialogViewBase, wrappingContainerBase } from "src/theme/elements";
-import { colors } from "src/theme/colors";
-import Translation from 'src/translation/en.json';
-import * as Routes from 'src/navigation/constants';
+import { TransactionsAPI } from 'src/api';
 import { BUTTON_TYPES } from 'src/constants';
+import { UserContext, WalletContext } from 'src/contexts';
+import * as Routes from 'src/navigation/constants';
+import DataLoading from 'src/screens/loadings/DataLoading';
+import { BorderedInput, Button, CancelBtn, Dialog, Header } from "src/shared/uielements";
+import { colors } from "src/theme/colors";
+import { dialogViewBase, underlineHeaderB, viewBaseB, wrappingContainerBase } from "src/theme/elements";
+import Translation from 'src/translation/en.json';
 import { showToast } from '../../utils/common';
 import { ToastType } from '../../utils/types';
-import { useDispatch } from 'react-redux';
-import { showLoadingProgress, hideLoadingProgress } from '../../store/loading/loading.actions';
-import { TransactionsAPI } from 'src/api';
-import { LoadingScreenTypes } from 'src/utils/types';
-import { UserContext, WalletContext } from 'src/contexts';
 
 const styles = StyleSheet.create({
 	headerText: {
@@ -85,9 +83,9 @@ const MerchantCashoutAmount = (): JSX.Element => {
 	const navigation = useNavigation();
 	const { businessDwollaId } = useContext(UserContext);
 	const { businessWalletData } = useContext(WalletContext);
-	const dispatch = useDispatch()
 	const [amount, setAmount] = useState<string>("");
 	const [goNext, setGoNext] = useState(false);
+	const [isLoading, setIsLoading] = useState<boolean>(false);
 	const [isVisible, setIsVisible] = useState(false);
 	const [maxAmount, setMaxAmount] = useState<string>("5.00")
 
@@ -120,13 +118,13 @@ const MerchantCashoutAmount = (): JSX.Element => {
 			return;
 		}
 
+		setIsLoading(true);
 		setIsVisible(false);
-		dispatch(showLoadingProgress(LoadingScreenTypes.LOADING_DATA))
 		const response = await TransactionsAPI.withdraw(
 			businessDwollaId, 
 			{amount: amount}
 		);
-		dispatch(hideLoadingProgress())
+		setIsLoading(false);
 
 		if (response.data) {
 			navigation.navigate(Routes.MERCHANT_REDEMPTION_IN_PROGRESS);
@@ -137,6 +135,7 @@ const MerchantCashoutAmount = (): JSX.Element => {
 
 	return (
 		<View style={viewBaseB}>
+			<DataLoading visible={isLoading} />
 			<Header
 				rightComponent={<CancelBtn text={Translation.BUTTON.CLOSE} color={colors.purple} onClick={() => navigation.navigate(Routes.MERCHANT_DASHBOARD)} />}
 			/>
@@ -148,7 +147,7 @@ const MerchantCashoutAmount = (): JSX.Element => {
 					<Text style={styles.bodyText}>{Translation.PAYMENT.CASH_OUT_DETAIL}</Text>
 					<View style={styles.formLabel}>
 						<Text style={styles.labelText}>{Translation.LABEL.AMOUNT}</Text>
-						<Text style={styles.labelText}>{Translation.LABEL.MAX_BERKSHARES}</Text>
+						<Text style={styles.labelText}>{Translation.LABEL.MAX_BERKSHARES} {businessWalletData.availableBalance}</Text>
 					</View>
 					<BorderedInput
 						label="Amount"
@@ -164,11 +163,11 @@ const MerchantCashoutAmount = (): JSX.Element => {
 					/>
 					<View style={styles.resultView}>
 						<Text style={styles.resultText}>{Translation.PAYMENT.REDEMPTION_FEE}(1.5%)</Text>
-						<Text style={styles.resultText}>$ {(Number(amount)*0.015).toFixed(2)}</Text>
+						<Text style={styles.resultText}>{Translation.COMMON.USD} {(Number(amount)*0.015).toFixed(2)}</Text>
 					</View>
 					<View style={styles.resultView}>
 						<Text style={styles.resultText}>{Translation.PAYMENT.NET_CASH_OUT}</Text>
-						<Text style={styles.resultText}>$ {(Number(amount)*0.985).toFixed(2)}</Text>
+						<Text style={styles.resultText}>{Translation.COMMON.USD} {(Number(amount)*0.985).toFixed(2)}</Text>
 					</View>
 				</View>
 			</ScrollView>
