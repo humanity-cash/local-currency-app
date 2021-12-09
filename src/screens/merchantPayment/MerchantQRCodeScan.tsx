@@ -149,7 +149,7 @@ const PaymentConfirm = (props: PaymentConfirmProps) => {
 
 	const firstName = user?.business?.owner?.firstName;
 	const lastName = user?.business?.owner?.lastName;
-	const amountCalcedFee = props.payInfo.amount + calcFee(props.payInfo.amount);
+	const amountCalcedFee = props.payInfo.amount;
 
 	return (
 		<Dialog visible={props.visible} onClose={props.onCancel} backgroundStyle={styles.dialogBg} style={styles.dialog}>
@@ -239,7 +239,7 @@ const MerchantQRCodeScan = (): JSX.Element => {
 	const onPayConfirm = async (isRoundUp: boolean) => {
 		setIsPaymentDialog(false);
 		setIsScanned(false);
-		const amountCalcedFee = state.amount + calcFee(state.amount);
+		const amountCalcedFee = state.amount;
 
 		if (businessWalletData.availableBalance <= state.amount) {
 			showToast(ToastType.ERROR, "Whoooops. You cannot the payment.", "You have too little funds available. Please load up your balance first.");
