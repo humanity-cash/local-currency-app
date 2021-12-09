@@ -181,7 +181,7 @@ const CashoutAmount = (): JSX.Element => {
 					<View style={dialogViewBase}>
 						<View style={styles.dialogWrap}>
 							<Text style={styles.dialogHeader}>{Translation.PAYMENT.CASH_OUT_CONFIRM}</Text>
-							<Text>{Translation.PAYMENT.CASH_OUT_CONFIRM_DETAIL}</Text>
+							<Text>{`You will redeem ${Number(state.amount).toFixed(2)} BerkShares for USD ${(Number(state.amount)*0.985).toFixed(2)} after a 1.5% fee.`}</Text>
 						</View>
 						<View style={styles.dialogBottom}>
 							<Button
