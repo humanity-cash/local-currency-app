@@ -1,14 +1,16 @@
 import { Octicons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
-import Fuse from 'fuse.js';
 import moment from 'moment';
 import React, { useContext, useEffect, useState } from 'react';
+import { useStore } from 'react-hookstore';
 import { ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native';
 import { Image, Text } from 'react-native-elements';
 import { TransactionsAPI } from 'src/api';
 import { ITransaction } from 'src/api/types';
 import { BUTTON_TYPES } from 'src/constants';
 import { UserContext, WalletContext } from "src/contexts";
+import { createFuseSearchInstance } from 'src/fuse';
+import { CUSTOMER_TX_FILTERS_STORE } from 'src/hook-stores';
 import * as Routes from 'src/navigation/constants';
 import DataLoading from 'src/screens/loadings/DataLoading';
 import PaymentRequestSuccess from 'src/screens/payment/PaymentRequestSuccess';
@@ -17,7 +19,7 @@ import { colors } from "src/theme/colors";
 import { baseHeader, dialogViewBase, FontFamily, viewBase, wrappingContainerBase } from "src/theme/elements";
 import Translation from 'src/translation/en.json';
 import { getBerksharePrefix } from "src/utils/common";
-import { TransactionType } from "src/utils/types";
+import { CustomerTxFilterStore, MiniTransaction, TransactionType } from "src/utils/types";
 import MyTransactionList from './MyTransactionList';
 import MyTransactionFilter from './MyTransactionsFilter';
 import ReturnQRCodeGen from './ReturnQRCodeGen';
@@ -181,26 +183,16 @@ const TransactionDetail = (props: TransactionDetailProps) => {
 	)
 }
 
-const defaultTransaction = {
-	transactionHash: "",
-	toUserId: "",
-	toAddress: "",
-	fromAddress: "",
-	fromName: "",
-	toName: "",
-	fromUserId: "",
-	type: "IN",
-	value: "",
-	timestamp: new Date().getTime(),
-	blockNumber: 0
-};
-
 const options = {
   includeScore: false,
   keys: ['toName', 'fromName', 'value']
 }
 
 const MyTransactions = (): JSX.Element => {
+	const [{ selectedType,
+		startDate,
+		endDate,
+	}] = useStore<CustomerTxFilterStore>(CUSTOMER_TX_FILTERS_STORE)
 	const navigation = useNavigation();
 	const { customerDwollaId } = useContext(UserContext);
 	const { customerWalletData } = useContext(WalletContext);
@@ -208,26 +200,42 @@ const MyTransactions = (): JSX.Element => {
 	const [searchText, setSearchText] = useState<string>("");
 	const [isDetailView, setIsDetailView] = useState<boolean>(false);
 	const [isReturnView, setIsReturnView] = useState<boolean>(false);
-	const [selectedItem, setSelectedItem] = useState<ITransaction>(defaultTransaction as ITransaction);
+	const [selectedItem, setSelectedItem] = useState<ITransaction>({} as ITransaction);
 	const [isRequestSuccess, setIsRequestSuccess] = useState<boolean>(false);
 	const [isLoading, setIsLoading]= useState<boolean>(false);
 	const [receivedAmount, setReceivedAmount] = useState<number>(0);
-	const [apiData, setAPIData] = useState([]);
-	const [ filteredData, setFilteredData] = useState([]);
-	const fuse = new Fuse(filteredData, options)
+	const [apiData, setAPIData] = useState<MiniTransaction[]>([]);
+	const [ filteredData, setFilteredData] = useState<MiniTransaction[]>([]);
+	const fuseInstance = createFuseSearchInstance(filteredData, options)
+
+	useEffect(() => {
+		if (!startDate && !endDate) {
+			setFilteredData(apiData)
+			return
+		}
+		const data = apiData.reduce<MiniTransaction[]>((acc, curr) => {
+			if (startDate) {
+				if (curr.timestamp < startDate?.getTime()) {
+					return acc
+				}
+			}
+			if (endDate) {
+				if (curr.timestamp > endDate?.getTime()) {
+					return acc
+				}
+			}
+			return [...acc, curr]
+		}, [])
+		setFilteredData(data)
+	}, [startDate, endDate, selectedType])
 
 	useEffect(() => {
 		if (customerDwollaId) {
 			const handler = async () => {
 				setIsLoading(true);
-				const [transactions, deposits, withdrawals] =
-					[await TransactionsAPI.getTransactions(customerDwollaId),
-					await TransactionsAPI.getDeposits(customerDwollaId),
-					await TransactionsAPI.getWithdrawals(customerDwollaId),
-					]
-				const all = [...transactions, ...deposits, ...withdrawals]
-				setAPIData(all);
-				setFilteredData(all);
+				const txs = await TransactionsAPI.getAllTransactions(customerDwollaId)
+				setAPIData(txs);
+				setFilteredData(txs);
 				setIsLoading(false);
 			};
 			handler();
@@ -240,9 +248,8 @@ const MyTransactions = (): JSX.Element => {
 			setSearchText(change);
 			return
 		}
-		const fuseresult = fuse.search(change)
-		//@ts-ignore
-		setFilteredData(fuseresult.map(i => i.item))
+		const fuseResult = fuseInstance.search(change)
+		setFilteredData(fuseResult.map(i => i.item))
 		setSearchText(change);
 	}
 

@@ -8,8 +8,8 @@ import * as Utils from './utils';
 
 export const NOT_AUTHENTICATED: BaseResponse<undefined> = { success: false, error: "noUserAuthed" };
 
-const USERPOOL_ID = 'us-west-1_petqW9x07'; 
-const CLIENT_ID = '5comvbaf73c7vb1es1tb1676oj';
+const USERPOOL_ID = 'us-west-1_3KYtffysk';
+const CLIENT_ID = '19rsrqi8s115pqeo4pfn7c2voq';
 
 const poolData = {
 	UserPoolId: USERPOOL_ID,
