@@ -75,7 +75,7 @@ export const useUpdateBusinessWalletData = (): void => {
 
 	useEffect(() => {
 		const timerId = setInterval(async () => {
-			if (businessWalletData?.address !== user?.customer?.walletAddress && businessDwollaId) {
+			if (businessWalletData?.address !== user?.business?.walletAddress && businessDwollaId) {
 				const userWallet = await DwollaAPI.loadWallet(businessDwollaId)
 				const fundingSource = await DwollaAPI.loadFundingSource(businessDwollaId)
 				updateBusinessWalletData(({ ...userWallet, availableFundingSource: fundingSource }))
