@@ -1,12 +1,15 @@
 import { AntDesign } from '@expo/vector-icons';
-import React, {useState, ReactElement} from 'react';
-import { StyleSheet, View, TouchableOpacity, Platform } from 'react-native';
-import { Text } from 'react-native-elements';
-import SelectDropdown from 'react-native-select-dropdown';
 import DateTimePicker from '@react-native-community/datetimepicker';
 import moment from 'moment';
-import Translation from 'src/translation/en.json';
+import React, { ReactElement } from 'react';
+import { useStore } from 'react-hookstore';
+import { Platform, StyleSheet, TouchableOpacity, View } from 'react-native';
+import { Text } from 'react-native-elements';
+import SelectDropdown from 'react-native-select-dropdown';
+import { BUSINESS_TX_FILTERS_STORE } from 'src/hook-stores';
 import { colors } from "src/theme/colors";
+import Translation from 'src/translation/en.json';
+import { BusinessTxFilterStore, BusinessTxFilterStoreActions, BusinessTxFilterStoreReducer } from 'src/utils/types';
 
 const TransactionTypes = ["All", "Sales", "Returns", "Cash outs", "Expenses"];
 
@@ -47,10 +50,10 @@ const styles = StyleSheet.create({
         backgroundColor: colors.purple
     },
     label: {
-		fontSize: 10,
-		lineHeight: 14,
-		color: colors.bodyText
-	},
+        fontSize: 10,
+        lineHeight: 14,
+        color: colors.bodyText
+    },
     typeView: {
         marginTop: 7
     },
@@ -62,12 +65,12 @@ const styles = StyleSheet.create({
         height: 55,
         backgroundColor: colors.white,
     },
-    dropdownContainer: {marginTop: -20},
+    dropdownContainer: { marginTop: -20 },
     clearFilter: {
-		paddingVertical: 15,
-		borderBottomWidth: 1,
-		borderBottomColor: colors.purple
-	},
+        paddingVertical: 15,
+        borderBottomWidth: 1,
+        borderBottomColor: colors.purple
+    },
     clearText: {
         textAlign: "center",
         color: colors.purple
@@ -75,39 +78,29 @@ const styles = StyleSheet.create({
 });
 
 const MerchantTransactionsFilter = (): ReactElement => {
-    const [startDate, setStartDate] = useState<Date | null>(null);
-    const [endDate, setEndDate] = useState<Date | null>(null);
-    const [isStartDate, setIsStartDate] = useState<boolean>(false);
-    const [isEndDate, setIsEndDate] = useState<boolean>(false);
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const [selectedType, setSelectedType] = useState<string>("All");
+    const [{ startDate, isStartDate, endDate, isEndDate }, dispatchBusinessTxFilterStore] = useStore<BusinessTxFilterStore, BusinessTxFilterStoreReducer>(BUSINESS_TX_FILTERS_STORE)
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const onStartDateChange = (event: any, selectedDate?: Date) => {
-        const currentDate = selectedDate || startDate;
-        setIsStartDate(false);
-        setStartDate(currentDate);
+    const onStartDateChange = (_: unknown, selectedDate?: Date) => {
+        dispatchBusinessTxFilterStore({ type: BusinessTxFilterStoreActions.UpdateStartDate, payload: { startDate: selectedDate || startDate || undefined } })
     };
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const onEndDateChange = (event: any, selectedDate?: Date) => {
-        const currentDate = selectedDate || startDate;
-        setIsEndDate(false);
-        setEndDate(currentDate);
+    const onEndDateChange = (_: unknown, selectedDate?: Date) => {
+        dispatchBusinessTxFilterStore({ type: BusinessTxFilterStoreActions.UpdateEndDate, payload: { endDate: selectedDate || endDate || undefined } })
     };
 
     const clearFilter = () => {
-        setSelectedType("All");
-        setStartDate(null)
-        setEndDate(null);
+        dispatchBusinessTxFilterStore({ type: BusinessTxFilterStoreActions.ClearAll, payload: {} })
     };
 
-	return (
-		<View style={styles.container}>
+    return (
+        <View style={styles.container}>
             <View style={styles.inlineView}>
                 <View style={styles.dateView}>
                     <Text style={styles.label}>{Translation.LABEL.START_DATE}</Text>
-                    <TouchableOpacity onPress={()=>setIsStartDate(true)} style={styles.date} >
+                    <TouchableOpacity onPress={() => dispatchBusinessTxFilterStore({
+                        type:
+                            BusinessTxFilterStoreActions.OpenStartDate, payload: {}
+                    })} style={styles.date} >
                         <Text style={startDate == null ? styles.placeholder : styles.mainText}>
                             {startDate == null ? "DD/MM/YY" : moment(startDate).format('DD/MM/yyyy')}
                         </Text>
@@ -116,7 +109,10 @@ const MerchantTransactionsFilter = (): ReactElement => {
                 <View style={styles.separator}></View>
                 <View style={styles.dateView}>
                     <Text style={styles.label}>{Translation.LABEL.END_DATE}</Text>
-                    <TouchableOpacity onPress={()=>setIsEndDate(true)} style={styles.date}>
+                    <TouchableOpacity onPress={() => dispatchBusinessTxFilterStore({
+                        type:
+                            BusinessTxFilterStoreActions.OpenEndDate, payload: {}
+                    })} style={styles.date}>
                         <Text style={endDate == null ? styles.placeholder : styles.mainText}>
                             {endDate == null ? "DD/MM/YY" : moment(endDate).format('DD/MM/yyyy')}
                         </Text>
@@ -129,7 +125,9 @@ const MerchantTransactionsFilter = (): ReactElement => {
                     data={TransactionTypes}
                     defaultValueByIndex={0}
                     onSelect={(selectedItem) => {
-                        setSelectedType(selectedItem)
+                        dispatchBusinessTxFilterStore({
+                            type: BusinessTxFilterStoreActions.UpdateType, payload: { type: selectedItem }
+                        })
                     }}
                     buttonTextAfterSelection={(selectedItem) => {
                         return selectedItem
@@ -169,7 +167,7 @@ const MerchantTransactionsFilter = (): ReactElement => {
                 />
             )}
         </View>
-	);
+    );
 }
 
 export default MerchantTransactionsFilter

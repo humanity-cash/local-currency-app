@@ -95,10 +95,11 @@ const MAX_AMOUNT = 2000;
 
 const MerchantLoadup = (): JSX.Element => {
   const navigation = useNavigation();
-  const { businessDwollaId } = useContext(UserContext);
+  const { user } = useContext(UserContext);
   const [amount, setAmount] = useState<string>("");
   const [goNext, setGoNext] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const businessDwollaId = user?.business?.dwollaId;
 
   useEffect(() => {
     setGoNext(Number(amount) > 0 && Number(amount) <= MAX_AMOUNT);

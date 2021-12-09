@@ -1,5 +1,6 @@
+import moment from 'moment';
 import Toast from 'react-native-toast-message';
-import { TransactionType, ToastType } from "src/utils/types";
+import { MiniTransaction, ToastType, TransactionType } from "src/utils/types";
 
 const fee = 0.015;
 
@@ -30,3 +31,10 @@ export const showToast = (type: ToastType, text1: string, text2: string): void =
 export const calcFee = (amount: number): number => {
 	return amount * fee;
 }
+
+
+export const sortTxByTimestamp = (txs: MiniTransaction[]): MiniTransaction[] => txs.sort((a: MiniTransaction, b: MiniTransaction) => {
+	if (moment(a.timestamp).isAfter(b.timestamp)) return -1;
+	else if (moment(a.timestamp).isBefore(b.timestamp)) return 1;
+	else return 0;
+});
