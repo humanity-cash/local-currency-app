@@ -38,13 +38,14 @@ const SelectMerchantBank = (): JSX.Element => {
 
 	useEffect(() => {
 		if (businessDwollaId) {
-			(async () => {
+			const handler = async () => {
 				const response: any = await DwollaAPI.iavToken(businessDwollaId);
 				if (response.data) {
 					setIAVToken(response?.data?.iavToken);
 					webview?.reload();
 				}
-			})();
+			};
+			handler()
 		}
 	}, [businessDwollaId]);
 
@@ -67,7 +68,7 @@ const SelectMerchantBank = (): JSX.Element => {
 					<WebView
 						ref={(ref) => (webview = ref)}
 						style={styles.bankView}
-						source={{ uri: `https://d11t12p3449df1.cloudfront.net/?iavToken=${iavToken}` }}
+						source={{ uri: `https://staging.api.humanity.cash/iav/?iavToken=${iavToken}` }}
 					/>
 				)}
 			</ScrollView>

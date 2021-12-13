@@ -1,5 +1,5 @@
 import { useNavigation } from "@react-navigation/native";
-import React, { useState } from 'react';
+import React, { useState, useContext } from 'react';
 import { StyleSheet, View, ScrollView } from 'react-native';
 import { Text } from "react-native-elements";
 import { Header } from "src/shared/uielements";
@@ -16,7 +16,7 @@ import { ITransaction } from 'src/api/types';
 import { TransactionState } from 'src/store/transaction/transaction.reducer';
 import { useSelector } from 'react-redux';
 import { AppState } from 'src/store';
-import { WalletState } from 'src/store/wallet/wallet.reducer';
+import { WalletContext } from "src/contexts";
 
 const styles = StyleSheet.create({
 	mainTextColor: {
@@ -155,10 +155,10 @@ const CashierTransactions = (): JSX.Element => {
 	const navigation = useNavigation();
 	const [searchText, setSearchText] = useState<string>("");
 	const [isDetailViewOpen, setIsDetailViewOpen] = useState<boolean>(false);
-	const [selectedItem, setSelectedItem] = useState<ITransaction>(defaultTransaction);
+	const [selectedItem, setSelectedItem] = useState<ITransaction>({} as ITransaction);
 
 	const { businessTransactions } = useSelector((state: AppState) => state.transactionReducer) as TransactionState;
-	const { businessWallet } = useSelector((state: AppState) => state.walletReducer) as WalletState;
+	const { businessWalletData } = useContext(WalletContext)
 
 	const onSearchChange = (name: string, change: string) => {
 		setSearchText(change);
@@ -187,7 +187,7 @@ const CashierTransactions = (): JSX.Element => {
 						<View></View>
 						<View>
 							<Text style={styles.alignRight}>{Translation.CASHIER.BALANCE}</Text>
-							<Text style={styles.balanceText}>B$ {businessWallet.availableBalance}</Text>
+							<Text style={styles.balanceText}>B$ {businessWalletData?.availableBalance}</Text>
 						</View>
 					</View>
 

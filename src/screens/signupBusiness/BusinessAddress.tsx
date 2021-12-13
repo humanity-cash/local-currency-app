@@ -93,9 +93,11 @@ const BusinessAddress = (): ReactElement => {
 			const newUser: IDBUser = response?.data
 			updateUserData(newUser);
 			updateUserType(UserType.Business, newUser.email);
+			setIsLoading(false);
 			updateSelectedView(ViewState.BusinessLinkBank);
+			return
 		}
-		setIsLoading(false);
+			setIsLoading(false);
 	};
 
 	return (

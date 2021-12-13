@@ -9,7 +9,7 @@ import { Text } from "react-native-elements";
 import { UserType } from "src/auth/types";
 import { AuthContext, UserContext, WalletContext } from "src/contexts";
 import { NavigationViewContext, ViewState } from "src/contexts/navigation";
-import { useBusinessWallet } from "src/hooks";
+import { useBusinessWallet, useUpdateBusinessWalletData } from "src/hooks";
 import DwollaDialog from 'src/screens/dashboard/DwollaDialog';
 import DataLoading from 'src/screens/loadings/DataLoading';
 import { Button, Header } from "src/shared/uielements";
@@ -41,11 +41,10 @@ const BusinessWelcome = (): ReactElement => {
 	const { updateSelectedView } = useContext(NavigationViewContext);
 	const [isLoading, setLoading] = useState<boolean>(true)
 
-	useBusinessWallet();
+	useUpdateBusinessWalletData();
 
-	useEffect(() => {
-		setLoading(!user?.verifiedBusiness || !businessWalletData?.userId)
-	}, [user?.verifiedBusiness, businessWalletData?.userId])
+	const { isLoading: isWalletLoading } = useBusinessWallet();
+
 
 	const onSkip = async () => {
 		updateUserType(UserType.Business, userEmail);
@@ -54,7 +53,7 @@ const BusinessWelcome = (): ReactElement => {
 
 	return (
 		<View style={viewBaseB}>
-			<DataLoading visible={isLoading} />
+			<DataLoading visible={isWalletLoading} />
 			<Header />
 			<ScrollView style={wrappingContainerBase}>
 				<Text style={styles.headerText}>

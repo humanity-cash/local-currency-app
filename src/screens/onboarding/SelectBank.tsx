@@ -62,7 +62,7 @@ const SelectBank = (): JSX.Element => {
 					<WebView
 						ref={(ref) => (webview = ref)}
 						style={styles.bankView}
-						source={{ uri: `https://d11t12p3449df1.cloudfront.net/?iavToken=${iavToken}` }}
+						source={{ uri: `https://staging.api.humanity.cash/iav/?iavToken=${iavToken}` }}
 					/>
 				)}
 			</ScrollView>

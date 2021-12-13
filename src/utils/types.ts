@@ -415,6 +415,10 @@ export interface BusinessTxDataStore {
   txs: MiniTransaction[]
 }
 
+export enum CustomerTxDataStoreActions {
+	UpdateTransactions = "updateTransactions",
+}
+
 export enum BusinessTxDataStoreActions {
 	UpdateTransactions = "updateTransactions",
 }
@@ -438,5 +442,6 @@ export enum CustomerTxFilterStoreActions {
 }
 
 export type CustomerTxFilterStoreReducer = { type: CustomerTxFilterStoreActions, payload: { startDate?: Date, endDate?: Date, type?: string } }
+export type CustomerTxDataStoreReducer = { type: CustomerTxDataStoreActions, payload: { txs: MiniTransaction[] } }
 export type BusinessTxFilterStoreReducer = { type: BusinessTxFilterStoreActions, payload: { startDate?: Date, endDate?: Date, type?: string } }
 export type BusinessTxDataStoreReducer = { type: BusinessTxDataStoreActions, payload: { txs: MiniTransaction[] } }

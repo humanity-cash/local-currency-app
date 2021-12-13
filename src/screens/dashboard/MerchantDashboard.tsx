@@ -5,12 +5,12 @@ import React, { useContext, useEffect, useState } from 'react';
 import { useStore } from "react-hookstore";
 import { ScrollView, StyleSheet, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native';
 import { Image, Text } from "react-native-elements";
-import { TransactionsAPI } from "src/api";
+import { DwollaAPI, TransactionsAPI } from "src/api";
 import { BUTTON_TYPES } from "src/constants";
 import { UserContext, WalletContext } from "src/contexts";
 import { createFuseSearchInstance } from "src/fuse";
 import { BUSINESS_TX_DATA_STORE, BUSINESS_TX_FILTERS_STORE } from "src/hook-stores";
-import { useBusinessWallet, useUpdateBusinessWalletData } from "src/hooks";
+import { useBusinessWallet } from "src/hooks";
 import * as Routes from 'src/navigation/constants';
 import DataLoading from "src/screens/loadings/DataLoading";
 import { Button, Dialog, Header, SearchInput } from "src/shared/uielements";
@@ -84,7 +84,7 @@ const MerchantDashboard = (): JSX.Element => {
 		endDate,
 	}] = useStore<BusinessTxFilterStore>(BUSINESS_TX_FILTERS_STORE)
 	const [apiData, dispatchApiData] = useStore<BusinessTxDataStore, BusinessTxDataStoreReducer>(BUSINESS_TX_DATA_STORE);
-	const { businessWalletData  } = useContext(WalletContext);
+	const { businessWalletData, updateBusinessWalletData } = useContext(WalletContext);
 	const { user } = useContext(UserContext);
 	const completedCustomerVerification = user?.verifiedCustomer;
 	const [isFilterVisible, setIsFilterVisible] = useState<boolean>(false);
@@ -93,12 +93,22 @@ const MerchantDashboard = (): JSX.Element => {
 	const [selectedItem, setSelectedItem] = useState<MiniTransaction>({} as MiniTransaction);
 	const [isDwollaVisible, setIsDwollaVisible] = useState<boolean>(false);
 	const [isPayment, setIsPayment] = useState<boolean>(false);
-	const [ filteredApiData, setFilteredApiData] = useState<MiniTransaction[]>([]);
+	const [filteredApiData, setFilteredApiData] = useState<MiniTransaction[]>([]);
 	const { isLoading: isWalletLoading } = useBusinessWallet();
 	const [isLoading, setIsLoading] = useState<boolean>(false);
 	const { businessDwollaId } = useContext(UserContext);
 
-	useUpdateBusinessWalletData();
+	useEffect(() => {
+		const timerId = setInterval(async () => {
+			if (businessDwollaId) {
+				const userWallet = await DwollaAPI.loadWallet(businessDwollaId)
+				const fundingSource = await DwollaAPI.loadFundingSource(businessDwollaId)
+				updateBusinessWalletData(({ ...userWallet, availableFundingSource: fundingSource }))
+			}
+		}, 1000);
+		return () => clearInterval(timerId);
+	}, [businessDwollaId]);
+
 	const fuse = createFuseSearchInstance(filteredApiData, options)
 	const onSearchChange = (name: string, change: string) => {
 		if (!change) {
@@ -144,13 +154,13 @@ const MerchantDashboard = (): JSX.Element => {
 			setIsLoading(true);
 			const txs = await TransactionsAPI.getAllTransactions(businessDwollaId)
 			const sortedTxs = sortTxByTimestamp(txs)
-			dispatchApiData({ type: BusinessTxDataStoreActions.UpdateTransactions, payload: { txs } })
+			dispatchApiData({ type: BusinessTxDataStoreActions.UpdateTransactions, payload: { txs: sortedTxs } })
 			setFilteredApiData(sortedTxs)
-			setIsLoading(false);
+		setIsLoading(false);
 		}
 		handler();
 
-	}, [businessWalletData, businessDwollaId]);
+	}, [businessWalletData.availableBalance, businessDwollaId]);
 	const onConfirm = () => {
 		setIsDetailViewOpen(false);
 	}
