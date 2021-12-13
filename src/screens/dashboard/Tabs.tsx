@@ -33,6 +33,8 @@ import SettingsHelpAndContact from "../settings/SettingsHelpAndContact";
 import BusinessAccount from "../signupBusiness/BusinessAccount";
 import MyTransactions from "../transactions/MyTransactions";
 import Dashboard from "./Dashboard";
+import { BarCodeScanner } from 'expo-barcode-scanner';
+import SettingDialog from 'src/shared/uielements/SettingDialog';
 
 const styles = StyleSheet.create({
 	headerText: {
@@ -137,25 +139,33 @@ const BankLinkDialog = (props: BankLinkDialogProps) => {
 type BankLinkDialogStateProps = {
 	visible: boolean,
 	title: string,
-	description: string
+	description: string,
+	confirmAction: ()=>void,
+	cancelAction: ()=>void
 }
 
 const initBankDialogState: BankLinkDialogStateProps = {
 	visible: false, 
 	title: "", 
-	description: ""
+	description: "",
+	confirmAction: () => {},
+	cancelAction: () => {}
 }
 
 const DrawerContent = (
 	props: DrawerContentComponentProps<DrawerContentOptions>
 ) => {
 	const { signOut, userEmail } = useContext(AuthContext);
-	const { customerWalletData } = useContext(WalletContext);
 	const { updateSelectedView } = useContext(NavigationViewContext);
 	const { user, updateUserType } = useContext(UserContext)
 	const authorization = { cashierView: user?.verifiedBusiness };
 	const [isExpanded, setIsExpanded] = useState<boolean>(false);
 	const [bankDialogState, setBankDialogState] = useState<BankLinkDialogStateProps>(initBankDialogState);
+
+	const { customerWalletData } = useContext(WalletContext)
+	const personalFundingSource = customerWalletData?.availableFundingSource;
+	const availableBalance = customerWalletData?.availableBalance;
+	const [isSetting, setIsSetting] = useState(false)
 
 	const onMerchant = () => {
 		updateUserType(UserType.Business, userEmail);
@@ -168,12 +178,51 @@ const DrawerContent = (
 	};
 
 	const onBankDialogConfirm = () => {
-		setBankDialogState(initBankDialogState)
+		setBankDialogState(initBankDialogState);
 		props.navigation.navigate(Routes.SELECT_BANK);
 	}
 
 	const onBankDialogCancel = () => {
-		setBankDialogState(initBankDialogState)
+		setBankDialogState(initBankDialogState);
+	}
+
+	const onLoadupDialogConfirm = () => {
+		setBankDialogState(initBankDialogState);
+		props.navigation.navigate(Routes.LOAD_UP);
+	}
+
+	const onLoadupDialogCancel = () => {
+		setBankDialogState(initBankDialogState);
+	}
+
+	const onPressScanToPay = async () => {
+		const {status} = await BarCodeScanner.requestPermissionsAsync();
+		if(status === 'granted') {
+			if(availableBalance > 0) {
+				props.navigation.navigate(Routes.QRCODE_SCAN)
+			} else {
+				if(personalFundingSource) {
+					setBankDialogState({
+						visible: true,
+						title: Translation.PAYMENT.PAYMENT_NO_BANK_TITLE,
+						description: Translation.LOAD_UP.LOAD_UP_NO_BANK_DETAIL,
+						confirmAction: onBankDialogConfirm,
+						cancelAction: onBankDialogCancel
+					})
+				} else {
+					setBankDialogState({
+						visible: true,
+						title: Translation.LOAD_UP.LOAD_UP_NO_BANK_TITLE,
+						description: Translation.LOAD_UP.LOAD_UP_NO_BANK_DETAIL,
+						confirmAction: onLoadupDialogConfirm,
+						cancelAction: onLoadupDialogCancel
+					})
+				}
+			} 
+		} else {
+			setIsSetting(true)
+		}
+		
 	}
 
 	const customerTag = user?.customer?.tag || undefined
@@ -267,14 +316,7 @@ const DrawerContent = (
 					<Drawer.Section>
 						<DrawerItem
 							label={Translation.TABS.SCAN_TO_PAY}
-							onPress={() => customerWalletData?.availableFundingSource 
-								? props.navigation.navigate(Routes.QRCODE_SCAN)
-								: setBankDialogState({
-									visible: true,
-									title: Translation.PAYMENT.PAYMENT_NO_BANK_TITLE,
-									description: Translation.PAYMENT.PAYMENT_NO_BANK_DETAIL
-								})
-							}
+							onPress={onPressScanToPay}
 						/>
 						<DrawerItem
 							label={Translation.TABS.RECEIVE_PAYMENT}
@@ -287,7 +329,9 @@ const DrawerContent = (
 								: setBankDialogState({
 									visible: true,
 									title: Translation.LOAD_UP.LOAD_UP_NO_BANK_TITLE,
-									description: Translation.LOAD_UP.LOAD_UP_NO_BANK_DETAIL
+									description: Translation.LOAD_UP.LOAD_UP_NO_BANK_DETAIL,
+									confirmAction: onBankDialogConfirm,
+									cancelAction: onBankDialogCancel
 								})
 							}
 						/>
@@ -298,7 +342,9 @@ const DrawerContent = (
 								: setBankDialogState({
 									visible: true,
 									title: Translation.CASH_OUT.CASH_OUT_NO_BANK_TITLE,
-									description: Translation.CASH_OUT.CASH_OUT_NO_BANK_DETAIL
+									description: Translation.CASH_OUT.CASH_OUT_NO_BANK_DETAIL,
+									confirmAction: onBankDialogConfirm,
+									cancelAction: onBankDialogCancel
 								})
 							}
 						/>
@@ -358,8 +404,13 @@ const DrawerContent = (
 				visible={bankDialogState.visible}
 				title={bankDialogState.title}
 				description={bankDialogState.description}
-				onConfirm={onBankDialogConfirm}
-				onCancel={onBankDialogCancel}
+				onConfirm={bankDialogState.confirmAction}
+				onCancel={bankDialogState.cancelAction}
+			/>
+			<SettingDialog
+				visible={isSetting}
+				onCancel={() => setIsSetting(false)}
+				description={Translation.OTHER.NO_CAMERA_PERMISSION_DETAIL}
 			/>
 		</View>
 	);
