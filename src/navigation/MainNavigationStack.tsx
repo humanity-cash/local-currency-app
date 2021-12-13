@@ -16,7 +16,6 @@ const PrimaryStack = createStackNavigator();
 
 const PrimaryStackScreen = () => {
   const { selectedView } = useContext(NavigationViewContext)
-  console.log(":PrimaryStackScreen ~ selectedView", selectedView)
   const { user } = useContext(UserContext);
   const { loadingState } = useSelector((state: AppState) => state.loadingReducer) as LoadingPageState;
 
