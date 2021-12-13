@@ -140,16 +140,14 @@ type BankLinkDialogStateProps = {
 	visible: boolean,
 	title: string,
 	description: string,
-	confirmAction: ()=>void,
-	cancelAction: ()=>void
+	confirmAction?: ()=>void,
+	cancelAction?: ()=>void
 }
 
 const initBankDialogState: BankLinkDialogStateProps = {
 	visible: false, 
 	title: "", 
-	description: "",
-	confirmAction: () => {},
-	cancelAction: () => {}
+	description: ""
 }
 
 const DrawerContent = (
@@ -204,18 +202,19 @@ const DrawerContent = (
 				if(personalFundingSource) {
 					setBankDialogState({
 						visible: true,
-						title: Translation.PAYMENT.PAYMENT_NO_BANK_TITLE,
-						description: Translation.LOAD_UP.LOAD_UP_NO_BANK_DETAIL,
-						confirmAction: onBankDialogConfirm,
-						cancelAction: onBankDialogCancel
-					})
-				} else {
-					setBankDialogState({
-						visible: true,
 						title: Translation.LOAD_UP.LOAD_UP_NO_BANK_TITLE,
 						description: Translation.LOAD_UP.LOAD_UP_NO_BANK_DETAIL,
 						confirmAction: onLoadupDialogConfirm,
 						cancelAction: onLoadupDialogCancel
+					})
+
+				} else {
+					setBankDialogState({
+						visible: true,
+						title: Translation.PAYMENT.PAYMENT_NO_BANK_TITLE,
+						description: Translation.PAYMENT.PAYMENT_NO_BANK_DETAIL,
+						confirmAction: onBankDialogConfirm,
+						cancelAction: onBankDialogCancel
 					})
 				}
 			} 
@@ -404,8 +403,8 @@ const DrawerContent = (
 				visible={bankDialogState.visible}
 				title={bankDialogState.title}
 				description={bankDialogState.description}
-				onConfirm={bankDialogState.confirmAction}
-				onCancel={bankDialogState.cancelAction}
+				onConfirm={() => {bankDialogState.confirmAction && bankDialogState.confirmAction()}}
+				onCancel={() => {bankDialogState.cancelAction && bankDialogState.cancelAction()}}
 			/>
 			<SettingDialog
 				visible={isSetting}
