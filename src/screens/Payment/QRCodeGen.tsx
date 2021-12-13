@@ -62,7 +62,7 @@ const QRCodeGen = (props: QRCodeGenProps): JSX.Element => {
     const { user, customerDwollaId } = useContext(UserContext);
     const { customerWalletData } = useContext(WalletContext);
     const { hasPermission, setMaxBrightness, setDefaultBrightness} = useBrightness();
-    const [initBalance] = useState<number>(customerWalletData.availableBalance);
+    const [initBalance] = useState<number>(customerWalletData?.availableBalance);
     const [isSuccess, setIsSuccess] = useState<boolean>(false);
     const addressStr = JSON.stringify({
         securityId: SECURITY_ID,
@@ -91,11 +91,11 @@ const QRCodeGen = (props: QRCodeGenProps): JSX.Element => {
                 await dispatch(loadPersonalTransactions(customerDwollaId));
             }
             setDefaultBrightness();
-            props.onSuccess(customerWalletData.availableBalance - initBalance);
+            props.onSuccess(customerWalletData?.availableBalance - initBalance);
         }
     }
 
-    if (customerWalletData.availableBalance > initBalance) {
+    if (customerWalletData?.availableBalance > initBalance) {
         onSuccess();
     }
 

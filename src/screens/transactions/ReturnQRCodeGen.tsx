@@ -68,7 +68,7 @@ const ReturnQRCodeGen = (props: ReturnQRCodeGenProps): JSX.Element => {
     const { user, customerDwollaId } = useContext(UserContext);
     const { hasPermission, setMaxBrightness, setDefaultBrightness} = useBrightness();
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const [initBalance, setInitBalance] = useState<number>(customerWalletData.availableBalance);
+    const [initBalance, setInitBalance] = useState<number>(customerWalletData?.availableBalance);
     const [isSuccess, setIsSuccess] = useState<boolean>(false);
     const requestData: QRCodeEntry = {
         securityId: SECURITY_ID,
@@ -99,11 +99,11 @@ const ReturnQRCodeGen = (props: ReturnQRCodeGenProps): JSX.Element => {
                 await dispatch(loadPersonalTransactions(customerDwollaId));
             }
             setDefaultBrightness();
-            props.onSuccess(customerWalletData.availableBalance - initBalance);
+            props.onSuccess(customerWalletData?.availableBalance - initBalance);
         }
     }
 
-    if (customerWalletData.availableBalance > initBalance) {
+    if (customerWalletData?.availableBalance > initBalance) {
         onSuccess();
     }
 
