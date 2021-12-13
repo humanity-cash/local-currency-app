@@ -10,13 +10,13 @@ import { BUTTON_TYPES } from 'src/constants';
 import { UserContext, WalletContext } from 'src/contexts';
 import { useCameraPermission } from 'src/hooks';
 import * as Routes from 'src/navigation/constants';
-import DataLoading from 'src/screens/loadings/DataLoading';
+import PaymentLoading from 'src/screens/loadings/PaymentPending';
 import { BackBtn, BorderedInput, Button, CancelBtn, Dialog, Header, Modal, ModalHeader, ToggleButton } from "src/shared/uielements";
 import { loadPersonalTransactions } from 'src/store/transaction/transaction.actions';
 import { colors } from "src/theme/colors";
 import { baseHeader, dialogViewBase, modalViewBase, underlineHeader, viewBase, wrappingContainerBase } from "src/theme/elements";
 import Translation from 'src/translation/en.json';
-import { calcFee, showToast } from 'src/utils/common';
+import { showToast } from 'src/utils/common';
 import { PaymentMode, QRCodeEntry, SECURITY_ID, ToastType } from 'src/utils/types';
 import { isQRCodeValid } from 'src/utils/validation';
 
@@ -43,36 +43,36 @@ const styles = StyleSheet.create({
 		height: 450
 	},
 	dialogWrap: {
-        position: 'relative',
+		position: 'relative',
 		paddingHorizontal: 10,
-        paddingTop: 70,
+		paddingTop: 70,
 		height: "100%",
 		flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center'
+		justifyContent: 'center',
+		alignItems: 'center'
 	},
 	ownerInfo: {
-        position: 'absolute',
-        top: -60,
-        borderRadius: 40,
-        alignItems: 'center'
-    },
-    image: {
-        width: 80,
-        height: 80,
-        borderRadius: 40
-    },
-    ownerName: {
-        fontWeight: 'bold',
-        fontSize: 18,
-        paddingVertical: 10
-    },
+		position: 'absolute',
+		top: -60,
+		borderRadius: 40,
+		alignItems: 'center'
+	},
+	image: {
+		width: 80,
+		height: 80,
+		borderRadius: 40
+	},
+	ownerName: {
+		fontWeight: 'bold',
+		fontSize: 18,
+		paddingVertical: 10
+	},
 	headerText: {
-        marginTop: 10,
-        fontSize: 32,
-        lineHeight: 40,
-        paddingTop: 20
-    },
+		marginTop: 10,
+		fontSize: 32,
+		lineHeight: 40,
+		paddingTop: 20
+	},
 	description: {
 		color: colors.bodyText,
 		fontSize: 10,
@@ -84,22 +84,22 @@ const styles = StyleSheet.create({
 		alignItems: 'center'
 	},
 	transparentBtn: {
-		backgroundColor: 
-		colors.white, 
-		borderWidth: 1, 
+		backgroundColor:
+			colors.white,
+		borderWidth: 1,
 		marginTop: 20,
 		marginBottom: 10
 	},
 	detailView: {
-		flexDirection: 'row', 
+		flexDirection: 'row',
 		justifyContent: 'space-between'
 	},
 	detailText: {
 		fontSize: 14,
 	},
 	switchView: {
-		flex: 1, 
-		justifyContent: 'center', 
+		flex: 1,
+		justifyContent: 'center',
 		alignItems: 'center'
 	},
 	switch: {
@@ -108,8 +108,8 @@ const styles = StyleSheet.create({
 	switchText: {
 		color: colors.darkGreen
 	},
-	label: { 
-		color: colors.text, 
+	label: {
+		color: colors.text,
 		fontSize: 12,
 		paddingTop: 10
 	},
@@ -137,21 +137,21 @@ const PaymentConfirm = (props: PaymentConfirmProps) => {
 		<Dialog visible={props.visible} onClose={props.onCancel} style={styles.dialog}>
 			<View style={dialogViewBase}>
 				<View style={styles.dialogWrap}>
-                    <View style={styles.ownerInfo}>
-                        <Image
-                            source={require("../../../assets/images/feed1.png")}
-                            style={styles.image}
-                        />
-                        <Text style={styles.ownerName}>{firstName + ' ' + lastName}</Text>
-                    </View>
+					<View style={styles.ownerInfo}>
+						<Image
+							source={require("../../../assets/images/feed1.png")}
+							style={styles.image}
+						/>
+						<Text style={styles.ownerName}>{firstName + ' ' + lastName}</Text>
+					</View>
 
 					<Text style={styles.headerText}>B$ {amountCalcedFee.toFixed(2)}</Text>
 					<View style={styles.view}>
 						<Text style={styles.detailText}>or</Text>
 						<Text style={styles.detailText}>{Translation.PAYMENT.CHOOSE_ROUND_UP}</Text>
 					</View>
-                </View>
-				
+				</View>
+
 				<View>
 					<Button
 						type={BUTTON_TYPES.TRANSPARENT}
@@ -181,9 +181,9 @@ const LowAmount = (props: LowAmountProps) => {
 
 	return (
 		<Dialog visible={props.visible} onClose={() => props.onCancel()}>
-			<View style={dialogViewBase }>
+			<View style={dialogViewBase}>
 				<View>
-					<View style={ baseHeader }>
+					<View style={baseHeader}>
 						<Text style={styles.headerText}> Whoooops. You cannot the payment. </Text>
 					</View>
 					<View style={styles.view}>
@@ -215,7 +215,7 @@ const QRCodeScan = (): JSX.Element => {
 	const [isOpenPayment, setIsOpenPayment] = useState<boolean>(false);
 	const [openAmount, setOpenAmount] = useState<string>("");
 	const [goNext, setGoNext] = useState<boolean>(false);
-	const { walletData } = useContext(WalletContext);
+	const { customerWalletData } = useContext(WalletContext);
 	const [state, setState] = useState<QRCodeEntry>({
 		securityId: SECURITY_ID,
 		to: "",
@@ -225,7 +225,7 @@ const QRCodeScan = (): JSX.Element => {
 
 	useEffect(() => {
 		setIsScanned(false);
-	});
+	}, []);
 
 	useEffect(() => {
 		setGoNext(Number(openAmount) > 0);
@@ -254,9 +254,9 @@ const QRCodeScan = (): JSX.Element => {
 		setIsLoading(true);
 		const amountCalcedFee = state.amount;
 		setIsPaymentDialog(false);
-		
+
 		// check balance
-		if (walletData?.availableBalance <= state.amount) {
+		if (customerWalletData?.availableBalance <= state.amount) {
 			setIsLowAmountDialog(true);
 		} else {
 			if (customerDwollaId) {
@@ -267,10 +267,9 @@ const QRCodeScan = (): JSX.Element => {
 				};
 
 				const response = await TransactionsAPI.transferTo(customerDwollaId, request);
-				
+
 				if (response.data) {
 					// Update user info
-					await dispatch(loadPersonalTransactions(customerDwollaId));
 					navigation.navigate(Routes.PAYMENT_SUCCESS);
 				} else {
 					navigation.navigate(Routes.PAYMENT_FAILED);
@@ -291,7 +290,7 @@ const QRCodeScan = (): JSX.Element => {
 	const handleOpenPay = async () => {
 		setIsOpenPayment(false);
 		// check balance
-		if (walletData?.availableBalance <= state.amount) {
+		if (customerWalletData?.availableBalance <= state.amount) {
 			setIsLowAmountDialog(true);
 		} else {
 			if (customerDwollaId) {
@@ -325,7 +324,7 @@ const QRCodeScan = (): JSX.Element => {
 
 	return (
 		<View style={viewBase}>
-			<DataLoading visible={isLoading} />
+			<PaymentLoading visible={isLoading} />
 			<View style={styles.container}>
 				<BarCodeScanner
 					onBarCodeScanned={isScanned ? undefined : handleBarCodeScanned}
@@ -339,7 +338,7 @@ const QRCodeScan = (): JSX.Element => {
 				<View style={styles.switchView}>
 					<ToggleButton
 						value={true}
-						onChange={()=>navigation.navigate(Routes.PAYMENT_REQUEST)}
+						onChange={() => navigation.navigate(Routes.PAYMENT_REQUEST)}
 						activeText="Pay"
 						inActiveText="Receive"
 						style={styles.switch}
@@ -347,11 +346,11 @@ const QRCodeScan = (): JSX.Element => {
 					/>
 				</View>
 			</View>
-			{ isPaymentDialog && <PaymentConfirm visible={isPaymentDialog} payInfo={state} onConfirm={(mode) => onPayConfirm(mode)} onCancel={onCancle} /> }
-			{ isLowAmountDialog && <LowAmount visible={isLowAmountDialog} onConfirm={onLoadUp} onCancel={onCancle} /> }
-			{ isOpenPayment && (
+			{isPaymentDialog && <PaymentConfirm visible={isPaymentDialog} payInfo={state} onConfirm={(mode) => onPayConfirm(mode)} onCancel={onCancle} />}
+			{isLowAmountDialog && <LowAmount visible={isLowAmountDialog} onConfirm={onLoadUp} onCancel={onCancle} />}
+			{isOpenPayment && (
 				<Modal visible={isOpenPayment}>
-					<View style={ modalViewBase }>
+					<View style={modalViewBase}>
 						<ModalHeader
 							leftComponent={<BackBtn onClick={() => setIsOpenPayment(false)} />}
 							rightComponent={<CancelBtn text="Close" onClick={onCancle} />}
