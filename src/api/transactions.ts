@@ -6,6 +6,9 @@ import { AxiosPromiseResponse, IDepositRequest, ITransaction, ITransactionReques
 export const getDeposits = async (userId: UserId): Promise<MiniTransaction[]> => {
   try {
     const response = await getRequest(`/users/${userId}/deposit`);
+    if (response.status === 204) {
+      return []
+    }
     return formatDeposits(response) || [];
   } catch (error) {
     console.log("Error in getDeposits", error)
@@ -16,7 +19,10 @@ export const getDeposits = async (userId: UserId): Promise<MiniTransaction[]> =>
 export const getWithdrawals = async (userId: UserId): Promise<MiniTransaction[]> => {
   try {
     const response = await getRequest(`/users/${userId}/withdraw`);
-    return formatWithdrawals(response) || [];
+    if (response.status === 204) {
+      return []
+    }
+    return formatWithdrawals(response);
   } catch (err) {
     console.log('err here', err)
     return [];
@@ -26,6 +32,9 @@ export const getWithdrawals = async (userId: UserId): Promise<MiniTransaction[]>
 export const getTransactions = async (userId: UserId): Promise<MiniTransaction[]> => {
   try {
     const response = await getRequest(`/users/${userId}/transfer`);
+    if (response.status === 204) {
+      return []
+    }
     return formatTransactions(response);
   } catch (error) {
     console.log('error in getTransactions', error)

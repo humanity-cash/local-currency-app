@@ -84,7 +84,7 @@ const MerchantQRCodeGen = (props: MerchantQRCodeGenProps): JSX.Element => {
                 const fundingSource = await DwollaAPI.loadFundingSource(businessDwollaId)
                 updateBusinessWalletData(({ ...userWallet, availableFundingSource: fundingSource }))
             }
-        }, 1500);
+        }, 1000);
         return () => clearInterval(timerId);
 	}, [props.visible]);
 

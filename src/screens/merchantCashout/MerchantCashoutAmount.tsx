@@ -103,9 +103,7 @@ const MerchantCashoutAmount = (): JSX.Element => {
 
 	const onValueChange = (name: string, change: string) => {
 		const amount = change.replace(',', '.')
-		if(+amount <= +maxAmount) {
 			setAmount(amount);
-		}
 	};
 
 	const viewConfirm = () => {
