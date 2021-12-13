@@ -61,7 +61,7 @@ export const useUpdateCustomerWalletData = (): void => {
 			}
 		}, 1500);
 		if (
-			customerWalletData?.address.length
+			customerWalletData?.address?.length
 			&& customerWalletData?.address === user?.customer?.walletAddress) {
 			clearInterval(timerId)
 		}
@@ -82,7 +82,7 @@ export const useUpdateBusinessWalletData = (): void => {
 			}
 		}, 1500);
 		if (
-			businessWalletData?.address.length
+			businessWalletData?.address?.length
 			&& businessWalletData?.address === user?.business?.walletAddress) {
 			clearInterval(timerId)
 		}
