@@ -18,6 +18,8 @@ import { colors } from 'src/theme/colors';
 import { baseHeader, dialogViewBase, viewBase, wrappingContainerBase } from 'src/theme/elements';
 import Translation from 'src/translation/en.json';
 import DwollaDialog from './DwollaDialog';
+import { BarCodeScanner } from 'expo-barcode-scanner';
+import SettingDialog from 'src/shared/uielements/SettingDialog';
 
 const styles = StyleSheet.create({
 	content: { paddingBottom: 80 },
@@ -150,8 +152,13 @@ const Dashboard = (): JSX.Element => {
 	const [isVisible, setIsVisible] = useState<boolean>(false);
 	const [isLoadup, setIsLoadup] = useState<boolean>(false);
 	const [isPayment, setIsPayment] = useState<boolean>(false);
+	const [isSetting, setIsSetting] = useState(false)
 	const { customerDwollaId } = useContext(UserContext)
 	const { customerWalletData, updateCustomerWalletData } = useContext(WalletContext)
+
+	const { isLoading: isWalletLoading } = useCustomerWallet();
+	const personalFundingSource = customerWalletData?.availableFundingSource;
+	const availableBalance = customerWalletData?.availableBalance;
 
 	const selectBank = () => {
 		navigation.navigate(Routes.SELECT_BANK);
@@ -169,16 +176,24 @@ const Dashboard = (): JSX.Element => {
 		return () => clearInterval(timerId);
 	}, [customerDwollaId]);
 
-	const { isLoading: isWalletLoading } = useCustomerWallet();
-
 	const onClose = () => {
 		setIsVisible(false);
 		setIsPayment(false);
 		setIsLoadup(false);
 	};
 
-	const personalFundingSource = customerWalletData?.availableFundingSource;
-	const availableBalance = customerWalletData?.availableBalance;
+	const onPressScan = async () => {
+		const {status} = await BarCodeScanner.requestPermissionsAsync();
+		if(status === 'granted') {
+			if(personalFundingSource && availableBalance > 0) {
+				navigation.navigate(Routes.QRCODE_SCAN)
+			} else {
+				navigation.navigate(Routes.RECEIVE_PAYMENT)
+			}
+		} else {
+			setIsSetting(true)
+		}
+	}
 
 	return (
 		<View style={viewBase}>
@@ -263,7 +278,7 @@ const Dashboard = (): JSX.Element => {
 					</View>
 				</ScrollView>
 			</View>
-			<TouchableOpacity onPress={() => personalFundingSource ? navigation.navigate(Routes.QRCODE_SCAN) : setIsPayment(true)} style={styles.scanButton}>
+			<TouchableOpacity onPress={onPressScan} style={styles.scanButton}>
 				<Image
 					source={require('../../../assets/images/qr_code_consumer.png')}
 					containerStyle={styles.qrIcon}
@@ -298,6 +313,13 @@ const Dashboard = (): JSX.Element => {
 					</View>
 				</Dialog>
 			)}
+
+			<SettingDialog
+				visible={isSetting}
+				onCancel={() => setIsSetting(false)}
+				description={Translation.OTHER.NO_CAMERA_PERMISSION_DETAIL}
+			/>
+
 		</View>
 	);
 };

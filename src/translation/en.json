@@ -69,7 +69,8 @@
         "SOMEONE_ELSE" :"Someone else",
         "MAIL_QR_CODE": "Mail my QR code again",
         "SHOW_MY_QR": "Show my QR",
-        "STATIC_QR": "Static QR"
+        "STATIC_QR": "Static QR",
+        "GOTO_SETTING": "Go to setting"
     },
     "LABEL": {
         "EMAIL_ADDR": "EMAIL ADDRESS",
@@ -240,6 +241,7 @@
         "NOT_REFUNABLE_DONATION": "*THE ROUND UP IS A NON REFUNABLE DONATION.",
         "PAYMENT_NO_BANK_TITLE": "Whoooops. You cannot make a payment yet.",
         "PAYMENT_NO_BANK_DETAIL": "First link your bank account and load up B$ to make sure you have enough B$ for your purchase.",
+        "PAYMENT_NO_BALANCE_DETAIL": "You have too little funds available. Please load up your balance first.",
         "WRONG": "Whooops, something went wrong.",
         "SPECIFY_PAYMENT": "Specify payment"
     },
@@ -250,6 +252,8 @@
         "CONTACT": "Contact",
         "CONTACT_DETAIL": "If you have questions, complaints, remarks, or just like to chat, please send an email to fennie@humanity.cash or contact the Schumacher Center by calling 010-125 08766",
         "DELETED_ACCOUNT_MESSAGE": "Sad to see you leave. Your account has been deleted. Hope to see you back soon.",
+        "NO_CAMERA_PERMISSION_TITLE": "Whoops camera permission denied.",
+        "NO_CAMERA_PERMISSION_DETAIL": "Sorry, we need camera roll permissions to make this work!\nPlease go to the settings and allow camera permission.",
         "NO_CAMERA_PERMISSION": "Sorry, we need camera roll permissions to make this work!",
         "REQUEST_CAMERA_PERMISSION": "Requesting for camera permission",
         "LEGAL": "Legal",

@@ -24,6 +24,9 @@ import MerchantQRCodeScan from "../merchantPayment/MerchantQRCodeScan";
 import MerchantRequest from "../merchantPayment/MerchantRequest";
 import MerchantReturnQRCodeScan from "../merchantPayment/MerchantReturnQRCodeScan";
 import MerchantDashboard from "./MerchantDashboard";
+import BankLinkDialog from 'src/shared/uielements/BankLinkDialog';
+import { BarCodeScanner } from 'expo-barcode-scanner';
+import SettingDialog from 'src/shared/uielements/SettingDialog';
 
 const styles = StyleSheet.create({
 	headerText: {
@@ -155,58 +158,37 @@ const CashierViewDialogDialog = (props: CashierViewDialogProps) => {
 	)
 }
 
-type BankLinkDialogProps = {
-	visible: boolean,
-	title: string,
-	description: string
-	onConfirm: ()=>void,
-	onCancel: ()=>void
-}
-
-const BankLinkDialog = (props: BankLinkDialogProps) => {
-	return (
-		<Dialog visible={props.visible} onClose={()=>props.onCancel()} backgroundStyle={styles.dialogBg}>
-			<View style={dialogViewBase}>
-				<View style={wrappingContainerBase}>
-					<View style={ baseHeader }>
-						<Text style={styles.headerText}>{props.title}</Text>
-					</View>
-					<Text style={styles.detailText}>{props.description}</Text>
-				</View>
-				<View>
-				<Button
-						type={BUTTON_TYPES.PURPLE}
-						title={Translation.BUTTON.LINK_BANK}
-						onPress={props.onConfirm}
-					/>
-				</View>
-			</View>
-		</Dialog>
-	)
-}
-
 type BankLinkDialogStateProps = {
 	visible: boolean,
 	title: string,
-	description: string
+	description: string,
+	buttoTitle: string,
+	confirmAction?: ()=>void,
+	cancelAction?: ()=>void
 }
 
 const initBankDialogState: BankLinkDialogStateProps = {
 	visible: false, 
 	title: "", 
-	description: ""
+	description: "",
+	buttoTitle: ""
 }
 
 const DrawerContent = (props: DrawerContentComponentProps) => {
 	const { signOut, userEmail } = useContext(AuthContext);
 	const { user, updateUserType } = useContext(UserContext);
 	const { updateSelectedView } = useContext(NavigationViewContext);
-	const { businessWalletData } = useContext(WalletContext);
 	const authorization = { cashierView: user?.verifiedBusiness };
 	const [isExpanded, setIsExpanded] = useState<boolean>(false);
 	const [isVisible, setIsVisible] = useState<boolean>(false);
 	const [isCashierView, setIsCashierView] = useState<boolean>(false);
 	const [bankDialogState, setBankDialogState] = useState<BankLinkDialogStateProps>(initBankDialogState);
+	const [isSetting, setIsSetting] = useState(false)
+
+	const { businessWalletData } = useContext(WalletContext)
+	const businessFundingSource = businessWalletData?.availableFundingSource;
+	const availableBalance = businessWalletData?.availableBalance;
+
 
 	const onScanConfirm = () => {
 		setIsVisible(false);
@@ -234,12 +216,166 @@ const DrawerContent = (props: DrawerContentComponentProps) => {
 	}
 
 	const onBankDialogCancel = () => {
+		console.log("caaaancel")
+		setBankDialogState(initBankDialogState);
+	}
+
+	const onLoadupDialogConfirm = () => {
+		setBankDialogState(initBankDialogState);
+		props.navigation.navigate(Routes.MERCHANT_LOADUP);
+	}
+
+	const onLoadupDialogCancel = () => {
 		setBankDialogState(initBankDialogState);
 	}
 
 	const onPersonal = () => {
 		updateUserType(UserType.Customer, userEmail);
 		updateSelectedView(ViewState.Customer);
+	}
+
+	const onPressScanToPay = async () => {
+		const {status} = await BarCodeScanner.requestPermissionsAsync();
+		if(status === 'granted') {
+			if(availableBalance > 0) {
+				props.navigation.navigate(Routes.MERCHANT_QRCODE_SCAN)
+			} else {
+				if(businessFundingSource) {
+					setBankDialogState({
+						visible: true,
+						title: Translation.LOAD_UP.LOAD_UP_NO_BANK_TITLE,
+						description: Translation.LOAD_UP.LOAD_UP_NO_BANK_DETAIL,
+						buttoTitle: Translation.BUTTON.LOAD_UP,
+						confirmAction: onLoadupDialogConfirm,
+						cancelAction: onLoadupDialogCancel
+					})
+				} else {
+					setBankDialogState({
+						visible: true,
+						title: Translation.PAYMENT.PAYMENT_NO_BANK_TITLE,
+						description: Translation.PAYMENT.PAYMENT_NO_BANK_DETAIL,
+						buttoTitle: Translation.BUTTON.LINK_BUSINESS_BANK,
+						confirmAction: onBankDialogConfirm,
+						cancelAction: onBankDialogCancel
+					})
+				}
+			} 
+		} else {
+			setIsSetting(true)
+		}
+	}
+
+	const onPressMakeReturn = async () => {
+		const {status} = await BarCodeScanner.requestPermissionsAsync();
+		if(status === 'granted') {
+			if(availableBalance > 0) {
+				setIsVisible(true)
+			} else {
+				if(businessFundingSource) {
+					setBankDialogState({
+						visible: true,
+						title: Translation.LOAD_UP.LOAD_UP_NO_BANK_TITLE,
+						description: Translation.LOAD_UP.LOAD_UP_NO_BANK_DETAIL,
+						buttoTitle: Translation.BUTTON.LOAD_UP,
+						confirmAction: onLoadupDialogConfirm,
+						cancelAction: onLoadupDialogCancel
+					})
+				} else {
+					setBankDialogState({
+						visible: true,
+						title: Translation.PAYMENT.PAYMENT_NO_BANK_TITLE,
+						description: Translation.PAYMENT.PAYMENT_NO_BANK_DETAIL,
+						buttoTitle: Translation.BUTTON.LINK_BUSINESS_BANK,
+						confirmAction: onBankDialogConfirm,
+						cancelAction: onBankDialogCancel
+					})
+				}
+			}
+		} else {
+			setIsSetting(true)
+		}
+	}
+
+	const onPressLoadup = async () => {
+		const {status} = await BarCodeScanner.requestPermissionsAsync();
+		if(status === 'granted') {
+			if(businessWalletData?.address) {
+				props.navigation.navigate(Routes.MERCHANT_LOADUP)
+			} else {
+				setBankDialogState({
+					visible: true,
+					title: Translation.LOAD_UP.LOAD_UP_NO_BANK_TITLE,
+					description: Translation.LOAD_UP.LOAD_UP_NO_BANK_DETAIL,
+					buttoTitle: Translation.BUTTON.LINK_BUSINESS_BANK,
+					confirmAction: onBankDialogConfirm,
+					cancelAction: onBankDialogCancel
+				})
+			}
+		} else {
+			setIsSetting(true)
+		}
+	}
+
+	const onPressSendToSomeone = async () => {
+		const {status} = await BarCodeScanner.requestPermissionsAsync();
+		if(status === 'granted') {
+			if(availableBalance > 0) {
+				props.navigation.navigate(Routes.MERCHANT_PAYOUT_SELECTION)
+			} else {
+				if(businessFundingSource) {
+					setBankDialogState({
+						visible: true,
+						title: Translation.LOAD_UP.LOAD_UP_NO_BANK_TITLE,
+						description: Translation.LOAD_UP.LOAD_UP_NO_BANK_DETAIL,
+						buttoTitle: Translation.BUTTON.LOAD_UP,
+						confirmAction: onLoadupDialogConfirm,
+						cancelAction: onLoadupDialogCancel
+					})
+				} else {
+					setBankDialogState({
+						visible: true,
+						title: Translation.PAYMENT.PAYMENT_NO_BANK_TITLE,
+						description: Translation.PAYMENT.PAYMENT_NO_BANK_DETAIL,
+						buttoTitle: Translation.BUTTON.LINK_BUSINESS_BANK,
+						confirmAction: onBankDialogConfirm,
+						cancelAction: onBankDialogCancel
+					})
+				}
+			}
+		} else {
+			setIsSetting(true)
+		}
+	}
+
+	const onPressCashout = async () => {
+		const {status} = await BarCodeScanner.requestPermissionsAsync();
+		if(status === 'granted') {
+			if(availableBalance > 0) {
+				props.navigation.navigate(Routes.MERCHANT_CASHOUT_AMOUNT)
+			} else {
+				if(businessFundingSource) {
+					setBankDialogState({
+						visible: true,
+						title: Translation.LOAD_UP.LOAD_UP_NO_BANK_TITLE,
+						description: Translation.LOAD_UP.LOAD_UP_NO_BANK_DETAIL,
+						buttoTitle: Translation.BUTTON.LOAD_UP,
+						confirmAction: onLoadupDialogConfirm,
+						cancelAction: onLoadupDialogCancel
+					})
+				} else {
+					setBankDialogState({
+						visible: true,
+						title: Translation.CASH_OUT.CASH_OUT_NO_BANK_TITLE,
+						description: Translation.CASH_OUT.CASH_OUT_NO_BANK_DETAIL,
+						buttoTitle: Translation.BUTTON.LINK_BUSINESS_BANK,
+						confirmAction: onBankDialogConfirm,
+						cancelAction: onBankDialogCancel
+					})
+				}
+			}
+		} else {
+			setIsSetting(true)
+		}
 	}
 
 	const userTag = user?.customer?.tag || undefined
@@ -327,58 +463,23 @@ const DrawerContent = (props: DrawerContentComponentProps) => {
 						/>
 						<DrawerItem
 							label={Translation.TABS.SCAN_TO_PAY}
-							onPress={() => businessWalletData?.availableBalance 
-								? props.navigation.navigate(Routes.MERCHANT_QRCODE_SCAN) 
-								: setBankDialogState({
-									visible: true,
-									title: Translation.PAYMENT.PAYMENT_NO_BANK_TITLE,
-									description: Translation.PAYMENT.PAYMENT_NO_BANK_DETAIL
-								})
-							}
+							onPress={onPressScanToPay}
 						/>
 						<DrawerItem
 							label={Translation.TABS.MAKE_RETURN}
-							onPress={() => businessWalletData?.availableBalance 
-								? setIsVisible(true) 
-								: setBankDialogState({
-									visible: true,
-									title: Translation.LOAD_UP.LOAD_UP_NO_BANK_TITLE,
-									description: Translation.LOAD_UP.LOAD_UP_NO_BANK_DETAIL
-								})
-							}
+							onPress={onPressMakeReturn}
 						/>
 						<DrawerItem
 							label={Translation.TABS.LOADUP}
-							onPress={() => businessWalletData?.address
-								? props.navigation.navigate(Routes.MERCHANT_LOADUP) 
-								: setBankDialogState({
-									visible: true,
-									title: Translation.LOAD_UP.LOAD_UP_NO_BANK_TITLE,
-									description: Translation.LOAD_UP.LOAD_UP_NO_BANK_DETAIL
-								})
-							}
+							onPress={onPressLoadup}
 						/>
 						<DrawerItem
 							label={Translation.TABS.SEND_TO_SOMEONE}
-							onPress={() => businessWalletData?.availableBalance 
-								? props.navigation.navigate(Routes.MERCHANT_PAYOUT_SELECTION) 
-								: setBankDialogState({
-									visible: true,
-									title: Translation.LOAD_UP.LOAD_UP_NO_BANK_TITLE,
-									description: Translation.LOAD_UP.LOAD_UP_NO_BANK_DETAIL
-								})
-							}
+							onPress={onPressSendToSomeone}
 						/>
 						<DrawerItem
 							label={Translation.TABS.CASHOUT}
-							onPress={() => businessWalletData?.availableBalance 
-								? props.navigation.navigate(Routes.MERCHANT_CASHOUT_AMOUNT) 
-								: setBankDialogState({
-									visible: true,
-									title: Translation.CASH_OUT.CASH_OUT_NO_BANK_TITLE,
-									description: Translation.CASH_OUT.CASH_OUT_NO_BANK_DETAIL
-								})
-							}
+							onPress={onPressCashout}
 						/>
 					</Drawer.Section>
 					<Drawer.Section>
@@ -438,8 +539,14 @@ const DrawerContent = (props: DrawerContentComponentProps) => {
 				visible={bankDialogState.visible}
 				title={bankDialogState.title}
 				description={bankDialogState.description}
-				onConfirm={onBankDialogConfirm}
-				onCancel={onBankDialogCancel}
+				buttonTitle={bankDialogState.buttoTitle}
+				onConfirm={() => {bankDialogState.confirmAction && bankDialogState.confirmAction()}}
+				onCancel={() => {bankDialogState.cancelAction && bankDialogState.cancelAction()}}
+			/>
+			<SettingDialog
+				visible={isSetting}
+				onCancel={() => setIsSetting(false)}
+				description={Translation.OTHER.NO_CAMERA_PERMISSION_DETAIL}
 			/>
 		</View>
 	);
