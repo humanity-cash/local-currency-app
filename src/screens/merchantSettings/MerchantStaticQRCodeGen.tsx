@@ -6,7 +6,6 @@ import { useDispatch } from 'react-redux';
 import { UserContext, WalletContext } from 'src/contexts';
 import { useBrightness, useUpdateBusinessWalletData } from "src/hooks";
 import { Dialog } from "src/shared/uielements";
-import { loadBusinessTransactions } from 'src/store/transaction/transaction.actions';
 import { colors } from 'src/theme/colors';
 import { dialogViewBase } from "src/theme/elements";
 import { PaymentMode, SECURITY_ID } from "src/utils/types";
@@ -92,7 +91,7 @@ const StaticQRCodeGen = (props: QRCodeGenProps): JSX.Element => {
         if (!isSuccess) {
             setIsSuccess(true);
             if (businessDwollaId) {
-                await dispatch(loadBusinessTransactions(businessDwollaId));
+                // await dispatch(loadBusinessTransactions(businessDwollaId));
             }
             setDefaultBrightness();
             props.onSuccess(businessWalletData.availableBalance - initBalance);

@@ -5,6 +5,7 @@ import { UserType } from "src/auth/types";
 
 export const EventsContext = React.createContext<IState>({} as IState);
 
+//@ts-ignore
 interface IState { }
 
 export const EventsProvider: React.FunctionComponent = ({ children }) => {
@@ -15,7 +16,6 @@ export const EventsProvider: React.FunctionComponent = ({ children }) => {
 		const handler = async () => {
 			if (id) {
 				const response = await EventsAPI.userEvents(id)
-				console.log("🚀 ~ handler ~ response", response?.data)
 			}
 		}
 		handler()
