@@ -120,7 +120,7 @@ export interface ITransaction {
     fromAddress: string;
     toUserId: string;
     toAddress: string;
-    type: "IN" | "OUT";
+    type: "IN" | "OUT" | "Deposit" | "Withdraw";
     value: string;
 }
 
@@ -132,15 +132,3 @@ export interface IOperatorResponse {
     deposits: IDepositResponse[];
     withdrawals: IWithdrawalResponse[];
 }
-
-// firstName: string;
-// lastName: string;
-// email: string;
-// address1: string;
-// address2?: string;
-// city: string;
-// state: string;
-// postalCode: string;
-// businessName?: string;
-// ipAddress?: string;
-// authUserId: string;
