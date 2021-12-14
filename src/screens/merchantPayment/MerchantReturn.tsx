@@ -57,7 +57,6 @@ const MerchantReturn = (): JSX.Element => {
 	}
 
 	const onReturn = () => {
-		console.log("onReturn")
 		navigation.navigate(Routes.MERCHANT_PAYMENT_PENDING);
 	}
 
