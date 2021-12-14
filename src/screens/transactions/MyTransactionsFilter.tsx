@@ -1,10 +1,8 @@
 import { AntDesign } from '@expo/vector-icons';
-// import DateTimePicker from '@react-native-community/datetimepicker';
 import moment from 'moment';
-// import { createStore, useStore } from "react-hookstore";
-import React, {useEffect} from 'react';
+import React from 'react';
 import { useStore } from 'react-hookstore';
-import { Platform, StyleSheet, TouchableOpacity, View } from 'react-native';
+import { StyleSheet, TouchableOpacity, View } from 'react-native';
 import { Text } from 'react-native-elements';
 import SelectDropdown from 'react-native-select-dropdown';
 import { CUSTOMER_TX_FILTERS_STORE } from 'src/hook-stores';
