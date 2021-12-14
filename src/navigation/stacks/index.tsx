@@ -21,6 +21,7 @@ import MerchantTabs from "src/screens/dashboard/MerchantTabs";
 import Tabs from "src/screens/dashboard/Tabs";
 import MerchantCashoutPassword from "src/screens/merchantCashout/MerchantCashoutPassword";
 import MerchantRedemptionInProgress from "src/screens/merchantCashout/MerchantRedemptionInProgress";
+import MerchantLoadup from "src/screens/merchantLoadup/MerchantLoadup";
 import MerchantLoadupPending from "src/screens/merchantLoadup/MerchantLoadupPending";
 import MerchantLoadupSuccess from "src/screens/merchantLoadup/MerchantLoadupSuccess";
 import MerchantPaymentPending from "src/screens/merchantPayment/MerchantPaymentPending";
@@ -66,7 +67,6 @@ import * as Routes from "../constants";
 import SelectMerchantBank from "src/screens/merchantBankAccount/SelectMerchantBank";
 import BusinessWelcome from "src/screens/signupBusiness/BusinessWelcome";
 import MyTransactions from "src/screens/transactions/MyTransactions";
-import MerchantLoadup from 'src/screens/merchantLoadup/MerchantLoadup';
 
 const PrimaryStack = createStackNavigator();
 
