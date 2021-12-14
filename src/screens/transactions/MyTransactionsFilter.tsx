@@ -78,7 +78,7 @@ const styles = StyleSheet.create({
 });
 
 const MyTransactionFilter = (): JSX.Element => {
-    const [{ selectedType,
+    const [{
         startDate,
         isStartDate,
         endDate,
