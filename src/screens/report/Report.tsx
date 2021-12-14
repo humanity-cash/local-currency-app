@@ -1,4 +1,4 @@
-import DateTimePicker from "@react-native-community/datetimepicker";
+import DateTimePicker from "react-native-modal-datetime-picker";
 import { useNavigation } from "@react-navigation/native";
 import moment from "moment";
 import React, { useContext, useEffect, useState } from "react";
@@ -6,14 +6,14 @@ import {
     KeyboardAvoidingView,
     Platform,
     ScrollView,
-    StyleSheet, TouchableOpacity, View, SafeAreaView 
+	StyleSheet,
+	TouchableOpacity,
+	View 
 } from "react-native";
 import { Text } from "react-native-elements";
-import DropDownPicker, { RenderBadgeItemPropsInterface } from 'react-native-dropdown-picker';
-import { UserContext } from "src/contexts";
 import { BUTTON_TYPES } from "src/constants";
 import * as Routes from "src/navigation/constants";
-import { BackBtn, Button, Header } from "src/shared/uielements";
+import { BackBtn, Button, Header } from 'src/shared/uielements';
 import { colors } from "src/theme/colors";
 import {
     underlineHeaderB,
@@ -22,6 +22,8 @@ import {
 } from "src/theme/elements";
 import Translation from "src/translation/en.json";
 import { UserType } from "src/auth/types";
+import { UserContext } from 'src/contexts';
+import TransactionTypePicker from "src/shared/uielements/TransactionTypePicker";
 
 const styles = StyleSheet.create({
 	headerText: {
@@ -88,8 +90,11 @@ const styles = StyleSheet.create({
 		flex: 1,
 		flexDirection: "row",
 		justifyContent: "space-between",
-		marginVertical: 5,
+		marginTop: 20,
 		alignItems: "center",
+	},
+	transactionTypeView: {
+		marginTop: 20,
 	},
 	dateView: {
 		flex: 1,
@@ -113,12 +118,6 @@ const styles = StyleSheet.create({
 		fontSize: 10,
 		lineHeight: 14,
 		color: colors.bodyText,
-	},
-	typeView: {
-		position: 'relative',
-		justifyContent: "center",
-		marginTop: 7,
-		zIndex: 10
 	},
 	picker: {
 		backgroundColor: colors.white,
@@ -157,39 +156,31 @@ const enum ReportType {
 	MONTH = "Month",
 }
 
-const Badge = (props: RenderBadgeItemPropsInterface): JSX.Element => {
-	return (
-		<View style={styles.badgeView}>
-			<Text style={styles.pickerView}>{props.label}</Text>
-		</View>
-	)
-}
-
 const Report = (): JSX.Element => {
 	const navigation = useNavigation();
-	const [startDate, setStartDate] = useState<Date | null>(null);
-	const [endDate, setEndDate] = useState<Date | null>();
+	const [startDate, setStartDate] = useState<Date | undefined>(undefined);
+	const [endDate, setEndDate] = useState<Date | undefined>(undefined);
 	const [isStartDate, setIsStartDate] = useState<boolean>(false);
 	const [isEndDate, setIsEndDate] = useState<boolean>(false);
 	const [goNext, setGoNext] = useState(false);
 	const [reportType, setReportType] = useState<ReportType>(ReportType.ALL);
 	const { userType } = useContext(UserContext);
 
-	const [open, setOpen] = useState(false);
-	const [value, setValue] = useState([]);
 	const [items, setItems] = useState([
-		{label: 'Sales', value: 'sales'},
-		{label: 'Returns', value: 'returns'},
-		{label: 'Cash outs', value: 'cashouts'},
-		{label: 'Transfers', value: 'transfers'},
+		'All', 'Sales','Returns', 'Cash outs', 'Other transfers'
 	]);
+	const [selIndexes, setSelIndexes] = useState<boolean[]>()
 
 	useEffect(() => {
-		setGoNext(true);
+		const indexes = []
+		for(let i = 0; i < items.length; i++) {
+			indexes.push(false)
+		}
+		setSelIndexes(indexes)
 	}, []);
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
-	const onStartDateChange = (event: any, selectedDate?: Date) => {
+	const onStartDateChange = (selectedDate?: Date) => {
 		const currentDate = selectedDate || startDate;
 		setIsStartDate(false);
 		setStartDate(currentDate);
@@ -197,12 +188,31 @@ const Report = (): JSX.Element => {
 	};
 
 	// eslint-disable-next-line @typescript-eslint/no-explicit-any
-	const onEndDateChange = (event: any, selectedDate?: Date) => {
+	const onEndDateChange = (selectedDate?: Date) => {
 		const currentDate = selectedDate || startDate;
 		setIsEndDate(false);
 		setEndDate(currentDate);
 		setReportType(ReportType.ALL);
 	};
+
+	const onPressPeriodType = (reportType: ReportType) => {
+		setReportType(reportType)
+		const today = new Date();
+		setEndDate(today);
+		switch(reportType) {
+			case ReportType.TODAY:
+				setStartDate(today);
+				break;
+			case ReportType.WEEK:
+				setStartDate(new Date(moment(today).add(-1, 'week').format("MM/DD/yyyy")));
+				break;
+			case ReportType.MONTH:
+				setStartDate(new Date(moment(today).add(-1, 'month').format("MM/DD/yyyy")));
+				break;
+			default:
+				break;
+		}
+	}
 
 	return (
 		<View style={viewBaseB}>
@@ -216,7 +226,7 @@ const Report = (): JSX.Element => {
 				}
 			/>
 
-			<SafeAreaView style={wrappingContainerBase}>
+			<ScrollView style={wrappingContainerBase}>
 				<View style={underlineHeaderB}>
 					<Text style={styles.headerText}>
 						{Translation.REPORT.MAKE_REPORT}
@@ -238,7 +248,7 @@ const Report = (): JSX.Element => {
 								? styles.selectedAmountItem
 								: styles.defaultAmountItem
 						}
-						onPress={() => setReportType(ReportType.TODAY)}>
+						onPress={() => onPressPeriodType(ReportType.TODAY)}>
 						<Text
 							style={
 								reportType == ReportType.TODAY
@@ -254,7 +264,7 @@ const Report = (): JSX.Element => {
 								? styles.selectedAmountItem
 								: styles.defaultAmountItem
 						}
-						onPress={() => setReportType(ReportType.WEEK)}>
+						onPress={() => onPressPeriodType(ReportType.WEEK)}>
 						<Text
 							style={
 								reportType === ReportType.WEEK
@@ -270,7 +280,7 @@ const Report = (): JSX.Element => {
 								? styles.selectedAmountItem
 								: styles.defaultAmountItem
 						}
-						onPress={() => setReportType(ReportType.MONTH)}>
+						onPress={() => onPressPeriodType(ReportType.MONTH)}>
 						<Text
 							style={
 								reportType === ReportType.MONTH
@@ -288,7 +298,10 @@ const Report = (): JSX.Element => {
 							{Translation.LABEL.START_DATE}
 						</Text>
 						<TouchableOpacity
-							onPress={() => setIsStartDate(true)}
+							onPress={() => {
+								setIsStartDate(true)
+								setIsEndDate(false)
+							}}
 							style={styles.date}>
 							<Text
 								style={
@@ -297,9 +310,9 @@ const Report = (): JSX.Element => {
 										: styles.amountText
 								}>
 								{startDate == null
-									? "DD/MM/YY"
+									? "MM/DD/YY"
 									: moment(startDate).format(
-											"DD/MM/yyyy"
+											"MM/DD/yyyy"
 										)}
 							</Text>
 						</TouchableOpacity>
@@ -310,7 +323,10 @@ const Report = (): JSX.Element => {
 							{Translation.LABEL.END_DATE}
 						</Text>
 						<TouchableOpacity
-							onPress={() => setIsEndDate(true)}
+							onPress={() => {
+								setIsEndDate(true)
+								setIsStartDate(false)
+							}}
 							style={styles.date}>
 							<Text
 								style={
@@ -319,76 +335,65 @@ const Report = (): JSX.Element => {
 										: styles.amountText
 								}>
 								{endDate == null
-									? "DD/MM/YY"
+									? "MM/DD/YY"
 									: moment(endDate).format(
-											"DD/MM/yyyy"
+											"MM/DD/yyyy"
 										)}
 							</Text>
 						</TouchableOpacity>
 					</View>
 				</View>
 				{userType === UserType.Business && (
-					<>
+					<View style={styles.transactionTypeView}>
 						<Text style={styles.label}>
 							{Translation.LABEL.TRANSACTION_TYPE}
 						</Text>
-						<View style={styles.typeView}>
-							<DropDownPicker
-								multiple={true}
-								open={open}
-								value={value}
-								items={items}
-								setOpen={setOpen}
-								setValue={setValue}
-								setItems={setItems}
-								placeholder="Select"
-								placeholderStyle={styles.pickerView}
-								listMode="MODAL"
-								mode="BADGE"
-								renderBadgeItem={(props) => <Badge {...props} />}
-								selectedItemLabelStyle={styles.selectedItemLabel}
-								listItemLabelStyle={styles.pickerView}
-								style={styles.picker}
-							/>
-						</View>
-					</>	
+						<TransactionTypePicker
+							items={items}
+							selected={selIndexes}
+							setSelected={setSelIndexes}
+						/>
+					</View>	
 				)}
-				<ScrollView style={styles.container}>
+				<View style={styles.container}>
 					<Text style={styles.specifySearch}>
 						{Translation.REPORT.SPECIFY_TIME_PERIOD}
 					</Text>
-				</ScrollView>
-			</SafeAreaView>
-			<KeyboardAvoidingView
-				behavior={Platform.OS == "ios" ? "padding" : "height"}>
-				<View style={styles.bottomView}>
-					<Button
-						type={BUTTON_TYPES.PURPLE}
-						title={Translation.BUTTON.SEND_REPORT}
-						disabled={!goNext}
-						onPress={() => {
-							navigation.navigate(Routes.REPORT_SUCCESS);
-						}}
-					/>
 				</View>
-			</KeyboardAvoidingView>
+			</ScrollView>
+			{ !isStartDate && !isEndDate &&
+				<KeyboardAvoidingView
+					behavior={Platform.OS == "ios" ? "padding" : "height"}>
+					<View style={styles.bottomView}>
+						<Button
+							type={BUTTON_TYPES.PURPLE}
+							title={Translation.BUTTON.SEND_REPORT}
+							disabled={!goNext}
+							onPress={() => {
+								navigation.navigate(Routes.REPORT_SUCCESS);
+							}}
+						/>
+					</View>
+				</KeyboardAvoidingView>
+			}
 
-			{isStartDate && (
-				<DateTimePicker
-					testID="dateTimePicker"
-					value={startDate ? startDate : new Date()}
-					display={Platform.OS == "ios" ? "inline" : "default"}
-					onChange={onStartDateChange}
-				/>
-			)}
-			{isEndDate && (
-				<DateTimePicker
-					testID="dateTimePicker"
-					value={endDate ? endDate : new Date()}
-					display={Platform.OS == "ios" ? "inline" : "default"}
-					onChange={onEndDateChange}
-				/>
-			)}
+			<DateTimePicker
+				isVisible={isStartDate}
+				mode="date"
+				date={startDate}
+				onConfirm={onStartDateChange}
+				onCancel={() => {setIsStartDate(false)}}
+				textColor='black'
+			/>
+			<DateTimePicker
+				isVisible={isEndDate}
+				mode="date"
+				date={endDate}
+				onConfirm={onEndDateChange}
+				minimumDate={startDate}
+				onCancel={() => {setIsEndDate(false)}}
+				textColor='black'
+			/>
 		</View>
 	);
 };
