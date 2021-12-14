@@ -47,12 +47,10 @@ const styles = StyleSheet.create({
 
 const PersonalAddress = (): React.ReactElement => {
 	const { user, updateUserData, updateUserType } = useContext(UserContext);
-  console.log("🚀 ~ file: PersonalAddress.tsx ~ line 50 ~ user", user)
 	const customer = user?.customer;
 	const [goNext, setGoNext] = useState<boolean>(false);
 	const [ isLoading, setIsLoading ] = useState<boolean>(false);
 	const { signOut, userEmail } = useContext(AuthContext);
-  console.log("🚀 ~ file: PersonalAddress.tsx ~ line 54 ~ userEmail", userEmail)
 	const { updateSelectedView } = useContext(NavigationViewContext);
 	const navigation = useNavigation();
 	const address1 = customer?.address1;
@@ -72,7 +70,6 @@ const PersonalAddress = (): React.ReactElement => {
 
 	const onNextPress = async () => {
 		if (!user || !user?.customer) return
-    console.log("🚀 ~ file: PersonalAddress.tsx ~ line 71 ~ onNextPress ~ user", user)
 		setIsLoading(true)
 		user.email = userEmail;
 		user.customer.avatar = "hee";

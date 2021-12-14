@@ -68,11 +68,11 @@ const TransactionItem = (props: TransactionItemProps) => {
 	return (
 		<View style={selected === item.transactionHash ? styles.selectedItem : styles.item}>
 			<View>
-				<Text style={styles.transactionType}>
-					{item.type}
-				</Text>
+				<Text style={styles.transactionType}>{item.type === "OUT" ? `${item.toName}` : `${item.fromName}`}</Text>
 				<Text style={styles.timeText}>{moment(item.timestamp).format('HH:mm, MMM D, YYYY')}</Text>
-				<Text style={styles.timeText}>{item.type === "OUT" ? `To: ${item.toName}` : `From: ${item.fromName}`}</Text>
+				<Text style={styles.timeText}>
+					{item.type === "IN" ? "Transfer In" : "Transfer Out"}
+				</Text>
 			</View>
 			<Text style={getStyle(item.type)}>{getBerksharePrefix(item.type)}  {item.value}</Text>
 		</View>

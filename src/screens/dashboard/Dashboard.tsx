@@ -1,15 +1,16 @@
 import { AntDesign, Entypo } from '@expo/vector-icons';
 import { DrawerActions, useNavigation } from '@react-navigation/native';
-import React, { useContext, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import {
 	ScrollView,
 	StyleSheet, TouchableOpacity, TouchableWithoutFeedback,
 	View
 } from 'react-native';
 import { Image, Text } from 'react-native-elements';
+import { DwollaAPI } from 'src/api';
 import { BUTTON_TYPES } from "src/constants";
-import { WalletContext } from 'src/contexts';
-import { useCustomerWallet, useUpdateCustomerWalletData } from 'src/hooks';
+import { UserContext, WalletContext } from 'src/contexts';
+import { useCustomerWallet } from 'src/hooks';
 import * as Routes from 'src/navigation/constants';
 import DataLoading from "src/screens/loadings/DataLoading";
 import { Button, Dialog, Header } from 'src/shared/uielements';
@@ -152,7 +153,8 @@ const Dashboard = (): JSX.Element => {
 	const [isLoadup, setIsLoadup] = useState<boolean>(false);
 	const [isPayment, setIsPayment] = useState<boolean>(false);
 	const [isSetting, setIsSetting] = useState(false)
-	const { customerWalletData } = useContext(WalletContext)
+	const { customerDwollaId } = useContext(UserContext)
+	const { customerWalletData, updateCustomerWalletData } = useContext(WalletContext)
 
 	const { isLoading: isWalletLoading } = useCustomerWallet();
 	const personalFundingSource = customerWalletData?.availableFundingSource;
@@ -163,7 +165,18 @@ const Dashboard = (): JSX.Element => {
 		onClose();
 	}
 
-	useUpdateCustomerWalletData();
+	useEffect(() => {
+		const timerId = setInterval(async () => {
+			if (customerDwollaId) {
+				const userWallet = await DwollaAPI.loadWallet(customerDwollaId)
+				const fundingSource = await DwollaAPI.loadFundingSource(customerDwollaId)
+				updateCustomerWalletData(({ ...userWallet, availableFundingSource: fundingSource }))
+			}
+		}, 1000);
+		return () => clearInterval(timerId);
+	}, [customerDwollaId]);
+
+	const { isLoading: isWalletLoading } = useCustomerWallet();
 
 	const onClose = () => {
 		setIsVisible(false);
