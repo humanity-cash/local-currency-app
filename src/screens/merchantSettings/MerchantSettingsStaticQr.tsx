@@ -41,7 +41,7 @@ const MerchantSettingsStaticQr = (): JSX.Element => {
 	const [isStaticQRCode, setIsStaticQRCode] = useState<boolean>(false);
 	const { businessDwollaId, user } = useContext(UserContext);
 	
-	const businessName = user?.customer?.tag || undefined
+	const businessName = user?.business?.tag || undefined
 	const addressStr = JSON.stringify({
         securityId: SECURITY_ID,
         to: businessDwollaId,

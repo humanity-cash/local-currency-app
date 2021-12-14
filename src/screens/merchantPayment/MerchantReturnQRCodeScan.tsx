@@ -20,6 +20,7 @@ import { updateLoadingStatus } from 'src/store/loading/loading.actions';
 import { isQRCodeValid } from 'src/utils/validation';
 import moment from 'moment';
 import { UserContext } from 'src/contexts';
+import DataLoading from 'src/screens/loadings/DataLoading';
 
 type HandleScaned = {
 	type: string,
@@ -237,11 +238,7 @@ const MerchantReturnQRCodeScan = (): JSX.Element => {
 								/>
 							</View>
 						</KeyboardAvoidingView>
-						{ isLoading && 
-							<View style={styles.loading}>
-								<ActivityIndicator size='large' color={colors.white}/>
-							</View> 
-						}
+						<DataLoading visible={isLoading} />
 					</SafeAreaView>
 				</Modal>
 			)}
