@@ -66,6 +66,7 @@ import * as Routes from "../constants";
 import SelectMerchantBank from "src/screens/merchantBankAccount/SelectMerchantBank";
 import BusinessWelcome from "src/screens/signupBusiness/BusinessWelcome";
 import MyTransactions from "src/screens/transactions/MyTransactions";
+import MerchantLoadup from 'src/screens/merchantLoadup/MerchantLoadup';
 
 const PrimaryStack = createStackNavigator();
 
@@ -282,6 +283,10 @@ export const BusinessUserStack = ({ isVerifiedCustomer }: { isVerifiedCustomer: 
 			<PrimaryStack.Screen
 				name={Routes.MERCHANT_LOADUP_PENDING}
 				component={MerchantLoadupPending}
+			/>
+			<PrimaryStack.Screen
+				name={Routes.MERCHANT_LOADUP}
+				component={MerchantLoadup}
 			/>
 			<PrimaryStack.Screen
 				name={Routes.MERCHANT_LOADUP_SUCCESS}
