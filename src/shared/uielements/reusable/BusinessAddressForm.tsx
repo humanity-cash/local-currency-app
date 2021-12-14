@@ -45,7 +45,8 @@ const styles = StyleSheet.create({
 		marginLeft: 4
 	},
 	pickerText: {
-        color: colors.purple
+        color: colors.purple,
+		textAlign: 'center'
     },
     selectItem: {
         width: '100%',
@@ -141,6 +142,7 @@ const BusinessAddressForm = (props: BusinessAddressProps): JSX.Element => {
 							renderDropdownIcon={() => (
 								<AntDesign name="down" size={18} color={colors.purple} />
 							)}
+							rowTextStyle={{textAlign: 'center'}}
 						/>
 					</View>
 				</View>

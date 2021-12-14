@@ -55,7 +55,8 @@ const styles = StyleSheet.create({
 		backgroundColor: colors.white,
 	},
 	pickerText: {
-        color: colors.purple
+        color: colors.purple,
+        textAlign: 'center'
     },
     selectItem: {
         width: '100%',
@@ -134,6 +135,7 @@ const BusinessDetail = (): ReactElement => {
 						renderDropdownIcon={() => (
 							<AntDesign name="down" size={18} color={colors.purple} />
 						)}
+						rowTextStyle={{textAlign: 'center'}}
 					/>
 				</View>
 			</ScrollView>

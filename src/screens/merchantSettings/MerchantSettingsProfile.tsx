@@ -69,6 +69,7 @@ const businessAddressFormStyles = StyleSheet.create({
 	},
 	pickerText: {
 		color: colors.purple,
+		textAlign: 'center',
 	},
 	selectItem: {
 		width: "100%",
@@ -425,6 +426,7 @@ export const MerchantSettingsProfile = (): JSX.Element => {
 												color={colors.purple}
 											/>
 										)}
+										rowTextStyle={{textAlign: 'center'}}
 									/>
 								</View>
 							</View>
