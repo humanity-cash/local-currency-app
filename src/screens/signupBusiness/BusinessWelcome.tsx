@@ -34,12 +34,10 @@ const styles = StyleSheet.create({
 });
 
 const BusinessWelcome = (): ReactElement => {
-	const { updateUserType, user } = useContext(UserContext);
-	const { businessWalletData } = useContext(WalletContext);
+	const { updateUserType } = useContext(UserContext);
 	const { userEmail } = useContext(AuthContext);
 	const [isVisible, setIsVisible] = useState<boolean>(false);
 	const { updateSelectedView } = useContext(NavigationViewContext);
-	const [isLoading, setLoading] = useState<boolean>(true)
 
 	useUpdateBusinessWalletData();
 
@@ -73,7 +71,7 @@ const BusinessWelcome = (): ReactElement => {
 					<Button
 						type="purple"
 						title={Translation.BUTTON.LINK_BUSINESS_BANK}
-						disabled={isLoading}
+						disabled={isWalletLoading}
 						onPress={() => {
 							setIsVisible(true)
 						}}
