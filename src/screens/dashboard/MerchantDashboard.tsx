@@ -22,6 +22,8 @@ import { BusinessTxDataStore, BusinessTxDataStoreActions, BusinessTxDataStoreRed
 import DwollaDialog from './DwollaDialog';
 import MerchantTransactionList from "./MerchantTransactionList";
 import MerchantTransactionsFilter from "./MerchantTransactionsFilter";
+import SettingDialog from 'src/shared/uielements/SettingDialog';
+import { BarCodeScanner } from 'expo-barcode-scanner';
 
 type TransactionDetailProps = {
 	visible: boolean,
@@ -98,6 +100,10 @@ const MerchantDashboard = (): JSX.Element => {
 	const [isLoading, setIsLoading] = useState<boolean>(false);
 	const { businessDwollaId } = useContext(UserContext);
 
+	const businessFundingSource = businessWalletData?.availableFundingSource;
+	const availableBalance = businessWalletData?.availableBalance;
+	const [isSetting, setIsSetting] = useState(false)
+
 	useUpdateBusinessWalletData();
 	const fuse = createFuseSearchInstance(filteredApiData, options)
 	const onSearchChange = (name: string, change: string) => {
@@ -165,8 +171,18 @@ const MerchantDashboard = (): JSX.Element => {
 		onClose();
 	}
 
-	const businessFundingSource = businessWalletData?.availableFundingSource;
-	const availableBalance = businessWalletData?.availableBalance;
+	const onPressScan = async () => {
+		const {status} = await BarCodeScanner.requestPermissionsAsync();
+		if(status === 'granted') {
+			if(businessFundingSource && availableBalance > 0) {
+				navigation.navigate(Routes.MERCHANT_QRCODE_SCAN)
+			} else {
+				navigation.navigate(Routes.MERCHANT_REQUEST)
+			}
+		} else {
+			setIsSetting(true)
+		}
+	}
 
 	return (
 		<View style={viewBaseB}>
@@ -248,10 +264,7 @@ const MerchantDashboard = (): JSX.Element => {
 					</View>
 				</ScrollView>
 			</View>
-			<TouchableOpacity onPress={() => { 
-				businessFundingSource 
-				? navigation.navigate(Routes.MERCHANT_QRCODE_SCAN) 
-				: setIsPayment(true) }} 
+			<TouchableOpacity onPress={onPressScan} 
 				style={styles.scanButton}>
 				<Image
 					source={require('../../../assets/images/qr_code_merchant.png')}
@@ -280,6 +293,12 @@ const MerchantDashboard = (): JSX.Element => {
 					</View>
 				</Dialog>
 			)}
+
+			<SettingDialog
+				visible={isSetting}
+				onCancel={() => setIsSetting(false)}
+				description={Translation.OTHER.NO_CAMERA_PERMISSION_DETAIL}
+			/>
 		</View>
 	);
 }
