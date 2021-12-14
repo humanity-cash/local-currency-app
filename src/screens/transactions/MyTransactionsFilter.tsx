@@ -195,22 +195,6 @@ const MyTransactionFilter = (): JSX.Element => {
 				onCancel={closeEndDate}
                 textColor='black'
 			/>
-            {/* {isStartDate && (
-                <DateTimePicker
-                    testID="dateTimePicker"
-                    value={startDate ? startDate : new Date()}
-                    display={Platform.OS == "ios" ? "inline" : "default"}
-                    onChange={onStartDateChange}
-                />
-            )}
-            {isEndDate && (
-                <DateTimePicker
-                    testID="dateTimePicker"
-                    value={endDate ? endDate : new Date()}
-                    display={Platform.OS == "ios" ? "inline" : "default"}
-                    onChange={onEndDateChange}
-                />
-            )} */}
         </View>
     );
 }
