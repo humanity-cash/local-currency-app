@@ -16,7 +16,7 @@ const styles = StyleSheet.create({
 	headerText: {
 		fontSize: 32,
 		color: colors.darkGreen,
-		lineHeight: 35
+		lineHeight: 42
 	},
 	bottomView: {
 		marginHorizontal: 20,
