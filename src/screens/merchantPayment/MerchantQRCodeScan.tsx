@@ -3,7 +3,6 @@ import { BarCodeScanner } from 'expo-barcode-scanner';
 import React, { useContext, useEffect, useState } from 'react';
 import { Image, KeyboardAvoidingView, Platform, ScrollView, StyleSheet, View } from 'react-native';
 import { Text } from 'react-native-elements';
-import { useDispatch } from 'react-redux';
 import PaymentLoading from 'src/screens/loadings/PaymentPending';
 import { TransactionsAPI } from 'src/api';
 import { ITransactionRequest } from 'src/api/types';
@@ -12,13 +11,11 @@ import { UserContext, WalletContext } from 'src/contexts';
 import { useCameraPermission } from 'src/hooks';
 import * as Routes from 'src/navigation/constants';
 import { BackBtn, BorderedInput, Button, CancelBtn, Dialog, Header, Modal, ModalHeader, ToggleButton } from "src/shared/uielements";
-import { updateLoadingStatus } from 'src/store/loading/loading.actions';
-import { loadBusinessTransactions } from 'src/store/transaction/transaction.actions';
 import { colors } from "src/theme/colors";
 import { dialogViewBase, modalViewBase, underlineHeaderB, viewBase, wrappingContainerBase } from "src/theme/elements";
 import Translation from 'src/translation/en.json';
-import { calcFee, showToast } from 'src/utils/common';
-import { LoadingScreenTypes, PaymentMode, QRCodeEntry, SECURITY_ID, ToastType } from 'src/utils/types';
+import { showToast } from 'src/utils/common';
+import { PaymentMode, QRCodeEntry, SECURITY_ID, ToastType } from 'src/utils/types';
 import { isQRCodeValid } from 'src/utils/validation';
 
 type HandleScaned = {
@@ -44,43 +41,43 @@ const styles = StyleSheet.create({
 		height: 450
 	},
 	dialogBg: {
-        backgroundColor: colors.overlayPurple
-    },
+		backgroundColor: colors.overlayPurple
+	},
 	dialogWrap: {
-        position: 'relative',
+		position: 'relative',
 		paddingHorizontal: 10,
-        paddingTop: 70,
+		paddingTop: 70,
 		height: "100%",
 		flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center'
+		justifyContent: 'center',
+		alignItems: 'center'
 	},
 	ownerInfo: {
-        position: 'absolute',
-        top: -60,
-        borderRadius: 40,
-        alignItems: 'center'
-    },
-    image: {
-        width: 80,
-        height: 80,
-        borderRadius: 40
-    },
-    ownerName: {
-        fontWeight: 'bold',
-        fontSize: 18,
-        paddingVertical: 10,
+		position: 'absolute',
+		top: -60,
+		borderRadius: 40,
+		alignItems: 'center'
+	},
+	image: {
+		width: 80,
+		height: 80,
+		borderRadius: 40
+	},
+	ownerName: {
+		fontWeight: 'bold',
+		fontSize: 18,
+		paddingVertical: 10,
 		color: colors.purple
-    },
+	},
 	headerText: {
-        // alignSelf: 'center',
-        marginTop: 10,
-        fontWeight: 'bold',
-        fontSize: 32,
-        lineHeight: 32,
-        paddingTop: 20,
+		// alignSelf: 'center',
+		marginTop: 10,
+		fontWeight: 'bold',
+		fontSize: 32,
+		lineHeight: 32,
+		paddingTop: 20,
 		color: colors.purple
-    },
+	},
 	view: {
 		paddingVertical: 10,
 		alignItems: 'center'
@@ -88,7 +85,7 @@ const styles = StyleSheet.create({
 	transparentBtn: {
 		backgroundColor: colors.white,
 		color: colors.purple,
-		borderWidth: 1, 
+		borderWidth: 1,
 		marginTop: 20,
 		marginBottom: 10,
 		borderColor: colors.purple
@@ -99,8 +96,8 @@ const styles = StyleSheet.create({
 		textAlign: 'center'
 	},
 	switchView: {
-		flex: 1, 
-		justifyContent: 'center', 
+		flex: 1,
+		justifyContent: 'center',
 		alignItems: 'center'
 	},
 	roundBtn: {
@@ -123,8 +120,8 @@ const styles = StyleSheet.create({
 	toggleBg: {
 		backgroundColor: colors.overlayPurple
 	},
-	label: { 
-		color: colors.bodyText, 
+	label: {
+		color: colors.bodyText,
 		fontSize: 12,
 		paddingTop: 10
 	},
@@ -151,26 +148,27 @@ const PaymentConfirm = (props: PaymentConfirmProps) => {
 	const firstName = user?.business?.owner?.firstName;
 	const lastName = user?.business?.owner?.lastName;
 	const amountCalcedFee = props.payInfo.amount;
+	const roundUpTotalAmount = Math.ceil(amountCalcedFee) - amountCalcedFee || amountCalcedFee + 1;
 
 	return (
 		<Dialog visible={props.visible} onClose={props.onCancel} backgroundStyle={styles.dialogBg} style={styles.dialog}>
 			<View style={dialogViewBase}>
 				<View style={styles.dialogWrap}>
-                    <View style={styles.ownerInfo}>
-                        <Image
-                            source={require("../../../assets/images/feed1.png")}
-                            style={styles.image}
-                        />
-                        <Text style={styles.ownerName}>{firstName + ' ' + lastName}</Text>
-                    </View>
+					<View style={styles.ownerInfo}>
+						<Image
+							source={require("../../../assets/images/feed1.png")}
+							style={styles.image}
+						/>
+						<Text style={styles.ownerName}>{firstName + ' ' + lastName}</Text>
+					</View>
 
 					<Text style={styles.headerText}>B$ {props.payInfo.amount?.toFixed(2)}</Text>
 					<View style={styles.view}>
 						<Text style={styles.detailText}>or</Text>
 						<Text style={styles.detailText}>{Translation.PAYMENT.CHOOSE_ROUND_UP}</Text>
 					</View>
-                </View>
-				
+				</View>
+
 				<View>
 					<Button
 						type={BUTTON_TYPES.TRANSPARENT}
@@ -180,7 +178,7 @@ const PaymentConfirm = (props: PaymentConfirmProps) => {
 					/>
 					<Button
 						type={BUTTON_TYPES.PURPLE}
-						title={`Round up to B$ ${Math.ceil(amountCalcedFee).toFixed(2)}`}
+						title={`Round up to B$ ${roundUpTotalAmount.toFixed(2)}`}
 						onPress={() => props.onConfirm(true)}
 					/>
 					<Text style={styles.description}>{Translation.PAYMENT.NOT_REFUNABLE_DONATION}</Text>
@@ -193,7 +191,6 @@ const PaymentConfirm = (props: PaymentConfirmProps) => {
 const MerchantQRCodeScan = (): JSX.Element => {
 	const navigation = useNavigation();
 	const { businessDwollaId } = useContext(UserContext);
-	const dispatch = useDispatch();
 	const hasPermission = useCameraPermission();
 	const [isScanned, setIsScanned] = useState<boolean>(false);
 	const [isPaymentDialog, setIsPaymentDialog] = useState<boolean>(false);
@@ -208,7 +205,6 @@ const MerchantQRCodeScan = (): JSX.Element => {
 	});
 	const [goNext, setGoNext] = useState<boolean>(false);
 	const { businessWalletData } = useContext(WalletContext);
-
 
 	useEffect(() => {
 		setIsScanned(false);
@@ -239,6 +235,7 @@ const MerchantQRCodeScan = (): JSX.Element => {
 	}
 
 	const onPayConfirm = async (isRoundUp: boolean) => {
+		setIsLoading(true)
 		setIsPaymentDialog(false);
 		setIsScanned(false);
 		const amountCalcedFee = state.amount;
@@ -251,23 +248,26 @@ const MerchantQRCodeScan = (): JSX.Element => {
 		if (businessDwollaId) {
 			const request: ITransactionRequest = {
 				toUserId: state.to,
-				amount: isRoundUp ? Math.ceil(amountCalcedFee).toString() : amountCalcedFee.toString(),
+				amount: amountCalcedFee.toString(),
 				comment: ''
 			};
-
-			setIsLoading(true)
+			if (isRoundUp) {
+				const roundUpAmount = Math.ceil(amountCalcedFee) - Number(amountCalcedFee) || 1;
+				request.roundUpAmount = roundUpAmount.toString();
+			}
+			console.log("🚀 onPayConfirm ~ business ~ request", request);
 			const response = await TransactionsAPI.transferTo(businessDwollaId, request);
+			cleanUpState();
 			if (response.data) {
-				await dispatch(loadBusinessTransactions(businessDwollaId));
 				navigation.navigate(Routes.MERCHANT_PAYMENT_SUCCESS);
 			} else {
 				showToast(ToastType.ERROR, "Failed", "Whooops, something went wrong.");
 				navigation.navigate(Routes.MERCHANT_DASHBOARD);
 			}
-			setIsLoading(false)
 		} else {
 			showToast(ToastType.ERROR, "Failed", "Whooops, something went wrong.");
 		}
+		setIsLoading(false)
 	};
 
 	const handleOpenPay = async () => {
@@ -287,7 +287,6 @@ const MerchantQRCodeScan = (): JSX.Element => {
 			setIsLoading(true)
 			const response = await TransactionsAPI.transferTo(businessDwollaId, request);
 			if (response.data) {
-				await dispatch(loadBusinessTransactions(businessDwollaId));
 				navigation.navigate(Routes.MERCHANT_PAYMENT_SUCCESS);
 			} else {
 				showToast(ToastType.ERROR, "Whooops, something went wrong.", "Connection failed");
@@ -298,10 +297,16 @@ const MerchantQRCodeScan = (): JSX.Element => {
 		}
 	}
 
-	const onClose = () => {
+	const cleanUpState = () => {
 		setIsPaymentDialog(false);
-		setIsOpenPayment(true);
+		setIsOpenPayment(false);
+		setIsLoading(false);
 		setIsScanned(false);
+		setState({} as QRCodeEntry)
+	}
+
+	const onClose = () => {
+		cleanUpState();
 		navigation.navigate(Routes.MERCHANT_DASHBOARD);
 	};
 
@@ -309,10 +314,13 @@ const MerchantQRCodeScan = (): JSX.Element => {
 		<View style={viewBase}>
 			<PaymentLoading visible={isLoading} />
 			<View style={styles.container}>
-				<BarCodeScanner
-					onBarCodeScanned={isScanned ? undefined : handleBarCodeScanned}
-					style={StyleSheet.absoluteFillObject}
-				/>
+				{
+					(!isPaymentDialog
+						&& !isOpenPayment) && <BarCodeScanner
+						onBarCodeScanned={isScanned ? undefined : handleBarCodeScanned}
+						style={StyleSheet.absoluteFillObject}
+					/>
+				}
 			</View>
 			<View style={styles.toggleView}>
 				<Header
@@ -321,7 +329,7 @@ const MerchantQRCodeScan = (): JSX.Element => {
 				<View style={styles.switchView}>
 					<ToggleButton
 						value={true}
-						onChange={()=>navigation.navigate(Routes.MERCHANT_REQUEST)}
+						onChange={() => navigation.navigate(Routes.MERCHANT_REQUEST)}
 						activeText="Pay"
 						inActiveText="Receive"
 						style={styles.switch}
@@ -330,10 +338,10 @@ const MerchantQRCodeScan = (): JSX.Element => {
 					/>
 				</View>
 			</View>
-			{ isPaymentDialog && <PaymentConfirm visible={isPaymentDialog} payInfo={state} onConfirm={onPayConfirm} onCancel={onClose} /> }
-			{ isOpenPayment && (
+			{isPaymentDialog && <PaymentConfirm visible={isPaymentDialog} payInfo={state} onConfirm={onPayConfirm} onCancel={onClose} />}
+			{isOpenPayment && (
 				<Modal visible={isOpenPayment}>
-					<View style={ modalViewBase }>
+					<View style={modalViewBase}>
 						<ModalHeader
 							leftComponent={<BackBtn color={colors.purple} onClick={() => setIsOpenPayment(false)} />}
 							rightComponent={<CancelBtn color={colors.purple} text="Close" onClick={onClose} />}

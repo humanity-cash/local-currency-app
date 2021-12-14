@@ -76,6 +76,7 @@ export interface IWithdrawalRequest {
 }
 
 export interface ITransactionRequest {
+    roundUpAmount?: string;
     toUserId: string;
     amount: string;
     comment: string;

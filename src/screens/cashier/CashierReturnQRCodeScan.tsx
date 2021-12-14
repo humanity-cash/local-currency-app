@@ -9,15 +9,13 @@ import * as Routes from 'src/navigation/constants';
 import { useNavigation } from '@react-navigation/core';
 import { modalViewBase, wrappingContainerBase, underlineHeaderB, viewBase } from "src/theme/elements";
 import { Header, CancelBtn, BackBtn, Modal, ModalHeader, BorderedInput, Button } from "src/shared/uielements";
-import { QRCodeEntry, SECURITY_ID, PaymentMode, ToastType, LoadingScreenTypes } from 'src/utils/types';
+import { QRCodeEntry, SECURITY_ID, PaymentMode, ToastType } from 'src/utils/types';
 import { isQRCodeValid } from 'src/utils/validation';
-import { TransactionsAPI, UserAPI } from 'src/api';
+import { TransactionsAPI } from 'src/api';
 import { ITransactionRequest } from 'src/api/types';
 import { showToast } from 'src/utils/common';
 import { BUTTON_TYPES } from 'src/constants';
-import { loadBusinessTransactions } from 'src/store/transaction/transaction.actions';
 import { useDispatch } from 'react-redux';
-import { updateLoadingStatus } from 'src/store/loading/loading.actions';
 import moment from 'moment';
 import { UserContext } from 'src/contexts';
 
@@ -87,7 +85,6 @@ const styles = StyleSheet.create({
 const CashierReturnQRCodeScan = (): JSX.Element => {
 	const navigation = useNavigation();
 	const hasPermission = useCameraPermission();
-	const dispatch = useDispatch();
 	const { businessDwollaId } = useContext(UserContext);
 	const [isScanned, setIsScanned] = useState<boolean>(false);
 	const [isReturnModal, setIsReturnModal] = useState<boolean>(false);
@@ -135,24 +132,24 @@ const CashierReturnQRCodeScan = (): JSX.Element => {
 				comment: ''
 			};
 
-			dispatch(updateLoadingStatus({
-				isLoading: true,
-				screen: LoadingScreenTypes.PAYMENT_PENDING
-			}));
+			// dispatch(updateLoadingStatus({
+			// 	isLoading: true,
+			// 	screen: LoadingScreenTypes.PAYMENT_PENDING
+			// }));
 			const response = await TransactionsAPI.transferTo(businessDwollaId, request);
 			if (response.data) {
-				await dispatch(loadBusinessTransactions(businessDwollaId));
-				dispatch(updateLoadingStatus({
-					isLoading: false,
-					screen: LoadingScreenTypes.PAYMENT_PENDING
-				}));
+				// await dispatch(loadBusinessTransactions(businessDwollaId));
+				// dispatch(updateLoadingStatus({
+				// 	isLoading: false,
+				// 	screen: LoadingScreenTypes.PAYMENT_PENDING
+				// }));
 				navigation.navigate(Routes.CASHIER_RETURN_SUCCESS);
 			} else {
 				showToast(ToastType.ERROR, "Failed", "Whooops, something went wrong.");
-				dispatch(updateLoadingStatus({
-					isLoading: false,
-					screen: LoadingScreenTypes.PAYMENT_PENDING
-				}));
+				// dispatch(updateLoadingStatus({
+				// 	isLoading: false,
+				// 	screen: LoadingScreenTypes.PAYMENT_PENDING
+				// }));
 				navigation.navigate(Routes.CASHIER_DASHBOARD);
 			}
 		} else {

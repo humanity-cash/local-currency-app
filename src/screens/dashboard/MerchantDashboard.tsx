@@ -1,7 +1,7 @@
 import { AntDesign, Entypo, Octicons } from "@expo/vector-icons";
 import { DrawerActions, useNavigation } from "@react-navigation/native";
 import moment from "moment";
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState, useRef } from 'react';
 import { useStore } from "react-hookstore";
 import { ScrollView, StyleSheet, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native';
 import { Image, Text } from "react-native-elements";
@@ -99,7 +99,7 @@ const MerchantDashboard = (): JSX.Element => {
 	const { isLoading: isWalletLoading } = useBusinessWallet();
 	const [isLoading, setIsLoading] = useState<boolean>(false);
 	const { businessDwollaId } = useContext(UserContext);
-
+	let hasUnmounted = false;
 	const businessFundingSource = businessWalletData?.availableFundingSource;
 	const availableBalance = businessWalletData?.availableBalance;
 	const [isSetting, setIsSetting] = useState(false)
@@ -156,15 +156,20 @@ const MerchantDashboard = (): JSX.Element => {
 
 	useEffect(() => {
 		const handler = async () => {
+			if (hasUnmounted) return;
 			if (!businessDwollaId) return
 			setIsLoading(true);
 			const txs = await TransactionsAPI.getAllTransactions(businessDwollaId)
 			const sortedTxs = sortTxByTimestamp(txs)
 			dispatchApiData({ type: BusinessTxDataStoreActions.UpdateTransactions, payload: { txs: sortedTxs } })
 			setFilteredApiData(sortedTxs)
-		setIsLoading(false);
+			setIsLoading(false);
 		}
 		handler();
+
+		return () => {
+			hasUnmounted = true;
+		}
 
 	}, [businessWalletData.availableBalance, businessDwollaId]);
 	const onConfirm = () => {

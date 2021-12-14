@@ -17,11 +17,9 @@ import { BUTTON_TYPES } from 'src/constants';
 import { ITransactionRequest } from 'src/api/types';
 import { TransactionsAPI } from 'src/api';
 import { updateLoadingStatus } from 'src/store/loading/loading.actions';
-import { loadBusinessTransactions } from 'src/store/transaction/transaction.actions';
-import { useDispatch } from 'react-redux';
 import { isQRCodeValid } from 'src/utils/validation';
 import moment from 'moment';
-import { UserContext, AuthContext } from 'src/contexts';
+import { UserContext } from 'src/contexts';
 
 type HandleScaned = {
 	type: string,
@@ -90,7 +88,6 @@ const MerchantReturnQRCodeScan = (): JSX.Element => {
 	const navigation = useNavigation();
 	const { businessDwollaId } = useContext(UserContext);
 	const hasPermission = useCameraPermission();
-	const dispatch = useDispatch();
 	const [isScanned, setIsScanned] = useState<boolean>(false);
 	const [isReturnModal, setIsReturnModal] = useState<boolean>(false);
 	const [amount, setAmount] = useState<string>("");
@@ -137,24 +134,24 @@ const MerchantReturnQRCodeScan = (): JSX.Element => {
 				amount: amount.toString(),
 				comment: ''
 			};
-			dispatch(updateLoadingStatus({
-				isLoading: true,
-				screen: LoadingScreenTypes.PAYMENT_PENDING
-			}));
+			// dispatch(updateLoadingStatus({
+			// 	isLoading: true,
+			// 	screen: LoadingScreenTypes.PAYMENT_PENDING
+			// }));
 			const response = await TransactionsAPI.transferTo(businessDwollaId, request);
 			if (response.data) {
-				await dispatch(loadBusinessTransactions(businessDwollaId));
-				dispatch(updateLoadingStatus({
-					isLoading: false,
-					screen: LoadingScreenTypes.PAYMENT_PENDING
-				}));
+				// await dispatch(loadBusinessTransactions(businessDwollaId));
+				// dispatch(updateLoadingStatus({
+				// 	isLoading: false,
+				// 	screen: LoadingScreenTypes.PAYMENT_PENDING
+				// }));
 				navigation.navigate(Routes.MERCHANT_PAYMENT_SUCCESS);
 			} else {
 				showToast(ToastType.ERROR, "Failed", "Whooops, something went wrong.");
-				dispatch(updateLoadingStatus({
-					isLoading: false,
-					screen: LoadingScreenTypes.PAYMENT_PENDING
-				}));
+				// dispatch(updateLoadingStatus({
+				// 	isLoading: false,
+				// 	screen: LoadingScreenTypes.PAYMENT_PENDING
+				// }));
 				navigation.navigate(Routes.MERCHANT_DASHBOARD);
 			}
 		} else {

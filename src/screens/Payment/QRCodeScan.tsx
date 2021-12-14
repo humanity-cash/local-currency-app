@@ -3,7 +3,6 @@ import { BarCodeScanner } from 'expo-barcode-scanner';
 import React, { useContext, useEffect, useState } from 'react';
 import { Image, KeyboardAvoidingView, Platform, ScrollView, StyleSheet, View } from 'react-native';
 import { Text } from 'react-native-elements';
-import { useDispatch } from 'react-redux';
 import { TransactionsAPI } from 'src/api';
 import { ITransactionRequest } from 'src/api/types';
 import { BUTTON_TYPES } from 'src/constants';
@@ -12,7 +11,6 @@ import { useCameraPermission } from 'src/hooks';
 import * as Routes from 'src/navigation/constants';
 import PaymentLoading from 'src/screens/loadings/PaymentPending';
 import { BackBtn, BorderedInput, Button, CancelBtn, Dialog, Header, Modal, ModalHeader, ToggleButton } from "src/shared/uielements";
-import { loadPersonalTransactions } from 'src/store/transaction/transaction.actions';
 import { colors } from "src/theme/colors";
 import { baseHeader, dialogViewBase, modalViewBase, underlineHeader, viewBase, wrappingContainerBase } from "src/theme/elements";
 import Translation from 'src/translation/en.json';
@@ -128,10 +126,10 @@ type PaymentConfirmProps = {
 
 const PaymentConfirm = (props: PaymentConfirmProps) => {
 	const { user } = useContext(UserContext);
-
 	const firstName = user?.customer?.firstName;
 	const lastName = user?.customer?.lastName;
 	const amountCalcedFee = props.payInfo.amount;
+	const roundUpTotalAmount = Math.ceil(amountCalcedFee) - amountCalcedFee || amountCalcedFee + 1;
 
 	return (
 		<Dialog visible={props.visible} onClose={props.onCancel} style={styles.dialog}>
@@ -161,7 +159,7 @@ const PaymentConfirm = (props: PaymentConfirmProps) => {
 					/>
 					<Button
 						type={BUTTON_TYPES.DARK_GREEN}
-						title={`Round up to B$ ${Math.ceil(amountCalcedFee).toFixed(2)}`}
+						title={`Round up to B$ ${roundUpTotalAmount.toFixed(2)}`}
 						onPress={() => props.onConfirm(true)}
 					/>
 					<Text style={styles.description}>{Translation.PAYMENT.NOT_REFUNABLE_DONATION}</Text>
@@ -205,7 +203,6 @@ const LowAmount = (props: LowAmountProps) => {
 
 const QRCodeScan = (): JSX.Element => {
 	const navigation = useNavigation();
-	const dispatch = useDispatch();
 	const { customerDwollaId } = useContext(UserContext);
 	const [isLoading, setIsLoading] = useState<boolean>(false);
 	const hasPermission = useCameraPermission();
@@ -262,12 +259,15 @@ const QRCodeScan = (): JSX.Element => {
 			if (customerDwollaId) {
 				const request: ITransactionRequest = {
 					toUserId: state.to,
-					amount: isRoundUp ? Math.ceil(amountCalcedFee).toString() : amountCalcedFee.toString(),
+					amount: amountCalcedFee.toString(),
 					comment: ''
 				};
-
+				if(isRoundUp) {
+					const roundUpAmount = Math.ceil(amountCalcedFee) - Number(amountCalcedFee) || 1;
+					request.roundUpAmount = roundUpAmount.toString();
+				}
 				const response = await TransactionsAPI.transferTo(customerDwollaId, request);
-
+				cleanUpState()
 				if (response.data) {
 					// Update user info
 					navigation.navigate(Routes.PAYMENT_SUCCESS);
@@ -288,37 +288,44 @@ const QRCodeScan = (): JSX.Element => {
 	}
 
 	const handleOpenPay = async () => {
-		setIsOpenPayment(false);
-		// check balance
-		if (customerWalletData?.availableBalance <= state.amount) {
-			setIsLowAmountDialog(true);
-		} else {
-			if (customerDwollaId) {
-				const request: ITransactionRequest = {
-					toUserId: state.to,
-					amount: openAmount,
-					comment: ''
-				};
+		console.log("here")
+		// setIsOpenPayment(false);
+		// // check balance
+		// if (customerWalletData?.availableBalance <= state.amount) {
+		// 	setIsLowAmountDialog(true);
+		// } else {
+		// 	if (customerDwollaId) {
+		// 		const request: ITransactionRequest = {
+		// 			toUserId: state.to,
+		// 			amount: openAmount,
+		// 			comment: ''
+		// 		};
 
-				setIsLoading(true)
-				const response = await TransactionsAPI.transferTo(customerDwollaId, request);
-				if (response.data) {
-					await dispatch(loadPersonalTransactions(customerDwollaId));
-					navigation.navigate(Routes.PAYMENT_SUCCESS);
-				} else {
-					navigation.navigate(Routes.PAYMENT_FAILED);
-				}
-				setIsLoading(false)
-			} else {
-				showToast(ToastType.ERROR, "Failed", "Whooops, something went wrong.");
-			}
-		}
+		// 		setIsLoading(true)
+		// 		const response = await TransactionsAPI.transferTo(customerDwollaId, request);
+		// 		if (response.data) {
+		// 			navigation.navigate(Routes.PAYMENT_SUCCESS);
+		// 		} else {
+		// 			navigation.navigate(Routes.PAYMENT_FAILED);
+		// 		}
+		// 		setIsLoading(false)
+		// 	} else {
+		// 		showToast(ToastType.ERROR, "Failed", "Whooops, something went wrong.");
+		// 	}
+		// }
 	}
 
-	const onCancle = () => {
+	const cleanUpState = () => {
 		setIsPaymentDialog(false);
 		setIsLowAmountDialog(false);
 		setIsOpenPayment(false);
+		setIsLoading(false);
+		setIsScanned(false);
+		setState({} as QRCodeEntry)
+	}
+
+	const onCancle = () => {
+		cleanUpState();
 		navigation.navigate(Routes.DASHBOARD);
 	}
 
@@ -326,10 +333,13 @@ const QRCodeScan = (): JSX.Element => {
 		<View style={viewBase}>
 			<PaymentLoading visible={isLoading} />
 			<View style={styles.container}>
-				<BarCodeScanner
-					onBarCodeScanned={isScanned ? undefined : handleBarCodeScanned}
-					style={StyleSheet.absoluteFillObject}
-				/>
+				{
+					(!isPaymentDialog
+						&& !isLowAmountDialog && !isOpenPayment) && <BarCodeScanner
+						onBarCodeScanned={isScanned ? undefined : handleBarCodeScanned}
+						style={StyleSheet.absoluteFillObject}
+					/>
+				}
 			</View>
 			<View style={styles.toggleView}>
 				<Header

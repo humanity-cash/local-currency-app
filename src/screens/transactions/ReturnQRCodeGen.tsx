@@ -2,12 +2,10 @@ import React, { useContext, useEffect, useState } from 'react';
 import { Image, StyleSheet, View } from 'react-native';
 import { Text } from 'react-native-elements';
 import QRCode from 'react-native-qrcode-svg';
-import { useDispatch } from 'react-redux';
 import { ITransaction } from "src/api/types";
 import { UserContext, WalletContext } from 'src/contexts';
 import { useBrightness, useUpdateCustomerWalletData } from "src/hooks";
 import { Dialog } from "src/shared/uielements";
-import { loadPersonalTransactions } from 'src/store/transaction/transaction.actions';
 import { colors } from "src/theme/colors";
 import { dialogViewBase } from "src/theme/elements";
 import { PaymentMode, QRCodeEntry, SECURITY_ID } from "src/utils/types";
@@ -63,7 +61,6 @@ type ReturnQRCodeGenProps = {
 }
 
 const ReturnQRCodeGen = (props: ReturnQRCodeGenProps): JSX.Element => {
-    const dispatch = useDispatch();
     const { customerWalletData } = useContext(WalletContext)
     const { user, customerDwollaId } = useContext(UserContext);
     const { hasPermission, setMaxBrightness, setDefaultBrightness} = useBrightness();
@@ -96,7 +93,7 @@ const ReturnQRCodeGen = (props: ReturnQRCodeGenProps): JSX.Element => {
         if (!isSuccess) {
             setIsSuccess(true);
             if (customerDwollaId) {
-                await dispatch(loadPersonalTransactions(customerDwollaId));
+                // await dispatch(loadPersonalTransactions(customerDwollaId));
             }
             setDefaultBrightness();
             props.onSuccess(customerWalletData?.availableBalance - initBalance);

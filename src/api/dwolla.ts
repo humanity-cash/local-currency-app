@@ -15,10 +15,11 @@ export const iavToken = async (userId: UserId): Promise<AxiosPromiseResponse> =>
 
 export const loadFundingSource = async (userId: UserId): Promise<boolean> => {
   try {
+    if(!userId) return false;
     const response = await getRequest(`/users/${userId}/funding-sources`);
     return fundingSource(response);
   } catch (err) {
-    console.log("error in getFundingSources", err);
+    console.log(err);
     return false;
   }
 };
@@ -32,9 +33,10 @@ export const webhook = async (): Promise<AxiosPromiseResponse> => {
   }
 };
 
-export const loadWallet = async (uId: string): Promise<IWallet> => {
+export const loadWallet = async (userId: string): Promise<IWallet> => {
   try {
-    const wallet = await getUser(uId);
+    if(!userId) return {} as IWallet;
+    const wallet = await getUser(userId);
     const walletData = {
       totalBalance: wallet?.totalBalance,
       availableBalance: wallet?.availableBalance,
