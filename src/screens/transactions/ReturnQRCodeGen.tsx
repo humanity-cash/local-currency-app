@@ -2,13 +2,12 @@ import React, { useContext, useEffect, useState } from 'react';
 import { Image, StyleSheet, View } from 'react-native';
 import { Text } from 'react-native-elements';
 import QRCode from 'react-native-qrcode-svg';
-import { ITransaction } from "src/api/types";
 import { UserContext, WalletContext } from 'src/contexts';
 import { useBrightness, useUpdateCustomerWalletData } from "src/hooks";
 import { Dialog } from "src/shared/uielements";
 import { colors } from "src/theme/colors";
 import { dialogViewBase } from "src/theme/elements";
-import { PaymentMode, QRCodeEntry, SECURITY_ID } from "src/utils/types";
+import { MiniTransaction, PaymentMode, QRCodeEntry, SECURITY_ID } from "src/utils/types";
 
 const styles = StyleSheet.create({
     dialog: {
@@ -57,7 +56,7 @@ type ReturnQRCodeGenProps = {
 	visible: boolean,
 	onClose: () => void,
     onSuccess: (amount: number) => void,
-    transactionInfo: ITransaction
+    transactionInfo: MiniTransaction
 }
 
 const ReturnQRCodeGen = (props: ReturnQRCodeGenProps): JSX.Element => {

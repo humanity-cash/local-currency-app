@@ -58,7 +58,7 @@ const TransactionItem = (props: TransactionItemProps) => {
 	const { item, selected } = props;
 
 	const getStyle = (type: string) => {
-		if (type === TransactionType.SALE || type === TransactionType.RETURN || type === TransactionType.IN) {
+		if (type === TransactionType.SALE || type === TransactionType.RETURN || type === TransactionType.IN || type == TransactionType.DEPOSIT) {
 			return styles.plusText;
 		} else {
 			return styles.amountText;
@@ -71,7 +71,13 @@ const TransactionItem = (props: TransactionItemProps) => {
 				<Text style={styles.transactionType}>{item.type === "OUT" ? `${item.toName}` : `${item.fromName}`}</Text>
 				<Text style={styles.timeText}>{moment(item.timestamp).format('HH:mm, MMM D, YYYY')}</Text>
 				<Text style={styles.timeText}>
-					{item.type === "IN" ? "Transfer In" : "Transfer Out"}
+					{item.type === "IN"
+						? "Transfer In"
+						: item.type === "Deposit"
+							? "Deposit"
+							: item.type === "Withdraw"
+								? "Withdraw"
+								: "Transfer Out"}
 				</Text>
 			</View>
 			<Text style={getStyle(item.type)}>{getBerksharePrefix(item.type)}  {item.value}</Text>
