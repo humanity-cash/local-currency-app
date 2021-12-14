@@ -106,7 +106,7 @@ const DwollaDialog = (props: DwollaDialogProps): JSX.Element => {
 							checkedColor={colors.darkGreen}
 							onPress={() => setSelection(!isSelected)}
 						/>
-                        <Text style={mainTextStyle}>{"By selecting ‘continue’ you agree to the "}
+                        <Text style={mainTextStyle}>{"By clicking on the box, you agree to the "}
                             <Text
                                 style={styles.underlineText}
                                 onPress={() => Linking.openURL(DWOLLA_TERMS_URL)}
