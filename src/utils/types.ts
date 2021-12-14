@@ -258,14 +258,6 @@ export type WalletMinimum = {
 
 export type Transaction = OrderTransaction | BalanceTransaction;
 
-export enum TransactionType {
-  BUY = "buy",
-  SELL = "sell",
-  WITHDRAW = "withdraw",
-  ADDCASH = "addcash",
-  RESERVATION = "reservation",
-}
-
 export type Notification = {
   message: string;
   redirect: string;
@@ -307,6 +299,7 @@ export enum TransactionType {
 	TRANSFER = 'Transfer',
   DONATION = 'Donation',
   CUSTOMER_RETURN = 'Customer return',
+  DEPOSIT = "Deposit",
   PURCHASEMENT = 'Purchasement',
   IN = "IN",
   OUT = "OUT"

@@ -13,7 +13,7 @@ export const formatValue = (value: number): string => {
 }
 
 export const getBerksharePrefix = (type: TransactionType | string): string => {
-	if (type === TransactionType.SALE || type === TransactionType.RETURN || type === TransactionType.IN) {
+	if (type === TransactionType.SALE || type === TransactionType.RETURN || type === TransactionType.IN || type === TransactionType.DEPOSIT) {
 		return "+ B$";
 	} else {
 		return "- B$";
