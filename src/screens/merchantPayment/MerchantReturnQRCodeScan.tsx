@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { StyleSheet, View, ScrollView, KeyboardAvoidingView, Platform } from 'react-native';
+import { StyleSheet, View, ScrollView, KeyboardAvoidingView, Platform, SafeAreaView, ActivityIndicator } from 'react-native';
 import { Text } from 'react-native-elements';
 import { useCameraPermission } from 'src/hooks';
 import { Header, CancelBtn, BackBtn } from "src/shared/uielements";
@@ -20,6 +20,7 @@ import { updateLoadingStatus } from 'src/store/loading/loading.actions';
 import { isQRCodeValid } from 'src/utils/validation';
 import moment from 'moment';
 import { UserContext } from 'src/contexts';
+import DataLoading from 'src/screens/loadings/DataLoading';
 
 type HandleScaned = {
 	type: string,
@@ -81,6 +82,16 @@ const styles = StyleSheet.create({
 	inlineView: {
 		flexDirection: 'row',
 		justifyContent: 'space-between'
+	},
+	loading: {
+		position: 'absolute', 
+		top: 0, 
+		left: 0, 
+		right: 0, 
+		bottom: 0, 
+		alignItems: 'center', 
+		justifyContent: 'center', 
+		backgroundColor: 'rgba(0, 0, 0, 0.4)'
 	}
 });
 
@@ -98,6 +109,7 @@ const MerchantReturnQRCodeScan = (): JSX.Element => {
 		amount: 0,
 		mode: PaymentMode.SELECT_AMOUNT
 	});
+	const [isLoading, setIsLoading] = useState(false)
 
 	useEffect(() => {
 		setIsScanned(false);
@@ -134,24 +146,16 @@ const MerchantReturnQRCodeScan = (): JSX.Element => {
 				amount: amount.toString(),
 				comment: ''
 			};
-			// dispatch(updateLoadingStatus({
-			// 	isLoading: true,
-			// 	screen: LoadingScreenTypes.PAYMENT_PENDING
-			// }));
+			setIsLoading(true)
 			const response = await TransactionsAPI.transferTo(businessDwollaId, request);
 			if (response.data) {
-				// await dispatch(loadBusinessTransactions(businessDwollaId));
-				// dispatch(updateLoadingStatus({
-				// 	isLoading: false,
-				// 	screen: LoadingScreenTypes.PAYMENT_PENDING
-				// }));
+				setIsLoading(false)
+				setIsReturnModal(false)
 				navigation.navigate(Routes.MERCHANT_PAYMENT_SUCCESS);
 			} else {
 				showToast(ToastType.ERROR, "Failed", "Whooops, something went wrong.");
-				// dispatch(updateLoadingStatus({
-				// 	isLoading: false,
-				// 	screen: LoadingScreenTypes.PAYMENT_PENDING
-				// }));
+				setIsLoading(false)
+				setIsReturnModal(false)
 				navigation.navigate(Routes.MERCHANT_DASHBOARD);
 			}
 		} else {
@@ -181,7 +185,7 @@ const MerchantReturnQRCodeScan = (): JSX.Element => {
 
 			{isReturnModal && (
 				<Modal visible={isReturnModal}>
-					<View style={ modalViewBase }>
+					<SafeAreaView style={ modalViewBase }>
 						<ModalHeader
 							leftComponent={<BackBtn color={colors.purple} onClick={() => setIsReturnModal(false)} />}
 							rightComponent={<CancelBtn text="Close" onClick={onModalClose} />}
@@ -234,7 +238,8 @@ const MerchantReturnQRCodeScan = (): JSX.Element => {
 								/>
 							</View>
 						</KeyboardAvoidingView>
-					</View>
+						<DataLoading visible={isLoading} />
+					</SafeAreaView>
 				</Modal>
 			)}
 		</View>
