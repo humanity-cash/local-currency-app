@@ -87,7 +87,7 @@ const CashoutAmount = (): JSX.Element => {
 
 	useEffect(() => {
 		if(customerWalletData && customerWalletData?.availableBalance < 5) {
-			setMaxAmount(`${customerWalletData.availableBalance}`)
+			setMaxAmount(`${customerWalletData?.availableBalance}`)
 		} else {
 			setMaxAmount('5.00')
 		}

@@ -4,6 +4,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import { Image, KeyboardAvoidingView, Platform, ScrollView, StyleSheet, View } from 'react-native';
 import { Text } from 'react-native-elements';
 import { useDispatch } from 'react-redux';
+import PaymentLoading from 'src/screens/loadings/PaymentPending';
 import { TransactionsAPI } from 'src/api';
 import { ITransactionRequest } from 'src/api/types';
 import { BUTTON_TYPES } from 'src/constants';
@@ -198,6 +199,7 @@ const MerchantQRCodeScan = (): JSX.Element => {
 	const [isPaymentDialog, setIsPaymentDialog] = useState<boolean>(false);
 	const [isOpenPayment, setIsOpenPayment] = useState<boolean>(false);
 	const [openAmount, setOpenAmount] = useState<string>("");
+	const [isLoading, setIsLoading] = useState<boolean>(false);
 	const [state, setState] = useState<QRCodeEntry>({
 		securityId: SECURITY_ID,
 		to: "",
@@ -253,10 +255,7 @@ const MerchantQRCodeScan = (): JSX.Element => {
 				comment: ''
 			};
 
-			dispatch(updateLoadingStatus({
-				isLoading: true,
-				screen: LoadingScreenTypes.PAYMENT_PENDING
-			}));
+			setIsLoading(true)
 			const response = await TransactionsAPI.transferTo(businessDwollaId, request);
 			if (response.data) {
 				await dispatch(loadBusinessTransactions(businessDwollaId));
@@ -265,10 +264,7 @@ const MerchantQRCodeScan = (): JSX.Element => {
 				showToast(ToastType.ERROR, "Failed", "Whooops, something went wrong.");
 				navigation.navigate(Routes.MERCHANT_DASHBOARD);
 			}
-			dispatch(updateLoadingStatus({
-				isLoading: false,
-				screen: LoadingScreenTypes.PAYMENT_PENDING
-			}));
+			setIsLoading(false)
 		} else {
 			showToast(ToastType.ERROR, "Failed", "Whooops, something went wrong.");
 		}
@@ -288,11 +284,7 @@ const MerchantQRCodeScan = (): JSX.Element => {
 				amount: openAmount,
 				comment: ''
 			};
-
-			dispatch(updateLoadingStatus({
-				isLoading: true,
-				screen: LoadingScreenTypes.PAYMENT_PENDING
-			}));
+			setIsLoading(true)
 			const response = await TransactionsAPI.transferTo(businessDwollaId, request);
 			if (response.data) {
 				await dispatch(loadBusinessTransactions(businessDwollaId));
@@ -300,10 +292,7 @@ const MerchantQRCodeScan = (): JSX.Element => {
 			} else {
 				showToast(ToastType.ERROR, "Whooops, something went wrong.", "Connection failed");
 			}
-			dispatch(updateLoadingStatus({
-				isLoading: false,
-				screen: LoadingScreenTypes.PAYMENT_PENDING
-			}));
+			setIsLoading(false)
 		} else {
 			showToast(ToastType.ERROR, "Whooops, something went wrong.", "Connection failed");
 		}
@@ -318,6 +307,7 @@ const MerchantQRCodeScan = (): JSX.Element => {
 
 	return (
 		<View style={viewBase}>
+			<PaymentLoading visible={isLoading} />
 			<View style={styles.container}>
 				<BarCodeScanner
 					onBarCodeScanned={isScanned ? undefined : handleBarCodeScanned}

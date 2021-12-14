@@ -1,14 +1,14 @@
 import { useNavigation } from '@react-navigation/native';
-import React, { useState, useEffect, useContext } from 'react';
-import { StyleSheet, View, ScrollView, Dimensions, ActivityIndicator } from 'react-native';
+import React, { useContext, useEffect, useState } from 'react';
+import { ActivityIndicator, Dimensions, ScrollView, StyleSheet, View } from 'react-native';
 import { WebView } from 'react-native-webview';
-import { Header, CancelBtn } from "src/shared/uielements";
-import { viewBaseWhite, wrappingContainerBase } from "src/theme/elements";
-import * as Routes from 'src/navigation/constants';
-import { colors } from "src/theme/colors";
 import { DwollaAPI } from 'src/api';
 import { UserContext } from 'src/contexts';
 import { NavigationViewContext, ViewState } from "src/contexts/navigation";
+import * as Routes from 'src/navigation/constants';
+import { CancelBtn, Header } from "src/shared/uielements";
+import { colors } from "src/theme/colors";
+import { viewBaseWhite, wrappingContainerBase } from "src/theme/elements";
 
 export const WEBVIEW_SCREEN = Dimensions.get('screen').height - 150;
 
@@ -62,7 +62,7 @@ const SelectBank = (): JSX.Element => {
 					<WebView
 						ref={(ref) => (webview = ref)}
 						style={styles.bankView}
-						source={{ uri: `https://d11t12p3449df1.cloudfront.net/?iavToken=${iavToken}` }}
+						source={{ uri: `https://staging.api.humanity.cash/iav/?iavToken=${iavToken}` }}
 					/>
 				)}
 			</ScrollView>
