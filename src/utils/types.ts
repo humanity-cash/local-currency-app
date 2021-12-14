@@ -426,6 +426,8 @@ export enum BusinessTxDataStoreActions {
 export enum BusinessTxFilterStoreActions {
 	OpenStartDate = "openStoreDate",
 	OpenEndDate = "openEndDate",
+	CloseStartDate = "closeStoreDate",
+	CloseEndDate = "closeEndDate",
 	UpdateStartDate = "updateStartDate",
 	UpdateEndDate = "updateEndDate",
 	UpdateType = "updateType",
@@ -435,6 +437,8 @@ export enum BusinessTxFilterStoreActions {
 export enum CustomerTxFilterStoreActions {
 	OpenStartDate = "openStoreDate",
 	OpenEndDate = "openEndDate",
+	CloseStartDate = "closeStoreDate",
+	CloseEndDate = "closeEndDate",
 	UpdateStartDate = "updateStartDate",
 	UpdateEndDate = "updateEndDate",
 	UpdateType = "updateType",

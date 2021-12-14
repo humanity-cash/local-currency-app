@@ -54,6 +54,18 @@ createStore<CustomerTxFilterStore, CustomerTxFilterStoreReducer>
 						isStartDate: false,
 						isEndDate: true
 					};
+				case CustomerTxFilterStoreActions.CloseStartDate:
+					return {
+						...state,
+						isEndDate: false,
+						isStartDate: false
+					};
+				case CustomerTxFilterStoreActions.CloseEndDate:
+					return {
+						...state,
+						isStartDate: false,
+						isEndDate: false
+					};
 				case CustomerTxFilterStoreActions.UpdateStartDate:
 					return {
 						...state,
@@ -100,6 +112,18 @@ createStore<BusinessTxFilterStore, BusinessTxFilterStoreReducer>(BUSINESS_TX_FIL
 					...state,
 					isStartDate: false,
 					isEndDate: true
+				};
+			case BusinessTxFilterStoreActions.CloseStartDate:
+				return {
+					...state,
+					isEndDate: false,
+					isStartDate: false
+				};
+			case BusinessTxFilterStoreActions.CloseEndDate:
+				return {
+					...state,
+					isStartDate: false,
+					isEndDate: false
 				};
 			case BusinessTxFilterStoreActions.UpdateStartDate:
 				return {
