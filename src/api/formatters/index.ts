@@ -13,7 +13,7 @@ export const formatDeposits = (response: AxiosPromiseResponse<[]>): MiniTransact
 			blockNumber: tx.blockNumber,
 			timestamp: tx.timestamp * 1000,
 			fromName: tx.fromName,
-			type: "IN",
+			type: "Deposit",
 			toName: tx.toName,
 			value: formatTransactionValue(tx.value)
 		}
@@ -29,8 +29,8 @@ export const formatWithdrawals = (response: AxiosPromiseResponse<[]>)
 			timestamp: tx.timestamp * 1000,
 			toName: tx.toName,
 			fromName: tx.fromName,
-			type: "OUT",
-			value: String((Number(tx.value) / 1000000000000000000).toFixed(2)),
+			type: "Withdraw",
+			value: formatTransactionValue(tx.value)
 		}
 	})
 }

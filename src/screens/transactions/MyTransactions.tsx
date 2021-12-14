@@ -129,9 +129,17 @@ const styles = StyleSheet.create({
 	}
 });
 
+const mappedTypes = {
+	"All": "All",
+	"Incoming transactions": "IN",
+	"Outgoing transactions": "OUT",
+	"Load ups B$": "Deposit",
+	"Cash out to USD": "Withdraw"
+}
+
 type TransactionDetailProps = {
 	visible: boolean,
-	data: ITransaction,
+	data: MiniTransaction,
 	onClose: ()=>void,
 	onReturn: ()=>void
 }
@@ -181,18 +189,18 @@ const TransactionDetail = (props: TransactionDetailProps) => {
 			</View>
 		</Dialog>
 	)
-}
+};
 
 const options = {
   includeScore: false,
   keys: ['toName', 'fromName', 'value']
-}
+};
 
 const MyTransactions = (): JSX.Element => {
 	const [{ selectedType,
 		startDate,
 		endDate,
-	}] = useStore<CustomerTxFilterStore>(CUSTOMER_TX_FILTERS_STORE)
+	}] = useStore<CustomerTxFilterStore>(CUSTOMER_TX_FILTERS_STORE);
 	const navigation = useNavigation();
 	const { customerDwollaId } = useContext(UserContext);
 	const { customerWalletData } = useContext(WalletContext);
@@ -200,23 +208,22 @@ const MyTransactions = (): JSX.Element => {
 	const [searchText, setSearchText] = useState<string>("");
 	const [isDetailView, setIsDetailView] = useState<boolean>(false);
 	const [isReturnView, setIsReturnView] = useState<boolean>(false);
-	const [selectedItem, setSelectedItem] = useState<ITransaction>({} as ITransaction);
+	const [selectedItem, setSelectedItem] = useState<MiniTransaction>({} as ITransaction);
 	const [isRequestSuccess, setIsRequestSuccess] = useState<boolean>(false);
 	const [isLoading, setIsLoading]= useState<boolean>(false);
 	const [receivedAmount, setReceivedAmount] = useState<number>(0);
 	const [apiData, setAPIData] = useState<MiniTransaction[]>([]);
 	const [ filteredData, setFilteredData] = useState<MiniTransaction[]>([]);
-	const fuseInstance = createFuseSearchInstance(filteredData, options)
 
 	useEffect(() => {
-		filterData()
-	}, [startDate, endDate, selectedType, searchText])
+		filterData();
+	}, [startDate, endDate, selectedType])
 
 	useEffect(() => {
 		if (customerDwollaId) {
 			const handler = async () => {
 				setIsLoading(true);
-				const txs = await TransactionsAPI.getAllTransactions(customerDwollaId)
+				const txs = await TransactionsAPI.getAllTransactions(customerDwollaId);
 				setAPIData(txs);
 				setFilteredData(txs);
 				setIsLoading(false);
@@ -226,44 +233,48 @@ const MyTransactions = (): JSX.Element => {
 	}, [customerDwollaId]);
 
 	const filterData = () => {
-		let data = apiData
-
-		// filter by date
-		data = data.reduce<MiniTransaction[]>((acc, curr) => {
-			if (startDate) {
+		const filteredByTime = apiData.reduce<MiniTransaction[]>((acc, curr) => {
+			if (startDate) { // filter by startDate
 				if (curr.timestamp < startDate?.getTime()) {
-					return acc
+					return acc;
 				}
 			}
-			if (endDate) {
+			if (endDate) { // filter by endDate
 				if (curr.timestamp > endDate?.getTime()) {
-					return acc
+					return acc;
 				}
 			}
-			return [...acc, curr]
+
+			if (selectedType && selectedType !== "All"){ // filter by transaction type
+				//@ts-ignore
+				if(curr.type !== mappedTypes[selectedType]){
+					return acc;
+				}
+			}
+			return [...acc, curr];
 		}, [])
-
-		// filter by name
-		const fuseResult = fuseInstance.search(searchText)
-		data = fuseResult.map(i => i.item)
-
-		// filter by type <-- to do
-
-		setFilteredData(data)
+		setFilteredData(filteredByTime);
 	}
 
 	const onSearchChange = (name: string, change: string) => {
-		if(!change){
-			setFilteredData(apiData)
+		if (!change) {
+			setFilteredData(apiData);
 			setSearchText(change);
-			return
+			return;
 		}
-		const fuseResult = fuseInstance.search(change)
-		setFilteredData(fuseResult.map(i => i.item))
+		const fuseInstance = createFuseSearchInstance(filteredData, options);
+		const fuseResult = fuseInstance.search(change);
+		//@ts-ignore
+		setFilteredData(fuseResult.map(i => i.item));
 		setSearchText(change);
 	}
 
-	const viewDetail = (item: ITransaction) => {
+	const clearSearchText = () => {
+		setSearchText("");
+		setFilteredData(apiData);
+	}
+
+	const viewDetail = (item: MiniTransaction) => {
 		setSelectedItem(item);
 		setIsDetailView(true);
 	}
@@ -324,7 +335,7 @@ const MyTransactions = (): JSX.Element => {
 								/>
 							</TouchableOpacity>
 						</View>
-						{isFilterVisible && <MyTransactionFilter/>}
+						{isFilterVisible && <MyTransactionFilter onClear={clearSearchText} />}
 						<MyTransactionList data={filteredData} onSelect={viewDetail} />
 					</View>
 				</ScrollView>

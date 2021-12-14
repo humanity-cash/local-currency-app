@@ -78,7 +78,7 @@ const styles = StyleSheet.create({
     }
 });
 
-const MyTransactionFilter = (): JSX.Element => {
+const MyTransactionFilter = ({ onClear }: { onClear: any }): JSX.Element => {
     const [{
         startDate,
         isStartDate,
@@ -108,24 +108,25 @@ const MyTransactionFilter = (): JSX.Element => {
     };
 
      const clearFilter = () => {
-        dispatch({ type: CustomerTxFilterStoreActions.ClearAll, payload: {} })
-    }
+        dispatch({ type: CustomerTxFilterStoreActions.ClearAll, payload: {} });
+        onClear();
+    };
 
     const openStartDate = () => {
-        dispatch({ type: CustomerTxFilterStoreActions.OpenStartDate, payload: {} })
+        dispatch({ type: CustomerTxFilterStoreActions.OpenStartDate, payload: {} });
     }
 
     const openEndDate = () => {
-        dispatch({ type: CustomerTxFilterStoreActions.OpenEndDate, payload: {} })
-    }
+        dispatch({ type: CustomerTxFilterStoreActions.OpenEndDate, payload: {} });
+    };
 
     const closeStartDate = () => {
-        dispatch({ type: CustomerTxFilterStoreActions.CloseStartDate, payload: {} })
-    }
+        dispatch({ type: CustomerTxFilterStoreActions.CloseStartDate, payload: {} });
+    };
 
     const closeEndDate = () => {
-        dispatch({ type: CustomerTxFilterStoreActions.CloseEndDate, payload: {} })
-    }
+        dispatch({ type: CustomerTxFilterStoreActions.CloseEndDate, payload: {} });
+    };
 
     return (
         <View style={styles.container}>
