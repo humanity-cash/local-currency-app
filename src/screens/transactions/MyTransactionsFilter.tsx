@@ -56,7 +56,8 @@ const styles = StyleSheet.create({
         backgroundColor: colors.inputBg
     },
     pickerText: {
-        color: colors.darkGreen
+        color: colors.darkGreen,
+        textAlign: 'center'
     },
     selectItem: {
         width: '100%',
@@ -171,6 +172,7 @@ const MyTransactionFilter = (): JSX.Element => {
                     renderDropdownIcon={() => (
                         <AntDesign name="down" size={18} color={colors.darkGreen} />
                     )}
+                    rowTextStyle={{textAlign: 'center'}}
                 />
             </View>
             <TouchableOpacity style={styles.clearFilter} onPress={clearFilter}>
