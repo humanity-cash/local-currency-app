@@ -57,6 +57,9 @@ const styles = StyleSheet.create({
 	},
 	toggleBg: {
 		backgroundColor: colors.purple
+	},
+	openBtn: {
+		marginBottom: 10
 	}
 });
 
@@ -80,6 +83,7 @@ const MerchantRequest = (): JSX.Element => {
 		detail: "",
 		buttonTitle: ""
 	});
+	const [isOpenAmount, setIsOpenAmount] = useState<boolean>(false);
 
 
 	useEffect(() => {
@@ -96,6 +100,12 @@ const MerchantRequest = (): JSX.Element => {
 	};
 
 	const requestAmount = () => {
+		setIsOpenAmount(false);
+		setIsVisible(true);
+	}
+
+	const openAmount = () => {
+		setIsOpenAmount(true);
 		setIsVisible(true);
 	}
 
@@ -195,14 +205,20 @@ const MerchantRequest = (): JSX.Element => {
 				behavior={Platform.OS == "ios" ? "padding" : "height"} >
 				<View style={styles.bottomView}>
 					<Button
-						type={BUTTON_TYPES.PURPLE}
+						type="transparent"
+						title={Translation.BUTTON.OPEN_AMOUNT}
+						style={styles.openBtn}
+						onPress={openAmount}
+					/>
+					<Button
+						type="darkGreen"
 						disabled={!goNext}
 						title={Translation.BUTTON.NEXT}
 						onPress={requestAmount}
 					/>
 				</View>
 			</KeyboardAvoidingView>
-			{ isVisible && <MerchantQRCodeGen visible={isVisible} onSuccess={onSuccess} onClose={onClose} amount={Number(state.amount)} /> }
+			{ isVisible && <MerchantQRCodeGen visible={isVisible} onSuccess={onSuccess} onClose={onClose} isOpenAmount={isOpenAmount} amount={Number(state.amount)} /> }
 			{ isRequestSuccess && <MerchantRequestSuccess visible={isRequestSuccess} onClose={onConfirm} amount={receivedAmount} /> }
 
 			<BankLinkDialog 
