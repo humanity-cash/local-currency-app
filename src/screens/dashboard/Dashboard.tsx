@@ -176,8 +176,6 @@ const Dashboard = (): JSX.Element => {
 		return () => clearInterval(timerId);
 	}, [customerDwollaId]);
 
-	const { isLoading: isWalletLoading } = useCustomerWallet();
-
 	const onClose = () => {
 		setIsVisible(false);
 		setIsPayment(false);
