@@ -85,7 +85,7 @@ const MyTransactionFilter = (): JSX.Element => {
         isEndDate }, dispatch] = useStore<CustomerTxFilterStore, CustomerTxFilterStoreReducer>(CUSTOMER_TX_FILTERS_STORE)
     
     const onStartDateChange = (selectedDate?: Date) => {
-        var date = selectedDate
+        const date = selectedDate
         if(date && endDate) {
             if(moment(date).isAfter(endDate)) {
                 dispatch({ type: CustomerTxFilterStoreActions.UpdateEndDate, payload: { endDate: date } })
@@ -96,7 +96,7 @@ const MyTransactionFilter = (): JSX.Element => {
     };
 
     const onEndDateChange = (selectedDate?: Date) => {
-        var date = selectedDate
+        const date = selectedDate
         if(date && startDate) {
             if(moment(startDate).isAfter(date)) {
                 dispatch({ type: CustomerTxFilterStoreActions.UpdateStartDate, payload: { startDate: date } })
