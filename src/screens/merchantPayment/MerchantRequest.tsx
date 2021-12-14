@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useContext} from 'react';
 import { StyleSheet, View, KeyboardAvoidingView, ScrollView, Platform } from 'react-native';
 import { useNavigation } from '@react-navigation/core';
 import { Text } from 'react-native-elements';
@@ -10,6 +10,8 @@ import MerchantRequestSuccess from "./MerchantRequestSuccess";
 import Translation from 'src/translation/en.json';
 import * as Routes from 'src/navigation/constants';
 import { BUTTON_TYPES } from 'src/constants';
+import { WalletContext } from 'src/contexts';
+import BankLinkDialog from 'src/shared/uielements/BankLinkDialog'
 
 type AmountState = {
 	amount: string,
@@ -69,6 +71,17 @@ const MerchantRequest = (): JSX.Element => {
 	const [receivedAmount, setReceivedAmount] = useState<number>(0);
 	const [isRequestSuccess, setIsRequestSuccess] = useState<boolean>(false);
 
+	const { businessWalletData } = useContext(WalletContext)
+	const businessFundingSource = businessWalletData?.availableFundingSource;
+	const availableBalance = businessWalletData?.availableBalance;
+	const [bankDialogInfo, setBankDialogInfo] = useState<any>({
+		isVisible: false,
+		title: "",
+		detail: "",
+		buttonTitle: ""
+	});
+
+
 	useEffect(() => {
 		setGoNext(Number(state.costs) > 0);
 	}, [state]);
@@ -101,6 +114,48 @@ const MerchantRequest = (): JSX.Element => {
 		setIsVisible(false);
 	}
 
+	const onPressPay = () => {
+		if (availableBalance > 0) {
+			navigation.navigate(Routes.MERCHANT_QRCODE_SCAN)
+			return
+		}
+
+		if(businessFundingSource) {
+			setBankDialogInfo({
+				...bankDialogInfo,
+				isVisible: true,
+				title: Translation.LOAD_UP.LOAD_UP_NO_BANK_TITLE,
+				detail: Translation.LOAD_UP.LOAD_UP_NO_BANK_DETAIL,
+				buttonTitle: Translation.BUTTON.LOAD_UP_BERKSHARES
+			})
+		} else {
+			setBankDialogInfo({
+				...bankDialogInfo,
+				isVisible: true,
+				title: Translation.PAYMENT.PAYMENT_NO_BANK_TITLE,
+				detail: Translation.PAYMENT.PAYMENT_NO_BANK_DETAIL,
+				buttonTitle: Translation.BUTTON.LINK_BUSINESS_BANK
+			})
+		}
+	}
+
+	const onBankDialogConfirm = () => {
+		onBankDialogCancel()
+
+		if(businessFundingSource) {
+			navigation.navigate(Routes.MERCHANT_LOADUP);
+		} else {
+			navigation.navigate(Routes.MERCHANT_BANK_ACCOUNT);
+		}
+	}
+
+	const onBankDialogCancel = () => {
+		setBankDialogInfo({
+			...bankDialogInfo,
+			isVisible: false
+		})
+	}
+
 	return (
 		<View style={viewBaseB}>
 			<Header
@@ -111,7 +166,7 @@ const MerchantRequest = (): JSX.Element => {
 					<View style={styles.switchView}>
 						<ToggleButton
 							value={false}
-							onChange={()=>navigation.navigate(Routes.MERCHANT_QRCODE_SCAN)}
+							onChange={onPressPay}
 							activeText="Pay"
 							inActiveText="Receive"
 							style={styles.switch}
@@ -149,6 +204,15 @@ const MerchantRequest = (): JSX.Element => {
 			</KeyboardAvoidingView>
 			{ isVisible && <MerchantQRCodeGen visible={isVisible} onSuccess={onSuccess} onClose={onClose} amount={Number(state.amount)} /> }
 			{ isRequestSuccess && <MerchantRequestSuccess visible={isRequestSuccess} onClose={onConfirm} amount={receivedAmount} /> }
+
+			<BankLinkDialog 
+				visible={bankDialogInfo.isVisible}
+				title={bankDialogInfo.title}
+				description={bankDialogInfo.detail}
+				buttonTitle={bankDialogInfo.buttonTitle}
+				onConfirm={onBankDialogConfirm}
+				onCancel={onBankDialogCancel}
+			/>
 		</View>
 	);
 }

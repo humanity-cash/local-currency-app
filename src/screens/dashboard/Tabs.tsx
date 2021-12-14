@@ -35,6 +35,7 @@ import MyTransactions from "../transactions/MyTransactions";
 import Dashboard from "./Dashboard";
 import { BarCodeScanner } from 'expo-barcode-scanner';
 import SettingDialog from 'src/shared/uielements/SettingDialog';
+import BankLinkDialog from 'src/shared/uielements/BankLinkDialog';
 
 const styles = StyleSheet.create({
 	headerText: {
@@ -106,40 +107,11 @@ const styles = StyleSheet.create({
 	}
 });
 
-type BankLinkDialogProps = {
-	visible: boolean,
-	title: string,
-	description: string
-	onConfirm: ()=>void,
-	onCancel: ()=>void
-}
-
-const BankLinkDialog = (props: BankLinkDialogProps) => {
-	return (
-		<Dialog visible={props.visible} onClose={()=>props.onCancel()}>
-			<View style={dialogViewBase}>
-				<View style={wrappingContainerBase}>
-					<View style={ baseHeader }>
-						<Text style={styles.headerText}>{props.title}</Text>
-					</View>
-					<Text style={styles.detailText}>{props.description}</Text>
-				</View>
-				<View>
-				<Button
-					type={BUTTON_TYPES.DARK_GREEN}
-					title={Translation.BUTTON.LINK_BANK}
-					onPress={props.onConfirm}
-				/>
-				</View>
-			</View>
-		</Dialog>
-	)
-}
-
 type BankLinkDialogStateProps = {
 	visible: boolean,
 	title: string,
 	description: string,
+	buttoTitle: string,
 	confirmAction?: ()=>void,
 	cancelAction?: ()=>void
 }
@@ -147,7 +119,8 @@ type BankLinkDialogStateProps = {
 const initBankDialogState: BankLinkDialogStateProps = {
 	visible: false, 
 	title: "", 
-	description: ""
+	description: "",
+	buttoTitle: ""
 }
 
 const DrawerContent = (
@@ -204,6 +177,7 @@ const DrawerContent = (
 						visible: true,
 						title: Translation.LOAD_UP.LOAD_UP_NO_BANK_TITLE,
 						description: Translation.LOAD_UP.LOAD_UP_NO_BANK_DETAIL,
+						buttoTitle: Translation.BUTTON.LOAD_UP,
 						confirmAction: onLoadupDialogConfirm,
 						cancelAction: onLoadupDialogCancel
 					})
@@ -213,6 +187,7 @@ const DrawerContent = (
 						visible: true,
 						title: Translation.PAYMENT.PAYMENT_NO_BANK_TITLE,
 						description: Translation.PAYMENT.PAYMENT_NO_BANK_DETAIL,
+						buttoTitle: Translation.BUTTON.LINK_BANK,
 						confirmAction: onBankDialogConfirm,
 						cancelAction: onBankDialogCancel
 					})
@@ -329,6 +304,7 @@ const DrawerContent = (
 									visible: true,
 									title: Translation.LOAD_UP.LOAD_UP_NO_BANK_TITLE,
 									description: Translation.LOAD_UP.LOAD_UP_NO_BANK_DETAIL,
+									buttoTitle: Translation.BUTTON.LINK_BANK,
 									confirmAction: onBankDialogConfirm,
 									cancelAction: onBankDialogCancel
 								})
@@ -342,6 +318,7 @@ const DrawerContent = (
 									visible: true,
 									title: Translation.CASH_OUT.CASH_OUT_NO_BANK_TITLE,
 									description: Translation.CASH_OUT.CASH_OUT_NO_BANK_DETAIL,
+									buttoTitle: Translation.BUTTON.LINK_BANK,
 									confirmAction: onBankDialogConfirm,
 									cancelAction: onBankDialogCancel
 								})
@@ -402,6 +379,7 @@ const DrawerContent = (
 			<BankLinkDialog
 				visible={bankDialogState.visible}
 				title={bankDialogState.title}
+				buttonTitle={bankDialogState.buttoTitle}
 				description={bankDialogState.description}
 				onConfirm={() => {bankDialogState.confirmAction && bankDialogState.confirmAction()}}
 				onCancel={() => {bankDialogState.cancelAction && bankDialogState.cancelAction()}}

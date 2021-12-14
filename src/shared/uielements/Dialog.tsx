@@ -1,5 +1,5 @@
 import React, { ReactElement } from 'react';
-import { Dimensions, View, StyleSheet } from "react-native";
+import { Dimensions, View, StyleSheet, SafeAreaView } from 'react-native';
 import { Overlay } from 'react-native-elements';
 import { CancelBtn } from "src/shared/uielements/header";
 import { colors } from "src/theme/colors";
@@ -73,9 +73,9 @@ const Dialog = ({visible = false, onClose, backgroundStyle={}, style = {}, child
 			onShow={() => onShow && onShow()}
 		>
 			<View style={styles.container}>
-				{!hiddenCloseBtn && <View style={styles.closeBtn}>
+				{!hiddenCloseBtn && <SafeAreaView style={styles.closeBtn}>
 					<CancelBtn text="Close" color={colors.white} onClick={() => onClose && onClose()} />
-				</View>}
+				</SafeAreaView>}
 				<View style={{
 					...styles.dialogWrap,
 					...style
