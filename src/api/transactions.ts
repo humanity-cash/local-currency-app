@@ -31,7 +31,6 @@ export const getWithdrawals = async (userId: UserId): Promise<MiniTransaction[]>
 
 const getTransactions = async (userId: UserId): Promise<MiniTransaction[]> => {
   try {
-console.log("🚀 ~ file: transactions.ts ~ line 44 ~ getTransactions ~ userId", userId)
     const response = await getRequest(`/users/${userId}/transfer`);
     if (response.status === 204) {
       return []

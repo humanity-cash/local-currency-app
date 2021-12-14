@@ -255,7 +255,6 @@ const MerchantQRCodeScan = (): JSX.Element => {
 				const roundUpAmount = Math.ceil(amountCalcedFee) - Number(amountCalcedFee) || 1;
 				request.roundUpAmount = roundUpAmount.toString();
 			}
-			console.log("🚀 onPayConfirm ~ business ~ request", request);
 			const response = await TransactionsAPI.transferTo(businessDwollaId, request);
 			cleanUpState();
 			if (response.data) {
@@ -272,7 +271,6 @@ const MerchantQRCodeScan = (): JSX.Element => {
 
 	const handleOpenPay = async () => {
 		setIsOpenPayment(false);
-		// check balance
 		if (businessWalletData.availableBalance <= state.amount) {
 			showToast(ToastType.ERROR, "Whoooops. You cannot the payment.", "You have too little funds available. Please load up your balance first.");
 			return;

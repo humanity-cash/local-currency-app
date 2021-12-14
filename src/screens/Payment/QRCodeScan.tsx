@@ -288,31 +288,30 @@ const QRCodeScan = (): JSX.Element => {
 	}
 
 	const handleOpenPay = async () => {
-		console.log("here")
-		// setIsOpenPayment(false);
-		// // check balance
-		// if (customerWalletData?.availableBalance <= state.amount) {
-		// 	setIsLowAmountDialog(true);
-		// } else {
-		// 	if (customerDwollaId) {
-		// 		const request: ITransactionRequest = {
-		// 			toUserId: state.to,
-		// 			amount: openAmount,
-		// 			comment: ''
-		// 		};
+		setIsLoading(true)
+		setIsOpenPayment(false);
+		if (customerWalletData?.availableBalance <= state.amount) {
+			setIsLowAmountDialog(true);
+			return;
+		} else {
+			if (customerDwollaId) {
+				const request: ITransactionRequest = {
+					toUserId: state.to,
+					amount: openAmount,
+					comment: ''
+				};
 
-		// 		setIsLoading(true)
-		// 		const response = await TransactionsAPI.transferTo(customerDwollaId, request);
-		// 		if (response.data) {
-		// 			navigation.navigate(Routes.PAYMENT_SUCCESS);
-		// 		} else {
-		// 			navigation.navigate(Routes.PAYMENT_FAILED);
-		// 		}
-		// 		setIsLoading(false)
-		// 	} else {
-		// 		showToast(ToastType.ERROR, "Failed", "Whooops, something went wrong.");
-		// 	}
-		// }
+				const response = await TransactionsAPI.transferTo(customerDwollaId, request);
+				if (response.data) {
+					navigation.navigate(Routes.PAYMENT_SUCCESS);
+				} else {
+					navigation.navigate(Routes.PAYMENT_FAILED);
+				}
+				setIsLoading(false)
+			} else {
+				showToast(ToastType.ERROR, "Failed", "Whooops, something went wrong.");
+			}
+		}
 	}
 
 	const cleanUpState = () => {
