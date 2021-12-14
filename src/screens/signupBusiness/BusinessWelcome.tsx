@@ -20,7 +20,7 @@ import Translation from "src/translation/en.json";
 const styles = StyleSheet.create({
 	headerText: {
 		fontSize: 32,
-		lineHeight: 40,
+		lineHeight: 42,
 		color: colors.purple,
 	},
 	bottomView: {

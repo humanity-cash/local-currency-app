@@ -94,16 +94,18 @@ const MerchantCashoutAmount = (): JSX.Element => {
 	}, [amount]);
 
 	useEffect(() => {
-		if(businessWalletData && businessWalletData?.availableBalance < 5) {
+		if(businessWalletData?.availableBalance) {
 			setMaxAmount(`${businessWalletData.availableBalance}`)
-		} else {
-			setMaxAmount('5.00')
 		}
+
 	}, [businessWalletData])
 
 	const onValueChange = (name: string, change: string) => {
 		const amount = change.replace(',', '.')
+
+		if(+amount <= +maxAmount) {
 			setAmount(amount);
+		}
 	};
 
 	const viewConfirm = () => {
@@ -142,7 +144,7 @@ const MerchantCashoutAmount = (): JSX.Element => {
 					<Text style={styles.headerText}>{Translation.PAYMENT.CASH_OUT}</Text>
 				</View>
 				<View>
-					<Text style={styles.bodyText}>{Translation.PAYMENT.CASH_OUT_DETAIL}</Text>
+					<Text style={styles.bodyText}>{Translation.PAYMENT.MERCHANT_CASH_OUT_DETAIL}</Text>
 					<View style={styles.formLabel}>
 						<Text style={styles.labelText}>{Translation.LABEL.AMOUNT}</Text>
 						<Text style={styles.labelText}>{`${Translation.LABEL.MAX_BERKSHARES} ${maxAmount}`}</Text>
