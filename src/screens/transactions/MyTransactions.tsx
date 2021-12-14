@@ -209,25 +209,8 @@ const MyTransactions = (): JSX.Element => {
 	const fuseInstance = createFuseSearchInstance(filteredData, options)
 
 	useEffect(() => {
-		if (!startDate && !endDate) {
-			setFilteredData(apiData)
-			return
-		}
-		const data = apiData.reduce<MiniTransaction[]>((acc, curr) => {
-			if (startDate) {
-				if (curr.timestamp < startDate?.getTime()) {
-					return acc
-				}
-			}
-			if (endDate) {
-				if (curr.timestamp > endDate?.getTime()) {
-					return acc
-				}
-			}
-			return [...acc, curr]
-		}, [])
-		setFilteredData(data)
-	}, [startDate, endDate, selectedType])
+		filterData()
+	}, [startDate, endDate, selectedType, searchText])
 
 	useEffect(() => {
 		if (customerDwollaId) {
@@ -241,6 +224,33 @@ const MyTransactions = (): JSX.Element => {
 			handler();
 		}
 	}, [customerDwollaId]);
+
+	const filterData = () => {
+		let data = apiData
+
+		// filter by date
+		data = data.reduce<MiniTransaction[]>((acc, curr) => {
+			if (startDate) {
+				if (curr.timestamp < startDate?.getTime()) {
+					return acc
+				}
+			}
+			if (endDate) {
+				if (curr.timestamp > endDate?.getTime()) {
+					return acc
+				}
+			}
+			return [...acc, curr]
+		}, [])
+
+		// filter by name
+		const fuseResult = fuseInstance.search(searchText)
+		data = fuseResult.map(i => i.item)
+
+		// filter by type <-- to do
+
+		setFilteredData(data)
+	}
 
 	const onSearchChange = (name: string, change: string) => {
 		if(!change){

@@ -1,8 +1,8 @@
 import { AntDesign } from '@expo/vector-icons';
-import DateTimePicker from '@react-native-community/datetimepicker';
+// import DateTimePicker from '@react-native-community/datetimepicker';
 import moment from 'moment';
 // import { createStore, useStore } from "react-hookstore";
-import React from 'react';
+import React, {useEffect} from 'react';
 import { useStore } from 'react-hookstore';
 import { Platform, StyleSheet, TouchableOpacity, View } from 'react-native';
 import { Text } from 'react-native-elements';
@@ -11,6 +11,7 @@ import { CUSTOMER_TX_FILTERS_STORE } from 'src/hook-stores';
 import { colors } from "src/theme/colors";
 import Translation from 'src/translation/en.json';
 import { CustomerTxFilterStore, CustomerTxFilterStoreActions, CustomerTxFilterStoreReducer } from 'src/utils/types';
+import DateTimePicker from "react-native-modal-datetime-picker";
 
 const consumerTransactionTypes = ["All", "Incoming transactions", "Outgoing transactions", "Load ups B$", "Cash out to USD"];
 
@@ -84,17 +85,47 @@ const MyTransactionFilter = (): JSX.Element => {
         isStartDate,
         endDate,
         isEndDate }, dispatch] = useStore<CustomerTxFilterStore, CustomerTxFilterStoreReducer>(CUSTOMER_TX_FILTERS_STORE)
-
-    const onStartDateChange = (_: unknown, selectedDate?: Date) => {
+    
+    const onStartDateChange = (selectedDate?: Date) => {
+        var date = selectedDate
+        if(date && endDate) {
+            if(moment(date).isAfter(endDate)) {
+                dispatch({ type: CustomerTxFilterStoreActions.UpdateEndDate, payload: { endDate: date } })
+            }
+        }
+        
         dispatch({ type: CustomerTxFilterStoreActions.UpdateStartDate, payload: { startDate: selectedDate || startDate || undefined } })
     };
 
-    const onEndDateChange = (_: unknown, selectedDate?: Date) => {
+    const onEndDateChange = (selectedDate?: Date) => {
+        var date = selectedDate
+        if(date && startDate) {
+            if(moment(startDate).isAfter(date)) {
+                dispatch({ type: CustomerTxFilterStoreActions.UpdateStartDate, payload: { startDate: date } })
+            }
+        }
+
         dispatch({ type: CustomerTxFilterStoreActions.UpdateEndDate, payload: { endDate: selectedDate || startDate || undefined } })
     };
 
-    const clearFilter = () => {
+     const clearFilter = () => {
         dispatch({ type: CustomerTxFilterStoreActions.ClearAll, payload: {} })
+    }
+
+    const openStartDate = () => {
+        dispatch({ type: CustomerTxFilterStoreActions.OpenStartDate, payload: {} })
+    }
+
+    const openEndDate = () => {
+        dispatch({ type: CustomerTxFilterStoreActions.OpenEndDate, payload: {} })
+    }
+
+    const closeStartDate = () => {
+        dispatch({ type: CustomerTxFilterStoreActions.CloseStartDate, payload: {} })
+    }
+
+    const closeEndDate = () => {
+        dispatch({ type: CustomerTxFilterStoreActions.CloseEndDate, payload: {} })
     }
 
     return (
@@ -102,18 +133,18 @@ const MyTransactionFilter = (): JSX.Element => {
             <View style={styles.inlineView}>
                 <View style={styles.dateView}>
                     <Text style={styles.label}>{Translation.LABEL.START_DATE}</Text>
-                    <TouchableOpacity onPress={() => dispatch({ type: CustomerTxFilterStoreActions.OpenStartDate, payload: {} })} style={styles.date} >
+                    <TouchableOpacity onPress={openStartDate} style={styles.date} >
                         <Text style={startDate == null ? styles.placeholder : styles.pickerText}>
-                            {startDate == null ? "MM/DD/YY" : moment(startDate).format('DD/MM/yyyy')}
+                            {startDate == null ? "MM/DD/YY" : moment(startDate).format('MM/DD/yyyy')}
                         </Text>
                     </TouchableOpacity>
                 </View>
                 <View style={styles.separator}></View>
                 <View style={styles.dateView}>
                     <Text style={styles.label}>{Translation.LABEL.END_DATE}</Text>
-                    <TouchableOpacity onPress={() => dispatch({ type: CustomerTxFilterStoreActions.OpenEndDate, payload: {} })} style={styles.date}>
+                    <TouchableOpacity onPress={openEndDate} style={styles.date}>
                         <Text style={endDate == null ? styles.placeholder : styles.pickerText}>
-                            {endDate == null ? "MM/DD/YY" : moment(endDate).format('DD/MM/yyyy')}
+                            {endDate == null ? "MM/DD/YY" : moment(endDate).format('MM/DD/yyyy')}
                         </Text>
                     </TouchableOpacity>
                 </View>
@@ -147,7 +178,26 @@ const MyTransactionFilter = (): JSX.Element => {
             <TouchableOpacity style={styles.clearFilter} onPress={clearFilter}>
                 <Text style={styles.clearText}>{Translation.PAYMENT.CLEAR_FILTER}</Text>
             </TouchableOpacity>
-            {isStartDate && (
+            {isStartDate &&
+                <DateTimePicker
+                    isVisible={true}
+                    mode="date"
+                    date={startDate ? startDate : new Date()}
+                    onConfirm={onStartDateChange}
+                    onCancel={closeStartDate}
+                    textColor='black'
+                />
+            }
+			<DateTimePicker
+				isVisible={isEndDate}
+				mode="date"
+				date={endDate ? endDate : new Date()}
+				onConfirm={onEndDateChange}
+				minimumDate={startDate}
+				onCancel={closeEndDate}
+                textColor='black'
+			/>
+            {/* {isStartDate && (
                 <DateTimePicker
                     testID="dateTimePicker"
                     value={startDate ? startDate : new Date()}
@@ -162,7 +212,7 @@ const MyTransactionFilter = (): JSX.Element => {
                     display={Platform.OS == "ios" ? "inline" : "default"}
                     onChange={onEndDateChange}
                 />
-            )}
+            )} */}
         </View>
     );
 }
