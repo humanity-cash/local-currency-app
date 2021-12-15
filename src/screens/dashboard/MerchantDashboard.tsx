@@ -21,11 +21,11 @@ import { getBerksharePrefix, sortTxByTimestamp } from "src/utils/common";
 import { BusinessTxDataStore, BusinessTxDataStoreActions, BusinessTxDataStoreReducer, BusinessTxFilterStore, MiniTransaction, TransactionType } from "src/utils/types";
 import DwollaDialog from './DwollaDialog';
 import MerchantTransactionList from "./MerchantTransactionList";
-import MerchantTransactionsFilter from "./MerchantTransactionsFilter";
 import SettingDialog from 'src/shared/uielements/SettingDialog';
 import { BarCodeScanner } from 'expo-barcode-scanner';
 import { EventsContext } from 'src/contexts/events';
 import EventItem from 'src/shared/uielements/EventItem';
+import MerchantTransactionsFilter from './MerchantTransactionsFilter';
 
 type TransactionDetailProps = {
 	visible: boolean,
@@ -86,7 +86,7 @@ const MerchantDashboard = (): JSX.Element => {
 	const [{ selectedType,
 		startDate,
 		endDate,
-	}] = useStore<BusinessTxFilterStore>(BUSINESS_TX_FILTERS_STORE)
+	}] = useStore<BusinessTxFilterStore>(BUSINESS_TX_FILTERS_STORE);
 	const [apiData, dispatchApiData] = useStore<BusinessTxDataStore, BusinessTxDataStoreReducer>(BUSINESS_TX_DATA_STORE);
 	const { businessWalletData, updateBusinessWalletData } = useContext(WalletContext);
 	const { user } = useContext(UserContext);
@@ -121,6 +121,10 @@ const MerchantDashboard = (): JSX.Element => {
 
 	const fuse = createFuseSearchInstance(filteredApiData, options)
 	const onSearchChange = (name: string, change: string) => {
+		updateSearchText(change)
+	}
+
+	const updateSearchText = (change: string) => {
 		if (!change) {
 			setFilteredApiData(apiData.txs)
 			setSearchText(change);
@@ -131,7 +135,6 @@ const MerchantDashboard = (): JSX.Element => {
 		setFilteredApiData(fuseResult.map(i => i.item))
 		setSearchText(change);
 	}
-
 
 	useEffect(() => {
 		if (!startDate && !endDate) {
@@ -176,6 +179,11 @@ const MerchantDashboard = (): JSX.Element => {
 		}
 
 	}, [businessWalletData.availableBalance, businessDwollaId]);
+
+	const clearSearchText = () => {
+		updateSearchText("")
+	}
+
 	const onConfirm = () => {
 		setIsDetailViewOpen(false);
 	}
@@ -283,7 +291,7 @@ const MerchantDashboard = (): JSX.Element => {
 								/>
 							</TouchableOpacity>
 						</View>
-						{isFilterVisible && <MerchantTransactionsFilter/>}
+						{isFilterVisible && <MerchantTransactionsFilter onClear={clearSearchText}/>}
 						<MerchantTransactionList data={filteredApiData} onSelect={viewDetail} />
 					</View>
 				</ScrollView>

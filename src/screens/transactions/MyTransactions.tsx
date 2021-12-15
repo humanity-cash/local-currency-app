@@ -335,7 +335,7 @@ const MyTransactions = (): JSX.Element => {
 								/>
 							</TouchableOpacity>
 						</View>
-						{isFilterVisible && <MyTransactionFilter onClear={clearSearchText} />}
+						{ isFilterVisible && <MyTransactionFilter onClear={clearSearchText} />}
 						<MyTransactionList data={filteredData} onSelect={viewDetail} />
 					</View>
 				</ScrollView>
