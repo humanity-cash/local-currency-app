@@ -60,12 +60,19 @@ export const getUser = async (userId: UserId): Promise<IWallet> => {
 
 export const createBusiness = async (user: IDBUser): Promise<{ status: number, data: IDBUser }> => {
   try {
-    if (user?.verifiedCustomer
+    const isVerifiedCustomer = user?.verifiedCustomer
       && user?.customer?.dwollaId
-      && user?.business) {
+      && user?.business
+    if (isVerifiedCustomer) {
       const response: AxiosPromiseResponse<IDBUser> = await addBusinessVerification(
+        //@ts-ignore
         user.customer.dwollaId
-        , { ...user?.business, avatar: "avatar" });
+        , {
+          ...user?.business,
+          avatar: user.business?.avatar? user.business.avatar : "avatar",
+          ein: user.business?.ein? user.business.ein : "ein",
+          phoneNumber: user.business?.phoneNumber? user.business.phoneNumber : "phoneNumber",
+        });
       //@ts-ignore
       return { status: response.status, data: response.data.data };
     } else {
@@ -73,7 +80,13 @@ export const createBusiness = async (user: IDBUser): Promise<{ status: number, d
         email: user.email,
         consent: true,
         type: 'business',
-        business: user.business
+        //@ts-ignore
+        business: {
+          ...user?.business,
+          avatar: user.business?.avatar ? user.business.avatar : "avatar",
+          ein: user.business?.ein ? user.business.ein : "ein",
+          phoneNumber: user.business?.phoneNumber ? user.business.phoneNumber : "phoneNumber",
+        }
       });
       return { status: response.status, data: response.data };
     }
