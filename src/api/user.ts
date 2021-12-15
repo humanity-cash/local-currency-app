@@ -64,17 +64,27 @@ export const createBusiness = async (user: IDBUser): Promise<{ status: number, d
       && user?.customer?.dwollaId
       && user?.business
     if (isVerifiedCustomer) {
+      const boz = {
+          ...user?.business,
+          avatar: user.business?.avatar? user.business.avatar : "avatar",
+          phoneNumber: user.business?.phoneNumber? user.business.phoneNumber : "phoneNumber",
+          owner: {
+            address1: user?.business?.address1 ? user?.business?.address1 : "empty",
+            address2: user?.business?.address2 ? user?.business?.address2 : "empty",
+            postalCode: user?.business?.postalCode ? user?.business?.postalCode : "empty",
+            state: user?.business?.state ? user?.business?.state : "empty",
+            city: user?.business?.city ? user?.business?.city : "empty",
+            firstName: user?.business?.owner?.firstName,
+            lastName: user?.business?.owner?.lastName
+          }
+
+      }
       const response: AxiosPromiseResponse<IDBUser> = await addBusinessVerification(
         //@ts-ignore
         user.customer.dwollaId
-        , {
-          ...user?.business,
-          avatar: user.business?.avatar? user.business.avatar : "avatar",
-          ein: user.business?.ein? user.business.ein : "ein",
-          phoneNumber: user.business?.phoneNumber? user.business.phoneNumber : "phoneNumber",
-        });
+        , boz);
       //@ts-ignore
-      return { status: response.status, data: response.data.data };
+      return { status: response.status, data: response?.data?.data };
     } else {
       const response = await createUser({
         email: user.email,
@@ -83,9 +93,19 @@ export const createBusiness = async (user: IDBUser): Promise<{ status: number, d
         //@ts-ignore
         business: {
           ...user?.business,
-          avatar: user.business?.avatar ? user.business.avatar : "avatar",
-          ein: user.business?.ein ? user.business.ein : "ein",
-          phoneNumber: user.business?.phoneNumber ? user.business.phoneNumber : "phoneNumber",
+          avatar: user.business?.avatar ? user.business.avatar : "empty",
+          phoneNumber: user.business?.phoneNumber ? user.business.phoneNumber : "00",
+          owner: {
+            address1: user?.business?.address1 ? user?.business?.address1 : "empty",
+            address2: user?.business?.address2 ? user?.business?.address2 : "empty",
+            postalCode: user?.business?.postalCode ? user?.business?.postalCode : "empty",
+            state: user?.business?.state ? user?.business?.state : "empty",
+            city: user?.business?.city ? user?.business?.city : "empty",
+            //@ts-ignore
+            firstName: user?.business?.owner?.firstName,
+            //@ts-ignore
+            lastName: user?.business?.owner?.lastName
+          }
         }
       });
       return { status: response.status, data: response.data };
@@ -100,7 +120,15 @@ export const createCustomer = async (user: IDBUser): Promise<{ status: number, d
   try {
     if (user?.verifiedBusiness && user?.business?.dwollaId && user?.dbId && user?.customer) {
       const response: AxiosPromiseResponse<IDBUser> =
-        await addCustomerVerification(user.business.dwollaId, user?.customer);
+        await addCustomerVerification(user.business.dwollaId, {
+          ...user?.customer,
+          avatar: user?.customer?.avatar ? user?.customer?.avatar : "empty",
+          address1: user?.customer?.address1 ? user?.customer?.address1 : "empty",
+          address2: user?.customer?.address2 ? user?.customer?.address2 : "empty",
+          postalCode: user?.customer?.postalCode ? user?.customer?.postalCode : "empty",
+          state: user?.customer?.state ? user?.customer?.state : "empty",
+          city: user?.customer?.city ? user?.customer?.city : "empty",
+        });
       //@ts-ignore
       return { status: response.status, data: response.data.data };
     } else {
@@ -108,7 +136,16 @@ export const createCustomer = async (user: IDBUser): Promise<{ status: number, d
         email: user.email,
         consent: true,
         type: 'customer',
-        customer: user.customer
+        //@ts-ignore
+        customer: {
+          ...user.customer,
+          avatar: user?.customer?.avatar ? user?.customer?.avatar : "empty",
+          address1: user?.customer?.address1 ? user?.customer?.address1 : "empty",
+          address2: user?.customer?.address2 ? user?.customer?.address2 : "empty",
+          postalCode: user?.customer?.postalCode ? user?.customer?.postalCode : "empty",
+          state: user?.customer?.state ? user?.customer?.state : "empty",
+          city: user?.customer?.city ? user?.customer?.city : "empty",
+        }
       });
       return { status: response.status, data: response.data };
     }

@@ -50,13 +50,6 @@ const styles = StyleSheet.create({
 const BusinessOwnerAddress = (): ReactElement => {
 	const navigation = useNavigation();
 	const { signOut } = useContext(AuthContext);
-	const { user } = useContext(UserContext);
-	const isFormFilled = 
-		Boolean(user?.business?.owner?.address1)
-		&& Boolean(user?.business?.owner?.address2)
-		&& Boolean(user?.business?.owner?.city)
-		&& Boolean(user?.business?.owner?.state)
-		&& Boolean(user?.business?.owner?.postalCode)
 	const onNextPress = () => {
 		navigation.navigate(Routes.BUSINESS_INFO)
 	}
@@ -82,7 +75,7 @@ const BusinessOwnerAddress = (): ReactElement => {
 				<Button
 					type="purple"
 					title={Translation.BUTTON.NEXT}
-					disabled={!isFormFilled}
+					disabled={false}
 					onPress={onNextPress}
 				/>
 			</SafeAreaView>

@@ -52,13 +52,11 @@ const BusinessOwnerDetail = (): JSX.Element => {
 	const business = user?.business;
 
 	useEffect(() => {
-		
 		setGoNext(Boolean(business?.owner?.firstName) && Boolean(business?.owner?.lastName));
 	}, [business?.owner?.firstName, business?.owner?.lastName]);
 
 	const onNextPress = () => {
 		navigation.navigate(Routes.BUSINESS_OWNER_ADDRESS);
-		// navigation.navigate(Routes.BUSINESS_INFO);
 	};
 
 	return (
