@@ -81,11 +81,11 @@ const styles = StyleSheet.create({
 const MerchantTransactionsFilter = ({ onClear }: {onClear: any}): JSX.Element => {
     const [{ startDate, isStartDate, endDate, isEndDate }, dispatchBusinessTxFilterStore] = useStore<BusinessTxFilterStore, BusinessTxFilterStoreReducer>(BUSINESS_TX_FILTERS_STORE)
 
-    const onStartDateChange = (_: unknown, selectedDate?: Date) => {
+    const onStartDateChange = (selectedDate?: Date) => {
         dispatchBusinessTxFilterStore({ type: BusinessTxFilterStoreActions.UpdateStartDate, payload: { startDate: selectedDate || startDate || undefined } })
     };
 
-    const onEndDateChange = (_: unknown, selectedDate?: Date) => {
+    const onEndDateChange = (selectedDate?: Date) => {
         dispatchBusinessTxFilterStore({ type: BusinessTxFilterStoreActions.UpdateEndDate, payload: { endDate: selectedDate || endDate || undefined } })
     };
 
