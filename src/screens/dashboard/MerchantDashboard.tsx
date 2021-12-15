@@ -86,7 +86,7 @@ const MerchantDashboard = (): JSX.Element => {
 	const [{ selectedType,
 		startDate,
 		endDate,
-	}] = useStore<BusinessTxFilterStore>(BUSINESS_TX_DATA_STORE);
+	}] = useStore<BusinessTxFilterStore>(BUSINESS_TX_FILTERS_STORE);
 	const [apiData, dispatchApiData] = useStore<BusinessTxDataStore, BusinessTxDataStoreReducer>(BUSINESS_TX_DATA_STORE);
 	const { businessWalletData, updateBusinessWalletData } = useContext(WalletContext);
 	const { user } = useContext(UserContext);
