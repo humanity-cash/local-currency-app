@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, View, KeyboardAvoidingView, Image, Platform } from 'react-native';
+import { StyleSheet, View, Image, SafeAreaView } from 'react-native';
 import { Text } from 'react-native-elements';
 import { colors } from "src/theme/colors";
 import { Button, Modal, ModalHeader } from "src/shared/uielements";
@@ -20,8 +20,8 @@ const styles = StyleSheet.create({
 		alignItems: 'center'
     },
     bottomView: {
-		padding: 20,
-		paddingBottom: 45
+		marginHorizontal: 20,
+		marginBottom: 20
 	}
 });
 
@@ -48,16 +48,13 @@ const MerchantRequestSuccess = (props: MerchantRequestSuccessProps): JSX.Element
                         />			
                     </View>
                 </View>
-                <KeyboardAvoidingView
-                    behavior={Platform.OS == "ios" ? "padding" : "height"} >
-                    <View style={styles.bottomView}>
-                        <Button
-                            type={BUTTON_TYPES.PURPLE}
-                            title={Translation.BUTTON.CLOSE}
-                            onPress={props.onClose}
-                        />
-                    </View>
-                </KeyboardAvoidingView>
+                <SafeAreaView style={styles.bottomView}>
+                    <Button
+                        type={BUTTON_TYPES.PURPLE}
+                        title={Translation.BUTTON.CLOSE}
+                        onPress={props.onClose}
+                    />
+                </SafeAreaView>
             </View>
         </Modal>
     )

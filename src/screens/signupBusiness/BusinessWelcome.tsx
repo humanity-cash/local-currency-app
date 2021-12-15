@@ -1,7 +1,6 @@
-import React, { ReactElement, useContext, useEffect, useState } from "react";
+import React, { ReactElement, useContext, useState } from "react";
 import {
-	KeyboardAvoidingView,
-	Platform, SafeAreaView, ScrollView,
+	SafeAreaView, ScrollView,
 	StyleSheet,
 	View
 } from "react-native";
@@ -58,26 +57,23 @@ const BusinessWelcome = (): ReactElement => {
 					{Translation.PROFILE.WELCOME_BERKSHARES}
 				</Text>
 			</ScrollView>
-			<KeyboardAvoidingView
-				behavior={Platform.OS == "ios" ? "padding" : "height"}>
-				<SafeAreaView style={styles.bottomView}>
-					<Button
-						type="transparent"
-						title={Translation.BUTTON.SKIP_NOW}
-						style={styles.skipBtn}
-						textStyle={styles.skipBtn}
-						onPress={onSkip}
-					/>
-					<Button
-						type="purple"
-						title={Translation.BUTTON.LINK_BUSINESS_BANK}
-						disabled={isWalletLoading}
-						onPress={() => {
-							setIsVisible(true)
-						}}
-					/>
-				</SafeAreaView>
-			</KeyboardAvoidingView>
+			<SafeAreaView style={styles.bottomView}>
+				<Button
+					type="transparent"
+					title={Translation.BUTTON.SKIP_NOW}
+					style={styles.skipBtn}
+					textStyle={styles.skipBtn}
+					onPress={onSkip}
+				/>
+				<Button
+					type="purple"
+					title={Translation.BUTTON.LINK_BUSINESS_BANK}
+					disabled={isWalletLoading}
+					onPress={() => {
+						setIsVisible(true)
+					}}
+				/>
+			</SafeAreaView>
 
 			{isVisible && (
 				<DwollaDialog title={Translation.BANK_ACCOUNT.USE_DWOLLA_BUSINESS} visible={isVisible} onClose={() => setIsVisible(false)} />

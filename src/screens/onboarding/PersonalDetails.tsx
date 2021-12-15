@@ -57,7 +57,9 @@ const PersonalDetails = (): JSX.Element => {
 	};
 
 	return (
-		<View style={viewBase}>
+		<KeyboardAvoidingView
+			behavior={Platform.OS == "ios" ? "padding" : "height"}
+			style={viewBase}>
 			<Header
 				leftComponent={<BackBtn onClick={() => navigation.goBack()} />}
 				rightComponent={
@@ -80,18 +82,15 @@ const PersonalDetails = (): JSX.Element => {
 					</View>
 				</ScrollView>
 			</View>
-			<KeyboardAvoidingView
-				behavior={Platform.OS == "ios" ? "padding" : "height"}>
-				<SafeAreaView style={styles.bottomView}>
-					<Button
-						type="darkGreen"
-						title={Translation.BUTTON.NEXT}
-						disabled={!goNext}
-						onPress={onNextPress}
-					/>
-				</SafeAreaView>
-			</KeyboardAvoidingView>
-		</View>
+			<SafeAreaView style={styles.bottomView}>
+				<Button
+					type="darkGreen"
+					title={Translation.BUTTON.NEXT}
+					disabled={!goNext}
+					onPress={onNextPress}
+				/>
+			</SafeAreaView>
+		</KeyboardAvoidingView>
 	);
 };
 

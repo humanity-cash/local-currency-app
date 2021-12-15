@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, View, KeyboardAvoidingView, Platform, Image } from 'react-native';
+import { StyleSheet, View, Image, SafeAreaView } from 'react-native';
 import { Text } from 'react-native-elements';
 import { Header, Button, CancelBtn } from "src/shared/uielements";
 import { baseHeader, viewBase } from "src/theme/elements";
@@ -26,8 +26,8 @@ const styles = StyleSheet.create({
 		alignItems: 'center'
 	},
 	bottomView: {
-		padding: 20,
-		paddingBottom: 45
+		marginHorizontal: 20,
+		marginBottom: 45
 	},
 });
 
@@ -52,16 +52,13 @@ const MerchantPaymentSuccess = (): JSX.Element => {
 					/>			
 				</View>
 			</View>
-			<KeyboardAvoidingView
-				behavior={Platform.OS == "ios" ? "padding" : "height"} >
-				<View style={styles.bottomView}>
-					<Button
-						type={BUTTON_TYPES.PURPLE}
-						title={Translation.BUTTON.NEXT}
-						onPress={() => navigation.navigate(Routes.MERCHANT_DASHBOARD)}
-					/>
-				</View>
-			</KeyboardAvoidingView>
+			<SafeAreaView style={styles.bottomView}>
+				<Button
+					type={BUTTON_TYPES.PURPLE}
+					title={Translation.BUTTON.NEXT}
+					onPress={() => navigation.navigate(Routes.MERCHANT_DASHBOARD)}
+				/>
+			</SafeAreaView>
 		</View>
 	);
 }

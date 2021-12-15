@@ -40,7 +40,9 @@ const PersonalProfile = (): ReactElement => {
 	}
 
 	return (
-		<View style={viewBase}>
+		<KeyboardAvoidingView
+			behavior={Platform.OS == "ios" ? "padding" : "height"}
+			style={viewBase}>
 			<Header
 				leftComponent={<BackBtn onClick={() => navigation.goBack()} />}
 				rightComponent={<CancelBtn text={Translation.BUTTON.LOGOUT} onClick={signOut} />}
@@ -55,18 +57,14 @@ const PersonalProfile = (): ReactElement => {
 				</ScrollView>
 			</View>
 			<SafeAreaView style={styles.bottomView}>
-				<KeyboardAvoidingView
-					behavior={Platform.OS == "ios" ? "padding" : "height"}
-				>
-					<Button
-						type={BUTTON_TYPES.DARK_GREEN}
-						title={Translation.BUTTON.NEXT}
-						disabled={!goNext}
-						onPress={onNextPress}
-					/>
-				</KeyboardAvoidingView>
+				<Button
+					type={BUTTON_TYPES.DARK_GREEN}
+					title={Translation.BUTTON.NEXT}
+					disabled={!goNext}
+					onPress={onNextPress}
+				/>
 			</SafeAreaView>
-		</View>
+		</KeyboardAvoidingView>
 	);
 }
 
