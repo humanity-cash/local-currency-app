@@ -1,4 +1,5 @@
 import { useNavigation } from "@react-navigation/native";
+import { createFuseSearchInstance } from 'src/fuse';
 import React, { useState, useContext, useEffect } from 'react';
 import { StyleSheet, View, ScrollView } from 'react-native';
 import { Text } from "react-native-elements";
@@ -138,6 +139,11 @@ const TransactionDetail = (props: TransactionDetailProps) => {
 	)
 }
 
+const options = {
+	includeScore: false,
+	keys: ['toName', 'fromName', 'value', 'type']
+};
+
 const CashierTransactions = (): JSX.Element => {
 	const navigation = useNavigation();
 	const [searchText, setSearchText] = useState<string>("");
@@ -147,17 +153,29 @@ const CashierTransactions = (): JSX.Element => {
 
 	const { businessDwollaId } = useContext(UserContext)
 	const { businessWalletData } = useContext(WalletContext)
-	const [, dispatchApiData] = useStore<BusinessTxDataStore, BusinessTxDataStoreReducer>(BUSINESS_TX_DATA_STORE);
+	const [apiData, dispatchApiData] = useStore<BusinessTxDataStore, BusinessTxDataStoreReducer>(BUSINESS_TX_DATA_STORE);
 	const [filteredApiData, setFilteredApiData] = useState<MiniTransaction []>([]);
+
 	const onSearchChange = (name: string, change: string) => {
 		setSearchText(change);
+		if (!change) {
+			setFilteredApiData(apiData.txs);
+			setSearchText(change);
+			return;
+		}
+		const fuseInstance = createFuseSearchInstance(filteredApiData, options);
+		const fuseResult = fuseInstance.search(change);
+		//@ts-ignore
+		setFilteredApiData(fuseResult.map(i => i.item));
+		setSearchText(change);
+
 	}
 
 	useEffect(() => {
 		const handler = async () => {
 			if (!businessDwollaId) return;
 			setIsLoading(true);
-			const txs = await TransactionsAPI.getAllTransactions(businessDwollaId);
+			const txs = await TransactionsAPI.getBlockchainTransactions(businessDwollaId);
 			const sortedTxs = sortTxByTimestamp(txs);
 			dispatchApiData({ type: BusinessTxDataStoreActions.UpdateTransactions, payload: { txs: sortedTxs } });
 			setFilteredApiData(sortedTxs);
