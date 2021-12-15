@@ -374,8 +374,6 @@ const DrawerContent = (
 					)}
 					label="Sign out"
 					onPress={() => { 
-						updateSelectedView(ViewState.Onboarding);
-						props.navigation.navigate(Routes.TEASER);
 						signOut();
 					}}
 				/>
