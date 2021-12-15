@@ -129,7 +129,7 @@ const PaymentConfirm = (props: PaymentConfirmProps) => {
 	const firstName = user?.customer?.firstName;
 	const lastName = user?.customer?.lastName;
 	const amountCalcedFee = props.payInfo.amount;
-	const roundUpTotalAmount = Math.ceil(amountCalcedFee) - amountCalcedFee || amountCalcedFee + 1;
+	const roundUpTotalAmount = (Math.ceil(amountCalcedFee) - amountCalcedFee) ? Math.ceil(amountCalcedFee) : amountCalcedFee + 1;
 
 	return (
 		<Dialog visible={props.visible} onClose={props.onCancel} style={styles.dialog}>
