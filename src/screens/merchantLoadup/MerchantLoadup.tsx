@@ -86,8 +86,8 @@ const styles = StyleSheet.create({
 		color: colors.purple
 	},
   bottomView: {
-		padding: 20,
-    paddingBottom: 45
+		marginHorizontal: 20,
+    marginBottom: 20
 	},
 });
 

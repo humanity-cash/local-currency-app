@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import { StyleSheet, View, KeyboardAvoidingView, ActivityIndicator, ScrollView, Platform } from 'react-native';
+import { StyleSheet, View, ActivityIndicator, ScrollView, SafeAreaView } from 'react-native';
 import { Text } from 'react-native-elements';
 import { Header } from "src/shared/uielements";
 import { colors } from "src/theme/colors";
@@ -19,7 +19,7 @@ const styles = StyleSheet.create({
 		color: colors.bodyText
 	},
 	bottomView: {
-		paddingBottom: 45
+		marginBottom: 20
 	},
 });
 
@@ -32,9 +32,7 @@ const CashierPaymentPending = (): JSX.Element => {
 	});
 
 	return (
-		<KeyboardAvoidingView
-			behavior={Platform.OS == "ios" ? "padding" : "height"}
-			style={viewBase}>
+		<View style={viewBase}>
 			<Header />
 			<ScrollView style={wrappingContainerBase}>
 				<View style={ baseHeader }>
@@ -42,10 +40,10 @@ const CashierPaymentPending = (): JSX.Element => {
 					<Text style={styles.text}>{Translation.PAYMENT.PENDING_DETAIL}</Text>
 				</View>
 			</ScrollView>
-			<View style={styles.bottomView}>
+			<SafeAreaView style={styles.bottomView}>
 				<ActivityIndicator size="large" color={colors.purple} />
-			</View>
-		</KeyboardAvoidingView>
+			</SafeAreaView>
+		</View>
 	);
 }
 

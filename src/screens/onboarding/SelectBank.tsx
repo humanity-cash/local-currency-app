@@ -1,6 +1,6 @@
 import { useNavigation } from '@react-navigation/native';
 import React, { useContext, useEffect, useState } from 'react';
-import { ActivityIndicator, Dimensions, ScrollView, StyleSheet, View } from 'react-native';
+import { ActivityIndicator, Dimensions, ScrollView, StyleSheet, View, SafeAreaView } from 'react-native';
 import { WebView } from 'react-native-webview';
 import { DwollaAPI } from 'src/api';
 import { UserContext } from 'src/contexts';
@@ -23,7 +23,7 @@ const styles = StyleSheet.create({
 		paddingBottom: 10
 	},
 	bottomView: {
-		paddingBottom: 45
+		marginBottom: 20
 	},
 });
 
@@ -67,9 +67,9 @@ const SelectBank = (): JSX.Element => {
 				)}
 			</ScrollView>
 			{iavToken === "" && (
-				<View style={styles.bottomView}>
+				<SafeAreaView style={styles.bottomView}>
 					<ActivityIndicator size="large" color={colors.darkGreen} />
-				</View>
+				</SafeAreaView>
 			)}
 		</View>
 	);

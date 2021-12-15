@@ -22,8 +22,8 @@ const styles = StyleSheet.create({
 		alignItems: 'center'
 	},
 	bottomView: {
-		padding: 20,
-		paddingBottom: 45
+		marginHorizontal: 20,
+		marginBottom: 20
 	},
 	bodyText: {
 		color: colors.bodyText
