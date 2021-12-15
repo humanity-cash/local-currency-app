@@ -20,6 +20,8 @@ import Translation from 'src/translation/en.json';
 import DwollaDialog from './DwollaDialog';
 import { BarCodeScanner } from 'expo-barcode-scanner';
 import SettingDialog from 'src/shared/uielements/SettingDialog';
+import { EventsContext } from 'src/contexts/events';
+import EventItem from 'src/shared/uielements/EventItem';
 
 const styles = StyleSheet.create({
 	content: { paddingBottom: 80 },
@@ -155,15 +157,11 @@ const Dashboard = (): JSX.Element => {
 	const [isSetting, setIsSetting] = useState(false)
 	const { customerDwollaId } = useContext(UserContext)
 	const { customerWalletData, updateCustomerWalletData } = useContext(WalletContext)
+	const { events, getEvents, deleteEvent } = useContext(EventsContext)
 
 	const { isLoading: isWalletLoading } = useCustomerWallet();
 	const personalFundingSource = customerWalletData?.availableFundingSource;
 	const availableBalance = customerWalletData?.availableBalance;
-
-	const selectBank = () => {
-		navigation.navigate(Routes.SELECT_BANK);
-		onClose();
-	}
 
 	useEffect(() => {
 		const timerId = setInterval(async () => {
@@ -171,10 +169,16 @@ const Dashboard = (): JSX.Element => {
 				const userWallet = await DwollaAPI.loadWallet(customerDwollaId)
 				const fundingSource = await DwollaAPI.loadFundingSource(customerDwollaId)
 				updateCustomerWalletData(({ ...userWallet, availableFundingSource: fundingSource }))
+				getEvents(customerDwollaId)
 			}
 		}, 1000);
 		return () => clearInterval(timerId);
 	}, [customerDwollaId]);
+
+	const selectBank = () => {
+		navigation.navigate(Routes.SELECT_BANK);
+		onClose();
+	}
 
 	const onClose = () => {
 		setIsVisible(false);
@@ -249,6 +253,13 @@ const Dashboard = (): JSX.Element => {
 								</Text>
 							</View>
 						)}
+
+						{ events.length > 0 && 
+							<EventItem 
+								event={events[events.length-1]}
+								onDelete={()=>{deleteEvent(customerDwollaId, events[events.length-1].dbId)}} 
+							/>
+						}
 
 						<View style={styles.feedView}>
 							<View style={styles.feedHeader}>

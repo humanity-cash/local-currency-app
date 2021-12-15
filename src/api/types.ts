@@ -1,6 +1,7 @@
 import { AxiosResponse } from 'axios';
 
 export type UserId = string;
+export type EventId = string;
 export type AxiosPromiseResponse<T = unknown> = AxiosResponse<T>;
 
 export interface BaseUser {
@@ -131,4 +132,13 @@ export interface IOperatorResponse {
     currentOutstanding: string;
     deposits: IDepositResponse[];
     withdrawals: IWithdrawalResponse[];
+}
+
+export interface IEvent {
+    userId: UserId;
+    timestamp: number;
+    message: string;
+    closed: boolean;
+    level: string;
+    dbId: string
 }
