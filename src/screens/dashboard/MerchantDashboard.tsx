@@ -24,6 +24,8 @@ import MerchantTransactionList from "./MerchantTransactionList";
 import MerchantTransactionsFilter from "./MerchantTransactionsFilter";
 import SettingDialog from 'src/shared/uielements/SettingDialog';
 import { BarCodeScanner } from 'expo-barcode-scanner';
+import { EventsContext } from 'src/contexts/events';
+import EventItem from 'src/shared/uielements/EventItem';
 
 type TransactionDetailProps = {
 	visible: boolean,
@@ -88,6 +90,7 @@ const MerchantDashboard = (): JSX.Element => {
 	const [apiData, dispatchApiData] = useStore<BusinessTxDataStore, BusinessTxDataStoreReducer>(BUSINESS_TX_DATA_STORE);
 	const { businessWalletData, updateBusinessWalletData } = useContext(WalletContext);
 	const { user } = useContext(UserContext);
+	const { events, getEvents, deleteEvent } = useContext(EventsContext)
 	const completedCustomerVerification = user?.verifiedCustomer;
 	const [isFilterVisible, setIsFilterVisible] = useState<boolean>(false);
 	const [searchText, setSearchText] = useState<string>("");
@@ -110,6 +113,7 @@ const MerchantDashboard = (): JSX.Element => {
 				const userWallet = await DwollaAPI.loadWallet(businessDwollaId)
 				const fundingSource = await DwollaAPI.loadFundingSource(businessDwollaId)
 				updateBusinessWalletData(({ ...userWallet, availableFundingSource: fundingSource }))
+				getEvents(businessDwollaId)
 			}
 		}, 1000);
 		return () => clearInterval(timerId);
@@ -252,7 +256,12 @@ const MerchantDashboard = (): JSX.Element => {
 								</Text>
 							</View>
 						): null}
-
+						{ events.length > 0 && 
+							<EventItem 
+								event={events[events.length-1]}
+								onDelete={()=>{deleteEvent(businessDwollaId, events[events.length-1].dbId)}} 
+							/>
+						}
 						<View style={styles.filterView}>
 							<View style={styles.filterInput}>
 								<SearchInput
