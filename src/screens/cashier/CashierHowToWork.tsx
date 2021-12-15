@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, View, KeyboardAvoidingView, ScrollView, Platform } from 'react-native';
+import { StyleSheet, View, ScrollView, SafeAreaView } from 'react-native';
 import { Text } from 'react-native-elements';
 import { Header, Button, BackBtn } from "src/shared/uielements";
 import { baseHeader, viewBaseB, wrappingContainerBase } from "src/theme/elements";
@@ -28,8 +28,8 @@ const styles = StyleSheet.create({
 		marginTop: 20
 	},
 	bottomView: {
-		padding: 20,
-		paddingBottom: 45
+		marginHorizontal: 20,
+		marginBottom: 20
 	}
 });
 
@@ -73,16 +73,13 @@ const CashierHowToWork = (): JSX.Element => {
 					</View>
 				</View>
 			</ScrollView>
-			<KeyboardAvoidingView
-				behavior={Platform.OS == "ios" ? "padding" : "height"} >
-				<View style={styles.bottomView}>
-					<Button
-						type={BUTTON_TYPES.PURPLE}
-						title={Translation.BUTTON.GOT_IT}
-						onPress={()=>navigation.goBack()}
-					/>
-				</View>
-			</KeyboardAvoidingView>
+			<SafeAreaView style={styles.bottomView}>
+				<Button
+					type={BUTTON_TYPES.PURPLE}
+					title={Translation.BUTTON.GOT_IT}
+					onPress={()=>navigation.goBack()}
+				/>
+			</SafeAreaView>
 		</View>
 	);
 }

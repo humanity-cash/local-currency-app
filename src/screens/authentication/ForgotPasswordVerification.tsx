@@ -59,7 +59,9 @@ const ForgotPasswordVerification = () => {
 	};
 
 	return (
-		<View style={viewBase}>
+		<KeyboardAvoidingView
+			behavior={Platform.OS == "ios" ? "padding" : "height"}
+			style={viewBase}>
 			<Header
 				leftComponent={<BackBtn onClick={() => navigation.goBack()} />}
 				rightComponent={
@@ -83,20 +85,17 @@ const ForgotPasswordVerification = () => {
 					<ConfirmationCode onComplete={onComplete} />
 				</View>
 			</View>
-			<KeyboardAvoidingView
-				behavior={Platform.OS == "ios" ? "padding" : "height"}>
-				<SafeAreaView style={styles.bottomView}>
-					<TouchableOpacity
-						onPress={() => {
-							Keyboard.dismiss();
-						}}>
-						<Text style={styles.bottomNavigation}>
-							Send code again
-						</Text>
-					</TouchableOpacity>
-				</SafeAreaView>
-			</KeyboardAvoidingView>
-		</View>
+			<SafeAreaView style={styles.bottomView}>
+				<TouchableOpacity
+					onPress={() => {
+						Keyboard.dismiss();
+					}}>
+					<Text style={styles.bottomNavigation}>
+						Send code again
+					</Text>
+				</TouchableOpacity>
+			</SafeAreaView>
+		</KeyboardAvoidingView>
 	);
 };
 

@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { StyleSheet, View, ScrollView, ActivityIndicator, Image } from 'react-native';
+import { StyleSheet, View, ScrollView, ActivityIndicator, Image, SafeAreaView } from 'react-native';
 import { Text } from 'react-native-elements';
 import { UserContext } from "src/contexts";
 import { Modal, ModalHeader } from "src/shared/uielements";
@@ -31,7 +31,7 @@ const styles = StyleSheet.create({
         lineHeight: 20
     },
     bottomView: {
-		paddingBottom: 45
+		marginBottom: 20
 	},
     imageView: {
 		justifyContent: 'center',
@@ -91,9 +91,9 @@ const PaymentPending = ({visible = false}: PaymentPendingProps): JSX.Element => 
                         <Text style={userType === UserType.Customer ? styles.contentText : styles.contentTextB}>Great Barrington mountain</Text>
                     </View>
                 </ScrollView>
-                <View style={styles.bottomView}>
+                <SafeAreaView style={styles.bottomView}>
                     <ActivityIndicator size="large" color={userType === UserType.Customer ? colors.darkGreen : colors.purple} />
-                </View>
+                </SafeAreaView>
             </View>
         </Modal>
     );

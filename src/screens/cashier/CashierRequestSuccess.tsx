@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, View, KeyboardAvoidingView, ScrollView, Platform } from 'react-native';
+import { StyleSheet, View, KeyboardAvoidingView, ScrollView, Platform, SafeAreaView } from 'react-native';
 import { Text } from 'react-native-elements';
 import { colors } from "src/theme/colors";
 import { CancelBtn, Button, Modal, ModalHeader } from "src/shared/uielements";
@@ -17,8 +17,8 @@ const styles = StyleSheet.create({
 		color: colors.bodyText
 	},
     bottomView: {
-		padding: 20,
-		paddingBottom: 45
+		marginHorizontal: 20,
+		marginBottom: 20
 	}
 });
 
@@ -31,7 +31,9 @@ type MerchantRequestSuccessProps = {
 const CashierRequestSuccess = (props: MerchantRequestSuccessProps): JSX.Element => {
     return (
         <Modal visible={props.visible}>
-            <View style={ modalViewBase }>
+            <KeyboardAvoidingView
+                behavior={Platform.OS == "ios" ? "padding" : "height"}
+                style={ modalViewBase }>
                 <ModalHeader
                     rightComponent={<CancelBtn text="Close" color={colors.purple} onClick={props.onClose} />}
                 />
@@ -43,17 +45,15 @@ const CashierRequestSuccess = (props: MerchantRequestSuccessProps): JSX.Element 
                     </View>
 					<Text style={styles.bodyText}> {Translation.CASHIER.PAYMENT_SUCCESS_DETAIL} </Text>
                 </ScrollView>
-                <KeyboardAvoidingView
-                    behavior={Platform.OS == "ios" ? "padding" : "height"} >
-                    <View style={styles.bottomView}>
-                        <Button
-                            type={BUTTON_TYPES.PURPLE}
-                            title={Translation.BUTTON.CLOSE}
-                            onPress={props.onClose}
-                        />
-                    </View>
-                </KeyboardAvoidingView>
-            </View>
+                
+                <SafeAreaView style={styles.bottomView}>
+                    <Button
+                        type={BUTTON_TYPES.PURPLE}
+                        title={Translation.BUTTON.CLOSE}
+                        onPress={props.onClose}
+                    />
+                </SafeAreaView>
+            </KeyboardAvoidingView>
         </Modal>
     )
 }

@@ -59,8 +59,8 @@ const styles = StyleSheet.create({
 		color: colors.purple
 	},
 	bottomView: {
-		padding: 20,
-		paddingBottom: 45
+		marginHorizontal: 20,
+		marginVertical: 20
 	},
 	transactionDetailView: {
 		padding: 20,
@@ -183,7 +183,9 @@ const CashierReturnQRCodeScan = (): JSX.Element => {
 			</View>
 			{isReturnModal && (
 				<Modal visible={isReturnModal}>
-					<SafeAreaView style={ modalViewBase }>
+					<KeyboardAvoidingView
+						behavior={Platform.OS == "ios" ? "padding" : "height"}
+						style={ modalViewBase }>
 						<ModalHeader
 							leftComponent={<BackBtn color={colors.purple} onClick={() => setIsReturnModal(false)} />}
 							rightComponent={<CancelBtn text="Close" onClick={onModalClose} />}
@@ -225,18 +227,15 @@ const CashierReturnQRCodeScan = (): JSX.Element => {
 								/>
 							</View>
 						</ScrollView>
-						<KeyboardAvoidingView
-							behavior={Platform.OS == "ios" ? "padding" : "height"} >
-							<View style={styles.bottomView}>
-								<Button
-									type={BUTTON_TYPES.PURPLE}
-									disabled={!goNext}
-									title={Translation.BUTTON.RETURN_AMOUNT}
-									onPress={onReturn}
-								/>
-							</View>
-						</KeyboardAvoidingView>
-					</SafeAreaView>
+						<SafeAreaView style={styles.bottomView}>
+							<Button
+								type={BUTTON_TYPES.PURPLE}
+								disabled={!goNext}
+								title={Translation.BUTTON.RETURN_AMOUNT}
+								onPress={onReturn}
+							/>
+						</SafeAreaView>
+					</KeyboardAvoidingView>
 				</Modal>
 			)}
 		</View>

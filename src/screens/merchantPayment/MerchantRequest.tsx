@@ -1,5 +1,5 @@
 import React, {useState, useEffect, useContext} from 'react';
-import { StyleSheet, View, KeyboardAvoidingView, ScrollView, Platform } from 'react-native';
+import { StyleSheet, View, KeyboardAvoidingView, ScrollView, Platform, SafeAreaView } from 'react-native';
 import { useNavigation } from '@react-navigation/core';
 import { Text } from 'react-native-elements';
 import { Header, Button, CancelBtn, BorderedInput, ToggleButton } from "src/shared/uielements";
@@ -46,8 +46,8 @@ const styles = StyleSheet.create({
 		color: colors.purple
 	},
 	bottomView: {
-		padding: 20,
-		paddingBottom: 45
+		marginHorizontal: 20,
+		marginBottom: 20
 	},
 	switch: {
 		borderColor: colors.purple,
@@ -167,7 +167,9 @@ const MerchantRequest = (): JSX.Element => {
 	}
 
 	return (
-		<View style={viewBaseB}>
+		<KeyboardAvoidingView
+			behavior={Platform.OS == "ios" ? "padding" : "height"}
+			style={viewBaseB}>
 			<Header
 				rightComponent={<CancelBtn color={colors.purple} text={Translation.BUTTON.CLOSE} onClick={() => navigation.navigate(Routes.MERCHANT_DASHBOARD)} />}
 			/>
@@ -201,23 +203,20 @@ const MerchantRequest = (): JSX.Element => {
 					/>
 				</View>
 			</ScrollView>
-			<KeyboardAvoidingView
-				behavior={Platform.OS == "ios" ? "padding" : "height"} >
-				<View style={styles.bottomView}>
-					<Button
-						type="transparent"
-						title={Translation.BUTTON.OPEN_AMOUNT}
-						style={styles.openBtn}
-						onPress={openAmount}
-					/>
-					<Button
-						type="darkGreen"
-						disabled={!goNext}
-						title={Translation.BUTTON.NEXT}
-						onPress={requestAmount}
-					/>
-				</View>
-			</KeyboardAvoidingView>
+			<SafeAreaView style={styles.bottomView}>
+				<Button
+					type="transparent"
+					title={Translation.BUTTON.OPEN_AMOUNT}
+					style={styles.openBtn}
+					onPress={openAmount}
+				/>
+				<Button
+					type="darkGreen"
+					disabled={!goNext}
+					title={Translation.BUTTON.NEXT}
+					onPress={requestAmount}
+				/>
+			</SafeAreaView>
 			{ isVisible && <MerchantQRCodeGen visible={isVisible} onSuccess={onSuccess} onClose={onClose} isOpenAmount={isOpenAmount} amount={Number(state.amount)} /> }
 			{ isRequestSuccess && <MerchantRequestSuccess visible={isRequestSuccess} onClose={onConfirm} amount={receivedAmount} /> }
 
@@ -229,7 +228,7 @@ const MerchantRequest = (): JSX.Element => {
 				onConfirm={onBankDialogConfirm}
 				onCancel={onBankDialogCancel}
 			/>
-		</View>
+		</KeyboardAvoidingView>
 	);
 }
 

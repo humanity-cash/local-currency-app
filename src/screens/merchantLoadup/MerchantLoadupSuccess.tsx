@@ -1,6 +1,6 @@
 import { useNavigation } from '@react-navigation/native';
 import React from 'react';
-import { StyleSheet, View, KeyboardAvoidingView, Platform, ScrollView } from 'react-native';
+import { StyleSheet, View, ScrollView, SafeAreaView } from 'react-native';
 import { Text } from 'react-native-elements';
 import { Header, CancelBtn, Button } from "src/shared/uielements";
 import { colors } from "src/theme/colors";
@@ -20,8 +20,8 @@ const styles = StyleSheet.create({
 		color: colors.bodyText
 	},
 	bottomView: {
-		paddingHorizontal: 20,
-		paddingBottom: 45
+		marginHorizontal: 20,
+		marginBottom: 20
 	},
 });
 
@@ -38,16 +38,13 @@ const LoadUpSuccess = (): JSX.Element => {
 				</View>
 				<Text style={styles.bodyText}>{Translation.LOAD_UP.LOAD_UP_SUCCESS_AVAILABLE}</Text>
 			</ScrollView>
-			<KeyboardAvoidingView
-				behavior={Platform.OS == "ios" ? "padding" : "height"} >
-				<View style={styles.bottomView}>
-					<Button
-						type={BUTTON_TYPES.PURPLE}
-						title={Translation.BUTTON.EXPLORE_BERKSHARES}
-						onPress={() => navigation.navigate(Routes.MERCHANT_DASHBOARD)}
-					/>
-				</View>
-			</KeyboardAvoidingView>
+			<SafeAreaView style={styles.bottomView}>
+				<Button
+					type={BUTTON_TYPES.PURPLE}
+					title={Translation.BUTTON.EXPLORE_BERKSHARES}
+					onPress={() => navigation.navigate(Routes.MERCHANT_DASHBOARD)}
+				/>
+			</SafeAreaView>
 		</View>
 	);
 }
