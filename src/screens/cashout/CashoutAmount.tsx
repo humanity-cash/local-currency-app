@@ -1,6 +1,6 @@
 import { useNavigation } from '@react-navigation/core';
 import React, { useContext, useEffect, useState } from 'react';
-import { KeyboardAvoidingView, Platform, ScrollView, StyleSheet, View } from 'react-native';
+import { KeyboardAvoidingView, Platform, ScrollView, StyleSheet, View, SafeAreaView } from 'react-native';
 import { Text } from 'react-native-elements';
 import { TransactionsAPI } from 'src/api';
 import { UserContext, WalletContext } from 'src/contexts';
@@ -47,8 +47,8 @@ const styles = StyleSheet.create({
 		lineHeight: 20,
 	},
 	bottomView: {
-		padding: 20,
-		paddingBottom: 45
+		marginHorizontal: 20,
+		marginBottom: 20
 	},
 	dialogWrap: {
 		paddingHorizontal: 10,
@@ -130,7 +130,9 @@ const CashoutAmount = (): JSX.Element => {
 	}
 
 	return (
-		<View style={viewBase}>
+		<KeyboardAvoidingView
+			behavior={Platform.OS == "ios" ? "padding" : "height"}
+			style={viewBase}>
 			<DataLoading visible={isLoading} />
 			<Header
 				rightComponent={<CancelBtn text={"Close"} onClick={() => navigation.goBack()} />}
@@ -164,17 +166,14 @@ const CashoutAmount = (): JSX.Element => {
 					</View>
 				</View>
 			</ScrollView>
-			<KeyboardAvoidingView
-				behavior={Platform.OS == "ios" ? "padding" : "height"} >
-				<View style={styles.bottomView}>
-					<Button
-						type="darkGreen"
-						disabled={!goNext}
-						title={Translation.BUTTON.CONFIRM}
-						onPress={viewConfirm}
-					/>
-				</View>
-			</KeyboardAvoidingView>
+			<SafeAreaView style={styles.bottomView}>
+				<Button
+					type="darkGreen"
+					disabled={!goNext}
+					title={Translation.BUTTON.CONFIRM}
+					onPress={viewConfirm}
+				/>
+			</SafeAreaView>
 
 			{ isVisible && (
 				<Dialog visible={isVisible} onClose={()=>setIsVisible(false)}>
@@ -193,7 +192,7 @@ const CashoutAmount = (): JSX.Element => {
 					</View>
 				</Dialog>
 			)}
-		</View>
+		</KeyboardAvoidingView>
 	);
 }
 

@@ -102,7 +102,9 @@ const BusinessInfo = (): ReactElement => {
 	};
 
 	return (
-		<View style={viewBaseB}>
+		<KeyboardAvoidingView
+			behavior={Platform.OS == "ios" ? "padding" : "height"}
+			style={viewBaseB}>
 			<Header
 				leftComponent={
 					<BackBtn
@@ -185,20 +187,17 @@ const BusinessInfo = (): ReactElement => {
 					</View>
 				</ScrollView>
 			</View>
-			<KeyboardAvoidingView
-				behavior={Platform.OS == "ios" ? "padding" : "height"}>
-				<SafeAreaView style={styles.bottomView}>
-					<Button
-						type="purple"
-						title={Translation.BUTTON.NEXT}
-						disabled={!goNext}
-						onPress={() =>
-							navigation.navigate(Routes.BUSINESS_ADDRESS)
-						}
-					/>
-				</SafeAreaView>
-			</KeyboardAvoidingView>
-		</View>
+			<SafeAreaView style={styles.bottomView}>
+				<Button
+					type="purple"
+					title={Translation.BUTTON.NEXT}
+					disabled={!goNext}
+					onPress={() =>
+						navigation.navigate(Routes.BUSINESS_ADDRESS)
+					}
+				/>
+			</SafeAreaView>
+		</KeyboardAvoidingView>
 	);
 };
 

@@ -1,6 +1,6 @@
 import { useNavigation } from '@react-navigation/core';
 import React, { useEffect, useState } from 'react';
-import { KeyboardAvoidingView, Platform, StyleSheet, TouchableOpacity, View } from 'react-native';
+import { KeyboardAvoidingView, Platform, StyleSheet, TouchableOpacity, View, SafeAreaView } from 'react-native';
 import { Text } from 'react-native-elements';
 import { useUserDetails } from "src/hooks";
 import { BackBtn, Header, NextBtn } from "src/shared/uielements";
@@ -43,7 +43,9 @@ const ConfirmEmail = (): React.ReactElement => {
 		}
 	}, [emailVerified]);
 	return (
-		<View style={viewBase}>
+		<KeyboardAvoidingView
+			behavior={Platform.OS == "ios" ? "padding" : "height"}
+			style={viewBase}>
 			<Header
 				leftComponent={<BackBtn onClick={() => navigation.goBack()} />}
 				rightComponent={<NextBtn text="Skip" onClick={() => navigation.navigate('OnboardingSteps', { step: 4 })} />}
@@ -59,30 +61,22 @@ const ConfirmEmail = (): React.ReactElement => {
 				</View>
 			</View>
 			{!noCodeReceived ? (
-				<KeyboardAvoidingView
-					behavior={Platform.OS == "ios" ? "padding" : "height"}
-				>
-					<View style={styles.bottomView}>
-						<TouchableOpacity onPress={() => {
-							setNoCodeReceived(true);
-						}}>
-							<Text style={styles.bottomNavigation}>Resend verification email</Text>
-						</TouchableOpacity>
-					</View>
-				</KeyboardAvoidingView>
+				<SafeAreaView style={styles.bottomView}>
+					<TouchableOpacity onPress={() => {
+						setNoCodeReceived(true);
+					}}>
+						<Text style={styles.bottomNavigation}>Resend verification email</Text>
+					</TouchableOpacity>
+				</SafeAreaView>
 			)
 			: (
-				<KeyboardAvoidingView
-					behavior={Platform.OS == "ios" ? "padding" : "height"}
-				>
-					<View style={styles.bottomView}>
-						<TouchableOpacity onPress={() => navigation.navigate('VerificationHelp')}>
-							<Text style={styles.bottomNavigation}>Need help?</Text>
-						</TouchableOpacity>
-					</View>
-				</KeyboardAvoidingView>
+				<SafeAreaView style={styles.bottomView}>
+					<TouchableOpacity onPress={() => navigation.navigate('VerificationHelp')}>
+						<Text style={styles.bottomNavigation}>Need help?</Text>
+					</TouchableOpacity>
+				</SafeAreaView>
 			)}
-		</View>
+		</KeyboardAvoidingView>
 	);
 }
 

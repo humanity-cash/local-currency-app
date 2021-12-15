@@ -1,5 +1,5 @@
 import React, { useState, useContext, useRef } from 'react';
-import { StyleSheet, View, KeyboardAvoidingView, ScrollView, Platform } from 'react-native';
+import { StyleSheet, View, ScrollView, SafeAreaView } from 'react-native';
 import { Text } from 'react-native-elements';
 import { Header, Button, BackBtn } from "src/shared/uielements";
 import { underlineHeaderB, viewBase, wrappingContainerBase } from "src/theme/elements";
@@ -28,8 +28,8 @@ const styles = StyleSheet.create({
 		paddingVertical: 5
 	},
 	bottomView: {
-		padding: 20,
-		paddingBottom: 45
+		marginHorizontal: 20,
+		marginBottom: 20
 	},
 	mainText: {
 		color: colors.purple
@@ -101,22 +101,19 @@ const MerchantSettingsStaticQr = (): JSX.Element => {
 				<Text style={styles.text}>{Translation.OTHER.STATIC_QR_DETAIL3}</Text>
 				<Text style={styles.text}>{Translation.OTHER.STATIC_QR_DETAIL4}</Text>
 			</ScrollView>
-			<KeyboardAvoidingView
-				behavior={Platform.OS == "ios" ? "padding" : "height"} >
-				<View style={styles.bottomView}>
-					<Button
-						type={BUTTON_TYPES.TRANSPARENT}
-						textStyle={styles.mainText}
-						title={Translation.BUTTON.SHOW_MY_QR}
-						onPress={() => setIsStaticQRCode(true)}
-					/>
-					<Button
-						type={BUTTON_TYPES.PURPLE}
-						title={Translation.BUTTON.MAIL_QR_CODE}
-						onPress={onPressShowMyQR}
-					/>
-				</View>
-			</KeyboardAvoidingView>
+			<SafeAreaView style={styles.bottomView}>
+				<Button
+					type={BUTTON_TYPES.TRANSPARENT}
+					textStyle={styles.mainText}
+					title={Translation.BUTTON.SHOW_MY_QR}
+					onPress={() => setIsStaticQRCode(true)}
+				/>
+				<Button
+					type={BUTTON_TYPES.PURPLE}
+					title={Translation.BUTTON.MAIL_QR_CODE}
+					onPress={onPressShowMyQR}
+				/>
+			</SafeAreaView>
 
 			{isStaticQRCode && (
 				<MerchantStaticQRCodeGen visible={isStaticQRCode} onSuccess={onSuccess} onClose={onClose} />

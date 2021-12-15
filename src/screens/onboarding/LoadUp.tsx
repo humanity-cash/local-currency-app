@@ -25,6 +25,7 @@ import { ToastType, LoadingScreenTypes } from 'src/utils/types';
 import { updateLoadingStatus } from 'src/store/loading/loading.actions';
 import { UserContext } from "src/contexts";
 import DataLoading from 'src/screens/loadings/DataLoading';
+import { SafeAreaView } from 'react-native';
 
 const styles = StyleSheet.create({
   container: { 
@@ -82,8 +83,8 @@ const styles = StyleSheet.create({
     padding: 10
   },
   bottomView: {
-		padding: 20,
-    paddingBottom: 45
+		marginHorizontal: 20,
+    marginBottom: 20
 	},
 });
 
@@ -136,7 +137,9 @@ const LoadUp = (): JSX.Element => {
   }
 
   return (
-    <View style={viewBase}>
+    <KeyboardAvoidingView
+      behavior={Platform.OS == "ios" ? "padding" : "height"}
+      style={viewBase}>
 			<DataLoading visible={isLoading} />
       <Header
         leftComponent={<BackBtn text="Home" onClick={() => navigation.goBack()} />}
@@ -201,19 +204,15 @@ const LoadUp = (): JSX.Element => {
           </View>
         </View>
       </ScrollView>
-      <KeyboardAvoidingView
-        behavior={Platform.OS == "ios" ? "padding" : "height"}
-      >
-        <View style={styles.bottomView}>
-          <Button
-            type={BUTTON_TYPES.DARK_GREEN}
-            title={Translation.BUTTON.LOAD_UP}
-            disabled={!goNext}
-            onPress={onLoadUp}
-          />
-        </View>
-      </KeyboardAvoidingView>
-    </View>
+      <SafeAreaView style={styles.bottomView}>
+        <Button
+          type={BUTTON_TYPES.DARK_GREEN}
+          title={Translation.BUTTON.LOAD_UP}
+          disabled={!goNext}
+          onPress={onLoadUp}
+        />
+      </SafeAreaView>
+    </KeyboardAvoidingView>
   );
 };
 
