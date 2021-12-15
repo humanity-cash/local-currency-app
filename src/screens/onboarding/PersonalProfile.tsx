@@ -18,7 +18,7 @@ const styles = StyleSheet.create({
 	},
 	bottomView: {
 		marginHorizontal: 20,
-    	marginBottom: 20,
+		marginBottom: 20,
 		backgroundColor: 'transparent'
 	},
 });
@@ -27,7 +27,7 @@ const PersonalProfile = (): ReactElement => {
 	const navigation = useNavigation();
 	const [goNext, setGoNext] = useState<boolean>(false);
 	const { user } = useContext(UserContext);
-	const { signOut  } = useContext(AuthContext);
+	const { signOut } = useContext(AuthContext);
 	const customer = user?.customer;
 	const tag = customer?.tag;
 
@@ -54,18 +54,18 @@ const PersonalProfile = (): ReactElement => {
 					<PersonalProfileForm />
 				</ScrollView>
 			</View>
-			<KeyboardAvoidingView
-				behavior={Platform.OS == "ios" ? "padding" : "height"}
-			>
-				<SafeAreaView style={styles.bottomView}>
+			<SafeAreaView style={styles.bottomView}>
+				<KeyboardAvoidingView
+					behavior={Platform.OS == "ios" ? "padding" : "height"}
+				>
 					<Button
 						type={BUTTON_TYPES.DARK_GREEN}
 						title={Translation.BUTTON.NEXT}
 						disabled={!goNext}
 						onPress={onNextPress}
 					/>
-				</SafeAreaView>
-			</KeyboardAvoidingView>
+				</KeyboardAvoidingView>
+			</SafeAreaView>
 		</View>
 	);
 }
