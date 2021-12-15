@@ -174,13 +174,14 @@ export const AuthProvider: React.FunctionComponent = ({ children }) => {
 	};
 
 	const signOut = () => {
-		userController.signOut();
-		updateAuthStatus(AuthStatus.SignedOut);
 		updateSelectedView(ViewState.Onboarding);
+		updateAuthStatus(AuthStatus.SignedOut);
 		updateUserData({});
 		setUserEmail("");
 		setSignInDetails({email: "", password: ""})
 		setSignUpDetails({email: "", password: "", confirmPassword: ""})
+		updateUserType(UserType.NotVerified, userEmail);
+		userController.signOut();
 	};
 
 	const actions = {

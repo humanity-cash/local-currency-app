@@ -36,13 +36,14 @@ const SelectBank = (): JSX.Element => {
 
 	useEffect(() => {
 		if (customerDwollaId) {
-			(async () => {
+			const handler = async () => {
 				const response: any = await DwollaAPI.iavToken(customerDwollaId);
 				if (response?.data) {
 					setIAVToken(response?.data?.iavToken);
 					webview?.reload();
 				}
-			})();
+			};
+			handler();
 		}
 	}, [customerDwollaId]);
 

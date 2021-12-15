@@ -15,9 +15,9 @@ import { TransactionsAPI } from 'src/api';
 import { ITransactionRequest } from 'src/api/types';
 import { showToast } from 'src/utils/common';
 import { BUTTON_TYPES } from 'src/constants';
-import { useDispatch } from 'react-redux';
 import moment from 'moment';
 import { UserContext } from 'src/contexts';
+import DataLoading from 'src/screens/loadings/DataLoading';
 
 type HandleScaned = {
 	type: string,
@@ -87,6 +87,7 @@ const CashierReturnQRCodeScan = (): JSX.Element => {
 	const hasPermission = useCameraPermission();
 	const { businessDwollaId } = useContext(UserContext);
 	const [isScanned, setIsScanned] = useState<boolean>(false);
+	const [isLoading, setIsLoading] = useState<boolean>(false);
 	const [isReturnModal, setIsReturnModal] = useState<boolean>(false);
 	const [amount, setAmount] = useState<string>("");
 	const [goNext, setGoNext] = useState<boolean>(false);
@@ -132,11 +133,9 @@ const CashierReturnQRCodeScan = (): JSX.Element => {
 				comment: ''
 			};
 
-			// dispatch(updateLoadingStatus({
-			// 	isLoading: true,
-			// 	screen: LoadingScreenTypes.PAYMENT_PENDING
-			// }));
+			setIsLoading(true);
 			const response = await TransactionsAPI.transferTo(businessDwollaId, request);
+      console.log("🚀 ~ file: CashierReturnQRCodeScan.tsx ~ line 138 ~ onReturn ~ response", response)
 			if (response.data) {
 				// await dispatch(loadBusinessTransactions(businessDwollaId));
 				// dispatch(updateLoadingStatus({
@@ -156,6 +155,7 @@ const CashierReturnQRCodeScan = (): JSX.Element => {
 			showToast(ToastType.ERROR, "Failed", "Whooops, something went wrong.");
 			navigation.navigate(Routes.CASHIER_DASHBOARD);
 		}
+				setIsLoading(false);
 	}
 
 	const onValueChange = (name: string, change: string) => {
@@ -169,6 +169,7 @@ const CashierReturnQRCodeScan = (): JSX.Element => {
 
 	return (
 		<View style={viewBase}>
+			<DataLoading visible={isLoading} />
 			<View style={styles.container}>
 				<BarCodeScanner
 					onBarCodeScanned={isScanned ? undefined : handleBarCodeScanned}
