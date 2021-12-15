@@ -2,7 +2,6 @@ import React, { useContext, useEffect, useState } from 'react';
 import { Image, StyleSheet, View } from 'react-native';
 import { Text } from 'react-native-elements';
 import QRCode from 'react-native-qrcode-svg';
-import { useDispatch } from 'react-redux';
 import { DwollaAPI } from 'src/api';
 import { UserContext, WalletContext } from 'src/contexts';
 import { useBrightness } from "src/hooks";
@@ -64,7 +63,6 @@ type MerchantQRCodeGenProps = {
 
 const MerchantQRCodeGen = (props: MerchantQRCodeGenProps): JSX.Element => {
     const { user, businessDwollaId } = useContext(UserContext);
-    const dispatch = useDispatch();
     const { hasPermission, setMaxBrightness, setDefaultBrightness} = useBrightness();
     const { businessWalletData, updateBusinessWalletData } = useContext(WalletContext);
     // eslint-disable-next-line @typescript-eslint/no-unused-vars

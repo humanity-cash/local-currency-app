@@ -1,7 +1,7 @@
 import { AntDesign, Entypo, Octicons } from "@expo/vector-icons";
 import { DrawerActions, useNavigation } from "@react-navigation/native";
 import moment from "moment";
-import React, { useContext, useEffect, useState, useRef } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { useStore } from "react-hookstore";
 import { ScrollView, StyleSheet, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native';
 import { Image, Text } from "react-native-elements";
