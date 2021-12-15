@@ -373,7 +373,11 @@ const DrawerContent = (
 						<Feather name="log-out" size={24} color={colors.text} />
 					)}
 					label="Sign out"
-					onPress={signOut}
+					onPress={() => { 
+						updateSelectedView(ViewState.Onboarding);
+						props.navigation.navigate(Routes.TEASER);
+						signOut();
+					}}
 				/>
 			</Drawer.Section>
 			<BankLinkDialog
