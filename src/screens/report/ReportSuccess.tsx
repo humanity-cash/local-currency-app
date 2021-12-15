@@ -1,7 +1,7 @@
 
 import { useNavigation } from '@react-navigation/native';
 import React, { useContext } from 'react';
-import { KeyboardAvoidingView, Platform, ScrollView, StyleSheet, View } from 'react-native';
+import { ScrollView, StyleSheet, View, SafeAreaView } from 'react-native';
 import { Text } from 'react-native-elements';
 import { UserContext } from "src/contexts";
 import { BUTTON_TYPES } from 'src/constants';
@@ -23,8 +23,8 @@ const styles = StyleSheet.create({
 		color: colors.bodyText
 	},
 	bottomView: {
-		padding: 20,
-		paddingBottom: 45
+		marginHorizontal: 20,
+		marginBottom: 20
 	},
 });
 
@@ -51,16 +51,13 @@ const ReportSuccess = (): JSX.Element => {
 				</View>
 				<Text style={styles.text}>{Translation.REPORT.SENT_REPORT} fennie@humanity.cash</Text>
 			</ScrollView>
-			<KeyboardAvoidingView
-				behavior={Platform.OS == "ios" ? "padding" : "height"} >
-				<View style={styles.bottomView}>
-					<Button
-						type={BUTTON_TYPES.PURPLE}
-						title={Translation.BUTTON.GO_BACK_HOME}
-						onPress={onConfirm}
-					/>
-				</View>
-			</KeyboardAvoidingView>
+			<SafeAreaView style={styles.bottomView}>
+				<Button
+					type={BUTTON_TYPES.PURPLE}
+					title={Translation.BUTTON.GO_BACK_HOME}
+					onPress={onConfirm}
+				/>
+			</SafeAreaView>
 		</View>
 	);
 }

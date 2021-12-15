@@ -1,6 +1,6 @@
 import { useNavigation } from '@react-navigation/native';
 import React, {useState, useEffect} from 'react';
-import { StyleSheet, View, KeyboardAvoidingView, ScrollView, Platform } from 'react-native';
+import { StyleSheet, View, KeyboardAvoidingView, ScrollView, Platform, SafeAreaView } from 'react-native';
 import { Text } from 'react-native-elements';
 import { Header, Button, CancelBtn, BackBtn, BorderedInput } from "src/shared/uielements";
 import { baseHeader, viewBaseB, wrappingContainerBase } from "src/theme/elements";
@@ -39,8 +39,8 @@ const styles = StyleSheet.create({
 		color: colors.purple
 	},
 	bottomView: {
-		padding: 20,
-		paddingBottom: 45
+		marginHorizontal: 20,
+		marginBottom: 20
 	}
 });
 
@@ -80,7 +80,9 @@ const CashierRequest = (): JSX.Element => {
 	}
 
 	return (
-		<View style={viewBaseB}>
+		<KeyboardAvoidingView
+			behavior={Platform.OS == "ios" ? "padding" : "height"}
+			style={viewBaseB}>
 			<Header
 				leftComponent={<BackBtn color={colors.purple} onClick={() => navigation.goBack()} />}
 				rightComponent={<CancelBtn color={colors.purple} text={Translation.BUTTON.CLOSE} onClick={() => navigation.navigate(Routes.CASHIER_DASHBOARD)} />}
@@ -105,26 +107,23 @@ const CashierRequest = (): JSX.Element => {
 					/>
 				</View>
 			</ScrollView>
-			<KeyboardAvoidingView
-				behavior={Platform.OS == "ios" ? "padding" : "height"} >
-				<View style={styles.bottomView}>
-					<Button
-						type={BUTTON_TYPES.TRANSPARENT}
-						title={Translation.BUTTON.HOW_TO_WORK}
-						textStyle={styles.text}
-						onPress={()=>navigation.navigate(Routes.CASHIER_HOW_TO_WORK)}
-					/>
-					<Button
-						type={BUTTON_TYPES.PURPLE}
-						disabled={!goNext}
-						title="Next"
-						onPress={requestAmount}
-					/>
-				</View>
-			</KeyboardAvoidingView>
+			<SafeAreaView style={styles.bottomView}>
+				<Button
+					type={BUTTON_TYPES.TRANSPARENT}
+					title={Translation.BUTTON.HOW_TO_WORK}
+					textStyle={styles.text}
+					onPress={()=>navigation.navigate(Routes.CASHIER_HOW_TO_WORK)}
+				/>
+				<Button
+					type={BUTTON_TYPES.PURPLE}
+					disabled={!goNext}
+					title="Next"
+					onPress={requestAmount}
+				/>
+			</SafeAreaView>
 			{ isVisible && <CashierQRCodeGen visible={isVisible} onSuccess={onSuccess} onClose={onClose} amount={Number(amount)} /> }
 			{ isRequestSuccess && <CashierRequestSuccess visible={isRequestSuccess} onClose={onConfirm} amount={receivedAmount} /> }
-		</View>
+		</KeyboardAvoidingView>
 	);
 }
 

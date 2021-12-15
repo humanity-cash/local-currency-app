@@ -32,7 +32,9 @@ const CashierPaymentPending = (): JSX.Element => {
 	});
 
 	return (
-		<View style={viewBase}>
+		<KeyboardAvoidingView
+			behavior={Platform.OS == "ios" ? "padding" : "height"}
+			style={viewBase}>
 			<Header />
 			<ScrollView style={wrappingContainerBase}>
 				<View style={ baseHeader }>
@@ -40,13 +42,10 @@ const CashierPaymentPending = (): JSX.Element => {
 					<Text style={styles.text}>{Translation.PAYMENT.PENDING_DETAIL}</Text>
 				</View>
 			</ScrollView>
-			<KeyboardAvoidingView
-				behavior={Platform.OS == "ios" ? "padding" : "height"} >
-				<View style={styles.bottomView}>
-					<ActivityIndicator size="large" color={colors.purple} />
-				</View>
-			</KeyboardAvoidingView>
-		</View>
+			<View style={styles.bottomView}>
+				<ActivityIndicator size="large" color={colors.purple} />
+			</View>
+		</KeyboardAvoidingView>
 	);
 }
 

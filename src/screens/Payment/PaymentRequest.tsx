@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { StyleSheet, View, KeyboardAvoidingView, ScrollView, Platform } from 'react-native';
+import { StyleSheet, View, KeyboardAvoidingView, ScrollView, Platform, SafeAreaView } from 'react-native';
 import { useNavigation } from '@react-navigation/core';
 import { Text } from 'react-native-elements';
 import { Header, Button, CancelBtn, BorderedInput, ToggleButton } from "src/shared/uielements";
@@ -38,8 +38,8 @@ const styles = StyleSheet.create({
 		fontSize: 12 
 	},
 	bottomView: {
-		padding: 20,
-		paddingBottom: 45
+		marginHorizontal: 20,
+		marginBottom: 20
 	},
 	openBtn: {
 		marginBottom: 10
@@ -155,7 +155,9 @@ const PaymentRequest = (): JSX.Element => {
 	}
 
 	return (
-		<View style={viewBase}>
+		<KeyboardAvoidingView
+			behavior={Platform.OS == "ios" ? "padding" : "height"}
+			style={viewBase}>
 			<Header
 				rightComponent={<CancelBtn text={Translation.BUTTON.CLOSE} onClick={() => navigation.navigate(Routes.DASHBOARD)} />}
 			/>
@@ -185,23 +187,20 @@ const PaymentRequest = (): JSX.Element => {
 					/>
 				</View>
 			</View>
-			<KeyboardAvoidingView
-				behavior={Platform.OS == "ios" ? "padding" : "height"} >
-				<View style={styles.bottomView}>
-					<Button
-						type="transparent"
-						title={Translation.BUTTON.OPEN_AMOUNT}
-						style={styles.openBtn}
-						onPress={openAmount}
-					/>
-					<Button
-						type="darkGreen"
-						disabled={!goNext}
-						title={Translation.BUTTON.NEXT}
-						onPress={requestAmount}
-					/>
-				</View>
-			</KeyboardAvoidingView>
+			<SafeAreaView style={styles.bottomView}>
+				<Button
+					type="transparent"
+					title={Translation.BUTTON.OPEN_AMOUNT}
+					style={styles.openBtn}
+					onPress={openAmount}
+				/>
+				<Button
+					type="darkGreen"
+					disabled={!goNext}
+					title={Translation.BUTTON.NEXT}
+					onPress={requestAmount}
+				/>
+			</SafeAreaView>
 			{ isVisible && <QRCodeGen visible={isVisible} onSuccess={onSuccess} onClose={onClose} isOpenAmount={isOpenAmount} amount={Number(state.amount)} /> }
 			{ isRequestSuccess && <PaymentRequestSuccess visible={isRequestSuccess} onClose={onConfirm} amount={receivedAmount} /> }
 
@@ -213,7 +212,7 @@ const PaymentRequest = (): JSX.Element => {
 				onConfirm={onBankDialogConfirm}
 				onCancel={onBankDialogCancel}
 			/>
-		</View>
+		</KeyboardAvoidingView>
 	);
 }
 

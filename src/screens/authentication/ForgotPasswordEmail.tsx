@@ -47,49 +47,48 @@ const ForgotPasswordEmail = (): React.ReactElement => {
   }
 
   return (
-		<View style={viewBase}>
-			<DataLoading visible={isLoading} />
-			<Header
-				leftComponent={<BackBtn onClick={() => navigation.goBack()} />}
-				rightComponent={
-					<CancelBtn
-						text="Close"
-						onClick={() => navigation.navigate("Login")}
-					/>
-				}
-			/>
+	<KeyboardAvoidingView
+		behavior={Platform.OS == "ios" ? "padding" : "height"}
+		style={viewBase}>
+		<DataLoading visible={isLoading} />
+		<Header
+			leftComponent={<BackBtn onClick={() => navigation.goBack()} />}
+			rightComponent={
+				<CancelBtn
+					text="Close"
+					onClick={() => navigation.navigate("Login")}
+				/>
+			}
+		/>
 
-			<ScrollView style={styles.container}>
-				<View style={baseHeader}>
-					<Text style={styles.modalHeader}>Forgot password</Text>
-				</View>
-				<Text style={styles.modalDescription}>
-					Enter phone number of the account you would like to change
-					the passcode of.
-				</Text>
-				<Text h3>EMAIL ADDRESS</Text>
-				<View>
-					<BlockInput
-						placeholder="Email"
-						name="email"
-						value={forgotPasswordDetails.email}
-						onChange={onValueChange}
-						keyboardType='email-address'
-					/>
-				</View>
-			</ScrollView>
-			<KeyboardAvoidingView
-				behavior={Platform.OS == "ios" ? "padding" : "height"}>
-				<SafeAreaView style={styles.bottomView}>
-					<Button
-						type="darkGreen"
-						title="NEXT"
-						disabled={!isEmailValid(forgotPasswordDetails.email)}
-						onPress={handleNext}
-					/>
-				</SafeAreaView>
-			</KeyboardAvoidingView>
-		</View>
+		<ScrollView style={styles.container}>
+			<View style={baseHeader}>
+				<Text style={styles.modalHeader}>Forgot password</Text>
+			</View>
+			<Text style={styles.modalDescription}>
+				Enter phone number of the account you would like to change
+				the passcode of.
+			</Text>
+			<Text h3>EMAIL ADDRESS</Text>
+			<View>
+				<BlockInput
+					placeholder="Email"
+					name="email"
+					value={forgotPasswordDetails.email}
+					onChange={onValueChange}
+					keyboardType='email-address'
+				/>
+			</View>
+		</ScrollView>
+		<SafeAreaView style={styles.bottomView}>
+			<Button
+				type="darkGreen"
+				title="NEXT"
+				disabled={!isEmailValid(forgotPasswordDetails.email)}
+				onPress={handleNext}
+			/>
+		</SafeAreaView>
+	</KeyboardAvoidingView>
   );
 };
 

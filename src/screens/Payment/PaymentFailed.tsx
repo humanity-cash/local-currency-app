@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, View, KeyboardAvoidingView, ScrollView, Platform } from 'react-native';
+import { StyleSheet, View, ScrollView, SafeAreaView } from 'react-native';
 import { Text } from 'react-native-elements';
 import { Header, Button, CancelBtn } from "src/shared/uielements";
 import { baseHeader, viewBase, wrappingContainerBase } from "src/theme/elements";
@@ -37,16 +37,13 @@ const PaymentSuccess = (): JSX.Element => {
 				</View>
 				<Text style={styles.errorText}>Connection failed</Text>
 			</ScrollView>
-			<KeyboardAvoidingView
-				behavior={Platform.OS == "ios" ? "padding" : "height"} >
-				<View style={styles.bottomView}>
-					<Button
-						type={BUTTON_TYPES.DARK_GREEN}
-						title={Translation.BUTTON.TRY_AGAIN}
-						onPress={() => navigation.navigate(Routes.DASHBOARD)}
-					/>
-				</View>
-			</KeyboardAvoidingView>
+			<SafeAreaView style={styles.bottomView}>
+				<Button
+					type={BUTTON_TYPES.DARK_GREEN}
+					title={Translation.BUTTON.TRY_AGAIN}
+					onPress={() => navigation.navigate(Routes.DASHBOARD)}
+				/>
+			</SafeAreaView>
 		</View>
 	);
 }
