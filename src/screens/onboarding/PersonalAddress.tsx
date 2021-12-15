@@ -84,7 +84,9 @@ const PersonalAddress = (): React.ReactElement => {
 	};
 
 	return (
-		<View style={viewBase}>
+		<KeyboardAvoidingView
+			behavior={Platform.OS == "ios" ? "padding" : "height"}
+			style={viewBase}>
 			<DataLoading visible={isLoading} />
 			<Header
 				leftComponent={<BackBtn onClick={() => navigation.goBack()} />}
@@ -108,18 +110,15 @@ const PersonalAddress = (): React.ReactElement => {
 					</View>
 				</ScrollView>
 			</View>
-			<KeyboardAvoidingView
-				behavior={Platform.OS == "ios" ? "padding" : "height"}>
-				<SafeAreaView style={styles.bottomView}>
-					<Button
-						type={BUTTON_TYPES.DARK_GREEN}
-						title={Translation.BUTTON.NEXT}
-						disabled={!goNext}
-						onPress={onNextPress}
-					/>
-				</SafeAreaView>
-			</KeyboardAvoidingView>
-		</View>
+			<SafeAreaView style={styles.bottomView}>
+				<Button
+					type={BUTTON_TYPES.DARK_GREEN}
+					title={Translation.BUTTON.NEXT}
+					disabled={!goNext}
+					onPress={onNextPress}
+				/>
+			</SafeAreaView>
+		</KeyboardAvoidingView>
 	);
 };
 

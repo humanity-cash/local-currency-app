@@ -80,7 +80,10 @@ const CreateAccount = (): JSX.Element => {
 	};
 
 	return (
-		<View style={viewBase}>
+		<KeyboardAvoidingView
+			behavior={Platform.OS == 'ios' ? 'padding' : 'height'} 
+			style={viewBase}
+		>
 			<Header
 				leftComponent={<BackBtn onClick={() => navigation.goBack()} />}
 			/>
@@ -106,37 +109,35 @@ const CreateAccount = (): JSX.Element => {
 					</View>
 				</View>
 			</ScrollView>
-			<KeyboardAvoidingView
-				behavior={Platform.OS == 'ios' ? 'padding' : 'height'}>
-				<SafeAreaView style={styles.bottomView}>
-					<View style={styles.terms}>
-						<CheckBox
-							checked={isSelected}
-							title=""
-							containerStyle={styles.checkboxContainer}
-							checkedColor={colors.darkGreen}
-							onPress={() => setSelection(!isSelected)}
-						/>
-						<View style={styles.checkboxTextView}>
-							<Text style={styles.bodyText}>
-								{"By checking this box, you agree to our partner Humanity Cash's "}
-								<Text style={styles.underlineText} onPress={()=>Linking.openURL(BERKSHARE_TERMS_URL)}>Terms & Conditions </Text>
-								{' and '}
-								<Text style={styles.underlineText} onPress={()=>Linking.openURL(BERKSHARE_PRIVACY_URL)}>Privacy Policy</Text>
-							</Text>
-						</View>
-					</View>
-					<Button
-						type={BUTTON_TYPES.DARK_GREEN}
-						title='NEXT'
-						disabled={
-							!isEmailValid(signUpDetails.email) || !isSelected
-						}
-						onPress={() => navigation.navigate(Routes.PASSWORD)}
+		
+			<SafeAreaView style={styles.bottomView}>
+				<View style={styles.terms}>
+					<CheckBox
+						checked={isSelected}
+						title=""
+						containerStyle={styles.checkboxContainer}
+						checkedColor={colors.darkGreen}
+						onPress={() => setSelection(!isSelected)}
 					/>
-				</SafeAreaView>
-			</KeyboardAvoidingView>
-		</View>
+					<View style={styles.checkboxTextView}>
+						<Text style={styles.bodyText}>
+							{"By checking this box, you agree to our partner Humanity Cash's "}
+							<Text style={styles.underlineText} onPress={()=>Linking.openURL(BERKSHARE_TERMS_URL)}>Terms & Conditions </Text>
+							{' and '}
+							<Text style={styles.underlineText} onPress={()=>Linking.openURL(BERKSHARE_PRIVACY_URL)}>Privacy Policy</Text>
+						</Text>
+					</View>
+				</View>
+				<Button
+					type={BUTTON_TYPES.DARK_GREEN}
+					title='NEXT'
+					disabled={
+						!isEmailValid(signUpDetails.email) || !isSelected
+					}
+					onPress={() => navigation.navigate(Routes.PASSWORD)}
+				/>
+			</SafeAreaView>
+		</KeyboardAvoidingView>
 	);
 };
 

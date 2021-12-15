@@ -95,7 +95,9 @@ const Password = (): JSX.Element => {
 	}
 
 	return (
-		<View style={viewBaseWhite}>
+		<KeyboardAvoidingView
+			behavior={Platform.OS == 'ios' ? 'padding' : 'height'}
+			style={viewBaseWhite}>
 			<DataLoading visible={isLoading} />
 			<Header
 				leftComponent={<BackBtn onClick={() => navigation.goBack()} />}
@@ -158,19 +160,16 @@ const Password = (): JSX.Element => {
 			</ScrollView>
 
 			<SafeAreaView>
-				<KeyboardAvoidingView
-					behavior={Platform.OS == 'ios' ? 'padding' : 'height'}>
-					<View style={styles.bottomView}>
-						<Button
-							type={BUTTON_TYPES.DARK_GREEN}
-							title='NEXT'
-							disabled={!isValidPassword}
-							onPress={onNext}
-						/>
-					</View>
-				</KeyboardAvoidingView>
+				<View style={styles.bottomView}>
+					<Button
+						type={BUTTON_TYPES.DARK_GREEN}
+						title='NEXT'
+						disabled={!isValidPassword}
+						onPress={onNext}
+					/>
+				</View>
 			</SafeAreaView>
-		</View>
+		</KeyboardAvoidingView>
 	);
 };
 

@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, View, KeyboardAvoidingView, Image, Platform } from 'react-native';
+import { StyleSheet, View, Image, SafeAreaView } from 'react-native';
 import { Text } from 'react-native-elements';
 import { Header, Button } from "src/shared/uielements";
 import { baseHeader, viewBase } from "src/theme/elements";
@@ -49,16 +49,13 @@ const PaymentSuccess = (): JSX.Element => {
 					/>			
 				</View>
 			</View>
-			<KeyboardAvoidingView
-				behavior={Platform.OS == "ios" ? "padding" : "height"} >
-				<View style={styles.bottomView}>
-					<Button
-						type={BUTTON_TYPES.DARK_GREEN}
-						title={Translation.BUTTON.CLOSE}
-						onPress={() => navigation.navigate(Routes.DASHBOARD)}
-					/>
-				</View>
-			</KeyboardAvoidingView>
+			<SafeAreaView style={styles.bottomView}>
+				<Button
+					type={BUTTON_TYPES.DARK_GREEN}
+					title={Translation.BUTTON.CLOSE}
+					onPress={() => navigation.navigate(Routes.DASHBOARD)}
+				/>
+			</SafeAreaView>
 		</View>
 	);
 }

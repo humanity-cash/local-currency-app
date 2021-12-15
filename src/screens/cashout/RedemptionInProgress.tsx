@@ -1,6 +1,6 @@
 import { useNavigation } from '@react-navigation/native';
 import React, { ReactElement } from 'react';
-import { StyleSheet, View, KeyboardAvoidingView, ScrollView, Platform } from 'react-native';
+import { StyleSheet, View, ScrollView, SafeAreaView } from 'react-native';
 import { Text } from 'react-native-elements';
 import { Header, Button, CancelBtn } from "src/shared/uielements";
 import { baseHeader, modalViewBase, wrappingContainerBase } from "src/theme/elements";
@@ -19,8 +19,8 @@ const styles = StyleSheet.create({
 		lineHeight: 40
 	},
 	bottomView: {
-		padding: 20,
-		paddingBottom: 45
+		marginHorizontal: 20,
+		marginBottom: 20
 	},
 });
 
@@ -39,16 +39,13 @@ const RedemptionInProgressView = (props: RedemptionInProgressProps) => {
 					<Text>{Translation.PAYMENT.REDEMPTION_PROCESS_DETAIL}</Text>
 				</View>
 			</ScrollView>
-			<KeyboardAvoidingView
-				behavior={Platform.OS == "ios" ? "padding" : "height"} >
-				<View style={styles.bottomView}>
-					<Button
-						type="darkGreen"
-						title={Translation.BUTTON.GO_BACK_HOME}
-						onPress={() => props.navigation.navigate(Routes.DASHBOARD)}
-					/>
-				</View>
-			</KeyboardAvoidingView>
+			<SafeAreaView style={styles.bottomView}>
+				<Button
+					type="darkGreen"
+					title={Translation.BUTTON.GO_BACK_HOME}
+					onPress={() => props.navigation.navigate(Routes.DASHBOARD)}
+				/>
+			</SafeAreaView>
 		</View>
 	);
 }

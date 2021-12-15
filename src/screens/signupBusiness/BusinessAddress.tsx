@@ -101,7 +101,9 @@ const BusinessAddress = (): ReactElement => {
 	};
 
 	return (
-		<View style={viewBaseB}>
+		<KeyboardAvoidingView
+			behavior={Platform.OS == "ios" ? "padding" : "height"}
+			style={viewBaseB}>
 			<DataLoading visible={isLoading} />
 			<Header
 				leftComponent={
@@ -133,18 +135,15 @@ const BusinessAddress = (): ReactElement => {
 					</View>
 				</ScrollView>
 			</View>
-			<KeyboardAvoidingView
-				behavior={Platform.OS == "ios" ? "padding" : "height"}>
-				<SafeAreaView style={styles.bottomView}>
-					<Button
-						type="purple"
-						title={Translation.BUTTON.NEXT}
-						disabled={!goNext}
-						onPress={onNextPress}
-					/>
-				</SafeAreaView>
-			</KeyboardAvoidingView>
-		</View>
+			<SafeAreaView style={styles.bottomView}>
+				<Button
+					type="purple"
+					title={Translation.BUTTON.NEXT}
+					disabled={!goNext}
+					onPress={onNextPress}
+				/>
+			</SafeAreaView>
+		</KeyboardAvoidingView>
 	);
 };
 

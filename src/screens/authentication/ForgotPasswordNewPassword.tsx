@@ -97,7 +97,10 @@ const ForgotPasswordNewPassword = (): React.ReactElement => {
 	}
 
 	return (
-		<View style={viewBase}>
+		<KeyboardAvoidingView
+			behavior={Platform.OS == "ios" ? "padding" : "height"}
+			style={viewBase}>
+
 			<DataLoading visible={isLoading} />
 			<Header
 				leftComponent={<BackBtn onClick={() => navigation.goBack()} />}
@@ -167,21 +170,18 @@ const ForgotPasswordNewPassword = (): React.ReactElement => {
 					</View>
 				</View>
 			</ScrollView>
-			<KeyboardAvoidingView
-				behavior={Platform.OS == "ios" ? "padding" : "height"}>
-				<SafeAreaView style={styles.bottomView}>
-					<Button
-						type="darkGreen"
-						title="NEXT"
-						disabled={
-							forgotPasswordDetails.newPassword !==
-								state.confirmPassword || !state.confirmPassword
-						}
-						onPress={onPress}
-					/>
-				</SafeAreaView>
-			</KeyboardAvoidingView>
-		</View>
+			<SafeAreaView style={styles.bottomView}>
+				<Button
+					type="darkGreen"
+					title="NEXT"
+					disabled={
+						forgotPasswordDetails.newPassword !==
+							state.confirmPassword || !state.confirmPassword
+					}
+					onPress={onPress}
+				/>
+			</SafeAreaView>
+		</KeyboardAvoidingView>
 	);
 };
 

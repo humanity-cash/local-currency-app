@@ -47,7 +47,9 @@ const BusinessProfile = (): ReactElement => {
 	}
 
 	return (
-		<View style={viewBaseB}>
+		<KeyboardAvoidingView
+			behavior={Platform.OS == "ios" ? "padding" : "height"}
+			style={viewBaseB}>
 			<Header
 				leftComponent={<BackBtn color={colors.purple} onClick={() => navigation.goBack()} />}
 				rightComponent={<CancelBtn color={colors.purple} text={Translation.BUTTON.LOGOUT} onClick={signOut} />}
@@ -62,19 +64,15 @@ const BusinessProfile = (): ReactElement => {
 					/>
 				</View>
 			</ScrollView>
-			<KeyboardAvoidingView
-				behavior={Platform.OS == "ios" ? "padding" : "height"}
-			>
-				<SafeAreaView style={styles.bottomView}>
-					<Button
-						type="purple"
-						title={Translation.BUTTON.NEXT}
-						disabled={!goNext}
-						onPress={onNextPress}
-					/>
-				</SafeAreaView>
-			</KeyboardAvoidingView>
-		</View>
+			<SafeAreaView style={styles.bottomView}>
+				<Button
+					type="purple"
+					title={Translation.BUTTON.NEXT}
+					disabled={!goNext}
+					onPress={onNextPress}
+				/>
+			</SafeAreaView>
+		</KeyboardAvoidingView>
 	);
 }
 

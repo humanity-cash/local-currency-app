@@ -1,6 +1,6 @@
 import { useNavigation } from "@react-navigation/native";
 import React, { useContext, useEffect, useState } from "react";
-import { KeyboardAvoidingView, Platform, ScrollView, StyleSheet, View } from "react-native";
+import { KeyboardAvoidingView, Platform, ScrollView, StyleSheet, View, SafeAreaView } from 'react-native';
 import { Text } from "react-native-elements";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { TransactionsAPI } from 'src/api';
@@ -131,7 +131,9 @@ const MerchantLoadup = (): JSX.Element => {
   }
 
   return (
-    <View style={viewBaseB}>
+    <KeyboardAvoidingView
+      behavior={Platform.OS == "ios" ? "padding" : "height"}
+      style={viewBaseB}>
       <DataLoading visible={isLoading} />
       <Header
         rightComponent={<CancelBtn color={colors.purple} text={Translation.BUTTON.CLOSE} onClick={() => navigation.navigate(Routes.MERCHANT_DASHBOARD)}/>}
@@ -193,19 +195,15 @@ const MerchantLoadup = (): JSX.Element => {
           </View>
         </View>
       </ScrollView>
-      <KeyboardAvoidingView
-        behavior={Platform.OS == "ios" ? "padding" : "height"}
-      >
-        <View style={styles.bottomView}>
-          <Button
-            type={BUTTON_TYPES.PURPLE}
-            title={Translation.BUTTON.LOAD_UP}
-            disabled={!goNext}
-            onPress={onLoadUp}
-          />
-        </View>
-      </KeyboardAvoidingView>
-    </View>
+      <SafeAreaView style={styles.bottomView}>
+        <Button
+          type={BUTTON_TYPES.PURPLE}
+          title={Translation.BUTTON.LOAD_UP}
+          disabled={!goNext}
+          onPress={onLoadUp}
+        />
+      </SafeAreaView>
+    </KeyboardAvoidingView>
   );
 };
 

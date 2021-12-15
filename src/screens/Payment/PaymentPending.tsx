@@ -1,5 +1,5 @@
 import React, { ReactElement, useEffect } from 'react';
-import { StyleSheet, View, KeyboardAvoidingView, ActivityIndicator, ScrollView, Platform } from 'react-native';
+import { StyleSheet, View, ActivityIndicator, ScrollView, SafeAreaView } from 'react-native';
 import { Text } from 'react-native-elements';
 import { Header } from "src/shared/uielements";
 import { colors } from "src/theme/colors";
@@ -19,7 +19,7 @@ const styles = StyleSheet.create({
 		lineHeight: 40
 	},
 	bottomView: {
-		paddingBottom: 45
+		marginBottom: 20
 	},
 });
 
@@ -40,12 +40,9 @@ const PaymentPending = (props: PaymentPendingProps): ReactElement => {
 					<Text>{Translation.PAYMENT.PENDING_DETAIL}</Text>
 				</View>
 			</ScrollView>
-			<KeyboardAvoidingView
-				behavior={Platform.OS == "ios" ? "padding" : "height"} >
-				<View style={styles.bottomView}>
-					<ActivityIndicator size="large" color={colors.darkGreen} />
-				</View>
-			</KeyboardAvoidingView>
+			<SafeAreaView style={styles.bottomView}>
+				<ActivityIndicator size="large" color={colors.darkGreen} />
+			</SafeAreaView>
 		</View>
 	);
 }

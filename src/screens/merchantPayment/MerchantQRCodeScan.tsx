@@ -1,7 +1,7 @@
 import { useNavigation } from '@react-navigation/core';
 import { BarCodeScanner } from 'expo-barcode-scanner';
 import React, { useContext, useEffect, useState } from 'react';
-import { Image, KeyboardAvoidingView, Platform, ScrollView, StyleSheet, View } from 'react-native';
+import { Image, KeyboardAvoidingView, Platform, ScrollView, StyleSheet, View, SafeAreaView } from 'react-native';
 import { Text } from 'react-native-elements';
 import PaymentLoading from 'src/screens/loadings/PaymentPending';
 import { TransactionsAPI } from 'src/api';
@@ -130,8 +130,8 @@ const styles = StyleSheet.create({
 		color: colors.purple
 	},
 	bottomView: {
-		padding: 20,
-		paddingBottom: 45
+		marginHorizontal: 20,
+		marginBottom: 45
 	}
 });
 
@@ -380,7 +380,9 @@ const MerchantQRCodeScan = (): JSX.Element => {
 			{isLowAmountDialog && <LowAmount visible={isLowAmountDialog} onConfirm={onLoadUp} onCancel={onClose} />}
 			{isOpenPayment && (
 				<Modal visible={isOpenPayment}>
-					<View style={modalViewBase}>
+					<KeyboardAvoidingView
+						behavior={Platform.OS == "ios" ? "padding" : "height"}
+						style={modalViewBase}>
 						<ModalHeader
 							leftComponent={<BackBtn color={colors.purple} onClick={() => setIsOpenPayment(false)} />}
 							rightComponent={<CancelBtn color={colors.purple} text="Close" onClick={onClose} />}
@@ -406,18 +408,15 @@ const MerchantQRCodeScan = (): JSX.Element => {
 								/>
 							</View>
 						</ScrollView>
-						<KeyboardAvoidingView
-							behavior={Platform.OS == "ios" ? "padding" : "height"} >
-							<View style={styles.bottomView}>
-								<Button
-									type={BUTTON_TYPES.PURPLE}
-									disabled={!goNext}
-									title={Translation.BUTTON.CONFIRM}
-									onPress={handleOpenPay}
-								/>
-							</View>
-						</KeyboardAvoidingView>
-					</View>
+						<SafeAreaView style={styles.bottomView}>
+							<Button
+								type={BUTTON_TYPES.PURPLE}
+								disabled={!goNext}
+								title={Translation.BUTTON.CONFIRM}
+								onPress={handleOpenPay}
+							/>
+						</SafeAreaView>
+					</KeyboardAvoidingView>
 				</Modal>
 			)}
 		</View>
