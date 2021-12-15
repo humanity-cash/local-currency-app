@@ -135,20 +135,10 @@ const CashierReturnQRCodeScan = (): JSX.Element => {
 
 			setIsLoading(true);
 			const response = await TransactionsAPI.transferTo(businessDwollaId, request);
-      console.log("🚀 ~ file: CashierReturnQRCodeScan.tsx ~ line 138 ~ onReturn ~ response", response)
 			if (response.data) {
-				// await dispatch(loadBusinessTransactions(businessDwollaId));
-				// dispatch(updateLoadingStatus({
-				// 	isLoading: false,
-				// 	screen: LoadingScreenTypes.PAYMENT_PENDING
-				// }));
 				navigation.navigate(Routes.CASHIER_RETURN_SUCCESS);
 			} else {
 				showToast(ToastType.ERROR, "Failed", "Whooops, something went wrong.");
-				// dispatch(updateLoadingStatus({
-				// 	isLoading: false,
-				// 	screen: LoadingScreenTypes.PAYMENT_PENDING
-				// }));
 				navigation.navigate(Routes.CASHIER_DASHBOARD);
 			}
 		} else {
