@@ -92,6 +92,7 @@ const BusinessInfo = (): ReactElement => {
 		setGoNext(
 			Boolean(business?.rbn)
 			&& Boolean(business?.industry)
+			&& Boolean(business?.ein)
 		);
 	}, [business?.rbn, business?.industry, business?.ein])
 

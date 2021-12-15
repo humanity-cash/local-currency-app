@@ -1,6 +1,6 @@
 import { IDBUser } from "@humanity.cash/types";
 import { useNavigation } from "@react-navigation/native";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useState } from "react";
 import {
 	KeyboardAvoidingView,
 	Platform, SafeAreaView, ScrollView,
@@ -47,32 +47,15 @@ const styles = StyleSheet.create({
 
 const PersonalAddress = (): React.ReactElement => {
 	const { user, updateUserData, updateUserType } = useContext(UserContext);
-	const customer = user?.customer;
-	const [goNext, setGoNext] = useState<boolean>(false);
 	const [ isLoading, setIsLoading ] = useState<boolean>(false);
 	const { signOut, userEmail } = useContext(AuthContext);
 	const { updateSelectedView } = useContext(NavigationViewContext);
 	const navigation = useNavigation();
-	const address1 = customer?.address1;
-	const address2 = customer?.address2;
-	const city = customer?.city;
-	const state = customer?.state;
-	const postalCode = customer?.postalCode;
-	useEffect(() => {
-		setGoNext(
-			Boolean(address1) &&
-			Boolean(address2) &&
-			Boolean(city) &&
-			Boolean(state) &&
-			Boolean(postalCode)
-		);
-	}, [address1, city, postalCode, state]);
 
 	const onNextPress = async () => {
 		if (!user || !user?.customer) return
 		setIsLoading(true)
 		user.email = userEmail;
-		user.customer.avatar = "hee";
 		const response = await UserAPI.createCustomer(user);
 		if (isSuccessResponse(response)) {
 			const newUser: IDBUser = response?.data
@@ -114,7 +97,7 @@ const PersonalAddress = (): React.ReactElement => {
 				<Button
 					type={BUTTON_TYPES.DARK_GREEN}
 					title={Translation.BUTTON.NEXT}
-					disabled={!goNext}
+					disabled={false}
 					onPress={onNextPress}
 				/>
 			</SafeAreaView>
