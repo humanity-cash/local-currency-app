@@ -179,6 +179,8 @@ export const AuthProvider: React.FunctionComponent = ({ children }) => {
 		updateSelectedView(ViewState.Onboarding);
 		updateUserData({});
 		setUserEmail("");
+		setSignInDetails({email: "", password: ""})
+		setSignUpDetails({email: "", password: "", confirmPassword: ""})
 	};
 
 	const actions = {
