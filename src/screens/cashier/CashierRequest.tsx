@@ -66,8 +66,8 @@ const CashierRequest = (): JSX.Element => {
 
 	const onSuccess = (amount: number) => {
 		setReceivedAmount(amount);
-		setIsVisible(false);
 		setIsRequestSuccess(true);
+		setIsVisible(false);
 	}
 
 	const onConfirm = () => {

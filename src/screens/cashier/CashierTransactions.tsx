@@ -1,5 +1,6 @@
 import { useNavigation } from "@react-navigation/native";
-import React, { useState, useContext } from 'react';
+import { createFuseSearchInstance } from 'src/fuse';
+import React, { useState, useContext, useEffect } from 'react';
 import { StyleSheet, View, ScrollView } from 'react-native';
 import { Text } from "react-native-elements";
 import { Header } from "src/shared/uielements";
@@ -8,15 +9,14 @@ import { viewBaseB, wrappingContainerBase, baseHeader, dialogViewBase, FontFamil
 import { SearchInput, Dialog, CancelBtn } from "src/shared/uielements";
 import CashierTransactionList from "./CashierTransactionList";
 import Translation from 'src/translation/en.json';
-import { TransactionType } from "src/utils/types";
-import { getBerksharePrefix } from "src/utils/common";
+import { BusinessTxDataStore, BusinessTxDataStoreActions, BusinessTxDataStoreReducer, MiniTransaction, TransactionType } from "src/utils/types";
+import { getBerksharePrefix, sortTxByTimestamp } from "src/utils/common";
 import moment from "moment";
-
-import { ITransaction } from 'src/api/types';
-import { TransactionState } from 'src/store/transaction/transaction.reducer';
-import { useSelector } from 'react-redux';
-import { AppState } from 'src/store';
-import { WalletContext } from "src/contexts";
+import { WalletContext, UserContext } from "src/contexts";
+import { useStore } from "react-hookstore";
+import { TransactionsAPI } from "src/api";
+import { BUSINESS_TX_DATA_STORE } from "src/hook-stores";
+import DataLoading from "src/screens/loadings/DataLoading";
 
 const styles = StyleSheet.create({
 	mainTextColor: {
@@ -88,7 +88,7 @@ const styles = StyleSheet.create({
 
 type TransactionDetailProps = {
 	visible: boolean,
-	data: ITransaction,
+	data: MiniTransaction,
 	onConfirm: () => void
 }
 
@@ -139,32 +139,53 @@ const TransactionDetail = (props: TransactionDetailProps) => {
 	)
 }
 
-const defaultTransaction = {
-	transactionHash: "",
-	toUserId: "",
-	toAddress: "",
-	fromAddress: "",
-	fromUserId: "",
-	type: "",
-	value: "",
-	timestamp: new Date().getTime(),
-	blockNumber: 0
+const options = {
+	includeScore: false,
+	keys: ['toName', 'fromName', 'value', 'type']
 };
 
 const CashierTransactions = (): JSX.Element => {
 	const navigation = useNavigation();
 	const [searchText, setSearchText] = useState<string>("");
 	const [isDetailViewOpen, setIsDetailViewOpen] = useState<boolean>(false);
-	const [selectedItem, setSelectedItem] = useState<ITransaction>({} as ITransaction);
+	const [isLoading, setIsLoading] = useState<boolean>(false);
+	const [selectedItem, setSelectedItem] = useState<MiniTransaction>({} as MiniTransaction);
 
-	const { businessTransactions } = useSelector((state: AppState) => state.transactionReducer) as TransactionState;
+	const { businessDwollaId } = useContext(UserContext)
 	const { businessWalletData } = useContext(WalletContext)
+	const [apiData, dispatchApiData] = useStore<BusinessTxDataStore, BusinessTxDataStoreReducer>(BUSINESS_TX_DATA_STORE);
+	const [filteredApiData, setFilteredApiData] = useState<MiniTransaction []>([]);
 
 	const onSearchChange = (name: string, change: string) => {
 		setSearchText(change);
+		if (!change) {
+			setFilteredApiData(apiData.txs);
+			setSearchText(change);
+			return;
+		}
+		const fuseInstance = createFuseSearchInstance(filteredApiData, options);
+		const fuseResult = fuseInstance.search(change);
+		//@ts-ignore
+		setFilteredApiData(fuseResult.map(i => i.item));
+		setSearchText(change);
+
 	}
 
-	const viewDetail = (item: ITransaction) => {
+	useEffect(() => {
+		const handler = async () => {
+			if (!businessDwollaId) return;
+			setIsLoading(true);
+			const txs = await TransactionsAPI.getBlockchainTransactions(businessDwollaId);
+			const sortedTxs = sortTxByTimestamp(txs);
+			dispatchApiData({ type: BusinessTxDataStoreActions.UpdateTransactions, payload: { txs: sortedTxs } });
+			setFilteredApiData(sortedTxs);
+			setIsLoading(false);
+		}
+		handler();
+
+	}, [businessWalletData.availableBalance, businessDwollaId]);
+
+	const viewDetail = (item: MiniTransaction) => {
 		setSelectedItem(item);
 		setIsDetailViewOpen(true);
 	}
@@ -175,6 +196,7 @@ const CashierTransactions = (): JSX.Element => {
 
 	return (
 		<View style={viewBaseB}>
+			<DataLoading visible={isLoading} />
 			<Header
 				rightComponent={<CancelBtn text={Translation.BUTTON.CLOSE} color={colors.purple} onClick={() => navigation.goBack()} />}
 			/>
@@ -202,7 +224,7 @@ const CashierTransactions = (): JSX.Element => {
 						onChange={onSearchChange}
 					/>
 				</View>
-				<CashierTransactionList data={businessTransactions} onSelect={viewDetail} />
+				<CashierTransactionList data={filteredApiData} onSelect={viewDetail} />
 			</ScrollView>
 			{isDetailViewOpen && <TransactionDetail visible={isDetailViewOpen} data={selectedItem} onConfirm={onConfirm} />}
 		</View>
