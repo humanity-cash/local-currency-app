@@ -129,6 +129,7 @@ const styles = StyleSheet.create({
 	}
 });
 
+const consumerTransactionTypes: string[] = ["All", "Incoming transactions", "Outgoing transactions", "Load ups B$", "Cash out to USD"];
 const mappedTypes = {
 	"All": "All",
 	"Incoming transactions": "IN",
@@ -335,7 +336,7 @@ const MyTransactions = (): JSX.Element => {
 								/>
 							</TouchableOpacity>
 						</View>
-						{isFilterVisible && <MyTransactionFilter onClear={clearSearchText} />}
+						{ isFilterVisible && <MyTransactionFilter transactionTypes={consumerTransactionTypes} onClear={clearSearchText} />}
 						<MyTransactionList data={filteredData} onSelect={viewDetail} />
 					</View>
 				</ScrollView>

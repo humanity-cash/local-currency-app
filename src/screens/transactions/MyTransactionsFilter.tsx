@@ -11,8 +11,6 @@ import Translation from 'src/translation/en.json';
 import { CustomerTxFilterStore, CustomerTxFilterStoreActions, CustomerTxFilterStoreReducer } from 'src/utils/types';
 import DateTimePicker from "react-native-modal-datetime-picker";
 
-const consumerTransactionTypes = ["All", "Incoming transactions", "Outgoing transactions", "Load ups B$", "Cash out to USD"];
-
 const styles = StyleSheet.create({
     container: {
         flex: 1,
@@ -78,8 +76,14 @@ const styles = StyleSheet.create({
     }
 });
 
-const MyTransactionFilter = ({ onClear }: { onClear: any }): JSX.Element => {
+type TransactionFilterProps = {
+	transactionTypes: string[],
+	onClear: () => void
+}
+
+const MyTransactionFilter = ({ transactionTypes, onClear }: TransactionFilterProps): JSX.Element => {
     const [{
+        selectedType,
         startDate,
         isStartDate,
         endDate,
@@ -152,8 +156,8 @@ const MyTransactionFilter = ({ onClear }: { onClear: any }): JSX.Element => {
             <Text style={styles.label}>{Translation.LABEL.TRANSACTION_TYPE}</Text>
             <View style={styles.typeView}>
                 <SelectDropdown
-                    data={consumerTransactionTypes}
-                    defaultValueByIndex={0}
+                    data={transactionTypes}
+                    defaultValue={selectedType}
                     onSelect={(selectedItem) => {
                         dispatch({ type: CustomerTxFilterStoreActions.UpdateType, payload: { type: selectedItem } })
                     }}
@@ -179,16 +183,14 @@ const MyTransactionFilter = ({ onClear }: { onClear: any }): JSX.Element => {
             <TouchableOpacity style={styles.clearFilter} onPress={clearFilter}>
                 <Text style={styles.clearText}>{Translation.PAYMENT.CLEAR_FILTER}</Text>
             </TouchableOpacity>
-            {isStartDate &&
-                <DateTimePicker
-                    isVisible={true}
-                    mode="date"
-                    date={startDate ? startDate : new Date()}
-                    onConfirm={onStartDateChange}
-                    onCancel={closeStartDate}
-                    textColor='black'
-                />
-            }
+            <DateTimePicker
+                isVisible={isStartDate}
+                mode="date"
+                date={startDate ? startDate : new Date()}
+                onConfirm={onStartDateChange}
+                onCancel={closeStartDate}
+                textColor='black'
+            />
 			<DateTimePicker
 				isVisible={isEndDate}
 				mode="date"
