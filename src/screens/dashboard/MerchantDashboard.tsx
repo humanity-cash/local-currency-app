@@ -25,8 +25,6 @@ import SettingDialog from 'src/shared/uielements/SettingDialog';
 import { BarCodeScanner } from 'expo-barcode-scanner';
 import { EventsContext } from 'src/contexts/events';
 import EventItem from 'src/shared/uielements/EventItem';
-import { CustomerTxFilterStore } from "src/utils/types";
-import { CUSTOMER_TX_FILTERS_STORE } from 'src/hook-stores';
 import MerchantTransactionsFilter from './MerchantTransactionsFilter';
 
 type TransactionDetailProps = {
@@ -88,7 +86,7 @@ const MerchantDashboard = (): JSX.Element => {
 	const [{ selectedType,
 		startDate,
 		endDate,
-	}] = useStore<CustomerTxFilterStore>(CUSTOMER_TX_FILTERS_STORE);
+	}] = useStore<BusinessTxFilterStore>(BUSINESS_TX_DATA_STORE);
 	const [apiData, dispatchApiData] = useStore<BusinessTxDataStore, BusinessTxDataStoreReducer>(BUSINESS_TX_DATA_STORE);
 	const { businessWalletData, updateBusinessWalletData } = useContext(WalletContext);
 	const { user } = useContext(UserContext);
