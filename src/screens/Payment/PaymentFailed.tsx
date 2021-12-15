@@ -16,8 +16,8 @@ const styles = StyleSheet.create({
 		lineHeight: 40
 	},
 	bottomView: {
-		padding: 20,
-		paddingBottom: 45
+		marginHorizontal: 20,
+		marginBottom: 20
 	},
 	errorText: {
 		color: colors.errorText
