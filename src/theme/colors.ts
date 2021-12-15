@@ -35,5 +35,8 @@ export const colors: any = {
 	greyedPurple: 'rgba(68,46,136,0.4)',
 	highlightPurple: '#F0EEF5',
 	lightPurple: '#e9e7f4',
-	alert: "#D2A824"
+	alert: "#D2A824",
+	info: "#547F3B",
+	error: "#A23B5F"
+
 }

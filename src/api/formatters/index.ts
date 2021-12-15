@@ -1,5 +1,5 @@
 import { IWallet } from "@humanity.cash/types";
-import { AxiosPromiseResponse, ITransaction } from "src/api/types";
+import { AxiosPromiseResponse, ITransaction, IEvent } from "src/api/types";
 import { MiniTransaction } from "src/utils/types";
 
 const formatTransactionValue = (value: number | string): string => {
@@ -71,4 +71,13 @@ export const userData = (res: AxiosPromiseResponse): IWallet => {
 
 	const list = res.data as IWallet[]
 	return list[0];
+}
+
+export const eventDatas = (res: AxiosPromiseResponse): IEvent[] => {
+	if (!res.data) return [];
+
+	const list = res.data as IEvent[];
+    return list.filter((event) => {
+        return !event.closed
+    })
 }
