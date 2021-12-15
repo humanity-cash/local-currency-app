@@ -1,5 +1,5 @@
 import { AntDesign } from '@expo/vector-icons';
-import DateTimePicker from '@react-native-community/datetimepicker';
+import DateTimePicker from "react-native-modal-datetime-picker";
 import moment from 'moment';
 import React, { ReactElement } from 'react';
 import { useStore } from 'react-hookstore';
@@ -78,7 +78,7 @@ const styles = StyleSheet.create({
     }
 });
 
-const MerchantTransactionsFilter = (): ReactElement => {
+const MerchantTransactionsFilter = ({ onClear }: {onClear: any}): JSX.Element => {
     const [{ startDate, isStartDate, endDate, isEndDate }, dispatchBusinessTxFilterStore] = useStore<BusinessTxFilterStore, BusinessTxFilterStoreReducer>(BUSINESS_TX_FILTERS_STORE)
 
     const onStartDateChange = (_: unknown, selectedDate?: Date) => {
@@ -91,6 +91,15 @@ const MerchantTransactionsFilter = (): ReactElement => {
 
     const clearFilter = () => {
         dispatchBusinessTxFilterStore({ type: BusinessTxFilterStoreActions.ClearAll, payload: {} })
+        onClear()
+    };
+
+    const closeStartDate = () => {
+        dispatchBusinessTxFilterStore({ type: BusinessTxFilterStoreActions.CloseStartDate, payload: {} });
+    };
+
+    const closeEndDate = () => {
+        dispatchBusinessTxFilterStore({ type: BusinessTxFilterStoreActions.CloseEndDate, payload: {} });
     };
 
     return (
@@ -152,22 +161,23 @@ const MerchantTransactionsFilter = (): ReactElement => {
             <TouchableOpacity style={styles.clearFilter} onPress={clearFilter}>
                 <Text style={styles.clearText}>{Translation.PAYMENT.CLEAR_FILTER}</Text>
             </TouchableOpacity>
-            {isStartDate && (
-                <DateTimePicker
-                    testID="dateTimePicker"
-                    value={startDate ? startDate : new Date()}
-                    display={Platform.OS == "ios" ? "inline" : "default"}
-                    onChange={onStartDateChange}
-                />
-            )}
-            {isEndDate && (
-                <DateTimePicker
-                    testID="dateTimePicker"
-                    value={endDate ? endDate : new Date()}
-                    display={Platform.OS == "ios" ? "inline" : "default"}
-                    onChange={onEndDateChange}
-                />
-            )}
+            <DateTimePicker
+                isVisible={isStartDate}
+                mode="date"
+                date={startDate ? startDate : new Date()}
+                onConfirm={onStartDateChange}
+                onCancel={closeStartDate}
+                textColor='black'
+            />
+			<DateTimePicker
+				isVisible={isEndDate}
+				mode="date"
+				date={endDate ? endDate : new Date()}
+				onConfirm={onEndDateChange}
+				minimumDate={startDate}
+				onCancel={closeEndDate}
+                textColor='black'
+			/>
         </View>
     );
 }
