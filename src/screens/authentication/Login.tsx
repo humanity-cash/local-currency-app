@@ -117,9 +117,9 @@ const Login = (): JSX.Element => {
 				</View>
 			</ScrollView>
 
-			<KeyboardAvoidingView
-				behavior={Platform.OS == 'ios' ? 'padding' : 'height'}>
-				<SafeAreaView style={styles.bottomView}>
+			<SafeAreaView style={styles.bottomView}>
+				<KeyboardAvoidingView
+					behavior={Platform.OS == 'ios' ? 'padding' : 'height'}>
 					<Button
 						type={BUTTON_TYPES.TRANSPARENT}
 						disabled={AuthStatus.Loading === authStatus}
@@ -134,8 +134,8 @@ const Login = (): JSX.Element => {
 						disabled={!goNext || AuthStatus.Loading === authStatus}
 						onPress={handleSignin}
 					/>
-				</SafeAreaView>
-			</KeyboardAvoidingView>
+				</KeyboardAvoidingView>
+			</SafeAreaView>
 		</View>
 	);
 };
