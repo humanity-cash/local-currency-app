@@ -25,11 +25,9 @@ import SettingDialog from 'src/shared/uielements/SettingDialog';
 import { BarCodeScanner } from 'expo-barcode-scanner';
 import { EventsContext } from 'src/contexts/events';
 import EventItem from 'src/shared/uielements/EventItem';
-import MyTransactionFilter from '../transactions/MyTransactionsFilter';
 import { CustomerTxFilterStore } from "src/utils/types";
 import { CUSTOMER_TX_FILTERS_STORE } from 'src/hook-stores';
-
-const TransactionTypes = ["All", "Sales", "Returns", "Cash outs", "Expenses"];
+import MerchantTransactionsFilter from './MerchantTransactionsFilter';
 
 type TransactionDetailProps = {
 	visible: boolean,
@@ -295,7 +293,7 @@ const MerchantDashboard = (): JSX.Element => {
 								/>
 							</TouchableOpacity>
 						</View>
-						{isFilterVisible && <MyTransactionFilter transactionTypes={TransactionTypes} onClear={clearSearchText}/>}
+						{isFilterVisible && <MerchantTransactionsFilter onClear={clearSearchText}/>}
 						<MerchantTransactionList data={filteredApiData} onSelect={viewDetail} />
 					</View>
 				</ScrollView>

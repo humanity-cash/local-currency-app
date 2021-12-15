@@ -11,6 +11,7 @@ import Translation from 'src/translation/en.json';
 import { CustomerTxFilterStore, CustomerTxFilterStoreActions, CustomerTxFilterStoreReducer } from 'src/utils/types';
 import DateTimePicker from "react-native-modal-datetime-picker";
 
+const consumerTransactionTypes = ["All", "Incoming transactions", "Outgoing transactions", "Load ups B$", "Cash out to USD"];
 const styles = StyleSheet.create({
     container: {
         flex: 1,
@@ -76,12 +77,7 @@ const styles = StyleSheet.create({
     }
 });
 
-type TransactionFilterProps = {
-	transactionTypes: string[],
-	onClear: () => void
-}
-
-const MyTransactionFilter = ({ transactionTypes, onClear }: TransactionFilterProps): JSX.Element => {
+const MyTransactionFilter = ({ onClear }: {onClear: any}): JSX.Element => {
     const [{
         selectedType,
         startDate,
@@ -156,7 +152,7 @@ const MyTransactionFilter = ({ transactionTypes, onClear }: TransactionFilterPro
             <Text style={styles.label}>{Translation.LABEL.TRANSACTION_TYPE}</Text>
             <View style={styles.typeView}>
                 <SelectDropdown
-                    data={transactionTypes}
+                    data={consumerTransactionTypes}
                     defaultValue={selectedType}
                     onSelect={(selectedItem) => {
                         dispatch({ type: CustomerTxFilterStoreActions.UpdateType, payload: { type: selectedItem } })
