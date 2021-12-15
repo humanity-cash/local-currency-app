@@ -1,6 +1,6 @@
 import { useNavigation } from '@react-navigation/native';
 import React from 'react';
-import { StyleSheet, View, KeyboardAvoidingView, ScrollView, Platform } from 'react-native';
+import { StyleSheet, View, KeyboardAvoidingView, ScrollView, Platform, SafeAreaView } from 'react-native';
 import { Text } from 'react-native-elements';
 import { Header, Button, CancelBtn } from "src/shared/uielements";
 import { baseHeader, modalViewBase, wrappingContainerBase } from "src/theme/elements";
@@ -20,15 +20,17 @@ const styles = StyleSheet.create({
 		color: colors.bodyText
 	},
 	bottomView: {
-		padding: 20,
-		paddingBottom: 45
+		marginHorizontal: 20,
+		marginBottom: 20
 	},
 });
 
 const MerchantRedemptionInProgress = (): JSX.Element => {
 	const navigation = useNavigation();
 	return (
-		<View style={modalViewBase}>
+		<KeyboardAvoidingView
+			behavior={Platform.OS == "ios" ? "padding" : "height"}
+			style={modalViewBase}>
 			<Header
 				rightComponent={<CancelBtn text={Translation.BUTTON.CLOSE} color={colors.purple} onClick={() => navigation.navigate(Routes.MERCHANT_DASHBOARD)} />}
 			/>
@@ -40,17 +42,14 @@ const MerchantRedemptionInProgress = (): JSX.Element => {
 					<Text style={styles.bodyText}>{Translation.PAYMENT.REDEMPTION_PROCESS_DETAIL}</Text>
 				</View>
 			</ScrollView>
-			<KeyboardAvoidingView
-				behavior={Platform.OS == "ios" ? "padding" : "height"} >
-				<View style={styles.bottomView}>
-					<Button
-						type={BUTTON_TYPES.PURPLE}
-						title={Translation.BUTTON.GO_BACK_HOME}
-						onPress={() => navigation.navigate(Routes.MERCHANT_DASHBOARD)}
-					/>
-				</View>
-			</KeyboardAvoidingView>
-		</View>
+			<SafeAreaView style={styles.bottomView}>
+				<Button
+					type={BUTTON_TYPES.PURPLE}
+					title={Translation.BUTTON.GO_BACK_HOME}
+					onPress={() => navigation.navigate(Routes.MERCHANT_DASHBOARD)}
+				/>
+			</SafeAreaView>
+		</KeyboardAvoidingView>
 	);
 }
 

@@ -1,7 +1,7 @@
 import { useNavigation } from '@react-navigation/native';
 import { BarCodeScanner } from 'expo-barcode-scanner';
 import React, { useContext, useEffect, useState } from 'react';
-import { Image, KeyboardAvoidingView, Platform, ScrollView, StyleSheet, View } from 'react-native';
+import { Image, KeyboardAvoidingView, Platform, ScrollView, StyleSheet, View, SafeAreaView } from 'react-native';
 import { Text } from 'react-native-elements';
 import { TransactionsAPI } from 'src/api';
 import { ITransactionRequest } from 'src/api/types';
@@ -112,8 +112,8 @@ const styles = StyleSheet.create({
 		paddingTop: 10
 	},
 	bottomView: {
-		padding: 20,
-		paddingBottom: 45
+		marginHorizontal: 20,
+		marginBottom: 20
 	}
 });
 
@@ -359,7 +359,9 @@ const QRCodeScan = (): JSX.Element => {
 			{isLowAmountDialog && <LowAmount visible={isLowAmountDialog} onConfirm={onLoadUp} onCancel={onCancle} />}
 			{isOpenPayment && (
 				<Modal visible={isOpenPayment}>
-					<View style={modalViewBase}>
+					<KeyboardAvoidingView
+							behavior={Platform.OS == "ios" ? "padding" : "height"}
+							style={modalViewBase}>
 						<ModalHeader
 							leftComponent={<BackBtn onClick={() => setIsOpenPayment(false)} />}
 							rightComponent={<CancelBtn text="Close" onClick={onCancle} />}
@@ -382,18 +384,16 @@ const QRCodeScan = (): JSX.Element => {
 								/>
 							</View>
 						</ScrollView>
-						<KeyboardAvoidingView
-							behavior={Platform.OS == "ios" ? "padding" : "height"} >
-							<View style={styles.bottomView}>
-								<Button
-									type={BUTTON_TYPES.DARK_GREEN}
-									disabled={!goNext}
-									title={Translation.BUTTON.CONFIRM}
-									onPress={handleOpenPay}
-								/>
-							</View>
-						</KeyboardAvoidingView>
-					</View>
+						
+						<SafeAreaView style={styles.bottomView}>
+							<Button
+								type={BUTTON_TYPES.DARK_GREEN}
+								disabled={!goNext}
+								title={Translation.BUTTON.CONFIRM}
+								onPress={handleOpenPay}
+							/>
+						</SafeAreaView>
+					</KeyboardAvoidingView>
 				</Modal>
 			)}
 		</View>

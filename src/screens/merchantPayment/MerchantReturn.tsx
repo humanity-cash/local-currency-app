@@ -1,6 +1,6 @@
 import { useNavigation } from '@react-navigation/core';
 import React, { useEffect, useState } from 'react';
-import { KeyboardAvoidingView, Platform, ScrollView, StyleSheet, View } from 'react-native';
+import { KeyboardAvoidingView, Platform, ScrollView, StyleSheet, View, SafeAreaView } from 'react-native';
 import { Text } from 'react-native-elements';
 import { BUTTON_TYPES } from 'src/constants';
 import * as Routes from 'src/navigation/constants';
@@ -37,8 +37,8 @@ const styles = StyleSheet.create({
 		color: colors.purple
 	},
 	bottomView: {
-		padding: 20,
-		paddingBottom: 45
+		marginHorizontal: 20,
+		marginBottom: 20
 	}
 });
 
@@ -61,7 +61,9 @@ const MerchantReturn = (): JSX.Element => {
 	}
 
 	return (
-		<View style={viewBaseB}>
+		<KeyboardAvoidingView
+			behavior={Platform.OS == "ios" ? "padding" : "height"}
+			style={viewBaseB}>
 			<Header
 				leftComponent={<BackBtn color={colors.purple} onClick={() => navigation.goBack()} />}
 				rightComponent={<CancelBtn color={colors.purple} text={Translation.BUTTON.CLOSE} onClick={() => navigation.navigate(Routes.MERCHANT_DASHBOARD)} />}
@@ -86,18 +88,15 @@ const MerchantReturn = (): JSX.Element => {
 					/>
 				</View>
 			</ScrollView>
-			<KeyboardAvoidingView
-				behavior={Platform.OS == "ios" ? "padding" : "height"} >
-				<View style={styles.bottomView}>
-					<Button
-						type={BUTTON_TYPES.PURPLE}
-						disabled={!goNext}
-						title={Translation.BUTTON.RETURN_AMOUNT}
-						onPress={onReturn}
-					/>
-				</View>
-			</KeyboardAvoidingView>
-		</View>
+			<SafeAreaView style={styles.bottomView}>
+				<Button
+					type={BUTTON_TYPES.PURPLE}
+					disabled={!goNext}
+					title={Translation.BUTTON.RETURN_AMOUNT}
+					onPress={onReturn}
+				/>
+			</SafeAreaView>
+		</KeyboardAvoidingView>
 	);
 }
 

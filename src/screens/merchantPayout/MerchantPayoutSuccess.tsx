@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, View, KeyboardAvoidingView, ScrollView, Platform } from 'react-native';
+import { StyleSheet, View, ScrollView, SafeAreaView } from 'react-native';
 import { useNavigation } from '@react-navigation/core';
 import { Text } from 'react-native-elements';
 import { Header, Button, CancelBtn } from "src/shared/uielements";
@@ -20,8 +20,8 @@ const styles = StyleSheet.create({
 		color: colors.bodyText
 	},
 	bottomView: {
-		padding: 20,
-		paddingBottom: 45
+		marginHorizontal: 20,
+		marginBottom: 20
 	},
 });
 
@@ -38,16 +38,13 @@ const MerchantPayoutSuccess = (): JSX.Element => {
 				</View>
 				<Text style={styles.text}>{Translation.PAYMENT.BERKSHARE_AVAILABLE_PERSONAL}</Text>
 			</ScrollView>
-			<KeyboardAvoidingView
-				behavior={Platform.OS == "ios" ? "padding" : "height"} >
-				<View style={styles.bottomView}>
-					<Button
-						type={BUTTON_TYPES.PURPLE}
-						title={Translation.BUTTON.CLOSE}
-						onPress={() => navigation.navigate(Routes.MERCHANT_DASHBOARD)}
-					/>
-				</View>
-			</KeyboardAvoidingView>
+			<SafeAreaView style={styles.bottomView}>
+				<Button
+					type={BUTTON_TYPES.PURPLE}
+					title={Translation.BUTTON.CLOSE}
+					onPress={() => navigation.navigate(Routes.MERCHANT_DASHBOARD)}
+				/>
+			</SafeAreaView>
 		</View>
 	);
 }

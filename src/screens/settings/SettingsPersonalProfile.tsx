@@ -1,7 +1,7 @@
 import { useNavigation } from '@react-navigation/native';
 import * as ImagePicker from 'expo-image-picker';
 import React, { useContext, useState } from 'react';
-import { Image, KeyboardAvoidingView, Platform, ScrollView, StyleSheet, TouchableOpacity, View } from "react-native";
+import { Image, KeyboardAvoidingView, Platform, ScrollView, StyleSheet, TouchableOpacity, View, SafeAreaView } from 'react-native';
 import { Text } from "react-native-elements";
 import { UserAPI } from "src/api";
 import { BUTTON_TYPES } from 'src/constants';
@@ -51,8 +51,8 @@ const styles = StyleSheet.create({
 		marginBottom: 10,
 	},
 	bottomView: {
-		paddingHorizontal: 20,
-		paddingBottom: 60,
+		marginHorizontal: 20,
+		marginBottom: 20,
 	},
 });
 
@@ -99,7 +99,9 @@ export const SettingsPersonalDetails = (): JSX.Element => {
 	}
 
 	return (
-		<View style={viewBase}>
+		<KeyboardAvoidingView
+			behavior={Platform.OS == 'ios' ? 'padding' : 'height'}
+			style={viewBase}>
 			<DataLoading visible={isLoading} />
 			<Header
 				leftComponent={<BackBtn onClick={() => navigation.goBack()} />}
@@ -134,18 +136,15 @@ export const SettingsPersonalDetails = (): JSX.Element => {
 					/>
 				</View>
 			</ScrollView>
-			<KeyboardAvoidingView
-				behavior={Platform.OS == 'ios' ? 'padding' : 'height'}>
-				<View style={styles.bottomView}>
-					<Button
-						type={BUTTON_TYPES.DARK_GREEN}
-						title={Translation.BUTTON.SAVE_CHANGE}
-						disabled={state.username === user?.customer?.tag}
-						onPress={handleSave}
-					/>
-				</View>
-			</KeyboardAvoidingView>
-		</View>
+			<SafeAreaView style={styles.bottomView}>
+				<Button
+					type={BUTTON_TYPES.DARK_GREEN}
+					title={Translation.BUTTON.SAVE_CHANGE}
+					disabled={state.username === user?.customer?.tag}
+					onPress={handleSave}
+				/>
+			</SafeAreaView>
+		</KeyboardAvoidingView>
 	);
 };
 

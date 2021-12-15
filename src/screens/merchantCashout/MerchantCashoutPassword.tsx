@@ -1,7 +1,7 @@
 import { useNavigation } from '@react-navigation/native';
 import * as LocalAuthentication from "expo-local-authentication";
 import React, { useEffect, useState } from 'react';
-import { ScrollView, KeyboardAvoidingView, Platform, StyleSheet, View } from 'react-native';
+import { ScrollView, KeyboardAvoidingView, Platform, StyleSheet, View, SafeAreaView } from 'react-native';
 import { Text } from 'react-native-elements';
 import { useUserDetails } from "src/hooks";
 import { Header, BackBtn, BlockInput, Button } from "src/shared/uielements";
@@ -38,8 +38,8 @@ const styles = StyleSheet.create({
         textDecorationLine: 'underline'
     },
 	bottomView: {
-		paddingHorizontal: 20,
-    	paddingBottom: 50
+		marginHorizontal: 20,
+    	marginBottom: 20
 	},
 });
 
@@ -70,7 +70,9 @@ const MerchantCashoutPassword = (): JSX.Element => {
 	};
 
 	return (
-		<View style={viewBaseB}>
+		<KeyboardAvoidingView
+			behavior={Platform.OS == "ios" ? "padding" : "height"}
+			style={viewBaseB}>
 			<Header
 				leftComponent={<BackBtn color={colors.purple} onClick={() => navigation.goBack()} />}
 			/>
@@ -92,25 +94,21 @@ const MerchantCashoutPassword = (): JSX.Element => {
 				</View>
 			</ScrollView>
 
-			<KeyboardAvoidingView
-				behavior={Platform.OS == "ios" ? "padding" : "height"}
-			>
-				<View style={styles.bottomView}>
-					<Button
-						type={BUTTON_TYPES.TRANSPARENT}
-						title={Translation.BUTTON.FORGOT_PASSWORD}
-                        textStyle={styles.forgotText}
-						onPress={() => navigation.navigate(Routes.FORGOT_PASSWORD)}
-					/>
-					<Button
-						type={BUTTON_TYPES.PURPLE}
-						title={Translation.BUTTON.CONFIRM}
-						disabled={!goNext}
-						onPress={() => navigation.navigate(Routes.MERCHANT_REDEMPTION_IN_PROGRESS)}
-					/>
-				</View>
-			</KeyboardAvoidingView>
-		</View>
+			<SafeAreaView style={styles.bottomView}>
+				<Button
+					type={BUTTON_TYPES.TRANSPARENT}
+					title={Translation.BUTTON.FORGOT_PASSWORD}
+					textStyle={styles.forgotText}
+					onPress={() => navigation.navigate(Routes.FORGOT_PASSWORD)}
+				/>
+				<Button
+					type={BUTTON_TYPES.PURPLE}
+					title={Translation.BUTTON.CONFIRM}
+					disabled={!goNext}
+					onPress={() => navigation.navigate(Routes.MERCHANT_REDEMPTION_IN_PROGRESS)}
+				/>
+			</SafeAreaView>
+		</KeyboardAvoidingView>
 	);
 }
 

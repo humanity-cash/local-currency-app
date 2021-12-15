@@ -1,5 +1,5 @@
 import React from 'react';
-import { StyleSheet, View, KeyboardAvoidingView, ScrollView, Platform } from 'react-native';
+import { StyleSheet, View, KeyboardAvoidingView, ScrollView, Platform, SafeAreaView } from 'react-native';
 import { Text } from 'react-native-elements';
 import { Header, Button, CancelBtn } from "src/shared/uielements";
 import { baseHeader, viewBase, wrappingContainerBase } from "src/theme/elements";
@@ -20,15 +20,17 @@ const styles = StyleSheet.create({
 		color: colors.bodyText
 	},
 	bottomView: {
-		padding: 20,
-		paddingBottom: 45
+		marginHorizontal: 20,
+		marginVertical: 20
 	},
 });
 
 const CashierReturnSuccess = (): JSX.Element => {
 	const navigation = useNavigation();
 	return (
-		<View style={viewBase}>
+		<KeyboardAvoidingView
+			behavior={Platform.OS == "ios" ? "padding" : "height"}
+			style={viewBase}>
 			<Header
 				rightComponent={<CancelBtn text={Translation.BUTTON.CLOSE} color={colors.purple} onClick={() => navigation.navigate(Routes.CASHIER_DASHBOARD)} />}
 			/>
@@ -38,17 +40,14 @@ const CashierReturnSuccess = (): JSX.Element => {
 					<Text style={styles.headerText}>{Translation.COMMON.THANK_YOU}</Text>
 				</View>
 			</ScrollView>
-			<KeyboardAvoidingView
-				behavior={Platform.OS == "ios" ? "padding" : "height"} >
-				<View style={styles.bottomView}>
-					<Button
-						type={BUTTON_TYPES.PURPLE}
-						title={Translation.BUTTON.NEXT}
-						onPress={() => navigation.navigate(Routes.CASHIER_DASHBOARD)}
-					/>
-				</View>
-			</KeyboardAvoidingView>
-		</View>
+			<SafeAreaView style={styles.bottomView}>
+				<Button
+					type={BUTTON_TYPES.PURPLE}
+					title={Translation.BUTTON.NEXT}
+					onPress={() => navigation.navigate(Routes.CASHIER_DASHBOARD)}
+				/>
+			</SafeAreaView>
+		</KeyboardAvoidingView>
 	);
 }
 

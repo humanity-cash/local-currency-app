@@ -75,7 +75,9 @@ const Login = (): JSX.Element => {
 	}
 
 	return (
-		<View style={viewBase}>
+		<KeyboardAvoidingView
+			behavior={Platform.OS == 'ios' ? 'padding' : 'height'}
+			style={viewBase}>
 			<DataLoading visible={isLoading} />
 			<Header
 				leftComponent={<BackBtn onClick={() => navigation.goBack()} />}
@@ -118,25 +120,22 @@ const Login = (): JSX.Element => {
 			</ScrollView>
 
 			<SafeAreaView style={styles.bottomView}>
-				<KeyboardAvoidingView
-					behavior={Platform.OS == 'ios' ? 'padding' : 'height'}>
-					<Button
-						type={BUTTON_TYPES.TRANSPARENT}
-						disabled={AuthStatus.Loading === authStatus}
-						title='Forgot password'
-						onPress={() =>
-							navigation.navigate(Routes.FORGOT_PASSWORD)
-						}
-					/>
-					<Button
-						type={BUTTON_TYPES.DARK_GREEN}
-						title='Log in'
-						disabled={!goNext || AuthStatus.Loading === authStatus}
-						onPress={handleSignin}
-					/>
-				</KeyboardAvoidingView>
+				<Button
+					type={BUTTON_TYPES.TRANSPARENT}
+					disabled={AuthStatus.Loading === authStatus}
+					title='Forgot password'
+					onPress={() =>
+						navigation.navigate(Routes.FORGOT_PASSWORD)
+					}
+				/>
+				<Button
+					type={BUTTON_TYPES.DARK_GREEN}
+					title='Log in'
+					disabled={!goNext || AuthStatus.Loading === authStatus}
+					onPress={handleSignin}
+				/>
 			</SafeAreaView>
-		</View>
+		</KeyboardAvoidingView>
 	);
 };
 
