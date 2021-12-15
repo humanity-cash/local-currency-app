@@ -18,6 +18,7 @@ export const getDeposits = async (userId: UserId): Promise<MiniTransaction[]> =>
 
 export const getWithdrawals = async (userId: UserId): Promise<MiniTransaction[]> => {
   try {
+    if(!userId) return [];
     const response = await getRequest(`/users/${userId}/withdraw`);
     if (response.status === 204) {
       return []
@@ -29,16 +30,17 @@ export const getWithdrawals = async (userId: UserId): Promise<MiniTransaction[]>
   }
 };
 
-const getTransactions = async (userId: UserId): Promise<MiniTransaction[]> => {
+export const getBlockchainTransactions = async (userId: UserId): Promise<MiniTransaction[]> => {
   try {
+    if(!userId) return [];
     const response = await getRequest(`/users/${userId}/transfer`);
     if (response.status === 204) {
       return []
     }
     return formatTransactions(response);
-  } catch (error) {
-    console.log(error)
-    return [] as ITransaction[];
+  } catch (error: any) {
+    console.log('error in getTransactions', error?.message)
+    return [];
   }
 };
 
@@ -60,7 +62,7 @@ export const transferTo = async (userId: UserId, request: ITransactionRequest): 
 export const getAllTransactions = async (userId: UserId): Promise<MiniTransaction[]> => {
   if(!userId) return [];
   const response =
-    [...await getTransactions(userId),
+    [...await getBlockchainTransactions(userId),
     ...await getDeposits(userId),
     ...await getWithdrawals(userId),
     ]

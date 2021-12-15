@@ -193,7 +193,7 @@ const TransactionDetail = (props: TransactionDetailProps) => {
 
 const options = {
   includeScore: false,
-  keys: ['toName', 'fromName', 'value']
+  keys: ['toName', 'fromName', 'value', 'type']
 };
 
 const MyTransactions = (): JSX.Element => {

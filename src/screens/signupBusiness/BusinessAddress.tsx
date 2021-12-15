@@ -79,7 +79,6 @@ const BusinessAddress = (): ReactElement => {
 			&& Boolean(city)
 			&& Boolean(state)
 			&& Boolean(postalCode)
-			&& Boolean(phoneNumber);
 
 		setGoNext(allInputsFilled);
 	}, [address1, address2, city, postalCode, state, phoneNumber]);
