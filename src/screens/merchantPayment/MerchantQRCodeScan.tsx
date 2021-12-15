@@ -12,7 +12,7 @@ import { useCameraPermission } from 'src/hooks';
 import * as Routes from 'src/navigation/constants';
 import { BackBtn, BorderedInput, Button, CancelBtn, Dialog, Header, Modal, ModalHeader, ToggleButton } from "src/shared/uielements";
 import { colors } from "src/theme/colors";
-import { dialogViewBase, modalViewBase, underlineHeaderB, viewBase, wrappingContainerBase } from "src/theme/elements";
+import { baseHeader, dialogViewBase, modalViewBase, underlineHeaderB, viewBase, wrappingContainerBase } from "src/theme/elements";
 import Translation from 'src/translation/en.json';
 import { showToast } from 'src/utils/common';
 import { PaymentMode, QRCodeEntry, SECURITY_ID, ToastType } from 'src/utils/types';
@@ -135,6 +135,38 @@ const styles = StyleSheet.create({
 	}
 });
 
+type LowAmountProps = {
+	visible: boolean,
+	onConfirm: () => void,
+	onCancel: () => void
+}
+
+const LowAmount = (props: LowAmountProps) => {
+
+	return (
+		<Dialog visible={props.visible} onClose={() => props.onCancel()}>
+			<View style={dialogViewBase}>
+				<View>
+					<View style={baseHeader}>
+						<Text style={styles.headerText}> Whoooops. You cannot the payment. </Text>
+					</View>
+					<View style={styles.view}>
+						<Text style={styles.detailText}>You have too little funds available. Please load up your balance first.</Text>
+					</View>
+				</View>
+
+				<View>
+					<Button
+						type={BUTTON_TYPES.DARK_GREEN}
+						title={Translation.BUTTON.LOAD_UP}
+						onPress={() => props.onConfirm()}
+					/>
+				</View>
+			</View>
+		</Dialog>
+	)
+}
+
 type PaymentConfirmProps = {
 	visible: boolean,
 	onConfirm: (isRoundUp: boolean) => void,
@@ -148,7 +180,7 @@ const PaymentConfirm = (props: PaymentConfirmProps) => {
 	const firstName = user?.business?.owner?.firstName;
 	const lastName = user?.business?.owner?.lastName;
 	const amountCalcedFee = props.payInfo.amount;
-	const roundUpTotalAmount = Math.ceil(amountCalcedFee) - amountCalcedFee || amountCalcedFee + 1;
+	const roundUpTotalAmount = (Math.ceil(amountCalcedFee) - amountCalcedFee) ? Math.ceil(amountCalcedFee) : amountCalcedFee + 1;
 
 	return (
 		<Dialog visible={props.visible} onClose={props.onCancel} backgroundStyle={styles.dialogBg} style={styles.dialog}>
@@ -205,6 +237,7 @@ const MerchantQRCodeScan = (): JSX.Element => {
 	});
 	const [goNext, setGoNext] = useState<boolean>(false);
 	const { businessWalletData } = useContext(WalletContext);
+	const [isLowAmountDialog, setIsLowAmountDialog] = useState<boolean>(false);
 
 	useEffect(() => {
 		setIsScanned(false);
@@ -235,15 +268,16 @@ const MerchantQRCodeScan = (): JSX.Element => {
 	}
 
 	const onPayConfirm = async (isRoundUp: boolean) => {
-		setIsLoading(true)
 		setIsPaymentDialog(false);
 		setIsScanned(false);
-		const amountCalcedFee = state.amount;
-
+		
 		if (businessWalletData.availableBalance <= state.amount) {
-			showToast(ToastType.ERROR, "Whoooops. You cannot the payment.", "You have too little funds available. Please load up your balance first.");
+			setIsLowAmountDialog(true);
 			return;
 		}
+
+		setIsLoading(true)
+		const amountCalcedFee = state.amount;
 
 		if (businessDwollaId) {
 			const request: ITransactionRequest = {
@@ -269,10 +303,15 @@ const MerchantQRCodeScan = (): JSX.Element => {
 		setIsLoading(false)
 	};
 
+	const onLoadUp = () => {
+		setIsLowAmountDialog(false);
+		navigation.navigate(Routes.MERCHANT_LOADUP);
+	}
+
 	const handleOpenPay = async () => {
 		setIsOpenPayment(false);
 		if (businessWalletData.availableBalance <= state.amount) {
-			showToast(ToastType.ERROR, "Whoooops. You cannot the payment.", "You have too little funds available. Please load up your balance first.");
+			setIsLowAmountDialog(true);
 			return;
 		}
 
@@ -297,6 +336,7 @@ const MerchantQRCodeScan = (): JSX.Element => {
 
 	const cleanUpState = () => {
 		setIsPaymentDialog(false);
+		setIsLowAmountDialog(false);
 		setIsOpenPayment(false);
 		setIsLoading(false);
 		setIsScanned(false);
@@ -313,11 +353,11 @@ const MerchantQRCodeScan = (): JSX.Element => {
 			<PaymentLoading visible={isLoading} />
 			<View style={styles.container}>
 				{
-					(!isPaymentDialog
-						&& !isOpenPayment) && <BarCodeScanner
-						onBarCodeScanned={isScanned ? undefined : handleBarCodeScanned}
-						style={StyleSheet.absoluteFillObject}
-					/>
+					(!isPaymentDialog && !isOpenPayment && !isLowAmountDialog) && 
+						<BarCodeScanner
+							onBarCodeScanned={isScanned ? undefined : handleBarCodeScanned}
+							style={StyleSheet.absoluteFillObject}
+						/>
 				}
 			</View>
 			<View style={styles.toggleView}>
@@ -337,6 +377,7 @@ const MerchantQRCodeScan = (): JSX.Element => {
 				</View>
 			</View>
 			{isPaymentDialog && <PaymentConfirm visible={isPaymentDialog} payInfo={state} onConfirm={onPayConfirm} onCancel={onClose} />}
+			{isLowAmountDialog && <LowAmount visible={isLowAmountDialog} onConfirm={onLoadUp} onCancel={onClose} />}
 			{isOpenPayment && (
 				<Modal visible={isOpenPayment}>
 					<View style={modalViewBase}>
