@@ -102,8 +102,6 @@ const StaticQRCodeGen = (props: QRCodeGenProps): JSX.Element => {
         onSuccess();
     }
 
-    // const firstName = user?.business?.owner?.firstName;
-    // const lastName = user?.business?.owner?.lastName;
     const businessName = user?.business?.tag || undefined
 
     return (
@@ -115,7 +113,6 @@ const StaticQRCodeGen = (props: QRCodeGenProps): JSX.Element => {
                             source={require("../../../assets/images/feed1.png")}
                             style={styles.image}
                         />
-                        {/* <Text style={styles.ownerName}>{firstName + ' ' + lastName}</Text> */}
                         <Text style={styles.ownerName}>{businessName}</Text>
                     </View>
                     <QRCode
