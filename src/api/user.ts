@@ -68,6 +68,7 @@ export const createBusiness = async (user: IDBUser): Promise<{ status: number, d
           ...user?.business,
           avatar: user.business?.avatar? user.business.avatar : "avatar",
           phoneNumber: user.business?.phoneNumber? user.business.phoneNumber : "phoneNumber",
+          address2: user.business?.address2? user.business.address2 : "address2",
           owner: {
             address1: user?.business?.address1 ? user?.business?.address1 : "empty",
             address2: user?.business?.address2 ? user?.business?.address2 : "empty",
@@ -77,7 +78,6 @@ export const createBusiness = async (user: IDBUser): Promise<{ status: number, d
             firstName: user?.business?.owner?.firstName,
             lastName: user?.business?.owner?.lastName
           }
-
       }
       const response: AxiosPromiseResponse<IDBUser> = await addBusinessVerification(
         //@ts-ignore
@@ -95,6 +95,7 @@ export const createBusiness = async (user: IDBUser): Promise<{ status: number, d
           ...user?.business,
           avatar: user.business?.avatar ? user.business.avatar : "empty",
           phoneNumber: user.business?.phoneNumber ? user.business.phoneNumber : "00",
+          address2: user.business?.address2? user.business.address2 : "address2",
           owner: {
             address1: user?.business?.address1 ? user?.business?.address1 : "empty",
             address2: user?.business?.address2 ? user?.business?.address2 : "empty",

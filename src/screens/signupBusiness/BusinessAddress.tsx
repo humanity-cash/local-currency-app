@@ -65,7 +65,6 @@ const BusinessAddress = (): ReactElement => {
 	const business = user?.business;
 	const [ isLoading, setIsLoading ] = useState<boolean>(false);
 	const address1 = business?.address1;
-	const address2 = business?.address2;
 	const city = business?.city;
 	const postalCode = business?.postalCode;
 	const phoneNumber = business?.phoneNumber;
@@ -75,13 +74,12 @@ const BusinessAddress = (): ReactElement => {
 	useEffect(() => {
 		const allInputsFilled =
 			Boolean(address1)
-			&& Boolean(address2)
 			&& Boolean(city)
 			&& Boolean(state)
 			&& Boolean(postalCode)
 
 		setGoNext(allInputsFilled);
-	}, [address1, address2, city, postalCode, state, phoneNumber]);
+    }, [address1, city, postalCode, state, phoneNumber]);
 
 	const onNextPress = async () => {
 		if (!user) return
