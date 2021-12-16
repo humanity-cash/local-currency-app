@@ -258,7 +258,7 @@ const MerchantDashboard = (): JSX.Element => {
 									<Text
 										style={styles.alertIcon}
 										onPress={() => setIsDwollaVisible(true)}>
-										{`${Translation.BANK_ACCOUNT.ACCOUNT_LINK_TEXT} `}
+										{`${Translation.BANK_ACCOUNT.LINK_BUSINESS_BANK_ACCOUNT} `}
 										&gt;
 									</Text>
 								</Text>
