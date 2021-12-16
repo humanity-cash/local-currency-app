@@ -2,6 +2,7 @@ import { useNavigation } from '@react-navigation/core';
 import React, { useContext, useEffect, useState } from 'react';
 import { KeyboardAvoidingView, Platform, ScrollView, StyleSheet, View, SafeAreaView } from 'react-native';
 import { Text } from 'react-native-elements';
+import { Colors } from 'react-native/Libraries/NewAppScreen';
 import { TransactionsAPI } from 'src/api';
 import { BUTTON_TYPES } from 'src/constants';
 import { UserContext, WalletContext } from 'src/contexts';
@@ -30,6 +31,11 @@ const styles = StyleSheet.create({
 		marginTop: 5, 
 		color: colors.bodyText, 
 		fontSize: 16
+	},
+	errorBalance: {
+		color: colors.mistakeRed, 
+		fontSize: 10,
+		lineHeight: 10
 	},
 	labelText: {
 		marginTop: 5, 
@@ -85,12 +91,14 @@ const MerchantCashoutAmount = (): JSX.Element => {
 	const { businessWalletData } = useContext(WalletContext);
 	const [amount, setAmount] = useState<string>("");
 	const [goNext, setGoNext] = useState(false);
+	const [exceed, setExceed] = useState(false)
 	const [isLoading, setIsLoading] = useState<boolean>(false);
 	const [isVisible, setIsVisible] = useState(false);
 	const [maxAmount, setMaxAmount] = useState<string>("5.00")
 
 	useEffect(() => {
 		setGoNext(Number(amount) > 0);
+		setExceed(+amount > +maxAmount)
 	}, [amount]);
 
 	useEffect(() => {
@@ -102,10 +110,7 @@ const MerchantCashoutAmount = (): JSX.Element => {
 
 	const onValueChange = (name: string, change: string) => {
 		const amount = change.replace(',', '.')
-
-		if(+amount <= +maxAmount) {
-			setAmount(amount);
-		}
+		setAmount(amount);
 	};
 
 	const viewConfirm = () => {
@@ -162,7 +167,9 @@ const MerchantCashoutAmount = (): JSX.Element => {
 						textStyle={styles.text}
 						value={amount}
 						onChange={onValueChange}
+						borderColor={exceed ? colors.mistakeRed : null}
 					/>
+					{exceed && <Text style={styles.errorBalance}>{Translation.PAYMENT.EXCEED_BALANCE}</Text>}
 					<View style={styles.resultView}>
 						<Text style={styles.resultText}>{Translation.PAYMENT.REDEMPTION_FEE}(1.5%)</Text>
 						<Text style={styles.resultText}>{Translation.COMMON.USD} {(Number(amount)*0.015).toFixed(2)}</Text>
@@ -176,7 +183,7 @@ const MerchantCashoutAmount = (): JSX.Element => {
 			<SafeAreaView style={styles.bottomView}>
 				<Button
 					type={BUTTON_TYPES.PURPLE}
-					disabled={!goNext}
+					disabled={!goNext || exceed}
 					title={Translation.BUTTON.CONFIRM}
 					onPress={viewConfirm}
 				/>
