@@ -216,7 +216,6 @@ const DrawerContent = (props: DrawerContentComponentProps) => {
 	}
 
 	const onBankDialogCancel = () => {
-		console.log("caaaancel")
 		setBankDialogState(initBankDialogState);
 	}
 
@@ -297,22 +296,17 @@ const DrawerContent = (props: DrawerContentComponentProps) => {
 	}
 
 	const onPressLoadup = async () => {
-		const {status} = await BarCodeScanner.requestPermissionsAsync();
-		if(status === 'granted') {
-			if(businessWalletData?.address) {
-				props.navigation.navigate(Routes.MERCHANT_LOADUP)
-			} else {
-				setBankDialogState({
-					visible: true,
-					title: Translation.LOAD_UP.LOAD_UP_NO_BANK_TITLE,
-					description: Translation.LOAD_UP.LOAD_UP_NO_BANK_DETAIL,
-					buttoTitle: Translation.BUTTON.LINK_BUSINESS_BANK,
-					confirmAction: onBankDialogConfirm,
-					cancelAction: onBankDialogCancel
-				})
-			}
+		if(businessWalletData?.address && businessFundingSource) {
+			props.navigation.navigate(Routes.MERCHANT_LOADUP)
 		} else {
-			setIsSetting(true)
+			setBankDialogState({
+				visible: true,
+				title: Translation.LOAD_UP.LOAD_UP_NO_BANK_TITLE,
+				description: Translation.LOAD_UP.LOAD_UP_NO_BANK_DETAIL,
+				buttoTitle: Translation.BUTTON.LINK_BUSINESS_BANK,
+				confirmAction: onBankDialogConfirm,
+				cancelAction: onBankDialogCancel
+			})
 		}
 	}
 
@@ -432,7 +426,7 @@ const DrawerContent = (props: DrawerContentComponentProps) => {
 												/>
 											</View>
 											<View style={styles.usernameView}>
-												<Text>{userTag}</Text>
+												<Text>@{userTag}</Text>
 											</View>
 										</View>
 									</TouchableWithoutFeedback>

@@ -247,7 +247,7 @@ const Dashboard = (): JSX.Element => {
 									<Text
 										style={styles.alertIcon}
 										onPress={() => setIsVisible(true)}>
-										{`${Translation.BANK_ACCOUNT.ACCOUNT_LINK_TEXT} `}
+										{`${Translation.BANK_ACCOUNT.LINK_PERSONAL_BANK_ACCOUNT} `}
 										&gt;
 									</Text>
 								</Text>
