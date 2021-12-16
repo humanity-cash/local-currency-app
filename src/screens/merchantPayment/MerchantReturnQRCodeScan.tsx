@@ -52,7 +52,7 @@ const styles = StyleSheet.create({
 	},
 	label: { 
 		color: colors.text, 
-		fontSize: 12 
+		fontSize: 12
 	},
 	input: {
 		backgroundColor: colors.white,
@@ -83,6 +83,14 @@ const styles = StyleSheet.create({
 		flexDirection: 'row',
 		justifyContent: 'space-between'
 	},
+	maxBView: {
+		flexDirection: 'row', 
+		justifyContent: 'space-between',
+	},
+	exceedLabel: {
+		fontSize: 10,
+		color: colors.mistakeRed
+	},
 	loading: {
 		position: 'absolute', 
 		top: 0, 
@@ -110,13 +118,15 @@ const MerchantReturnQRCodeScan = (): JSX.Element => {
 		mode: PaymentMode.SELECT_AMOUNT
 	});
 	const [isLoading, setIsLoading] = useState(false)
+	const [exceed, setExceed] = useState(false)
 
 	useEffect(() => {
 		setIsScanned(false);
 	});
 
 	useEffect(() => {
-		setGoNext(Number(amount) > 0);
+		setGoNext(+amount > 0);
+		setExceed(+amount > state.amount)
 	}, [amount]);
 
 	const handleBarCodeScanned = (data: HandleScaned) => {
@@ -200,7 +210,7 @@ const MerchantReturnQRCodeScan = (): JSX.Element => {
 									<Text style={styles.transactionDetailAmount}>B$ {state.amount.toFixed(2)}</Text>
 									<View style={styles.inlineView}>
 										<Text style={styles.label}>TRANSACTION ID</Text>
-										<Text style={styles.label}>{state.transactionHash}</Text>
+										<Text style={[styles.label, {flex: 1, marginLeft: 20}]}>{state.transactionHash}</Text>
 									</View>
 									<View style={styles.inlineView}>
 										<Text style={styles.label}>TYPE</Text>
@@ -212,18 +222,22 @@ const MerchantReturnQRCodeScan = (): JSX.Element => {
 									</View>
 								</View>
 
-								<Text style={styles.label}>{Translation.LABEL.RETURN_AMOUNT}</Text>
+								<View style={styles.maxBView}>
+									<Text style={styles.label}>{Translation.LABEL.RETURN_AMOUNT}</Text>
+									{exceed && <Text style={styles.exceedLabel}>MAX. TOTAL TRANSACTION AMOUNT</Text>}
+								</View>
 								<BorderedInput
 									label="Amount"
 									name="amount"
 									keyboardType="decimal-pad"
 									placeholder="Amount"
 									placeholderTextColor={colors.greyedPurple}
-									prefix="B$"
+									prefix="B$1"
 									style={styles.input}
 									textStyle={styles.text}
 									value={amount}
 									onChange={onValueChange}
+									borderColor={exceed ? colors.mistakeRed : null}
 								/>
 							</View>
 						</ScrollView>
@@ -232,7 +246,7 @@ const MerchantReturnQRCodeScan = (): JSX.Element => {
 							<View style={styles.bottomView}>
 								<Button
 									type={BUTTON_TYPES.PURPLE}
-									disabled={!goNext}
+									disabled={!goNext || exceed}
 									title={Translation.BUTTON.RETURN_AMOUNT}
 									onPress={onReturn}
 								/>
