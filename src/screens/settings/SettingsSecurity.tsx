@@ -1,6 +1,6 @@
 import { useNavigation } from '@react-navigation/native';
-import React, { useState, useEffect, useContext } from 'react';
-import { ScrollView, StyleSheet, Switch, View } from "react-native";
+import React, { useState, useEffect, useContext, createRef } from 'react';
+import { ScrollView, StyleSheet, Switch, View, KeyboardAvoidingView, TextInput, Platform } from "react-native";
 import { Text } from "react-native-elements";
 import { AuthContext } from "src/contexts";
 import { useUserDetails } from "src/hooks";
@@ -57,7 +57,7 @@ const styles = StyleSheet.create({
 		fontSize: 10,
 	},
 	bottomView: {
-		marginBottom: 40,
+		marginBottom: 20,
 		marginHorizontal: 20
 	},
 	saveButton: {
@@ -79,6 +79,8 @@ export const SettingsSecurity = (): JSX.Element => {
 		newPassword: "",
 		newPassowrdConfirm: ""
 	});
+	const newPasswordRef = createRef<TextInput>()
+	const confirmPasswordRef = createRef<TextInput>()
 
 	useEffect(() => {
 		setSwitchToggle(authorization.touchID);
@@ -132,7 +134,9 @@ export const SettingsSecurity = (): JSX.Element => {
 	}
 
 	return (
-		<View style={viewBase}>
+		<KeyboardAvoidingView
+			behavior={Platform.OS == "ios" ? "padding" : "height"}
+			style={viewBase}>
 			<Header
 				leftComponent={<BackBtn onClick={() => navigation.goBack()} />}
 			/>
@@ -159,16 +163,25 @@ export const SettingsSecurity = (): JSX.Element => {
 						value={state.password}
 						secureTextEntry={true}
 						onChange={onValueChange}
+						returnKeyType='next'
+						onSubmitEditing={()=>{
+							newPasswordRef.current?.focus()
+						}}
 					/>
 
 					<Text style={styles.label}>{Translation.LABEL.NEW_PASSWORD}</Text>
 					<Text style={styles.label}>({Translation.LABEL.PASSWORD_REG})</Text>
 					<BlockInput
+						inputRef={newPasswordRef}
 						name="newPassword"
 						placeholder="new password"
 						value={state.newPassword}
 						secureTextEntry={true}
 						onChange={onValueChange}
+						returnKeyType='next'
+						onSubmitEditing={()=>{
+							confirmPasswordRef.current?.focus()
+						}}
 					/>
 
 					<View style={styles.inlineView}>
@@ -178,6 +191,7 @@ export const SettingsSecurity = (): JSX.Element => {
 						)}
 					</View>
 					<BlockInput
+						inputRef={confirmPasswordRef}
 						name="newPassowrdConfirm"
 						placeholder="new password confirm"
 						value={state.newPassowrdConfirm}
@@ -194,7 +208,7 @@ export const SettingsSecurity = (): JSX.Element => {
 					onPress={handleSave}
 				/>
 			</View>
-		</View>
+		</KeyboardAvoidingView>
 	);
 }
 
