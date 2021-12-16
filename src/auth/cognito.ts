@@ -96,30 +96,32 @@ export const completeForgotPasswordFlow = async ({ email, verificationCode, newP
 };
 
 export const signIn = async ({ email, password }: SignInInput): CognitoResponse<CognitoUserSession> => {
-	currentUser = getCognitoUser(email);
-	const authenticationDetails = new AuthenticationDetails({
-		Username: email,
-		Password: password,
-	});
-	return new Promise(function (resolve) {
-		if (!currentUser) {
-			showToast(ToastType.ERROR, Translation.NOTIFICATIONS.ERROR, Translation.NOTIFICATIONS.EMAIL_NOT_REGISTERED)
-			resolve({ success: false, error: Translation.NOTIFICATIONS.EMAIL_NOT_REGISTERED })
-		}
-		else return currentUser.authenticateUser(authenticationDetails, {
-			onSuccess: async function (response: CognitoUserSession) {
-				resolve({ success: true, data: response });
-			},
-			onFailure: function (error: CognitoError) {
-				showToast(ToastType.ERROR, error.code, error.message);
-				resolve({ success: false,  error: error.code  });
-			},
-		})
-	})
+    currentUser = getCognitoUser(email);
+    const authenticationDetails = new AuthenticationDetails({
+        Username: email,
+        Password: password,
+    });
+    return new Promise(function (resolve) {
+        if (!currentUser) {
+            showToast(ToastType.ERROR, Translation.NOTIFICATIONS.ERROR, Translation.NOTIFICATIONS.EMAIL_NOT_REGISTERED)
+            resolve({ success: false, error: Translation.NOTIFICATIONS.EMAIL_NOT_REGISTERED })
+        }
+        else return currentUser.authenticateUser(authenticationDetails, {
+            onSuccess: async function (response: CognitoUserSession) {
+                resolve({ success: true, data: response });
+            },
+            onFailure: function (error: CognitoError) {
+                if(error.code !== "UserNotConfirmedException") {
+                    showToast(ToastType.ERROR, error.code, error.message);
+                }
+                resolve({ success: false,  error: error.code  });
+            },
+        })
+    })
 };
 
 export const signOut = (): void =>
-	currentUser?.signOut()
+    currentUser?.signOut()
 
 export const confirmEmailVerificationCode = async (email: string, code: string)
 	: CognitoResponse<unknown> => {

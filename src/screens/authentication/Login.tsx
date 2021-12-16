@@ -15,128 +15,132 @@ import Translation from 'src/translation/en.json';
 import { isPasswordValid } from 'src/utils/validation';
 
 const styles = StyleSheet.create({
-	headerText: {
-		fontSize: 32,
-		color: colors.darkGreen,
-		lineHeight: 35,
-	},
-	bodyText: {
-		color: colors.bodyText,
-	},
-	form: {
-		marginVertical: 30,
-	},
-	label: {
-		fontSize: 12,
-		lineHeight: 14,
-		color: colors.bodyText,
-		paddingTop: 10
-	},
-	bottomView: {
-		marginHorizontal: 20,
-		marginBottom: 20,
-	},
-	eyeView: {
-		position: 'absolute',
-		right: 10,
-		top: 0,
-		bottom: 0,
-		justifyContent: 'center'
-	}
+    headerText: {
+        fontSize: 32,
+        color: colors.darkGreen,
+        lineHeight: 35,
+    },
+    bodyText: {
+        color: colors.bodyText,
+    },
+    form: {
+        marginVertical: 30,
+    },
+    label: {
+        fontSize: 12,
+        lineHeight: 14,
+        color: colors.bodyText,
+        paddingTop: 10
+    },
+    bottomView: {
+        marginHorizontal: 20,
+        marginBottom: 20,
+    },
+    eyeView: {
+        position: 'absolute',
+        right: 10,
+        top: 0,
+        bottom: 0,
+        justifyContent: 'center'
+    }
 });
 
 const Login = (): JSX.Element => {
-	const navigation = useNavigation();
-	const { signIn, signInDetails, setSignInDetails, authStatus } = useContext(AuthContext);
-	const [goNext, setGoNext] = useState<boolean>(false);
-	const [isLoading, setLoading] = useState<boolean>(false)
-	const passwordRef = createRef<TextInput>()
-	const [isSecurity, setSecurity] = useState(true)
+    const navigation = useNavigation();
+    const { signIn, signInDetails, setSignInDetails, authStatus, resendEmailVerificationCode } = useContext(AuthContext);
+    const [goNext, setGoNext] = useState<boolean>(false);
+    const [isLoading, setLoading] = useState<boolean>(false)
+    const passwordRef = createRef<TextInput>()
+    const [isSecurity, setSecurity] = useState(true)
 
-	useEffect(() => {
-		setGoNext(isPasswordValid(signInDetails ? signInDetails.password : ""));
-	}, [signInDetails]);
+    useEffect(() => {
+        setGoNext(isPasswordValid(signInDetails ? signInDetails.password : ""));
+    }, [signInDetails]);
 
-	useEffect(() => {
-		setLoading(authStatus === AuthStatus.Loading)
-	}, [authStatus])
+    useEffect(() => {
+        setLoading(authStatus === AuthStatus.Loading)
+    }, [authStatus])
 
-	const onValueChange = (name: 'email' | 'password', change: string) => {
-		setSignInDetails((pv: SignInInput) => ({
-			...pv,
-			[name]: change,
-		}));
-	};
+    const onValueChange = (name: 'email' | 'password', change: string) => {
+        setSignInDetails((pv: SignInInput) => ({
+            ...pv,
+            [name]: change,
+        }));
+    };
 
-	const handleSignin = async () => {
-		setLoading(true)
-		await signIn();
-		setLoading(false)
-	}
+    const handleSignin = async () => {
+        setLoading(true)
+        const response =	await signIn();
+        if(response.error === "UserNotConfirmedException") {
+            await resendEmailVerificationCode(signInDetails.email);
+            navigation.navigate(Routes.VERIFICATION);
+        }
+        setLoading(false)
+    }
 
-	return (
-		<KeyboardAvoidingView
-			behavior={Platform.OS == 'ios' ? 'padding' : 'height'}
-			style={viewBase}>
-			<DataLoading visible={isLoading} />
-			<Header
-				leftComponent={<BackBtn onClick={() => navigation.goBack()} />}
-			/>
+    return (
+        <KeyboardAvoidingView
+            behavior={Platform.OS == 'ios' ? 'padding' : 'height'}
+            style={viewBase}>
+            <DataLoading visible={isLoading} />
+            <Header
+                leftComponent={<BackBtn onClick={() => navigation.goBack()} />}
+            />
 
-			<ScrollView style={wrappingContainerBase}>
-				<View style={baseHeader}>
-					<Text style={styles.headerText}>{Translation.LANDING_PAGE.LOGIN}</Text>
-				</View>
-				<Text style={styles.bodyText}>{Translation.LANDING_PAGE.WELCOME_BACK}</Text>
-				<View style={styles.form}>
-					<Text style={styles.label}>{Translation.LABEL.EMAIL_USERNAME}</Text>
-					<BlockInput
-						name='email'
-						placeholder='Email'
-						value={signInDetails?.email}
-						onChange={onValueChange}
-						returnKeyType='next'
-						onSubmitEditing={() => {passwordRef.current?.focus()}}
-						keyboardType='email-address'
-					/>
-					<Text style={styles.label}>{Translation.LABEL.CONFIRM_PASSWORD}</Text>
-					<View>
-						<BlockInput
-							inputRef={passwordRef}
-							name='password'
-							placeholder='Password1'
-							value={signInDetails?.password}
-							secureTextEntry={isSecurity}
-							onChange={onValueChange}
-						/>
-						<View style={styles.eyeView}>
-							<SecurityEyeButton
-								isSecurity={isSecurity}
-								onPress={() => setSecurity(!isSecurity)}
-							/>
-						</View>
-					</View>
-				</View>
-			</ScrollView>
+            <ScrollView style={wrappingContainerBase}>
+                <View style={baseHeader}>
+                    <Text style={styles.headerText}>{Translation.LANDING_PAGE.LOGIN}</Text>
+                </View>
+                <Text style={styles.bodyText}>{Translation.LANDING_PAGE.WELCOME_BACK}</Text>
+                <View style={styles.form}>
+                    <Text style={styles.label}>{Translation.LABEL.EMAIL_USERNAME}</Text>
+                    <BlockInput
+                        name='email'
+                        placeholder='Email'
+                        value={signInDetails?.email}
+                        onChange={onValueChange}
+                        returnKeyType='next'
+                        onSubmitEditing={() => {passwordRef.current?.focus()}}
+                        keyboardType='email-address'
+                    />
+                    <Text style={styles.label}>{Translation.LABEL.CONFIRM_PASSWORD}</Text>
+                    <View>
+                        <BlockInput
+                            inputRef={passwordRef}
+                            name='password'
+                            placeholder='Password1'
+                            value={signInDetails?.password}
+                            secureTextEntry={isSecurity}
+                            onChange={onValueChange}
+                        />
+                        <View style={styles.eyeView}>
+                            <SecurityEyeButton
+                                isSecurity={isSecurity}
+                                onPress={() => setSecurity(!isSecurity)}
+                            />
+                        </View>
+                    </View>
+                </View>
+            </ScrollView>
 
-			<SafeAreaView style={styles.bottomView}>
-				<Button
-					type={BUTTON_TYPES.TRANSPARENT}
-					disabled={AuthStatus.Loading === authStatus}
-					title='Forgot password'
-					onPress={() =>
-						navigation.navigate(Routes.FORGOT_PASSWORD)
-					}
-				/>
-				<Button
-					type={BUTTON_TYPES.DARK_GREEN}
-					title='Log in'
-					disabled={!goNext || AuthStatus.Loading === authStatus}
-					onPress={handleSignin}
-				/>
-			</SafeAreaView>
-		</KeyboardAvoidingView>
-	);
+            <SafeAreaView style={styles.bottomView}>
+                <Button
+                    type={BUTTON_TYPES.TRANSPARENT}
+                    disabled={AuthStatus.Loading === authStatus}
+                    title='Forgot password'
+                    onPress={() =>
+                        navigation.navigate(Routes.FORGOT_PASSWORD)
+                    }
+                />
+                <Button
+                    type={BUTTON_TYPES.DARK_GREEN}
+                    title='Log in'
+                    disabled={!goNext || AuthStatus.Loading === authStatus}
+                    onPress={handleSignin}
+                />
+            </SafeAreaView>
+        </KeyboardAvoidingView>
+    );
 };
 
 export default Login;
