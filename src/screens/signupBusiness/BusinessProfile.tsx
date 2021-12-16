@@ -60,8 +60,7 @@ const BusinessProfile = (): ReactElement => {
 					<Text style={styles.headerText}>{Translation.PROFILE.SETUP_PROFILE}</Text>
 				</View>
 				<View style={styles.formView}>
-					<BusinessProfileForm
-					/>
+					<BusinessProfileForm/>
 				</View>
 			</ScrollView>
 			<SafeAreaView style={styles.bottomView}>

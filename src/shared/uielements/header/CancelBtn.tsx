@@ -23,7 +23,8 @@ const styles = StyleSheet.create({
 	},
 	text: {
 		paddingLeft: 5,
-		textAlign: "right"
+		textAlign: "right",
+		width: 100
 	}
 })
 

@@ -229,7 +229,7 @@ const DrawerContent = (
 									/>
 								</View>
 								<View style={styles.usernameView}>
-									<Text>{customerTag}</Text>
+									<Text>@{customerTag}</Text>
 									{isVerifiedBusiness && <View style={styles.inlineView}>
 										<Text style={styles.fadeText}>
 											{Translation.COMMON.SWITCH_ACCOUNT}

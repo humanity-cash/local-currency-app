@@ -1,6 +1,6 @@
 import { AntDesign } from '@expo/vector-icons';
 import { useNavigation } from "@react-navigation/native";
-import React, { ReactElement, useContext } from "react";
+import React, { ReactElement, useContext, useEffect } from "react";
 import {
 	KeyboardAvoidingView,
 	Platform, SafeAreaView, ScrollView,
@@ -76,6 +76,10 @@ const BusinessDetail = (): ReactElement => {
 	const { user, updateBusinessData } = useContext(UserContext);
 	const business = user?.business;
 
+	useEffect(() => {
+		updateBusinessData({"type": businessTypes[0]})
+	}, [])
+
 	const onValueChange = (name: string, change: string) => {
 		updateBusinessData({
 			[name]: change,
@@ -117,7 +121,7 @@ const BusinessDetail = (): ReactElement => {
 				<View style={styles.dropdownView}>
 					<SelectDropdown
 						data={businessTypes}
-						defaultValueByIndex={0}
+						defaultValue={business ? business.type : businessTypes[0]}
 						onSelect={(selectedItem) => {
 							onValueChange('type', selectedItem)
 						}}

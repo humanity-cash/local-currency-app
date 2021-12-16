@@ -79,7 +79,15 @@ const styles = StyleSheet.create({
 	inlineView: {
 		flexDirection: 'row',
 		justifyContent: 'space-between'
-	}
+	},
+	maxBView: {
+		flexDirection: 'row', 
+		justifyContent: 'space-between',
+	},
+	exceedLabel: {
+		fontSize: 10,
+		color: colors.mistakeRed
+	},
 });
 
 const CashierReturnQRCodeScan = (): JSX.Element => {
@@ -97,6 +105,7 @@ const CashierReturnQRCodeScan = (): JSX.Element => {
 		amount: 0,
 		mode: PaymentMode.SELECT_AMOUNT
 	});
+	const [exceed, setExceed] = useState(false)
 
 	useEffect(() => {
 		setIsScanned(false);
@@ -104,6 +113,7 @@ const CashierReturnQRCodeScan = (): JSX.Element => {
 
 	useEffect(() => {
 		setGoNext(Number(amount) > 0);
+		setExceed(+amount > state.amount)
 	}, [amount]);
 
 	const handleBarCodeScanned = (data: HandleScaned) => {
@@ -202,7 +212,10 @@ const CashierReturnQRCodeScan = (): JSX.Element => {
 									</View>
 								</View>
 
-								<Text style={styles.label}>{Translation.LABEL.RETURN_AMOUNT}</Text>
+								<View style={styles.maxBView}>
+									<Text style={styles.label}>{Translation.LABEL.RETURN_AMOUNT}</Text>
+									{exceed && <Text style={styles.exceedLabel}>MAX. TOTAL TRANSACTION AMOUNT</Text>}
+								</View>
 								<BorderedInput
 									label="Amount"
 									name="amount"
@@ -214,6 +227,7 @@ const CashierReturnQRCodeScan = (): JSX.Element => {
 									textStyle={styles.text}
 									value={amount}
 									onChange={onValueChange}
+									borderColor={exceed ? colors.mistakeRed : null}
 								/>
 							</View>
 						</ScrollView>

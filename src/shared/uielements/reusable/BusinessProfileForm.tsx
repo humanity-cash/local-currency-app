@@ -1,5 +1,5 @@
 import * as ImagePicker from 'expo-image-picker';
-import React, { ReactElement, useContext } from "react";
+import React, { ReactElement, useContext, createRef } from "react";
 import { StyleSheet, TextInput, TouchableOpacity, View } from "react-native";
 import { Image, Text } from "react-native-elements";
 import { UserContext } from "src/contexts";
@@ -61,7 +61,7 @@ const BusinessProfileForm = (): ReactElement => {
 	const { user, updateBusinessData } = useContext(UserContext)
 	const business = user?.business;
 
-	// useMediaLibraryPermission();
+	const storyRef = createRef<TextInput>()
 
 	const onValueChange = (name: string, change: string) => {
 		updateBusinessData({ [name]: change });
@@ -115,12 +115,17 @@ const BusinessProfileForm = (): ReactElement => {
 				value={business?.tag}
 				onChange={onValueChange}
 				style={styles.inputBg}
+				returnKeyType='next'
+				onSubmitEditing={() => {
+					storyRef.current?.focus()
+				}}
 			/>
 
 			<Text style={styles.smallLabel}>
 				TELL US YOUR STORY (50 WORDS MAX)
 			</Text>
 			<TextInput
+				ref={storyRef}
 				placeholder="Tell the world about your business. What gives you joy as an entrepreneur? What do you love about the Berkshires?"
 				value={business?.story}
 				multiline={true}
@@ -131,6 +136,7 @@ const BusinessProfileForm = (): ReactElement => {
 				numberOfLines={6}
 				autoCapitalize='none'
 				autoCorrect={false}
+				scrollEnabled={false}
 			/>
 		</View>
   	);
