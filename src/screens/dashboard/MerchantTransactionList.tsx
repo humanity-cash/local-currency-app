@@ -65,10 +65,11 @@ const TransactionItem = (props: TransactionItemProps) => {
 		}
 	}
 
+	const name = item.type === "Withdraw" ? "Cash out to bank" : item.type === "Deposit" ? "Load up" : item.type === "OUT" ? item.toName : item.fromName;
 	return (
 		<View style={selected === item.transactionHash ? styles.selectedItem : styles.item}>
 			<View>
-				<Text style={styles.transactionType}>{item.type === "OUT" ? `${item.toName}` : `${item.fromName}`}</Text>
+				<Text style={styles.transactionType}>{name}</Text>
 				<Text style={styles.timeText}>{moment(item.timestamp).format('HH:mm, MMM D, YYYY')}</Text>
 				<Text style={styles.timeText}>
 					{item.type === "IN"
