@@ -448,7 +448,7 @@ export const MerchantSettingsProfile = (): JSX.Element => {
 							PHONE NUMBER - OPTIONAL
 						</Text>
 						<MaskInput
-							value={business?.phoneNumber}
+							value={businessData.phoneNumber}
 							mask={["(", /\d/, /\d/, /\d/, ")", " ", /\d/, /\d/, /\d/, "-", /\d/, /\d/, /\d/, /\d/]}
 							name="phoneNumber"
 							placeholder="(XXX) XXX-XXXX"
