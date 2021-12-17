@@ -73,7 +73,7 @@ const TransactionItem = (props: MyTransactionItemProps) => {
 		}
 	}
 
-	const name = item.type === "OUT" || item.type === "Withdraw" ? item.toName : item.fromName;
+	const name = item.type === "Withdraw" ? "Cash out to bank" : item.type === "Deposit" ? "Load up" : item.type === "OUT" ? item.toName : item.fromName;
 	return (
 		<View style={ selected===item.transactionHash? styles.selectedItem : styles.item }>
 			<View style={styles.imageContainer}>
