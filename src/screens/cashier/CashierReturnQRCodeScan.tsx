@@ -146,16 +146,20 @@ const CashierReturnQRCodeScan = (): JSX.Element => {
 			setIsLoading(true);
 			const response = await TransactionsAPI.transferTo(businessDwollaId, request);
 			if (response.data) {
+				setIsLoading(false)
+				setIsReturnModal(false)
 				navigation.navigate(Routes.CASHIER_RETURN_SUCCESS);
 			} else {
 				showToast(ToastType.ERROR, "Failed", "Whooops, something went wrong.");
+				setIsLoading(false)
+				setIsReturnModal(false)
 				navigation.navigate(Routes.CASHIER_DASHBOARD);
 			}
 		} else {
 			showToast(ToastType.ERROR, "Failed", "Whooops, something went wrong.");
 			navigation.navigate(Routes.CASHIER_DASHBOARD);
 		}
-				setIsLoading(false);
+		setIsLoading(false);
 	}
 
 	const onValueChange = (name: string, change: string) => {
@@ -169,7 +173,6 @@ const CashierReturnQRCodeScan = (): JSX.Element => {
 
 	return (
 		<View style={viewBase}>
-			<DataLoading visible={isLoading} />
 			<View style={styles.container}>
 				<BarCodeScanner
 					onBarCodeScanned={isScanned ? undefined : handleBarCodeScanned}
@@ -234,11 +237,12 @@ const CashierReturnQRCodeScan = (): JSX.Element => {
 						<SafeAreaView style={styles.bottomView}>
 							<Button
 								type={BUTTON_TYPES.PURPLE}
-								disabled={!goNext}
+								disabled={!goNext || exceed}
 								title={Translation.BUTTON.RETURN_AMOUNT}
 								onPress={onReturn}
 							/>
 						</SafeAreaView>
+						<DataLoading visible={isLoading} />
 					</KeyboardAvoidingView>
 				</Modal>
 			)}
