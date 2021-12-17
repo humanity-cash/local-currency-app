@@ -35,6 +35,7 @@ import Translation from "src/translation/en.json";
 import { showToast } from 'src/utils/common';
 import { isSuccessResponse } from "src/utils/http";
 import { ToastType } from 'src/utils/types';
+import MaskInput from 'src/shared/uielements/MaskInput';
 
 const businessAddressFormStyles = StyleSheet.create({
 	bodyText: {
@@ -446,10 +447,12 @@ export const MerchantSettingsProfile = (): JSX.Element => {
 						<Text style={businessAddressFormStyles.label}>
 							PHONE NUMBER - OPTIONAL
 						</Text>
-						<BlockInput
+						<MaskInput
+							value={business?.phoneNumber}
+							mask={["(", /\d/, /\d/, /\d/, ")", " ", /\d/, /\d/, /\d/, "-", /\d/, /\d/, /\d/, /\d/]}
 							name="phoneNumber"
-							placeholder="+00 0987 6543 21"
-							value={businessData.phoneNumber}
+							placeholder="(XXX) XXX-XXXX"
+							keyboardType="number-pad"
 							onChange={(name: string, newValue: string) => updateBusinessProfileData(name, newValue)}
 							style={businessAddressFormStyles.inputBg}
 						/>

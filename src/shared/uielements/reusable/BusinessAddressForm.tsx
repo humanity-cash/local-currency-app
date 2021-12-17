@@ -8,6 +8,7 @@ import countries from "src/mocks/countries";
 import { colors } from "src/theme/colors";
 import { IMap } from 'src/utils/types';
 import BlockInput from "../BlockInput";
+import MaskInput from 'src/shared/uielements/MaskInput';
 
 interface BusinessAddressProps {
   style?: IMap;
@@ -162,12 +163,13 @@ const BusinessAddressForm = (props: BusinessAddressProps): JSX.Element => {
 			/>
 
 			<Text style={styles.label}>PHONE NUMBER - OPTIONAL</Text>
-			<BlockInput
+			<MaskInput
 				inputRef={phoneRef}
-				name="phoneNumber"
-				placeholder="000987654321"
-				keyboardType="number-pad"
 				value={business?.phoneNumber}
+				mask={["(", /\d/, /\d/, /\d/, ")", " ", /\d/, /\d/, /\d/, "-", /\d/, /\d/, /\d/, /\d/]}
+				name="phoneNumber"
+				placeholder="(XXX) XXX-XXXX"
+				keyboardType="number-pad"
 				onChange={onValueChange}
 				style={props.style}
 			/>
