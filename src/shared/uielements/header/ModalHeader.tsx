@@ -1,5 +1,5 @@
 import React, { ReactElement } from "react";
-import { Dimensions, StyleSheet, TouchableOpacity, View } from "react-native";
+import { Dimensions, StyleSheet, TouchableOpacity, View, SafeAreaView } from 'react-native';
 import { Text } from 'react-native-elements';
 
 export const MODAL_HEADER_HEIGHT = Dimensions.get("window").height * 0.08;
@@ -7,8 +7,8 @@ export const MODAL_HEADER_HEIGHT = Dimensions.get("window").height * 0.08;
 const styles = StyleSheet.create({
 	header: {
 		flexDirection: "row",
-		height: MODAL_HEADER_HEIGHT,
-		paddingVertical: 5
+		paddingVertical: 5,
+		alignItems: 'center'
 	},
 	leftContainer: {
 		textAlignVertical: "center",
@@ -41,7 +41,7 @@ type ModalHeaderProps = {
 
 const ModalHeader = (props: ModalHeaderProps) => {
 	return (
-		<View style={styles.header}>
+		<SafeAreaView style={styles.header}>
 			{props.leftComponent && (
 				<View style={styles.leftContainer}>
 					{typeof props.leftComponent === 'string' && (
@@ -64,7 +64,7 @@ const ModalHeader = (props: ModalHeaderProps) => {
 					)}
 				</View>
 			)}
-		</View>
+		</SafeAreaView>
 	);
 }
 
