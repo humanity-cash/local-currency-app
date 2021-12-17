@@ -18,7 +18,7 @@
     ],
     "ios": {
       "bundleIdentifier": "com.keyko.berkshares-app",
-      "buildNumber": "3"
+      "buildNumber": "4"
     },
     "packagerOpts": {
       "config": "metro.config.js",
