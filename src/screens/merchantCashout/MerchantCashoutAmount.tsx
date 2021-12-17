@@ -169,7 +169,7 @@ const MerchantCashoutAmount = (): JSX.Element => {
 						onChange={onValueChange}
 						borderColor={exceed ? colors.mistakeRed : null}
 					/>
-					{exceed && <Text style={styles.errorBalance}>{Translation.PAYMENT.EXCEED_BALANCE}</Text>}
+					{exceed && <Text style={styles.errorBalance}>{Translation.PAYMENT.MERCHAT_EXCEED_BALANCE}</Text>}
 					<View style={styles.resultView}>
 						<Text style={styles.resultText}>{Translation.PAYMENT.REDEMPTION_FEE}(1.5%)</Text>
 						<Text style={styles.resultText}>{Translation.COMMON.USD} {(Number(amount)*0.015).toFixed(2)}</Text>
