@@ -61,6 +61,11 @@ const styles = StyleSheet.create({
 		marginTop: 20,
 		marginBottom: 10,
 	},
+	errorBalance: {
+		color: colors.mistakeRed, 
+		fontSize: 10,
+		lineHeight: 10
+	},
 	dialogBottom: {
 		paddingTop: 20,
 	}
@@ -72,6 +77,7 @@ const CashoutAmount = (): JSX.Element => {
 	const { customerWalletData } = useContext(WalletContext);
 	const [isLoading, setIsLoading] = useState<boolean>(false);
 	const [maxAmount, setMaxAmount] = useState<string>("5.00")
+	const [exceed, setExceed] = useState(false)
 
 	const [state, setState] = useState<CashoutState>({
 		amount: "",
@@ -83,6 +89,7 @@ const CashoutAmount = (): JSX.Element => {
 
 	useEffect(() => {
 		setGoNext(Boolean(state.costs));
+		setExceed(+state.costs > +maxAmount)
 	}, [state]);
 
 	useEffect(() => {
@@ -95,13 +102,10 @@ const CashoutAmount = (): JSX.Element => {
 
 	const onValueChange = (name: string, change: string) => {
 		const amount = change.replace(',', '.')
-
-		if(+amount <= +maxAmount) {
-			setState({
-				amount: amount,
-				costs: amount,
-			  } as CashoutState);
-		}
+		setState({
+			amount: amount,
+			costs: amount,
+			} as CashoutState);
 	};
 
 	const viewConfirm = () => {
@@ -155,7 +159,11 @@ const CashoutAmount = (): JSX.Element => {
 						prefix="B$"
 						value={state.amount}
 						onChange={onValueChange}
+						borderColor={exceed ? colors.mistakeRed : null}
 					/>
+					{exceed && <Text style={styles.errorBalance}>
+						{customerWalletData?.availableBalance <= 5 ? Translation.PAYMENT.PERSONAL_EXCEED_BALANCE : Translation.PAYMENT.PERSONAL_EXCEED_$5}
+					</Text>}
 					<View style={styles.resultView}>
 						<Text style={styles.resultText}>{Translation.PAYMENT.REDEMPTION_FEE} (1.5%)</Text>
 						<Text style={styles.resultText}>{Translation.COMMON.USD} {(Number(state.amount) * 0.015).toFixed(2)}</Text>
@@ -169,7 +177,7 @@ const CashoutAmount = (): JSX.Element => {
 			<SafeAreaView style={styles.bottomView}>
 				<Button
 					type="darkGreen"
-					disabled={!goNext}
+					disabled={!goNext || exceed}
 					title={Translation.BUTTON.CONFIRM}
 					onPress={viewConfirm}
 				/>

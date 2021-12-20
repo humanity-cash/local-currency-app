@@ -26,6 +26,7 @@ import {
 } from "src/theme/elements";
 import Translation from "src/translation/en.json";
 import { Industry } from "src/utils/types";
+import MaskInput from 'src/shared/uielements/MaskInput';
 
 const Industries = [
 	Industry.ARTS_ENTERTAINMENT,
@@ -176,12 +177,13 @@ const BusinessInfo = (): ReactElement => {
 							/>
 						</View>
 						<Text style={styles.label}>{Translation.LABEL.EIN}</Text>
-						<BlockInput
-							name="ein"
-							placeholder="Employee identification number"
-							keyboardType="number-pad"
-							placeholderTextColor={colors.greyedPurple}
+						<MaskInput
 							value={business?.ein}
+							mask={[/\d/, /\d/, "-", /\d/, /\d/, /\d/, /\d/, /\d/, /\d/, /\d/]}
+							name="ein"
+							placeholder="XX-XXXXXXX"
+							placeholderTextColor={colors.greyedPurple}
+							keyboardType="number-pad"
 							onChange={onValueChange}
 							style={styles.input}
 						/>
