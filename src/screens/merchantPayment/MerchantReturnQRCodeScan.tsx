@@ -195,7 +195,9 @@ const MerchantReturnQRCodeScan = (): JSX.Element => {
 
 			{isReturnModal && (
 				<Modal visible={isReturnModal}>
-					<SafeAreaView style={ modalViewBase }>
+					<KeyboardAvoidingView
+						behavior={Platform.OS == "ios" ? "padding" : "height"}
+						style={ modalViewBase }>
 						<ModalHeader
 							leftComponent={<BackBtn color={colors.purple} onClick={() => setIsReturnModal(false)} />}
 							rightComponent={<CancelBtn text="Close" onClick={onModalClose} />}
@@ -241,8 +243,7 @@ const MerchantReturnQRCodeScan = (): JSX.Element => {
 								/>
 							</View>
 						</ScrollView>
-						<KeyboardAvoidingView
-							behavior={Platform.OS == "ios" ? "padding" : "height"} >
+						<SafeAreaView >
 							<View style={styles.bottomView}>
 								<Button
 									type={BUTTON_TYPES.PURPLE}
@@ -251,9 +252,9 @@ const MerchantReturnQRCodeScan = (): JSX.Element => {
 									onPress={onReturn}
 								/>
 							</View>
-						</KeyboardAvoidingView>
+						</SafeAreaView>
 						<DataLoading visible={isLoading} />
-					</SafeAreaView>
+					</KeyboardAvoidingView>
 				</Modal>
 			)}
 		</View>
