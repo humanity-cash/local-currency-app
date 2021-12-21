@@ -93,7 +93,7 @@ export const SettingsSecurity = (): JSX.Element => {
 		setCanSave(
 			Object.keys(state).every((key) => state[key] !== "") && 
 			state.newPassword.length > 0 && 
-			isPasswordValid && 
+			isValidPassword && 
 			isPasswordMatched
 		);
 	}, [state]);
