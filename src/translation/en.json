@@ -331,5 +331,9 @@
         "EMAIL_NOT_REGISTERED": "Email not registered!",
         "NOT_AUTHORIZED": "NotAuthorizedException",
         "ERROR": "Error"
+    },
+    "PASSWORD": {
+        "NOT_MEET_REQUIREMENTS": "PASSWORD DOES NOT MEET REQUIREMENTS",
+        "NOT_MATCHED": "PASSWORDs DO NOT MATCH"
     }
 }

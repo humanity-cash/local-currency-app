@@ -24,6 +24,8 @@ import MyTransactionList from './MyTransactionList';
 import MyTransactionFilter from './MyTransactionsFilter';
 import ReturnQRCodeGen from './ReturnQRCodeGen';
 
+moment.locale('us-en')
+
 const styles = StyleSheet.create({
 	content: {
 		flex: 1,
@@ -243,12 +245,13 @@ const MyTransactions = (): JSX.Element => {
 	const filterData = () => {
 		const filteredByTime = apiData.reduce<MiniTransaction[]>((acc, curr) => {
 			if (startDate) { // filter by startDate
-				if (curr.timestamp < startDate?.getTime()) {
+				if (moment(curr.timestamp).isBefore(moment(startDate))) {
 					return acc;
 				}
 			}
+
 			if (endDate) { // filter by endDate
-				if (curr.timestamp > endDate?.getTime()) {
+				if (moment(curr.timestamp).isAfter(moment(endDate).add(1, 'day'))) {
 					return acc;
 				}
 			}
