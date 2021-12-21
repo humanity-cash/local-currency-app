@@ -5,13 +5,13 @@ import { Text } from 'react-native-elements';
 import { Header, Button, CancelBtn, BorderedInput, ToggleButton } from "src/shared/uielements";
 import { baseHeader, viewBaseB, wrappingContainerBase } from "src/theme/elements";
 import { colors } from "src/theme/colors";
-import MerchantQRCodeGen from "./MerchantQRCodeGen";
+import { PaymentsModule } from "src/modules";
 import MerchantRequestSuccess from "./MerchantRequestSuccess";
 import Translation from 'src/translation/en.json';
 import * as Routes from 'src/navigation/constants';
-import { BUTTON_TYPES } from 'src/constants';
-import { WalletContext } from 'src/contexts';
+import { WalletContext, UserContext } from 'src/contexts';
 import BankLinkDialog from 'src/shared/uielements/BankLinkDialog'
+import { IWallet } from '@humanity.cash/types';
 
 type AmountState = {
 	amount: string,
@@ -74,7 +74,8 @@ const MerchantRequest = (): JSX.Element => {
 	const [receivedAmount, setReceivedAmount] = useState<number>(0);
 	const [isRequestSuccess, setIsRequestSuccess] = useState<boolean>(false);
 
-	const { businessWalletData } = useContext(WalletContext)
+	const { businessDwollaId, user } = useContext(UserContext)
+	const { businessWalletData, updateBusinessWalletData } = useContext(WalletContext)
 	const businessFundingSource = businessWalletData?.availableFundingSource;
 	const availableBalance = businessWalletData?.availableBalance;
 	const [bankDialogInfo, setBankDialogInfo] = useState<any>({
@@ -126,7 +127,9 @@ const MerchantRequest = (): JSX.Element => {
 
 	const onPressPay = () => {
 		if (availableBalance > 0) {
-			navigation.navigate(Routes.MERCHANT_QRCODE_SCAN)
+			navigation.navigate(Routes.MERCHANT_QRCODE_SCAN, {
+				senderId: businessDwollaId, walletData: businessWalletData
+			})
 			return
 		}
 
@@ -217,8 +220,18 @@ const MerchantRequest = (): JSX.Element => {
 					onPress={requestAmount}
 				/>
 			</SafeAreaView>
-			{ isVisible && <MerchantQRCodeGen visible={isVisible} onSuccess={onSuccess} onClose={onClose} isOpenAmount={isOpenAmount} amount={Number(state.amount)} /> }
-			{ isRequestSuccess && <MerchantRequestSuccess visible={isRequestSuccess} onClose={onConfirm} amount={receivedAmount} /> }
+			{isVisible && <PaymentsModule.Request
+				visible={isVisible}
+				onSuccess={onSuccess}
+				onClose={onClose}
+				isOpenAmount={isOpenAmount}
+				amount={Number(state.amount)}
+				ownerName={user?.business?.tag || ""}
+				recieverId={businessDwollaId}
+				walletData={businessWalletData}
+				updateWalletData={(walletData: IWallet) => updateBusinessWalletData((pv: any) => ({ ...pv, ...walletData }))}
+			/>}
+			{isRequestSuccess && <MerchantRequestSuccess visible={isRequestSuccess} onClose={onConfirm} amount={receivedAmount} />}
 
 			<BankLinkDialog 
 				visible={bankDialogInfo.isVisible}
