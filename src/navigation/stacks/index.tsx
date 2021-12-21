@@ -28,7 +28,6 @@ import MerchantPaymentPending from "src/screens/merchantPayment/MerchantPaymentP
 import MerchantPaymentSuccess from "src/screens/merchantPayment/MerchantPaymentSuccess";
 import MerchantReturn from "src/screens/merchantPayment/MerchantReturn";
 import MerchantPayoutPending from "src/screens/merchantPayout/MerchantPayoutPending";
-import MerchantPayoutQRCodeScan from "src/screens/merchantPayout/MerchantPayoutQRCodeScan";
 import MerchantPayoutSuccess from "src/screens/merchantPayout/MerchantPayoutSuccess";
 import MerchantPayoutToPersonal from "src/screens/merchantPayout/MerchantPayoutToPersonal";
 import MerchantPayoutToSomeone from "src/screens/merchantPayout/MerchantPayoutToSomeone";
