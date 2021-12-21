@@ -220,6 +220,14 @@ const MyTransactions = (): JSX.Element => {
 	}, [startDate, endDate, selectedType])
 
 	useEffect(() => {
+		loadTransactions()
+	}, [customerDwollaId]);
+
+	useEffect(() => {
+		loadTransactions()
+	}, []);
+
+	const loadTransactions = () => {
 		if (customerDwollaId) {
 			const handler = async () => {
 				setIsLoading(true);
@@ -230,7 +238,7 @@ const MyTransactions = (): JSX.Element => {
 			};
 			handler();
 		}
-	}, [customerDwollaId]);
+	}
 
 	const filterData = () => {
 		const filteredByTime = apiData.reduce<MiniTransaction[]>((acc, curr) => {

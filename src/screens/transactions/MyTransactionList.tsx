@@ -66,7 +66,7 @@ const TransactionItem = (props: MyTransactionItemProps) => {
 	const {item, selected} = props;
 	
 	const getStyle = (type: string) => {
-		if (TransactionType.SALE || type === TransactionType.RETURN || type === TransactionType.IN || type === TransactionType.DEPOSIT) {
+		if (type === TransactionType.SALE || type === TransactionType.RETURN || type === TransactionType.IN || type === TransactionType.DEPOSIT) {
 			return styles.plusText;
 		} else {
 			return styles.minusText;
