@@ -55,8 +55,13 @@ export const withdraw = async (userId: UserId, request: IWithdrawalRequest): Pro
 };
 
 export const transferTo = async (userId: UserId, request: ITransactionRequest): Promise<AxiosPromiseResponse> => {
-  const response = await postRequest(`/users/${userId}/transfer`, request);
-  return response;
+    try {
+        const response = await postRequest(`/users/${userId}/transfer`, request);
+        return response;
+    } catch(error) {
+        console.log("error in transferTo", error)
+        return {} as Promise<AxiosPromiseResponse>
+    }
 };
 
 export const getAllTransactions = async (userId: UserId): Promise<MiniTransaction[]> => {
