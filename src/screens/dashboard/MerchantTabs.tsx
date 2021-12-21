@@ -20,13 +20,13 @@ import { Button, Dialog } from "src/shared/uielements";
 import { colors } from "src/theme/colors";
 import { baseHeader, dialogViewBase, wrappingContainerBase } from "src/theme/elements";
 import Translation from 'src/translation/en.json';
-import MerchantQRCodeScan from "../merchantPayment/MerchantQRCodeScan";
 import MerchantRequest from "../merchantPayment/MerchantRequest";
 import MerchantReturnQRCodeScan from "../merchantPayment/MerchantReturnQRCodeScan";
 import MerchantDashboard from "./MerchantDashboard";
 import BankLinkDialog from 'src/shared/uielements/BankLinkDialog';
 import { BarCodeScanner } from 'expo-barcode-scanner';
 import SettingDialog from 'src/shared/uielements/SettingDialog';
+import { PaymentsModule } from 'src/modules';
 
 const styles = StyleSheet.create({
 	headerText: {
@@ -176,7 +176,7 @@ const initBankDialogState: BankLinkDialogStateProps = {
 
 const DrawerContent = (props: DrawerContentComponentProps) => {
 	const { signOut, userEmail } = useContext(AuthContext);
-	const { user, updateUserType } = useContext(UserContext);
+	const { user, updateUserType, businessDwollaId } = useContext(UserContext);
 	const { updateSelectedView } = useContext(NavigationViewContext);
 	const authorization = { cashierView: user?.verifiedBusiness };
 	const [isExpanded, setIsExpanded] = useState<boolean>(false);
@@ -237,7 +237,9 @@ const DrawerContent = (props: DrawerContentComponentProps) => {
 		const {status} = await BarCodeScanner.requestPermissionsAsync();
 		if(status === 'granted') {
 			if(availableBalance > 0) {
-				props.navigation.navigate(Routes.MERCHANT_QRCODE_SCAN)
+				props.navigation.navigate(Routes.MERCHANT_QRCODE_SCAN, {
+					senderId: businessDwollaId, walletData: businessWalletData
+				})
 			} else {
 				if(businessFundingSource) {
 					setBankDialogState({
@@ -553,7 +555,7 @@ const MerchantTabs: React.FC = () => {
 		<DrawerNav.Navigator initialRouteName={Routes.MERCHANT_DASHBOARD} drawerContent={ props => <DrawerContent {...props} />}>
 			<DrawerNav.Screen name={Routes.MERCHANT_DASHBOARD} component={MerchantDashboard} />
 			<DrawerNav.Screen name={Routes.MERCHANT_REQUEST} component={MerchantRequest} />
-			<DrawerNav.Screen name={Routes.MERCHANT_QRCODE_SCAN} component={MerchantQRCodeScan} />
+			<DrawerNav.Screen name={Routes.MERCHANT_QRCODE_SCAN} component={PaymentsModule.Send} />
 			<DrawerNav.Screen name={Routes.MERCHANT_RETURN_QRCODE_SCAN} component={MerchantReturnQRCodeScan} />
 			<DrawerNav.Screen name={Routes.MERCHANT_CASHOUT_AMOUNT} component={MerchantCashoutAmount} />
 			<DrawerNav.Screen name={Routes.MERCHANT_LOADUP} component={MerchantLoadup} />

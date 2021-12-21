@@ -67,6 +67,7 @@ import * as Routes from "../constants";
 import SelectMerchantBank from "src/screens/merchantBankAccount/SelectMerchantBank";
 import BusinessWelcome from "src/screens/signupBusiness/BusinessWelcome";
 import MyTransactions from "src/screens/transactions/MyTransactions";
+import { PaymentsModule } from "src/modules";
 
 const PrimaryStack = createStackNavigator();
 
@@ -310,7 +311,7 @@ export const BusinessUserStack = ({ isVerifiedCustomer }: { isVerifiedCustomer: 
 			/>
 			<PrimaryStack.Screen
 				name={Routes.MERCHANT_PAYOUT_QR_SCAN}
-				component={MerchantPayoutQRCodeScan}
+				component={PaymentsModule.SendFixedAmount}
 			/>
 			<PrimaryStack.Screen
 				name={Routes.MERCHANT_CASHOUT_PASSWORD}
