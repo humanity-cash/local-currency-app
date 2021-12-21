@@ -63,7 +63,7 @@ const LinkBankAccount = (): JSX.Element => {
 				/>
 				<Button
 					type={BUTTON_TYPES.DARK_GREEN}
-					title={Routes.LINK_BANK_ACCOUNT}
+					title={Translation.BUTTON.LINK_PERSONAL_BANK}
 					disabled={isWalletLoading}
 					onPress={selectBank}
 				/>

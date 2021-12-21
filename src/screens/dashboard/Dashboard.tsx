@@ -317,7 +317,7 @@ const Dashboard = (): JSX.Element => {
 						<View style={styles.dialogBottom}>
 							<Button
 								type={BUTTON_TYPES.DARK_GREEN}
-								title={Translation.BUTTON.LINK_BANK}
+								title={Translation.BUTTON.LINK_PERSONAL_BANK}
 								onPress={selectBank}
 							/>
 						</View>
