@@ -52,6 +52,13 @@ const PersonalAddress = (): React.ReactElement => {
 	const { updateSelectedView } = useContext(NavigationViewContext);
 	const navigation = useNavigation();
 
+	const availableNext = () => {
+		return user && user.customer &&
+			  user.customer.address1 && user.customer.address1.length > 0 &&
+			  user.customer.city && user.customer.city.length > 0 &&
+			  user.customer.postalCode && user.customer.postalCode.length > 0
+	}
+  
 	const onNextPress = async () => {
 		if (!user || !user?.customer) return
 		setIsLoading(true)
@@ -97,7 +104,7 @@ const PersonalAddress = (): React.ReactElement => {
 				<Button
 					type={BUTTON_TYPES.DARK_GREEN}
 					title={Translation.BUTTON.NEXT}
-					disabled={false}
+					disabled={!availableNext()}
 					onPress={onNextPress}
 				/>
 			</SafeAreaView>
