@@ -211,7 +211,7 @@ const MerchantRequest = (): JSX.Element => {
 					onPress={openAmount}
 				/>
 				<Button
-					type="darkGreen"
+					type="purple"
 					disabled={!goNext}
 					title={Translation.BUTTON.NEXT}
 					onPress={requestAmount}
