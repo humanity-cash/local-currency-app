@@ -202,7 +202,8 @@ const MerchantDashboard = (): JSX.Element => {
 		const {status} = await BarCodeScanner.requestPermissionsAsync();
 		if(status === 'granted') {
 			if(businessFundingSource && availableBalance > 0) {
-				navigation.navigate(Routes.MERCHANT_QRCODE_SCAN)
+				navigation.navigate(Routes.MERCHANT_QRCODE_SCAN,
+					{ senderId: businessDwollaId, walletData: businessWalletData })
 			} else {
 				navigation.navigate(Routes.MERCHANT_REQUEST)
 			}

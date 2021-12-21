@@ -1,7 +1,8 @@
 import { useNavigation } from '@react-navigation/core';
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { KeyboardAvoidingView, Platform, ScrollView, StyleSheet, View, SafeAreaView } from 'react-native';
 import { Text } from 'react-native-elements';
+import { WalletContext, UserContext } from 'src/contexts';
 import { BUTTON_TYPES } from 'src/constants';
 import * as Routes from 'src/navigation/constants';
 import { BackBtn, BorderedInput, Button, CancelBtn, Dialog, Header } from "src/shared/uielements";
@@ -9,58 +10,10 @@ import { colors } from "src/theme/colors";
 import { dialogViewBase, underlineHeaderB, viewBaseB, wrappingContainerBase } from "src/theme/elements";
 import Translation from 'src/translation/en.json';
 
-const styles = StyleSheet.create({
-	headerText: {
-		fontSize: 32,
-		fontWeight: '400',
-		lineHeight: 40,
-		color: colors.purple
-	},
-	formLabel: {
-		flexDirection: 'row',
-		justifyContent: 'space-between',
-		marginTop: 20
-	},
-	bodyText: {
-		marginTop: 5, 
-		color: colors.bodyText, 
-		fontSize: 16
-	},
-	labelText: {
-		marginTop: 5, 
-		color: colors.bodyText, 
-		fontSize: 12
-	},
-	input: {
-		backgroundColor: colors.white,
-		color: colors.purple
-	},
-	text: {
-		color: colors.purple
-	},
-	bottomView: {
-		marginHorizontal: 20,
-		marginBottom: 20
-	},
-	dialogBg: {
-        backgroundColor: colors.overlayPurple
-    },
-	dialogWrap: {
-		paddingHorizontal: 10,
-		height: "100%",
-		flex: 1,
-	},
-	dialogHeader: {
-		fontSize: 30,
-		lineHeight: 32,
-		marginTop: 20,
-		marginBottom: 10,
-		color: colors.purple
-	}
-});
-
-const MerchantCashoutAmount = (): JSX.Element => {
+const MerchantPayoutToSomeone = (): JSX.Element => {
 	const navigation = useNavigation();
+	const { businessWalletData}  = useContext(WalletContext);
+	const { businessDwollaId }  = useContext(UserContext);
 	const [amount, setAmount] = useState<string>('');
 	const [isVisible, setIsVisible] = useState<boolean>(false);
 	const [goNext, setGoNext] = useState(false);
@@ -75,7 +28,8 @@ const MerchantCashoutAmount = (): JSX.Element => {
 
 	const doScan = () => {
 		setIsVisible(false);
-		navigation.navigate(Routes.MERCHANT_PAYOUT_QR_SCAN);
+		navigation.navigate(Routes.MERCHANT_PAYOUT_QR_SCAN,
+			{ amount: Number(amount), senderId: businessDwollaId, walletData: businessWalletData });
 	}
 
 	return (
@@ -138,4 +92,54 @@ const MerchantCashoutAmount = (): JSX.Element => {
 	);
 }
 
-export default MerchantCashoutAmount
+const styles = StyleSheet.create({
+	headerText: {
+		fontSize: 32,
+		fontWeight: '400',
+		lineHeight: 40,
+		color: colors.purple
+	},
+	formLabel: {
+		flexDirection: 'row',
+		justifyContent: 'space-between',
+		marginTop: 20
+	},
+	bodyText: {
+		marginTop: 5, 
+		color: colors.bodyText, 
+		fontSize: 16
+	},
+	labelText: {
+		marginTop: 5, 
+		color: colors.bodyText, 
+		fontSize: 12
+	},
+	input: {
+		backgroundColor: colors.white,
+		color: colors.purple
+	},
+	text: {
+		color: colors.purple
+	},
+	bottomView: {
+		marginHorizontal: 20,
+		marginBottom: 20
+	},
+	dialogBg: {
+        backgroundColor: colors.overlayPurple
+    },
+	dialogWrap: {
+		paddingHorizontal: 10,
+		height: "100%",
+		flex: 1,
+	},
+	dialogHeader: {
+		fontSize: 30,
+		lineHeight: 32,
+		marginTop: 20,
+		marginBottom: 10,
+		color: colors.purple
+	}
+});
+
+export default MerchantPayoutToSomeone 

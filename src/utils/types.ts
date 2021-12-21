@@ -349,7 +349,7 @@ export interface FaqData extends AccordionEntry {
 }
 
 export enum PaymentMode {
-  OPEN_AMOUNT = 'open',
+  OPEN_AMOUNT = "open",
   SELECT_AMOUNT = "select"
 }
 
