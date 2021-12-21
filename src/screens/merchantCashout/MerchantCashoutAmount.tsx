@@ -103,7 +103,7 @@ const MerchantCashoutAmount = (): JSX.Element => {
 
 	useEffect(() => {
 		if(businessWalletData?.availableBalance) {
-			setMaxAmount(`${businessWalletData.availableBalance}`)
+			setMaxAmount(`${businessWalletData.availableBalance.toFixed(2)}`)
 		}
 
 	}, [businessWalletData])

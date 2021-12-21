@@ -26,6 +26,7 @@ import {
 	viewBase,
 	wrappingContainerBase
 } from 'src/theme/elements';
+import Translation from 'src/translation/en.json';
 
 const styles = StyleSheet.create({
 	container: {
@@ -84,27 +85,20 @@ const Verification = (): JSX.Element => {
 					<View style={baseHeader}>
 						{!noCodeReceived && (
 							<Text style={styles.headerText}>
-								Verify your mail address
+								{Translation.EMAIL_VERIFICATION.VERIFY_MAIL}
 							</Text>
 						)}
 						{noCodeReceived && (
 							<Text style={styles.headerText}>
-								Enter verification code
+								{Translation.EMAIL_VERIFICATION.ENTER_EMAIL_ADDR}
 							</Text>
 						)}
 					</View>
-					{!noCodeReceived && (
-						<Text style={styles.bodyText}>
-							We have sent an email with a verification code to{' '}
-							{email}
-						</Text>
-					)}
-					{noCodeReceived && (
-						<Text style={styles.bodyText}>
-							We have sent another message with a new verification
-							code to {email}
-						</Text>
-					)}
+					<Text style={styles.bodyText}>
+						{noCodeReceived 
+							? Translation.EMAIL_VERIFICATION.SENT_VERIFICATION_CODE_AGAIN.replace('{{mail}}', email)
+							: Translation.EMAIL_VERIFICATION.SENT_VERIFICATION_CODE.replace('{{mail}}', email)}
+					</Text>
 					<View style={styles.codeView}>
 						<ConfirmationCode onComplete={onComplete} />
 					</View>
@@ -113,9 +107,12 @@ const Verification = (): JSX.Element => {
 
 			<SafeAreaView style={styles.bottomView}>
 				{!noCodeReceived && (
-					<TouchableOpacity onPress={resendEmailVerificationCode}>
+					<TouchableOpacity onPress={() => {
+						resendEmailVerificationCode()
+						setNoCodeReceived(true)
+					}}>
 						<Text style={styles.bottomNavigation}>
-							Send code again
+							{Translation.EMAIL_VERIFICATION.SEND_CODE}
 						</Text>
 					</TouchableOpacity>
 				)}
@@ -125,7 +122,7 @@ const Verification = (): JSX.Element => {
 							navigation.navigate(Routes.VERIFICATION_HELP)
 						}>
 						<Text style={styles.bottomNavigation}>
-							Need help?
+							{Translation.EMAIL_VERIFICATION.NEED_HELP}
 						</Text>
 					</TouchableOpacity>
 				)}

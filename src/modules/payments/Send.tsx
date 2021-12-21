@@ -64,8 +64,13 @@ type PaymentConfirmProps = {
 
 const PaymentConfirm = (props: PaymentConfirmProps) => {
 	const { user } = useContext(UserContext);
+<<<<<<< HEAD:src/modules/payments/Send.tsx
 	const firstName = user?.business?.owner?.firstName;
 	const lastName = user?.business?.owner?.lastName;
+=======
+
+	const businessName = user?.business?.tag;
+>>>>>>> f939193c135f35c96a7ffdf69b9bd851cb18aacc:src/screens/merchantPayment/MerchantQRCodeScan.tsx
 	const amountCalcedFee = props.payInfo.amount;
 	const roundUpTotalAmount = (Math.ceil(amountCalcedFee) - amountCalcedFee) ? Math.ceil(amountCalcedFee) : amountCalcedFee + 1;
 
@@ -78,7 +83,7 @@ const PaymentConfirm = (props: PaymentConfirmProps) => {
 							source={require("../../../assets/images/feed1.png")}
 							style={styles.image}
 						/>
-						<Text style={styles.ownerName}>{firstName + ' ' + lastName}</Text>
+						<Text style={styles.ownerName}>{businessName}</Text>
 					</View>
 
 					<Text style={styles.headerText}>B$ {props.payInfo.amount?.toFixed(2)}</Text>

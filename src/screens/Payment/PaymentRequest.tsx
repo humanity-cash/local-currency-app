@@ -132,7 +132,7 @@ const PaymentRequest = (): JSX.Element => {
 				isVisible: true,
 				title: Translation.PAYMENT.PAYMENT_NO_BANK_TITLE,
 				detail: Translation.PAYMENT.PAYMENT_NO_BANK_DETAIL,
-				buttonTitle: Translation.BUTTON.LINK_BANK
+				buttonTitle: Translation.BUTTON.LINK_PERSONAL_BANK
 			})
 		}
 	}

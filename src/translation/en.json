@@ -24,7 +24,6 @@
         "LOGOUT": "Log out",
         "LOAD_UP": "Load up B$",
         "SCAN": "Scan to Pay or Receive",
-        "LINK_BANK": "Link my bank account",
         "CONTINUE": "Continue",
         "SUBMIT": "Submit",
         "CHECKINGS": "Checkings",
@@ -54,6 +53,7 @@
         "MENU": "Menu",
         "RECEIVE_OR_SCAN":"Receive or Scan to Pay",
         "GOTO_SETUP": "Go to set up",
+        "LINK_PERSONAL_BANK": "Link my personal bank account",
         "LINK_BUSINESS_BANK": "Link my business bank account",
         "NEED_HELP": "Need help?",
         "SWITCH_VIEW": "Switch view",
@@ -126,8 +126,8 @@
         "TERMS_PRIVACY": "I've read and accept the Terms & Conditions and Privacy Policy",
         "ENTER_EMAIL_ADDR": "ENTER EMAIL ADDRESS",
         "VERIFY_MAIL": "Verify your mail address",
-        "SENT_VERIFICATION_CODE": "We have sent an eamil with a verification code to {{mail}}.",
-        "SENT_VERIFICATION_CODE_AGAIN": "We have sent another message with a new verification code to {{mail}}",
+        "SENT_VERIFICATION_CODE": "We have sent an email with a verification code to {{mail}}. Please check your spam if you haven’t received it.",
+        "SENT_VERIFICATION_CODE_AGAIN": "We have sent another message with a new verification code to {{mail}}. Please check your spam if you haven’t received it.",
         "NEED_HELP": "Need help?",
         "SEND_CODE": "Send code again",
         "NEED_HELP_DETAIL": "If you need help, have questions, complaints, remarks, or just like to chat, please send an email to berkshares@humanitycash.com",
@@ -198,15 +198,15 @@
         "FORGOT_PASSWORD_DETAIL": "Enter the email address so we can verify your identity",
         "CREATE_NEW_PASSWORD": "Create a new password",
         "CREATE_NEW_PASSWORD_DETAIL": "Create a new password to secure your account.",
-        "CHANGE_PASSWORD_SUCCESS": "Password has changed successfully!"
+        "CHANGE_PASSWORD_SUCCESS": "You’ve successfully changed your password!"
     },
     "PAYMENT": {
         "PAYMENT_SUCCESS_DETAIL": "Your receipt can be found in your transaction overview.",
         "PAYMENT_RECEIVE_SUCCESS": "Succeeded! You have received B$ {{amount}}",
         "CASH_OUT": "Cash out to USD",
-        "CASH_OUT_DETAIL": "Select the amount of BerkShares you would like to redeem to USD. You can only redeem when your balance is 5 B$ or less, and you cannot exceed your account balance.",
+        "CASH_OUT_DETAIL": "Select the amount of BerkShares you would like to redeem to USD. You can only cash out when your balance is B$ 5.00 or less and you cannot exceed your balance.",
         "MERCHANT_CASH_OUT_DETAIL": "Select the amount of BerkShares you would like to redeem to USD. You cannot exceed your account balance.",
-        "PERSONAL_EXCEED_$5": "BALANCE ABOVE B$ 5.00",
+        "PERSONAL_EXCEED_$5": "BALANCE ABOVE B$ 5.00 - SPEND IT LOCALLY!",
         "PERSONAL_EXCEED_BALANCE": "CANNOT EXCEED BALANCE AND/OR MAXIMUM CASHOUT",
         "MERCHAT_EXCEED_BALANCE": "CANNOT EXCEED BALANCE",
         "REDEMPTION_FEE": "Redemption fee ",
@@ -270,7 +270,7 @@
         "ENABLE_CASHIER_VIEW" :"Enable cashier view",
         "CONFIRM_SAVE": "Are you sure you want to go back without saving changes?",
         "CHANGE_PASSWORD_FAILED": "Whoops something went wrong. Your action did not succeed.",
-        "CHANGE_PASSWORD_SUCCESS": "Password changed successfully."
+        "CHANGE_PASSWORD_SUCCESS": "You’ve successfully changed your password!"
     },
     "COMMUNITY_CHEST": {
         "CONTENT": "The BerkShares community want to support the local community. Therefore, we ask you at each transaction if you are willing to make a donation. This donation will go to a local project. On this page you will find the current project and its status.",
@@ -331,5 +331,9 @@
         "EMAIL_NOT_REGISTERED": "Email not registered!",
         "NOT_AUTHORIZED": "NotAuthorizedException",
         "ERROR": "Error"
+    },
+    "PASSWORD": {
+        "NOT_MEET_REQUIREMENTS": "PASSWORD DOES NOT MEET REQUIREMENTS",
+        "NOT_MATCHED": "PASSWORDs DO NOT MATCH"
     }
 }

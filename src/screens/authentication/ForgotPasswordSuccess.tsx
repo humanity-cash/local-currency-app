@@ -4,10 +4,17 @@ import { StyleSheet, View, SafeAreaView } from 'react-native';
 import { Text } from 'react-native-elements';
 import { AuthContext } from "src/contexts";
 import { BackBtn, Button, CancelBtn, Header } from "src/shared/uielements";
-import { baseHeader, viewBase, wrappingContainerBase } from "src/theme/elements";
+import { viewBase, wrappingContainerBase } from "src/theme/elements";
 import DataLoading from 'src/screens/loadings/DataLoading';
+import { colors } from "src/theme/colors";
+import Translation from "src/translation/en.json";
 
 const styles = StyleSheet.create({
+	headerText: {
+		fontSize: 32,
+		lineHeight: 42,
+		color: colors.darkGreen,
+	},
 	modalHeader: {
 		fontSize: 32,
 		fontWeight: '400',
@@ -37,13 +44,12 @@ const ForgotPasswordSuccess = () => {
 		<View style={viewBase}>
 			<DataLoading visible={isLoading} />
 			<Header
-				leftComponent={<BackBtn onClick={() => navigation.goBack()} />}
 				rightComponent={<CancelBtn text="Close" onClick={() => navigation.navigate('Login')} />}
 			/>
 			<View style={wrappingContainerBase}>
-				<View style={baseHeader}>
-					<Text style={styles.modalHeader}>Create a new password</Text>
-				</View>
+				<Text style={styles.headerText}>
+					{Translation.FORGOT_PASSWORD.CHANGE_PASSWORD_SUCCESS}
+				</Text>
 			</View>
 			<SafeAreaView style={styles.bottomView}>
 				<Button
