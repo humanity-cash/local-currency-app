@@ -142,20 +142,23 @@ const MerchantDashboard = (): JSX.Element => {
 			return
 		}
 		const data = apiData.txs.reduce<MiniTransaction[]>((acc, curr) => {
-			if (startDate) {
-				if (curr.timestamp < startDate?.getTime()) {
-					return acc
+			if (startDate) { // filter by startDate
+				if (moment(curr.timestamp).isBefore(moment(startDate))) {
+					return acc;
 				}
 			}
-			if (endDate) {
-				if (curr.timestamp > endDate?.getTime()) {
-					return acc
+
+			if (endDate) { // filter by endDate
+				if (moment(curr.timestamp).isAfter(moment(endDate).add(1, 'day'))) {
+					return acc;
 				}
 			}
+
 			return [...acc, curr]
 		}, [])
 		setFilteredApiData(data)
 	}, [startDate, endDate, selectedType])
+
 	const viewDetail = (item: MiniTransaction) => {
 		setSelectedItem(item);
 		setIsDetailViewOpen(true);
@@ -319,7 +322,7 @@ const MerchantDashboard = (): JSX.Element => {
 						<View style={styles.dialogBottom}>
 							<Button
 								type={BUTTON_TYPES.PURPLE}
-								title={Translation.BUTTON.LINK_BANK}
+								title={Translation.BUTTON.LINK_BUSINESS_BANK}
 								onPress={selectBank}
 							/>
 						</View>

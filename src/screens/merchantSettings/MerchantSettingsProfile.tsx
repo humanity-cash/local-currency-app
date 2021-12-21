@@ -1,7 +1,7 @@
 import { AntDesign } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import * as ImagePicker from "expo-image-picker";
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import {
 	Dimensions,
 	ScrollView,
@@ -208,6 +208,18 @@ export const MerchantSettingsProfile = (): JSX.Element => {
 		website: business?.website || "",
 	})
 
+	useEffect(() => {
+		updateBusinessProfileData('state', countries[0])
+	}, [])
+
+	const availableNext = () => {
+		return 	businessData.address1.length > 0 &&
+				businessData.address2.length > 0 &&
+				businessData.city.length > 0 &&
+				businessData.state.length > 0 &&
+				businessData.postalCode.length > 0
+	}
+  
 	const updateBusinessProfileData = (prop: string, newValue: string) => setBusinessData((pv) => {
 		const newState: any = {
 			...pv
@@ -461,6 +473,7 @@ export const MerchantSettingsProfile = (): JSX.Element => {
 			</ScrollView>
 			<TouchableOpacity
 				onPress={handleSave}
+				disabled={!availableNext()}
 				style={styles.scanButton}>
 				<Text style={styles.scanBtnText}>
 					{Translation.BUTTON.SAVE_CHANGE}

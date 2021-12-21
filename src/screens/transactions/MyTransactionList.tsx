@@ -66,7 +66,7 @@ const TransactionItem = (props: MyTransactionItemProps) => {
 	const {item, selected} = props;
 	
 	const getStyle = (type: string) => {
-		if (TransactionType.SALE || type === TransactionType.RETURN || type === TransactionType.IN || type === TransactionType.DEPOSIT) {
+		if (type === TransactionType.SALE || type === TransactionType.RETURN || type === TransactionType.IN || type === TransactionType.DEPOSIT) {
 			return styles.plusText;
 		} else {
 			return styles.minusText;
@@ -95,7 +95,7 @@ const TransactionItem = (props: MyTransactionItemProps) => {
 					</Text>
 				</View>
 			</View>
-			<Text style={getStyle(item.type)}>{getBerksharePrefix(item.type)} {item.value}</Text>
+			<Text style={getStyle(item.type)}>{getBerksharePrefix(item.type)} {(+item.value).toFixed(2)}</Text>
 		</View>
 	);
 }

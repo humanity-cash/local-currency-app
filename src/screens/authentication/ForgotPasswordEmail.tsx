@@ -42,7 +42,7 @@ const ForgotPasswordEmail = (): React.ReactElement => {
 	setLoading(false)
     if(response.success) {
       /**Email exist and a verification code was sent */
-      navigation.navigate("ForgotPasswordVerification")
+	  navigation.navigate("ForgotPasswordVerification")
     }
   }
 
