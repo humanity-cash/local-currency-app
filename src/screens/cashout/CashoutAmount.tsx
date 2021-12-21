@@ -169,7 +169,7 @@ const CashoutAmount = (): JSX.Element => {
 						<Text style={styles.resultText}>{Translation.COMMON.USD} {(Number(state.amount) * 0.015).toFixed(2)}</Text>
 					</View>
 					<View style={styles.resultView}>
-						<Text style={{ ...styles.resultText, fontWeight: 'bold' }}>{Translation.LOAD_UP.TOTAL_COSTS}</Text>
+						<Text style={{ ...styles.resultText, fontWeight: 'bold' }}>{Translation.PAYMENT.NET_CASH_OUT}</Text>
 						<Text style={{ ...styles.resultText, fontWeight: 'bold' }}>{Translation.COMMON.USD} {(Number(state.amount) * 0.985).toFixed(2)}</Text>
 					</View>
 				</View>
