@@ -198,7 +198,7 @@
         "FORGOT_PASSWORD_DETAIL": "Enter the email address so we can verify your identity",
         "CREATE_NEW_PASSWORD": "Create a new password",
         "CREATE_NEW_PASSWORD_DETAIL": "Create a new password to secure your account.",
-        "CHANGE_PASSWORD_SUCCESS": "Password has changed successfully!"
+        "CHANGE_PASSWORD_SUCCESS": "You’ve successfully changed your password!"
     },
     "PAYMENT": {
         "PAYMENT_SUCCESS_DETAIL": "Your receipt can be found in your transaction overview.",
@@ -270,7 +270,7 @@
         "ENABLE_CASHIER_VIEW" :"Enable cashier view",
         "CONFIRM_SAVE": "Are you sure you want to go back without saving changes?",
         "CHANGE_PASSWORD_FAILED": "Whoops something went wrong. Your action did not succeed.",
-        "CHANGE_PASSWORD_SUCCESS": "Password changed successfully."
+        "CHANGE_PASSWORD_SUCCESS": "You’ve successfully changed your password!"
     },
     "COMMUNITY_CHEST": {
         "CONTENT": "The BerkShares community want to support the local community. Therefore, we ask you at each transaction if you are willing to make a donation. This donation will go to a local project. On this page you will find the current project and its status.",
