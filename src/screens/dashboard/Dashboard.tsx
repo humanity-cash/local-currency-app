@@ -226,7 +226,7 @@ const Dashboard = (): JSX.Element => {
 					</Text>
 				</View>
 				<View style={styles.amountView}>
-					<Text style={styles.text}>B$ {personalFundingSource ? availableBalance : '-'}</Text>
+					<Text style={styles.text}>B$ {personalFundingSource ? availableBalance.toFixed(2) : '-'}</Text>
 					<TouchableOpacity
 						style={styles.topupButton}
 						onPress={() => { personalFundingSource ? navigation.navigate(Routes.LOAD_UP) : setIsVisible(true) }}>

@@ -322,7 +322,7 @@ const MyTransactions = (): JSX.Element => {
 					<Text style={styles.headerText}>{Translation.PAYMENT.MY_TRANSACTIONS}</Text>
 				</View>
 				<View style={styles.totalAmountView}>
-					<Text style={styles.amountText}>B$ {customerWalletData?.availableBalance}</Text>
+					<Text style={styles.amountText}>B$ {customerWalletData?.availableBalance.toFixed(2)}</Text>
 				</View>
 				
 				<ScrollView>
