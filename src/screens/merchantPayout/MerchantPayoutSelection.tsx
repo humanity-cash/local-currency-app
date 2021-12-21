@@ -1,5 +1,5 @@
 import { useNavigation } from "@react-navigation/native";
-import React from "react";
+import React, { useContext } from "react";
 import { ScrollView, View, StyleSheet } from "react-native";
 import { Text } from "react-native-elements";
 import Button from "src/shared/uielements/Button";
@@ -10,6 +10,7 @@ import { colors } from "src/theme/colors";
 import Translation from 'src/translation/en.json';
 import * as Routes from 'src/navigation/constants';
 import { BUTTON_TYPES } from "src/constants";
+import { UserContext } from 'src/contexts'
 
 const styles = StyleSheet.create({
 	headerText: {
@@ -37,7 +38,10 @@ const styles = StyleSheet.create({
 });
 
 const MerchantPayoutSelection = (): JSX.Element => {
+    const { user } = useContext(UserContext);
+    const verifiedCustomer = Boolean(user?.verifiedCustomer);
 	const navigation = useNavigation();
+
 	return (
 		<View style={viewBaseB}>
 			<Header
@@ -54,6 +58,7 @@ const MerchantPayoutSelection = (): JSX.Element => {
 						type={BUTTON_TYPES.TRANSPARENT}
 						onPress={() => navigation.navigate(Routes.MERCHANT_PAYOUT_PERSONAL)} 
 						title={Translation.BUTTON.MY_PERSONAL_ACCOUNT}
+                        disabled={!verifiedCustomer}
 						textStyle={styles.text}
 						style={styles.button} />
 					<Button 
