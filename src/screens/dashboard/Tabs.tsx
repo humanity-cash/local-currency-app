@@ -187,7 +187,7 @@ const DrawerContent = (
 						visible: true,
 						title: Translation.PAYMENT.PAYMENT_NO_BANK_TITLE,
 						description: Translation.PAYMENT.PAYMENT_NO_BANK_DETAIL,
-						buttoTitle: Translation.BUTTON.LINK_BANK,
+						buttoTitle: Translation.BUTTON.LINK_PERSONAL_BANK,
 						confirmAction: onBankDialogConfirm,
 						cancelAction: onBankDialogCancel
 					})
@@ -304,7 +304,7 @@ const DrawerContent = (
 									visible: true,
 									title: Translation.LOAD_UP.LOAD_UP_NO_BANK_TITLE,
 									description: Translation.LOAD_UP.LOAD_UP_NO_BANK_DETAIL,
-									buttoTitle: Translation.BUTTON.LINK_BANK,
+									buttoTitle: Translation.BUTTON.LINK_PERSONAL_BANK,
 									confirmAction: onBankDialogConfirm,
 									cancelAction: onBankDialogCancel
 								})
@@ -318,7 +318,7 @@ const DrawerContent = (
 									visible: true,
 									title: Translation.CASH_OUT.CASH_OUT_NO_BANK_TITLE,
 									description: Translation.CASH_OUT.CASH_OUT_NO_BANK_DETAIL,
-									buttoTitle: Translation.BUTTON.LINK_BANK,
+									buttoTitle: Translation.BUTTON.LINK_PERSONAL_BANK,
 									confirmAction: onBankDialogConfirm,
 									cancelAction: onBankDialogCancel
 								})

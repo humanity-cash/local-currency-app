@@ -318,7 +318,7 @@ const MerchantDashboard = (): JSX.Element => {
 						<View style={styles.dialogBottom}>
 							<Button
 								type={BUTTON_TYPES.PURPLE}
-								title={Translation.BUTTON.LINK_BANK}
+								title={Translation.BUTTON.LINK_BUSINESS_BANK}
 								onPress={selectBank}
 							/>
 						</View>
