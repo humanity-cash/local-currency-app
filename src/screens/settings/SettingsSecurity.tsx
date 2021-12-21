@@ -55,6 +55,8 @@ const styles = StyleSheet.create({
 	errorText: {
 		color: colors.mistakeRed,
 		fontSize: 10,
+		alignSelf: 'flex-end',
+		lineHeight: 12
 	},
 	bottomView: {
 		marginBottom: 20,
@@ -74,6 +76,7 @@ export const SettingsSecurity = (): JSX.Element => {
 	const [switchToggle, setSwitchToggle] = useState<boolean>(false);
 	const [canSave, setCanSave] = useState<boolean>(false);
 	const [isValidPassword, setIsValidPassword] = useState<boolean>(false);
+	const [isPasswordMatched, setIsPasswordMatched] = useState<boolean>(false);
 	const [state, setState] = useState<SecurityProps>({
 		password: "",
 		newPassword: "",
@@ -89,14 +92,15 @@ export const SettingsSecurity = (): JSX.Element => {
 	useEffect(() => {
 		setCanSave(
 			Object.keys(state).every((key) => state[key] !== "") && 
-			state.newPassword === state.newPassowrdConfirm && 
-			isPasswordValid(state.newPassword) && 
-			isPasswordValid(state.password)
+			state.newPassword.length > 0 && 
+			isPasswordValid && 
+			isPasswordMatched
 		);
 	}, [state]);
 
 	useEffect(() => {
-		setIsValidPassword(state.newPassword === state.newPassowrdConfirm);
+		setIsValidPassword(state.newPassword.length < 1 || isPasswordValid(state.newPassword));
+		setIsPasswordMatched(state.newPassowrdConfirm === state.newPassword)
 	}, [state.newPassowrdConfirm, state.newPassword]);
 
 	const onTouchIdOption = (value: boolean) => {
@@ -170,7 +174,7 @@ export const SettingsSecurity = (): JSX.Element => {
 					/>
 
 					<Text style={styles.label}>{Translation.LABEL.NEW_PASSWORD}</Text>
-					<Text style={styles.label}>({Translation.LABEL.PASSWORD_REG})</Text>
+					<Text style={styles.label}>{Translation.LABEL.PASSWORD_REG}</Text>
 					<BlockInput
 						inputRef={newPasswordRef}
 						name="newPassword"
@@ -183,12 +187,12 @@ export const SettingsSecurity = (): JSX.Element => {
 							confirmPasswordRef.current?.focus()
 						}}
 					/>
+					{!isValidPassword && (
+						<Text style={styles.errorText}>{Translation.PASSWORD.NOT_MEET_REQUIREMENTS}</Text>
+					)}
 
 					<View style={styles.inlineView}>
 						<Text style={styles.label}>{Translation.LABEL.CONFIRM_NEW_PASSWORD}</Text>
-						{!isValidPassword && (
-							<Text style={styles.errorText}>REPEAT NEW PASSWORD</Text>
-						)}
 					</View>
 					<BlockInput
 						inputRef={confirmPasswordRef}
@@ -198,6 +202,9 @@ export const SettingsSecurity = (): JSX.Element => {
 						secureTextEntry={true}
 						onChange={onValueChange}
 					/>
+					{!isPasswordMatched && (
+						<Text style={styles.errorText}>{Translation.PASSWORD.NOT_MATCHED}</Text>
+					)}
 				</View>
 			</ScrollView>
 			<View style={styles.bottomView}>

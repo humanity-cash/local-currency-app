@@ -1,5 +1,5 @@
 import { useNavigation } from "@react-navigation/native";
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import {
 	Keyboard,
 	KeyboardAvoidingView,
@@ -12,6 +12,7 @@ import {
 import { Text } from "react-native-elements";
 import { AuthContext } from "src/contexts";
 import { ForgotPassword } from "src/auth/types";
+import Translation from 'src/translation/en.json';
 import {
 	BackBtn,
 	CancelBtn,
@@ -48,6 +49,7 @@ const ForgotPasswordVerification = () => {
 		forgotPasswordDetails: { email },
 		setForgotPasswordDetails,
 	} = useContext(AuthContext);
+	const [sentAgain, setSentAgain] = useState(false)
 
 	const onComplete = async (text: string) => {
 		setForgotPasswordDetails((pv: ForgotPassword) => ({
@@ -74,13 +76,14 @@ const ForgotPasswordVerification = () => {
 			<View style={wrappingContainerBase}>
 				<View style={baseHeader}>
 					<Text style={styles.modalHeader}>
-						Verify your mail address
+						{Translation.EMAIL_VERIFICATION.VERIFY_MAIL}
 					</Text>
 				</View>
 				<View style={styles.modalDescription}>
 					<Text>
-						We have sent an email with a verification code to{" "}
-						{email}.
+						{sentAgain 
+							? Translation.EMAIL_VERIFICATION.SENT_VERIFICATION_CODE_AGAIN.replace('{{mail}}', email)
+							: Translation.EMAIL_VERIFICATION.SENT_VERIFICATION_CODE.replace('{{mail}}', email)}
 					</Text>
 					<ConfirmationCode onComplete={onComplete} />
 				</View>
@@ -91,7 +94,7 @@ const ForgotPasswordVerification = () => {
 						Keyboard.dismiss();
 					}}>
 					<Text style={styles.bottomNavigation}>
-						Send code again
+						{Translation.EMAIL_VERIFICATION.SEND_CODE}
 					</Text>
 				</TouchableOpacity>
 			</SafeAreaView>

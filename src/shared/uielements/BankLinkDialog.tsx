@@ -43,7 +43,7 @@ const BankLinkDialog = ({
 	visible = false,
 	title = Translation.PAYMENT.PAYMENT_NO_BANK_TITLE,
 	description = Translation.PAYMENT.PAYMENT_NO_BALANCE_DETAIL,
-	buttonTitle = Translation.BUTTON.LINK_BANK,
+	buttonTitle = Translation.BUTTON.LINK_PERSONAL_BANK,
 	onConfirm,
 	onCancel
 }: BankLinkDialogProps) => {

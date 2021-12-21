@@ -1,5 +1,5 @@
 import { AntDesign } from '@expo/vector-icons';
-import React, { useContext, createRef } from "react";
+import React, { useContext, createRef, useEffect } from "react";
 import { StyleSheet, View, TextInput, Keyboard } from 'react-native';
 import { Text } from "react-native-elements";
 import SelectDropdown from 'react-native-select-dropdown';
@@ -65,6 +65,10 @@ const BusinessAddressForm = (props: BusinessAddressProps): JSX.Element => {
 	const cityRef = createRef<TextInput>()
 	const stateRef = createRef<SelectDropdown>()
 	const phoneRef = createRef<TextInput>()
+
+	useEffect(() => {
+		onValueChange("state", countries[0])
+	}, [])
 
 	const onValueChange = (name: string, change: string) => {
 		updateBusinessData({

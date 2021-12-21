@@ -103,8 +103,7 @@ const ReturnQRCodeGen = (props: ReturnQRCodeGenProps): JSX.Element => {
         onSuccess();
     }
 
-    const firstName = user?.customer?.firstName;
-    const lastName = user?.customer?.lastName;
+    const customerName = user?.customer?.tag;
 
     return (
         <Dialog visible={props.visible} onClose={onClose} style={styles.dialog}>
@@ -115,7 +114,7 @@ const ReturnQRCodeGen = (props: ReturnQRCodeGenProps): JSX.Element => {
                             source={require("../../../assets/images/feed1.png")}
                             style={styles.image}
                         />
-                        <Text style={styles.ownerName}>{firstName + ' ' + lastName}</Text>
+                        <Text style={styles.ownerName}>@{customerName}</Text>
                     </View>
                     <QRCode
                         value={addressStr}
