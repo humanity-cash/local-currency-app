@@ -286,7 +286,7 @@ const DrawerContent = (
 							</View>
 						)}
 					</View>
-					<Text style={styles.berkAmount}>B$ {customerWalletData?.availableBalance}</Text>
+					<Text style={styles.berkAmount}>B$ {customerWalletData?.availableBalance.toFixed(2)}</Text>
 					<Drawer.Section>
 						<DrawerItem
 							label={Translation.TABS.SCAN_TO_PAY}
