@@ -53,6 +53,10 @@ const CashierRequest = (): JSX.Element => {
 	const [isRequestSuccess, setIsRequestSuccess] = useState<boolean>(false);
 
 	useEffect(() => {
+		setAmount("")
+	}, [])
+	
+	useEffect(() => {
 		setGoNext(Number(amount) > 0);
 	}, [amount]);
 

@@ -85,6 +85,9 @@ const MerchantRequest = (): JSX.Element => {
 	});
 	const [isOpenAmount, setIsOpenAmount] = useState<boolean>(false);
 
+	useEffect(() => {
+		setState({amount: "", costs: ""})
+	}, [])
 
 	useEffect(() => {
 		setGoNext(Number(state.costs) > 0);
@@ -171,7 +174,12 @@ const MerchantRequest = (): JSX.Element => {
 			behavior={Platform.OS == "ios" ? "padding" : "height"}
 			style={viewBaseB}>
 			<Header
-				rightComponent={<CancelBtn color={colors.purple} text={Translation.BUTTON.CLOSE} onClick={() => navigation.navigate(Routes.MERCHANT_DASHBOARD)} />}
+				rightComponent={
+					<CancelBtn 
+						color={colors.purple} 
+						text={Translation.BUTTON.CLOSE} 
+						onClick={() => navigation.goBack()} />
+				}
 			/>
 			<ScrollView style={wrappingContainerBase}>
 				<View style={baseHeader}>

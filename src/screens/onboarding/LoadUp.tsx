@@ -100,6 +100,10 @@ const LoadUp = (): JSX.Element => {
   const [goNext, setGoNext] = useState(false);
 
   useEffect(() => {
+    setAmount("")
+  }, [])
+
+  useEffect(() => {
     setGoNext(Number(amount) >= MIN_AMOUNT && Number(amount) <= MAX_AMOUNT);
   }, [amount]);
 
