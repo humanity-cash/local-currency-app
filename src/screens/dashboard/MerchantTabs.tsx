@@ -449,7 +449,7 @@ const DrawerContent = (props: DrawerContentComponentProps) => {
 							</View>
 						)}
 					</View>
-					<Text style={styles.berkAmount}>B$ {businessWalletData?.availableBalance}</Text>
+					<Text style={styles.berkAmount}>B$ {businessWalletData?.availableBalance.toFixed(2)}</Text>
 					<Drawer.Section>
 						<DrawerItem
 							label={Translation.TABS.RECEIVE_PAYMENT}

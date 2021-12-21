@@ -81,7 +81,7 @@ const TransactionItem = (props: TransactionItemProps) => {
 								: "Transfer Out"}
 				</Text>
 			</View>
-			<Text style={getStyle(item.type)}>{getBerksharePrefix(item.type)}  {item.value}</Text>
+			<Text style={getStyle(item.type)}>{getBerksharePrefix(item.type)}  {(+item.value).toFixed(2)}</Text>
 		</View>
 	);
 }

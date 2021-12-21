@@ -24,6 +24,8 @@ import MyTransactionList from './MyTransactionList';
 import MyTransactionFilter from './MyTransactionsFilter';
 import ReturnQRCodeGen from './ReturnQRCodeGen';
 
+moment.locale('us-en')
+
 const styles = StyleSheet.create({
 	content: {
 		flex: 1,
@@ -220,6 +222,14 @@ const MyTransactions = (): JSX.Element => {
 	}, [startDate, endDate, selectedType])
 
 	useEffect(() => {
+		loadTransactions()
+	}, [customerDwollaId]);
+
+	useEffect(() => {
+		loadTransactions()
+	}, []);
+
+	const loadTransactions = () => {
 		if (customerDwollaId) {
 			const handler = async () => {
 				setIsLoading(true);
@@ -230,17 +240,18 @@ const MyTransactions = (): JSX.Element => {
 			};
 			handler();
 		}
-	}, [customerDwollaId]);
+	}
 
 	const filterData = () => {
 		const filteredByTime = apiData.reduce<MiniTransaction[]>((acc, curr) => {
 			if (startDate) { // filter by startDate
-				if (curr.timestamp < startDate?.getTime()) {
+				if (moment(curr.timestamp).isBefore(moment(startDate))) {
 					return acc;
 				}
 			}
+
 			if (endDate) { // filter by endDate
-				if (curr.timestamp > endDate?.getTime()) {
+				if (moment(curr.timestamp).isAfter(moment(endDate).add(1, 'day'))) {
 					return acc;
 				}
 			}
@@ -311,7 +322,7 @@ const MyTransactions = (): JSX.Element => {
 					<Text style={styles.headerText}>{Translation.PAYMENT.MY_TRANSACTIONS}</Text>
 				</View>
 				<View style={styles.totalAmountView}>
-					<Text style={styles.amountText}>B$ {customerWalletData?.availableBalance}</Text>
+					<Text style={styles.amountText}>B$ {customerWalletData?.availableBalance.toFixed(2)}</Text>
 				</View>
 				
 				<ScrollView>

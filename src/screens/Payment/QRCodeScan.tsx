@@ -126,8 +126,7 @@ type PaymentConfirmProps = {
 
 const PaymentConfirm = (props: PaymentConfirmProps) => {
 	const { user } = useContext(UserContext);
-	const firstName = user?.customer?.firstName;
-	const lastName = user?.customer?.lastName;
+	const customerName = user?.customer?.tag;
 	const amountCalcedFee = props.payInfo.amount;
 	const roundUpTotalAmount = (Math.ceil(amountCalcedFee) - amountCalcedFee) ? Math.ceil(amountCalcedFee) : amountCalcedFee + 1;
 
@@ -140,7 +139,7 @@ const PaymentConfirm = (props: PaymentConfirmProps) => {
 							source={require("../../../assets/images/feed1.png")}
 							style={styles.image}
 						/>
-						<Text style={styles.ownerName}>{firstName + ' ' + lastName}</Text>
+						<Text style={styles.ownerName}>@{customerName}</Text>
 					</View>
 
 					<Text style={styles.headerText}>B$ {amountCalcedFee.toFixed(2)}</Text>
