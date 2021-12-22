@@ -10,7 +10,7 @@ import { AuthContext, UserContext, WalletContext } from "src/contexts";
 import { NavigationViewContext, ViewState } from "src/contexts/navigation";
 import { useBusinessWallet, useUpdateBusinessWalletData } from "src/hooks";
 import DwollaDialog from 'src/screens/dashboard/DwollaDialog';
-import DataLoading from 'src/screens/loadings/DataLoading';
+import { LoadingPage } from 'src/views';
 import { Button, Header } from "src/shared/uielements";
 import { colors } from "src/theme/colors";
 import { viewBaseB, wrappingContainerBase } from "src/theme/elements";
@@ -50,7 +50,7 @@ const BusinessWelcome = (): ReactElement => {
 
 	return (
 		<View style={viewBaseB}>
-			<DataLoading visible={isWalletLoading} />
+			<LoadingPage visible={isWalletLoading} isData={true} />
 			<Header />
 			<ScrollView style={wrappingContainerBase}>
 				<Text style={styles.headerText}>

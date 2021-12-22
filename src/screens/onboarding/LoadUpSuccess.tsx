@@ -5,7 +5,6 @@ import { Text } from 'react-native-elements';
 import { Header, CancelBtn, Button } from "src/shared/uielements";
 import { baseHeader, viewBase, wrappingContainerBase } from "src/theme/elements";
 import Translation from 'src/translation/en.json';
-import * as Routes from 'src/navigation/constants';
 
 const styles = StyleSheet.create({
 	headerText: {
@@ -19,12 +18,22 @@ const styles = StyleSheet.create({
 	},
 });
 
-const LoadUpSuccess = (): JSX.Element => {
+interface LoadUpSuccessInput {
+	route: {
+		params: {
+			homeRoute: string
+		}
+	}
+}
+
+const LoadUpSuccess = (props: LoadUpSuccessInput): JSX.Element => {
+	const { homeRoute } = props?.route?.params;
 	const navigation = useNavigation();
+
 	return (
 		<View style={viewBase}>
 			<Header
-				rightComponent={<CancelBtn text={Translation.BUTTON.CLOSE} onClick={() => navigation.navigate(Routes.TABS)} />}
+				rightComponent={<CancelBtn text={Translation.BUTTON.CLOSE} onClick={() => navigation.navigate(homeRoute)} />}
 			/>
 			<ScrollView style={wrappingContainerBase}>
 				<View style={ baseHeader }>
@@ -36,7 +45,7 @@ const LoadUpSuccess = (): JSX.Element => {
 				<Button
 					type="darkGreen"
 					title={Translation.BUTTON.EXPLORE_BERKSHARES}
-					onPress={() => navigation.navigate(Routes.TABS)}
+					onPress={() => navigation.navigate(homeRoute)}
 				/>
 			</SafeAreaView>
 		</View>

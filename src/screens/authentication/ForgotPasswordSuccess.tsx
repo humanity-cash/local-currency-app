@@ -5,7 +5,7 @@ import { Text } from 'react-native-elements';
 import { AuthContext } from "src/contexts";
 import { BackBtn, Button, CancelBtn, Header } from "src/shared/uielements";
 import { viewBase, wrappingContainerBase } from "src/theme/elements";
-import DataLoading from 'src/screens/loadings/DataLoading';
+import { LoadingPage } from 'src/views';
 import { colors } from "src/theme/colors";
 import Translation from "src/translation/en.json";
 
@@ -42,7 +42,7 @@ const ForgotPasswordSuccess = () => {
 
 	return (
 		<View style={viewBase}>
-			<DataLoading visible={isLoading} />
+			<LoadingPage visible={isLoading} isData={true} />
 			<Header
 				rightComponent={<CancelBtn text="Close" onClick={() => navigation.navigate('Login')} />}
 			/>

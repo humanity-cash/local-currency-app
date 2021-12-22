@@ -12,7 +12,7 @@ import { createFuseSearchInstance } from "src/fuse";
 import { BUSINESS_TX_DATA_STORE, BUSINESS_TX_FILTERS_STORE } from "src/hook-stores";
 import { useBusinessWallet } from "src/hooks";
 import * as Routes from 'src/navigation/constants';
-import DataLoading from "src/screens/loadings/DataLoading";
+import { LoadingPage } from "src/views";
 import { Button, Dialog, Header, SearchInput } from "src/shared/uielements";
 import { colors } from "src/theme/colors";
 import { baseHeader, dialogViewBase, FontFamily, viewBaseB, wrappingContainerBase } from "src/theme/elements";
@@ -26,6 +26,7 @@ import { BarCodeScanner } from 'expo-barcode-scanner';
 import { EventsContext } from 'src/contexts/events';
 import EventItem from 'src/shared/uielements/EventItem';
 import MerchantTransactionsFilter from './MerchantTransactionsFilter';
+import { BusinessScanQrCodeStyle } from "src/style";
 
 type TransactionDetailProps = {
 	visible: boolean,
@@ -209,7 +210,10 @@ const MerchantDashboard = (): JSX.Element => {
 					{
 						senderId: businessDwollaId,
 						walletData: businessWalletData,
-						username: user?.business?.tag
+						username: user?.business?.tag,
+						styles: BusinessScanQrCodeStyle,
+						recieveRoute: Routes.MERCHANT_REQUEST,
+						cancelRoute: Routes.MERCHANT_DASHBOARD
 					})
 			} else {
 				navigation.navigate(Routes.MERCHANT_REQUEST)
@@ -221,7 +225,7 @@ const MerchantDashboard = (): JSX.Element => {
 
 	return (
 		<View style={viewBaseB}>
-			<DataLoading visible={isWalletLoading || isLoading} />
+			<LoadingPage visible={isWalletLoading || isLoading} isData={true} />
 			<Header
 				leftComponent={
 					<TouchableWithoutFeedback onPress={() => navigation.dispatch(DrawerActions.toggleDrawer())}>

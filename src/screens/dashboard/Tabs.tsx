@@ -24,7 +24,6 @@ import Translation from "src/translation/en.json";
 import CashoutAmount from "../cashout/CashoutAmount";
 import MerchantDictionary from "../merchant/MerchantDictionary";
 import PaymentRequest from "../payment/PaymentRequest";
-import QRCodeScan from "../payment/QRCodeScan";
 import Settings from "../settings/Settings";
 import SettingsHelpAndContact from "../settings/SettingsHelpAndContact";
 import BusinessAccount from "../signupBusiness/BusinessAccount";
@@ -33,6 +32,8 @@ import Dashboard from "./Dashboard";
 import { BarCodeScanner } from 'expo-barcode-scanner';
 import SettingDialog from 'src/shared/uielements/SettingDialog';
 import BankLinkDialog from 'src/shared/uielements/BankLinkDialog';
+import { PaymentsModule } from "src/modules";
+import { CustomerLoadUp, CustomerScanQrCodeStyle } from "src/style";
 
 const styles = StyleSheet.create({
 	headerText: {
@@ -125,7 +126,7 @@ const DrawerContent = (
 ) => {
 	const { signOut, userEmail } = useContext(AuthContext);
 	const { updateSelectedView } = useContext(NavigationViewContext);
-	const { user, updateUserType } = useContext(UserContext)
+	const { user, updateUserType, customerDwollaId } = useContext(UserContext)
 	const authorization = { cashierView: user?.verifiedBusiness };
 	const [isExpanded, setIsExpanded] = useState<boolean>(false);
 	const [bankDialogState, setBankDialogState] = useState<BankLinkDialogStateProps>(initBankDialogState);
@@ -156,7 +157,7 @@ const DrawerContent = (
 
 	const onLoadupDialogConfirm = () => {
 		setBankDialogState(initBankDialogState);
-		props.navigation.navigate(Routes.LOAD_UP);
+		props.navigation.navigate(Routes.LOAD_UP, { userId: customerDwollaId });
 	}
 
 	const onLoadupDialogCancel = () => {
@@ -167,7 +168,14 @@ const DrawerContent = (
 		const { status } = await BarCodeScanner.requestPermissionsAsync();
 		if (status === 'granted') {
 			if (availableBalance > 0) {
-				props.navigation.navigate(Routes.QRCODE_SCAN)
+				props.navigation.navigate(Routes.QRCODE_SCAN, {
+					senderId: customerDwollaId,
+					walletData: customerWalletData,
+					username: user?.customer?.tag,
+					styles: CustomerScanQrCodeStyle,
+					recieveRoute: Routes.PAYMENT_REQUEST,
+					cancelRoute: Routes.DASHBOARD
+				})
 			} else {
 				if (personalFundingSource) {
 					setBankDialogState({
@@ -296,7 +304,8 @@ const DrawerContent = (
 						<DrawerItem
 							label={Translation.TABS.LOADUP}
 							onPress={() => customerWalletData?.availableFundingSource
-								? props.navigation.navigate(Routes.LOAD_UP)
+								? props.navigation.navigate(Routes.LOAD_UP, 
+									{ userId: customerDwollaId })
 								: setBankDialogState({
 									visible: true,
 									title: Translation.LOAD_UP.LOAD_UP_NO_BANK_TITLE,
@@ -402,7 +411,7 @@ const Tabs = (): JSX.Element => {
 			<DrawerNav.Screen name={Routes.DASHBOARD} component={Dashboard} />
 			<DrawerNav.Screen
 				name={Routes.QRCODE_SCAN}
-				component={QRCodeScan}
+				component={PaymentsModule.Send}
 			/>
 			<DrawerNav.Screen
 				name={Routes.RECEIVE_PAYMENT}

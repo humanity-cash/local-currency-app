@@ -12,7 +12,7 @@ import { BUTTON_TYPES } from "src/constants";
 import { UserContext, WalletContext } from 'src/contexts';
 import { useCustomerWallet } from 'src/hooks';
 import * as Routes from 'src/navigation/constants';
-import DataLoading from "src/screens/loadings/DataLoading";
+import { LoadingPage } from "src/views";
 import { Button, Dialog, Header } from 'src/shared/uielements';
 import { colors } from 'src/theme/colors';
 import { baseHeader, dialogViewBase, viewBase, wrappingContainerBase } from 'src/theme/elements';
@@ -22,6 +22,7 @@ import { BarCodeScanner } from 'expo-barcode-scanner';
 import SettingDialog from 'src/shared/uielements/SettingDialog';
 import { EventsContext } from 'src/contexts/events';
 import EventItem from 'src/shared/uielements/EventItem';
+import { CustomerScanQrCodeStyle } from 'src/style';
 
 const styles = StyleSheet.create({
 	content: { paddingBottom: 80 },
@@ -155,7 +156,7 @@ const Dashboard = (): JSX.Element => {
 	const [isLoadup, setIsLoadup] = useState<boolean>(false);
 	const [isPayment, setIsPayment] = useState<boolean>(false);
 	const [isSetting, setIsSetting] = useState(false)
-	const { customerDwollaId } = useContext(UserContext)
+	const { customerDwollaId, user } = useContext(UserContext)
 	const { customerWalletData, updateCustomerWalletData } = useContext(WalletContext)
 	const { events, getEvents, deleteEvent } = useContext(EventsContext)
 
@@ -190,7 +191,14 @@ const Dashboard = (): JSX.Element => {
 		const {status} = await BarCodeScanner.requestPermissionsAsync();
 		if(status === 'granted') {
 			if(personalFundingSource && availableBalance > 0) {
-				navigation.navigate(Routes.QRCODE_SCAN)
+				navigation.navigate(Routes.QRCODE_SCAN, {
+					senderId: customerDwollaId,
+					walletData: customerWalletData,
+					username: user?.customer?.tag,
+					styles: CustomerScanQrCodeStyle,
+					recieveRoute: Routes.PAYMENT_REQUEST,
+					cancelRoute: Routes.DASHBOARD
+				})
 			} else {
 				navigation.navigate(Routes.RECEIVE_PAYMENT)
 			}
@@ -201,7 +209,7 @@ const Dashboard = (): JSX.Element => {
 
 	return (
 		<View style={viewBase}>
-			<DataLoading visible={isWalletLoading} />
+			<LoadingPage visible={isWalletLoading} isData={true} />
 			<Header
 				leftComponent={
 					<TouchableWithoutFeedback
@@ -229,7 +237,7 @@ const Dashboard = (): JSX.Element => {
 					<Text style={styles.text}>B$ {personalFundingSource ? availableBalance.toFixed(2) : '-'}</Text>
 					<TouchableOpacity
 						style={styles.topupButton}
-						onPress={() => { personalFundingSource ? navigation.navigate(Routes.LOAD_UP) : setIsVisible(true) }}>
+						onPress={() => { personalFundingSource ? navigation.navigate(Routes.LOAD_UP, { userId: customerDwollaId }) : setIsVisible(true) }}>
 						<Text style={styles.topupText}>Load up B$</Text>
 					</TouchableOpacity>
 				</View>

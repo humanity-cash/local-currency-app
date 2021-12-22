@@ -4,9 +4,8 @@ import { Text } from 'react-native-elements';
 import { BUTTON_TYPES } from 'src/constants';
 import { NavigationViewContext, ViewState } from "src/contexts/navigation";
 import { useCustomerWallet, useUpdateCustomerWalletData } from "src/hooks";
-import * as Routes from 'src/navigation/constants';
 import DwollaDialog from 'src/screens/dashboard/DwollaDialog';
-import DataLoading from 'src/screens/loadings/DataLoading';
+import { LoadingPage } from 'src/views';
 import { Button, Header } from "src/shared/uielements";
 import { colors } from "src/theme/colors";
 import { baseHeader, viewBase, wrappingContainerBase } from "src/theme/elements";
@@ -44,7 +43,7 @@ const LinkBankAccount = (): JSX.Element => {
 	
 	return (
 		<View style={viewBase}>
-			<DataLoading visible={isWalletLoading} />
+			<LoadingPage visible={isWalletLoading} isData={true} />
 			<Header />
 
 			<View style={wrappingContainerBase}>

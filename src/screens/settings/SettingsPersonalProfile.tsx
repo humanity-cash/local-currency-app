@@ -6,7 +6,7 @@ import { Text } from "react-native-elements";
 import { UserAPI } from "src/api";
 import { BUTTON_TYPES } from 'src/constants';
 import { UserContext } from 'src/contexts';
-import DataLoading from 'src/screens/loadings/DataLoading';
+import { LoadingPage } from 'src/views';
 import { BackBtn, BlockInput, Button, Header } from "src/shared/uielements";
 import { colors } from "src/theme/colors";
 import { underlineHeader, viewBase } from "src/theme/elements";
@@ -102,7 +102,7 @@ export const SettingsPersonalDetails = (): JSX.Element => {
 		<KeyboardAvoidingView
 			behavior={Platform.OS == 'ios' ? 'padding' : 'height'}
 			style={viewBase}>
-			<DataLoading visible={isLoading} />
+			<LoadingPage visible={isLoading} isData={true} />
 			<Header
 				leftComponent={<BackBtn onClick={() => navigation.goBack()} />}
 			/>

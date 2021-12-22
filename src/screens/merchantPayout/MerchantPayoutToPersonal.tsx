@@ -10,7 +10,7 @@ import { underlineHeaderB, viewBaseB, wrappingContainerBase } from "src/theme/el
 import Translation from 'src/translation/en.json';
 import { UserContext, WalletContext } from 'src/contexts';
 import { TransactionsAPI } from 'src/api';
-import DataLoading from 'src/screens/loadings/DataLoading'
+import { LoadingPage } from 'src/views'
 
 const styles = StyleSheet.create({
 	headerText: {
@@ -96,7 +96,7 @@ const MerchantCashoutAmount = (): JSX.Element => {
                 leftComponent={<BackBtn color={colors.purple} onClick={() => navigation.goBack()} />}
                 rightComponent={<CancelBtn text={Translation.BUTTON.CLOSE} color={colors.purple} onClick={() => navigation.navigate(Routes.MERCHANT_DASHBOARD)} />}
             />
-            <DataLoading visible={isLoading} />
+            <LoadingPage visible={isLoading} isPayment={true} />
             <ScrollView style={wrappingContainerBase}>
                 <View style={underlineHeaderB}>
                     <Text style={styles.headerText}>{Translation.PAYMENT.PAYOUT_SOMEONE}</Text>

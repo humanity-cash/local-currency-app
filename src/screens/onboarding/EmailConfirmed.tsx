@@ -7,7 +7,7 @@ import { BUTTON_TYPES } from 'src/constants';
 import { BackBtn, Button, Header } from "src/shared/uielements";
 import { colors } from "src/theme/colors";
 import { baseHeader, viewBase, wrappingContainerBase } from "src/theme/elements";
-import DataLoading from 'src/screens/loadings/DataLoading';
+import { LoadingPage } from 'src/views';
 
 const styles = StyleSheet.create({
     headerText: {
@@ -52,7 +52,7 @@ const EmailConfirmed = (): JSX.Element => {
 
     return (
         <View style={viewBase}>
-            <DataLoading visible={isLoading} />
+            <LoadingPage visible={isLoading} isData={true} />
             <Header
                 leftComponent={
                     <BackBtn onClick={() => navigation.goBack()} />

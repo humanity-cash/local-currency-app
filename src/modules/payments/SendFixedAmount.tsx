@@ -1,18 +1,18 @@
 import { useNavigation } from '@react-navigation/core';
 import { BarCodeScanner } from 'expo-barcode-scanner';
-import React, { useContext, useEffect, useState } from 'react';
-import { Image, KeyboardAvoidingView, Platform, ScrollView, StyleSheet, View, SafeAreaView } from 'react-native';
+import React, { useContext, useState } from 'react';
+import { Image, StyleSheet, View } from 'react-native';
 import { Text } from 'react-native-elements';
-import PaymentLoading from 'src/screens/loadings/PaymentPending';
+import { LoadingPage } from 'src/views';
 import { TransactionsAPI } from 'src/api';
 import { ITransactionRequest } from 'src/api/types';
 import { BUTTON_TYPES } from 'src/constants';
 import { UserContext } from 'src/contexts';
 import { useCameraPermission } from 'src/hooks';
 import * as Routes from 'src/navigation/constants';
-import { BackBtn, BorderedInput, Button, CancelBtn, Dialog, Header, Modal, ModalHeader, ToggleButton } from "src/shared/uielements";
+import { Button, CancelBtn, Dialog, Header, ToggleButton } from "src/shared/uielements";
 import { colors } from "src/theme/colors";
-import { baseHeader, dialogViewBase, modalViewBase, underlineHeaderB, viewBase, wrappingContainerBase } from "src/theme/elements";
+import { baseHeader, dialogViewBase, viewBase } from "src/theme/elements";
 import Translation from 'src/translation/en.json';
 import { showToast } from 'src/utils/common';
 import { PaymentMode, QRCodeEntry, SECURITY_ID, ToastType } from 'src/utils/types';
@@ -201,7 +201,7 @@ const SendPayment = (props: SendPayment): JSX.Element => {
 
 	return (
 		<View style={viewBase}>
-			<PaymentLoading visible={isLoading} />
+			<LoadingPage visible={isLoading} isPayment={true} />
 			<View style={styles.container}>
 				{
 					(!isPaymentDialog && !isLowAmountDialog) &&

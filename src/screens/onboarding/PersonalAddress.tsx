@@ -13,7 +13,7 @@ import { UserType } from "src/auth/types";
 import { BUTTON_TYPES } from "src/constants";
 import { AuthContext, UserContext } from "src/contexts";
 import { NavigationViewContext, ViewState } from "src/contexts/navigation";
-import DataLoading from 'src/screens/loadings/DataLoading';
+import DataLoading from 'src/views';
 import {
 	BackBtn,
 	Button,

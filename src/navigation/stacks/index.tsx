@@ -1,7 +1,6 @@
 import { createStackNavigator } from "@react-navigation/stack";
 import React from "react";
 import "react-native-gesture-handler";
-import LoadingPage from "src/screens/loadings/LoadingPage";
 import { CashoutNavigator } from "src/navigation/CashoutNavigator";
 import { ForgotPasswordNavigator } from "src/navigation/ForgotPasswordStack";
 import { MerchantBankAccountNavigator } from "src/navigation/MerchantBankAccountNavigator";
@@ -21,11 +20,6 @@ import MerchantTabs from "src/screens/dashboard/MerchantTabs";
 import Tabs from "src/screens/dashboard/Tabs";
 import MerchantCashoutPassword from "src/screens/merchantCashout/MerchantCashoutPassword";
 import MerchantRedemptionInProgress from "src/screens/merchantCashout/MerchantRedemptionInProgress";
-import MerchantLoadup from "src/screens/merchantLoadup/MerchantLoadup";
-import MerchantLoadupPending from "src/screens/merchantLoadup/MerchantLoadupPending";
-import MerchantLoadupSuccess from "src/screens/merchantLoadup/MerchantLoadupSuccess";
-import MerchantPaymentPending from "src/screens/merchantPayment/MerchantPaymentPending";
-import MerchantPaymentSuccess from "src/screens/merchantPayment/MerchantPaymentSuccess";
 import MerchantReturn from "src/screens/merchantPayment/MerchantReturn";
 import MerchantPayoutPending from "src/screens/merchantPayout/MerchantPayoutPending";
 import MerchantPayoutSuccess from "src/screens/merchantPayout/MerchantPayoutSuccess";
@@ -51,10 +45,8 @@ import SelectBank from "src/screens/onboarding/SelectBank";
 import Teaser from "src/screens/onboarding/Teaser";
 import Verification from "src/screens/onboarding/Verification";
 import VerificationHelp from "src/screens/onboarding/VerificationHelp";
-import PaymentPending from "src/screens/payment/PaymentPending";
 import PaymentRequest from "src/screens/payment/PaymentRequest";
 import PaymentSuccess from "src/screens/payment/PaymentSuccess";
-import QRCodeScan from "src/screens/payment/QRCodeScan";
 import Report from "src/screens/report/Report";
 import ReportSuccess from "src/screens/report/ReportSuccess";
 import SettingsBankAccount from "src/screens/settings/SettingsBankAccount";
@@ -71,17 +63,12 @@ import { PaymentsModule } from "src/modules";
 const PrimaryStack = createStackNavigator();
 
 export const CustomerUserStack = ({ isVerifiedBusiness }: { isVerifiedBusiness: boolean }) => {
-
 	return (
 		<>
 			<PrimaryStack.Screen name={Routes.TABS} component={Tabs} />
 			<PrimaryStack.Screen
 				name={Routes.QRCODE_SCAN}
-				component={QRCodeScan}
-			/>
-			<PrimaryStack.Screen
-				name={Routes.PAYMENT_PENDING}
-				component={PaymentPending}
+				component={PaymentsModule.Send}
 			/>
 			<PrimaryStack.Screen
 				name={Routes.PAYMENT_SUCCESS}
@@ -137,17 +124,6 @@ export const CustomerUserStack = ({ isVerifiedBusiness }: { isVerifiedBusiness: 
 					component={SignupBusinessNavigator}
 				/>
 			)}
-		</>
-	)
-}
-
-export const LoadingStack = () => {
-	return (
-		<>
-			<PrimaryStack.Screen
-				name={"LOADING"}
-				component={LoadingPage}
-			/>
 		</>
 	)
 }
@@ -269,28 +245,24 @@ export const BusinessUserStack = ({ isVerifiedCustomer }: { isVerifiedCustomer: 
 				component={MerchantTabs}
 			/>
 			<PrimaryStack.Screen
-				name={Routes.MERCHANT_PAYMENT_PENDING}
-				component={MerchantPaymentPending}
+				name={Routes.PAYMENT_FAILED}
+				component={PaymentSuccess}
 			/>
 			<PrimaryStack.Screen
-				name={Routes.MERCHANT_PAYMENT_SUCCESS}
-				component={MerchantPaymentSuccess}
+				name={Routes.PAYMENT_SUCCESS}
+				component={PaymentSuccess}
 			/>
 			<PrimaryStack.Screen
 				name={Routes.MERCHANT_RETURN}
 				component={MerchantReturn}
 			/>
 			<PrimaryStack.Screen
-				name={Routes.MERCHANT_LOADUP_PENDING}
-				component={MerchantLoadupPending}
+				name={Routes.LOADUP_SUCCESS}
+				component={LoadUpSuccess}
 			/>
 			<PrimaryStack.Screen
-				name={Routes.MERCHANT_LOADUP}
-				component={MerchantLoadup}
-			/>
-			<PrimaryStack.Screen
-				name={Routes.MERCHANT_LOADUP_SUCCESS}
-				component={MerchantLoadupSuccess}
+				name={Routes.LOAD_UP}
+				component={LoadUp}
 			/>
 			<PrimaryStack.Screen
 				name={Routes.MERCHANT_PAYOUT_PERSONAL}
