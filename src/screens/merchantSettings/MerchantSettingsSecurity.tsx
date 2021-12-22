@@ -98,7 +98,6 @@ export const MerchantSettingsSecurity = (): JSX.Element => {
 	const confirmPasswordRef = createRef<TextInput>()
 
 	useEffect(() => {
-		console.log(authorization.cashierView)
 		setIsTouchId(authorization.touchID);
 		setIsCashierView(authorization.cashierView);
 	}, [authorization]);
