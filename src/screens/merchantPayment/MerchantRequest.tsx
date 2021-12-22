@@ -12,6 +12,7 @@ import * as Routes from 'src/navigation/constants';
 import { WalletContext, UserContext } from 'src/contexts';
 import BankLinkDialog from 'src/shared/uielements/BankLinkDialog'
 import { IWallet } from '@humanity.cash/types';
+import { BusinessScanQrCodeStyle } from 'src/style';
 
 type AmountState = {
 	amount: string,
@@ -133,7 +134,10 @@ const MerchantRequest = (): JSX.Element => {
 			navigation.navigate(Routes.MERCHANT_QRCODE_SCAN, {
 				senderId: businessDwollaId, 
 				walletData: businessWalletData,
-				username: user?.business?.tag
+				username: user?.business?.tag,
+				styles: BusinessScanQrCodeStyle,
+				recieveRoute: Routes.MERCHANT_REQUEST,
+				cancelRoute: Routes.MERCHANT_DASHBOARD
 			})
 			return
 		}

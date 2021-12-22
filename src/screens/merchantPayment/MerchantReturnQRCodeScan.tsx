@@ -16,11 +16,10 @@ import { Modal, ModalHeader, BorderedInput, Button } from "src/shared/uielements
 import { BUTTON_TYPES } from 'src/constants';
 import { ITransactionRequest } from 'src/api/types';
 import { TransactionsAPI } from 'src/api';
-import { updateLoadingStatus } from 'src/store/loading/loading.actions';
 import { isQRCodeValid } from 'src/utils/validation';
 import moment from 'moment';
 import { UserContext } from 'src/contexts';
-import DataLoading from 'src/screens/loadings/DataLoading';
+import { LoadingPage } from 'src/views';
 
 type HandleScaned = {
 	type: string,
@@ -253,7 +252,7 @@ const MerchantReturnQRCodeScan = (): JSX.Element => {
 								/>
 							</View>
 						</SafeAreaView>
-						<DataLoading visible={isLoading} />
+						<LoadingPage visible={isLoading} isPayment={true} />
 					</KeyboardAvoidingView>
 				</Modal>
 			)}
