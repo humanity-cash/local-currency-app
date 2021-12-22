@@ -1,5 +1,5 @@
 import { useNavigation } from '@react-navigation/core';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { KeyboardAvoidingView, Platform, ScrollView, StyleSheet, View, SafeAreaView } from 'react-native';
 import { Text } from 'react-native-elements';
 import { BUTTON_TYPES } from 'src/constants';
@@ -8,6 +8,9 @@ import { BackBtn, BorderedInput, Button, CancelBtn, Header } from "src/shared/ui
 import { colors } from "src/theme/colors";
 import { underlineHeaderB, viewBaseB, wrappingContainerBase } from "src/theme/elements";
 import Translation from 'src/translation/en.json';
+import { UserContext, WalletContext } from 'src/contexts';
+import { TransactionsAPI } from 'src/api';
+import DataLoading from 'src/screens/loadings/DataLoading'
 
 const styles = StyleSheet.create({
 	headerText: {
@@ -46,59 +49,90 @@ const styles = StyleSheet.create({
 
 const MerchantCashoutAmount = (): JSX.Element => {
 	const navigation = useNavigation();
+    const { user } = useContext(UserContext);
+    const { businessWalletData } = useContext(WalletContext);
+    const { availableBalance } = businessWalletData;
+    const verifiedBusiness = Boolean(user?.verifiedBusiness);
+    const verifiedCustomer = Boolean(user?.verifiedCustomer);
+    const businessDwollaId = user?.business?.dwollaId;
+
 	const [amount, setAmount] = useState<string>('');
 	const [goNext, setGoNext] = useState(false);
+	const [isLoading, setIsLoading] = useState(false);
 
 	useEffect(() => {
 		setGoNext(Boolean(amount));
 	}, [amount]);
 
 	const onValueChange = (name: string, change: string) => {
+        if(Number(change) > Number(availableBalance)) return;
 		setAmount(change.replace(',', '.'));
 	};
 
-	return (
-		<KeyboardAvoidingView
-			behavior={Platform.OS == "ios" ? "padding" : "height"}
-			style={viewBaseB}>
-			<Header
-				leftComponent={<BackBtn color={colors.purple} onClick={() => navigation.goBack()} />}
-				rightComponent={<CancelBtn text={Translation.BUTTON.CLOSE} color={colors.purple} onClick={() => navigation.navigate(Routes.MERCHANT_DASHBOARD)} />}
-			/>
-			<ScrollView style={wrappingContainerBase}>
-				<View style={underlineHeaderB}>
-					<Text style={styles.headerText}>{Translation.PAYMENT.PAYOUT_SOMEONE}</Text>
-				</View>
-				<View>
-					<Text style={styles.bodyText}>{Translation.PAYMENT.PAYOUT_AMOUNT_PERSONAL}</Text>
-					<View style={styles.formLabel}>
-						<Text style={styles.labelText}>{Translation.LABEL.AMOUNT}</Text>
-						<Text style={styles.labelText}>{Translation.LABEL.MAX_BERKSHARES}</Text>
-					</View>
-					<BorderedInput
-						label="Amount"
-						name="amount"
-						keyboardType="decimal-pad"
-						placeholder="Amount"
-						placeholderTextColor={colors.greyedPurple}
-						prefix="B$"
-						style={styles.input}
-						textStyle={styles.text}
-						value={amount}
-						onChange={onValueChange}
-					/>
-				</View>
-			</ScrollView>
-			<SafeAreaView style={styles.bottomView}>
-				<Button
-					type={BUTTON_TYPES.PURPLE}
-					disabled={!goNext}
-					title={Translation.BUTTON.CONFIRM}
-					onPress={()=>navigation.navigate(Routes.MERCHANT_PAYOUT_PENDING)}
-				/>
-			</SafeAreaView>
-		</KeyboardAvoidingView>
-	);
+    const handlePayment = async () => {
+        const toUserId = user?.customer?.dwollaId;
+        if (!toUserId || !businessDwollaId) return;
+        setIsLoading(true);
+        const request = {
+            toUserId,
+            amount,
+            comment: ''
+        };
+        const response = await TransactionsAPI.transferTo(businessDwollaId, request);
+        setIsLoading(false);
+        if(response.data) {
+            navigation.navigate(Routes.MERCHANT_PAYMENT_SUCCESS);
+        } else {
+            // FIXME: ADD ERROR TOAST
+            navigation.navigate(Routes.MERCHANT_DASHBOARD);
+        }
+    }
+
+    return (
+        <KeyboardAvoidingView
+            behavior={Platform.OS == "ios" ? "padding" : "height"}
+            style={viewBaseB}>
+            <Header
+                leftComponent={<BackBtn color={colors.purple} onClick={() => navigation.goBack()} />}
+                rightComponent={<CancelBtn text={Translation.BUTTON.CLOSE} color={colors.purple} onClick={() => navigation.navigate(Routes.MERCHANT_DASHBOARD)} />}
+            />
+            <DataLoading visible={isLoading} />
+            <ScrollView style={wrappingContainerBase}>
+                <View style={underlineHeaderB}>
+                    <Text style={styles.headerText}>{Translation.PAYMENT.PAYOUT_SOMEONE}</Text>
+                </View>
+                <View>
+                    <Text style={styles.bodyText}>{Translation.PAYMENT.PAYOUT_AMOUNT_PERSONAL}</Text>
+                    <View style={styles.formLabel}>
+                        <Text style={styles.labelText}>{Translation.LABEL.AMOUNT}</Text>
+                        <Text style={styles.labelText}>{`${Translation.LABEL.MAX_BERKSHARES} ${availableBalance.toFixed(2)}`}</Text>
+                    </View>
+                    <BorderedInput
+                        label="Amount"
+                        name="amount"
+                        keyboardType="decimal-pad"
+                        placeholder="Amount"
+                        placeholderTextColor={colors.greyedPurple}
+                        prefix="B$"
+                        style={styles.input}
+                        textStyle={styles.text}
+                        value={amount}
+                        onChange={onValueChange}
+                    />
+                </View>
+            </ScrollView>
+            <SafeAreaView style={styles.bottomView}>
+                <Button
+                    type={BUTTON_TYPES.PURPLE}
+                    disabled={!goNext || !verifiedCustomer || !verifiedBusiness}
+                    title={Translation.BUTTON.CONFIRM}
+                    onPress={handlePayment}
+                />
+            </SafeAreaView>
+        </KeyboardAvoidingView>
+    );
 }
 
 export default MerchantCashoutAmount
+
+// onPress={()=> navigation.navigate(Routes.MERCHANT_PAYOUT_PENDING)}
