@@ -1,16 +1,17 @@
 import React, { useState, useEffect, useContext } from 'react';
-import { StyleSheet, View, KeyboardAvoidingView, ScrollView, Platform, SafeAreaView } from 'react-native';
+import { StyleSheet, View, KeyboardAvoidingView, Platform, SafeAreaView } from 'react-native';
 import { useNavigation } from '@react-navigation/core';
 import { Text } from 'react-native-elements';
 import { Header, Button, CancelBtn, BorderedInput, ToggleButton } from "src/shared/uielements";
 import { baseHeader, viewBase, wrappingContainerBase } from "src/theme/elements";
 import { colors } from "src/theme/colors";
-import QRCodeGen from "./QRCodeGen";
 import PaymentRequestSuccess from "./PaymentRequestSuccess";
 import Translation from 'src/translation/en.json';
 import * as Routes from 'src/navigation/constants';
 import BankLinkDialog from 'src/shared/uielements/BankLinkDialog'
-import { WalletContext } from 'src/contexts';
+import { WalletContext, UserContext } from 'src/contexts';
+import { IWallet } from '@humanity.cash/types';
+import { PaymentsModule } from 'src/modules';
 
 type AmountState = {
 	amount: string,
@@ -70,7 +71,8 @@ const PaymentRequest = (): JSX.Element => {
 		buttonTitle: ""
 	});
 
-	const { customerWalletData } = useContext(WalletContext)
+	const { user, customerDwollaId } = useContext(UserContext)
+	const { customerWalletData, updateCustomerWalletData } = useContext(WalletContext)
 	const personalFundingSource = customerWalletData?.availableFundingSource;
 	const availableBalance = customerWalletData?.availableBalance;
 
@@ -166,7 +168,7 @@ const PaymentRequest = (): JSX.Element => {
 				rightComponent={<CancelBtn text={Translation.BUTTON.CLOSE} onClick={() => navigation.navigate(Routes.DASHBOARD)} />}
 			/>
 			<View style={wrappingContainerBase}>
-				<View style={ baseHeader }>
+				<View style={baseHeader}>
 					<View style={styles.switchView}>
 						<ToggleButton
 							value={false}
@@ -205,10 +207,21 @@ const PaymentRequest = (): JSX.Element => {
 					onPress={requestAmount}
 				/>
 			</SafeAreaView>
-			{ isVisible && <QRCodeGen visible={isVisible} onSuccess={onSuccess} onClose={onClose} isOpenAmount={isOpenAmount} amount={Number(state.amount)} /> }
-			{ isRequestSuccess && <PaymentRequestSuccess visible={isRequestSuccess} onClose={onConfirm} amount={receivedAmount} /> }
+			{isVisible && <PaymentsModule.Request
+				visible={isVisible}
+				onSuccess={onSuccess}
+				styles={paymentRequestStyles}
+				onClose={onClose}
+				isOpenAmount={isOpenAmount}
+				amount={Number(state.amount)}
+				ownerName={user?.customer?.tag || ""}
+				recieverId={customerDwollaId}
+				walletData={customerWalletData}
+				updateWalletData={(walletData: IWallet) => updateCustomerWalletData((pv: any) => ({ ...pv, ...walletData }))}
+			/>}
+			{isRequestSuccess && <PaymentRequestSuccess visible={isRequestSuccess} onClose={onConfirm} amount={receivedAmount} />}
 
-			<BankLinkDialog 
+			<BankLinkDialog
 				visible={bankDialogInfo.isVisible}
 				title={bankDialogInfo.title}
 				description={bankDialogInfo.detail}
@@ -219,5 +232,44 @@ const PaymentRequest = (): JSX.Element => {
 		</KeyboardAvoidingView>
 	);
 }
+
+const paymentRequestStyles = StyleSheet.create({
+	dialog: {
+		height: 400
+	},
+	dialogWrap: {
+		position: 'relative',
+		paddingHorizontal: 10,
+		paddingTop: 70,
+		height: "100%",
+		flex: 1,
+		justifyContent: 'center',
+		alignItems: 'center'
+	},
+	amount: {
+		alignSelf: 'center',
+		marginTop: 10,
+		fontWeight: 'bold',
+		fontSize: 32,
+		lineHeight: 32,
+		paddingTop: 20
+	},
+	ownerInfo: {
+		position: 'absolute',
+		top: -60,
+		borderRadius: 40,
+		alignItems: 'center'
+	},
+	image: {
+		width: 80,
+		height: 80,
+		borderRadius: 40
+	},
+	ownerName: {
+		fontWeight: 'bold',
+		fontSize: 18,
+		paddingVertical: 10
+	}
+});
 
 export default PaymentRequest

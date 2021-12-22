@@ -16,13 +16,10 @@ import {
 } from "react-native";
 import { Drawer } from "react-native-paper";
 import { UserType } from "src/auth/types";
-import { BUTTON_TYPES } from "src/constants";
 import { AuthContext, NavigationViewContext, UserContext, WalletContext } from "src/contexts";
 import { ViewState } from "src/contexts/navigation";
 import * as Routes from "src/navigation/constants";
-import { Button, Dialog } from "src/shared/uielements";
 import { colors } from "src/theme/colors";
-import { baseHeader, dialogViewBase, wrappingContainerBase } from "src/theme/elements";
 import Translation from "src/translation/en.json";
 import CashoutAmount from "../cashout/CashoutAmount";
 import MerchantDictionary from "../merchant/MerchantDictionary";
@@ -112,13 +109,13 @@ type BankLinkDialogStateProps = {
 	title: string,
 	description: string,
 	buttoTitle: string,
-	confirmAction?: ()=>void,
-	cancelAction?: ()=>void
+	confirmAction?: () => void,
+	cancelAction?: () => void
 }
 
 const initBankDialogState: BankLinkDialogStateProps = {
-	visible: false, 
-	title: "", 
+	visible: false,
+	title: "",
 	description: "",
 	buttoTitle: ""
 }
@@ -167,12 +164,12 @@ const DrawerContent = (
 	}
 
 	const onPressScanToPay = async () => {
-		const {status} = await BarCodeScanner.requestPermissionsAsync();
-		if(status === 'granted') {
-			if(availableBalance > 0) {
+		const { status } = await BarCodeScanner.requestPermissionsAsync();
+		if (status === 'granted') {
+			if (availableBalance > 0) {
 				props.navigation.navigate(Routes.QRCODE_SCAN)
 			} else {
-				if(personalFundingSource) {
+				if (personalFundingSource) {
 					setBankDialogState({
 						visible: true,
 						title: Translation.LOAD_UP.LOAD_UP_NO_BANK_TITLE,
@@ -192,11 +189,11 @@ const DrawerContent = (
 						cancelAction: onBankDialogCancel
 					})
 				}
-			} 
+			}
 		} else {
 			setIsSetting(true)
 		}
-		
+
 	}
 
 	const customerTag = user?.customer?.tag || undefined
@@ -207,8 +204,8 @@ const DrawerContent = (
 		<View style={styles.drawerWrap}>
 			<DrawerContentScrollView {...props}>
 				<View>
-					<TouchableOpacity 
-						onPress={() => 
+					<TouchableOpacity
+						onPress={() =>
 							props.navigation.dispatch(DrawerActions.toggleDrawer())
 						}>
 						<View style={styles.closeBtnView}>
@@ -286,7 +283,7 @@ const DrawerContent = (
 							</View>
 						)}
 					</View>
-					<Text style={styles.berkAmount}>B$ {customerWalletData?.availableBalance.toFixed(2)}</Text>
+					<Text style={styles.berkAmount}>B$ {customerWalletData?.availableBalance?.toFixed(2)}</Text>
 					<Drawer.Section>
 						<DrawerItem
 							label={Translation.TABS.SCAN_TO_PAY}
@@ -298,8 +295,8 @@ const DrawerContent = (
 						/>
 						<DrawerItem
 							label={Translation.TABS.LOADUP}
-							onPress={() => customerWalletData?.availableFundingSource 
-								? props.navigation.navigate(Routes.LOAD_UP) 
+							onPress={() => customerWalletData?.availableFundingSource
+								? props.navigation.navigate(Routes.LOAD_UP)
 								: setBankDialogState({
 									visible: true,
 									title: Translation.LOAD_UP.LOAD_UP_NO_BANK_TITLE,
@@ -312,8 +309,8 @@ const DrawerContent = (
 						/>
 						<DrawerItem
 							label={Translation.TABS.CASHOUT}
-							onPress={() => customerWalletData?.availableFundingSource 
-								? props.navigation.navigate(Routes.CASHOUT_AMOUNT) 
+							onPress={() => customerWalletData?.availableFundingSource
+								? props.navigation.navigate(Routes.CASHOUT_AMOUNT)
 								: setBankDialogState({
 									visible: true,
 									title: Translation.CASH_OUT.CASH_OUT_NO_BANK_TITLE,
@@ -373,7 +370,7 @@ const DrawerContent = (
 						<Feather name="log-out" size={24} color={colors.text} />
 					)}
 					label="Sign out"
-					onPress={() => { 
+					onPress={() => {
 						signOut();
 					}}
 				/>
@@ -383,8 +380,8 @@ const DrawerContent = (
 				title={bankDialogState.title}
 				buttonTitle={bankDialogState.buttoTitle}
 				description={bankDialogState.description}
-				onConfirm={() => {bankDialogState.confirmAction && bankDialogState.confirmAction()}}
-				onCancel={() => {bankDialogState.cancelAction && bankDialogState.cancelAction()}}
+				onConfirm={() => { bankDialogState.confirmAction && bankDialogState.confirmAction() }}
+				onCancel={() => { bankDialogState.cancelAction && bankDialogState.cancelAction() }}
 			/>
 			<SettingDialog
 				visible={isSetting}
