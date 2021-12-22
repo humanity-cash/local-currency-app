@@ -88,6 +88,10 @@ const CashoutAmount = (): JSX.Element => {
 	const [isVisible, setIsVisible] = useState(false);
 
 	useEffect(() => {
+		setState({amount: "", costs: ""})
+	}, [])
+	
+	useEffect(() => {
 		setGoNext(Boolean(state.costs));
 		setExceed(+state.costs > +maxAmount)
 	}, [state]);

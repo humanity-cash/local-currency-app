@@ -167,7 +167,7 @@ const Report = (): JSX.Element => {
 	const { userType } = useContext(UserContext);
 
 	const [items, setItems] = useState([
-		'All', 'Sales','Returns', 'Cash outs', 'Other transfers'
+		'All', 'Sales','Returns', 'Load ups', 'Cash outs', 'Other transfers'
 	]);
 	const [selIndexes, setSelIndexes] = useState<boolean[]>()
 

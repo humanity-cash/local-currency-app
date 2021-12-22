@@ -97,6 +97,11 @@ const MerchantCashoutAmount = (): JSX.Element => {
 	const [maxAmount, setMaxAmount] = useState<string>("5.00")
 
 	useEffect(() => {
+		setAmount("")
+	}, [])
+
+
+	useEffect(() => {
 		setGoNext(Number(amount) > 0);
 		setExceed(+amount > +maxAmount)
 	}, [amount]);

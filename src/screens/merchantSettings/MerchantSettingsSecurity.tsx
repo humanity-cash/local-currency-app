@@ -61,6 +61,8 @@ const styles = StyleSheet.create({
 	errorText: {
 		color: colors.mistakeRed,
 		fontSize: 10,
+		alignSelf: 'flex-end',
+		lineHeight: 12
 	},
 	input: {
 		color: colors.purple,
@@ -85,6 +87,7 @@ export const MerchantSettingsSecurity = (): JSX.Element => {
 	const [isCashierView, setIsCashierView] = useState<boolean>(true);
 	const [canSave, setCanSave] = useState<boolean>(false);
 	const [isValidPassword, setIsValidPassword] = useState<boolean>(false);
+	const [isPasswordMatched, setIsPasswordMatched] = useState<boolean>(false);
 	const [state, setState] = useState<SecurityProps>({
 		password: "",
 		newPassword: "",
@@ -100,15 +103,16 @@ export const MerchantSettingsSecurity = (): JSX.Element => {
 	}, [authorization]);
 
 	useEffect(() => {
-		setIsValidPassword(state.newPassword === state.newPassowrdConfirm);
+		setIsValidPassword(state.newPassword.length < 1 || isPasswordValid(state.newPassword));
+		setIsPasswordMatched(state.newPassowrdConfirm === state.newPassword)
 	}, [state.newPassowrdConfirm, state.newPassword]);
 
 	useEffect(() => {
 		setCanSave(
 			Object.keys(state).every((key) => state[key] !== "") && 
 			state.newPassword === state.newPassowrdConfirm && 
-			isPasswordValid(state.newPassword) && 
-			isPasswordValid(state.password)
+			isValidPassword && 
+			isPasswordMatched
 		);
 	}, [state]);
 
@@ -198,7 +202,7 @@ export const MerchantSettingsSecurity = (): JSX.Element => {
 					/>
 
 					<Text style={styles.label}>{Translation.LABEL.NEW_PASSWORD}</Text>
-					<Text style={styles.label}>({Translation.LABEL.PASSWORD_REG})</Text>
+					<Text style={styles.label}>{Translation.LABEL.PASSWORD_REG}</Text>
 					<BlockInput
 						inputRef={newPasswordRef}
 						name="newPassword"
@@ -212,12 +216,12 @@ export const MerchantSettingsSecurity = (): JSX.Element => {
 							confirmPasswordRef.current?.focus()
 						}}
 					/>
+					{!isValidPassword && (
+						<Text style={styles.errorText}>{Translation.PASSWORD.NOT_MEET_REQUIREMENTS}</Text>
+					)}
 
 					<View style={styles.inlineView}>
 						<Text style={styles.label}>{Translation.LABEL.CONFIRM_NEW_PASSWORD}</Text>
-						{!isValidPassword && (
-							<Text style={styles.errorText}>REPEAT NEW PASSWORD</Text>
-						)}
 					</View>
 					<BlockInput
 						inputRef={confirmPasswordRef}
@@ -228,6 +232,9 @@ export const MerchantSettingsSecurity = (): JSX.Element => {
 						style={styles.input}
 						onChange={onValueChange}
 					/>
+					{!isPasswordMatched && (
+						<Text style={styles.errorText}>{Translation.PASSWORD.NOT_MATCHED}</Text>
+					)}
 				</View>
 			</ScrollView>
 			<View style={styles.bottomView}>

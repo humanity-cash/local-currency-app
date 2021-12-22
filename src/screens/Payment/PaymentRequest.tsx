@@ -75,6 +75,10 @@ const PaymentRequest = (): JSX.Element => {
 	const availableBalance = customerWalletData?.availableBalance;
 
 	useEffect(() => {
+		setState({amount: "", cost: ""})
+	}, [])
+	
+	useEffect(() => {
 		setGoNext(Number(state.amount) > 0);
 	}, [state]);
 

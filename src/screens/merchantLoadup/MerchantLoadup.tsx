@@ -102,6 +102,10 @@ const MerchantLoadup = (): JSX.Element => {
   const businessDwollaId = user?.business?.dwollaId;
 
   useEffect(() => {
+    setAmount("")
+  }, [])
+
+  useEffect(() => {
     setGoNext(Number(amount) > 0 && Number(amount) <= MAX_AMOUNT);
   }, [amount]);
 
