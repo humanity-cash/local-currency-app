@@ -26,6 +26,7 @@ import MerchantDashboard from "./MerchantDashboard";
 import BankLinkDialog from 'src/shared/uielements/BankLinkDialog';
 import { BarCodeScanner } from 'expo-barcode-scanner';
 import SettingDialog from 'src/shared/uielements/SettingDialog';
+import { useUserDetails } from "src/hooks";
 import { PaymentsModule } from 'src/modules';
 
 const styles = StyleSheet.create({
@@ -178,7 +179,7 @@ const DrawerContent = (props: DrawerContentComponentProps) => {
 	const { signOut, userEmail } = useContext(AuthContext);
 	const { user, updateUserType, businessDwollaId } = useContext(UserContext);
 	const { updateSelectedView } = useContext(NavigationViewContext);
-	const authorization = { cashierView: user?.verifiedBusiness };
+	const {authorization} = useUserDetails();
 	const [isExpanded, setIsExpanded] = useState<boolean>(false);
 	const [isVisible, setIsVisible] = useState<boolean>(false);
 	const [isCashierView, setIsCashierView] = useState<boolean>(false);
@@ -451,7 +452,7 @@ const DrawerContent = (props: DrawerContentComponentProps) => {
 							</View>
 						)}
 					</View>
-					<Text style={styles.berkAmount}>B$ {businessWalletData?.availableBalance.toFixed(2)}</Text>
+					<Text style={styles.berkAmount}>B$ {businessWalletData?.availableBalance?.toFixed(2)}</Text>
 					<Drawer.Section>
 						<DrawerItem
 							label={Translation.TABS.RECEIVE_PAYMENT}

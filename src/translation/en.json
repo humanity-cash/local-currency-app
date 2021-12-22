@@ -276,7 +276,7 @@
         "CONTENT": "The BerkShares community want to support the local community. Therefore, we ask you at each transaction if you are willing to make a donation. This donation will go to a local project. On this page you will find the current project and its status.",
         "INFORMATION_SHARE": "This information is shared publicly.",
         "REMOVE_BANK_ACCOUNT": "Are you sure you want to remove this bank account?",
-        "NO_BANK_ACCOUNT": "You do not have a bank account linked. Link your bank account in order to enable buying new BerkShares and/or cash out to USD.",
+        "NO_BANK_ACCOUNT": "You do not have a bank account linked. Link your bank account in order to enable funding your BerkShares wallet.",
         "BANK_ACCOUNT": "Bank account",
         "SECURITY": "Security",
         "ALLOW_TOUCH": "Allow touch ID",
