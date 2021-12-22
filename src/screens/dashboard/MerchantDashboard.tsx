@@ -206,7 +206,11 @@ const MerchantDashboard = (): JSX.Element => {
 		if(status === 'granted') {
 			if(businessFundingSource && availableBalance > 0) {
 				navigation.navigate(Routes.MERCHANT_QRCODE_SCAN,
-					{ senderId: businessDwollaId, walletData: businessWalletData })
+					{
+						senderId: businessDwollaId,
+						walletData: businessWalletData,
+						username: user?.business?.tag
+					})
 			} else {
 				navigation.navigate(Routes.MERCHANT_REQUEST)
 			}

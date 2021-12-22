@@ -239,7 +239,9 @@ const DrawerContent = (props: DrawerContentComponentProps) => {
 		if(status === 'granted') {
 			if(availableBalance > 0) {
 				props.navigation.navigate(Routes.MERCHANT_QRCODE_SCAN, {
-					senderId: businessDwollaId, walletData: businessWalletData
+					senderId: businessDwollaId, 
+					walletData: businessWalletData,
+					username: user?.business?.tag
 				})
 			} else {
 				if(businessFundingSource) {

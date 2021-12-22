@@ -131,7 +131,9 @@ const MerchantRequest = (): JSX.Element => {
 	const onPressPay = () => {
 		if (availableBalance > 0) {
 			navigation.navigate(Routes.MERCHANT_QRCODE_SCAN, {
-				senderId: businessDwollaId, walletData: businessWalletData
+				senderId: businessDwollaId, 
+				walletData: businessWalletData,
+				username: user?.business?.tag
 			})
 			return
 		}
@@ -231,6 +233,7 @@ const MerchantRequest = (): JSX.Element => {
 			{isVisible && <PaymentsModule.Request
 				visible={isVisible}
 				onSuccess={onSuccess}
+				styles={paymentRequestStyles}
 				onClose={onClose}
 				isOpenAmount={isOpenAmount}
 				amount={Number(state.amount)}
@@ -252,5 +255,50 @@ const MerchantRequest = (): JSX.Element => {
 		</KeyboardAvoidingView>
 	);
 }
+
+const paymentRequestStyles = StyleSheet.create({
+	dialog: {
+		height: 420
+	},
+	dialogBg: {
+		backgroundColor: colors.overlayPurple
+	},
+	dialogWrap: {
+		paddingHorizontal: 10,
+		paddingTop: 70,
+		height: "100%",
+		flex: 1,
+		justifyContent: 'center',
+		alignItems: 'center'
+	},
+	amount: {
+		alignSelf: 'center',
+		marginTop: 10,
+		fontWeight: 'bold',
+		fontSize: 32,
+		lineHeight: 32,
+		paddingTop: 20,
+		color: colors.purple
+	},
+	ownerInfo: {
+		position: 'absolute',
+		top: -60,
+		borderRadius: 40,
+		alignItems: 'center'
+	},
+	image: {
+		width: 80,
+		height: 80,
+		borderRadius: 40
+	},
+	ownerName: {
+		fontWeight: 'bold',
+		fontSize: 18,
+		paddingVertical: 10,
+		color: colors.purple
+	}
+});
+
+
 
 export default MerchantRequest

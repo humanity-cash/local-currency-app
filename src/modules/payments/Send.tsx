@@ -1,13 +1,12 @@
 import { useNavigation } from '@react-navigation/core';
 import { BarCodeScanner } from 'expo-barcode-scanner';
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Image, KeyboardAvoidingView, Platform, ScrollView, StyleSheet, View, SafeAreaView } from 'react-native';
 import { Text } from 'react-native-elements';
 import PaymentLoading from 'src/screens/loadings/PaymentPending';
 import { TransactionsAPI } from 'src/api';
 import { ITransactionRequest } from 'src/api/types';
 import { BUTTON_TYPES } from 'src/constants';
-import { UserContext } from 'src/contexts';
 import { useCameraPermission } from 'src/hooks';
 import * as Routes from 'src/navigation/constants';
 import { BackBtn, BorderedInput, Button, CancelBtn, Dialog, Header, Modal, ModalHeader, ToggleButton } from "src/shared/uielements";
@@ -60,12 +59,10 @@ type PaymentConfirmProps = {
 	onConfirm: (isRoundUp: boolean) => void,
 	onCancel: () => void,
 	payInfo: QRCodeEntry,
+	username: string
 }
 
 const PaymentConfirm = (props: PaymentConfirmProps) => {
-	const { user } = useContext(UserContext);
-
-	const businessName = user?.business?.tag;
 	const amountCalcedFee = props.payInfo.amount;
 	const roundUpTotalAmount = (Math.ceil(amountCalcedFee) - amountCalcedFee) ? Math.ceil(amountCalcedFee) : amountCalcedFee + 1;
 
@@ -78,7 +75,7 @@ const PaymentConfirm = (props: PaymentConfirmProps) => {
 							source={require("../../../assets/images/feed1.png")}
 							style={styles.image}
 						/>
-						<Text style={styles.ownerName}>{businessName}</Text>
+						<Text style={styles.ownerName}>{props.username}</Text>
 					</View>
 
 					<Text style={styles.headerText}>B$ {props.payInfo.amount?.toFixed(2)}</Text>
@@ -107,17 +104,18 @@ const PaymentConfirm = (props: PaymentConfirmProps) => {
 	)
 }
 
-interface SendPayment {
+interface SendPaymentInput {
 	route: {
 		params: {
 			senderId: string
 			walletData: { availableBalance: number }
+			username: string
 		}
 	}
 }
 
-const SendPayment = (props: SendPayment): JSX.Element => {
-	const { senderId, walletData } = props?.route?.params;
+const SendPayment = (props: SendPaymentInput): JSX.Element => {
+	const { senderId, walletData, username } = props?.route?.params;
 	if(!senderId || !walletData) return <div>InValid</div>
 	const navigation = useNavigation();
 	const hasPermission = useCameraPermission();
@@ -266,7 +264,7 @@ const SendPayment = (props: SendPayment): JSX.Element => {
 					/>
 				</View>
 			</View>
-			{isPaymentDialog && <PaymentConfirm visible={isPaymentDialog} payInfo={qrCodeData} onConfirm={onPayConfirm} onCancel={onClose} />}
+			{isPaymentDialog && <PaymentConfirm username={username} visible={isPaymentDialog} payInfo={qrCodeData} onConfirm={onPayConfirm} onCancel={onClose} />}
 			{isLowAmountDialog && <LowAmount visible={isLowAmountDialog} onConfirm={onLoadUp} onCancel={onClose} />}
 			{isOpenPayment && (
 				<Modal visible={isOpenPayment}>
