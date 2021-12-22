@@ -24,7 +24,7 @@ const styles = StyleSheet.create({
 	}
 });
 
-const PaymentSuccess = (): JSX.Element => {
+const PaymentFailed = (): JSX.Element => {
 	const navigation = useNavigation();
 	return (
 		<View style={viewBase}>
@@ -48,4 +48,4 @@ const PaymentSuccess = (): JSX.Element => {
 	);
 }
 
-export default PaymentSuccess
+export default PaymentFailed 

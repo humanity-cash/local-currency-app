@@ -17,7 +17,7 @@ import { BUTTON_TYPES } from "src/constants";
 import { UserContext } from "src/contexts";
 import countries from "src/mocks/countries";
 import * as Routes from "src/navigation/constants";
-import DataLoading from "src/screens/loadings/DataLoading";
+import { LoadingPage } from "src/views";
 import {
 	BackBtn,
 	BlockInput,
@@ -267,7 +267,7 @@ export const MerchantSettingsProfile = (): JSX.Element => {
 
 	return (
 		<View style={viewBaseB}>
-			<DataLoading visible={isLoading} />
+			<LoadingPage visible={isLoading} isData={true}/>
 			<Header
 				leftComponent={
 					<BackBtn

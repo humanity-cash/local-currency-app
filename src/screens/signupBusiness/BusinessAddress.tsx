@@ -7,7 +7,7 @@ import { UserAPI } from "src/api";
 import { UserType } from "src/auth/types";
 import { AuthContext, UserContext } from "src/contexts";
 import { NavigationViewContext, ViewState } from "src/contexts/navigation";
-import DataLoading from 'src/screens/loadings/DataLoading';
+import { LoadingPage } from 'src/views';
 import {
 	BackBtn,
 	BusinessAddressForm, Button,
@@ -101,7 +101,7 @@ const BusinessAddress = (): ReactElement => {
 		<KeyboardAvoidingView
 			behavior={Platform.OS == "ios" ? "padding" : "height"}
 			style={viewBaseB}>
-			<DataLoading visible={isLoading} />
+			<LoadingPage visible={isLoading} isData={true} />
 			<Header
 				leftComponent={
 					<BackBtn

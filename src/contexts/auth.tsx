@@ -13,7 +13,6 @@ import {
     AuthStatus,
     BaseResponse, ChangePasswordInput, defaultState, ForgotPassword, IAuth, SignUpInput, UserType
 } from "src/auth/types";
-import DataLoading from "src/screens/loadings/DataLoading";
 import { NavigationViewContext, ViewState } from "./navigation";
 import { UserContext } from "./user";
 
@@ -211,7 +210,6 @@ export const AuthProvider: React.FunctionComponent = ({ children }) => {
 
     return (
         <AuthContext.Provider value={state}>
-            <DataLoading visible={authStatus === AuthStatus.Loading} />
             {children}
         </AuthContext.Provider>
     );

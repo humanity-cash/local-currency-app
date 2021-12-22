@@ -5,6 +5,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import { useStore } from 'react-hookstore';
 import { ScrollView, StyleSheet, TouchableOpacity, View } from 'react-native';
 import { Image, Text } from 'react-native-elements';
+import { CustomerScanQrCodeStyle } from 'src/style';
 import { TransactionsAPI } from 'src/api';
 import { ITransaction } from 'src/api/types';
 import { BUTTON_TYPES } from 'src/constants';
@@ -12,7 +13,7 @@ import { UserContext, WalletContext } from "src/contexts";
 import { createFuseSearchInstance } from 'src/fuse';
 import { CUSTOMER_TX_FILTERS_STORE } from 'src/hook-stores';
 import * as Routes from 'src/navigation/constants';
-import DataLoading from 'src/screens/loadings/DataLoading';
+import { LoadingPage } from 'src/views';
 import PaymentRequestSuccess from 'src/screens/payment/PaymentRequestSuccess';
 import { BackBtn, Button, Dialog, Header, SearchInput } from "src/shared/uielements";
 import { colors } from "src/theme/colors";
@@ -204,7 +205,7 @@ const MyTransactions = (): JSX.Element => {
 		endDate,
 	}] = useStore<CustomerTxFilterStore>(CUSTOMER_TX_FILTERS_STORE);
 	const navigation = useNavigation();
-	const { customerDwollaId } = useContext(UserContext);
+	const { customerDwollaId, user } = useContext(UserContext);
 	const { customerWalletData } = useContext(WalletContext);
 	const [isFilterVisible, setIsFilterVisible] = useState<boolean>(false);
 	const [searchText, setSearchText] = useState<string>("");
@@ -313,7 +314,7 @@ const MyTransactions = (): JSX.Element => {
 
 	return (
 		<View style={viewBase}>
-			<DataLoading visible={isLoading}/>
+			<LoadingPage visible={isLoading} isData={true} />
 			<Header
 				leftComponent={<BackBtn text="Home" onClick={() => navigation.goBack()} />}
 			/>
@@ -352,7 +353,14 @@ const MyTransactions = (): JSX.Element => {
 				</ScrollView>
 			</View>
 
-			<TouchableOpacity onPress={()=>navigation.navigate(Routes.QRCODE_SCAN)} style={styles.scanButton}>
+			<TouchableOpacity onPress={() => navigation.navigate(Routes.QRCODE_SCAN, {
+				senderId: customerDwollaId,
+				walletData: customerWalletData,
+				username: user?.customer?.tag,
+				styles: CustomerScanQrCodeStyle,
+				recieveRoute: Routes.PAYMENT_REQUEST,
+				cancelRoute: Routes.DASHBOARD
+			})} style={styles.scanButton}>
 				<Image
 					source={require('../../../assets/images/qr_code_consumer.png')}
 					containerStyle={styles.qrIcon}
@@ -361,10 +369,11 @@ const MyTransactions = (): JSX.Element => {
 			</TouchableOpacity>
 
 			{isDetailView && <TransactionDetail visible={isDetailView} data={selectedItem} onReturn={onReturn} onClose={onClose} />}
-			{isReturnView && <ReturnQRCodeGen visible={isReturnView} onSuccess={onSuccess} onClose={onClose} transactionInfo={selectedItem} /> }
-			{isRequestSuccess && <PaymentRequestSuccess visible={isRequestSuccess} onClose={onConfirm} amount={receivedAmount} /> }
+			{isReturnView && <ReturnQRCodeGen visible={isReturnView} onSuccess={onSuccess} onClose={onClose} transactionInfo={selectedItem} />}
+			{isRequestSuccess && <PaymentRequestSuccess visible={isRequestSuccess} onClose={onConfirm} amount={receivedAmount} />}
 		</View>
 	);
 }
+
 
 export default MyTransactions

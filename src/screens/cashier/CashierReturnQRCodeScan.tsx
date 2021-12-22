@@ -17,7 +17,7 @@ import { showToast } from 'src/utils/common';
 import { BUTTON_TYPES } from 'src/constants';
 import moment from 'moment';
 import { UserContext } from 'src/contexts';
-import DataLoading from 'src/screens/loadings/DataLoading';
+import { LoadingPage } from 'src/views';
 
 type HandleScaned = {
 	type: string,
@@ -242,7 +242,7 @@ const CashierReturnQRCodeScan = (): JSX.Element => {
 								onPress={onReturn}
 							/>
 						</SafeAreaView>
-						<DataLoading visible={isLoading} />
+						<LoadingPage visible={isLoading} isPayment={true} />
 					</KeyboardAvoidingView>
 				</Modal>
 			)}

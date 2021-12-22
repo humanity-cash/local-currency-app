@@ -1,5 +1,5 @@
 import React, { ReactElement, useContext, createRef } from "react";
-import { StyleSheet, View, TextInput, Keyboard } from 'react-native';
+import { StyleSheet, View, TextInput } from 'react-native';
 import { Text } from "react-native-elements";
 import { UserContext } from "src/contexts";
 import { colors } from "src/theme/colors";

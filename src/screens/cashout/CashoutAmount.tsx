@@ -5,7 +5,7 @@ import { Text } from 'react-native-elements';
 import { TransactionsAPI } from 'src/api';
 import { UserContext, WalletContext } from 'src/contexts';
 import * as Routes from 'src/navigation/constants';
-import DataLoading from 'src/screens/loadings/DataLoading';
+import { LoadingPage } from 'src/views';
 import { BorderedInput, Button, CancelBtn, Dialog, Header } from "src/shared/uielements";
 import { colors } from "src/theme/colors";
 import { dialogViewBase, underlineHeader, viewBase, wrappingContainerBase } from "src/theme/elements";
@@ -141,7 +141,7 @@ const CashoutAmount = (): JSX.Element => {
 		<KeyboardAvoidingView
 			behavior={Platform.OS == "ios" ? "padding" : "height"}
 			style={viewBase}>
-			<DataLoading visible={isLoading} />
+			<LoadingPage visible={isLoading} isPayment={true} />
 			<Header
 				rightComponent={<CancelBtn text={"Close"} onClick={() => navigation.goBack()} />}
 			/>

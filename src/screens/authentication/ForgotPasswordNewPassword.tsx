@@ -9,7 +9,7 @@ import { colors } from "src/theme/colors";
 import { baseHeader, viewBase, wrappingContainerBase } from "src/theme/elements";
 import { IMap } from "src/utils/types";
 import Translation from 'src/translation/en.json';
-import DataLoading from 'src/screens/loadings/DataLoading';
+import { LoadingPage } from 'src/views';
 import SecurityEyeButton from 'src/shared/uielements/SecurityEyeButton';
 
 interface PasswordForm extends IMap {
@@ -101,7 +101,7 @@ const ForgotPasswordNewPassword = (): React.ReactElement => {
 			behavior={Platform.OS == "ios" ? "padding" : "height"}
 			style={viewBase}>
 
-			<DataLoading visible={isLoading} />
+			<LoadingPage visible={isLoading} isData={true} />
 			<Header
 				leftComponent={<BackBtn onClick={() => navigation.goBack()} />}
 				rightComponent={

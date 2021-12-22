@@ -3,7 +3,7 @@ import { BarCodeScanner } from 'expo-barcode-scanner';
 import React, { useEffect, useState } from 'react';
 import { Image, KeyboardAvoidingView, Platform, ScrollView, StyleSheet, View, SafeAreaView } from 'react-native';
 import { Text } from 'react-native-elements';
-import PaymentLoading from 'src/screens/loadings/PaymentPending';
+import { LoadingPage } from 'src/views';
 import { TransactionsAPI } from 'src/api';
 import { ITransactionRequest } from 'src/api/types';
 import { BUTTON_TYPES } from 'src/constants';
@@ -25,7 +25,8 @@ type HandleScaned = {
 type LowAmountProps = {
 	visible: boolean,
 	onConfirm: () => void,
-	onCancel: () => void
+	onCancel: () => void,
+	styles: any
 }
 
 const LowAmount = (props: LowAmountProps) => {
@@ -35,10 +36,10 @@ const LowAmount = (props: LowAmountProps) => {
 			<View style={dialogViewBase}>
 				<View>
 					<View style={baseHeader}>
-						<Text style={styles.headerText}> Whoooops. You cannot the payment. </Text>
+						<Text style={props.styles.headerText}> Whoooops. You cannot the payment. </Text>
 					</View>
-					<View style={styles.view}>
-						<Text style={styles.detailText}>You have too little funds available. Please load up your balance first.</Text>
+					<View style={props.styles.view}>
+						<Text style={props.styles.detailText}>You have too little funds available. Please load up your balance first.</Text>
 					</View>
 				</View>
 
@@ -60,9 +61,11 @@ type PaymentConfirmProps = {
 	onCancel: () => void,
 	payInfo: QRCodeEntry,
 	username: string
+	styles: any
 }
 
 const PaymentConfirm = (props: PaymentConfirmProps) => {
+	const { styles } = props
 	const amountCalcedFee = props.payInfo.amount;
 	const roundUpTotalAmount = (Math.ceil(amountCalcedFee) - amountCalcedFee) ? Math.ceil(amountCalcedFee) : amountCalcedFee + 1;
 
@@ -110,13 +113,16 @@ interface SendPaymentInput {
 			senderId: string
 			walletData: { availableBalance: number }
 			username: string
+			styles: any
+			recieveRoute: string
+			cancelRoute: string
 		}
 	}
 }
 
 const SendPayment = (props: SendPaymentInput): JSX.Element => {
-	const { senderId, walletData, username } = props?.route?.params;
-	if(!senderId || !walletData) return <div>InValid</div>
+	const { senderId, walletData, username, styles, recieveRoute, cancelRoute } = props?.route?.params;
+	if (!senderId || !walletData) return <div>InValid</div>
 	const navigation = useNavigation();
 	const hasPermission = useCameraPermission();
 	const [isScanned, setIsScanned] = useState<boolean>(false);
@@ -180,20 +186,21 @@ const SendPayment = (props: SendPaymentInput): JSX.Element => {
 			const response = await TransactionsAPI.transferTo(senderId, request);
 			cleanUpState();
 			if (response.data) {
-				navigation.navigate(Routes.MERCHANT_PAYMENT_SUCCESS);
+				navigation.navigate(Routes.PAYMENT_SUCCESS);
 			} else {
 				showToast(ToastType.ERROR, "Failed", "Whooops, something went wrong.");
-				navigation.navigate(Routes.MERCHANT_DASHBOARD);
+				navigation.navigate(Routes.PAYMENT_FAILED);
 			}
 		} else {
-			showToast(ToastType.ERROR, "Failed", "Whooops, something went wrong.");
+			console.log('NO SENDER ID!')
 		}
 		setIsLoading(false)
 	};
 
 	const onLoadUp = () => {
 		setIsLowAmountDialog(false);
-		navigation.navigate(Routes.MERCHANT_LOADUP);
+		navigation.navigate(Routes.LOAD_UP,
+			{ userId: senderId });
 	}
 
 	const handleOpenPay = async () => {
@@ -212,7 +219,7 @@ const SendPayment = (props: SendPaymentInput): JSX.Element => {
 			setIsLoading(true)
 			const response = await TransactionsAPI.transferTo(senderId, request);
 			if (response.data) {
-				navigation.navigate(Routes.MERCHANT_PAYMENT_SUCCESS);
+				navigation.navigate(Routes.PAYMENT_SUCCESS);
 			} else {
 				showToast(ToastType.ERROR, "Whooops, something went wrong.", "Connection failed");
 			}
@@ -233,12 +240,12 @@ const SendPayment = (props: SendPaymentInput): JSX.Element => {
 
 	const onClose = () => {
 		cleanUpState();
-		navigation.navigate(Routes.MERCHANT_DASHBOARD);
+		navigation.navigate(cancelRoute);
 	};
 
 	return (
 		<View style={viewBase}>
-			<PaymentLoading visible={isLoading} />
+			<LoadingPage visible={isLoading} isPayment={true} />
 			<View style={styles.container}>
 				{
 					(!isPaymentDialog && !isOpenPayment && !isLowAmountDialog) &&
@@ -250,12 +257,12 @@ const SendPayment = (props: SendPaymentInput): JSX.Element => {
 			</View>
 			<View style={styles.toggleView}>
 				<Header
-					rightComponent={<CancelBtn text={Translation.BUTTON.CLOSE} color={colors.white} onClick={() => navigation.navigate(Routes.MERCHANT_DASHBOARD)} />}
+					rightComponent={<CancelBtn text={Translation.BUTTON.CLOSE} color={colors.white} onClick={() => navigation.navigate(cancelRoute)} />}
 				/>
 				<View style={styles.switchView}>
 					<ToggleButton
 						value={true}
-						onChange={() => navigation.navigate(Routes.MERCHANT_REQUEST)}
+						onChange={() => navigation.navigate(recieveRoute)}
 						activeText="Pay"
 						inActiveText="Receive"
 						style={styles.switch}
@@ -264,8 +271,8 @@ const SendPayment = (props: SendPaymentInput): JSX.Element => {
 					/>
 				</View>
 			</View>
-			{isPaymentDialog && <PaymentConfirm username={username} visible={isPaymentDialog} payInfo={qrCodeData} onConfirm={onPayConfirm} onCancel={onClose} />}
-			{isLowAmountDialog && <LowAmount visible={isLowAmountDialog} onConfirm={onLoadUp} onCancel={onClose} />}
+			{isPaymentDialog && <PaymentConfirm styles={styles} username={username} visible={isPaymentDialog} payInfo={qrCodeData} onConfirm={onPayConfirm} onCancel={onClose} />}
+			{isLowAmountDialog && <LowAmount styles={styles} visible={isLowAmountDialog} onConfirm={onLoadUp} onCancel={onClose} />}
 			{isOpenPayment && (
 				<Modal visible={isOpenPayment}>
 					<KeyboardAvoidingView
@@ -310,116 +317,5 @@ const SendPayment = (props: SendPaymentInput): JSX.Element => {
 		</View>
 	);
 }
-
-const styles = StyleSheet.create({
-	container: {
-		flex: 1,
-		flexDirection: 'column',
-		justifyContent: 'center',
-	},
-	toggleView: {
-		position: 'absolute',
-		top: 0,
-		left: 0,
-		width: '100%',
-		height: 200,
-		backgroundColor: 'rgba(0,0,0,0.8)'
-	},
-	dialog: {
-		height: 450
-	},
-	dialogBg: {
-		backgroundColor: colors.overlayPurple
-	},
-	dialogWrap: {
-		position: 'relative',
-		paddingHorizontal: 10,
-		paddingTop: 70,
-		height: "100%",
-		flex: 1,
-		justifyContent: 'center',
-		alignItems: 'center'
-	},
-	ownerInfo: {
-		position: 'absolute',
-		top: -60,
-		borderRadius: 40,
-		alignItems: 'center'
-	},
-	image: {
-		width: 80,
-		height: 80,
-		borderRadius: 40
-	},
-	ownerName: {
-		fontWeight: 'bold',
-		fontSize: 18,
-		paddingVertical: 10,
-		color: colors.purple
-	},
-	headerText: {
-		marginTop: 10,
-		fontWeight: 'bold',
-		fontSize: 32,
-		lineHeight: 32,
-		paddingTop: 20,
-		color: colors.purple
-	},
-	view: {
-		paddingVertical: 10,
-		alignItems: 'center'
-	},
-	transparentBtn: {
-		backgroundColor: colors.white,
-		color: colors.purple,
-		borderWidth: 1,
-		marginTop: 20,
-		marginBottom: 10,
-		borderColor: colors.purple
-	},
-	detailText: {
-		fontSize: 14,
-		color: colors.purple,
-		textAlign: 'center'
-	},
-	switchView: {
-		flex: 1,
-		justifyContent: 'center',
-		alignItems: 'center'
-	},
-	roundBtn: {
-		marginBottom: 10,
-		borderWidth: 1,
-		borderColor: colors.purple
-	},
-	description: {
-		color: colors.bodyText,
-		fontSize: 10,
-		textAlign: 'center',
-		marginTop: 10
-	},
-	switch: {
-		borderColor: colors.purple,
-	},
-	switchText: {
-		color: colors.purple
-	},
-	toggleBg: {
-		backgroundColor: colors.overlayPurple
-	},
-	label: {
-		color: colors.bodyText,
-		fontSize: 12,
-		paddingTop: 10
-	},
-	input: {
-		backgroundColor: colors.white,
-		color: colors.purple
-	},
-	bottomView: {
-		marginHorizontal: 20,
-		marginBottom: 45
-	}
-});
 
 export default SendPayment 

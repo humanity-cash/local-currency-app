@@ -7,7 +7,7 @@ import { ForgotPassword } from "src/auth/types";
 import { BackBtn, BlockInput, Button, CancelBtn, Header } from "src/shared/uielements";
 import { baseHeader, viewBase } from "src/theme/elements";
 import { isEmailValid } from "src/utils/validation";
-import DataLoading from 'src/screens/loadings/DataLoading';
+import { LoadingPage } from 'src/views';
 
 const styles = StyleSheet.create({
   container: { 
@@ -50,7 +50,7 @@ const ForgotPasswordEmail = (): React.ReactElement => {
 	<KeyboardAvoidingView
 		behavior={Platform.OS == "ios" ? "padding" : "height"}
 		style={viewBase}>
-		<DataLoading visible={isLoading} />
+			<LoadingPage visible={isLoading} isData={true} />
 		<Header
 			leftComponent={<BackBtn onClick={() => navigation.goBack()} />}
 			rightComponent={

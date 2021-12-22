@@ -12,6 +12,7 @@ import BankLinkDialog from 'src/shared/uielements/BankLinkDialog'
 import { WalletContext, UserContext } from 'src/contexts';
 import { IWallet } from '@humanity.cash/types';
 import { PaymentsModule } from 'src/modules';
+import { CustomerScanQrCodeStyle } from 'src/style';
 
 type AmountState = {
 	amount: string,
@@ -120,7 +121,14 @@ const PaymentRequest = (): JSX.Element => {
 
 	const onPressPay = () => {
 		if (availableBalance > 0) {
-			navigation.navigate(Routes.QRCODE_SCAN)
+			navigation.navigate(Routes.QRCODE_SCAN, {
+				senderId: customerDwollaId,
+				walletData: customerWalletData,
+				username: user?.customer?.tag,
+				styles: CustomerScanQrCodeStyle,
+				recieveRoute: Routes.PAYMENT_REQUEST,
+				cancelRoute: Routes.DASHBOARD
+			})
 			return
 		}
 
@@ -147,7 +155,7 @@ const PaymentRequest = (): JSX.Element => {
 		onBankDialogCancel()
 
 		if(personalFundingSource) {
-			navigation.navigate(Routes.LOAD_UP);
+			navigation.navigate(Routes.LOAD_UP, { userId: customerDwollaId });
 		} else {
 			navigation.navigate(Routes.SELECT_BANK);
 		}
