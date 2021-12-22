@@ -7,7 +7,6 @@ import { NavigationProvider } from 'src/contexts';
 import { UserProvider, AuthProvider, WalletProvider, EventsProvider } from './contexts';
 import useCachedResources from "./hooks/useCachedResources";
 import { MainNavigationStack } from './navigation/MainNavigationStack';
-import LoadingPage from './screens/loadings/LoadingPage';
 import store from './store';
 import { theme } from "./theme/theme";
 
@@ -26,7 +25,6 @@ export default function App(): ReactElement | null {
 							<WalletProvider>
 								<ThemeProvider theme={theme}>
 									<MainNavigationStack />
-									<LoadingPage />
 									<Toast ref={(ref) => Toast.setRef(ref)} />
 								</ThemeProvider>
 							</WalletProvider>
