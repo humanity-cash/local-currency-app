@@ -234,7 +234,7 @@ const MerchantReturnQRCodeScan = (): JSX.Element => {
 									keyboardType="decimal-pad"
 									placeholder="Amount"
 									placeholderTextColor={colors.greyedPurple}
-									prefix="B$1"
+									prefix="B$"
 									style={styles.input}
 									textStyle={styles.text}
 									value={amount}
