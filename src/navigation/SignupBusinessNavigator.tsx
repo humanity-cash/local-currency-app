@@ -1,12 +1,12 @@
 import { createStackNavigator } from "@react-navigation/stack";
 import React, { ReactElement } from "react";
-import BusinessProfile from "src/screens/signupBusiness/BusinessProfile";
-import BusinessDetail from "src/screens/signupBusiness/BusinessDetail";
-import BusinessOwnerDetail from "src/screens/signupBusiness/BusinessOwnerDetail";
-import BusinessOwnerAddress from "src/screens/signupBusiness/BusinessOwnerAddress";
-import BusinessInfo from "src/screens/signupBusiness/BusinessInfo";
-import BusinessAddress from "src/screens/signupBusiness/BusinessAddress";
-import BusinessWelcome from "src/screens/signupBusiness/BusinessWelcome";
+import BusinessProfile from "src/screens/business/signup/BusinessProfile";
+import BusinessDetail from "src/screens/business/signup/BusinessDetail";
+import BusinessOwnerDetail from "src/screens/business/signup/BusinessOwnerDetail";
+import BusinessOwnerAddress from "src/screens/business/signup/BusinessOwnerAddress";
+import BusinessInfo from "src/screens/business/signup/BusinessInfo";
+import BusinessAddress from "src/screens/business/signup/BusinessAddress";
+import BusinessWelcome from "src/screens/business/signup/BusinessWelcome";
 
 const SignupBusinessStack = createStackNavigator()
 function SignupBusinessScreen(): ReactElement {
