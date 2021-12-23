@@ -1,11 +1,13 @@
 import { useNavigation } from '@react-navigation/native';
-import React, { ReactElement } from 'react';
+import React, { ReactElement, useContext } from 'react';
 import { StyleSheet, View, ScrollView, SafeAreaView } from 'react-native';
 import { Text } from 'react-native-elements';
 import { Header, Button, CancelBtn } from "src/shared/uielements";
 import { baseHeader, modalViewBase, wrappingContainerBase } from "src/theme/elements";
 import Translation from 'src/translation/en.json';
 import * as Routes from 'src/navigation/constants';
+import { UserContext } from 'src/contexts';
+import { UserType } from 'src/auth/types';
 
 type RedemptionInProgressProps = {
 	navigation?: any,
@@ -25,14 +27,17 @@ const styles = StyleSheet.create({
 });
 
 const RedemptionInProgressView = (props: RedemptionInProgressProps) => {
+	const { userType } = useContext(UserContext);
+	const homeRoute = userType === UserType.Business ? Routes.MERCHANT_DASHBOARD : Routes.DASHBOARD;
 
 	return (
 		<View style={modalViewBase}>
 			<Header
-				rightComponent={<CancelBtn text={Translation.BUTTON.CLOSE} onClick={() => props.navigation.navigate(Routes.DASHBOARD)} />}
+				rightComponent={<CancelBtn text={Translation.BUTTON.CLOSE} onClick={() =>
+					props.navigation.navigate(homeRoute)} />}
 			/>
 			<ScrollView style={wrappingContainerBase}>
-				<View style={ baseHeader }>
+				<View style={baseHeader}>
 					<Text style={styles.headerText}>{Translation.PAYMENT.REDEMPTION_PROCESS}</Text>
 				</View>
 				<View>
@@ -43,7 +48,7 @@ const RedemptionInProgressView = (props: RedemptionInProgressProps) => {
 				<Button
 					type="darkGreen"
 					title={Translation.BUTTON.GO_BACK_HOME}
-					onPress={() => props.navigation.navigate(Routes.DASHBOARD)}
+					onPress={() => props.navigation.navigate(homeRoute)}
 				/>
 			</SafeAreaView>
 		</View>
@@ -51,7 +56,7 @@ const RedemptionInProgressView = (props: RedemptionInProgressProps) => {
 }
 
 
-const RedemptionInProgress = (props:RedemptionInProgressProps): ReactElement => {
+const RedemptionInProgress = (props: RedemptionInProgressProps): ReactElement => {
 	const navigation = useNavigation();
 	return <RedemptionInProgressView {...props} navigation={navigation} />;
 }

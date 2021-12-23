@@ -18,7 +18,6 @@ import CashierTransactions from "src/screens/cashier/CashierTransactions";
 import CashierDashboard from "src/screens/dashboard/CashierDashboard";
 import MerchantTabs from "src/screens/dashboard/MerchantTabs";
 import Tabs from "src/screens/dashboard/Tabs";
-import MerchantCashoutPassword from "src/screens/merchantCashout/MerchantCashoutPassword";
 import MerchantRedemptionInProgress from "src/screens/merchantCashout/MerchantRedemptionInProgress";
 import MerchantReturn from "src/screens/merchantPayment/MerchantReturn";
 import MerchantPayoutPending from "src/screens/merchantPayout/MerchantPayoutPending";
@@ -257,6 +256,10 @@ export const BusinessUserStack = ({ isVerifiedCustomer }: { isVerifiedCustomer: 
 				component={MerchantReturn}
 			/>
 			<PrimaryStack.Screen
+				name={Routes.CASHOUT}
+				component={CashoutNavigator}
+			/>
+			<PrimaryStack.Screen
 				name={Routes.LOADUP_SUCCESS}
 				component={LoadUpSuccess}
 			/>
@@ -283,10 +286,6 @@ export const BusinessUserStack = ({ isVerifiedCustomer }: { isVerifiedCustomer: 
 			<PrimaryStack.Screen
 				name={Routes.MERCHANT_PAYOUT_QR_SCAN}
 				component={PaymentsModule.SendFixedAmount}
-			/>
-			<PrimaryStack.Screen
-				name={Routes.MERCHANT_CASHOUT_PASSWORD}
-				component={MerchantCashoutPassword}
 			/>
 			<PrimaryStack.Screen
 				name={Routes.MERCHANT_REDEMPTION_IN_PROGRESS}

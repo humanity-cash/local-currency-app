@@ -33,7 +33,7 @@ import { BarCodeScanner } from 'expo-barcode-scanner';
 import SettingDialog from 'src/shared/uielements/SettingDialog';
 import BankLinkDialog from 'src/shared/uielements/BankLinkDialog';
 import { PaymentsModule } from "src/modules";
-import { CustomerLoadUp, CustomerScanQrCodeStyle } from "src/style";
+import { CustomerScanQrCodeStyle } from "src/style";
 
 const styles = StyleSheet.create({
 	headerText: {
@@ -318,16 +318,19 @@ const DrawerContent = (
 						/>
 						<DrawerItem
 							label={Translation.TABS.CASHOUT}
-							onPress={() => customerWalletData?.availableFundingSource
-								? props.navigation.navigate(Routes.CASHOUT_AMOUNT)
-								: setBankDialogState({
-									visible: true,
-									title: Translation.CASH_OUT.CASH_OUT_NO_BANK_TITLE,
-									description: Translation.CASH_OUT.CASH_OUT_NO_BANK_DETAIL,
-									buttoTitle: Translation.BUTTON.LINK_PERSONAL_BANK,
-									confirmAction: onBankDialogConfirm,
-									cancelAction: onBankDialogCancel
-								})
+							onPress={() => {
+								customerWalletData?.availableFundingSource
+									? props.navigation.navigate(Routes.CASHOUT_AMOUNT,
+										{ userId: customerDwollaId, walletData: customerWalletData })
+									: setBankDialogState({
+										visible: true,
+										title: Translation.CASH_OUT.CASH_OUT_NO_BANK_TITLE,
+										description: Translation.CASH_OUT.CASH_OUT_NO_BANK_DETAIL,
+										buttoTitle: Translation.BUTTON.LINK_PERSONAL_BANK,
+										confirmAction: onBankDialogConfirm,
+										cancelAction: onBankDialogCancel
+									})
+							}
 							}
 						/>
 					</Drawer.Section>
