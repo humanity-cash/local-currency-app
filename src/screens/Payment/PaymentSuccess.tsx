@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { StyleSheet, View, Image, SafeAreaView } from 'react-native';
 import { Text } from 'react-native-elements';
 import { Header, Button } from "src/shared/uielements";
@@ -8,6 +8,8 @@ import * as Routes from 'src/navigation/constants';
 import { useNavigation } from '@react-navigation/core';
 import { BUTTON_TYPES } from 'src/constants';
 import { colors } from "src/theme/colors";
+import { UserContext } from 'src/contexts';
+import { UserType } from 'src/auth/types';
 
 const styles = StyleSheet.create({
 	headerText: {
@@ -32,6 +34,9 @@ const styles = StyleSheet.create({
 
 const PaymentSuccess = (): JSX.Element => {
 	const navigation = useNavigation();
+	const { userType } = useContext(UserContext);
+	const homeRoute = userType === UserType.Business ? Routes.MERCHANT_DASHBOARD : Routes.DASHBOARD;
+	const buttonType = userType === UserType.Business ? BUTTON_TYPES.PURPLE : BUTTON_TYPES.DARK_GREEN;
 
 	return (
 		<View style={viewBase}>
@@ -51,9 +56,9 @@ const PaymentSuccess = (): JSX.Element => {
 			</View>
 			<SafeAreaView style={styles.bottomView}>
 				<Button
-					type={BUTTON_TYPES.DARK_GREEN}
+					type={buttonType}
 					title={Translation.BUTTON.CLOSE}
-					onPress={() => navigation.navigate(Routes.DASHBOARD)}
+					onPress={() => navigation.navigate(homeRoute)}
 				/>
 			</SafeAreaView>
 		</View>
