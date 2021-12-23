@@ -60,7 +60,6 @@ const styles = StyleSheet.create({
 });
 
 export const MerchantSettingsHelpAndContact = (): JSX.Element => {
-
 	const [searchText, setSearchText] = useState<string>("");
 	const [isContacted, setIsContacted] = useState<boolean>(false);
 	const [faqData, setFaqData] = useState<AccordionEntry[]>([]);
