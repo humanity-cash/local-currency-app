@@ -10,7 +10,7 @@ import { AuthContext, NavigationViewContext, UserContext, WalletContext } from '
 import { ViewState } from "src/contexts/navigation";
 import { useBusinessWallet } from 'src/hooks';
 import * as Routes from 'src/navigation/constants';
-import MerchantCashoutAmount from "src/screens/merchantCashout/MerchantCashoutAmount";
+import CashoutAmount from "src/screens/cashout/CashoutAmount";
 import MerchantPayoutSelection from 'src/screens/merchantPayout/MerchantPayoutSelection';
 import MerchantSettings from "src/screens/merchantSettings/MerchantSettings";
 import MerchantSettingsHelpAndContact from 'src/screens/merchantSettings/MerchantSettingsHelpAndContact';
@@ -351,10 +351,13 @@ const DrawerContent = (props: DrawerContentComponentProps) => {
 	}
 
 	const onPressCashout = async () => {
-		const {status} = await BarCodeScanner.requestPermissionsAsync();
-		if(status === 'granted') {
-			if(availableBalance > 0) {
-				props.navigation.navigate(Routes.MERCHANT_CASHOUT_AMOUNT)
+		const { status } = await BarCodeScanner.requestPermissionsAsync();
+		if (status === 'granted') {
+			if (availableBalance > 0) {
+				props.navigation.navigate(Routes.MERCHANT_CASHOUT_AMOUNT, {
+					userId: businessDwollaId,
+					walletData: businessWalletData
+				})
 			} else {
 				if(businessFundingSource) {
 					setBankDialogState({
@@ -564,7 +567,7 @@ const MerchantTabs: React.FC = () => {
 			<DrawerNav.Screen name={Routes.MERCHANT_REQUEST} component={MerchantRequest} />
 			<DrawerNav.Screen name={Routes.MERCHANT_QRCODE_SCAN} component={PaymentsModule.Send} />
 			<DrawerNav.Screen name={Routes.MERCHANT_RETURN_QRCODE_SCAN} component={MerchantReturnQRCodeScan} />
-			<DrawerNav.Screen name={Routes.MERCHANT_CASHOUT_AMOUNT} component={MerchantCashoutAmount} />
+			<DrawerNav.Screen name={Routes.MERCHANT_CASHOUT_AMOUNT} component={CashoutAmount} />
 			<DrawerNav.Screen name={Routes.MERCHANT_LOADUP} component={LoadUp} />
 			<DrawerNav.Screen name={Routes.MERCHANT_PAYOUT_SELECTION} component={MerchantPayoutSelection} />
 			<DrawerNav.Screen name={Routes.REPORT} component={Report} />

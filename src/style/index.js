@@ -343,3 +343,126 @@ export const BusinessLoadUp = StyleSheet.create({
 		marginBottom: 20
 	},
 });
+
+
+export const CustomerCashOut = StyleSheet.create({
+	headerText: {
+		fontSize: 32,
+		fontWeight: '400',
+		lineHeight: 40
+	},
+	formLabel: {
+		flexDirection: 'row',
+		justifyContent: 'space-between',
+		marginTop: 20
+	},
+	labelText: {
+		marginTop: 5,
+		color: colors.text,
+		fontSize: 12
+	},
+	resultView: {
+		flexDirection: 'row',
+		justifyContent: 'space-between',
+		paddingTop: 20,
+		paddingLeft: 20,
+		paddingRight: 20
+	},
+	resultText: {
+		fontSize: 16,
+		lineHeight: 20,
+	},
+	bottomView: {
+		marginHorizontal: 20,
+		marginBottom: 20
+	},
+	dialogWrap: {
+		paddingHorizontal: 10,
+		height: "100%",
+		flex: 1,
+	},
+	dialogHeader: {
+		fontSize: 30,
+		lineHeight: 32,
+		marginTop: 20,
+		marginBottom: 10,
+	},
+	errorBalance: {
+		color: colors.mistakeRed,
+		fontSize: 10,
+		lineHeight: 10
+	},
+	dialogBottom: {
+		paddingTop: 20,
+	}
+});
+
+export const BusinessCashOut = StyleSheet.create({
+	headerText: {
+		fontSize: 32,
+		fontWeight: '400',
+		lineHeight: 40,
+		color: colors.purple
+	},
+	formLabel: {
+		flexDirection: 'row',
+		justifyContent: 'space-between',
+		marginTop: 20
+	},
+	bodyText: {
+		marginTop: 5,
+		color: colors.bodyText,
+		fontSize: 16
+	},
+	errorBalance: {
+		color: colors.mistakeRed,
+		fontSize: 10,
+		lineHeight: 10
+	},
+	labelText: {
+		marginTop: 5,
+		color: colors.bodyText,
+		fontSize: 12
+	},
+	input: {
+		backgroundColor: colors.white,
+		color: colors.purple
+	},
+	text: {
+		color: colors.purple
+	},
+	resultView: {
+		flexDirection: 'row',
+		justifyContent: 'space-between',
+		paddingTop: 20,
+		paddingLeft: 20,
+		paddingRight: 20
+	},
+	resultText: {
+		fontSize: 16,
+		lineHeight: 20,
+		color: colors.purple
+	},
+	bottomView: {
+		marginHorizontal: 20,
+		marginBottom: 20
+	},
+	dialogBg: {
+		backgroundColor: colors.overlayPurple
+	},
+	dialogWrap: {
+		paddingHorizontal: 10,
+		height: "100%",
+		flex: 1,
+	},
+	dialogHeader: {
+		fontSize: 30,
+		lineHeight: 32,
+		marginTop: 20,
+		marginBottom: 10,
+		color: colors.purple
+	},
+	dialogBottom: {
+		paddingTop: 20,
+	}
+});
