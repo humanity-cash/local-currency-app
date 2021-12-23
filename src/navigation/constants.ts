@@ -43,7 +43,6 @@ export const MERCHANT_QRCODE_SCAN = "MerchantQRCodeScan";
 export const MERCHANT_BANK_ACCOUNT = "SelectMerchantBank";
 export const SELECT_MERCHANT_BANK_ACCOUNT = "SelectMerchantBankAccount";
 export const LOGIN_MERCHANT_BANK = "LoginToMerchantBank";
-export const MERCHANT_CASHOUT_PASSWORD = "MerchantCashoutPassword";
 export const MERCHANT_REDEMPTION_IN_PROGRESS = "MerchantRedemptionInProgress";
 export const MERCHANT_LOADUP = "MerchantLoadup";
 export const MERCHANT_LOADUP_PENDING = "MerchantLoadupPending";

@@ -45,13 +45,22 @@ export const getBlockchainTransactions = async (userId: UserId): Promise<MiniTra
 };
 
 export const deposit = async (userId: UserId, request: IDepositRequest): Promise<AxiosPromiseResponse> => {
-  const response = await postRequest(`/users/${userId}/deposit`, request);
-  return response;
+  try {
+    const response = await postRequest(`/users/${userId}/deposit`, request);
+    return response;
+  } catch (error) {
+    return {} as AxiosPromiseResponse
+  }
 };
 
 export const withdraw = async (userId: UserId, request: IWithdrawalRequest): Promise<AxiosPromiseResponse> => {
-  const response = await postRequest(`/users/${userId}/withdraw`, request);
-  return response;
+  try {
+    const response = await postRequest(`/users/${userId}/withdraw`, request);
+    return response;
+  } catch (error) {
+    // console.log(error?.response?.data?.message)
+    return {} as AxiosPromiseResponse
+  }
 };
 
 export const transferTo = async (userId: UserId, request: ITransactionRequest): Promise<AxiosPromiseResponse> => {
