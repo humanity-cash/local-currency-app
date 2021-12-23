@@ -28,6 +28,7 @@ import { BarCodeScanner } from 'expo-barcode-scanner';
 import SettingDialog from 'src/shared/uielements/SettingDialog';
 import { useUserDetails } from "src/hooks";
 import { PaymentsModule } from 'src/modules';
+import { prefixCustomerName } from '../../utils/common';
 
 const styles = StyleSheet.create({
 	headerText: {
@@ -429,7 +430,7 @@ const DrawerContent = (props: DrawerContentComponentProps) => {
 												/>
 											</View>
 											<View style={styles.usernameView}>
-												<Text>@{userTag}</Text>
+												<Text>{prefixCustomerName(userTag)}</Text>
 											</View>
 										</View>
 									</TouchableWithoutFeedback>

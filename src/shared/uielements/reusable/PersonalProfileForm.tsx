@@ -6,6 +6,7 @@ import { UserContext } from "src/contexts";
 import { useMediaLibraryPermission } from 'src/hooks';
 import { colors } from "src/theme/colors";
 import BlockInput from "../BlockInput";
+import { prefixCustomerName } from '../../../utils/common';
 
 const styles = StyleSheet.create({
 	container: {
@@ -110,7 +111,7 @@ const PersonalProfileForm = (): ReactElement => {
 			<BlockInput
 				name="tag"
 				placeholder="@username"
-				value={tag}
+				value={prefixCustomerName(tag ?? "")}
 				onChange={onValueChange}
 			/>
 		</View>
