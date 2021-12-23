@@ -14,6 +14,7 @@ import Translation from 'src/translation/en.json';
 import { showToast } from 'src/utils/common';
 import { isSuccessResponse } from 'src/utils/http';
 import { ToastType } from 'src/utils/types';
+import { prefixCustomerName } from '../../utils/common';
 
 const styles = StyleSheet.create({
 	container: {
@@ -131,7 +132,7 @@ export const SettingsPersonalDetails = (): JSX.Element => {
 					<BlockInput
 						name='username'
 						placeholder='@username'
-						value={state.username}
+						value={prefixCustomerName(state.username)}
 						onChange={onValueChange}
 					/>
 				</View>

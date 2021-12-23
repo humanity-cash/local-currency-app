@@ -8,6 +8,7 @@ import { Dialog } from "src/shared/uielements";
 import { colors } from "src/theme/colors";
 import { dialogViewBase } from "src/theme/elements";
 import { MiniTransaction, PaymentMode, QRCodeEntry, SECURITY_ID } from "src/utils/types";
+import { prefixCustomerName } from '../../utils/common';
 
 const styles = StyleSheet.create({
     dialog: {
@@ -114,7 +115,7 @@ const ReturnQRCodeGen = (props: ReturnQRCodeGenProps): JSX.Element => {
                             source={require("../../../assets/images/feed1.png")}
                             style={styles.image}
                         />
-                        <Text style={styles.ownerName}>@{customerName}</Text>
+                        <Text style={styles.ownerName}>{prefixCustomerName(customerName ?? "")}</Text>
                     </View>
                     <QRCode
                         value={addressStr}

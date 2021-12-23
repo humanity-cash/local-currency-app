@@ -1,11 +1,14 @@
 import { useNavigation } from '@react-navigation/native';
 import React, { ReactElement } from 'react';
-import { ScrollView, StyleSheet, View } from "react-native";
+import { ScrollView, StyleSheet, View, TouchableOpacity, Linking } from 'react-native';
 import { Text } from 'react-native-elements';
-import { Header, BackBtn, AccordionCard } from "src/shared/uielements";
+import { Header, BackBtn } from "src/shared/uielements";
 import { underlineHeader, viewBase } from "src/theme/elements";
-import { AccordionEntry } from "src/utils/types";
 import Translation from 'src/translation/en.json';
+import { colors } from "src/theme/colors";
+import { Entypo } from '@expo/vector-icons';
+import { FontFamily } from "src/theme/elements";
+import { BERKSHARE_TERMS_URL, BERKSHARE_PRIVACY_URL } from '../../config/env';
 
 const styles = StyleSheet.create({
 	headerText: {
@@ -20,29 +23,48 @@ const styles = StyleSheet.create({
 	faqView: {
 		paddingBottom: 30, 
 		paddingTop: 10
-	}
+	},
+	buttonView: {
+		flexDirection: "row",
+		backgroundColor: colors.inputBg,
+	},
+	buttonText: {
+		flex: 1,
+		fontFamily: FontFamily.bold,
+		fontSize: 16
+	},
+	buttonIcon: {
+		flexDirection: "row",
+		alignItems: "center"
+	},
+	buttonContainer: {
+		backgroundColor: colors.inputBg,
+		padding: 20,
+		marginBottom: 5
+	},
 });
 
-const termsAndConditions: AccordionEntry = {
+const termsAndConditions: any = {
   title: "Terms & Conditions",
-  content: "ARTICLE 1: GENERAL \n\nSection 1: Name -  The name of the corporation will be BerkShares, Inc., a non-profit corporation organized under the laws of the Commonwealth of Massachusetts.\n" +
-		"Section 2: Area - The corporation will focus its activities in the Berkshire Region.\n" +
-		"Section 3: Offices - The principal office of the corporation will be at 140 Jug End Road, South Egremont, Massachusetts 01258 (mailing address: P O Box 125, Great Barrington, MA 01230) or at some other physical location as determined by the Board of Trustees.\n\n" +
-		"ARTICLE II: Purpose\n\n" +  
-		"Section 1: Purpose - The Purpose of BerkShares, Inc. is to initiate, encourage and administer educational and practical programs for the furtherance of regional economic self-reliance in the Berkshire Region.\n\n" +
-		"By pooling capital and human resources, BerkShares, Inc. seeks to facilitate the formation of small businesses, cottage industries, farms and cooperatives that would enable local communities to develop greater self-reliance. Basic human needs in the areas of food, shelter, energy, environment, employment, transportation, health care, education, cultural activities and social services could thus be increasingly met through local efforts. It is intended that such a program would encourage use of land in harmony with ecological principles. It would also encourage the development of alternative exchange instruments and of community associations that would foster and support initiative in these areas.\n\n" +
-		"ARTICLE III: Membership\n\n" +
-		"Section 1: General Membership - The membership of BerkShares, Inc. will be open to all residents of the Berkshire Region who are interested in the promotion of local and regional economic self-sufficiency. All Members will be considered in good standing if they have paid an annual membership fee as established by the Board of Trustees.\n"
+  link: BERKSHARE_TERMS_URL
 }
 
-const privacyPolicy: AccordionEntry = {
+const privacyPolicy: any = {
   title: "Privacy Policy",
-  content: "Privacy Policy"
+  link: BERKSHARE_PRIVACY_URL
 }
 
 export const SettingsTermsAndConditions = (): ReactElement => {
 
 	const navigation = useNavigation();
+
+	const openTerms = () => {
+		Linking.openURL(termsAndConditions.link)
+	}
+
+	const openPrivacy = () => {
+		Linking.openURL(privacyPolicy.link)
+	}
 
 	return (
 		<View style={viewBase}>
@@ -54,8 +76,34 @@ export const SettingsTermsAndConditions = (): ReactElement => {
 					<Text style={styles.headerText}>{Translation.OTHER.LEGAL}</Text>
 				</View>
 				<View style={styles.faqView}>
-					<AccordionCard title={termsAndConditions.title} content={termsAndConditions.content} />
-                    <AccordionCard title={privacyPolicy.title} content={privacyPolicy.content} />
+					<View style={styles.buttonContainer}>
+						<TouchableOpacity onPress={openTerms}>
+							<View style={styles.buttonView}>
+								<Text style={styles.buttonText}>{termsAndConditions.title}</Text>
+								<View style={styles.buttonIcon}>
+									<Entypo 
+										name="chevron-right" 
+										size={16} 
+										color={colors.text} 
+									/>
+								</View>
+							</View>
+						</TouchableOpacity>
+					</View>
+					<View style={styles.buttonContainer}>
+						<TouchableOpacity onPress={openPrivacy}>
+							<View style={styles.buttonView}>
+								<Text style={styles.buttonText}>{privacyPolicy.title}</Text>
+								<View style={styles.buttonIcon}>
+									<Entypo 
+										name="chevron-right" 
+										size={16} 
+										color={colors.text} 
+									/>
+								</View>
+							</View>
+						</TouchableOpacity>
+					</View>
 				</View>
 			</ScrollView>
 		</View>

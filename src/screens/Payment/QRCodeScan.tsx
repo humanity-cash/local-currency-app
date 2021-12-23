@@ -17,6 +17,7 @@ import Translation from 'src/translation/en.json';
 import { showToast } from 'src/utils/common';
 import { PaymentMode, QRCodeEntry, SECURITY_ID, ToastType } from 'src/utils/types';
 import { isQRCodeValid } from 'src/utils/validation';
+import { prefixCustomerName } from '../../utils/common';
 
 type HandleScaned = {
 	type: string,
@@ -139,7 +140,7 @@ const PaymentConfirm = (props: PaymentConfirmProps) => {
 							source={require("../../../assets/images/feed1.png")}
 							style={styles.image}
 						/>
-						<Text style={styles.ownerName}>@{customerName}</Text>
+						<Text style={styles.ownerName}>{prefixCustomerName(customerName ?? "")}</Text>
 					</View>
 
 					<Text style={styles.headerText}>B$ {amountCalcedFee.toFixed(2)}</Text>

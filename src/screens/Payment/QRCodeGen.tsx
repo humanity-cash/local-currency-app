@@ -8,6 +8,7 @@ import { useBrightness } from "src/hooks";
 import { Dialog } from "src/shared/uielements";
 import { dialogViewBase } from "src/theme/elements";
 import { PaymentMode, SECURITY_ID } from "src/utils/types";
+import { prefixCustomerName } from '../../utils/common';
 
 const styles = StyleSheet.create({
     dialog: {
@@ -115,7 +116,7 @@ const QRCodeGen = (props: QRCodeGenProps): JSX.Element => {
                             source={require("../../../assets/images/feed1.png")}
                             style={styles.image}
                         />
-                        <Text style={styles.ownerName}>@{customerName}</Text>
+                        <Text style={styles.ownerName}>{prefixCustomerName(customerName ?? "")}</Text>
                     </View>
                     <QRCode
                         value={addressStr}
