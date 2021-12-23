@@ -4,7 +4,7 @@
   "expo": {
     "name": "BerkShares",
     "slug": "berkshares",
-    "version": "1.0.17",
+    "version": "1.0.18",
     "icon": "./assets/images/icon_white.png",
     "orientation": "portrait",
     "userInterfaceStyle": "automatic",
@@ -18,7 +18,7 @@
     ],
     "ios": {
       "bundleIdentifier": "com.keyko.berkshares-app",
-      "buildNumber": "4"
+      "buildNumber": "1"
     },
     "packagerOpts": {
       "config": "metro.config.js",
@@ -34,7 +34,7 @@
     },
     "android": {
       "package": "com.berkshares",
-      "versionCode": 3,
+      "versionCode": 4,
       "permissions": [
         "CAMERA",
         "RECORD_AUDIO",
