@@ -29,6 +29,7 @@ import { useUserDetails } from "src/hooks";
 import { PaymentsModule } from 'src/modules';
 import { BusinessScanQrCodeStyle } from 'src/style';
 import LoadUp from "src/screens/onboarding/LoadUp";
+import { prefixCustomerName } from '../../utils/common';
 
 const styles = StyleSheet.create({
 	headerText: {
@@ -438,7 +439,7 @@ const DrawerContent = (props: DrawerContentComponentProps) => {
 												/>
 											</View>
 											<View style={styles.usernameView}>
-												<Text>@{userTag}</Text>
+												<Text>{prefixCustomerName(userTag)}</Text>
 											</View>
 										</View>
 									</TouchableWithoutFeedback>

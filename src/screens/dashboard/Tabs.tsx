@@ -34,6 +34,7 @@ import SettingDialog from 'src/shared/uielements/SettingDialog';
 import BankLinkDialog from 'src/shared/uielements/BankLinkDialog';
 import { PaymentsModule } from "src/modules";
 import { CustomerScanQrCodeStyle } from "src/style";
+import { prefixCustomerName } from '../../utils/common';
 
 const styles = StyleSheet.create({
 	headerText: {
@@ -234,7 +235,7 @@ const DrawerContent = (
 									/>
 								</View>
 								<View style={styles.usernameView}>
-									<Text>@{customerTag}</Text>
+									<Text>{prefixCustomerName(customerTag ?? "")}</Text>
 									{isVerifiedBusiness && <View style={styles.inlineView}>
 										<Text style={styles.fadeText}>
 											{Translation.COMMON.SWITCH_ACCOUNT}

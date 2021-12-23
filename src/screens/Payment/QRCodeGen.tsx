@@ -2,27 +2,27 @@ import React, { useContext, useEffect, useState } from 'react';
 import { Image, StyleSheet, View } from 'react-native';
 import { Text } from 'react-native-elements';
 import QRCode from 'react-native-qrcode-svg';
+import { DwollaAPI } from 'src/api';
 import { UserContext, WalletContext } from 'src/contexts';
-import { useBrightness, useUpdateCustomerWalletData } from "src/hooks";
+import { useBrightness } from "src/hooks";
 import { Dialog } from "src/shared/uielements";
-import { colors } from "src/theme/colors";
 import { dialogViewBase } from "src/theme/elements";
-import { MiniTransaction, PaymentMode, QRCodeEntry, SECURITY_ID } from "src/utils/types";
+import { PaymentMode, SECURITY_ID } from "src/utils/types";
 import { prefixCustomerName } from '../../utils/common';
 
 const styles = StyleSheet.create({
     dialog: {
-        height: 440
+        height: 400
     },
-	dialogWrap: {
+    dialogWrap: {
         position: 'relative',
-		paddingHorizontal: 10,
+        paddingHorizontal: 10,
         paddingTop: 70,
-		height: "100%",
-		flex: 1,
+        height: "100%",
+        flex: 1,
         justifyContent: 'center',
         alignItems: 'center'
-	},
+    },
     amount: {
         alignSelf: 'center',
         marginTop: 10,
@@ -46,38 +46,41 @@ const styles = StyleSheet.create({
         fontWeight: 'bold',
         fontSize: 18,
         paddingVertical: 10
-    },
-    errorText: {
-        color: colors.mistakeRed,
-        marginTop: 20
     }
 });
 
-type ReturnQRCodeGenProps = {
-	visible: boolean,
-	onClose: () => void,
+type QRCodeGenProps = {
+    visible: boolean,
+    onClose: () => void,
     onSuccess: (amount: number) => void,
-    transactionInfo: MiniTransaction
+    isOpenAmount: boolean,
+    amount?: number
 }
 
-const ReturnQRCodeGen = (props: ReturnQRCodeGenProps): JSX.Element => {
-    const { customerWalletData } = useContext(WalletContext)
+const QRCodeGen = (props: QRCodeGenProps): JSX.Element => {
     const { user, customerDwollaId } = useContext(UserContext);
-    const { hasPermission, setMaxBrightness, setDefaultBrightness} = useBrightness();
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const [initBalance, setInitBalance] = useState<number>(customerWalletData?.availableBalance);
+    const { customerWalletData, updateCustomerWalletData } = useContext(WalletContext);
+    const { hasPermission, setMaxBrightness, setDefaultBrightness } = useBrightness();
+    const [initBalance] = useState<number>(customerWalletData?.availableBalance);
     const [isSuccess, setIsSuccess] = useState<boolean>(false);
-    const requestData: QRCodeEntry = {
+    const addressStr = JSON.stringify({
         securityId: SECURITY_ID,
-        transactionHash: props.transactionInfo.transactionHash,
-        transactionDate: props.transactionInfo.timestamp,
-        to: customerDwollaId ? customerDwollaId : "",
-        amount: Number(props.transactionInfo.value),
-        mode: PaymentMode.OPEN_AMOUNT
-    };
-    const addressStr = JSON.stringify(requestData);
+        to: customerDwollaId,
+        amount: props.amount,
+        mode: props.isOpenAmount ? PaymentMode.OPEN_AMOUNT : PaymentMode.SELECT_AMOUNT
+    });
 
-    useUpdateCustomerWalletData();
+    useEffect(() => {
+        const timerId = setInterval(async () => {
+            if (customerDwollaId) {
+                const userWallet = await DwollaAPI.loadWallet(customerDwollaId)
+                const fundingSource = await DwollaAPI.loadFundingSource(customerDwollaId)
+                updateCustomerWalletData(({ ...userWallet, availableFundingSource: fundingSource }))
+            }
+        }, 1000);
+        return () => clearInterval(timerId);
+    }, [props.visible]);
+
     useEffect(() => {
         if (hasPermission) {
             setMaxBrightness();
@@ -89,12 +92,9 @@ const ReturnQRCodeGen = (props: ReturnQRCodeGenProps): JSX.Element => {
         props.onClose();
     }
 
-    const onSuccess = async() => {
+    const onSuccess = async () => {
         if (!isSuccess) {
             setIsSuccess(true);
-            if (customerDwollaId) {
-                // await dispatch(loadPersonalTransactions(customerDwollaId));
-            }
             setDefaultBrightness();
             props.onSuccess(customerWalletData?.availableBalance - initBalance);
         }
@@ -103,6 +103,7 @@ const ReturnQRCodeGen = (props: ReturnQRCodeGenProps): JSX.Element => {
     if (customerWalletData?.availableBalance > initBalance) {
         onSuccess();
     }
+
 
     const customerName = user?.customer?.tag;
 
@@ -119,13 +120,13 @@ const ReturnQRCodeGen = (props: ReturnQRCodeGenProps): JSX.Element => {
                     </View>
                     <QRCode
                         value={addressStr}
-                        size={250}
+                        size={200}
                     />
-                    <Text style={styles.errorText}>Show QR code to the cashier </Text>
+                    {!props.isOpenAmount && <Text style={styles.amount}>B$ {props.amount?.toFixed(2)}</Text>}
                 </View>
             </View>
         </Dialog>
     )
 }
 
-export default ReturnQRCodeGen;
+export default QRCodeGen;
