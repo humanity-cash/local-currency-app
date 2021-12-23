@@ -20,6 +20,14 @@ export const getBerksharePrefix = (type: TransactionType | string): string => {
 	}
 }
 
+export const prefixCustomerName = (name: string): string => {
+	if (name.startsWith('@')) {
+		return name;
+	} else {
+		return `@${name}`;
+	}
+}
+
 export const showToast = (type: ToastType, text1: string, text2: string): void => {
 	Toast.show({
 		type,
