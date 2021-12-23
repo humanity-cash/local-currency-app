@@ -12,10 +12,8 @@ import Translation from 'src/translation/en.json';
 import { BUTTON_TYPES } from 'src/constants';
 import { isPasswordValid } from 'src/utils/validation';
 import { showToast } from 'src/utils/common';
+import { LoadingPage } from 'src/views';
 import { ToastType } from 'src/utils/types';
-import { LoadingScreenTypes } from 'src/utils/types';
-import { updateLoadingStatus } from 'src/store/loading/loading.actions';
-import { useDispatch } from 'react-redux';
 
 interface SecurityProps extends IMap {
 	password: string;
@@ -71,11 +69,11 @@ const styles = StyleSheet.create({
 export const SettingsSecurity = (): JSX.Element => {
 	const navigation = useNavigation();
 	const { changePassword } = useContext(AuthContext);
-	const dispatch = useDispatch();
 	const { authorization, updateAuthorization } = useUserDetails();
 	const [switchToggle, setSwitchToggle] = useState<boolean>(false);
 	const [canSave, setCanSave] = useState<boolean>(false);
 	const [isValidPassword, setIsValidPassword] = useState<boolean>(false);
+	const [isLoading, setIsLoading] = useState<boolean>(false);
 	const [isPasswordMatched, setIsPasswordMatched] = useState<boolean>(false);
 	const [state, setState] = useState<SecurityProps>({
 		password: "",
@@ -115,19 +113,12 @@ export const SettingsSecurity = (): JSX.Element => {
 	}
 
 	const handleSave = async () => {
-		dispatch(updateLoadingStatus({
-			isLoading: true,
-			screen: LoadingScreenTypes.LOADING_DATA
-		}));
+		setIsLoading(true);
 		const response = await changePassword({
 			oldPassword: state.password, 
 			newPassword: state.newPassword
 		});
-		dispatch(updateLoadingStatus({
-			isLoading: false,
-			screen: LoadingScreenTypes.LOADING_DATA
-		}));
-		
+		setIsLoading(false);
 		if (!response?.success) {
 			showToast(ToastType.ERROR, 'FAILED', Translation.OTHER.CHANGE_PASSWORD_FAILED);
 			return;
@@ -141,11 +132,12 @@ export const SettingsSecurity = (): JSX.Element => {
 		<KeyboardAvoidingView
 			behavior={Platform.OS == "ios" ? "padding" : "height"}
 			style={viewBase}>
+			<LoadingPage visible={isLoading} isData={true} />
 			<Header
 				leftComponent={<BackBtn onClick={() => navigation.goBack()} />}
 			/>
 			<ScrollView style={styles.content}>
-				<View style={ underlineHeader }>
+				<View style={underlineHeader}>
 					<Text style={styles.headerText}>{Translation.COMMUNITY_CHEST.SECURITY}</Text>
 				</View>
 				<View style={styles.view}>
@@ -158,7 +150,7 @@ export const SettingsSecurity = (): JSX.Element => {
 						value={switchToggle}
 					/>
 				</View>
-				<View style={ underlineHeader }></View>
+				<View style={underlineHeader}></View>
 				<View>
 					<Text style={styles.label}>{Translation.LABEL.OLD_PASSWORD}</Text>
 					<BlockInput
@@ -168,7 +160,7 @@ export const SettingsSecurity = (): JSX.Element => {
 						secureTextEntry={true}
 						onChange={onValueChange}
 						returnKeyType='next'
-						onSubmitEditing={()=>{
+						onSubmitEditing={() => {
 							newPasswordRef.current?.focus()
 						}}
 					/>
