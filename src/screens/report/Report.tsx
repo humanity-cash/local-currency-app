@@ -3,12 +3,12 @@ import { useNavigation } from "@react-navigation/native";
 import moment from "moment";
 import React, { useContext, useEffect, useState } from "react";
 import {
-    KeyboardAvoidingView,
-    Platform,
-    ScrollView,
+	KeyboardAvoidingView,
+	Platform,
+	ScrollView,
 	StyleSheet,
 	TouchableOpacity,
-	View 
+	View
 } from "react-native";
 import { Text } from "react-native-elements";
 import { BUTTON_TYPES } from "src/constants";
@@ -16,9 +16,9 @@ import * as Routes from "src/navigation/constants";
 import { BackBtn, Button, Header } from 'src/shared/uielements';
 import { colors } from "src/theme/colors";
 import {
-    underlineHeaderB,
-    viewBaseB,
-    wrappingContainerBase
+	underlineHeaderB,
+	viewBaseB,
+	wrappingContainerBase
 } from "src/theme/elements";
 import Translation from "src/translation/en.json";
 import { UserType } from "src/auth/types";
@@ -162,18 +162,18 @@ const Report = (): JSX.Element => {
 	const [endDate, setEndDate] = useState<Date | undefined>(undefined);
 	const [isStartDate, setIsStartDate] = useState<boolean>(false);
 	const [isEndDate, setIsEndDate] = useState<boolean>(false);
-	const [goNext, setGoNext] = useState(false);
+	const [goNext] = useState(false);
 	const [reportType, setReportType] = useState<ReportType>(ReportType.ALL);
 	const { userType } = useContext(UserContext);
 
-	const [items, setItems] = useState([
-		'All', 'Sales','Returns', 'Load ups', 'Cash outs', 'Other transfers'
+	const [items] = useState([
+		'All', 'Sales', 'Returns', 'Load ups', 'Cash outs', 'Other transfers'
 	]);
 	const [selIndexes, setSelIndexes] = useState<boolean[]>()
 
 	useEffect(() => {
 		const indexes = []
-		for(let i = 0; i < items.length; i++) {
+		for (let i = 0; i < items.length; i++) {
 			indexes.push(false)
 		}
 		setSelIndexes(indexes)
@@ -199,7 +199,7 @@ const Report = (): JSX.Element => {
 		setReportType(reportType)
 		const today = new Date();
 		setEndDate(today);
-		switch(reportType) {
+		switch (reportType) {
 			case ReportType.TODAY:
 				setStartDate(today);
 				break;
@@ -312,8 +312,8 @@ const Report = (): JSX.Element => {
 								{startDate == null
 									? "MM/DD/YY"
 									: moment(startDate).format(
-											"MM/DD/yyyy"
-										)}
+										"MM/DD/yyyy"
+									)}
 							</Text>
 						</TouchableOpacity>
 					</View>
@@ -337,8 +337,8 @@ const Report = (): JSX.Element => {
 								{endDate == null
 									? "MM/DD/YY"
 									: moment(endDate).format(
-											"MM/DD/yyyy"
-										)}
+										"MM/DD/yyyy"
+									)}
 							</Text>
 						</TouchableOpacity>
 					</View>
@@ -353,7 +353,7 @@ const Report = (): JSX.Element => {
 							selected={selIndexes}
 							setSelected={setSelIndexes}
 						/>
-					</View>	
+					</View>
 				)}
 				<View style={styles.container}>
 					<Text style={styles.specifySearch}>
@@ -361,7 +361,7 @@ const Report = (): JSX.Element => {
 					</Text>
 				</View>
 			</ScrollView>
-			{ !isStartDate && !isEndDate &&
+			{!isStartDate && !isEndDate &&
 				<KeyboardAvoidingView
 					behavior={Platform.OS == "ios" ? "padding" : "height"}>
 					<View style={styles.bottomView}>
@@ -382,7 +382,7 @@ const Report = (): JSX.Element => {
 				mode="date"
 				date={startDate}
 				onConfirm={onStartDateChange}
-				onCancel={() => {setIsStartDate(false)}}
+				onCancel={() => { setIsStartDate(false) }}
 				textColor='black'
 			/>
 			<DateTimePicker
@@ -391,7 +391,7 @@ const Report = (): JSX.Element => {
 				date={endDate}
 				onConfirm={onEndDateChange}
 				minimumDate={startDate}
-				onCancel={() => {setIsEndDate(false)}}
+				onCancel={() => { setIsEndDate(false) }}
 				textColor='black'
 			/>
 		</View>
