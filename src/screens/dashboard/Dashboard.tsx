@@ -188,9 +188,9 @@ const Dashboard = (): JSX.Element => {
 	};
 
 	const onPressScan = async () => {
-		const {status} = await BarCodeScanner.requestPermissionsAsync();
-		if(status === 'granted') {
-			if(personalFundingSource && availableBalance > 0) {
+		const { status } = await BarCodeScanner.requestPermissionsAsync();
+		if (status === 'granted') {
+			if (personalFundingSource && availableBalance > 0) {
 				navigation.navigate(Routes.QRCODE_SCAN, {
 					senderId: customerDwollaId,
 					walletData: customerWalletData,
@@ -262,10 +262,10 @@ const Dashboard = (): JSX.Element => {
 							</View>
 						)}
 
-						{ events.length > 0 && 
-							<EventItem 
-								event={events[events.length-1]}
-								onDelete={()=>{deleteEvent(customerDwollaId, events[events.length-1].dbId)}} 
+						{events.length > 0 &&
+							<EventItem
+								event={events[events.length - 1]}
+								onDelete={() => { deleteEvent(customerDwollaId, events[events.length - 1].dbId) }}
 							/>
 						}
 

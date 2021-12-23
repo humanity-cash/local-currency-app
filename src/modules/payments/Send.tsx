@@ -1,6 +1,6 @@
 import { useNavigation } from '@react-navigation/core';
 import { BarCodeScanner } from 'expo-barcode-scanner';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { Image, KeyboardAvoidingView, Platform, ScrollView, StyleSheet, View, SafeAreaView } from 'react-native';
 import { Text } from 'react-native-elements';
 import { LoadingPage } from 'src/views';
@@ -16,6 +16,9 @@ import Translation from 'src/translation/en.json';
 import { showToast } from 'src/utils/common';
 import { PaymentMode, QRCodeEntry, SECURITY_ID, ToastType } from 'src/utils/types';
 import { isQRCodeValid } from 'src/utils/validation';
+import { UserType } from 'src/auth/types';
+import { UserContext } from 'src/contexts';
+import { CustomerScanQrCodeStyle, BusinessScanQrCodeStyle } from 'src/style';
 
 type HandleScaned = {
 	type: string,
@@ -121,9 +124,11 @@ interface SendPaymentInput {
 }
 
 const SendPayment = (props: SendPaymentInput): JSX.Element => {
-	const { senderId, walletData, username, styles, recieveRoute, cancelRoute } = props?.route?.params;
+	const { senderId, walletData, username, recieveRoute, cancelRoute } = props?.route?.params;
 	if (!senderId || !walletData) return <div>InValid</div>
 	const navigation = useNavigation();
+	const { userType } = useContext(UserContext);
+	const styles = userType === UserType.Customer ? CustomerScanQrCodeStyle : BusinessScanQrCodeStyle;
 	const hasPermission = useCameraPermission();
 	const [isScanned, setIsScanned] = useState<boolean>(false);
 	const [isPaymentDialog, setIsPaymentDialog] = useState<boolean>(false);
@@ -166,12 +171,10 @@ const SendPayment = (props: SendPaymentInput): JSX.Element => {
 	const onPayConfirm = async (isRoundUp: boolean) => {
 		setIsPaymentDialog(false);
 		setIsScanned(false);
-
 		if (walletData.availableBalance <= qrCodeData.amount) {
 			setIsLowAmountDialog(true);
 			return;
 		}
-
 		setIsLoading(true)
 		if (senderId) {
 			const request: ITransactionRequest = {
@@ -209,8 +212,7 @@ const SendPayment = (props: SendPaymentInput): JSX.Element => {
 			setIsLowAmountDialog(true);
 			return;
 		}
-
-		if (senderId) {
+		if (senderId && qrCodeData.to && openAmount) {
 			const request: ITransactionRequest = {
 				toUserId: qrCodeData.to,
 				amount: openAmount,
@@ -306,7 +308,7 @@ const SendPayment = (props: SendPaymentInput): JSX.Element => {
 						<SafeAreaView style={styles.bottomView}>
 							<Button
 								type={BUTTON_TYPES.PURPLE}
-								disabled={!goNext}
+								disabled={!goNext || !senderId || !walletData}
 								title={Translation.BUTTON.CONFIRM}
 								onPress={handleOpenPay}
 							/>
