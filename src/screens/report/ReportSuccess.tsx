@@ -1,4 +1,3 @@
-
 import { useNavigation } from '@react-navigation/native';
 import React, { useContext } from 'react';
 import { ScrollView, StyleSheet, View, SafeAreaView } from 'react-native';
@@ -46,7 +45,7 @@ const ReportSuccess = (): JSX.Element => {
 				rightComponent={<CancelBtn text={Translation.BUTTON.CLOSE} color={colors.purple} onClick={onConfirm} />}
 			/>
 			<ScrollView style={wrappingContainerBase}>
-				<View style={ baseHeader }>
+				<View style={baseHeader}>
 					<Text style={styles.headerText}>{Translation.COMMON.SUCCEEDED}</Text>
 				</View>
 				<Text style={styles.text}>{Translation.REPORT.SENT_REPORT} fennie@humanity.cash</Text>

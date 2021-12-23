@@ -15,48 +15,46 @@ import CashierReturn from "src/screens/cashier/CashierReturn";
 import CashierReturnQRCodeScan from "src/screens/cashier/CashierReturnQRCodeScan";
 import CashierReturnSuccess from "src/screens/cashier/CashierReturnSuccess";
 import CashierTransactions from "src/screens/cashier/CashierTransactions";
-import CashierDashboard from "src/screens/dashboard/CashierDashboard";
-import MerchantTabs from "src/screens/dashboard/MerchantTabs";
-import Tabs from "src/screens/dashboard/Tabs";
-import MerchantRedemptionInProgress from "src/screens/merchantCashout/MerchantRedemptionInProgress";
-import MerchantReturn from "src/screens/merchantPayment/MerchantReturn";
-import MerchantPayoutPending from "src/screens/merchantPayout/MerchantPayoutPending";
-import MerchantPayoutSuccess from "src/screens/merchantPayout/MerchantPayoutSuccess";
-import MerchantPayoutToPersonal from "src/screens/merchantPayout/MerchantPayoutToPersonal";
-import MerchantPayoutToSomeone from "src/screens/merchantPayout/MerchantPayoutToSomeone";
-import MerchantSettingsBankAccount from "src/screens/merchantSettings/MerchantSettingsBankAccount";
-import MerchantSettingsProfile from "src/screens/merchantSettings/MerchantSettingsProfile";
-import MerchantSettingsSecurity from "src/screens/merchantSettings/MerchantSettingsSecurity";
-import MerchantSettingsStaticQr from "src/screens/merchantSettings/MerchantSettingsStaticQr";
-import MerchantSettingsTermsAndConditions from "src/screens/merchantSettings/MerchantSettingsTermsAndConditions";
+import CashierDashboard from "src/screens/cashier/CashierDashboard";
+import BusinessDrawer from "src/screens/business/drawer";
+import CustomerDrawer from "src/screens/customer/drawer";
+import MerchantReturn from "src/screens/business/payment/MerchantReturn";
+import MerchantPayoutPending from "src/screens/business/drawer/sendToSomeone/MerchantPayoutPending";
+import MerchantPayoutSuccess from "src/screens/business/drawer/sendToSomeone/MerchantPayoutSuccess";
+import MerchantPayoutToPersonal from "src/screens/business/drawer/sendToSomeone/MerchantPayoutToPersonal";
+import MerchantPayoutToSomeone from "src/screens/business/drawer/sendToSomeone/MerchantPayoutToSomeone";
+import MerchantSettingsBankAccount from "src/screens/business/drawer/settings/MerchantSettingsBankAccount";
+import MerchantSettingsProfile from "src/screens/business/drawer/settings/MerchantSettingsProfile";
+import MerchantSettingsSecurity from "src/screens/business/drawer/settings/MerchantSettingsSecurity";
+import MerchantSettingsStaticQr from "src/screens/business/drawer/settings/MerchantSettingsStaticQr";
+import MerchantSettingsTermsAndConditions from "src/screens/business/drawer/settings/MerchantSettingsTermsAndConditions";
 import ConfirmEmail from "src/screens/onboarding/ConfirmEmail";
 import CreateAccount from "src/screens/onboarding/CreateAccount";
 import EmailConfirmed from "src/screens/onboarding/EmailConfirmed";
-import LinkBankAccount from "src/screens/onboarding/LinkBankAccount";
-import LoadUp from "src/screens/onboarding/LoadUp";
-import LoadUpSuccess from "src/screens/onboarding/LoadUpSuccess";
+import CustomerWelcome from "src/screens/customer/signup/CustomerWelcome";
+import { LoadUpSuccess } from "src/views";
 import Password from "src/screens/onboarding/Password";
-import PersonalAddress from "src/screens/onboarding/PersonalAddress";
-import PersonalDetails from "src/screens/onboarding/PersonalDetails";
-import PersonalProfile from "src/screens/onboarding/PersonalProfile";
+import PersonalAddress from "src/screens/customer/signup/PersonalAddress";
+import PersonalDetails from "src/screens/customer/signup/PersonalDetails";
+import PersonalProfile from "src/screens/customer/signup/PersonalProfile";
 import SelectAccountType from "src/screens/onboarding/SelectAccountType";
-import SelectBank from "src/screens/onboarding/SelectBank";
+import SelectBank from "src/screens/customer/bank";
 import Teaser from "src/screens/onboarding/Teaser";
 import Verification from "src/screens/onboarding/Verification";
 import VerificationHelp from "src/screens/onboarding/VerificationHelp";
-import PaymentRequest from "src/screens/payment/PaymentRequest";
-import PaymentSuccess from "src/screens/payment/PaymentSuccess";
+import PaymentRequest from "src/screens/customer/payment/PaymentRequest";
+import PaymentSuccess from "src/screens/customer/payment/PaymentSuccess";
 import Report from "src/screens/report/Report";
 import ReportSuccess from "src/screens/report/ReportSuccess";
-import SettingsBankAccount from "src/screens/settings/SettingsBankAccount";
-import SettingsDeleteAccount from "src/screens/settings/SettingsDeleteAccount";
-import SettingsPersonalProfile from "src/screens/settings/SettingsPersonalProfile";
-import SettingsSecurity from "src/screens/settings/SettingsSecurity";
-import SettingsTermsAndConditions from "src/screens/settings/SettingsTermsAndConditions";
+import SettingsBankAccount from "src/screens/customer/drawer/settings/SettingsBankAccount";
+import SettingsDeleteAccount from "src/screens/customer/drawer/settings/SettingsDeleteAccount";
+import SettingsPersonalProfile from "src/screens/customer/drawer/settings/SettingsPersonalProfile";
+import SettingsSecurity from "src/screens/customer/drawer/settings/SettingsSecurity";
+import SettingsTermsAndConditions from "src/screens/customer/drawer/settings/SettingsTermsAndConditions";
 import * as Routes from "../constants";
-import SelectMerchantBank from "src/screens/merchantBankAccount/SelectMerchantBank";
-import BusinessWelcome from "src/screens/signupBusiness/BusinessWelcome";
-import MyTransactions from "src/screens/transactions/MyTransactions";
+import SelectMerchantBank from "src/screens/business/bank";
+import BusinessWelcome from "src/screens/business/signup/BusinessWelcome";
+import CustomerTransactions from "src/screens/customer/transactions/MyTransactions";
 import { PaymentsModule } from "src/modules";
 
 const PrimaryStack = createStackNavigator();
@@ -64,7 +62,7 @@ const PrimaryStack = createStackNavigator();
 export const CustomerUserStack = ({ isVerifiedBusiness }: { isVerifiedBusiness: boolean }) => {
 	return (
 		<>
-			<PrimaryStack.Screen name={Routes.TABS} component={Tabs} />
+			<PrimaryStack.Screen name={Routes.TABS} component={CustomerDrawer} />
 			<PrimaryStack.Screen
 				name={Routes.QRCODE_SCAN}
 				component={PaymentsModule.Send}
@@ -87,7 +85,7 @@ export const CustomerUserStack = ({ isVerifiedBusiness }: { isVerifiedBusiness: 
 			/>
 			<PrimaryStack.Screen
 				name={Routes.LOAD_UP}
-				component={LoadUp}
+				component={PaymentsModule.Loadup}
 			/>
 			<PrimaryStack.Screen
 				name={Routes.SETTING_TERMS_CONDITIONS}
@@ -99,7 +97,7 @@ export const CustomerUserStack = ({ isVerifiedBusiness }: { isVerifiedBusiness: 
 			/>
 			<PrimaryStack.Screen
 			name={Routes.MY_TRANSACTIONS}
-			component={MyTransactions}
+			component={CustomerTransactions}
 			/>
 			<PrimaryStack.Screen
 				name={Routes.SETTING_SECURITY}
@@ -165,7 +163,7 @@ export const OnboardingStack = () => {
 			/>
 			<PrimaryStack.Screen
 				name={Routes.LINK_BANK_ACCOUNT}
-				component={LinkBankAccount}
+				component={CustomerWelcome}
 			/>
 			<PrimaryStack.Screen
 				name={Routes.SELECT_BANK}
@@ -241,7 +239,7 @@ export const BusinessUserStack = ({ isVerifiedCustomer }: { isVerifiedCustomer: 
 		<>
 			<PrimaryStack.Screen
 				name={Routes.MERCHANT_TABS}
-				component={MerchantTabs}
+				component={BusinessDrawer}
 			/>
 			<PrimaryStack.Screen
 				name={Routes.PAYMENT_FAILED}
@@ -265,7 +263,7 @@ export const BusinessUserStack = ({ isVerifiedCustomer }: { isVerifiedCustomer: 
 			/>
 			<PrimaryStack.Screen
 				name={Routes.LOAD_UP}
-				component={LoadUp}
+				component={PaymentsModule.Loadup}
 			/>
 			<PrimaryStack.Screen
 				name={Routes.MERCHANT_PAYOUT_PERSONAL}
@@ -286,10 +284,6 @@ export const BusinessUserStack = ({ isVerifiedCustomer }: { isVerifiedCustomer: 
 			<PrimaryStack.Screen
 				name={Routes.MERCHANT_PAYOUT_QR_SCAN}
 				component={PaymentsModule.SendFixedAmount}
-			/>
-			<PrimaryStack.Screen
-				name={Routes.MERCHANT_REDEMPTION_IN_PROGRESS}
-				component={MerchantRedemptionInProgress}
 			/>
 			<PrimaryStack.Screen
 				name={Routes.MERCHANT_BANK_ACCOUNT}
@@ -373,7 +367,7 @@ export const NotVerifiedUserStack = () => {
 			/>
 			<PrimaryStack.Screen
 				name={Routes.LINK_BANK_ACCOUNT}
-				component={LinkBankAccount}
+				component={CustomerWelcome}
 			/>
 			<PrimaryStack.Screen
 				name={Routes.SELECT_BANK}
@@ -397,7 +391,7 @@ export const CustomerLinkBankAccount = () => {
 		<>
 			<PrimaryStack.Screen
 				name={Routes.LINK_BANK_ACCOUNT}
-				component={LinkBankAccount}
+				component={CustomerWelcome}
 			/>
 			<PrimaryStack.Screen
 				name={Routes.SELECT_BANK}
