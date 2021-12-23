@@ -5,7 +5,7 @@ import { Text } from 'react-native-elements';
 import { BUTTON_TYPES } from 'src/constants';
 import { AuthContext } from "src/contexts";
 import * as Routes from 'src/navigation/constants';
-import DataLoading from 'src/screens/loadings/DataLoading';
+import { LoadingPage } from 'src/views';
 import { BackBtn, BlockInput, Button, Header } from 'src/shared/uielements';
 import SecurityEyeButton from 'src/shared/uielements/SecurityEyeButton';
 import { colors } from 'src/theme/colors';
@@ -98,7 +98,7 @@ const Password = (): JSX.Element => {
 		<KeyboardAvoidingView
 			behavior={Platform.OS == 'ios' ? 'padding' : 'height'}
 			style={viewBaseWhite}>
-			<DataLoading visible={isLoading} />
+			<LoadingPage visible={isLoading} isData={true} />
 			<Header
 				leftComponent={<BackBtn onClick={() => navigation.goBack()} />}
 			/>

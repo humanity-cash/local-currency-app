@@ -1,7 +1,10 @@
 import { useNavigation } from '@react-navigation/native';
-import React from 'react';
-import { ImageBackground, StyleSheet, View, TouchableOpacity } from 'react-native';
+import { LoadingPage } from 'src/views';
+import React, { useContext } from 'react';
+import { ImageBackground, StyleSheet, View } from 'react-native';
 import { Text } from 'react-native-elements';
+import { AuthContext } from 'src/contexts';
+import { AuthStatus } from 'src/auth/types';
 import { BUTTON_TYPES } from 'src/constants';
 import * as Routes from 'src/navigation/constants';
 import { Button } from 'src/shared/uielements';
@@ -50,13 +53,15 @@ const styles = StyleSheet.create({
 });
 
 const Teaser = (): JSX.Element => {
+	const { authStatus } = useContext(AuthContext);
 	const navigation = useNavigation();
 
 	return (
 		<View style={viewBase}>
+			<LoadingPage visible={authStatus === AuthStatus.Loading} isData={true} />
 			<ImageBackground
 				source={require('../../../assets/images/mainscreen.jpg')}
-				resizeMode="cover" 
+				resizeMode="cover"
 				style={styles.image}>
 				<View style={styles.titleView}>
 					<Text style={styles.titleText}>{Translation.LANDING_PAGE.TITLE}</Text>
@@ -74,7 +79,7 @@ const Teaser = (): JSX.Element => {
 						title="Create an account"
 						onPress={() => navigation.navigate(Routes.CREATE_ACCOUNT)}
 						style={styles.createAccountBtn}
-						textStyle={{color: colors.darkGreen}}
+						textStyle={{ color: colors.darkGreen }}
 					/>
 				</View>
 			</ImageBackground>

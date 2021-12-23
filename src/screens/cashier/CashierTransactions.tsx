@@ -16,7 +16,7 @@ import { WalletContext, UserContext } from "src/contexts";
 import { useStore } from "react-hookstore";
 import { TransactionsAPI } from "src/api";
 import { BUSINESS_TX_DATA_STORE } from "src/hook-stores";
-import DataLoading from "src/screens/loadings/DataLoading";
+import { LoadingPage } from "src/views";
 
 const styles = StyleSheet.create({
 	mainTextColor: {
@@ -196,7 +196,7 @@ const CashierTransactions = (): JSX.Element => {
 
 	return (
 		<View style={viewBaseB}>
-			<DataLoading visible={isLoading} />
+			<LoadingPage visible={isLoading} isPayment={true}/>
 			<Header
 				rightComponent={<CancelBtn text={Translation.BUTTON.CLOSE} color={colors.purple} onClick={() => navigation.goBack()} />}
 			/>
