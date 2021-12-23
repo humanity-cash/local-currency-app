@@ -1,4 +1,5 @@
 import { useNavigation } from '@react-navigation/native';
+import { LoadingPage } from 'src/views';
 import React, { useState, useEffect, useContext, createRef } from 'react';
 import { ScrollView, StyleSheet, Switch, View, KeyboardAvoidingView, Platform, TextInput } from "react-native";
 import { Text } from "react-native-elements";
@@ -13,9 +14,6 @@ import { BUTTON_TYPES } from 'src/constants';
 import { isPasswordValid } from 'src/utils/validation';
 import { showToast } from 'src/utils/common';
 import { ToastType } from 'src/utils/types';
-import { LoadingScreenTypes } from 'src/utils/types';
-import { updateLoadingStatus } from 'src/store/loading/loading.actions';
-import { useDispatch } from 'react-redux';
 
 interface SecurityProps extends IMap {
 	password: string;
@@ -82,12 +80,12 @@ export const MerchantSettingsSecurity = (): JSX.Element => {
 	const navigation = useNavigation();
 	const {authorization, updateAuthorization} = useUserDetails();
 	const { changePassword } = useContext(AuthContext);
-	const dispatch = useDispatch();
 	const [isTouchId, setIsTouchId] = useState<boolean>(true);
 	const [isCashierView, setIsCashierView] = useState<boolean>(true);
 	const [canSave, setCanSave] = useState<boolean>(false);
 	const [isValidPassword, setIsValidPassword] = useState<boolean>(false);
 	const [isPasswordMatched, setIsPasswordMatched] = useState<boolean>(false);
+	const [isLoading, setIsLoading] = useState<boolean>(false);
 	const [state, setState] = useState<SecurityProps>({
 		password: "",
 		newPassword: "",
@@ -132,18 +130,20 @@ export const MerchantSettingsSecurity = (): JSX.Element => {
 	}
 
 	const handleSave = async () => {
-		dispatch(updateLoadingStatus({
-			isLoading: true,
-			screen: LoadingScreenTypes.LOADING_DATA
-		}));
+		// dispatch(updateLoadingStatus({
+		// 	isLoading: true,
+		// 	screen: LoadingScreenTypes.LOADING_DATA
+		// }));
+		setIsLoading(true);
 		const response = await changePassword({
 			oldPassword: state.password, 
 			newPassword: state.newPassword
 		});
-		dispatch(updateLoadingStatus({
-			isLoading: false,
-			screen: LoadingScreenTypes.LOADING_DATA
-		}));
+		setIsLoading(false);
+		// dispatch(updateLoadingStatus({
+		// 	isLoading: false,
+		// 	screen: LoadingScreenTypes.LOADING_DATA
+		// }));
 		
 		if (!response?.success) {
 			showToast(ToastType.ERROR, 'FAILED', Translation.OTHER.CHANGE_PASSWORD_FAILED);
@@ -157,6 +157,7 @@ export const MerchantSettingsSecurity = (): JSX.Element => {
 		<KeyboardAvoidingView
 			behavior={Platform.OS == "ios" ? "padding" : "height"}
 			style={viewBaseB}>
+				<LoadingPage visible={isLoading} isData={true} />
 			<Header
 				leftComponent={<BackBtn onClick={() => navigation.goBack()} color={colors.purple} />}
 			/>

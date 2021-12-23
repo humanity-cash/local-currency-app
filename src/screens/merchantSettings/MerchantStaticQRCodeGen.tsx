@@ -2,7 +2,6 @@ import React, { useContext, useEffect, useState } from 'react';
 import { Image, StyleSheet, View } from 'react-native';
 import { Text } from 'react-native-elements';
 import QRCode from 'react-native-qrcode-svg';
-import { useDispatch } from 'react-redux';
 import { UserContext, WalletContext } from 'src/contexts';
 import { useBrightness, useUpdateBusinessWalletData } from "src/hooks";
 import { Dialog } from "src/shared/uielements";
@@ -60,12 +59,10 @@ type QRCodeGenProps = {
 }
 
 const StaticQRCodeGen = (props: QRCodeGenProps): JSX.Element => {
-    const dispatch = useDispatch();
     const { user, businessDwollaId } = useContext(UserContext);
     const { businessWalletData } = useContext(WalletContext);
     const { hasPermission, setMaxBrightness, setDefaultBrightness } = useBrightness();
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
-    const [initBalance, setInitBalance] = useState<number>(businessWalletData.availableBalance);
+    const [initBalance] = useState<number>(businessWalletData.availableBalance);
     const [isSuccess, setIsSuccess] = useState<boolean>(false);
     const addressStr = JSON.stringify({
         securityId: SECURITY_ID,
@@ -90,9 +87,6 @@ const StaticQRCodeGen = (props: QRCodeGenProps): JSX.Element => {
     const onSuccess = async () => {
         if (!isSuccess) {
             setIsSuccess(true);
-            if (businessDwollaId) {
-                // await dispatch(loadBusinessTransactions(businessDwollaId));
-            }
             setDefaultBrightness();
             props.onSuccess(businessWalletData.availableBalance - initBalance);
         }
