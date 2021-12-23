@@ -8,6 +8,7 @@ import Translation from 'src/translation/en.json';
 import { colors } from "src/theme/colors";
 import { Entypo } from '@expo/vector-icons';
 import { FontFamily } from "src/theme/elements";
+import { BERKSHARE_TERMS_URL, BERKSHARE_PRIVACY_URL } from '../../config/env';
 
 const styles = StyleSheet.create({
 	headerText: {
@@ -50,12 +51,12 @@ const styles = StyleSheet.create({
 
 const termsAndConditions: any = {
 	title: "Terms & Conditions",
-	link: "https://docs.google.com/document/d/1f2lD1L1J1G78aMKuQGzfMQrfsari31_X5kIURksPmIA/edit#"
+	link: BERKSHARE_TERMS_URL
 }
 
 const privacyPolicy: any = {
 	title: "Privacy Policy",
-	link: "https://berkshares.org/about/privacy-policy/"
+	link: BERKSHARE_PRIVACY_URL
 }
   
 export const MerchantSettingsTermsAndConditions = (): ReactElement => {
