@@ -1,6 +1,6 @@
 import { createStackNavigator } from "@react-navigation/stack";
 import React, { ReactElement } from "react";
-import RedemptionInProgress from "src/screens/cashout/RedemptionInProgress";
+import { RedemptionInProgress } from "src/views";
 
 const CashoutStack = createStackNavigator()
 function CashoutStackScreen(): ReactElement {

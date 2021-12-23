@@ -1,6 +1,6 @@
 import { createStackNavigator } from "@react-navigation/stack";
 import React, { ReactElement } from "react";
-import SelectMerchantBank from "src/screens/merchantBankAccount/SelectMerchantBank";
+import SelectMerchantBank from "src/screens/business/bank";
 
 const MerchantBankAccountStack = createStackNavigator()
 function MerchantBankAccountScreen(): ReactElement {
