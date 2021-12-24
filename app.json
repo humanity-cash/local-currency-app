@@ -18,7 +18,13 @@
     ],
     "ios": {
       "bundleIdentifier": "com.keyko.berkshares-app",
-      "buildNumber": "1"
+      "buildNumber": "2",
+      "infoPlist": {
+        "NSCameraUsageDescription": "BerkShares uses the camera to scan barcodes or edit your profile.",
+        "NSPhotoLibraryAddUsageDescription": "BerkShares uses the photo library to upload your profile.",
+        "NSPhotoLibraryUsageDescription": "BerkShares uses the photo library to upload your profile.",
+        "ITSAppUsesNonExemptEncryption": false
+      }
     },
     "packagerOpts": {
       "config": "metro.config.js",
