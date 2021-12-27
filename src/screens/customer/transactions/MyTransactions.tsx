@@ -21,9 +21,9 @@ import { baseHeader, dialogViewBase, FontFamily, viewBase, wrappingContainerBase
 import Translation from 'src/translation/en.json';
 import { getBerksharePrefix } from "src/utils/common";
 import { CustomerTxFilterStore, MiniTransaction, TransactionType } from "src/utils/types";
-import MyTransactionList from './MyTransactionList';
-import MyTransactionFilter from './MyTransactionsFilter';
-import ReturnQRCodeGen from './ReturnQRCodeGen';
+import MyTransactionList from "./MyTransactionList";
+import TransactionFilters from "src/shared/uielements/TransactionFilters";
+import ReturnQRCodeGen from "./ReturnQRCodeGen";
 
 moment.locale('us-en')
 
@@ -347,7 +347,7 @@ const MyTransactions = (): JSX.Element => {
 								/>
 							</TouchableOpacity>
 						</View>
-						{ isFilterVisible && <MyTransactionFilter onClear={clearSearchText} />}
+						{ isFilterVisible && <TransactionFilters onClear={clearSearchText} />}
 						<MyTransactionList data={filteredData} onSelect={viewDetail} />
 					</View>
 				</ScrollView>
