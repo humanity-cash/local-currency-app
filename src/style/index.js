@@ -466,3 +466,134 @@ export const BusinessCashOut = StyleSheet.create({
 		paddingTop: 20,
 	}
 });
+
+export const BusinessTxFiltersStyle =  StyleSheet.create({
+    container: {
+        flex: 1,
+        paddingBottom: 20
+    },
+    mainText: {
+        color: colors.purple
+    },
+    placeholder: {
+        color: colors.greyedPurple
+    },
+    inlineView: {
+        flex: 1,
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        marginVertical: 5,
+        alignItems: 'center'
+    },
+    dateView: {
+        flex: 1,
+    },
+    date: {
+        height: 55,
+        marginVertical: 7,
+        alignItems: 'center',
+        justifyContent: 'center',
+        borderRadius: 3,
+        backgroundColor: colors.white
+    },
+    separator: {
+        width: 15,
+        height: 1,
+        marginHorizontal: 10,
+        marginTop: 15,
+        backgroundColor: colors.purple
+    },
+    label: {
+        fontSize: 10,
+        lineHeight: 14,
+        color: colors.bodyText
+    },
+    typeView: {
+        marginTop: 7
+    },
+    pickerText: {
+        color: colors.purple,
+        textAlign: 'center'
+    },
+    selectItem: {
+        width: '100%',
+        height: 55,
+        backgroundColor: colors.white,
+    },
+    dropdownContainer: { marginTop: -20 },
+    clearFilter: {
+        paddingVertical: 15,
+        borderBottomWidth: 1,
+        borderBottomColor: colors.purple
+    },
+    clearText: {
+        textAlign: "center",
+        color: colors.purple
+    }
+});
+
+export const CustomerTxFiltersStyle = StyleSheet.create({
+    container: {
+        flex: 1,
+        paddingBottom: 20
+    },
+    inlineView: {
+        flex: 1,
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        marginVertical: 5,
+        alignItems: 'center'
+    },
+    dateView: {
+        flex: 1,
+    },
+    date: {
+        height: 55,
+        marginVertical: 7,
+        alignItems: 'center',
+        justifyContent: 'center',
+        borderRadius: 3,
+        backgroundColor: colors.inputBg
+    },
+    separator: {
+        width: 15,
+        height: 1,
+        marginHorizontal: 10,
+        marginTop: 15,
+        backgroundColor: colors.darkGreen
+    },
+    label: {
+		fontSize: 10,
+		lineHeight: 14,
+		color: colors.bodyText
+	},
+    typeView: {
+        flex: 1,
+        height: 55,
+        justifyContent: 'center',
+        marginTop: 7,
+        backgroundColor: colors.inputBg
+    },
+    pickerText: {
+        color: colors.darkGreen,
+        textAlign: 'center'
+    },
+    selectItem: {
+        width: '100%',
+        height: 55,
+        backgroundColor: colors.inputBg,
+    },
+    dropdownContainer: {marginTop: -20},
+    placeholder: {
+        color: colors.lightGreen
+    },
+    clearFilter: {
+		paddingVertical: 15,
+		borderBottomWidth: 1,
+		borderBottomColor: colors.darkGreen
+	},
+    clearText: {
+        textAlign: "center"
+    }
+});
+

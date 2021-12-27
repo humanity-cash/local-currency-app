@@ -25,8 +25,8 @@ import SettingDialog from 'src/shared/uielements/SettingDialog';
 import { BarCodeScanner } from 'expo-barcode-scanner';
 import { EventsContext } from 'src/contexts/events';
 import EventItem from 'src/shared/uielements/EventItem';
-import MerchantTransactionsFilter from '../transactions/MerchantTransactionsFilter';
 import { BusinessScanQrCodeStyle } from "src/style";
+import TransactionFilters from "src/shared/uielements/TransactionFilters";
 
 type TransactionDetailProps = {
 	visible: boolean,
@@ -303,7 +303,7 @@ const MerchantDashboard = (): JSX.Element => {
 								/>
 							</TouchableOpacity>
 						</View>
-						{isFilterVisible && <MerchantTransactionsFilter onClear={clearSearchText} />}
+						{isFilterVisible && <TransactionFilters onClear={clearSearchText} />}
 						<MerchantTransactionList data={filteredApiData} onSelect={viewDetail} />
 					</View>
 				</ScrollView>
