@@ -383,6 +383,8 @@ const DrawerContent = (props: DrawerContentComponentProps) => {
 
 	const userTag = user?.customer?.tag || undefined
 	const businessTag = user?.business?.tag || undefined
+    const verifiedBusiness = user?.verifiedCustomer;
+    const verifiedCustomer = user?.verifiedCustomer;
 
 	return (
 		<View style={styles.drawerWrap}>
@@ -409,7 +411,7 @@ const DrawerContent = (props: DrawerContentComponentProps) => {
 								</View>
 								<View style={styles.usernameView}>
 									<Text>{businessTag}</Text>
-									{(userTag || authorization.cashierView) && <View style={styles.inlineView}>
+									{(verifiedCustomer || verifiedBusiness) && <View style={styles.inlineView}>
 										<Text style={styles.fadeText}>
 											Switch account
 										</Text>
@@ -424,7 +426,7 @@ const DrawerContent = (props: DrawerContentComponentProps) => {
 						</TouchableWithoutFeedback>
 						{isExpanded && (
 							<View>
-								{userTag ? (
+								{verifiedCustomer && userTag ? (
 									<TouchableWithoutFeedback
 										onPress={onPersonal}>
 										<View style={styles.userInfo}>
@@ -440,7 +442,7 @@ const DrawerContent = (props: DrawerContentComponentProps) => {
 										</View>
 									</TouchableWithoutFeedback>
 								) : null}
-								{authorization.cashierView ? (<TouchableWithoutFeedback
+								{verifiedBusiness ? (<TouchableWithoutFeedback
 									onPress={() => setIsCashierView(true)}>
 									<View style={styles.userInfo}>
 										<View style={styles.imageView}>
