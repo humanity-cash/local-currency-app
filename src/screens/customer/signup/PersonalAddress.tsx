@@ -13,7 +13,7 @@ import { UserType } from "src/auth/types";
 import { BUTTON_TYPES } from "src/constants";
 import { AuthContext, UserContext } from "src/contexts";
 import { NavigationViewContext, ViewState } from "src/contexts/navigation";
-import DataLoading from 'src/views';
+import { LoadingPage } from 'src/views';
 import {
 	BackBtn,
 	Button,
@@ -77,7 +77,7 @@ const PersonalAddress = (): React.ReactElement => {
 		<KeyboardAvoidingView
 			behavior={Platform.OS == "ios" ? "padding" : "height"}
 			style={viewBase}>
-			<DataLoading visible={isLoading} />
+			<LoadingPage visible={isLoading} isData={true}/>
 			<Header
 				leftComponent={<BackBtn onClick={() => navigation.goBack()} />}
 				rightComponent={
