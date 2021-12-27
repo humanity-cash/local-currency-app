@@ -122,7 +122,7 @@ const BusinessProfileForm = (): ReactElement => {
 			/>
 
 			<Text style={styles.smallLabel}>
-				TELL US YOUR STORY (50 WORDS MAX)
+				TELL US YOUR STORY (50 WORDS MAX)*
 			</Text>
 			<TextInput
 				ref={storyRef}
