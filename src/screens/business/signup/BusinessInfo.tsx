@@ -135,7 +135,7 @@ const BusinessInfo = (): ReactElement => {
 				<ScrollView>
 					<View style={styles.formView}>
 						<Text style={styles.label}>
-							{Translation.LABEL.REGISTERD_NAME}
+							{`${Translation.LABEL.REGISTERD_NAME}*`}
 						</Text>
 						<BlockInput
 							name="rbn"
@@ -180,7 +180,7 @@ const BusinessInfo = (): ReactElement => {
 								)}
 							/>
 						</View>
-						<Text style={styles.label}>{Translation.LABEL.EIN}</Text>
+						<Text style={styles.label}>{`${Translation.LABEL.EIN}*`}</Text>
 						<MaskInput
 							value={business?.ein}
 							mask={[/\d/, /\d/, "-", /\d/, /\d/, /\d/, /\d/, /\d/, /\d/, /\d/]}
