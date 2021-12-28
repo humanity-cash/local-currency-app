@@ -158,10 +158,15 @@ const CustomerDashboard = (): JSX.Element => {
 	const [isSetting, setIsSetting] = useState(false)
 	const { customerDwollaId, user } = useContext(UserContext)
 	const { customerWalletData, updateCustomerWalletData } = useContext(WalletContext)
-	const { events, getEvents, deleteEvent } = useContext(EventsContext)
+	const { events, getEvents, deleteEvent, updateEvents } = useContext(EventsContext)
 	const { isLoading: isWalletLoading } = useCustomerWallet();
 	const personalFundingSource = customerWalletData?.availableFundingSource;
 	const availableBalance = customerWalletData?.availableBalance;
+	const [showEvents, setShowEvents] = useState(false)
+
+	useEffect(() => {
+		updateEvents([])
+	}, [])
 
 	useEffect(() => {
 		const timerId = setInterval(async () => {
@@ -169,7 +174,8 @@ const CustomerDashboard = (): JSX.Element => {
 				const userWallet = await DwollaAPI.loadWallet(customerDwollaId)
 				const fundingSource = await DwollaAPI.loadFundingSource(customerDwollaId)
 				updateCustomerWalletData(({ ...userWallet, availableFundingSource: fundingSource }))
-				getEvents(customerDwollaId)
+				await getEvents(customerDwollaId)
+				setShowEvents(true)
 			}
 		}, 1000);
 		return () => clearInterval(timerId);
@@ -260,7 +266,7 @@ const CustomerDashboard = (): JSX.Element => {
 								</Text>
 							</View>
 						)}
-						{events.length > 0 &&
+						{showEvents && events.length > 0 &&
 							<EventItem
 								event={events[events.length - 1]}
 								onDelete={() => { deleteEvent(customerDwollaId, events[events.length - 1].dbId) }}
