@@ -90,7 +90,7 @@ const Verification = (): JSX.Element => {
 						)}
 						{noCodeReceived && (
 							<Text style={styles.headerText}>
-								{Translation.EMAIL_VERIFICATION.ENTER_EMAIL_ADDR}
+								{Translation.EMAIL_VERIFICATION.ENTER_VERIFICATION_CODE}
 							</Text>
 						)}
 					</View>
