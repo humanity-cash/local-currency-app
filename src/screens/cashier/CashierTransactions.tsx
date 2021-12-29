@@ -1,28 +1,20 @@
 import { useNavigation } from "@react-navigation/native";
-import { createFuseSearchInstance } from 'src/fuse';
-import React, { useState, useContext, useEffect } from 'react';
+import React, { useContext } from 'react';
 import { StyleSheet, View, ScrollView } from 'react-native';
 import { Text } from "react-native-elements";
 import { Header } from "src/shared/uielements";
 import { colors } from "src/theme/colors";
-import { viewBaseB, wrappingContainerBase, baseHeader, dialogViewBase, FontFamily } from "src/theme/elements";
-import { SearchInput, Dialog, CancelBtn } from "src/shared/uielements";
-import CashierTransactionList from "./CashierTransactionList";
+import { viewBaseB, wrappingContainerBase, baseHeader, FontFamily } from "src/theme/elements";
+import { CancelBtn } from "src/shared/uielements";
 import Translation from 'src/translation/en.json';
-import { BusinessTxDataStore, BusinessTxDataStoreActions, BusinessTxDataStoreReducer, MiniTransaction, TransactionType } from "src/utils/types";
-import { getBerksharePrefix, sortTxByTimestamp } from "src/utils/common";
-import moment from "moment";
 import { WalletContext, UserContext } from "src/contexts";
-import { useStore } from "react-hookstore";
-import { TransactionsAPI } from "src/api";
-import { BUSINESS_TX_DATA_STORE } from "src/hook-stores";
-import { LoadingPage } from "src/views";
+import { TransactionList } from "src/views"
 
 const styles = StyleSheet.create({
 	mainTextColor: {
 		color: colors.purple,
 	},
-	inlineView: {flexDirection: 'row'},
+	inlineView: { flexDirection: 'row' },
 	headerText: {
 		color: colors.purple,
 		fontSize: 40,
@@ -58,7 +50,7 @@ const styles = StyleSheet.create({
 		paddingTop: 20
 	},
 	detailView: {
-		flexDirection: 'row', 
+		flexDirection: 'row',
 		justifyContent: 'space-between'
 	},
 	detailText: {
@@ -86,117 +78,13 @@ const styles = StyleSheet.create({
 	}
 });
 
-type TransactionDetailProps = {
-	visible: boolean,
-	data: MiniTransaction,
-	onConfirm: () => void
-}
-
-const TransactionDetail = (props: TransactionDetailProps) => {
-	const {data, visible, onConfirm} = props;
-
-	const getStyle = (type: string) => {
-		if (type === TransactionType.SALE || type === TransactionType.RETURN) {
-			return styles.plusText;
-		} else {
-			return styles.minusText;
-		}
-	}
-
-	return (
-		<Dialog visible={visible} onClose={onConfirm} backgroundStyle={styles.dialog} style={styles.dialogHeight}>
-			<View style={dialogViewBase}>
-				<ScrollView style={wrappingContainerBase}>
-					<View style={ baseHeader }>
-						<Text style={getStyle(data.type)}>
-							{data.type}
-						</Text>
-						<Text style={{...getStyle(data.type), ...styles.amountText}}>
-							{getBerksharePrefix(data.type)} { data.value } 
-						</Text>
-					</View>
-					<View style={styles.infoView}>
-						<View style={styles.detailView}>
-							<Text style={styles.detailText}>{Translation.PAYMENT.TRANSACTION_ID}</Text>
-							<Text style={styles.detailText}>{data.transactionHash}</Text>
-						</View>
-						<View style={styles.detailView}>
-							<Text style={styles.detailText}>TYPE</Text>
-							<Text style={styles.detailText}>
-								{data.type}
-							</Text>
-						</View>
-						<View style={styles.detailView}>
-							<Text style={styles.detailText}>DATE</Text>
-							<Text style={styles.detailText}>
-								{moment(data.timestamp).format('HH:mm, MMM D, YYYY')}
-							</Text>
-						</View>
-					</View>
-				</ScrollView>
-			</View>
-		</Dialog>
-	)
-}
-
-const options = {
-	includeScore: false,
-	keys: ['toName', 'fromName', 'value', 'type']
-};
-
 const CashierTransactions = (): JSX.Element => {
 	const navigation = useNavigation();
-	const [searchText, setSearchText] = useState<string>("");
-	const [isDetailViewOpen, setIsDetailViewOpen] = useState<boolean>(false);
-	const [isLoading, setIsLoading] = useState<boolean>(false);
-	const [selectedItem, setSelectedItem] = useState<MiniTransaction>({} as MiniTransaction);
-
 	const { businessDwollaId } = useContext(UserContext)
 	const { businessWalletData } = useContext(WalletContext)
-	const [apiData, dispatchApiData] = useStore<BusinessTxDataStore, BusinessTxDataStoreReducer>(BUSINESS_TX_DATA_STORE);
-	const [filteredApiData, setFilteredApiData] = useState<MiniTransaction []>([]);
-
-	const onSearchChange = (name: string, change: string) => {
-		setSearchText(change);
-		if (!change) {
-			setFilteredApiData(apiData.txs);
-			setSearchText(change);
-			return;
-		}
-		const fuseInstance = createFuseSearchInstance(filteredApiData, options);
-		const fuseResult = fuseInstance.search(change);
-		//@ts-ignore
-		setFilteredApiData(fuseResult.map(i => i.item));
-		setSearchText(change);
-
-	}
-
-	useEffect(() => {
-		const handler = async () => {
-			if (!businessDwollaId) return;
-			setIsLoading(true);
-			const txs = await TransactionsAPI.getBlockchainTransactions(businessDwollaId);
-			const sortedTxs = sortTxByTimestamp(txs);
-			dispatchApiData({ type: BusinessTxDataStoreActions.UpdateTransactions, payload: { txs: sortedTxs } });
-			setFilteredApiData(sortedTxs);
-			setIsLoading(false);
-		}
-		handler();
-
-	}, [businessWalletData.availableBalance, businessDwollaId]);
-
-	const viewDetail = (item: MiniTransaction) => {
-		setSelectedItem(item);
-		setIsDetailViewOpen(true);
-	}
-
-	const onConfirm = () => {
-		setIsDetailViewOpen(false);
-	}
 
 	return (
 		<View style={viewBaseB}>
-			<LoadingPage visible={isLoading} isPayment={true}/>
 			<Header
 				rightComponent={<CancelBtn text={Translation.BUTTON.CLOSE} color={colors.purple} onClick={() => navigation.goBack()} />}
 			/>
@@ -209,24 +97,12 @@ const CashierTransactions = (): JSX.Element => {
 						<View></View>
 						<View>
 							<Text style={styles.alignRight}>{Translation.CASHIER.BALANCE}</Text>
-							<Text style={styles.balanceText}>B$ {businessWalletData?.availableBalance.toFixed(2)}</Text>
+							<Text style={styles.balanceText}>B$ {businessWalletData?.availableBalance?.toFixed(2)}</Text>
 						</View>
 					</View>
-
-					<SearchInput
-						label="Search"
-						name="searchText"
-						keyboardType="default"
-						placeholder="Search"
-						style={styles.input}
-						textColor={colors.greyedPurple}
-						value={searchText}
-						onChange={onSearchChange}
-					/>
+					<TransactionList userId={businessDwollaId} />
 				</View>
-				<CashierTransactionList data={filteredApiData} onSelect={viewDetail} />
 			</ScrollView>
-			{isDetailViewOpen && <TransactionDetail visible={isDetailViewOpen} data={selectedItem} onConfirm={onConfirm} />}
 		</View>
 	);
 }

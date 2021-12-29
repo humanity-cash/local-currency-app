@@ -31,6 +31,7 @@ export interface FiltersModule {
 }
 
 const customerTxTypes = ["All", "Incoming transactions", "Outgoing transactions", "Load ups B$", "Cash out to USD"];
+const cashierTxTypes = ["All", "Incoming transactions", "Outgoing transactions"];
 
 const getFilters = ({ onClear, store }: { onClear: any, store: string }): FiltersModule => {
     const [{
@@ -105,7 +106,7 @@ const getFilters = ({ onClear, store }: { onClear: any, store: string }): Filter
 const MyTransactionFilter = ({ onClear }: { onClear: any }): JSX.Element => {
     let txTypes: string[] = [];
     const { userType } = useContext(UserContext);
-    const store = userType === UserType.Business ? BUSINESS_TX_FILTERS_STORE : CUSTOMER_TX_FILTERS_STORE;
+    const store = userType === UserType.Business || userType === UserType.Cashier ? BUSINESS_TX_FILTERS_STORE : CUSTOMER_TX_FILTERS_STORE;
 
     let styles: any = {};
     if (userType === UserType.Customer) {
@@ -114,7 +115,9 @@ const MyTransactionFilter = ({ onClear }: { onClear: any }): JSX.Element => {
     } else if (userType === UserType.Business) {
         styles = BusinessTxFiltersStyle
         txTypes = customerTxTypes;
-        // txTypes = businessTxTypes;
+    } else if (userType === UserType.Cashier) {
+        styles = BusinessTxFiltersStyle
+        txTypes = cashierTxTypes;
     }
 
     const { onStartDateChange,
