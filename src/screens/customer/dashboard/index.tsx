@@ -118,7 +118,7 @@ const CustomerDashboard = (): JSX.Element => {
 					<TouchableOpacity
 						style={styles.topupButton}
 						onPress={() => { personalFundingSource ? navigation.navigate(Routes.LOAD_UP, { userId: customerDwollaId }) : setIsVisible(true) }}>
-						<Text style={styles.topupText}>Load up B$</Text>
+						<Text style={styles.topupText}>{Translation.LOAD_UP.TITLE}</Text>
 					</TouchableOpacity>
 				</View>
 				<ScrollView>
