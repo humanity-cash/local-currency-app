@@ -1,5 +1,5 @@
 import { useNavigation } from '@react-navigation/native';
-import React, {useState, useEffect} from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { StyleSheet, View, KeyboardAvoidingView, ScrollView, Platform, SafeAreaView } from 'react-native';
 import { Text } from 'react-native-elements';
 import { Header, Button, CancelBtn, BackBtn, BorderedInput } from "src/shared/uielements";
@@ -7,9 +7,11 @@ import { baseHeader, viewBaseB, wrappingContainerBase } from "src/theme/elements
 import { colors } from "src/theme/colors";
 import Translation from 'src/translation/en.json';
 import * as Routes from 'src/navigation/constants';
-import CashierQRCodeGen from 'src/screens/cashier/CashierQRCodeGen';
-import CashierRequestSuccess from './CashierRequestSuccess';
 import { BUTTON_TYPES } from 'src/constants';
+import { PaymentsModule } from 'src/modules';
+import { UserContext, WalletContext } from "src/contexts"
+import { IWallet } from '@humanity.cash/types';
+import { PaymentRequestSuccess } from "src/views";
 
 const styles = StyleSheet.create({
 	headerText: {
@@ -19,17 +21,17 @@ const styles = StyleSheet.create({
 		lineHeight: 40
 	},
 	switchView: {
-		flex: 1, 
-		justifyContent: 'center', 
+		flex: 1,
+		justifyContent: 'center',
 		alignItems: 'center'
 	},
-	contentView: { 
+	contentView: {
 		marginTop: 5
 	},
-	label: { 
-		marginTop: 20, 
-		color: colors.bodyText, 
-		fontSize: 12 
+	label: {
+		marginTop: 20,
+		color: colors.bodyText,
+		fontSize: 12
 	},
 	input: {
 		backgroundColor: colors.white,
@@ -51,11 +53,13 @@ const CashierRequest = (): JSX.Element => {
 	const [isVisible, setIsVisible] = useState<boolean>(false);
 	const [receivedAmount, setReceivedAmount] = useState<number>(0);
 	const [isRequestSuccess, setIsRequestSuccess] = useState<boolean>(false);
+	const { user, businessDwollaId } = useContext(UserContext);
+	const { businessWalletData, updateBusinessWalletData } = useContext(WalletContext);
 
 	useEffect(() => {
 		setAmount("")
 	}, [])
-	
+
 	useEffect(() => {
 		setGoNext(Number(amount) > 0);
 	}, [amount]);
@@ -116,7 +120,7 @@ const CashierRequest = (): JSX.Element => {
 					type={BUTTON_TYPES.TRANSPARENT}
 					title={Translation.BUTTON.HOW_TO_WORK}
 					textStyle={styles.text}
-					onPress={()=>navigation.navigate(Routes.CASHIER_HOW_TO_WORK)}
+					onPress={() => navigation.navigate(Routes.CASHIER_HOW_TO_WORK)}
 				/>
 				<Button
 					type={BUTTON_TYPES.PURPLE}
@@ -125,8 +129,15 @@ const CashierRequest = (): JSX.Element => {
 					onPress={requestAmount}
 				/>
 			</SafeAreaView>
-			{ isVisible && <CashierQRCodeGen visible={isVisible} onSuccess={onSuccess} onClose={onClose} amount={Number(amount)} /> }
-			{ isRequestSuccess && <CashierRequestSuccess visible={isRequestSuccess} onClose={onConfirm} amount={receivedAmount} /> }
+			{isVisible && <PaymentsModule.Request
+				visible={isVisible}
+				onSuccess={onSuccess}
+				onClose={onClose}
+				isOpenAmount={false}
+				amount={Number(amount)}
+				ownerName={user?.business?.tag || ""}
+			/>}
+			{isRequestSuccess && <PaymentRequestSuccess visible={isRequestSuccess} onClose={onConfirm} amount={receivedAmount} />}
 		</KeyboardAvoidingView>
 	);
 }
