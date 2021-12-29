@@ -2,7 +2,7 @@ import { AntDesign, EvilIcons, Feather } from '@expo/vector-icons';
 import { createDrawerNavigator, DrawerContentComponentProps, DrawerContentScrollView, DrawerItem } from '@react-navigation/drawer';
 import { DrawerActions } from '@react-navigation/native';
 import React, { useContext, useState } from 'react';
-import { Image, StyleSheet, Text, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native';
+import { Image, Text, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native';
 import { Drawer } from 'react-native-paper';
 import { UserType } from 'src/auth/types';
 import { BUTTON_TYPES } from 'src/constants';
@@ -22,82 +22,12 @@ import MerchantDashboard from "../dashboard";
 import BankLinkDialog from 'src/shared/uielements/BankLinkDialog';
 import { BarCodeScanner } from 'expo-barcode-scanner';
 import SettingDialog from 'src/shared/uielements/SettingDialog';
-import { useUserDetails } from "src/hooks";
 import { PaymentsModule } from 'src/modules';
 import { BusinessScanQrCodeStyle } from 'src/style';
 import { prefixCustomerName } from 'src/utils/common';
 import MerchantSettings from "../drawer/settings/MerchantSettings";
 import MerchantSettingsHelpAndContact from '../drawer/settings/MerchantSettingsHelpAndContact';
-
-const styles = StyleSheet.create({
-	headerText: {
-		fontSize: 32,
-		lineHeight: 35,
-		color: colors.purple
-	},
-	drawerWrap: {
-		flex: 1,
-		backgroundColor: colors.greyedPurple,
-		paddingVertical: 30
-	},
-	closeBtnView: {
-		paddingLeft: 15,
-		paddingBottom: 10,
-		flexDirection: 'row'
-	},
-	closeBtnText: {
-		fontSize: 18,
-		marginLeft: 10,
-		color: colors.bodyText
-	},
-	imageView: {
-		justifyContent: 'center',
-		alignItems: 'center',
-		width: 50,
-		height: 50,
-		borderRadius: 25,
-		backgroundColor: colors.white
-	},
-	image: {
-		width: '70%',
-		height: '70%',
-		borderRadius: 20
-	},
-	infoView: {
-		paddingVertical: 10
-	},
-	userInfo: {
-		flexDirection: 'row',
-		alignItems: 'center',
-		paddingVertical: 5,
-		paddingHorizontal: 10
-	},
-	usernameView: {
-		paddingHorizontal: 10
-	},
-	fadeText: {
-		color: colors.purple
-	},
-	berkAmount: {
-		fontSize: 32,
-		color: colors.lightBg,
-		paddingHorizontal: 15,
-		paddingTop: 10
-	},
-	bottomSection: {
-		paddingBottom: 10
-	},
-	inlineView: {
-		flexDirection: 'row'
-	},
-	detailText: {
-		fontSize: 16,
-		color: colors.bodyText
-	},
-	dialogBg: {
-		backgroundColor: colors.overlayPurple
-	}
-});
+import { styles } from "./style";
 
 type ReturnPaymentDialogProps = {
 	visible: boolean,
@@ -179,7 +109,6 @@ const DrawerContent = (props: DrawerContentComponentProps) => {
 	const { signOut, userEmail } = useContext(AuthContext);
 	const { user, updateUserType, businessDwollaId } = useContext(UserContext);
 	const { updateSelectedView } = useContext(NavigationViewContext);
-	const { authorization } = useUserDetails();
 	const [isExpanded, setIsExpanded] = useState<boolean>(false);
 	const [isVisible, setIsVisible] = useState<boolean>(false);
 	const [isCashierView, setIsCashierView] = useState<boolean>(false);
@@ -383,8 +312,8 @@ const DrawerContent = (props: DrawerContentComponentProps) => {
 
 	const userTag = user?.customer?.tag || undefined
 	const businessTag = user?.business?.tag || undefined
-    const verifiedBusiness = user?.verifiedCustomer;
-    const verifiedCustomer = user?.verifiedCustomer;
+	const verifiedBusiness = user?.verifiedCustomer;
+	const verifiedCustomer = user?.verifiedCustomer;
 
 	return (
 		<View style={styles.drawerWrap}>

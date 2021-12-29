@@ -39,9 +39,11 @@ const RequestPayment = (props: RequestPaymentInput): JSX.Element => {
 		const timerId = setInterval(async () => {
 			if (recieverId) {
 				const userWallet: IWallet = await DwollaAPI.loadWallet(recieverId)
-				updateWalletData(userWallet);
+				if(userWallet?.userId) {
+					updateWalletData(userWallet);
+				}
 			}
-		}, 1000);
+		}, 2000);
 
 		return () => clearInterval(timerId);
 	}, [props.visible]);
