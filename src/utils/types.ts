@@ -386,7 +386,7 @@ export interface LoadingState {
 }
 
 
-interface TxFilters {
+export interface TxFilters {
   startDate: Date | undefined,
   endDate: Date | undefined,
   isStartDate: boolean,
@@ -394,29 +394,18 @@ interface TxFilters {
   selectedType: string | undefined
 }
 
-export type CustomerTxFilterStore = TxFilters;
-export type BusinessTxFilterStore = TxFilters;
 
 export type MiniTransaction = Pick<ITransaction, 'blockNumber' | 'transactionHash' | 'timestamp' | 'toName' | 'type' | 'value' | 'fromName'>
 
-
-export interface CustomerTxDataStore {
+export interface TxDataStore {
   txs: MiniTransaction[]
 }
 
-export interface BusinessTxDataStore {
-  txs: MiniTransaction[]
-}
-
-export enum CustomerTxDataStoreActions {
+export enum TxDataStoreActions {
 	UpdateTransactions = "updateTransactions",
 }
 
-export enum BusinessTxDataStoreActions {
-	UpdateTransactions = "updateTransactions",
-}
-
-export enum BusinessTxFilterStoreActions {
+export enum TxFilterStoreActions {
 	OpenStartDate = "openStoreDate",
 	OpenEndDate = "openEndDate",
 	CloseStartDate = "closeStoreDate",
@@ -427,18 +416,5 @@ export enum BusinessTxFilterStoreActions {
 	ClearAll = "clearAll"
 }
 
-export enum CustomerTxFilterStoreActions {
-	OpenStartDate = "openStoreDate",
-	OpenEndDate = "openEndDate",
-	CloseStartDate = "closeStoreDate",
-	CloseEndDate = "closeEndDate",
-	UpdateStartDate = "updateStartDate",
-	UpdateEndDate = "updateEndDate",
-	UpdateType = "updateType",
-	ClearAll = "clearAll"
-}
-
-export type CustomerTxFilterStoreReducer = { type: CustomerTxFilterStoreActions, payload: { startDate?: Date, endDate?: Date, type?: string } }
-export type CustomerTxDataStoreReducer = { type: CustomerTxDataStoreActions, payload: { txs: MiniTransaction[] } }
-export type BusinessTxFilterStoreReducer = { type: BusinessTxFilterStoreActions, payload: { startDate?: Date, endDate?: Date, type?: string } }
-export type BusinessTxDataStoreReducer = { type: BusinessTxDataStoreActions, payload: { txs: MiniTransaction[] } }
+export type TxFilterStoreReducer = { type: TxFilterStoreActions, payload: { startDate?: Date, endDate?: Date, type?: string } }
+export type TxDataStoreReducer = { type: TxDataStoreActions, payload: { txs: MiniTransaction[] } }

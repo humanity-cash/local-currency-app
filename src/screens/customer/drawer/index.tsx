@@ -26,7 +26,7 @@ import PaymentRequest from "src/screens/customer/payment/PaymentRequest";
 import Settings from "./settings/Settings";
 import SettingsHelpAndContact from "./settings/SettingsHelpAndContact";
 import BusinessAccount from "src/screens/business/signup/BusinessAccount";
-import MyTransactions from "../transactions/MyTransactions";
+import MyTransactions from "../transactions";
 import Dashboard from "src/screens/customer/dashboard";
 import { BarCodeScanner } from 'expo-barcode-scanner';
 import SettingDialog from 'src/shared/uielements/SettingDialog';
