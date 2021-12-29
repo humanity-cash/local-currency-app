@@ -37,7 +37,7 @@ const styles = StyleSheet.create({
 		lineHeight: 35,
 	},
 	bodyText: {
-		color: colors.bodyText,
+		color: colors.bodyText
 	},
 	form: {
 		marginTop: 30,
@@ -53,7 +53,8 @@ const styles = StyleSheet.create({
 		fontWeight: '400',
 		paddingTop: 10,
 		flexDirection: 'row',
-		flexWrap: 'wrap'
+		flexWrap: 'wrap',
+		flex: 1
 	},
 	checkboxContainer: {
 		borderWidth: 0,
