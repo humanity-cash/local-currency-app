@@ -31,6 +31,7 @@ export interface FiltersModule {
 }
 
 const customerTxTypes = ["All", "Incoming transactions", "Outgoing transactions", "Load ups B$", "Cash out to USD"];
+const cashierTxTypes = ["All", "Incoming transactions", "Outgoing transactions"];
 
 const getFilters = ({ onClear, store }: { onClear: any, store: string }): FiltersModule => {
     const [{
@@ -111,10 +112,12 @@ const MyTransactionFilter = ({ onClear }: { onClear: any }): JSX.Element => {
     if (userType === UserType.Customer) {
         styles = CustomerTxFiltersStyle;
         txTypes = customerTxTypes;
-    } else if (userType === UserType.Business || userType === UserType.Cashier) {
+    } else if (userType === UserType.Business) {
         styles = BusinessTxFiltersStyle
         txTypes = customerTxTypes;
-        // txTypes = businessTxTypes;
+    } else if (userType === UserType.Cashier) {
+        styles = BusinessTxFiltersStyle
+        txTypes = cashierTxTypes;
     }
 
     const { onStartDateChange,
