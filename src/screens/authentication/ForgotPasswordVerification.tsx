@@ -24,6 +24,8 @@ import {
 	viewBase,
 	wrappingContainerBase
 } from "src/theme/elements";
+import { showToast } from 'src/utils/common';
+import { ToastType } from 'src/utils/types';
 
 const styles = StyleSheet.create({
 	modalHeader: {
@@ -48,6 +50,7 @@ const ForgotPasswordVerification = () => {
 	const {
 		forgotPasswordDetails: { email },
 		setForgotPasswordDetails,
+		startForgotPasswordFlow,
 	} = useContext(AuthContext);
 	const [sentAgain, setSentAgain] = useState(false)
 
@@ -90,8 +93,14 @@ const ForgotPasswordVerification = () => {
 			</View>
 			<SafeAreaView style={styles.bottomView}>
 				<TouchableOpacity
-					onPress={() => {
+					onPress={async () => {
 						Keyboard.dismiss();
+						const response = await startForgotPasswordFlow();
+						if (response.success) {
+							showToast(ToastType.SUCCESS, "Code sent again!", "");
+						} else {
+							showToast(ToastType.ERROR, "Something went wrong!", "");
+						}
 					}}>
 					<Text style={styles.bottomNavigation}>
 						{Translation.EMAIL_VERIFICATION.SEND_CODE}

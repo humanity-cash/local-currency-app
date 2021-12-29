@@ -1,3 +1,4 @@
+import moment from 'moment';
 import React, { ReactElement } from 'react';
 import { ThemeProvider } from "react-native-elements";
 import 'react-native-gesture-handler';
@@ -7,6 +8,8 @@ import { UserProvider, AuthProvider, WalletProvider, EventsProvider } from './co
 import useCachedResources from "./hooks/useCachedResources";
 import { MainNavigationStack } from './navigation/MainNavigationStack';
 import { theme } from "./theme/theme";
+
+moment.locale('us-en')
 
 export default function App(): ReactElement | null {
 	const resourceLoaded = useCachedResources();

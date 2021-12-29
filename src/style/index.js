@@ -597,3 +597,45 @@ export const CustomerTxFiltersStyle = StyleSheet.create({
     }
 });
 
+
+export const BusinessTransactionItem = StyleSheet.create({
+	transactionType: {
+		color: colors.purple,
+		fontWeight: 'bold'
+	},
+	item: {
+		flex: 1,
+		flexDirection: 'row',
+		justifyContent: 'space-between',
+		alignItems: 'center',
+		height: 80,
+		paddingHorizontal: 20,
+		marginVertical: 5,
+		backgroundColor: colors.white
+	},
+	selectedItem: {
+		flex: 1,
+		flexDirection: 'row',
+		justifyContent: 'space-between',
+		alignItems: 'center',
+		height: 80,
+		paddingHorizontal: 20,
+		marginVertical: 2,
+		borderRadius: 3,
+		backgroundColor: colors.lightPurple
+	},
+	timeText: {
+		fontSize: 10,
+		color: colors.purple
+	},
+	amountText: {
+		fontWeight: 'bold',
+		fontSize: 18,
+		color: colors.darkRed
+	},
+	plusText: {
+		fontWeight: 'bold',
+		fontSize: 18,
+		color: colors.purple
+	},
+});

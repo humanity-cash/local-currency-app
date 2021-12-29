@@ -54,7 +54,7 @@ import SettingsTermsAndConditions from "src/screens/customer/drawer/settings/Set
 import * as Routes from "../constants";
 import SelectMerchantBank from "src/screens/business/bank";
 import BusinessWelcome from "src/screens/business/signup/BusinessWelcome";
-import CustomerTransactions from "src/screens/customer/transactions/MyTransactions";
+import CustomerTransactions from "src/screens/customer/transactions";
 import { PaymentsModule } from "src/modules";
 
 const PrimaryStack = createStackNavigator();
