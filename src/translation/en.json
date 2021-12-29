@@ -22,7 +22,7 @@
         "PERSONAL": "Personal",
         "BUSINESS_PERSONAL": "Business and personal",
         "LOGOUT": "Log out",
-        "LOAD_UP": "Load up B$",
+        "LOAD_UP": "Load Wallet",
         "SCAN": "Scan to Pay or Receive",
         "CONTINUE": "Continue",
         "SUBMIT": "Submit",
@@ -178,7 +178,7 @@
         "CONGRATULATION_DETAIL": "You have linked your Salisbury Checking (US-08-CHAS-0686-5892) bank account! Your are ready to load up your BerkShares and start supporting your community!"
     },
     "LOAD_UP": {
-        "TITLE": "Load up B$",
+        "TITLE": "Load Wallet",
         "LOAD_UP_BERKSHARES": "Load up BerkShares",
         "LOAD_UP_NO_BANK_TITLE": "Whoooops. You have to link your bank account first",
         "LOAD_UP_NO_BANK_DETAIL": "Before you can Load up B$ you have to link your bank account first.",
@@ -319,7 +319,7 @@
         "RECEIVE_PAYMENT": "Receive payment",
         "SCAN_TO_PAY": "Scan to pay",
         "MAKE_RETURN": "Make a return",
-        "LOADUP": "Load up B$",
+        "LOADUP": "Load Wallet",
         "SEND_TO_SOMEONE": "Send B$ to someone",
         "CASHOUT": "Cash out to USD",
         "REPORT": "Report",
