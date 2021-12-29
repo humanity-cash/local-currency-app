@@ -19,9 +19,6 @@ type RequestPaymentInput = {
 	isOpenAmount: boolean
 	amount?: number
 	ownerName: string
-	recieverId: string
-	walletData: { availableBalance: number }
-	updateWalletData:(i: IWallet) => void
 }
 
 const useWalletData = () => {
