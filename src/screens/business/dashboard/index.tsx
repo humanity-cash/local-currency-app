@@ -91,7 +91,7 @@ const MerchantDashboard = (): JSX.Element => {
 	const [apiData, dispatchApiData] = useStore<BusinessTxDataStore, BusinessTxDataStoreReducer>(BUSINESS_TX_DATA_STORE);
 	const { businessWalletData, updateBusinessWalletData } = useContext(WalletContext);
 	const { user } = useContext(UserContext);
-	const { events, getEvents, deleteEvent } = useContext(EventsContext)
+	const { events, getEvents, deleteEvent, updateEvents } = useContext(EventsContext)
 	const completedCustomerVerification = user?.verifiedCustomer;
 	const [isFilterVisible, setIsFilterVisible] = useState<boolean>(false);
 	const [searchText, setSearchText] = useState<string>("");
@@ -107,6 +107,7 @@ const MerchantDashboard = (): JSX.Element => {
 	const businessFundingSource = businessWalletData?.availableFundingSource;
 	const availableBalance = businessWalletData?.availableBalance;
 	const [isSetting, setIsSetting] = useState(false)
+	const [showEvents, setShowEvents] = useState(false)
 
 	useEffect(() => {
 		const timerId = setInterval(async () => {
@@ -114,28 +115,12 @@ const MerchantDashboard = (): JSX.Element => {
 				const userWallet = await DwollaAPI.loadWallet(businessDwollaId)
 				const fundingSource = await DwollaAPI.loadFundingSource(businessDwollaId)
 				updateBusinessWalletData(({ ...userWallet, availableFundingSource: fundingSource }))
-				getEvents(businessDwollaId)
+				await getEvents(businessDwollaId)
+				setShowEvents(true)
 			}
 		}, 1000);
 		return () => clearInterval(timerId);
 	}, [businessDwollaId]);
-
-	const fuse = createFuseSearchInstance(filteredApiData, options)
-	const onSearchChange = (name: string, change: string) => {
-		updateSearchText(change)
-	}
-
-	const updateSearchText = (change: string) => {
-		if (!change) {
-			setFilteredApiData(apiData.txs)
-			setSearchText(change);
-			return
-		}
-		const fuseResult = fuse.search(change)
-		//@ts-ignore
-		setFilteredApiData(fuseResult.map(i => i.item))
-		setSearchText(change);
-	}
 
 	useEffect(() => {
 		if (!startDate && !endDate) {
@@ -159,6 +144,23 @@ const MerchantDashboard = (): JSX.Element => {
 		}, [])
 		setFilteredApiData(data)
 	}, [startDate, endDate, selectedType])
+
+	const fuse = createFuseSearchInstance(filteredApiData, options)
+	const onSearchChange = (name: string, change: string) => {
+		updateSearchText(change)
+	}
+
+	const updateSearchText = (change: string) => {
+		if (!change) {
+			setFilteredApiData(apiData.txs)
+			setSearchText(change);
+			return
+		}
+		const fuseResult = fuse.search(change)
+		//@ts-ignore
+		setFilteredApiData(fuseResult.map(i => i.item))
+		setSearchText(change);
+	}
 
 	const viewDetail = (item: MiniTransaction) => {
 		setSelectedItem(item);
@@ -276,7 +278,7 @@ const MerchantDashboard = (): JSX.Element => {
 								</Text>
 							</View>
 						) : null}
-						{events.length > 0 &&
+						{showEvents && events.length > 0 &&
 							<EventItem
 								event={events[events.length - 1]}
 								onDelete={() => { deleteEvent(businessDwollaId, events[events.length - 1].dbId) }}
