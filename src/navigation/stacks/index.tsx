@@ -15,7 +15,7 @@ import CashierReturn from "src/screens/cashier/CashierReturn";
 import CashierReturnQRCodeScan from "src/screens/cashier/CashierReturnQRCodeScan";
 import CashierReturnSuccess from "src/screens/cashier/CashierReturnSuccess";
 import CashierTransactions from "src/screens/cashier/CashierTransactions";
-import CashierDashboard from "src/screens/cashier/CashierDashboard";
+import CashierDashboard from "src/screens/cashier/dashboard";
 import BusinessDrawer from "src/screens/business/drawer";
 import CustomerDrawer from "src/screens/customer/drawer";
 import MerchantReturn from "src/screens/business/payment/MerchantReturn";

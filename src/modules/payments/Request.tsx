@@ -1,13 +1,16 @@
 import { IWallet } from '@humanity.cash/types';
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useContext } from 'react';
 import { Image, View } from 'react-native';
 import { Text } from 'react-native-elements';
 import QRCode from 'react-native-qrcode-svg';
+import { UserContext, WalletContext } from 'src/contexts';
 import { DwollaAPI } from 'src/api';
 import { useBrightness } from "src/hooks";
 import { Dialog } from "src/shared/uielements";
 import { dialogViewBase } from "src/theme/elements";
 import { PaymentMode, SECURITY_ID } from "src/utils/types";
+import { UserType } from 'src/auth/types';
+import { CustomerScanQrCodeStyle, BusinessScanQrCodeStyle } from 'src/style';
 
 type RequestPaymentInput = {
 	visible: boolean
@@ -19,26 +22,45 @@ type RequestPaymentInput = {
 	recieverId: string
 	walletData: { availableBalance: number }
 	updateWalletData:(i: IWallet) => void
-	styles: any
+}
+
+const useWalletData = () => {
+	const { customerWalletData, businessWalletData, updateBusinessWalletData, updateCustomerWalletData } = useContext(WalletContext);
+	const { userType, customerDwollaId, businessDwollaId } = useContext(UserContext);
+	if (userType === UserType.Customer) {
+		return {
+			walletData: customerWalletData,
+			userId: customerDwollaId,
+			updateWalletData: updateCustomerWalletData
+		}
+	} else {
+		return {
+			walletData: businessWalletData,
+			userId: businessDwollaId,
+			updateWalletData: updateBusinessWalletData
+		}
+	}
 }
 
 const RequestPayment = (props: RequestPaymentInput): JSX.Element => {
-	const { recieverId, walletData, updateWalletData, styles } = props;
+	const { walletData, userId, updateWalletData } = useWalletData();
 	const { hasPermission, setMaxBrightness, setDefaultBrightness } = useBrightness();
+	const { userType } = useContext(UserContext);
+	const styles = userType === UserType.Customer ? CustomerScanQrCodeStyle : BusinessScanQrCodeStyle;
 	const [initBalance] = useState<number>(walletData?.availableBalance);
 	const [isSuccess, setIsSuccess] = useState<boolean>(false);
 
 	const addressStr = JSON.stringify({
 		securityId: SECURITY_ID,
-		to: recieverId,
+		to: userId,
 		amount: props.amount,
 		mode: props.isOpenAmount ? PaymentMode.OPEN_AMOUNT : PaymentMode.SELECT_AMOUNT
 	});
 
 	useEffect(() => {
 		const timerId = setInterval(async () => {
-			if (recieverId) {
-				const userWallet: IWallet = await DwollaAPI.loadWallet(recieverId)
+			if (userId) {
+				const userWallet: IWallet = await DwollaAPI.loadWallet(userId)
 				if(userWallet?.userId) {
 					updateWalletData(userWallet);
 				}
