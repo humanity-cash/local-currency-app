@@ -97,7 +97,7 @@ const CashierTransactions = (): JSX.Element => {
 						<View></View>
 						<View>
 							<Text style={styles.alignRight}>{Translation.CASHIER.BALANCE}</Text>
-							<Text style={styles.balanceText}>B$ {businessWalletData?.availableBalance.toFixed(2)}</Text>
+							<Text style={styles.balanceText}>B$ {businessWalletData?.availableBalance?.toFixed(2)}</Text>
 						</View>
 					</View>
 					<TransactionList userId={businessDwollaId} />

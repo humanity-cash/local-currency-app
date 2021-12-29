@@ -12,7 +12,6 @@ import * as Routes from 'src/navigation/constants';
 import { WalletContext, UserContext } from 'src/contexts';
 import BankLinkDialog from 'src/shared/uielements/BankLinkDialog'
 import { IWallet } from '@humanity.cash/types';
-import { BusinessScanQrCodeStyle } from 'src/style';
 
 type AmountState = {
 	amount: string,
@@ -135,7 +134,6 @@ const MerchantRequest = (): JSX.Element => {
 				senderId: businessDwollaId, 
 				walletData: businessWalletData,
 				username: user?.business?.tag,
-				styles: BusinessScanQrCodeStyle,
 				recieveRoute: Routes.MERCHANT_REQUEST,
 				cancelRoute: Routes.MERCHANT_DASHBOARD
 			})
@@ -237,14 +235,10 @@ const MerchantRequest = (): JSX.Element => {
 			{isVisible && <PaymentsModule.Request
 				visible={isVisible}
 				onSuccess={onSuccess}
-				styles={paymentRequestStyles}
 				onClose={onClose}
 				isOpenAmount={isOpenAmount}
 				amount={Number(state.amount)}
 				ownerName={user?.business?.tag || ""}
-				recieverId={businessDwollaId}
-				walletData={businessWalletData}
-				updateWalletData={(walletData: IWallet) => updateBusinessWalletData((pv: any) => ({ ...pv, ...walletData }))}
 			/>}
 			{isRequestSuccess && <MerchantRequestSuccess visible={isRequestSuccess} onClose={onConfirm} amount={receivedAmount} />}
 
@@ -260,49 +254,4 @@ const MerchantRequest = (): JSX.Element => {
 	);
 }
 
-const paymentRequestStyles = StyleSheet.create({
-	dialog: {
-		height: 420
-	},
-	dialogBg: {
-		backgroundColor: colors.overlayPurple
-	},
-	dialogWrap: {
-		paddingHorizontal: 10,
-		paddingTop: 70,
-		height: "100%",
-		flex: 1,
-		justifyContent: 'center',
-		alignItems: 'center'
-	},
-	amount: {
-		alignSelf: 'center',
-		marginTop: 10,
-		fontWeight: 'bold',
-		fontSize: 32,
-		lineHeight: 32,
-		paddingTop: 20,
-		color: colors.purple
-	},
-	ownerInfo: {
-		position: 'absolute',
-		top: -60,
-		borderRadius: 40,
-		alignItems: 'center'
-	},
-	image: {
-		width: 80,
-		height: 80,
-		borderRadius: 40
-	},
-	ownerName: {
-		fontWeight: 'bold',
-		fontSize: 18,
-		paddingVertical: 10,
-		color: colors.purple
-	}
-});
-
-
-
-export default MerchantRequest
+export default MerchantRequest;
