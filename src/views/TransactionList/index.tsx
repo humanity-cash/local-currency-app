@@ -47,6 +47,8 @@ const TransactionList = (props: MyTransactionsInput): JSX.Element => {
 		setFilteredData(d);
 	}, [startDate, endDate, selectedType, apiData])
 
+    // ADD TIMER HERE
+
 	useEffect(() => {
 		loadTransactions()
 	}, [userId]);
@@ -58,10 +60,8 @@ const TransactionList = (props: MyTransactionsInput): JSX.Element => {
 				let txs: MiniTransaction[] = [];
 				if (userType === UserType.Cashier) {
 					txs = await TransactionsAPI.getBlockchainTransactions(userId);
-
 				} else if (userType !== UserType.NotVerified) {
 					txs = await TransactionsAPI.getAllTransactions(userId);
-
 				}
 				const formattedTxs = sortTxByTimestamp(txs);
 				setAPIData(formattedTxs);

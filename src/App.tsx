@@ -9,9 +9,9 @@ import useCachedResources from "./hooks/useCachedResources";
 import { MainNavigationStack } from './navigation/MainNavigationStack';
 import { theme } from "./theme/theme";
 
-moment.locale('us-en')
+moment.locale('us-en');
 
-export default function App(): ReactElement | null {
+const App = (): ReactElement | null =>  {
 	const resourceLoaded = useCachedResources();
 	if (!resourceLoaded) {
 		return null;
@@ -34,3 +34,5 @@ export default function App(): ReactElement | null {
 		</NavigationProvider>
 	);
 }
+
+export default App;
