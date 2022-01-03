@@ -9,8 +9,7 @@ import Translation from 'src/translation/en.json';
 import * as Routes from 'src/navigation/constants';
 import { BUTTON_TYPES } from 'src/constants';
 import { PaymentsModule } from 'src/modules';
-import { UserContext, WalletContext } from "src/contexts"
-import { IWallet } from '@humanity.cash/types';
+import { UserContext } from "src/contexts"
 import { PaymentRequestSuccess } from "src/views";
 
 const styles = StyleSheet.create({
@@ -53,8 +52,7 @@ const CashierRequest = (): JSX.Element => {
 	const [isVisible, setIsVisible] = useState<boolean>(false);
 	const [receivedAmount, setReceivedAmount] = useState<number>(0);
 	const [isRequestSuccess, setIsRequestSuccess] = useState<boolean>(false);
-	const { user, businessDwollaId } = useContext(UserContext);
-	const { businessWalletData, updateBusinessWalletData } = useContext(WalletContext);
+	const { user } = useContext(UserContext);
 
 	useEffect(() => {
 		setAmount("")
