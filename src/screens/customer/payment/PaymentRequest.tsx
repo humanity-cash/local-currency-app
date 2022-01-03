@@ -218,14 +218,10 @@ const PaymentRequest = (): JSX.Element => {
 			{isVisible && <PaymentsModule.Request
 				visible={isVisible}
 				onSuccess={onSuccess}
-				styles={paymentRequestStyles}
 				onClose={onClose}
 				isOpenAmount={isOpenAmount}
 				amount={Number(state.amount)}
 				ownerName={user?.customer?.tag || ""}
-				recieverId={customerDwollaId}
-				walletData={customerWalletData}
-				updateWalletData={(walletData: IWallet) => updateCustomerWalletData((pv: any) => ({ ...pv, ...walletData }))}
 			/>}
 			{isRequestSuccess && <PaymentRequestSuccess visible={isRequestSuccess} onClose={onConfirm} amount={receivedAmount} />}
 
