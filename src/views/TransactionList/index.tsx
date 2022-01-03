@@ -10,7 +10,7 @@ import { UserContext } from "src/contexts";
 import { createFuseSearchInstance } from 'src/fuse';
 import { BUSINESS_TX_FILTERS_STORE, CUSTOMER_TX_FILTERS_STORE } from 'src/hook-stores';
 import LoadingPage from '../Loading';
-import {  SearchInput } from "src/shared/uielements";
+import { SearchInput } from "src/shared/uielements";
 import { colors } from "src/theme/colors";
 import { TxFilters } from "src/utils/types";
 import TransactionFilters from "src/shared/uielements/TransactionFilters";
@@ -23,11 +23,12 @@ import { styles, mListstyles } from './style';
 import { TransactionDetail, TransactionItem } from './components';
 
 export interface MyTransactionsInput {
-	userId: string
+	userId: string,
+	refreshing: boolean
 }
 
 const TransactionList = (props: MyTransactionsInput): JSX.Element => {
-	const { userId } = props
+	const { userId, refreshing } = props
 	const { userType } = useContext(UserContext);
 	const filtersStore = userType === UserType.Customer ? CUSTOMER_TX_FILTERS_STORE : BUSINESS_TX_FILTERS_STORE;
 	const [{ selectedType,
@@ -47,9 +48,9 @@ const TransactionList = (props: MyTransactionsInput): JSX.Element => {
 		setFilteredData(d);
 	}, [startDate, endDate, selectedType, apiData])
 
-    // ADD TIMER HERE
 
 	useEffect(() => {
+    // ADD TIMER HERE
 		loadTransactions()
 	}, [userId]);
 
@@ -104,6 +105,12 @@ const TransactionList = (props: MyTransactionsInput): JSX.Element => {
 		setIsDetailView(false);
 	}
 
+	useEffect(() => {
+		if(refreshing){
+			loadTransactions()
+		}
+	}, [refreshing])
+
 	return (
 		<ScrollView>
 			<LoadingPage visible={isLoading} isData={true} />
@@ -144,31 +151,3 @@ const TransactionList = (props: MyTransactionsInput): JSX.Element => {
 }
 
 export default TransactionList;
-
-{/* {isReturnView && <ReturnQRCodeGen visible={isReturnView} onSuccess={onSuccess} onClose={onClose} transactionInfo={selectedItem} />}
-{isRequestSuccess && <PaymentRequestSuccess visible={isRequestSuccess} onClose={onConfirm} amount={receivedAmount} />} */}
-
-// {TransactionType.OUT === data.type && (
-// 	<View>
-// 		<Button
-// 			type={BUTTON_TYPES.TRANSPARENT}
-// 			title={Translation.BUTTON.WANT_RETURN}
-// 			textStyle={styles.returnText}
-// 			onPress={onReturn}
-// 		/>
-// 	</View>
-// )}
-
-// setIsReturnView(true);
-// const onSuccess = (amount: number) => {
-// 	setReceivedAmount(amount);
-// 	setIsReturnView(false);
-// 	setIsRequestSuccess(true);
-// }
-
-// const onConfirm = () => {
-// 	setIsRequestSuccess(false);
-// }
-
-	// setIsReturnView(false);
-	// setIsRequestSuccess(false);

@@ -10,7 +10,6 @@ import Translation from 'src/translation/en.json';
 import * as Routes from 'src/navigation/constants';
 import BankLinkDialog from 'src/shared/uielements/BankLinkDialog'
 import { WalletContext, UserContext } from 'src/contexts';
-import { IWallet } from '@humanity.cash/types';
 import { PaymentsModule } from 'src/modules';
 import { CustomerScanQrCodeStyle } from 'src/style';
 
@@ -73,7 +72,7 @@ const PaymentRequest = (): JSX.Element => {
 	});
 
 	const { user, customerDwollaId } = useContext(UserContext)
-	const { customerWalletData, updateCustomerWalletData } = useContext(WalletContext)
+	const { customerWalletData } = useContext(WalletContext)
 	const personalFundingSource = customerWalletData?.availableFundingSource;
 	const availableBalance = customerWalletData?.availableBalance;
 
