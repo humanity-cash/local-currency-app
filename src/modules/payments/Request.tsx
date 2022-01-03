@@ -1,10 +1,8 @@
-import { IWallet } from '@humanity.cash/types';
 import React, { useEffect, useState, useContext } from 'react';
 import { Image, View } from 'react-native';
 import { Text } from 'react-native-elements';
 import QRCode from 'react-native-qrcode-svg';
 import { UserContext, WalletContext } from 'src/contexts';
-import { DwollaAPI } from 'src/api';
 import { useBrightness } from "src/hooks";
 import { Dialog } from "src/shared/uielements";
 import { dialogViewBase } from "src/theme/elements";
@@ -40,7 +38,7 @@ const useWalletData = () => {
 }
 
 const RequestPayment = (props: RequestPaymentInput): JSX.Element => {
-	const { walletData, userId, updateWalletData } = useWalletData();
+	const { walletData, userId } = useWalletData();
 	const { hasPermission, setMaxBrightness, setDefaultBrightness } = useBrightness();
 	const { userType } = useContext(UserContext);
 	const styles = userType === UserType.Customer ? CustomerScanQrCodeStyle : BusinessScanQrCodeStyle;
@@ -53,19 +51,6 @@ const RequestPayment = (props: RequestPaymentInput): JSX.Element => {
 		amount: props.amount,
 		mode: props.isOpenAmount ? PaymentMode.OPEN_AMOUNT : PaymentMode.SELECT_AMOUNT
 	});
-
-	useEffect(() => {
-		const timerId = setInterval(async () => {
-			if (userId) {
-				const userWallet: IWallet = await DwollaAPI.loadWallet(userId)
-				if(userWallet?.userId) {
-					updateWalletData(userWallet);
-				}
-			}
-		}, 2000);
-
-		return () => clearInterval(timerId);
-	}, [props.visible]);
 
 	useEffect(() => {
 		if (hasPermission) {

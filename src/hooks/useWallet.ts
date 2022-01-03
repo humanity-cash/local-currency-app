@@ -1,8 +1,7 @@
 import { useContext, useEffect, useState } from 'react';
-import { DwollaAPI } from "src/api";
 import { UserContext, WalletContext } from "src/contexts";
 
-export const useBusinessWallet = ():  { isLoading: boolean }  => {
+export const useBusinessWallet = (): { isLoading: boolean } => {
 	const [isLoading, setIsLoading] = useState<boolean>(false);
 	const { updateBusinessWalletData } = useContext(WalletContext);
 	const { businessDwollaId } = useContext(UserContext);
@@ -11,11 +10,7 @@ export const useBusinessWallet = ():  { isLoading: boolean }  => {
 		const handler = async () => {
 			if (businessDwollaId) {
 				setIsLoading(true);
-				const wData = await DwollaAPI.loadWallet(businessDwollaId);
-				if (wData?.userId?.length) {
-					const isFundingSourceAvailable = await DwollaAPI.loadFundingSource(businessDwollaId);
-					updateBusinessWalletData({ ...wData, availableFundingSource: isFundingSourceAvailable })
-				}
+				updateBusinessWalletData(businessDwollaId)
 			}
 			setIsLoading(false);
 		}
@@ -34,11 +29,7 @@ export const useCustomerWallet = (): { isLoading: boolean } => {
 		const handler = async () => {
 			if (customerDwollaId) {
 				setIsLoading(true);
-				const wData = await DwollaAPI.loadWallet(customerDwollaId);
-				if (wData?.userId?.length) {
-					const isFundingSourceAvailable = await DwollaAPI.loadFundingSource(customerDwollaId);
-					updateCustomerWalletData({ ...wData, availableFundingSource: isFundingSourceAvailable })
-				}
+				updateCustomerWalletData(customerDwollaId)
 			}
 			setIsLoading(false);
 		}
@@ -55,9 +46,7 @@ export const useUpdateCustomerWalletData = (): void => {
 	useEffect(() => {
 		const timerId = setInterval(async () => {
 			if (customerWalletData?.address !== user?.customer?.walletAddress && customerDwollaId) {
-				const userWallet = await DwollaAPI.loadWallet(customerDwollaId)
-				const fundingSource = await DwollaAPI.loadFundingSource(customerDwollaId)
-				updateCustomerWalletData(({ ...userWallet, availableFundingSource: fundingSource }))
+				updateCustomerWalletData(customerDwollaId)
 			}
 		}, 1500);
 		if (
@@ -76,9 +65,7 @@ export const useUpdateBusinessWalletData = (): void => {
 	useEffect(() => {
 		const timerId = setInterval(async () => {
 			if (businessWalletData?.address !== user?.business?.walletAddress && businessDwollaId) {
-				const userWallet = await DwollaAPI.loadWallet(businessDwollaId)
-				const fundingSource = await DwollaAPI.loadFundingSource(businessDwollaId)
-				updateBusinessWalletData(({ ...userWallet, availableFundingSource: fundingSource }))
+				updateBusinessWalletData(businessDwollaId)
 			}
 		}, 1500);
 		if (

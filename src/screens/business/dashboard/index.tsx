@@ -1,14 +1,12 @@
 import { AntDesign, Entypo } from "@expo/vector-icons";
 import { DrawerActions, useNavigation } from "@react-navigation/native";
 import React, { useContext, useEffect, useState } from 'react';
-import { ScrollView, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native';
+import { RefreshControl, ScrollView, TouchableOpacity, TouchableWithoutFeedback, View } from 'react-native';
 import { Image, Text } from "react-native-elements";
-import { DwollaAPI } from "src/api";
 import { BUTTON_TYPES } from "src/constants";
 import { UserContext, WalletContext } from "src/contexts";
 import { useBusinessWallet } from "src/hooks";
 import * as Routes from 'src/navigation/constants';
-import { LoadingPage } from "src/views";
 import { Button, Dialog, Header } from "src/shared/uielements";
 import { colors } from "src/theme/colors";
 import { baseHeader, dialogViewBase, viewBaseB, wrappingContainerBase } from "src/theme/elements";
@@ -31,19 +29,17 @@ const MerchantDashboard = (): JSX.Element => {
 	const [isDwollaVisible, setIsDwollaVisible] = useState<boolean>(false);
 	const [isPayment, setIsPayment] = useState<boolean>(false);
 	const { isLoading: isWalletLoading } = useBusinessWallet();
-	const [isLoading] = useState<boolean>(false);
 	const { businessDwollaId } = useContext(UserContext);
 	const businessFundingSource = businessWalletData?.availableFundingSource;
 	const availableBalance = businessWalletData?.availableBalance;
 	const [isSetting, setIsSetting] = useState(false)
 	const [showEvents, setShowEvents] = useState(false)
+	const [refreshing, setRefreshing] = React.useState(false);
 
 	useEffect(() => {
 		const timerId = setInterval(async () => {
 			if (businessDwollaId) {
-				const userWallet = await DwollaAPI.loadWallet(businessDwollaId)
-				const fundingSource = await DwollaAPI.loadFundingSource(businessDwollaId)
-				updateBusinessWalletData(({ ...userWallet, availableFundingSource: fundingSource }))
+				updateBusinessWalletData(businessDwollaId)
 				await getEvents(businessDwollaId)
 				setShowEvents(true)
 			}
@@ -82,9 +78,19 @@ const MerchantDashboard = (): JSX.Element => {
 		}
 	}
 
+	const onRefresh = React.useCallback(async () => {
+		setRefreshing(true);
+		if (businessDwollaId) {
+			updateBusinessWalletData(businessDwollaId)
+			await getEvents(businessDwollaId);
+			setShowEvents(true);
+		}
+		setRefreshing(false);
+	}, [businessDwollaId]);
+
+
 	return (
 		<View style={viewBaseB}>
-			<LoadingPage visible={isWalletLoading || isLoading} isData={true} />
 			<Header
 				leftComponent={
 					<TouchableWithoutFeedback onPress={() => navigation.dispatch(DrawerActions.toggleDrawer())}>
@@ -107,7 +113,12 @@ const MerchantDashboard = (): JSX.Element => {
 					<Text style={styles.amountTxt}>B$ {businessFundingSource ? availableBalance : '-'}</Text>
 				</View>
 
-				<ScrollView>
+				<ScrollView refreshControl={
+					<RefreshControl
+						refreshing={refreshing}
+						onRefresh={onRefresh}
+					/>
+				}>
 					<View style={styles.content}>
 						{!completedCustomerVerification && <View style={styles.alertView}>
 							<AntDesign name="exclamationcircleo" size={18} style={styles.alertIcon} />
@@ -141,7 +152,7 @@ const MerchantDashboard = (): JSX.Element => {
 								onDelete={() => { deleteEvent(businessDwollaId, events[events.length - 1].dbId) }}
 							/>
 						}
-						<TransactionList userId={businessDwollaId} />
+						<TransactionList refreshing={refreshing} userId={businessDwollaId} />
 					</View>
 				</ScrollView>
 			</View>
