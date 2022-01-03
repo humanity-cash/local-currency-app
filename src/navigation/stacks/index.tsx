@@ -8,13 +8,10 @@ import { SignupBusinessNavigator } from "src/navigation/SignupBusinessNavigator"
 import Login from "src/screens/authentication/Login";
 import CashierHelp from "src/screens/cashier/CashierHelp";
 import CashierHowToWork from "src/screens/cashier/CashierHowToWork";
-import CashierPaymentPending from "src/screens/cashier/CashierPaymentPending";
-import CashierRequest from "src/screens/cashier/CashierRequest";
-import CashierRequestSuccess from "src/screens/cashier/CashierRequestSuccess";
-import CashierReturn from "src/screens/cashier/CashierReturn";
-import CashierReturnQRCodeScan from "src/screens/cashier/CashierReturnQRCodeScan";
-import CashierReturnSuccess from "src/screens/cashier/CashierReturnSuccess";
-import CashierTransactions from "src/screens/cashier/CashierTransactions";
+import CashierRequest from "src/screens/cashier/payment/CashierRequest";
+import CashierReturn from "src/screens/cashier/payment/CashierReturn";
+import CashierReturnQRCodeScan from "src/screens/cashier/payment/CashierReturnQRCodeScan";
+import CashierTransactions from "src/screens/cashier/transactions";
 import CashierDashboard from "src/screens/cashier/dashboard";
 import BusinessDrawer from "src/screens/business/drawer";
 import CustomerDrawer from "src/screens/customer/drawer";
@@ -198,10 +195,6 @@ export const CashierUserStack = () => {
 				component={CashierTransactions}
 			/>
 			<PrimaryStack.Screen
-				name={Routes.CASHIER_REQUEST_SUCCESS}
-				component={CashierRequestSuccess}
-			/>
-			<PrimaryStack.Screen
 				name={Routes.CASHIER_RETURN_QRCODE_SCAN}
 				component={CashierReturnQRCodeScan}
 			/>
@@ -212,14 +205,6 @@ export const CashierUserStack = () => {
 			<PrimaryStack.Screen
 				name={Routes.CASHIER_HOW_TO_WORK}
 				component={CashierHowToWork}
-			/>
-			<PrimaryStack.Screen
-				name={Routes.CASHIER_PAYMENT_PENDING}
-				component={CashierPaymentPending}
-			/>
-			<PrimaryStack.Screen
-				name={Routes.CASHIER_RETURN_SUCCESS}
-				component={CashierReturnSuccess}
 			/>
 			<PrimaryStack.Screen
 				name={Routes.REPORT}
