@@ -83,7 +83,7 @@ const TransactionItem = (props: MyTransactionItemProps) => {
 				/>
 				<View>
 					<Text>{name}</Text>
-					<Text style={styles.timeText}>{moment(item.timestamp).format('HH:mm, MMM D, YYYY')}</Text>
+					<Text style={styles.timeText}>{moment(item.timestamp).format('hh:mm A, MMM D, YYYY')}</Text>
 					<Text style={styles.timeText}>
 						{item.type === "IN"
 							? "Transfer In"

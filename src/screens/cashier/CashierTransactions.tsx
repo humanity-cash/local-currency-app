@@ -129,7 +129,7 @@ const TransactionDetail = (props: TransactionDetailProps) => {
 						<View style={styles.detailView}>
 							<Text style={styles.detailText}>DATE</Text>
 							<Text style={styles.detailText}>
-								{moment(data.timestamp).format('HH:mm, MMM D, YYYY')}
+								{moment(data.timestamp).format('hh:mm A, MMM D, YYYY')}
 							</Text>
 						</View>
 					</View>

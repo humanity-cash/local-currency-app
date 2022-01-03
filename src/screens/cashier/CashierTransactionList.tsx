@@ -73,7 +73,7 @@ const TransactionItem = (props: TransactionItemProps) => {
 					{item.type}
 				</Text>
 				<Text style={styles.timeText}>
-					{moment(item.timestamp).format('HH:mm, MMM D, YYYY')}
+					{moment(item.timestamp).format('hh:mm A, MMM D, YYYY')}
 				</Text>
 				<Text style={styles.timeText}>
 					{item.type === "IN" ? item.fromName : item.toName}

@@ -70,7 +70,7 @@ const TransactionItem = (props: TransactionItemProps) => {
 		<View style={selected === item.transactionHash ? styles.selectedItem : styles.item}>
 			<View>
 				<Text style={styles.transactionType}>{name}</Text>
-				<Text style={styles.timeText}>{moment(item.timestamp).format('HH:mm, MMM D, YYYY')}</Text>
+				<Text style={styles.timeText}>{moment(item.timestamp).format('hh:mm A, MMM D, YYYY')}</Text>
 				<Text style={styles.timeText}>
 					{item.type === "IN"
 						? "Transfer In"
