@@ -2,12 +2,12 @@ import { AntDesign, Entypo } from '@expo/vector-icons';
 import { DrawerActions, useNavigation } from '@react-navigation/native';
 import React, { useContext, useState, useEffect } from 'react';
 import {
+	RefreshControl,
 	ScrollView,
 	TouchableOpacity, TouchableWithoutFeedback,
 	View
 } from 'react-native';
 import { Image, Text } from 'react-native-elements';
-import { DwollaAPI } from 'src/api';
 import { BUTTON_TYPES } from "src/constants";
 import { UserContext, WalletContext } from 'src/contexts';
 import { useCustomerWallet } from 'src/hooks';
@@ -38,6 +38,7 @@ const CustomerDashboard = (): JSX.Element => {
 	const personalFundingSource = customerWalletData?.availableFundingSource;
 	const availableBalance = customerWalletData?.availableBalance;
 	const [showEvents, setShowEvents] = useState(false)
+	const [refreshing, setRefreshing] = React.useState(false);
 
 	useEffect(() => {
 		updateEvents([])
@@ -46,13 +47,11 @@ const CustomerDashboard = (): JSX.Element => {
 	useEffect(() => {
 		const timerId = setInterval(async () => {
 			if (customerDwollaId) {
-				const userWallet = await DwollaAPI.loadWallet(customerDwollaId)
-				const fundingSource = await DwollaAPI.loadFundingSource(customerDwollaId)
-				updateCustomerWalletData(({ ...userWallet, availableFundingSource: fundingSource }))
+				updateCustomerWalletData(customerDwollaId)
 				await getEvents(customerDwollaId)
 				setShowEvents(true)
 			}
-		}, 1000);
+		}, 5000);
 		return () => clearInterval(timerId);
 	}, [customerDwollaId]);
 
@@ -86,6 +85,16 @@ const CustomerDashboard = (): JSX.Element => {
 			setIsSetting(true)
 		}
 	}
+
+	const onRefresh = React.useCallback(async () => {
+		setRefreshing(true);
+		if (customerDwollaId) {
+			updateCustomerWalletData(customerDwollaId)
+			await getEvents(customerDwollaId);
+			setShowEvents(true);
+		}
+		setRefreshing(false);
+	}, [customerDwollaId]);
 
 	return (
 		<View style={viewBase}>
@@ -121,7 +130,12 @@ const CustomerDashboard = (): JSX.Element => {
 						<Text style={styles.topupText}>{Translation.LOAD_UP.TITLE}</Text>
 					</TouchableOpacity>
 				</View>
-				<ScrollView>
+				<ScrollView refreshControl={
+					<RefreshControl
+						refreshing={refreshing}
+						onRefresh={onRefresh}
+					/>
+				}>
 					<View style={styles.content}>
 						{!personalFundingSource && !isWalletLoading && (
 							<View style={styles.alertView}>
@@ -147,6 +161,7 @@ const CustomerDashboard = (): JSX.Element => {
 								onDelete={() => { deleteEvent(customerDwollaId, events[events.length - 1].dbId) }}
 							/>
 						}
+
 						<View style={styles.feedView}>
 							<View style={styles.feedHeader}>
 								<Text h3>Merchant of the month</Text>
@@ -173,6 +188,7 @@ const CustomerDashboard = (): JSX.Element => {
 							/>
 						</View>
 					</View>
+
 				</ScrollView>
 			</View>
 			<TouchableOpacity onPress={onPressScan} style={styles.scanButton}>
@@ -216,7 +232,6 @@ const CustomerDashboard = (): JSX.Element => {
 				onCancel={() => setIsSetting(false)}
 				description={Translation.OTHER.NO_CAMERA_PERMISSION_DETAIL}
 			/>
-
 		</View>
 	);
 };

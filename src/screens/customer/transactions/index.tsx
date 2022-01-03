@@ -1,6 +1,6 @@
 import React, { useContext } from 'react';
 import { Image, Text } from 'react-native-elements';
-import { TouchableOpacity,  View  } from 'react-native';
+import { RefreshControl, ScrollView, TouchableOpacity, View } from 'react-native';
 import { CustomerScanQrCodeStyle } from 'src/style';
 import * as Routes from 'src/navigation/constants';
 import { UserContext } from "src/contexts";
@@ -14,9 +14,20 @@ import { TransactionList } from "src/views";
 import { useNavigation } from '@react-navigation/native';
 
 const CustomerTransactions = (): React.ReactElement => {
-	const { customerWalletData } = useContext(WalletContext);
+	const { customerWalletData, updateCustomerWalletData } = useContext(WalletContext);
 	const { customerDwollaId, user } = useContext(UserContext);
 	const navigation = useNavigation();
+	const [refreshing, setRefreshing] = React.useState(false);
+
+	const onRefresh = React.useCallback(async () => {
+		setRefreshing(true);
+		if (customerDwollaId) {
+			updateCustomerWalletData(customerDwollaId)
+		}
+		setTimeout(() => setRefreshing(false), 3000)
+	}, [customerDwollaId]);
+
+
 
 	return (
 		<View style={viewBase}>
@@ -30,23 +41,29 @@ const CustomerTransactions = (): React.ReactElement => {
 				<View style={styles.totalAmountView}>
 					<Text style={styles.amountText}>B$ {customerWalletData?.availableBalance?.toFixed(2)}</Text>
 				</View>
-				<TransactionList userId={customerDwollaId} />
-			</View>
-
-				<TouchableOpacity onPress={() => navigation.navigate(Routes.QRCODE_SCAN, {
-					senderId: customerDwollaId,
-					walletData: customerWalletData,
-					username: user?.customer?.tag,
-					styles: CustomerScanQrCodeStyle,
-					recieveRoute: Routes.PAYMENT_REQUEST,
-					cancelRoute: Routes.DASHBOARD
-				})} style={styles.scanButton}>
-					<Image
-						source={require('../../../../assets/images/qr_code_consumer.png')}
-						containerStyle={styles.qrIcon}
+				<ScrollView refreshControl={
+					<RefreshControl
+						refreshing={refreshing}
+						onRefresh={onRefresh}
 					/>
-					<Text style={styles.scanBtnText}>{Translation.PAYMENT.SCAN_TO_PAY_REQUEST}</Text>
-				</TouchableOpacity>
+				}>
+					<TransactionList refreshing={refreshing} userId={customerDwollaId} />
+				</ScrollView>
+			</View>
+			<TouchableOpacity onPress={() => navigation.navigate(Routes.QRCODE_SCAN, {
+				senderId: customerDwollaId,
+				walletData: customerWalletData,
+				username: user?.customer?.tag,
+				styles: CustomerScanQrCodeStyle,
+				recieveRoute: Routes.PAYMENT_REQUEST,
+				cancelRoute: Routes.DASHBOARD
+			})} style={styles.scanButton}>
+				<Image
+					source={require('../../../../assets/images/qr_code_consumer.png')}
+					containerStyle={styles.qrIcon}
+				/>
+				<Text style={styles.scanBtnText}>{Translation.PAYMENT.SCAN_TO_PAY_REQUEST}</Text>
+			</TouchableOpacity>
 		</View>
 	)
 }
