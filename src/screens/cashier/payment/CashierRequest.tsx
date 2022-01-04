@@ -9,7 +9,7 @@ import Translation from 'src/translation/en.json';
 import * as Routes from 'src/navigation/constants';
 import { BUTTON_TYPES } from 'src/constants';
 import { PaymentsModule } from 'src/modules';
-import { UserContext } from "src/contexts"
+import { UserContext, WalletContext } from "src/contexts"
 import { PaymentRequestSuccess } from "src/views";
 
 const styles = StyleSheet.create({
@@ -52,7 +52,17 @@ const CashierRequest = (): JSX.Element => {
 	const [isVisible, setIsVisible] = useState<boolean>(false);
 	const [receivedAmount, setReceivedAmount] = useState<number>(0);
 	const [isRequestSuccess, setIsRequestSuccess] = useState<boolean>(false);
-	const { user } = useContext(UserContext);
+	const { businessDwollaId, user } = useContext(UserContext)
+	const { updateBusinessWalletData } = useContext(WalletContext)
+
+	useEffect(() => {
+		const timerId = setInterval(async () => {
+			if (businessDwollaId) {
+				updateBusinessWalletData(businessDwollaId)
+			}
+		}, 1000);
+		return () => clearInterval(timerId);
+	}, [businessDwollaId]);
 
 	useEffect(() => {
 		setAmount("")
@@ -62,7 +72,7 @@ const CashierRequest = (): JSX.Element => {
 		setGoNext(Number(amount) > 0);
 	}, [amount]);
 
-	const onValueChange = (name: string, change: string) => {
+	const onValueChange = (_: string, change: string) => {
 		setAmount(change.replace(',', '.'));
 	};
 
@@ -72,8 +82,8 @@ const CashierRequest = (): JSX.Element => {
 
 	const onSuccess = (amount: number) => {
 		setReceivedAmount(amount);
-		setIsRequestSuccess(true);
 		setIsVisible(false);
+		setIsRequestSuccess(true);
 	}
 
 	const onConfirm = () => {
