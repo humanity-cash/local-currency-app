@@ -10,20 +10,39 @@ berkshares frontend application
 
 ### Startup
 
+- Expo: ```expo start```
 - Web: ```npm run web```
 - iOS*: ```npm run ios```
 - Android*: ```npm run android```
-
 (* Requires local available emulator or connected device in development mode)
 
+### E2E use cases
 
-## Folder Structure
+#### Signup as a customer -> Link bank account -> Dashboard screen
+#### Signup as a business -> Link bank account -> Dashboard screen
 
-### The main folders are src/api, src/screens, src/hooks, src/stores, src/style, src/common
+#### Signup as a customer ->  Dashboard screen -> Link Bank Account
+#### Signup as a business ->  Dashboard screen -> Link Bank Account
 
-#### src/api: holde the api setup, api requests and formatters for requests and responses going thro the api
-#### src/screens: holds the different screens grouped into: onboarding, user, merchant, auth, transaction. the main motivation here is to keep this as clean as possible, ie only contains the views - any logic the screens are using should be located in src/hooks or src/common.
-#### src/hooks: holds functions that use react hooks like useEffect
-#### src/stores: holds stores initializations and thier initial state, using react-hooksstore
-#### src/style: holds the theme definition, global style vars, global styled components
-#### src/common: holds shared components, time utils, crypto utils...
+#### Login as a customer ->  Dashboard screen -> Send Payment ->  Success Payment -> Transaction List updated -> Balance Updated
+#### Login as a business ->  Dashboard screen -> Send Payment ->  Success Payment -> Transaction List updated -> Balance Updated
+#### Login as a business -> Switch to Cashier ->  Dashboard screen -> Send Payment ->  Success Payment -> Transaction List updated -> Balance Updated
+
+#### Login as a customer ->  Dashboard screen -> Receive Payment ->  Success Payment -> Transaction List updated -> Balance Updated
+#### Login as a business ->  Dashboard screen -> Receive Payment ->  Success Payment -> Transaction List updated -> Balance Updated
+#### Login as a business -> Switch to Cashier -> Dashboard screen -> Receive Payment ->  Success Payment -> Transaction List updated -> Balance Updated
+
+#### Login as a customer ->  Dashboard screen -> Loadup -> Success Message
+#### Login as a business ->  Dashboard screen -> Loadup -> Success Message
+
+#### Login as a customer ->  Dashboard screen -> Cashout -> Success Message -> Balance Updated
+#### Login as a business ->  Dashboard screen -> Cashout -> Success Message -> Balance Updated
+
+#### Login as a customer ->  Open Drawer -> Settings -> Update Profile -> Success 
+#### Login as a business ->  Open Drawer -> Settings -> Update Profile -> Success 
+
+#### Login as a business ->  Create Personal Account -> Link Bank Account
+#### Login as a customer ->  Create business Account -> Link Bank Account
+
+#### Login as a business ->  Create Personal Account -> Dashboard -> Link Bank Account
+#### Login as a customer ->  Create business Account -> Dashboard -> Link Bank Account
