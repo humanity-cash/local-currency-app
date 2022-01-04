@@ -5,14 +5,14 @@ import { EventsContext, EventsProvider } from "./events";
 import { NavigationViewContext, NavigationProvider } from "./navigation";
 
 export {
-	EventsContext,
-	EventsProvider,
-	WalletContext,
-	WalletProvider,
-	NavigationViewContext,
-	NavigationProvider,
-	UserContext,
-	UserProvider,
-	AuthContext,
-	AuthProvider
+  EventsContext,
+  EventsProvider,
+  WalletContext,
+  WalletProvider,
+  NavigationViewContext,
+  NavigationProvider,
+  UserContext,
+  UserProvider,
+  AuthContext,
+  AuthProvider,
 };

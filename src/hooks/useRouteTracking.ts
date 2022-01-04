@@ -7,25 +7,24 @@ const storeId = "ROUTE_TRACKING";
 type RouteState = Route;
 
 const store = createStore<RouteState>(storeId, {
-	current: ''
+  current: "",
 });
 
 const useRouteTracking = () => {
-	const [details] = useStore<RouteState>(storeId);
+  const [details] = useStore<RouteState>(storeId);
 
-	const update = useCallback(
-		async (data: Route) => {
-			const currentState = store.getState();
-			store.setState({
-				...currentState,
-				...data
-			});
-		}, []);
+  const update = useCallback(async (data: Route) => {
+    const currentState = store.getState();
+    store.setState({
+      ...currentState,
+      ...data,
+    });
+  }, []);
 
-	return {
-		currentRoute: details.current,
-		update
-	}
+  return {
+    currentRoute: details.current,
+    update,
+  };
 };
 
 export default useRouteTracking;

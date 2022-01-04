@@ -1,3 +1,3 @@
-import * as PaymentsModule from './payments';
+import * as PaymentsModule from "./payments";
 
 export { PaymentsModule };

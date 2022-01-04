@@ -8,12 +8,12 @@ import BusinessOwnerDetailsForm from "./BusinessOwnerDetailForm";
 import BusinessOwnerAddressForm from "./BusinessOwnerAddressForm";
 
 export {
-    BusinessOwnerAddressForm,
-    BusinessOwnerDetailsForm,
-    DepositView, 
-    PersonalAddressForm, 
-    PersonalDetailsForm, 
-    PersonalProfileForm,
-    BusinessProfileForm,
-    BusinessAddressForm
+  BusinessOwnerAddressForm,
+  BusinessOwnerDetailsForm,
+  DepositView,
+  PersonalAddressForm,
+  PersonalDetailsForm,
+  PersonalProfileForm,
+  BusinessProfileForm,
+  BusinessAddressForm,
 };
