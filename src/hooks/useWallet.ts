@@ -10,7 +10,7 @@ export const useBusinessWallet = (): { isLoading: boolean } => {
 		const handler = async () => {
 			if (businessDwollaId) {
 				setIsLoading(true);
-				updateBusinessWalletData(businessDwollaId)
+				await updateBusinessWalletData(businessDwollaId)
 			}
 			setIsLoading(false);
 		}
@@ -27,9 +27,9 @@ export const useCustomerWallet = (): { isLoading: boolean } => {
 
 	useEffect(() => {
 		const handler = async () => {
+            setIsLoading(true);
 			if (customerDwollaId) {
-				setIsLoading(true);
-				updateCustomerWalletData(customerDwollaId)
+				await updateCustomerWalletData(customerDwollaId)
 			}
 			setIsLoading(false);
 		}

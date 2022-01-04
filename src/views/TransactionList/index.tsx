@@ -73,7 +73,6 @@ const TransactionList = (props: MyTransactionsInput): JSX.Element => {
 		}
 	}
 
-
 	const onSearchChange = (name: string, change: string) => {
 		if (!change) {
 			setFilteredData(apiData);
