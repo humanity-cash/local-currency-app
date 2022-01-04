@@ -6,34 +6,50 @@ import { NavigationViewContext, UserContext } from "src/contexts";
 import { ViewState } from "src/contexts/navigation";
 import { useRouteTracking } from "src/hooks";
 import {
-  BusinessLinkBankAccount, BusinessUserStack, CashierUserStack, CustomerLinkBankAccount, CustomerUserStack, NotVerifiedUserStack, OnboardingStack
+  BusinessLinkBankAccount,
+  BusinessUserStack,
+  CashierUserStack,
+  CustomerLinkBankAccount,
+  CustomerUserStack,
+  NotVerifiedUserStack,
+  OnboardingStack,
 } from "./stacks";
 
 const PrimaryStack = createStackNavigator();
 
 const PrimaryStackScreen = () => {
-  const { selectedView } = useContext(NavigationViewContext)
+  const { selectedView } = useContext(NavigationViewContext);
   const { user } = useContext(UserContext);
 
   return (
     <PrimaryStack.Navigator
       screenOptions={() => ({
-        headerShown: false
+        headerShown: false,
       })}
     >
       {selectedView === ViewState.Customer ? (
-        <>{CustomerUserStack({ isVerifiedBusiness: user?.verifiedBusiness || false })}</>
+        <>
+          {CustomerUserStack({
+            isVerifiedBusiness: user?.verifiedBusiness || false,
+          })}
+        </>
       ) : selectedView === ViewState.Cashier ? (
         <>{CashierUserStack()}</>
       ) : selectedView === ViewState.Business ? (
-        <>{BusinessUserStack({ isVerifiedCustomer: user?.verifiedCustomer || false })}</>
+        <>
+          {BusinessUserStack({
+            isVerifiedCustomer: user?.verifiedCustomer || false,
+          })}
+        </>
       ) : selectedView === ViewState.CustomerLinkBank ? (
         <>{CustomerLinkBankAccount()}</>
       ) : selectedView === ViewState.BusinessLinkBank ? (
         <>{BusinessLinkBankAccount()}</>
       ) : selectedView === ViewState.NotVerified ? (
         <>{NotVerifiedUserStack()}</>
-      ) : <>{OnboardingStack()}</>}
+      ) : (
+        <>{OnboardingStack()}</>
+      )}
     </PrimaryStack.Navigator>
   );
 };
@@ -51,8 +67,8 @@ export const MainNavigationStack = (): JSX.Element => {
         ...DefaultTheme,
         colors: {
           ...DefaultTheme.colors,
-          background: "transparent"
-        }
+          background: "transparent",
+        },
       }}
     >
       <PrimaryStackScreen />

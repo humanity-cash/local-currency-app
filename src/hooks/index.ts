@@ -7,20 +7,25 @@ import useModalStatusBar from "./useModalStatusBar";
 import useNotifications from "./useNotifications";
 import useRouteTracking from "./useRouteTracking";
 import useUserDetails from "./useUserDetails";
-import { useBusinessWallet, useCustomerWallet, useUpdateBusinessWalletData, useUpdateCustomerWalletData } from "./useWallet";
+import {
+  useBusinessWallet,
+  useCustomerWallet,
+  useUpdateBusinessWalletData,
+  useUpdateCustomerWalletData,
+} from "./useWallet";
 
 export {
-	useMediaLibraryPermission,
-	useUpdateCustomerWalletData,
-	useBusinessWallet,
-	useCustomerWallet,
-	useUpdateBusinessWalletData,
-	useUserDetails,
-	useCachedResources,
-	useModalStatusBar,
-	useNotifications,
-	useRouteTracking,
-	useCameraPermission,
-	useBusinesses,
-	useBrightness,
+  useMediaLibraryPermission,
+  useUpdateCustomerWalletData,
+  useBusinessWallet,
+  useCustomerWallet,
+  useUpdateBusinessWalletData,
+  useUserDetails,
+  useCachedResources,
+  useModalStatusBar,
+  useNotifications,
+  useRouteTracking,
+  useCameraPermission,
+  useBusinesses,
+  useBrightness,
 };

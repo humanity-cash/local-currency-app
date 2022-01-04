@@ -1,85 +1,113 @@
-import { MiniTransaction } from 'src/utils/types';
-import { getRequest, postRequest } from './base';
-import { formatDeposits, formatTransactions, formatWithdrawals } from './formatters';
-import { AxiosPromiseResponse, IDepositRequest, ITransaction, ITransactionRequest, IWithdrawalRequest, UserId } from './types';
+import { MiniTransaction } from "src/utils/types";
+import { getRequest, postRequest } from "./base";
+import {
+  formatDeposits,
+  formatTransactions,
+  formatWithdrawals,
+} from "./formatters";
+import {
+  AxiosPromiseResponse,
+  IDepositRequest,
+  ITransaction,
+  ITransactionRequest,
+  IWithdrawalRequest,
+  UserId,
+} from "./types";
 
-export const getDeposits = async (userId: UserId): Promise<MiniTransaction[]> => {
+export const getDeposits = async (
+  userId: UserId
+): Promise<MiniTransaction[]> => {
   try {
     const response = await getRequest(`/users/${userId}/deposit`);
     if (response.status === 204) {
-      return []
+      return [];
     }
     return formatDeposits(response) || [];
   } catch (error) {
-    console.log("Error in getDeposits", error)
+    console.log("Error in getDeposits", error);
     return [];
   }
 };
 
-export const getWithdrawals = async (userId: UserId): Promise<MiniTransaction[]> => {
+export const getWithdrawals = async (
+  userId: UserId
+): Promise<MiniTransaction[]> => {
   try {
-    if(!userId) return [];
+    if (!userId) return [];
     const response = await getRequest(`/users/${userId}/withdraw`);
     if (response.status === 204) {
-      return []
+      return [];
     }
     return formatWithdrawals(response);
   } catch (err) {
-    console.log('err here', err)
+    console.log("err here", err);
     return [];
   }
 };
 
-export const getBlockchainTransactions = async (userId: UserId): Promise<MiniTransaction[]> => {
+export const getBlockchainTransactions = async (
+  userId: UserId
+): Promise<MiniTransaction[]> => {
   try {
-    if(!userId) return [];
+    if (!userId) return [];
     const response = await getRequest(`/users/${userId}/transfer`);
     if (response.status === 204) {
-      return []
+      return [];
     }
     return formatTransactions(response);
   } catch (error: any) {
-    console.log('error in getTransactions', error?.message)
+    console.log("error in getTransactions", error?.message);
     return [];
   }
 };
 
-export const deposit = async (userId: UserId, request: IDepositRequest): Promise<AxiosPromiseResponse> => {
+export const deposit = async (
+  userId: UserId,
+  request: IDepositRequest
+): Promise<AxiosPromiseResponse> => {
   try {
     const response = await postRequest(`/users/${userId}/deposit`, request);
     return response;
   } catch (error) {
-    return {} as AxiosPromiseResponse
+    return {} as AxiosPromiseResponse;
   }
 };
 
-export const withdraw = async (userId: UserId, request: IWithdrawalRequest): Promise<AxiosPromiseResponse> => {
+export const withdraw = async (
+  userId: UserId,
+  request: IWithdrawalRequest
+): Promise<AxiosPromiseResponse> => {
   try {
     const response = await postRequest(`/users/${userId}/withdraw`, request);
     return response;
   } catch (error) {
     // console.log(error?.response?.data?.message)
-    return {} as AxiosPromiseResponse
+    return {} as AxiosPromiseResponse;
   }
 };
 
-export const transferTo = async (userId: UserId, request: ITransactionRequest): Promise<AxiosPromiseResponse> => {
-    try {
-        const response = await postRequest(`/users/${userId}/transfer`, request);
-        return response;
-    } catch(error) {
-        console.log("error in transferTo", error)
-        return {} as Promise<AxiosPromiseResponse>
-    }
+export const transferTo = async (
+  userId: UserId,
+  request: ITransactionRequest
+): Promise<AxiosPromiseResponse> => {
+  try {
+    const response = await postRequest(`/users/${userId}/transfer`, request);
+    return response;
+  } catch (error) {
+    console.log("error in transferTo", error);
+    return {} as Promise<AxiosPromiseResponse>;
+  }
 };
 
-export const getAllTransactions = async (userId: UserId): Promise<MiniTransaction[]> => {
-  if(!userId) return [];
-  const response =
-    [...await getBlockchainTransactions(userId),
-    ...await getDeposits(userId),
-    ...await getWithdrawals(userId),
-    ]
+export const getAllTransactions = async (
+  userId: UserId
+): Promise<MiniTransaction[]> => {
+  if (!userId) return [];
+  const response = [
+    ...(await getBlockchainTransactions(userId)),
+    ...(await getDeposits(userId)),
+    ...(await getWithdrawals(userId)),
+  ];
 
-  return response
-}
+  return response;
+};

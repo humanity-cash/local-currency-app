@@ -51,7 +51,7 @@ export enum BusinessType {
   CORPORATION = "Corporation",
   LLC = "LLC",
   PARTNERSHIP = "Partnership",
-  NON_PROFIT = "Non-profit"
+  NON_PROFIT = "Non-profit",
 }
 
 export enum Industry {
@@ -61,7 +61,7 @@ export enum Industry {
   HEALTH_WELLNESS = "Health & wellness",
   LODGING = "Lodging",
   SHOPPING = "Shopping",
-  SERVICES = "Services"
+  SERVICES = "Services",
 }
 
 export type BusinessDetails = {
@@ -284,49 +284,49 @@ export interface Bank {
 }
 
 export type MyTransactionItem = {
-  transactionId: number,
-	avatar: string,
-	name: string,
-  type: string,
-	amount: string,
-	date: string
-}
+  transactionId: number;
+  avatar: string;
+  name: string;
+  type: string;
+  amount: string;
+  date: string;
+};
 
 export enum TransactionType {
-  SALE = 'Sale',
-	RETURN = 'Return',
-	CASH_OUT = 'Cash out',
-	TRANSFER = 'Transfer',
-  DONATION = 'Donation',
-  CUSTOMER_RETURN = 'Customer return',
+  SALE = "Sale",
+  RETURN = "Return",
+  CASH_OUT = "Cash out",
+  TRANSFER = "Transfer",
+  DONATION = "Donation",
+  CUSTOMER_RETURN = "Customer return",
   DEPOSIT = "Deposit",
-  PURCHASEMENT = 'Purchasement',
+  PURCHASEMENT = "Purchasement",
   IN = "IN",
-  OUT = "OUT"
+  OUT = "OUT",
 }
 
 export const TransactionTypes = {
-  'Sale': 'Customer sale',
-  'Return': 'Return',
-  'Cash out': 'Cash out',
-  'Transfer': 'Transfer',
-  'Donation': 'Donation',
-  'Customer return': 'Customer return',
-  'Purchasement': 'Purchasement'
-}
+  Sale: "Customer sale",
+  Return: "Return",
+  "Cash out": "Cash out",
+  Transfer: "Transfer",
+  Donation: "Donation",
+  "Customer return": "Customer return",
+  Purchasement: "Purchasement",
+};
 
 export type MerchantTransactionItem = {
-  transactionId: string,
-  type: TransactionType,
-  amount: number,
-  date: string
-}
+  transactionId: string;
+  type: TransactionType;
+  amount: number;
+  date: string;
+};
 
 export type MerchantCategory = {
   id: string;
   name: string;
   merchants: MerchantEntry[];
-}
+};
 
 export type MerchantEntry = {
   title: string;
@@ -335,22 +335,22 @@ export type MerchantEntry = {
   addressLine1: string;
   addressLine2: string;
   phone: string;
-}
+};
 
 export interface AccordionEntry {
-	title: string,
-	content: string,
-  style?: IMap,
+  title: string;
+  content: string;
+  style?: IMap;
   textColor?: string;
 }
 
 export interface FaqData extends AccordionEntry {
-  type?: string
+  type?: string;
 }
 
 export enum PaymentMode {
   OPEN_AMOUNT = "open",
-  SELECT_AMOUNT = "select"
+  SELECT_AMOUNT = "select",
 }
 
 export const SECURITY_ID = "berkShareSecurity";
@@ -359,62 +359,75 @@ export interface QRCodeEntry {
   securityId: string;
   transactionHash?: string;
   transactionDate?: number;
-  to: string,
-  amount: number,
-  mode: PaymentMode
+  to: string;
+  amount: number;
+  mode: PaymentMode;
 }
 export interface EnvData {
-  coreApiUrl: string
+  coreApiUrl: string;
 }
 
 export enum ToastType {
   SUCCESS = "success",
   ERROR = "error",
-  INFO = "info"
+  INFO = "info",
 }
 
 /* LOADING SCREENS	*/
 export const enum LoadingScreenTypes {
-	PAYMENT_PENDING = 'paymentPending',
-	LOADING_DATA = 'loadingData',
-	ANY = 'anyData'
+  PAYMENT_PENDING = "paymentPending",
+  LOADING_DATA = "loadingData",
+  ANY = "anyData",
 }
 
 export interface LoadingState {
-  screen: LoadingScreenTypes,
-  isLoading: boolean
+  screen: LoadingScreenTypes;
+  isLoading: boolean;
 }
-
 
 export interface TxFilters {
-  startDate: Date | undefined,
-  endDate: Date | undefined,
-  isStartDate: boolean,
-  isEndDate: boolean,
-  selectedType: string | undefined
+  startDate: Date | undefined;
+  endDate: Date | undefined;
+  isStartDate: boolean;
+  isEndDate: boolean;
+  selectedType: string | undefined;
 }
 
-
-export type MiniTransaction = Pick<ITransaction, 'blockNumber' | 'transactionHash' | 'timestamp' | 'toName' | 'type' | 'value' | 'fromName'>
+export type MiniTransaction = Pick<
+  ITransaction,
+  | "blockNumber"
+  | "transactionHash"
+  | "timestamp"
+  | "toName"
+  | "type"
+  | "value"
+  | "fromName"
+>;
 
 export interface TxDataStore {
-  txs: MiniTransaction[]
+  txs: MiniTransaction[];
 }
 
 export enum TxDataStoreActions {
-	UpdateTransactions = "updateTransactions",
+  UpdateTransactions = "updateTransactions",
 }
 
 export enum TxFilterStoreActions {
-	OpenStartDate = "openStoreDate",
-	OpenEndDate = "openEndDate",
-	CloseStartDate = "closeStoreDate",
-	CloseEndDate = "closeEndDate",
-	UpdateStartDate = "updateStartDate",
-	UpdateEndDate = "updateEndDate",
-	UpdateType = "updateType",
-	ClearAll = "clearAll"
+  OpenStartDate = "openStoreDate",
+  OpenEndDate = "openEndDate",
+  CloseStartDate = "closeStoreDate",
+  CloseEndDate = "closeEndDate",
+  UpdateStartDate = "updateStartDate",
+  UpdateEndDate = "updateEndDate",
+  UpdateType = "updateType",
+  ClearAll = "clearAll",
 }
 
-export type TxFilterStoreReducer = { type: TxFilterStoreActions, payload: { startDate?: Date, endDate?: Date, type?: string } }
-export type TxDataStoreReducer = { type: TxDataStoreActions, payload: { txs: MiniTransaction[] } }
+export type TxFilterStoreReducer = {
+  type: TxFilterStoreActions;
+  payload: { startDate?: Date; endDate?: Date; type?: string };
+};
+export type TxDataStoreReducer = {
+  type: TxDataStoreActions;
+  payload: { txs: MiniTransaction[] };
+};

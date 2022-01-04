@@ -56,358 +56,328 @@ import { PaymentsModule } from "src/modules";
 
 const PrimaryStack = createStackNavigator();
 
-export const CustomerUserStack = ({ isVerifiedBusiness }: { isVerifiedBusiness: boolean }) => {
-	return (
-		<>
-			<PrimaryStack.Screen name={Routes.TABS} component={CustomerDrawer} />
-			<PrimaryStack.Screen
-				name={Routes.QRCODE_SCAN}
-				component={PaymentsModule.Send}
-			/>
-			<PrimaryStack.Screen
-				name={Routes.PAYMENT_SUCCESS}
-				component={PaymentSuccess}
-			/>
-			<PrimaryStack.Screen
-				name={Routes.PAYMENT_REQUEST}
-				component={PaymentRequest}
-			/>
-			<PrimaryStack.Screen
-				name={Routes.CASHOUT}
-				component={CashoutNavigator}
-			/>
-			<PrimaryStack.Screen
-				name={Routes.LOADUP_SUCCESS}
-				component={LoadUpSuccess}
-			/>
-			<PrimaryStack.Screen
-				name={Routes.LOAD_UP}
-				component={PaymentsModule.Loadup}
-			/>
-			<PrimaryStack.Screen
-				name={Routes.SETTING_TERMS_CONDITIONS}
-				component={SettingsTermsAndConditions}
-			/>
-			<PrimaryStack.Screen
-				name={Routes.SETTING_PERSONAL_PROFILE}
-				component={SettingsPersonalProfile}
-			/>
-			<PrimaryStack.Screen
-			name={Routes.MY_TRANSACTIONS}
-			component={CustomerTransactions}
-			/>
-			<PrimaryStack.Screen
-				name={Routes.SETTING_SECURITY}
-				component={SettingsSecurity}
-			/>
-			<PrimaryStack.Screen
-				name={Routes.SETTING_BANK_ACCOUNT}
-				component={SettingsBankAccount}
-			/>
-			<PrimaryStack.Screen
-				name={Routes.SETTING_DELETE_ACCOUNT}
-				component={SettingsDeleteAccount}
-			/>
-			<PrimaryStack.Screen
-				name={Routes.SELECT_BANK}
-				component={SelectBank}
-			/>
-			{!isVerifiedBusiness && (
-				<PrimaryStack.Screen
-					name={Routes.SIGNUP_BUSINESS}
-					component={SignupBusinessNavigator}
-				/>
-			)}
-		</>
-	)
-}
+export const CustomerUserStack = ({
+  isVerifiedBusiness,
+}: {
+  isVerifiedBusiness: boolean;
+}) => {
+  return (
+    <>
+      <PrimaryStack.Screen name={Routes.TABS} component={CustomerDrawer} />
+      <PrimaryStack.Screen
+        name={Routes.QRCODE_SCAN}
+        component={PaymentsModule.Send}
+      />
+      <PrimaryStack.Screen
+        name={Routes.PAYMENT_SUCCESS}
+        component={PaymentSuccess}
+      />
+      <PrimaryStack.Screen
+        name={Routes.PAYMENT_REQUEST}
+        component={PaymentRequest}
+      />
+      <PrimaryStack.Screen name={Routes.CASHOUT} component={CashoutNavigator} />
+      <PrimaryStack.Screen
+        name={Routes.LOADUP_SUCCESS}
+        component={LoadUpSuccess}
+      />
+      <PrimaryStack.Screen
+        name={Routes.LOAD_UP}
+        component={PaymentsModule.Loadup}
+      />
+      <PrimaryStack.Screen
+        name={Routes.SETTING_TERMS_CONDITIONS}
+        component={SettingsTermsAndConditions}
+      />
+      <PrimaryStack.Screen
+        name={Routes.SETTING_PERSONAL_PROFILE}
+        component={SettingsPersonalProfile}
+      />
+      <PrimaryStack.Screen
+        name={Routes.MY_TRANSACTIONS}
+        component={CustomerTransactions}
+      />
+      <PrimaryStack.Screen
+        name={Routes.SETTING_SECURITY}
+        component={SettingsSecurity}
+      />
+      <PrimaryStack.Screen
+        name={Routes.SETTING_BANK_ACCOUNT}
+        component={SettingsBankAccount}
+      />
+      <PrimaryStack.Screen
+        name={Routes.SETTING_DELETE_ACCOUNT}
+        component={SettingsDeleteAccount}
+      />
+      <PrimaryStack.Screen name={Routes.SELECT_BANK} component={SelectBank} />
+      {!isVerifiedBusiness && (
+        <PrimaryStack.Screen
+          name={Routes.SIGNUP_BUSINESS}
+          component={SignupBusinessNavigator}
+        />
+      )}
+    </>
+  );
+};
 
 export const OnboardingStack = () => {
-
-	return (
-		<>
-			<PrimaryStack.Screen
-				name={Routes.TEASER}
-				component={Teaser}
-			/>
-			<PrimaryStack.Screen
-				name={Routes.LOGIN}
-				component={Login}
-			/>
-			<PrimaryStack.Screen
-				name={Routes.CREATE_ACCOUNT}
-				component={CreateAccount}
-			/>
-			<PrimaryStack.Screen
-				name={Routes.PASSWORD}
-				component={Password}
-			/>
-			<PrimaryStack.Screen
-				name={Routes.VERIFICATION}
-				component={Verification}
-			/>
-			<PrimaryStack.Screen
-				name={Routes.VERIFICATION_HELP}
-				component={VerificationHelp}
-			/>
-			<PrimaryStack.Screen
-				name={Routes.CONFIRM_EMAIL}
-				component={ConfirmEmail}
-			/>
-			<PrimaryStack.Screen
-				name={Routes.EMAIL_CONFIRMED}
-				component={EmailConfirmed}
-			/>
-			<PrimaryStack.Screen
-				name={Routes.LINK_BANK_ACCOUNT}
-				component={CustomerWelcome}
-			/>
-			<PrimaryStack.Screen
-				name={Routes.SELECT_BANK}
-				component={SelectBank}
-			/>
-			<PrimaryStack.Screen
-				name={Routes.FORGOT_PASSWORD}
-				component={ForgotPasswordNavigator}
-			/>
-		</>
-	)
-}
+  return (
+    <>
+      <PrimaryStack.Screen name={Routes.TEASER} component={Teaser} />
+      <PrimaryStack.Screen name={Routes.LOGIN} component={Login} />
+      <PrimaryStack.Screen
+        name={Routes.CREATE_ACCOUNT}
+        component={CreateAccount}
+      />
+      <PrimaryStack.Screen name={Routes.PASSWORD} component={Password} />
+      <PrimaryStack.Screen
+        name={Routes.VERIFICATION}
+        component={Verification}
+      />
+      <PrimaryStack.Screen
+        name={Routes.VERIFICATION_HELP}
+        component={VerificationHelp}
+      />
+      <PrimaryStack.Screen
+        name={Routes.CONFIRM_EMAIL}
+        component={ConfirmEmail}
+      />
+      <PrimaryStack.Screen
+        name={Routes.EMAIL_CONFIRMED}
+        component={EmailConfirmed}
+      />
+      <PrimaryStack.Screen
+        name={Routes.LINK_BANK_ACCOUNT}
+        component={CustomerWelcome}
+      />
+      <PrimaryStack.Screen name={Routes.SELECT_BANK} component={SelectBank} />
+      <PrimaryStack.Screen
+        name={Routes.FORGOT_PASSWORD}
+        component={ForgotPasswordNavigator}
+      />
+    </>
+  );
+};
 
 export const CashierUserStack = () => {
+  return (
+    <>
+      <PrimaryStack.Screen
+        name={Routes.CASHIER_DASHBOARD}
+        component={CashierDashboard}
+      />
+      <PrimaryStack.Screen name={Routes.CASHIER_HELP} component={CashierHelp} />
+      <PrimaryStack.Screen
+        name={Routes.CASHIER_REQUEST}
+        component={CashierRequest}
+      />
+      <PrimaryStack.Screen
+        name={Routes.CASHIER_TRANSACTIONS}
+        component={CashierTransactions}
+      />
+      <PrimaryStack.Screen
+        name={Routes.CASHIER_RETURN_QRCODE_SCAN}
+        component={CashierReturnQRCodeScan}
+      />
+      <PrimaryStack.Screen
+        name={Routes.CASHIER_RETURN}
+        component={CashierReturn}
+      />
+      <PrimaryStack.Screen
+        name={Routes.CASHIER_HOW_TO_WORK}
+        component={CashierHowToWork}
+      />
+      <PrimaryStack.Screen name={Routes.REPORT} component={Report} />
+      <PrimaryStack.Screen
+        name={Routes.REPORT_SUCCESS}
+        component={ReportSuccess}
+      />
+    </>
+  );
+};
 
-	return (
-		<>
-			<PrimaryStack.Screen
-				name={Routes.CASHIER_DASHBOARD}
-				component={CashierDashboard}
-			/>
-			<PrimaryStack.Screen
-				name={Routes.CASHIER_HELP}
-				component={CashierHelp}
-			/>
-			<PrimaryStack.Screen
-				name={Routes.CASHIER_REQUEST}
-				component={CashierRequest}
-			/>
-			<PrimaryStack.Screen
-				name={Routes.CASHIER_TRANSACTIONS}
-				component={CashierTransactions}
-			/>
-			<PrimaryStack.Screen
-				name={Routes.CASHIER_RETURN_QRCODE_SCAN}
-				component={CashierReturnQRCodeScan}
-			/>
-			<PrimaryStack.Screen
-				name={Routes.CASHIER_RETURN}
-				component={CashierReturn}
-			/>
-			<PrimaryStack.Screen
-				name={Routes.CASHIER_HOW_TO_WORK}
-				component={CashierHowToWork}
-			/>
-			<PrimaryStack.Screen
-				name={Routes.REPORT}
-				component={Report}
-			/>
-			<PrimaryStack.Screen
-				name={Routes.REPORT_SUCCESS}
-				component={ReportSuccess}
-			/>
-		</>
-	)
-}
-
-export const BusinessUserStack = ({ isVerifiedCustomer }: { isVerifiedCustomer: boolean}) => {
-
-	return (
-		<>
-			<PrimaryStack.Screen
-				name={Routes.MERCHANT_TABS}
-				component={BusinessDrawer}
-			/>
-			<PrimaryStack.Screen
-				name={Routes.PAYMENT_FAILED}
-				component={PaymentSuccess}
-			/>
-			<PrimaryStack.Screen
-				name={Routes.PAYMENT_SUCCESS}
-				component={PaymentSuccess}
-			/>
-			<PrimaryStack.Screen
-				name={Routes.MERCHANT_RETURN}
-				component={MerchantReturn}
-			/>
-			<PrimaryStack.Screen
-				name={Routes.CASHOUT}
-				component={CashoutNavigator}
-			/>
-			<PrimaryStack.Screen
-				name={Routes.LOADUP_SUCCESS}
-				component={LoadUpSuccess}
-			/>
-			<PrimaryStack.Screen
-				name={Routes.LOAD_UP}
-				component={PaymentsModule.Loadup}
-			/>
-			<PrimaryStack.Screen
-				name={Routes.MERCHANT_PAYOUT_PERSONAL}
-				component={MerchantPayoutToPersonal}
-			/>
-			<PrimaryStack.Screen
-				name={Routes.MERCHANT_PAYOUT_SOMEONE}
-				component={MerchantPayoutToSomeone}
-			/>
-			<PrimaryStack.Screen
-				name={Routes.MERCHANT_PAYOUT_PENDING}
-				component={MerchantPayoutPending}
-			/>
-			<PrimaryStack.Screen
-				name={Routes.MERCHANT_PAYOUT_SUCCESS}
-				component={MerchantPayoutSuccess}
-			/>
-			<PrimaryStack.Screen
-				name={Routes.MERCHANT_PAYOUT_QR_SCAN}
-				component={PaymentsModule.SendFixedAmount}
-			/>
-			<PrimaryStack.Screen
-				name={Routes.MERCHANT_BANK_ACCOUNT}
-				component={MerchantBankAccountNavigator}
-			/>
-			<PrimaryStack.Screen
-				name={Routes.REPORT_SUCCESS}
-				component={ReportSuccess}
-			/>
-			<PrimaryStack.Screen
-				name={Routes.MERCHANT_SETTINGS_PROFILE}
-				component={MerchantSettingsProfile}
-			/>
-			<PrimaryStack.Screen
-				name={Routes.MERCHANT_SETTINGS_BANK_ACCOUNT}
-				component={MerchantSettingsBankAccount}
-			/>
-			<PrimaryStack.Screen
-				name={Routes.MERCHANT_SETTINGS_STATIC_QR}
-				component={MerchantSettingsStaticQr}
-			/>
-			<PrimaryStack.Screen
-				name={Routes.MERCHANT_SETTINGS_LEGAL}
-				component={MerchantSettingsTermsAndConditions}
-			/>
-			<PrimaryStack.Screen
-				name={Routes.MERCHANT_SETTINGS_SECURITY}
-				component={MerchantSettingsSecurity}
-			/>
-			<PrimaryStack.Screen
-				name={Routes.SETTING_BANK_ACCOUNT}
-				component={SettingsBankAccount}
-			/>
-			<PrimaryStack.Screen
-				name={Routes.SETTING_DELETE_ACCOUNT}
-				component={SettingsDeleteAccount}
-			/>
-			<PrimaryStack.Screen
-				name={Routes.SELECT_MERCHANT_BANK_ACCOUNT}
-				component={SelectMerchantBank}
-			/>
-			{!isVerifiedCustomer && (
-				<>
-					<PrimaryStack.Screen
-						name={Routes.PERSONAL_PROFILE}
-						component={PersonalProfile}
-					/>
-					<PrimaryStack.Screen
-						name={Routes.PERSONAL_DETAILS}
-						component={PersonalDetails}
-					/>
-					<PrimaryStack.Screen
-						name={Routes.PERSONAL_ADDRESS}
-						component={PersonalAddress}
-					/>
-				</>
-			)}
-		</>
-	)
-}
+export const BusinessUserStack = ({
+  isVerifiedCustomer,
+}: {
+  isVerifiedCustomer: boolean;
+}) => {
+  return (
+    <>
+      <PrimaryStack.Screen
+        name={Routes.MERCHANT_TABS}
+        component={BusinessDrawer}
+      />
+      <PrimaryStack.Screen
+        name={Routes.PAYMENT_FAILED}
+        component={PaymentSuccess}
+      />
+      <PrimaryStack.Screen
+        name={Routes.PAYMENT_SUCCESS}
+        component={PaymentSuccess}
+      />
+      <PrimaryStack.Screen
+        name={Routes.MERCHANT_RETURN}
+        component={MerchantReturn}
+      />
+      <PrimaryStack.Screen name={Routes.CASHOUT} component={CashoutNavigator} />
+      <PrimaryStack.Screen
+        name={Routes.LOADUP_SUCCESS}
+        component={LoadUpSuccess}
+      />
+      <PrimaryStack.Screen
+        name={Routes.LOAD_UP}
+        component={PaymentsModule.Loadup}
+      />
+      <PrimaryStack.Screen
+        name={Routes.MERCHANT_PAYOUT_PERSONAL}
+        component={MerchantPayoutToPersonal}
+      />
+      <PrimaryStack.Screen
+        name={Routes.MERCHANT_PAYOUT_SOMEONE}
+        component={MerchantPayoutToSomeone}
+      />
+      <PrimaryStack.Screen
+        name={Routes.MERCHANT_PAYOUT_PENDING}
+        component={MerchantPayoutPending}
+      />
+      <PrimaryStack.Screen
+        name={Routes.MERCHANT_PAYOUT_SUCCESS}
+        component={MerchantPayoutSuccess}
+      />
+      <PrimaryStack.Screen
+        name={Routes.MERCHANT_PAYOUT_QR_SCAN}
+        component={PaymentsModule.SendFixedAmount}
+      />
+      <PrimaryStack.Screen
+        name={Routes.MERCHANT_BANK_ACCOUNT}
+        component={MerchantBankAccountNavigator}
+      />
+      <PrimaryStack.Screen
+        name={Routes.REPORT_SUCCESS}
+        component={ReportSuccess}
+      />
+      <PrimaryStack.Screen
+        name={Routes.MERCHANT_SETTINGS_PROFILE}
+        component={MerchantSettingsProfile}
+      />
+      <PrimaryStack.Screen
+        name={Routes.MERCHANT_SETTINGS_BANK_ACCOUNT}
+        component={MerchantSettingsBankAccount}
+      />
+      <PrimaryStack.Screen
+        name={Routes.MERCHANT_SETTINGS_STATIC_QR}
+        component={MerchantSettingsStaticQr}
+      />
+      <PrimaryStack.Screen
+        name={Routes.MERCHANT_SETTINGS_LEGAL}
+        component={MerchantSettingsTermsAndConditions}
+      />
+      <PrimaryStack.Screen
+        name={Routes.MERCHANT_SETTINGS_SECURITY}
+        component={MerchantSettingsSecurity}
+      />
+      <PrimaryStack.Screen
+        name={Routes.SETTING_BANK_ACCOUNT}
+        component={SettingsBankAccount}
+      />
+      <PrimaryStack.Screen
+        name={Routes.SETTING_DELETE_ACCOUNT}
+        component={SettingsDeleteAccount}
+      />
+      <PrimaryStack.Screen
+        name={Routes.SELECT_MERCHANT_BANK_ACCOUNT}
+        component={SelectMerchantBank}
+      />
+      {!isVerifiedCustomer && (
+        <>
+          <PrimaryStack.Screen
+            name={Routes.PERSONAL_PROFILE}
+            component={PersonalProfile}
+          />
+          <PrimaryStack.Screen
+            name={Routes.PERSONAL_DETAILS}
+            component={PersonalDetails}
+          />
+          <PrimaryStack.Screen
+            name={Routes.PERSONAL_ADDRESS}
+            component={PersonalAddress}
+          />
+        </>
+      )}
+    </>
+  );
+};
 
 export const NotVerifiedUserStack = () => {
-
-	return (
-		<>
-			<PrimaryStack.Screen
-				name={Routes.SELECT_ACCOUNT_TYPE}
-				component={SelectAccountType}
-			/>
-			<PrimaryStack.Screen
-				name={Routes.PERSONAL_PROFILE}
-				component={PersonalProfile}
-			/>
-			<PrimaryStack.Screen
-				name={Routes.PERSONAL_DETAILS}
-				component={PersonalDetails}
-			/>
-			<PrimaryStack.Screen
-				name={Routes.PERSONAL_ADDRESS}
-				component={PersonalAddress}
-			/>
-			<PrimaryStack.Screen
-				name={Routes.LINK_BANK_ACCOUNT}
-				component={CustomerWelcome}
-			/>
-			<PrimaryStack.Screen
-				name={Routes.SELECT_BANK}
-				component={SelectBank}
-			/>
-			<PrimaryStack.Screen
-				name={Routes.SIGNUP_BUSINESS}
-				component={SignupBusinessNavigator}
-			/>
-			<PrimaryStack.Screen
-				name={Routes.MERCHANT_BANK_ACCOUNT}
-				component={MerchantBankAccountNavigator}
-			/>
-		</>
-	)
-}
+  return (
+    <>
+      <PrimaryStack.Screen
+        name={Routes.SELECT_ACCOUNT_TYPE}
+        component={SelectAccountType}
+      />
+      <PrimaryStack.Screen
+        name={Routes.PERSONAL_PROFILE}
+        component={PersonalProfile}
+      />
+      <PrimaryStack.Screen
+        name={Routes.PERSONAL_DETAILS}
+        component={PersonalDetails}
+      />
+      <PrimaryStack.Screen
+        name={Routes.PERSONAL_ADDRESS}
+        component={PersonalAddress}
+      />
+      <PrimaryStack.Screen
+        name={Routes.LINK_BANK_ACCOUNT}
+        component={CustomerWelcome}
+      />
+      <PrimaryStack.Screen name={Routes.SELECT_BANK} component={SelectBank} />
+      <PrimaryStack.Screen
+        name={Routes.SIGNUP_BUSINESS}
+        component={SignupBusinessNavigator}
+      />
+      <PrimaryStack.Screen
+        name={Routes.MERCHANT_BANK_ACCOUNT}
+        component={MerchantBankAccountNavigator}
+      />
+    </>
+  );
+};
 
 export const CustomerLinkBankAccount = () => {
-
-	return (
-		<>
-			<PrimaryStack.Screen
-				name={Routes.LINK_BANK_ACCOUNT}
-				component={CustomerWelcome}
-			/>
-			<PrimaryStack.Screen
-				name={Routes.SELECT_BANK}
-				component={SelectBank}
-			/>
-		</>
-	)
-}
+  return (
+    <>
+      <PrimaryStack.Screen
+        name={Routes.LINK_BANK_ACCOUNT}
+        component={CustomerWelcome}
+      />
+      <PrimaryStack.Screen name={Routes.SELECT_BANK} component={SelectBank} />
+    </>
+  );
+};
 
 export const BusinessLinkBankAccount = () => {
+  return (
+    <>
+      <PrimaryStack.Screen
+        name={Routes.BUSINESS_WELCOME}
+        component={BusinessWelcome}
+      />
+      <PrimaryStack.Screen
+        name={Routes.MERCHANT_BANK_ACCOUNT}
+        component={SelectMerchantBank}
+      />
+    </>
+  );
+};
 
-	return (
-		<>
-			<PrimaryStack.Screen
-				name={Routes.BUSINESS_WELCOME}
-				component={BusinessWelcome}
-			/>
-			<PrimaryStack.Screen
-				name={Routes.MERCHANT_BANK_ACCOUNT}
-				component={SelectMerchantBank}
-			/>
-		</>
-	)
+{
+  /* <PrimaryStack.Screen name={'TouchId'} component={TouchId} /> */
 }
 
-
-
-
-{/* <PrimaryStack.Screen name={'TouchId'} component={TouchId} /> */}
-
-{/* <PrimaryStack.Screen
+{
+  /* <PrimaryStack.Screen
 			name='ConfirmPassword'
 			component={PasswordConfirm}
-		/> */}
+		/> */
+}

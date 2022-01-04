@@ -1,71 +1,81 @@
 import React, { ReactElement } from "react";
-import { Dimensions, StyleSheet, TouchableOpacity, View, SafeAreaView } from 'react-native';
-import { Text } from 'react-native-elements';
+import {
+  Dimensions,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+  SafeAreaView,
+} from "react-native";
+import { Text } from "react-native-elements";
 
 export const MODAL_HEADER_HEIGHT = Dimensions.get("window").height * 0.08;
 
 const styles = StyleSheet.create({
-	header: {
-		flexDirection: "row",
-		paddingVertical: 5,
-		alignItems: 'center'
-	},
-	leftContainer: {
-		textAlignVertical: "center",
-		flex: 1,
-		alignContent: "flex-start"
-	},
-	leftText: {
-		lineHeight: MODAL_HEADER_HEIGHT,
-		textAlign: "left"
-	},
-	rightContainer: {
-		textAlign: "right",
-		height: MODAL_HEADER_HEIGHT,
-		textAlignVertical: "center",
-		flex: 1,
-		paddingHorizontal: 15
-	},
-	rightText: {
-		lineHeight: MODAL_HEADER_HEIGHT,
-		textAlign: "right"
-	}
+  header: {
+    flexDirection: "row",
+    paddingVertical: 5,
+    alignItems: "center",
+  },
+  leftContainer: {
+    textAlignVertical: "center",
+    flex: 1,
+    alignContent: "flex-start",
+  },
+  leftText: {
+    lineHeight: MODAL_HEADER_HEIGHT,
+    textAlign: "left",
+  },
+  rightContainer: {
+    textAlign: "right",
+    height: MODAL_HEADER_HEIGHT,
+    textAlignVertical: "center",
+    flex: 1,
+    paddingHorizontal: 15,
+  },
+  rightText: {
+    lineHeight: MODAL_HEADER_HEIGHT,
+    textAlign: "right",
+  },
 });
 
 type ModalHeaderProps = {
-	onRightComponentPress?: () => void;
-	onLeftComponentPress?: () => void;
-	leftComponent?: string | ReactElement,
-	rightComponent?: string | ReactElement,
-}
+  onRightComponentPress?: () => void;
+  onLeftComponentPress?: () => void;
+  leftComponent?: string | ReactElement;
+  rightComponent?: string | ReactElement;
+};
 
 const ModalHeader = (props: ModalHeaderProps) => {
-	return (
-		<SafeAreaView style={styles.header}>
-			{props.leftComponent && (
-				<View style={styles.leftContainer}>
-					{typeof props.leftComponent === 'string' && (
-						<TouchableOpacity onPress={props.onLeftComponentPress}>
-							<Text h2 style={styles.leftText}>{props.leftComponent}</Text>
-						</TouchableOpacity>
-					)}
-					{typeof props.leftComponent !== 'string' && props.leftComponent}
-				</View>
-			)}
-			{props.rightComponent && (
-				<View style={styles.rightContainer}>
-					{typeof props.rightComponent === 'string' && (
-						<TouchableOpacity onPress={props.onRightComponentPress}>
-							<Text h2 style={styles.rightText}>{props.rightComponent}</Text>
-						</TouchableOpacity>
-					)}
-					{typeof props.rightComponent !== 'string' && (
-						<View>{props.rightComponent}</View>
-					)}
-				</View>
-			)}
-		</SafeAreaView>
-	);
-}
+  return (
+    <SafeAreaView style={styles.header}>
+      {props.leftComponent && (
+        <View style={styles.leftContainer}>
+          {typeof props.leftComponent === "string" && (
+            <TouchableOpacity onPress={props.onLeftComponentPress}>
+              <Text h2 style={styles.leftText}>
+                {props.leftComponent}
+              </Text>
+            </TouchableOpacity>
+          )}
+          {typeof props.leftComponent !== "string" && props.leftComponent}
+        </View>
+      )}
+      {props.rightComponent && (
+        <View style={styles.rightContainer}>
+          {typeof props.rightComponent === "string" && (
+            <TouchableOpacity onPress={props.onRightComponentPress}>
+              <Text h2 style={styles.rightText}>
+                {props.rightComponent}
+              </Text>
+            </TouchableOpacity>
+          )}
+          {typeof props.rightComponent !== "string" && (
+            <View>{props.rightComponent}</View>
+          )}
+        </View>
+      )}
+    </SafeAreaView>
+  );
+};
 
 export default ModalHeader;
