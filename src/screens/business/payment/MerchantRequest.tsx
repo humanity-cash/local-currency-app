@@ -6,7 +6,7 @@ import { Header, Button, CancelBtn, BorderedInput, ToggleButton } from "src/shar
 import { baseHeader, viewBaseB, wrappingContainerBase } from "src/theme/elements";
 import { colors } from "src/theme/colors";
 import { PaymentsModule } from "src/modules";
-import MerchantRequestSuccess from "./MerchantRequestSuccess";
+import { PaymentRequestSuccess } from "src/views";
 import Translation from 'src/translation/en.json';
 import * as Routes from 'src/navigation/constants';
 import { WalletContext, UserContext } from 'src/contexts';
@@ -239,7 +239,7 @@ const MerchantRequest = (): JSX.Element => {
                 amount={Number(state.amount)}
                 ownerName={user?.business?.tag || ""}
             />}
-            {isRequestSuccess && <MerchantRequestSuccess visible={isRequestSuccess} onClose={onConfirm} amount={receivedAmount} />}
+            {isRequestSuccess && <PaymentRequestSuccess visible={isRequestSuccess} onClose={onConfirm} amount={receivedAmount} />}
 
             <BankLinkDialog 
                 visible={bankDialogInfo.isVisible}
