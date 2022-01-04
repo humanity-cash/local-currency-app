@@ -2,43 +2,43 @@ import { createStore, useStore } from "react-hookstore";
 import { colors } from "src/theme/colors";
 import { ModalStatusBar, IMap } from "src/utils/types";
 
-const storeId = 'MODAL_STATUSBAR';
+const storeId = "MODAL_STATUSBAR";
 
 const headerValues = {
-	styles: { backgroundColor: colors.black },
-	bar: 'light-content'
-}
+  styles: { backgroundColor: colors.black },
+  bar: "light-content",
+};
 type ModalStatusBarState = ModalStatusBar;
 
 const store = createStore<ModalStatusBarState>(storeId, {
-	show: false,
-	styles: {}
+  show: false,
+  styles: {},
 });
 
 const useModalStatusBar = (): IMap => {
-	const [details] = useStore<ModalStatusBarState>(storeId);
+  const [details] = useStore<ModalStatusBarState>(storeId);
 
-	const setUseHeader = (value: boolean) => {
-		if (value) {
-			store.setState({
-				show: value,
-				styles: headerValues.styles,
-				bar: 'light-content'
-			});
-		}
-		if (!value) {
-			store.setState({
-				show: value,
-				styles: { },
-				bar: undefined
-			});
-		}
-	}
+  const setUseHeader = (value: boolean) => {
+    if (value) {
+      store.setState({
+        show: value,
+        styles: headerValues.styles,
+        bar: "light-content",
+      });
+    }
+    if (!value) {
+      store.setState({
+        show: value,
+        styles: {},
+        bar: undefined,
+      });
+    }
+  };
 
-	return {
-		properties: details,
-		setUseHeader
-	}
+  return {
+    properties: details,
+    setUseHeader,
+  };
 };
 
-export default  useModalStatusBar;
+export default useModalStatusBar;
