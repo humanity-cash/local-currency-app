@@ -11,6 +11,7 @@ import {
 import Translation from "src/translation/en.json";
 import * as Routes from "src/navigation/constants";
 import { UserContext } from "src/contexts";
+import { BUTTON_TYPES } from "src/constants";
 import { UserType } from "src/auth/types";
 
 const styles = StyleSheet.create({
@@ -32,6 +33,10 @@ const RedemptionInProgress = (): ReactElement => {
       ? Routes.MERCHANT_DASHBOARD
       : Routes.DASHBOARD;
   const navigation = useNavigation();
+  const buttonStyle =
+    userType === UserType.Business
+      ? BUTTON_TYPES.PURPLE
+      : BUTTON_TYPES.DARK_GREEN
 
   return (
     <View style={modalViewBase}>
@@ -55,7 +60,7 @@ const RedemptionInProgress = (): ReactElement => {
       </ScrollView>
       <SafeAreaView style={styles.bottomView}>
         <Button
-          type="darkGreen"
+          type={buttonStyle}
           title={Translation.BUTTON.GO_BACK_HOME}
           onPress={() => navigation.navigate(homeRoute)}
         />
