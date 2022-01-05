@@ -53,7 +53,10 @@ const CashoutAmount = (props: CashOutInput): JSX.Element => {
   const { userType } = useContext(UserContext);
   const styles =
     userType === UserType.Business ? BusinessCashOut : CustomerCashOut;
-  const buttonStyle = userType === UserType.Business ? BUTTON_TYPES.PURPLE : BUTTON_TYPES.DARK_GREEN;
+  const buttonStyle =
+    userType === UserType.Business
+      ? BUTTON_TYPES.PURPLE
+      : BUTTON_TYPES.DARK_GREEN;
   const navigation = useNavigation();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [maxAmount, setMaxAmount] = useState<string>("5.00");
@@ -228,7 +231,6 @@ const CashoutAmount = (props: CashOutInput): JSX.Element => {
           </View>
         </Dialog>
       )}
-
     </KeyboardAvoidingView>
   );
 };

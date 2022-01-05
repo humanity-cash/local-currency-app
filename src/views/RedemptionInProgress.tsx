@@ -36,7 +36,7 @@ const RedemptionInProgress = (): ReactElement => {
   const buttonStyle =
     userType === UserType.Business
       ? BUTTON_TYPES.PURPLE
-      : BUTTON_TYPES.DARK_GREEN
+      : BUTTON_TYPES.DARK_GREEN;
 
   return (
     <View style={modalViewBase}>
