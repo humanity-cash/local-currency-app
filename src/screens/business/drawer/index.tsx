@@ -348,7 +348,7 @@ const DrawerContent = (props: DrawerContentComponentProps) => {
 
   const userTag = user?.customer?.tag || undefined;
   const businessTag = user?.business?.tag || undefined;
-  const verifiedBusiness = user?.verifiedCustomer;
+  const verifiedBusiness = user?.verifiedBusiness;
   const verifiedCustomer = user?.verifiedCustomer;
 
   return (
