@@ -110,48 +110,48 @@ export const AuthProvider: React.FunctionComponent = ({ children }) => {
     userController.resendEmailVerificationCode(email.toLowerCase());
 
   const signUp = async () => {
-      const response = await userController.signUp(
-          signUpDetails.email.toLowerCase(),
-          signUpDetails.password
-      );
-      return response;
+    const response = await userController.signUp(
+      signUpDetails.email.toLowerCase(),
+      signUpDetails.password
+    );
+    return response;
   };
 
   const signIn = async (
-      email = signInDetails.email,
-      password = signInDetails.password
+    email = signInDetails.email,
+    password = signInDetails.password
   ) => {
-      updateAuthStatus(AuthStatus.Loading);
-      const response: BaseResponse<CognitoUserSession> =
-          await userController.signIn({ email: email.toLowerCase(), password });
-      if (response?.success) {
-          await getSessionInfo();
-          const user = await UserAPI.getUserByEmail(email);
-          if (!user) {
-              updateUserType(UserType.NotVerified, email);
-              updateSelectedView(ViewState.NotVerified);
-              return response;
-          } else {
-              const latestType = await getLatestSelectedAccountType(email);
-              updateUserData(user);
-              const newType = 
-                  latestType === UserType.NotVerified && user?.verifiedCustomer 
-                      ? UserType.Customer
-                      : latestType === UserType.NotVerified && user?.verifiedBusiness 
-                          ? UserType.Business
-                          : latestType as UserType;
-              updateUserType(newType, email);
-              if (newType === UserType.Business)
-                  updateSelectedView(ViewState.Business);
-              else if (newType === UserType.Customer)
-                  updateSelectedView(ViewState.Customer);
-              else if (newType === UserType.NotVerified)
-                  updateSelectedView(ViewState.NotVerified);
-          }
+    updateAuthStatus(AuthStatus.Loading);
+    const response: BaseResponse<CognitoUserSession> =
+      await userController.signIn({ email: email.toLowerCase(), password });
+    if (response?.success) {
+      await getSessionInfo();
+      const user = await UserAPI.getUserByEmail(email);
+      if (!user) {
+        updateUserType(UserType.NotVerified, email);
+        updateSelectedView(ViewState.NotVerified);
+        return response;
       } else {
-          updateAuthStatus(AuthStatus.SignedOut);
+        const latestType = await getLatestSelectedAccountType(email);
+        updateUserData(user);
+        const newType =
+          latestType === UserType.NotVerified && user?.verifiedCustomer
+            ? UserType.Customer
+            : latestType === UserType.NotVerified && user?.verifiedBusiness
+            ? UserType.Business
+            : (latestType as UserType);
+        updateUserType(newType, email);
+        if (newType === UserType.Business)
+          updateSelectedView(ViewState.Business);
+        else if (newType === UserType.Customer)
+          updateSelectedView(ViewState.Customer);
+        else if (newType === UserType.NotVerified)
+          updateSelectedView(ViewState.NotVerified);
       }
-      return response;
+    } else {
+      updateAuthStatus(AuthStatus.SignedOut);
+    }
+    return response;
   };
 
   const startForgotPasswordFlow = async (): Promise<BaseResponse<unknown>> => {
