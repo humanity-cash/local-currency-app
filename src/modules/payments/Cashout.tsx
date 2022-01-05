@@ -31,6 +31,7 @@ import { showToast } from "src/utils/common";
 import { ToastType } from "src/utils/types";
 import { CustomerCashOut, BusinessCashOut } from "src/style";
 import { UserContext } from "src/contexts";
+import { BUTTON_TYPES } from "src/constants";
 import { UserType } from "src/auth/types";
 
 interface CashoutState extends IMap {
@@ -41,7 +42,6 @@ interface CashoutState extends IMap {
 interface CashOutInput {
   route: {
     params: {
-      styles: any;
       userId: string;
       walletData: { availableBalance: number };
     };
@@ -53,6 +53,7 @@ const CashoutAmount = (props: CashOutInput): JSX.Element => {
   const { userType } = useContext(UserContext);
   const styles =
     userType === UserType.Business ? BusinessCashOut : CustomerCashOut;
+  const buttonStyle = userType === UserType.Business ? BUTTON_TYPES.PURPLE : BUTTON_TYPES.DARK_GREEN;
   const navigation = useNavigation();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [maxAmount, setMaxAmount] = useState<string>("5.00");
@@ -87,7 +88,7 @@ const CashoutAmount = (props: CashOutInput): JSX.Element => {
     }
   }, [walletData]);
 
-  const onValueChange = (name: string, change: string) => {
+  const onValueChange = (_: string, change: string) => {
     const amount = change.replace(",", ".");
     setState({
       amount: amount,
@@ -100,18 +101,20 @@ const CashoutAmount = (props: CashOutInput): JSX.Element => {
   };
 
   const doCashout = async () => {
-    if (!userId || !state.amount) {
+    const { amount } = state;
+    if (!userId || !amount) {
       showToast(
         ToastType.ERROR,
         "Whoops, something went wrong.",
         "Connection failed."
       );
+
       return;
     }
     setIsVisible(false);
     setIsLoading(true);
     const response = await TransactionsAPI.withdraw(userId, {
-      amount: state.amount,
+      amount,
     });
     setIsLoading(false);
 
@@ -217,7 +220,7 @@ const CashoutAmount = (props: CashOutInput): JSX.Element => {
             </View>
             <View style={styles.dialogBottom}>
               <Button
-                type="darkGreen"
+                type={buttonStyle}
                 title={Translation.BUTTON.CASH_OUT}
                 onPress={doCashout}
               />
@@ -225,6 +228,7 @@ const CashoutAmount = (props: CashOutInput): JSX.Element => {
           </View>
         </Dialog>
       )}
+
     </KeyboardAvoidingView>
   );
 };
