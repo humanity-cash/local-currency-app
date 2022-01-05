@@ -54,18 +54,18 @@ const TransactionList = (props: MyTransactionsInput): JSX.Element => {
   }, [startDate, endDate, selectedType, apiData]);
 
   useEffect(() => {
-      setInterval(() => loadTransactions(), 5000);
+    setInterval(() => loadTransactions(), 5000);
   }, []);
 
   useEffect(() => {
-     loadTransactions(true);
+    loadTransactions(true);
   }, [userId]);
 
   const loadTransactions = (isWithLoading = false) => {
     if (userId) {
       const handler = async () => {
-        if(isWithLoading){
-            setIsLoading(true);
+        if (isWithLoading) {
+          setIsLoading(true);
         }
         let txs: MiniTransaction[] = [];
         if (userType === UserType.Cashier) {
@@ -76,8 +76,8 @@ const TransactionList = (props: MyTransactionsInput): JSX.Element => {
         const formattedTxs = sortTxByTimestamp(txs);
         setAPIData(formattedTxs);
         setFilteredData(formattedTxs);
-        if(isWithLoading) {
-            setIsLoading(false);
+        if (isWithLoading) {
+          setIsLoading(false);
         }
       };
       handler();

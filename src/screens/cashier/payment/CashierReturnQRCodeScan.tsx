@@ -185,7 +185,7 @@ const CashierReturnQRCodeScan = (): JSX.Element => {
       if (response.data) {
         setIsLoading(false);
         setIsReturnModal(false);
-        showToast(ToastType.SUCCESS, "Success", `You have sent B$ ${amount}.`)
+        showToast(ToastType.SUCCESS, "Success", `You have sent B$ ${amount}.`);
       } else {
         showToast(ToastType.ERROR, "Failed", "Whooops, something went wrong.");
         setIsLoading(false);
@@ -209,71 +209,71 @@ const CashierReturnQRCodeScan = (): JSX.Element => {
 
   return (
     <View style={viewBase}>
-        {
-            ( !isLoading && !isReturnModal )  && <View style={styles.container}>
-                <BarCodeScanner
-                    onBarCodeScanned={isScanned ? undefined : handleBarCodeScanned}
-                    style={StyleSheet.absoluteFillObject}
-                />
-            </View>
-        }
-        <View style={styles.toggleView}>
-            <Header
-                rightComponent={
-                    <CancelBtn
-                        text={Translation.BUTTON.CLOSE}
-                        color={colors.white}
-                        onClick={() => navigation.navigate(Routes.CASHIER_DASHBOARD)}
-                    />
-                }
-            />
+      {!isLoading && !isReturnModal && (
+        <View style={styles.container}>
+          <BarCodeScanner
+            onBarCodeScanned={isScanned ? undefined : handleBarCodeScanned}
+            style={StyleSheet.absoluteFillObject}
+          />
         </View>
-        {isReturnModal && (
-            <Modal visible={isReturnModal}>
-                <KeyboardAvoidingView
-                    behavior={Platform.OS == "ios" ? "padding" : "height"}
-                    style={modalViewBase}
-                >
-                    <ModalHeader
-                        leftComponent={
-                            <BackBtn
-                                color={colors.purple}
-                                onClick={() => setIsReturnModal(false)}
-                            />
-                        }
-                        rightComponent={<CancelBtn text="Close" onClick={onModalClose} />}
-                    />
-                    <ScrollView style={wrappingContainerBase}>
-                        <View style={underlineHeaderB}>
-                            <Text style={styles.headerText}>
-                                {Translation.CASHIER.MAKE_RETURN}
-                            </Text>
-                        </View>
-                        <View style={styles.contentView}>
-                            <Text style={styles.label}>
-                                {Translation.LABEL.TRANSACTION_DETAILS}
-                            </Text>
-                            <View style={styles.transactionDetailView}>
-                                <Text style={styles.transactionDetailAmount}>
-                                    B$ {state.amount.toFixed(2)}
-                                </Text>
-                                <View style={styles.inlineView}>
-                                    <Text style={styles.label}>TRANSACTION ID</Text>
-                                    <Text style={styles.label}>{state.transactionHash}</Text>
-                                </View>
-                                <View style={styles.inlineView}>
-                                    <Text style={styles.label}>TYPE</Text>
-                                    <Text style={styles.label}>CUSTOMER SALE</Text>
-                                </View>
-                                <View style={styles.inlineView}>
-                                    <Text style={styles.label}>DATE</Text>
-                                    <Text style={styles.label}>
-                                        {moment(state.transactionDate).format(
-                                            "HH:mm, MMM D, YYYY"
-                                        )}
-                                    </Text>
-                                </View>
-                            </View>
+      )}
+      <View style={styles.toggleView}>
+        <Header
+          rightComponent={
+            <CancelBtn
+              text={Translation.BUTTON.CLOSE}
+              color={colors.white}
+              onClick={() => navigation.navigate(Routes.CASHIER_DASHBOARD)}
+            />
+          }
+        />
+      </View>
+      {isReturnModal && (
+        <Modal visible={isReturnModal}>
+          <KeyboardAvoidingView
+            behavior={Platform.OS == "ios" ? "padding" : "height"}
+            style={modalViewBase}
+          >
+            <ModalHeader
+              leftComponent={
+                <BackBtn
+                  color={colors.purple}
+                  onClick={() => setIsReturnModal(false)}
+                />
+              }
+              rightComponent={<CancelBtn text="Close" onClick={onModalClose} />}
+            />
+            <ScrollView style={wrappingContainerBase}>
+              <View style={underlineHeaderB}>
+                <Text style={styles.headerText}>
+                  {Translation.CASHIER.MAKE_RETURN}
+                </Text>
+              </View>
+              <View style={styles.contentView}>
+                <Text style={styles.label}>
+                  {Translation.LABEL.TRANSACTION_DETAILS}
+                </Text>
+                <View style={styles.transactionDetailView}>
+                  <Text style={styles.transactionDetailAmount}>
+                    B$ {state.amount.toFixed(2)}
+                  </Text>
+                  <View style={styles.inlineView}>
+                    <Text style={styles.label}>TRANSACTION ID</Text>
+                    <Text style={styles.label}>{state.transactionHash}</Text>
+                  </View>
+                  <View style={styles.inlineView}>
+                    <Text style={styles.label}>TYPE</Text>
+                    <Text style={styles.label}>CUSTOMER SALE</Text>
+                  </View>
+                  <View style={styles.inlineView}>
+                    <Text style={styles.label}>DATE</Text>
+                    <Text style={styles.label}>
+                      {moment(state.transactionDate).format(
+                        "HH:mm, MMM D, YYYY"
+                      )}
+                    </Text>
+                  </View>
+                </View>
 
                 <View style={styles.maxBView}>
                   <Text style={styles.label}>
@@ -309,11 +309,9 @@ const CashierReturnQRCodeScan = (): JSX.Element => {
               />
             </SafeAreaView>
             <LoadingPage visible={isLoading} isPayment={true} />
-                </KeyboardAvoidingView>
-
-            </Modal>
-        )}
-
+          </KeyboardAvoidingView>
+        </Modal>
+      )}
     </View>
   );
 };
