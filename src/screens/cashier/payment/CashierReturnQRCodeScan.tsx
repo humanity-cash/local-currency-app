@@ -181,15 +181,15 @@ const CashierReturnQRCodeScan = (): JSX.Element => {
         businessDwollaId,
         request
       );
+      navigation.navigate(Routes.CASHIER_DASHBOARD);
       if (response.data) {
         setIsLoading(false);
         setIsReturnModal(false);
-        navigation.navigate(Routes.CASHIER_RETURN_SUCCESS);
+        showToast(ToastType.SUCCESS, "Success", `You have sent B$ ${amount}.`);
       } else {
         showToast(ToastType.ERROR, "Failed", "Whooops, something went wrong.");
         setIsLoading(false);
         setIsReturnModal(false);
-        navigation.navigate(Routes.CASHIER_DASHBOARD);
       }
     } else {
       showToast(ToastType.ERROR, "Failed", "Whooops, something went wrong.");
@@ -209,12 +209,14 @@ const CashierReturnQRCodeScan = (): JSX.Element => {
 
   return (
     <View style={viewBase}>
-      <View style={styles.container}>
-        <BarCodeScanner
-          onBarCodeScanned={isScanned ? undefined : handleBarCodeScanned}
-          style={StyleSheet.absoluteFillObject}
-        />
-      </View>
+      {!isLoading && !isReturnModal && (
+        <View style={styles.container}>
+          <BarCodeScanner
+            onBarCodeScanned={isScanned ? undefined : handleBarCodeScanned}
+            style={StyleSheet.absoluteFillObject}
+          />
+        </View>
+      )}
       <View style={styles.toggleView}>
         <Header
           rightComponent={

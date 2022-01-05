@@ -93,10 +93,8 @@ const MerchantDashboard = (): JSX.Element => {
     setRefreshing(true);
     if (businessDwollaId) {
       updateBusinessWalletData(businessDwollaId);
-      await getEvents(businessDwollaId);
-      setShowEvents(true);
     }
-    setRefreshing(false);
+    setTimeout(() => setRefreshing(false), 1000);
   }, [businessDwollaId]);
 
   return (

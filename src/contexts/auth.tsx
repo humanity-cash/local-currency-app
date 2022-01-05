@@ -133,14 +133,22 @@ export const AuthProvider: React.FunctionComponent = ({ children }) => {
         return response;
       } else {
         const latestType = await getLatestSelectedAccountType(email);
-        if (latestType === UserType.Business)
-          updateSelectedView(ViewState.Business);
-        else if (latestType === UserType.Customer)
-          updateSelectedView(ViewState.Customer);
-        else if (user.verifiedBusiness) updateSelectedView(ViewState.Business);
-        else if (user.verifiedCustomer) updateSelectedView(ViewState.Customer);
         updateUserData(user);
-        updateUserType(latestType as UserType, email);
+        const newType =
+          latestType === UserType.NotVerified ||
+          (!latestType && user?.verifiedCustomer)
+            ? UserType.Customer
+            : latestType === UserType.NotVerified ||
+              (!latestType && user?.verifiedBusiness)
+            ? UserType.Business
+            : (latestType as UserType);
+        updateUserType(newType, email);
+        if (newType === UserType.Business)
+          updateSelectedView(ViewState.Business);
+        else if (newType === UserType.Customer)
+          updateSelectedView(ViewState.Customer);
+        else if (newType === UserType.NotVerified)
+          updateSelectedView(ViewState.NotVerified);
       }
     } else {
       updateAuthStatus(AuthStatus.SignedOut);
@@ -182,7 +190,6 @@ export const AuthProvider: React.FunctionComponent = ({ children }) => {
   };
 
   const signOut = () => {
-    updateSelectedView(ViewState.Onboarding);
     updateAuthStatus(AuthStatus.SignedOut);
     updateUserData({});
     setUserEmail("");
@@ -190,6 +197,7 @@ export const AuthProvider: React.FunctionComponent = ({ children }) => {
     setSignUpDetails({ email: "", password: "", confirmPassword: "" });
     updateUserType(UserType.NotVerified, userEmail);
     userController.signOut();
+    updateSelectedView(ViewState.Onboarding);
   };
 
   const actions = {

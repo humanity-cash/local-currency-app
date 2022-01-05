@@ -9,7 +9,6 @@ import Login from "src/screens/authentication/Login";
 import CashierHelp from "src/screens/cashier/CashierHelp";
 import CashierHowToWork from "src/screens/cashier/CashierHowToWork";
 import CashierRequest from "src/screens/cashier/payment/CashierRequest";
-import CashierReturn from "src/screens/cashier/payment/CashierReturn";
 import CashierReturnQRCodeScan from "src/screens/cashier/payment/CashierReturnQRCodeScan";
 import CashierTransactions from "src/screens/cashier/transactions";
 import CashierDashboard from "src/screens/cashier/dashboard";
@@ -178,10 +177,6 @@ export const CashierUserStack = () => {
       <PrimaryStack.Screen
         name={Routes.CASHIER_RETURN_QRCODE_SCAN}
         component={CashierReturnQRCodeScan}
-      />
-      <PrimaryStack.Screen
-        name={Routes.CASHIER_RETURN}
-        component={CashierReturn}
       />
       <PrimaryStack.Screen
         name={Routes.CASHIER_HOW_TO_WORK}
@@ -370,14 +365,3 @@ export const BusinessLinkBankAccount = () => {
     </>
   );
 };
-
-{
-  /* <PrimaryStack.Screen name={'TouchId'} component={TouchId} /> */
-}
-
-{
-  /* <PrimaryStack.Screen
-			name='ConfirmPassword'
-			component={PasswordConfirm}
-		/> */
-}
