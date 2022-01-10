@@ -8,6 +8,7 @@ import { colors } from "src/theme/colors";
 import Translation from 'src/translation/en.json';
 import * as Routes from 'src/navigation/constants';
 import { BUTTON_TYPES } from 'src/constants';
+import { FontFamily } from "src/theme/elements";
 
 const styles = StyleSheet.create({
 	content: {
@@ -55,7 +56,7 @@ const styles = StyleSheet.create({
 	},
 	text: {
 		color: colors.bodyText,
-		fontWeight: 'bold',
+		fontFamily: FontFamily.bold,
 		fontSize: 10
 	},
 	deleteBtn: {

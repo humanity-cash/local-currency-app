@@ -9,7 +9,7 @@ import { colors } from "src/theme/colors";
 import {
   baseHeader,
   viewBase,
-  wrappingContainerBase,
+  wrappingContainerBase
 } from "src/theme/elements";
 import { LoadingPage } from "src/views";
 
@@ -17,28 +17,28 @@ const styles = StyleSheet.create({
   headerText: {
     fontSize: 32,
     color: colors.darkGreen,
-    lineHeight: 35,
+    lineHeight: 35
   },
   bodyText: {
-    color: colors.bodyText,
+    color: colors.bodyText
   },
   bottomNavigation: {
-    justifyContent: "center",
+    justifyContent: "center"
   },
   bottomView: {
     marginHorizontal: 20,
-    marginBottom: 20,
+    marginBottom: 20
   },
   image: {
     alignSelf: "center",
     width: 280,
-    height: 280,
+    height: 280
   },
   imageView: {
     justifyContent: "center",
     textAlignVertical: "center",
-    flex: 1,
-  },
+    flex: 1
+  }
 });
 
 const EmailConfirmed = (): JSX.Element => {

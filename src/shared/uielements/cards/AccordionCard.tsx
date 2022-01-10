@@ -10,33 +10,33 @@ const styles = StyleSheet.create({
   container: {
     backgroundColor: colors.inputBg,
     padding: 20,
-    marginBottom: 5,
+    marginBottom: 5
   },
   header: {
     flexDirection: "row",
-    backgroundColor: colors.inputBg,
+    backgroundColor: colors.inputBg
   },
   headerText: {
     flex: 1,
     fontFamily: FontFamily.bold,
-    fontSize: 16,
+    fontSize: 16
   },
   headerIcon: {
     flexDirection: "row",
-    alignItems: "center",
+    alignItems: "center"
   },
   headerActive: {
-    transform: [{ rotate: "180deg" }],
+    transform: [{ rotate: "180deg" }]
   },
   textContainer: {
     marginTop: 15,
-    paddingHorizontal: 10,
+    paddingHorizontal: 10
   },
   contentText: {
     fontSize: 10,
     lineHeight: 14,
-    color: colors.bodyText,
-  },
+    color: colors.bodyText
+  }
 });
 
 const AccordionCard = (props: AccordionEntry): ReactElement => {
@@ -45,7 +45,7 @@ const AccordionCard = (props: AccordionEntry): ReactElement => {
     <View
       style={{
         ...styles.container,
-        ...props.style,
+        ...props.style
       }}
     >
       <TouchableWithoutFeedback onPress={() => setIsExpanded(!isExpanded)}>
@@ -53,7 +53,7 @@ const AccordionCard = (props: AccordionEntry): ReactElement => {
           <Text
             style={{
               ...styles.headerText,
-              ...props.style,
+              ...props.style
             }}
           >
             {props.title}
@@ -61,7 +61,7 @@ const AccordionCard = (props: AccordionEntry): ReactElement => {
           <View
             style={{
               ...styles.headerIcon,
-              ...props.style,
+              ...props.style
             }}
           >
             <Entypo

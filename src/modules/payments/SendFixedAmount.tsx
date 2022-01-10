@@ -15,7 +15,7 @@ import {
   CancelBtn,
   Dialog,
   Header,
-  ToggleButton,
+  ToggleButton
 } from "src/shared/uielements";
 import { colors } from "src/theme/colors";
 import { baseHeader, dialogViewBase, viewBase } from "src/theme/elements";
@@ -25,7 +25,7 @@ import {
   PaymentMode,
   QRCodeEntry,
   SECURITY_ID,
-  ToastType,
+  ToastType
 } from "src/utils/types";
 import { isQRCodeValid } from "src/utils/validation";
 
@@ -158,7 +158,7 @@ const SendPayment = (props: SendPayment): JSX.Element => {
   const [qrCodeData, setQRCodeData] = useState<Omit<QRCodeEntry, "amount">>({
     securityId: SECURITY_ID,
     to: "",
-    mode: PaymentMode.SELECT_AMOUNT,
+    mode: PaymentMode.SELECT_AMOUNT
   });
   const [isLowAmountDialog, setIsLowAmountDialog] = useState<boolean>(false);
 
@@ -193,7 +193,7 @@ const SendPayment = (props: SendPayment): JSX.Element => {
       const request: ITransactionRequest = {
         toUserId: qrCodeData.to,
         amount: amount.toString(),
-        comment: "",
+        comment: ""
       };
       if (isRoundUp) {
         const roundUpAmount = Math.ceil(amount) - Number(amount) || 1;
@@ -287,7 +287,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     flexDirection: "column",
-    justifyContent: "center",
+    justifyContent: "center"
   },
   toggleView: {
     position: "absolute",
@@ -295,13 +295,13 @@ const styles = StyleSheet.create({
     left: 0,
     width: "100%",
     height: 200,
-    backgroundColor: "rgba(0,0,0,0.8)",
+    backgroundColor: "rgba(0,0,0,0.8)"
   },
   dialog: {
-    height: 450,
+    height: 450
   },
   dialogBg: {
-    backgroundColor: colors.overlayPurple,
+    backgroundColor: colors.overlayPurple
   },
   dialogWrap: {
     position: "relative",
@@ -310,24 +310,24 @@ const styles = StyleSheet.create({
     height: "100%",
     flex: 1,
     justifyContent: "center",
-    alignItems: "center",
+    alignItems: "center"
   },
   ownerInfo: {
     position: "absolute",
     top: -60,
     borderRadius: 40,
-    alignItems: "center",
+    alignItems: "center"
   },
   image: {
     width: 80,
     height: 80,
-    borderRadius: 40,
+    borderRadius: 40
   },
   ownerName: {
     fontWeight: "bold",
     fontSize: 18,
     paddingVertical: 10,
-    color: colors.purple,
+    color: colors.purple
   },
   headerText: {
     marginTop: 10,
@@ -335,11 +335,11 @@ const styles = StyleSheet.create({
     fontSize: 32,
     lineHeight: 32,
     paddingTop: 20,
-    color: colors.purple,
+    color: colors.purple
   },
   view: {
     paddingVertical: 10,
-    alignItems: "center",
+    alignItems: "center"
   },
   transparentBtn: {
     backgroundColor: colors.white,
@@ -347,51 +347,51 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     marginTop: 20,
     marginBottom: 10,
-    borderColor: colors.purple,
+    borderColor: colors.purple
   },
   detailText: {
     fontSize: 14,
     color: colors.purple,
-    textAlign: "center",
+    textAlign: "center"
   },
   switchView: {
     flex: 1,
     justifyContent: "center",
-    alignItems: "center",
+    alignItems: "center"
   },
   roundBtn: {
     marginBottom: 10,
     borderWidth: 1,
-    borderColor: colors.purple,
+    borderColor: colors.purple
   },
   description: {
     color: colors.bodyText,
     fontSize: 10,
     textAlign: "center",
-    marginTop: 10,
+    marginTop: 10
   },
   switch: {
-    borderColor: colors.purple,
+    borderColor: colors.purple
   },
   switchText: {
-    color: colors.purple,
+    color: colors.purple
   },
   toggleBg: {
-    backgroundColor: colors.overlayPurple,
+    backgroundColor: colors.overlayPurple
   },
   label: {
     color: colors.bodyText,
     fontSize: 12,
-    paddingTop: 10,
+    paddingTop: 10
   },
   input: {
     backgroundColor: colors.white,
-    color: colors.purple,
+    color: colors.purple
   },
   bottomView: {
     marginHorizontal: 20,
-    marginBottom: 45,
-  },
+    marginBottom: 45
+  }
 });
 
 export default SendPayment;

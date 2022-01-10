@@ -4,7 +4,7 @@ import {
   RefreshControl,
   ScrollView,
   TouchableOpacity,
-  View,
+  View
 } from "react-native";
 import { CustomerScanQrCodeStyle } from "src/style";
 import * as Routes from "src/navigation/constants";
@@ -13,7 +13,7 @@ import { BackBtn, Header } from "src/shared/uielements";
 import {
   baseHeader,
   viewBase,
-  wrappingContainerBase,
+  wrappingContainerBase
 } from "src/theme/elements";
 import Translation from "src/translation/en.json";
 import { styles } from "src/views/TransactionList/style";
@@ -23,8 +23,9 @@ import { TransactionList } from "src/views";
 import { useNavigation } from "@react-navigation/native";
 
 const CustomerTransactions = (): React.ReactElement => {
-  const { customerWalletData, updateCustomerWalletData } =
-    useContext(WalletContext);
+  const { customerWalletData, updateCustomerWalletData } = useContext(
+    WalletContext
+  );
   const { customerDwollaId, user } = useContext(UserContext);
   const navigation = useNavigation();
   const [refreshing, setRefreshing] = React.useState(false);
@@ -71,7 +72,7 @@ const CustomerTransactions = (): React.ReactElement => {
             username: user?.customer?.tag,
             styles: CustomerScanQrCodeStyle,
             recieveRoute: Routes.PAYMENT_REQUEST,
-            cancelRoute: Routes.DASHBOARD,
+            cancelRoute: Routes.DASHBOARD
           })
         }
         style={styles.scanButton}

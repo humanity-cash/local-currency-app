@@ -5,7 +5,7 @@ import PaymentPending from "./PaymentPending";
 const LoadingPage = ({
   visible = false,
   isPayment = false,
-  isData = false,
+  isData = false
 }): JSX.Element => {
   return (
     <>

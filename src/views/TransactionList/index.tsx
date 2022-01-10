@@ -9,7 +9,7 @@ import { UserContext } from "src/contexts";
 import { createFuseSearchInstance } from "src/fuse";
 import {
   BUSINESS_TX_FILTERS_STORE,
-  CUSTOMER_TX_FILTERS_STORE,
+  CUSTOMER_TX_FILTERS_STORE
 } from "src/hook-stores";
 import LoadingPage from "../Loading";
 import { SearchInput } from "src/shared/uielements";
@@ -36,8 +36,9 @@ const TransactionList = (props: MyTransactionsInput): JSX.Element => {
     userType === UserType.Customer
       ? CUSTOMER_TX_FILTERS_STORE
       : BUSINESS_TX_FILTERS_STORE;
-  const [{ selectedType, startDate, endDate }] =
-    useStore<TxFilters>(filtersStore);
+  const [{ selectedType, startDate, endDate }] = useStore<TxFilters>(
+    filtersStore
+  );
   const [isFilterVisible, setIsFilterVisible] = useState<boolean>(false);
   const [searchText, setSearchText] = useState<string>("");
   const [isDetailView, setIsDetailView] = useState<boolean>(false);
@@ -47,6 +48,7 @@ const TransactionList = (props: MyTransactionsInput): JSX.Element => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [apiData, setAPIData] = useState<MiniTransaction[]>([]);
   const [filteredData, setFilteredData] = useState<MiniTransaction[]>([]);
+  const isCustomer = userType === UserType.Customer;
 
   useEffect(() => {
     const d = filterData({ data: apiData, startDate, endDate, selectedType });
@@ -93,11 +95,11 @@ const TransactionList = (props: MyTransactionsInput): JSX.Element => {
 
     const fuseInstance = createFuseSearchInstance(filteredData, {
       includeScore: false,
-      keys: ["toName", "fromName", "value", "type"],
+      keys: ["toName", "fromName", "value", "type"]
     });
     const fuseResult = fuseInstance.search(change);
     //@ts-ignore
-    setFilteredData(fuseResult.map((i) => i.item));
+    setFilteredData(fuseResult.map(i => i.item));
     setSearchText(change);
   };
 
@@ -121,6 +123,16 @@ const TransactionList = (props: MyTransactionsInput): JSX.Element => {
     }
   }, [refreshing]);
 
+  const filterBtnStyle = {
+    ...styles.filterBtn,
+    backgroundColor: isCustomer ? colors.inputBg : colors.lightBg
+  };
+
+  const selectedFilterBtnStyle = {
+    ...styles.selectedFilterBtn,
+    backgroundColor: isCustomer ? colors.darkGreen : colors.purple
+  };
+
   return (
     <ScrollView>
       <LoadingPage visible={isLoading} isData={true} />
@@ -134,12 +146,13 @@ const TransactionList = (props: MyTransactionsInput): JSX.Element => {
               placeholder="Search"
               value={searchText}
               onChange={onSearchChange}
+              style={{
+                backgroundColor: isCustomer ? colors.inputBg : colors.lightBg
+              }}
             />
           </View>
           <TouchableOpacity
-            style={
-              isFilterVisible ? styles.selectedFilterBtn : styles.filterBtn
-            }
+            style={isFilterVisible ? selectedFilterBtnStyle : filterBtnStyle}
             onPress={() => setIsFilterVisible(!isFilterVisible)}
           >
             <Octicons

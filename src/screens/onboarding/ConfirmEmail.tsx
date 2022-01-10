@@ -6,7 +6,7 @@ import {
   StyleSheet,
   TouchableOpacity,
   View,
-  SafeAreaView,
+  SafeAreaView
 } from "react-native";
 import { Text } from "react-native-elements";
 import { useUserDetails } from "src/hooks";
@@ -14,21 +14,21 @@ import { BackBtn, Header, NextBtn } from "src/shared/uielements";
 import {
   baseHeader,
   viewBase,
-  wrappingContainerBase,
+  wrappingContainerBase
 } from "src/theme/elements";
 
 const styles = StyleSheet.create({
   codeView: {
-    flex: 1,
+    flex: 1
   },
   bottomNavigation: {
-    justifyContent: "center",
+    justifyContent: "center"
   },
   bottomView: {
     height: 60,
     justifyContent: "center",
-    alignItems: "center",
-  },
+    alignItems: "center"
+  }
 });
 
 const ConfirmEmail = (): React.ReactElement => {
@@ -36,7 +36,7 @@ const ConfirmEmail = (): React.ReactElement => {
   const [noCodeReceived, setNoCodeReceived] = useState(false);
   const {
     personalDetails: { email, emailVerified },
-    updatePersonalDetails,
+    updatePersonalDetails
   } = useUserDetails();
 
   useEffect(() => {

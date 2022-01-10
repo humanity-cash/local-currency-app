@@ -7,7 +7,7 @@ export const styles = StyleSheet.create({
   headerText: {
     fontSize: 40,
     fontWeight: "400",
-    lineHeight: 40,
+    lineHeight: 40
   },
   amountView: {
     borderBottomColor: colors.darkGreen,
@@ -15,13 +15,13 @@ export const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     paddingBottom: 2,
-    marginBottom: 10,
+    marginBottom: 10
   },
   text: {
     fontSize: 18,
     fontWeight: "bold",
     paddingLeft: 5,
-    paddingRight: 5,
+    paddingRight: 5
   },
   alertView: {
     borderLeftWidth: 5,
@@ -32,42 +32,42 @@ export const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    marginBottom: 10,
+    marginBottom: 10
   },
   alertIcon: {
     color: colors.alert,
-    fontWeight: "bold",
+    fontWeight: "bold"
   },
   alertText: {
     color: colors.black,
-    width: "90%",
+    width: "90%"
   },
   feedView: {
     backgroundColor: colors.card,
     padding: 10,
     marginVertical: 5,
-    borderRadius: 2,
+    borderRadius: 2
   },
   feedHeader: {
     flexDirection: "row",
     justifyContent: "space-between",
     marginBottom: 20,
-    marginTop: 10,
+    marginTop: 10
   },
   bodyText: {
-    paddingVertical: 10,
+    paddingVertical: 10
   },
   image: {
     alignItems: "center",
     width: "100%",
     height: 300,
     marginRight: 20,
-    borderRadius: 5,
+    borderRadius: 5
   },
   qrIcon: {
     width: 24,
     height: 24,
-    marginRight: 20,
+    marginRight: 20
   },
   scanButton: {
     flexDirection: "row",
@@ -80,10 +80,10 @@ export const styles = StyleSheet.create({
     color: colors.white,
     backgroundColor: colors.darkGreen,
     alignSelf: "center",
-    borderRadius: 30,
+    borderRadius: 30
   },
   scanBtnText: {
-    color: colors.white,
+    color: colors.white
   },
   topupButton: {
     justifyContent: "center",
@@ -91,23 +91,23 @@ export const styles = StyleSheet.create({
     paddingLeft: 10,
     paddingRight: 10,
     borderRadius: 10,
-    backgroundColor: colors.darkGreen,
+    backgroundColor: colors.darkGreen
   },
   topupText: { color: colors.white, fontSize: 16 },
   dialog: {
-    height: 320,
+    height: 320
   },
   dialogWrap: {
     paddingHorizontal: 10,
-    flex: 1,
+    flex: 1
   },
   dialogHeader: {
     fontSize: 30,
     lineHeight: 32,
     marginTop: 20,
-    marginBottom: 10,
+    marginBottom: 10
   },
   dialogBottom: {
-    paddingTop: 20,
-  },
+    paddingTop: 20
+  }
 });

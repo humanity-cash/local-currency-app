@@ -24,7 +24,7 @@ export const buildCompleteBusinessVerificationObject = (
     city: update.city,
     state: update.state,
     postalCode: update.postalCode,
-    phoneNumber: update.phoneNumber,
+    phoneNumber: update.phoneNumber
   };
 };
 
@@ -40,7 +40,7 @@ export const buildCompleteCustomerVerificationObject = (
     address2: update.address2,
     city: update.city,
     state: update.state,
-    postalCode: update.postalCode,
+    postalCode: update.postalCode
   };
 };
 

@@ -5,22 +5,22 @@ export const styles = StyleSheet.create({
   headerText: {
     fontSize: 32,
     lineHeight: 35,
-    color: colors.purple,
+    color: colors.purple
   },
   drawerWrap: {
     flex: 1,
     backgroundColor: colors.greyedPurple,
-    paddingVertical: 30,
+    paddingVertical: 30
   },
   closeBtnView: {
     paddingLeft: 15,
     paddingBottom: 10,
-    flexDirection: "row",
+    flexDirection: "row"
   },
   closeBtnText: {
     fontSize: 18,
     marginLeft: 10,
-    color: colors.bodyText,
+    color: colors.bodyText
   },
   imageView: {
     justifyContent: "center",
@@ -28,45 +28,45 @@ export const styles = StyleSheet.create({
     width: 50,
     height: 50,
     borderRadius: 25,
-    backgroundColor: colors.white,
+    backgroundColor: colors.white
   },
   image: {
     width: "70%",
     height: "70%",
-    borderRadius: 20,
+    borderRadius: 20
   },
   infoView: {
-    paddingVertical: 10,
+    paddingVertical: 10
   },
   userInfo: {
     flexDirection: "row",
     alignItems: "center",
     paddingVertical: 5,
-    paddingHorizontal: 10,
+    paddingHorizontal: 10
   },
   usernameView: {
-    paddingHorizontal: 10,
+    paddingHorizontal: 10
   },
   fadeText: {
-    color: colors.purple,
+    color: colors.purple
   },
   berkAmount: {
     fontSize: 32,
     color: colors.lightBg,
     paddingHorizontal: 15,
-    paddingTop: 10,
+    paddingTop: 10
   },
   bottomSection: {
-    paddingBottom: 10,
+    paddingBottom: 10
   },
   inlineView: {
-    flexDirection: "row",
+    flexDirection: "row"
   },
   detailText: {
     fontSize: 16,
-    color: colors.bodyText,
+    color: colors.bodyText
   },
   dialogBg: {
-    backgroundColor: colors.overlayPurple,
-  },
+    backgroundColor: colors.overlayPurple
+  }
 });

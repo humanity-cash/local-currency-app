@@ -8,6 +8,7 @@ import { Dialog } from "src/shared/uielements";
 import { colors } from 'src/theme/colors';
 import { dialogViewBase } from "src/theme/elements";
 import { PaymentMode, SECURITY_ID } from "src/utils/types";
+import { FontFamily } from "src/theme/elements";
 
 const styles = StyleSheet.create({
     dialog: {
@@ -28,7 +29,7 @@ const styles = StyleSheet.create({
     amount: {
         alignSelf: 'center',
         marginTop: 10,
-        fontWeight: 'bold',
+		fontFamily: FontFamily.bold,
         fontSize: 32,
         lineHeight: 32,
         paddingTop: 20
@@ -46,7 +47,7 @@ const styles = StyleSheet.create({
     },
     ownerName: {
         color: colors.purple,
-        fontWeight: 'bold',
+		fontFamily: FontFamily.bold,
         fontSize: 18,
         paddingVertical: 10
     }

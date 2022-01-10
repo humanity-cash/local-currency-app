@@ -3,7 +3,7 @@ import {
   Modal,
   StyleSheet,
   TouchableWithoutFeedback,
-  View,
+  View
 } from "react-native";
 import { Text } from "react-native-elements";
 import { colors } from "src/theme/colors";
@@ -22,7 +22,7 @@ const styles = StyleSheet.create({
     opacity: 0.8,
     backgroundColor: colors.text,
     width: "100%",
-    zIndex: 100,
+    zIndex: 100
   },
   content: {
     position: "absolute",
@@ -32,7 +32,7 @@ const styles = StyleSheet.create({
     backgroundColor: colors.lightBg,
     zIndex: 100,
     elevation: 100,
-    flex: 1,
+    flex: 1
   },
   text: {
     justifyContent: "center",
@@ -40,8 +40,8 @@ const styles = StyleSheet.create({
     padding: 10,
     marginVertical: 20,
     fontSize: 20,
-    fontFamily: FontFamily.bold,
-  },
+    fontFamily: FontFamily.bold
+  }
 });
 
 const BottomSheet = (props: BottomSheetProps) => {

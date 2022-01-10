@@ -4,7 +4,10 @@ import { MiniTransaction, ToastType, TransactionType } from "src/utils/types";
 
 const fee = 0.015;
 
-export const makeId = (): string => Math.random().toString(36).substring(7);
+export const makeId = (): string =>
+  Math.random()
+    .toString(36)
+    .substring(7);
 
 export const formatValue = (value: number): string => {
   const strFormat = value.toFixed(2);
@@ -44,7 +47,7 @@ export const showToast = (
   Toast.show({
     type,
     text1,
-    text2,
+    text2
   });
 };
 

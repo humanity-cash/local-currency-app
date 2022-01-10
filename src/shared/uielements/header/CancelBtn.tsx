@@ -15,17 +15,17 @@ const styles = StyleSheet.create({
     alignSelf: "flex-end",
     padding: 10,
     flexDirection: "row",
-    textAlign: "right",
+    textAlign: "right"
   },
   cross: {
     paddingLeft: 5,
-    textAlign: "right",
+    textAlign: "right"
   },
   text: {
     paddingLeft: 5,
     textAlign: "right",
-    width: 100,
-  },
+    width: 100
+  }
 });
 
 const CancelBtn = (props: CancelBtnProps) => {

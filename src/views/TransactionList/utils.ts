@@ -7,7 +7,7 @@ const mappedTypes = {
   "Incoming transactions": "IN",
   "Outgoing transactions": "OUT",
   "Load ups B$": "Deposit",
-  "Cash out to USD": "Withdraw",
+  "Cash out to USD": "Withdraw"
 };
 
 export const getStyle = (type: string) => {
@@ -34,7 +34,7 @@ export const filterData = ({
   data,
   startDate,
   endDate,
-  selectedType,
+  selectedType
 }: FilterDataInput) => {
   const filtered = data?.reduce<MiniTransaction[]>((acc, curr) => {
     if (startDate) {

@@ -4,7 +4,7 @@ import {
   TextInput,
   TouchableWithoutFeedback,
   View,
-  StyleSheet,
+  StyleSheet
 } from "react-native";
 import { colors } from "src/theme/colors";
 
@@ -30,10 +30,10 @@ const styles = StyleSheet.create({
     alignItems: "center",
     backgroundColor: colors.inputBg,
     marginVertical: 8,
-    paddingHorizontal: 15,
+    paddingHorizontal: 15
   },
   iconView: {
-    alignItems: "center",
+    alignItems: "center"
   },
   inputText: {
     textAlign: "left",
@@ -41,8 +41,8 @@ const styles = StyleSheet.create({
     paddingLeft: 15,
     borderWidth: 0,
     color: colors.text,
-    flex: 1,
-  },
+    flex: 1
+  }
 });
 
 const SearchInput = (props: SearchInputProps) => {
@@ -62,14 +62,14 @@ const SearchInput = (props: SearchInputProps) => {
           ref={inputRef}
           style={{
             ...styles.inputText,
-            ...props.style,
+            ...props.style
           }}
           placeholderTextColor={
             props.textColor ? props.textColor : colors.lightGreen
           }
           keyboardType={props.keyboardType || "default"}
           placeholder={props.placeholder ? props.placeholder : ""}
-          onChangeText={(newValue) => props.onChange(props.name, newValue)}
+          onChangeText={newValue => props.onChange(props.name, newValue)}
           value={props.value}
           onKeyPress={props.onKeyPress}
           maxLength={props.maxLength}

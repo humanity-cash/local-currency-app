@@ -4,7 +4,7 @@ import React, {
   RefObject,
   useContext,
   useEffect,
-  useState,
+  useState
 } from "react";
 import {
   KeyboardAvoidingView,
@@ -14,7 +14,7 @@ import {
   SafeAreaView,
   TextInput,
   Keyboard,
-  ScrollView,
+  ScrollView
 } from "react-native";
 import { Text } from "react-native-elements";
 import { AuthContext } from "src/contexts";
@@ -24,13 +24,13 @@ import {
   BlockInput,
   Button,
   CancelBtn,
-  Header,
+  Header
 } from "src/shared/uielements";
 import { colors } from "src/theme/colors";
 import {
   baseHeader,
   viewBase,
-  wrappingContainerBase,
+  wrappingContainerBase
 } from "src/theme/elements";
 import { IMap } from "src/utils/types";
 import Translation from "src/translation/en.json";
@@ -45,57 +45,57 @@ const styles = StyleSheet.create({
   modalHeader: {
     fontSize: 32,
     fontWeight: "400",
-    lineHeight: 40,
+    lineHeight: 40
   },
   modalDescription: {
-    paddingBottom: 30,
+    paddingBottom: 30
   },
   bodyText: {
-    color: colors.bodyText,
+    color: colors.bodyText
   },
   inlineView: {
     flexDirection: "row",
-    justifyContent: "space-between",
+    justifyContent: "space-between"
   },
   errorText: {
     color: colors.mistakeRed,
     fontSize: 12,
-    lineHeight: 14,
+    lineHeight: 14
   },
   form: {
-    marginTop: 30,
+    marginTop: 30
   },
   label: {
     fontSize: 12,
     lineHeight: 14,
-    color: colors.bodyText,
+    color: colors.bodyText
   },
   bottomView: {
     marginHorizontal: 20,
-    marginBottom: 20,
+    marginBottom: 20
   },
   bottomNavigation: {
-    justifyContent: "center",
+    justifyContent: "center"
   },
   eyeView: {
     position: "absolute",
     right: 10,
     top: 0,
     bottom: 0,
-    justifyContent: "center",
-  },
+    justifyContent: "center"
+  }
 });
 
 const ForgotPasswordNewPassword = (): React.ReactElement => {
   const {
     forgotPasswordDetails,
     setForgotPasswordDetails,
-    completeForgotPasswordFlow,
+    completeForgotPasswordFlow
   } = useContext(AuthContext);
   const navigation = useNavigation();
   const [isMatch, setIsMatch] = useState<boolean>(false);
   const [state, setState] = useState<PasswordForm>({
-    confirmPassword: "",
+    confirmPassword: ""
   });
   const [isLoading, setLoading] = useState<boolean>(false);
   const [isShowPassword, setShowPassword] = useState<boolean>(true);
@@ -110,7 +110,7 @@ const ForgotPasswordNewPassword = (): React.ReactElement => {
   const onValueChange = (name: string, change: string) => {
     setForgotPasswordDetails((pv: ForgotPassword) => ({
       ...pv,
-      newPassword: change,
+      newPassword: change
     }));
   };
 
