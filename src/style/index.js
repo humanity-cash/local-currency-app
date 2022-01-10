@@ -1,5 +1,6 @@
 import { colors } from "src/theme/colors";
 import { StyleSheet } from 'react-native';
+import { FontFamily } from "src/theme/elements";
 
 export const BusinessScanQrCodeStyle = StyleSheet.create({
 	container: {
@@ -42,7 +43,7 @@ export const BusinessScanQrCodeStyle = StyleSheet.create({
 		borderRadius: 40
 	},
 	ownerName: {
-		fontWeight: 'bold',
+		fontFamily: FontFamily.bold,
 		fontSize: 18,
 		paddingVertical: 10,
 		lineHeight: 24,
@@ -50,7 +51,7 @@ export const BusinessScanQrCodeStyle = StyleSheet.create({
 	},
 	headerText: {
 		marginTop: 10,
-		fontWeight: 'bold',
+		fontFamily: FontFamily.bold,
 		fontSize: 32,
 		lineHeight: 32,
 		paddingTop: 20,
@@ -114,7 +115,7 @@ export const BusinessScanQrCodeStyle = StyleSheet.create({
 	amount: {
         alignSelf: 'center',
         marginTop: 10,
-        fontWeight: 'bold',
+		fontFamily: FontFamily.bold,
         fontSize: 32,
         lineHeight: 32,
 		paddingTop: 20,
@@ -164,7 +165,7 @@ export const CustomerScanQrCodeStyle = StyleSheet.create({
 		borderRadius: 40
 	},
 	ownerName: {
-		fontWeight: 'bold',
+		fontFamily: FontFamily.bold,
 		fontSize: 18,
 		paddingVertical: 10,
 		lineHeight: 24,
@@ -223,7 +224,7 @@ export const CustomerScanQrCodeStyle = StyleSheet.create({
 	amount: {
         alignSelf: 'center',
         marginTop: 10,
-        fontWeight: 'bold',
+		fontFamily: FontFamily.bold,
         fontSize: 32,
         lineHeight: 32,
 		paddingTop: 20,
@@ -625,7 +626,7 @@ export const CustomerTxFiltersStyle = StyleSheet.create({
 export const BusinessTransactionItem = StyleSheet.create({
 	transactionType: {
 		color: colors.purple,
-		fontWeight: 'bold'
+		fontFamily: FontFamily.bold,
 	},
 	item: {
 		flex: 1,
@@ -653,12 +654,12 @@ export const BusinessTransactionItem = StyleSheet.create({
 		color: colors.purple
 	},
 	amountText: {
-		fontWeight: 'bold',
+		fontFamily: FontFamily.bold,
 		fontSize: 18,
 		color: colors.darkRed
 	},
 	plusText: {
-		fontWeight: 'bold',
+		fontFamily: FontFamily.bold,
 		fontSize: 18,
 		color: colors.purple
 	},
