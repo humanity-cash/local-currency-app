@@ -142,10 +142,8 @@ const getFilters = ({
 const MyTransactionFilter = ({ onClear }: { onClear: any }): JSX.Element => {
   let txTypes: string[] = [];
   const { userType } = useContext(UserContext);
-  const store =
-    userType === UserType.Business || userType === UserType.Cashier
-      ? BUSINESS_TX_FILTERS_STORE
-      : CUSTOMER_TX_FILTERS_STORE;
+  const isCustomer = userType === UserType.Customer;
+  const store = isCustomer ? CUSTOMER_TX_FILTERS_STORE : BUSINESS_TX_FILTERS_STORE;
 
   let styles: any = {};
   if (userType === UserType.Customer) {

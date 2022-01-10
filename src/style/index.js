@@ -45,6 +45,7 @@ export const BusinessScanQrCodeStyle = StyleSheet.create({
 		fontWeight: 'bold',
 		fontSize: 18,
 		paddingVertical: 10,
+		lineHeight: 24,
 		color: colors.purple
 	},
 	headerText: {
@@ -109,6 +110,15 @@ export const BusinessScanQrCodeStyle = StyleSheet.create({
 	bottomView: {
 		marginHorizontal: 20,
 		marginBottom: 45
+	},
+	amount: {
+        alignSelf: 'center',
+        marginTop: 10,
+        fontWeight: 'bold',
+        fontSize: 32,
+        lineHeight: 32,
+		paddingTop: 20,
+		color: colors.purple
 	}
 });
 
@@ -129,6 +139,9 @@ export const CustomerScanQrCodeStyle = StyleSheet.create({
 	},
 	dialog: {
 		height: 450
+	},
+	dialogBg: {
+		backgroundColor: colors.pDialogBg,
 	},
 	dialogWrap: {
 		position: 'relative',
@@ -153,13 +166,15 @@ export const CustomerScanQrCodeStyle = StyleSheet.create({
 	ownerName: {
 		fontWeight: 'bold',
 		fontSize: 18,
-		paddingVertical: 10
+		paddingVertical: 10,
+		lineHeight: 24,
+		color: colors.darkGreen
 	},
 	headerText: {
 		marginTop: 10,
 		fontSize: 32,
 		lineHeight: 40,
-		paddingTop: 20
+		paddingTop: 20,
 	},
 	description: {
 		color: colors.bodyText,
@@ -204,6 +219,15 @@ export const CustomerScanQrCodeStyle = StyleSheet.create({
 	bottomView: {
 		marginHorizontal: 20,
 		marginBottom: 20
+	},
+	amount: {
+        alignSelf: 'center',
+        marginTop: 10,
+        fontWeight: 'bold',
+        fontSize: 32,
+        lineHeight: 32,
+		paddingTop: 20,
+		color: colors.darkGreen
 	}
 });
 

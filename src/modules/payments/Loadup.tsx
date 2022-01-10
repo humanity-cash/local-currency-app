@@ -1,5 +1,5 @@
 import { useNavigation } from "@react-navigation/native";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import {
   KeyboardAvoidingView,
   Platform,
@@ -30,6 +30,8 @@ import { ToastType } from "src/utils/types";
 import { LoadingPage } from "src/views";
 import { SafeAreaView } from "react-native";
 import { CustomerLoadUp, BusinessLoadUp } from "src/style";
+import { UserContext } from "src/contexts";
+import { UserType } from "src/auth/types";
 
 const MAX_AMOUNT = 2000;
 const MIN_AMOUNT = 1;
@@ -54,6 +56,8 @@ const LoadUp = (props: LoadUpProps): JSX.Element => {
   const [goNext, setGoNext] = useState(false);
   const homeRoute =
     stylesSelection === "business" ? Routes.MERCHANT_DASHBOARD : Routes.TABS;
+  const { userType } = useContext(UserContext);
+  const isCustomer = userType === UserType.Customer;
 
   useEffect(() => {
     setAmount("");
@@ -164,6 +168,7 @@ const LoadUp = (props: LoadUpProps): JSX.Element => {
               placeholder="Amount"
               prefix="B$"
               value={amount}
+              style={{backgroundColor: isCustomer ? colors.inputBg : colors.lightBg}}
               onChange={onValueChange}
             />
 

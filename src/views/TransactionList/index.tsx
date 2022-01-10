@@ -47,6 +47,7 @@ const TransactionList = (props: MyTransactionsInput): JSX.Element => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [apiData, setAPIData] = useState<MiniTransaction[]>([]);
   const [filteredData, setFilteredData] = useState<MiniTransaction[]>([]);
+  const isCustomer = userType === UserType.Customer;
 
   useEffect(() => {
     const d = filterData({ data: apiData, startDate, endDate, selectedType });
@@ -121,6 +122,16 @@ const TransactionList = (props: MyTransactionsInput): JSX.Element => {
     }
   }, [refreshing]);
 
+  const filterBtnStyle = {
+    ...styles.filterBtn,
+    backgroundColor: isCustomer ? colors.inputBg : colors.lightBg,
+  }
+
+  const selectedFilterBtnStyle = {
+    ...styles.selectedFilterBtn,
+    backgroundColor: isCustomer ? colors.darkGreen : colors.purple,
+  }
+
   return (
     <ScrollView>
       <LoadingPage visible={isLoading} isData={true} />
@@ -134,11 +145,12 @@ const TransactionList = (props: MyTransactionsInput): JSX.Element => {
               placeholder="Search"
               value={searchText}
               onChange={onSearchChange}
+              style={{backgroundColor: isCustomer ? colors.inputBg : colors.lightBg}}
             />
           </View>
           <TouchableOpacity
             style={
-              isFilterVisible ? styles.selectedFilterBtn : styles.filterBtn
+              isFilterVisible ? selectedFilterBtnStyle : filterBtnStyle
             }
             onPress={() => setIsFilterVisible(!isFilterVisible)}
           >

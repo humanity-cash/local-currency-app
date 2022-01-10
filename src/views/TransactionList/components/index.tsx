@@ -1,6 +1,6 @@
 import moment from "moment";
 import { MiniTransaction } from "src/utils/types";
-import React from "react";
+import React, {useContext} from "react";
 import { ScrollView } from "react-native";
 import { Image, Text } from "react-native-elements";
 import { Dialog } from "src/shared/uielements";
@@ -10,6 +10,9 @@ import { View } from "react-native";
 import { getBerksharePrefix } from "src/utils/common";
 import { getStyle } from "../utils";
 import { styles, mListstyles } from "../style";
+import { UserContext } from "src/contexts";
+import { UserType } from "src/auth/types";
+import { colors } from "src/theme/colors";
 
 export type MyTransactionItemProps = {
   item: MiniTransaction;
@@ -23,6 +26,8 @@ export type TransactionDetailProps = {
 };
 
 export const TransactionItem = (props: MyTransactionItemProps) => {
+  const { userType } = useContext(UserContext);
+  const isCustomer = userType === UserType.Customer;
   const { item, selected } = props;
   const name =
     item.type === "Withdraw"
@@ -46,7 +51,7 @@ export const TransactionItem = (props: MyTransactionItemProps) => {
     <View
       style={
         selected === item.transactionHash
-          ? mListstyles.selectedItem
+          ? {...mListstyles.selectedItem, backgroundColor: isCustomer ? colors.card : colors.bCard}
           : mListstyles.item
       }
     >
@@ -55,7 +60,7 @@ export const TransactionItem = (props: MyTransactionItemProps) => {
           source={require("../../../../assets/images/placeholder5.png")}
           containerStyle={mListstyles.image}
         />
-        <View>
+        <View style={mListstyles.detailView}>
           <Text>{name}</Text>
           <Text style={mListstyles.timeText}>
             {moment(item.timestamp).format("HH:mm, MMM D, YYYY")}

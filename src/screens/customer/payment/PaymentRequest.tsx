@@ -28,6 +28,7 @@ import BankLinkDialog from "src/shared/uielements/BankLinkDialog";
 import { WalletContext, UserContext } from "src/contexts";
 import { PaymentsModule } from "src/modules";
 import { CustomerScanQrCodeStyle } from "src/style";
+import { UserType } from "src/auth/types";
 
 type AmountState = {
   amount: string;
@@ -91,6 +92,8 @@ const PaymentRequest = (): JSX.Element => {
   const { customerWalletData } = useContext(WalletContext);
   const personalFundingSource = customerWalletData?.availableFundingSource;
   const availableBalance = customerWalletData?.availableBalance;
+  const { userType } = useContext(UserContext);
+  const isCustomer = userType === UserType.Customer;
 
   useEffect(() => {
     setState({ amount: "", cost: "" });
@@ -218,6 +221,7 @@ const PaymentRequest = (): JSX.Element => {
             placeholder="Amount"
             prefix="B$"
             value={state.amount}
+            style={{backgroundColor: isCustomer ? colors.inputBg : colors.lightBg}}
             onChange={onValueChange}
           />
         </View>
@@ -265,44 +269,5 @@ const PaymentRequest = (): JSX.Element => {
     </KeyboardAvoidingView>
   );
 };
-
-const paymentRequestStyles = StyleSheet.create({
-  dialog: {
-    height: 400,
-  },
-  dialogWrap: {
-    position: "relative",
-    paddingHorizontal: 10,
-    paddingTop: 70,
-    height: "100%",
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-  },
-  amount: {
-    alignSelf: "center",
-    marginTop: 10,
-    fontWeight: "bold",
-    fontSize: 32,
-    lineHeight: 32,
-    paddingTop: 20,
-  },
-  ownerInfo: {
-    position: "absolute",
-    top: -60,
-    borderRadius: 40,
-    alignItems: "center",
-  },
-  image: {
-    width: 80,
-    height: 80,
-    borderRadius: 40,
-  },
-  ownerName: {
-    fontWeight: "bold",
-    fontSize: 18,
-    paddingVertical: 10,
-  },
-});
 
 export default PaymentRequest;
