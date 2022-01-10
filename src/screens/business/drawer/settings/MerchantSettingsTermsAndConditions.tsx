@@ -31,19 +31,19 @@ const styles = StyleSheet.create({
 	},
 	buttonView: {
 		flexDirection: "row",
-		backgroundColor: colors.inputBg,
+		backgroundColor: colors.lightBg,
 	},
 	buttonText: {
 		flex: 1,
-		fontFamily: FontFamily.bold,
-		fontSize: 16
+		fontSize: 16,
+		color: colors.purple
 	},
 	buttonIcon: {
 		flexDirection: "row",
 		alignItems: "center"
 	},
 	buttonContainer: {
-		backgroundColor: colors.inputBg,
+		backgroundColor: colors.lightBg,
 		padding: 20,
 		marginBottom: 5
 	},
@@ -81,7 +81,7 @@ export const MerchantSettingsTermsAndConditions = (): ReactElement => {
 					<Text style={styles.headerText}>{Translation.OTHER.LEGAL}</Text>
 				</View>
 				<View style={styles.faqView}>
-				<View style={styles.buttonContainer}>
+					<View style={styles.buttonContainer}>
 						<TouchableOpacity onPress={openTerms}>
 							<View style={styles.buttonView}>
 								<Text style={styles.buttonText}>{termsAndConditions.title}</Text>

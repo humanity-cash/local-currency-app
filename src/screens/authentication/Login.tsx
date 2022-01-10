@@ -131,7 +131,7 @@ const Login = (): JSX.Element => {
             <BlockInput
               inputRef={passwordRef}
               name="password"
-              placeholder="Password1"
+              placeholder="Password"
               value={signInDetails?.password}
               secureTextEntry={isSecurity}
               onChange={onValueChange}

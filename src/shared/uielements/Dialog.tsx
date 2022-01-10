@@ -1,9 +1,11 @@
-import React, { ReactElement } from "react";
+import React, { ReactElement, useContext } from "react";
 import { Dimensions, View, StyleSheet, SafeAreaView } from "react-native";
 import { Overlay } from "react-native-elements";
 import { CancelBtn } from "src/shared/uielements/header";
 import { colors } from "src/theme/colors";
 import { IMap } from "src/utils/types";
+import { UserType } from "src/auth/types";
+import { UserContext } from "src/contexts";
 
 type DialogProps = {
   visible: boolean;
@@ -24,7 +26,6 @@ const styles = StyleSheet.create({
     left: 0,
     width: "100%",
     height: "100%",
-    backgroundColor: "rgba(57, 83, 68, 0.9)",
   },
   closeBtn: {
     position: "absolute",
@@ -69,10 +70,17 @@ const Dialog = ({
   hiddenCloseBtn = false,
   onShow,
 }: DialogProps): JSX.Element => {
+  const { userType } = useContext(UserContext);
+  const isCustomer = userType === UserType.Customer;
+
   return (
     <Overlay
       isVisible={visible}
-      overlayStyle={{ ...styles.dialogBg, ...backgroundStyle }}
+      overlayStyle={{ 
+        ...styles.dialogBg, 
+        ...backgroundStyle,
+        backgroundColor: isCustomer ? colors.pDialogBg : colors.bDialogBg,
+      }}
       backdropStyle={{
         backgroundColor: "transparent",
       }}

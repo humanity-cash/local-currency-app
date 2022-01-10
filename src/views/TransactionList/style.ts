@@ -16,8 +16,7 @@ export const mListstyles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    padding: 5,
-    backgroundColor: colors.card,
+    padding: 5
   },
   imageContainer: {
     flexDirection: "row",
@@ -28,6 +27,9 @@ export const mListstyles = StyleSheet.create({
     width: 60,
     height: 60,
     borderRadius: 30,
+  },
+  detailView: {
+    paddingLeft: 8
   },
   timeText: {
     fontSize: 10,
@@ -81,7 +83,6 @@ export const styles = StyleSheet.create({
     height: 55,
     marginTop: 8,
     borderRadius: 3,
-    backgroundColor: colors.inputBg,
     alignItems: "center",
     justifyContent: "center",
   },
@@ -90,7 +91,6 @@ export const styles = StyleSheet.create({
     height: 55,
     marginTop: 8,
     borderRadius: 3,
-    backgroundColor: colors.darkGreen,
     alignItems: "center",
     justifyContent: "center",
   },
@@ -133,14 +133,14 @@ export const styles = StyleSheet.create({
   },
   minusText: {
     fontFamily: FontFamily.bold,
-    fontSize: 32,
+    fontSize: 16,
     lineHeight: 32,
     color: colors.darkRed,
     textAlign: "center",
   },
   plusText: {
     fontFamily: FontFamily.bold,
-    fontSize: 32,
+    fontSize: 16,
     lineHeight: 32,
     color: colors.darkGreen,
     textAlign: "center",

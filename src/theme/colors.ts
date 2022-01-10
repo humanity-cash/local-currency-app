@@ -29,6 +29,7 @@ export const colors: any = {
   lightGreen1: "#DCE3DD",
   bodyText: "#2E2E2E",
   card: "#E6EBE5",
+  bCard: "#442E881A",
 
   purple: "#442E88",
   overlayPurple: "rgba(68,46,136,0.9)",
@@ -38,4 +39,7 @@ export const colors: any = {
   alert: "#D2A824",
   info: "#547F3B",
   error: "#A23B5F",
+
+  pDialogBg: "rgba(57, 83, 68, 0.9)",
+  bDialogBg: "#442E88E5"
 };

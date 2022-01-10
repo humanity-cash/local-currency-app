@@ -23,6 +23,7 @@ import {
   dialogViewBase,
   underlineHeader,
   viewBase,
+  viewBaseB,
   wrappingContainerBase,
 } from "src/theme/elements";
 import Translation from "src/translation/en.json";
@@ -61,6 +62,7 @@ const CashoutAmount = (props: CashOutInput): JSX.Element => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [maxAmount, setMaxAmount] = useState<string>("5.00");
   const [exceed, setExceed] = useState(false);
+  const isCustomer = userType === UserType.Customer;
 
   const [state, setState] = useState<CashoutState>({
     amount: "",
@@ -135,7 +137,7 @@ const CashoutAmount = (props: CashOutInput): JSX.Element => {
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS == "ios" ? "padding" : "height"}
-      style={viewBase}
+      style={isCustomer ? viewBase : viewBaseB}
     >
       <LoadingPage visible={isLoading} isPayment={true} />
       <Header
@@ -163,6 +165,7 @@ const CashoutAmount = (props: CashOutInput): JSX.Element => {
             prefix="B$"
             value={state.amount}
             onChange={onValueChange}
+            style={{backgroundColor: isCustomer ? colors.inputBg : colors.lightBg}}
             borderColor={exceed ? colors.mistakeRed : null}
           />
           {exceed && (
@@ -194,12 +197,12 @@ const CashoutAmount = (props: CashOutInput): JSX.Element => {
       </ScrollView>
       <SafeAreaView style={styles.bottomView}>
         <Button
-          type="darkGreen"
+          type={isCustomer ? "darkGreen" : "purple"}
           disabled={
             !goNext ||
             exceed ||
             (userType === UserType.Customer &&
-              walletData?.availableBalance > 5) ||
+              walletData?.availableBalance < 5) ||
             !walletData ||
             !userId
           }
