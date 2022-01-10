@@ -8,7 +8,7 @@ import {
   UserProvider,
   AuthProvider,
   WalletProvider,
-  EventsProvider,
+  EventsProvider
 } from "./contexts";
 import useCachedResources from "./hooks/useCachedResources";
 import { MainNavigationStack } from "./navigation/MainNavigationStack";
@@ -30,7 +30,7 @@ const App = (): ReactElement | null => {
             <WalletProvider>
               <ThemeProvider theme={theme}>
                 <MainNavigationStack />
-                <Toast ref={(ref) => Toast.setRef(ref)} />
+                <Toast ref={ref => Toast.setRef(ref)} />
               </ThemeProvider>
             </WalletProvider>
           </EventsProvider>

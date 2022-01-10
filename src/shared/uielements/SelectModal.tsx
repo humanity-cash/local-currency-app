@@ -4,7 +4,7 @@ import {
   ScrollView,
   StyleSheet,
   TouchableOpacity,
-  View,
+  View
 } from "react-native";
 import { Image, Text } from "react-native-elements";
 import { colors } from "src/theme/colors";
@@ -36,32 +36,32 @@ const styles = StyleSheet.create({
   modalHeader: {
     fontFamily: FontFamily.bold,
     fontSize: 20,
-    paddingBottom: 10,
+    paddingBottom: 10
   },
   modalDescription: {
-    paddingBottom: 10,
+    paddingBottom: 10
   },
   modalMainItemView: {
     flexDirection: "row",
     paddingVertical: 15,
-    marginVertical: 10,
+    marginVertical: 10
   },
   modalItemView: {
     flexDirection: "row",
     paddingVertical: 5,
-    marginVertical: 5,
+    marginVertical: 5
   },
   flagImage: {
     width: 27,
     height: 23,
-    marginRight: 10,
+    marginRight: 10
   },
   flagNoImage: {
     backgroundColor: colors.text,
     width: 27,
     height: 23,
-    marginRight: 10,
-  },
+    marginRight: 10
+  }
 });
 
 const SelectModal = ({
@@ -73,12 +73,12 @@ const SelectModal = ({
   modalMainOption,
   modalList,
   value,
-  style,
+  style
 }: SelectModalProps) => {
   const [visible, setVisible] = useState(false);
   const [selected, setSelected] = useState<SelectionProps>({
     name: "",
-    value: "",
+    value: ""
   });
 
   useEffect(() => {
@@ -86,7 +86,7 @@ const SelectModal = ({
       setSelected(modalMainOption);
       return;
     }
-    const option = modalList?.find((item) => item.value === value);
+    const option = modalList?.find(item => item.value === value);
     if (option) {
       setSelected(option);
       return;
@@ -112,7 +112,7 @@ const SelectModal = ({
             marginVertical: 8,
             paddingLeft: 10,
             alignItems: "center",
-            ...style,
+            ...style
           }}
         >
           {selected?.icon && (
@@ -129,7 +129,7 @@ const SelectModal = ({
               height: 60,
               justifyContent: "center",
               paddingHorizontal: 5,
-              textAlignVertical: "center",
+              textAlignVertical: "center"
             }}
           >
             {selected.name}

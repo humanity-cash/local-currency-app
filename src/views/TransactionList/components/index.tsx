@@ -1,6 +1,6 @@
 import moment from "moment";
 import { MiniTransaction } from "src/utils/types";
-import React, {useContext} from "react";
+import React, { useContext } from "react";
 import { ScrollView } from "react-native";
 import { Image, Text } from "react-native-elements";
 import { Dialog } from "src/shared/uielements";
@@ -51,7 +51,10 @@ export const TransactionItem = (props: MyTransactionItemProps) => {
     <View
       style={
         selected === item.transactionHash
-          ? {...mListstyles.selectedItem, backgroundColor: isCustomer ? colors.card : colors.bCard}
+          ? {
+              ...mListstyles.selectedItem,
+              backgroundColor: isCustomer ? colors.card : colors.bCard
+            }
           : mListstyles.item
       }
     >

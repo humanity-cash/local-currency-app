@@ -18,12 +18,12 @@ const styles = StyleSheet.create({
     height: "100%",
     backgroundColor: colors.lightBg,
     borderWidth: 0,
-    padding: 0,
+    padding: 0
   },
   modalView: {
     flex: 1,
-    overflow: "hidden",
-  },
+    overflow: "hidden"
+  }
 });
 
 export const MODAL_SCREEN_OFFSET = Dimensions.get("screen").height * 0.06;
@@ -32,17 +32,17 @@ const Modal = ({
   visible = false,
   style = {},
   children,
-  onShow,
+  onShow
 }: ModalProps) => {
   return visible ? (
     <Overlay
       isVisible={visible}
       overlayStyle={{
         ...styles.modalWrap,
-        ...style,
+        ...style
       }}
       backdropStyle={{
-        backgroundColor: "transparent",
+        backgroundColor: "transparent"
       }}
       animationType="slide"
       onShow={() => onShow && onShow()}

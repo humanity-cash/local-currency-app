@@ -25,17 +25,17 @@ const styles = StyleSheet.create({
     top: 0,
     left: 0,
     width: "100%",
-    height: "100%",
+    height: "100%"
   },
   closeBtn: {
     position: "absolute",
     top: 10,
-    right: 20,
+    right: 20
   },
   container: {
     flex: 1,
     justifyContent: "center",
-    alignItems: "center",
+    alignItems: "center"
   },
   dialogWrap: {
     width: "90%",
@@ -51,14 +51,14 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.5,
     padding: 0,
     justifyContent: "center",
-    alignItems: "center",
+    alignItems: "center"
   },
   dialogView: {
     width: "100%",
     height: "100%",
     flex: 1,
-    borderRadius: 20,
-  },
+    borderRadius: 20
+  }
 });
 
 const Dialog = ({
@@ -68,7 +68,7 @@ const Dialog = ({
   style = {},
   children,
   hiddenCloseBtn = false,
-  onShow,
+  onShow
 }: DialogProps): JSX.Element => {
   const { userType } = useContext(UserContext);
   const isCustomer = userType === UserType.Customer;
@@ -76,13 +76,13 @@ const Dialog = ({
   return (
     <Overlay
       isVisible={visible}
-      overlayStyle={{ 
-        ...styles.dialogBg, 
+      overlayStyle={{
+        ...styles.dialogBg,
         ...backgroundStyle,
-        backgroundColor: isCustomer ? colors.pDialogBg : colors.bDialogBg,
+        backgroundColor: isCustomer ? colors.pDialogBg : colors.bDialogBg
       }}
       backdropStyle={{
-        backgroundColor: "transparent",
+        backgroundColor: "transparent"
       }}
       animationType="slide"
       onShow={() => onShow && onShow()}
@@ -100,7 +100,7 @@ const Dialog = ({
         <View
           style={{
             ...styles.dialogWrap,
-            ...style,
+            ...style
           }}
         >
           <View style={styles.dialogView}>{children}</View>

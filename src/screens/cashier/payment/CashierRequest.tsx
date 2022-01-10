@@ -6,7 +6,7 @@ import {
   KeyboardAvoidingView,
   ScrollView,
   Platform,
-  SafeAreaView,
+  SafeAreaView
 } from "react-native";
 import { Text } from "react-native-elements";
 import {
@@ -14,12 +14,12 @@ import {
   Button,
   CancelBtn,
   BackBtn,
-  BorderedInput,
+  BorderedInput
 } from "src/shared/uielements";
 import {
   baseHeader,
   viewBaseB,
-  wrappingContainerBase,
+  wrappingContainerBase
 } from "src/theme/elements";
 import { colors } from "src/theme/colors";
 import Translation from "src/translation/en.json";
@@ -34,32 +34,32 @@ const styles = StyleSheet.create({
     fontSize: 32,
     fontWeight: "400",
     color: colors.purple,
-    lineHeight: 40,
+    lineHeight: 40
   },
   switchView: {
     flex: 1,
     justifyContent: "center",
-    alignItems: "center",
+    alignItems: "center"
   },
   contentView: {
-    marginTop: 5,
+    marginTop: 5
   },
   label: {
     marginTop: 20,
     color: colors.bodyText,
-    fontSize: 12,
+    fontSize: 12
   },
   input: {
     backgroundColor: colors.white,
-    color: colors.purple,
+    color: colors.purple
   },
   text: {
-    color: colors.purple,
+    color: colors.purple
   },
   bottomView: {
     marginHorizontal: 20,
-    marginBottom: 20,
-  },
+    marginBottom: 20
+  }
 });
 
 const CashierRequest = (): JSX.Element => {

@@ -11,8 +11,8 @@ type SecurityEyeButtonProps = {
 
 const styles = StyleSheet.create({
   container: {
-    padding: 10,
-  },
+    padding: 10
+  }
 });
 
 const SecurityEyeButton = (props: SecurityEyeButtonProps) => {
@@ -21,7 +21,7 @@ const SecurityEyeButton = (props: SecurityEyeButtonProps) => {
       onPress={props.onPress}
       style={{
         ...styles.container,
-        ...props.style,
+        ...props.style
       }}
     >
       <Ionicons

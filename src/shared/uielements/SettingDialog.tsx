@@ -9,26 +9,26 @@ import { startActivityAsync, ActivityAction } from "expo-intent-launcher";
 
 const styles = StyleSheet.create({
   dialog: {
-    height: 320,
+    height: 320
   },
   dialogWrap: {
     paddingHorizontal: 10,
-    flex: 1,
+    flex: 1
   },
   dialogHeader: {
     fontSize: 28,
     lineHeight: 32,
     marginTop: 20,
     marginBottom: 10,
-    color: colors.darkGreen,
+    color: colors.darkGreen
   },
   dialogDetail: {
     paddingTop: 12,
-    color: colors.darkGreen,
+    color: colors.darkGreen
   },
   dialogBottom: {
-    paddingTop: 20,
-  },
+    paddingTop: 20
+  }
 });
 
 type SettingDialogProps = {
@@ -40,7 +40,7 @@ type SettingDialogProps = {
 const SettingDialog = ({
   visible = false,
   description = Translation.PAYMENT.PAYMENT_NO_BALANCE_DETAIL,
-  onCancel,
+  onCancel
 }: SettingDialogProps) => {
   const onConfirm = () => {
     if (Platform.OS == "ios") {

@@ -7,14 +7,14 @@ import { Text } from "react-native-elements";
 import SelectDropdown from "react-native-select-dropdown";
 import {
   CUSTOMER_TX_FILTERS_STORE,
-  BUSINESS_TX_FILTERS_STORE,
+  BUSINESS_TX_FILTERS_STORE
 } from "src/hook-stores";
 import { colors } from "src/theme/colors";
 import Translation from "src/translation/en.json";
 import {
   TxFilters,
   TxFilterStoreActions,
-  TxFilterStoreReducer,
+  TxFilterStoreReducer
 } from "src/utils/types";
 import DateTimePicker from "react-native-modal-datetime-picker";
 import { UserContext } from "src/contexts";
@@ -42,24 +42,24 @@ const customerTxTypes = [
   "Incoming transactions",
   "Outgoing transactions",
   "Load ups B$",
-  "Cash out to USD",
+  "Cash out to USD"
 ];
 const cashierTxTypes = [
   "All",
   "Incoming transactions",
-  "Outgoing transactions",
+  "Outgoing transactions"
 ];
 
 const getFilters = ({
   onClear,
-  store,
+  store
 }: {
   onClear: any;
   store: string;
 }): FiltersModule => {
   const [
     { selectedType, startDate, isStartDate, endDate, isEndDate },
-    dispatch,
+    dispatch
   ] = useStore<TxFilters, TxFilterStoreReducer>(store);
 
   const onStartDateChange = (selectedDate?: Date) => {
@@ -68,13 +68,13 @@ const getFilters = ({
       if (moment(date).isAfter(endDate)) {
         dispatch({
           type: TxFilterStoreActions.UpdateEndDate,
-          payload: { endDate: date },
+          payload: { endDate: date }
         });
       }
     }
     dispatch({
       type: TxFilterStoreActions.UpdateStartDate,
-      payload: { startDate: selectedDate || startDate || undefined },
+      payload: { startDate: selectedDate || startDate || undefined }
     });
   };
 
@@ -84,13 +84,13 @@ const getFilters = ({
       if (moment(startDate).isAfter(date)) {
         dispatch({
           type: TxFilterStoreActions.UpdateStartDate,
-          payload: { startDate: date },
+          payload: { startDate: date }
         });
       }
     }
     dispatch({
       type: TxFilterStoreActions.UpdateEndDate,
-      payload: { endDate: selectedDate || startDate || undefined },
+      payload: { endDate: selectedDate || startDate || undefined }
     });
   };
 
@@ -118,7 +118,7 @@ const getFilters = ({
   const onTypeSelect = (selectedItem: string) => {
     dispatch({
       type: TxFilterStoreActions.UpdateType,
-      payload: { type: selectedItem },
+      payload: { type: selectedItem }
     });
   };
 
@@ -135,7 +135,7 @@ const getFilters = ({
     closeEndDate,
     selectedType,
     isStartDate,
-    isEndDate,
+    isEndDate
   };
 };
 
@@ -143,7 +143,9 @@ const MyTransactionFilter = ({ onClear }: { onClear: any }): JSX.Element => {
   let txTypes: string[] = [];
   const { userType } = useContext(UserContext);
   const isCustomer = userType === UserType.Customer;
-  const store = isCustomer ? CUSTOMER_TX_FILTERS_STORE : BUSINESS_TX_FILTERS_STORE;
+  const store = isCustomer
+    ? CUSTOMER_TX_FILTERS_STORE
+    : BUSINESS_TX_FILTERS_STORE;
 
   let styles: any = {};
   if (userType === UserType.Customer) {
@@ -170,7 +172,7 @@ const MyTransactionFilter = ({ onClear }: { onClear: any }): JSX.Element => {
     isEndDate,
     startDate,
     endDate,
-    onTypeSelect,
+    onTypeSelect
   }: FiltersModule = getFilters({ onClear, store });
 
   return (
@@ -207,20 +209,20 @@ const MyTransactionFilter = ({ onClear }: { onClear: any }): JSX.Element => {
         <SelectDropdown
           data={txTypes}
           defaultValue={selectedType}
-          onSelect={(selectedItem) => {
+          onSelect={selectedItem => {
             onTypeSelect(selectedItem);
           }}
-          buttonTextAfterSelection={(selectedItem) => {
+          buttonTextAfterSelection={selectedItem => {
             return selectedItem;
           }}
-          rowTextForSelection={(item) => {
+          rowTextForSelection={item => {
             return item;
           }}
           buttonStyle={styles.selectItem}
           buttonTextStyle={styles.pickerText}
           rowStyle={styles.selectItem}
           dropdownStyle={styles.dropdownContainer}
-          renderCustomizedRowChild={(item) => (
+          renderCustomizedRowChild={item => (
             <Text style={styles.pickerText}>{item}</Text>
           )}
           renderDropdownIcon={() => (

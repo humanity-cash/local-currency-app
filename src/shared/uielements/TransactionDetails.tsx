@@ -8,7 +8,7 @@ import { formatValue } from "src/utils/common";
 import {
   OrderTransaction,
   Transaction,
-  TransactionType,
+  TransactionType
 } from "src/utils/types";
 import Button from "./Button";
 
@@ -22,14 +22,14 @@ const styles = StyleSheet.create({
     paddingHorizontal: 10,
     paddingTop: 60,
     height: "100%",
-    flex: 1,
+    flex: 1
   },
   header: {
     fontFamily: FontFamily.bold,
     fontSize: 16,
     marginBottom: 10,
     textAlign: "center",
-    opacity: 0.6,
+    opacity: 0.6
   },
   title: {
     fontFamily: FontFamily.bold,
@@ -37,32 +37,32 @@ const styles = StyleSheet.create({
     paddingHorizontal: "20%",
     marginTop: 50,
     marginBottom: 10,
-    textAlign: "center",
+    textAlign: "center"
   },
   price: {
     fontFamily: FontFamily.bold,
     fontSize: 20,
     paddingHorizontal: "20%",
     marginBottom: 10,
-    textAlign: "center",
+    textAlign: "center"
   },
   detailsView: {
     flexDirection: "row",
     marginVertical: 20,
-    paddingHorizontal: 20,
+    paddingHorizontal: 20
   },
   gridView: {
     flex: 1,
-    alignItems: "center",
+    alignItems: "center"
   },
   boldText: {
-    fontFamily: FontFamily.bold,
+    fontFamily: FontFamily.bold
   },
   transferView: {
     flex: 1,
     alignItems: "center",
-    marginTop: 10,
-  },
+    marginTop: 10
+  }
 });
 
 const TransactionDetails = (props: TransactionDetailsProps) => {

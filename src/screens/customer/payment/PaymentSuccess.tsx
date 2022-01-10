@@ -15,21 +15,21 @@ const styles = StyleSheet.create({
   headerText: {
     fontSize: 32,
     fontWeight: "400",
-    lineHeight: 40,
+    lineHeight: 40
   },
   imageView: {
     flex: 1,
     margin: 15,
     justifyContent: "center",
-    alignItems: "center",
+    alignItems: "center"
   },
   bottomView: {
     marginHorizontal: 20,
-    marginBottom: 20,
+    marginBottom: 20
   },
   bodyText: {
-    color: colors.bodyText,
-  },
+    color: colors.bodyText
+  }
 });
 
 const PaymentSuccess = (): JSX.Element => {

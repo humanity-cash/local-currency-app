@@ -5,7 +5,7 @@ import { Header, Button, BackBtn } from "src/shared/uielements";
 import {
   baseHeader,
   viewBaseB,
-  wrappingContainerBase,
+  wrappingContainerBase
 } from "src/theme/elements";
 import { colors } from "src/theme/colors";
 import Translation from "src/translation/en.json";
@@ -17,24 +17,24 @@ const styles = StyleSheet.create({
     fontSize: 32,
     fontWeight: "400",
     lineHeight: 40,
-    color: colors.purple,
+    color: colors.purple
   },
   text: {
-    color: colors.bodyText,
+    color: colors.bodyText
   },
   contentView: {
-    paddingBottom: 40,
+    paddingBottom: 40
   },
   inlineView: {
-    flexDirection: "row",
+    flexDirection: "row"
   },
   lastView: {
-    marginTop: 20,
+    marginTop: 20
   },
   bottomView: {
     marginHorizontal: 20,
-    marginBottom: 20,
-  },
+    marginBottom: 20
+  }
 });
 
 const CashierHowToWork = (): JSX.Element => {

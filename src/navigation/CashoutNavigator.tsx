@@ -7,7 +7,7 @@ function CashoutStackScreen(): ReactElement {
   return (
     <CashoutStack.Navigator
       screenOptions={() => ({
-        headerShown: false,
+        headerShown: false
       })}
     >
       <CashoutStack.Screen

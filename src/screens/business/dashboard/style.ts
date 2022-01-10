@@ -4,14 +4,14 @@ import { StyleSheet } from "react-native";
 
 export const styles = StyleSheet.create({
   mainTextColor: {
-    color: colors.purple,
+    color: colors.purple
   },
   content: { paddingBottom: 100 },
   inlineView: { flexDirection: "row" },
   headerText: {
     color: colors.purple,
     fontSize: 40,
-    lineHeight: 45,
+    lineHeight: 45
   },
   amountView: {
     borderBottomColor: colors.purple,
@@ -19,14 +19,14 @@ export const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     paddingBottom: 2,
-    marginBottom: 10,
+    marginBottom: 10
   },
   amountTxt: {
     color: colors.purple,
     fontSize: 18,
     fontFamily: FontFamily.bold,
     paddingLeft: 5,
-    paddingRight: 5,
+    paddingRight: 5
   },
   alertView: {
     borderLeftWidth: 5,
@@ -37,47 +37,47 @@ export const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    marginBottom: 10,
+    marginBottom: 10
   },
   alertIcon: {
     color: colors.alert,
-    fontWeight: "bold",
+    fontWeight: "bold"
   },
   alertText: {
     color: colors.black,
-    width: "90%",
+    width: "90%"
   },
   bodyText: {
-    paddingVertical: 10,
+    paddingVertical: 10
   },
   filterView: {
     flexDirection: "row",
-    justifyContent: "space-between",
+    justifyContent: "space-between"
   },
   filterInput: {
     flex: 1,
-    marginRight: 10,
+    marginRight: 10
   },
   input: {
     backgroundColor: colors.white,
-    color: colors.purple,
+    color: colors.purple
   },
   dialog: {
-    backgroundColor: colors.overlayPurple,
+    backgroundColor: colors.overlayPurple
   },
   dialogWrap: {
     paddingHorizontal: 10,
-    flex: 1,
+    flex: 1
   },
   dialogHeader: {
     fontSize: 30,
     lineHeight: 32,
     marginTop: 20,
     marginBottom: 10,
-    color: colors.purple,
+    color: colors.purple
   },
   dialogBottom: {
-    paddingTop: 20,
+    paddingTop: 20
   },
   filterBtn: {
     width: 55,
@@ -86,7 +86,7 @@ export const styles = StyleSheet.create({
     borderRadius: 3,
     backgroundColor: colors.white,
     alignItems: "center",
-    justifyContent: "center",
+    justifyContent: "center"
   },
   selectedFilterBtn: {
     width: 55,
@@ -95,12 +95,12 @@ export const styles = StyleSheet.create({
     borderRadius: 3,
     backgroundColor: colors.purple,
     alignItems: "center",
-    justifyContent: "center",
+    justifyContent: "center"
   },
   qrIcon: {
     width: 24,
     height: 24,
-    marginRight: 20,
+    marginRight: 20
   },
   scanButton: {
     flexDirection: "row",
@@ -113,40 +113,40 @@ export const styles = StyleSheet.create({
     color: colors.white,
     backgroundColor: colors.purple,
     alignSelf: "center",
-    borderRadius: 30,
+    borderRadius: 30
   },
   scanBtnText: {
-    color: colors.white,
+    color: colors.white
   },
   infoView: {
     paddingHorizontal: 5,
-    paddingTop: 30,
+    paddingTop: 30
   },
   detailView: {
     flexDirection: "row",
-    justifyContent: "space-between",
+    justifyContent: "space-between"
   },
   detailText: {
     fontSize: 10,
     marginHorizontal: 10,
-    color: colors.bodyText,
+    color: colors.bodyText
   },
   minusText: {
     color: colors.darkRed,
     textAlign: "center",
-    fontSize: 10,
+    fontSize: 10
   },
   plusText: {
     color: colors.purple,
     textAlign: "center",
-    fontSize: 10,
+    fontSize: 10
   },
   amountText: {
     fontFamily: FontFamily.bold,
     fontSize: 32,
-    lineHeight: 35,
+    lineHeight: 35
   },
   dialogHeight: {
-    height: 270,
-  },
+    height: 270
+  }
 });

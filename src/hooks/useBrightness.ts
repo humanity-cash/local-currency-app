@@ -6,15 +6,16 @@ const defaultBrightness = 0.6;
 
 const useBrightness = (): IMap => {
   const [hasPermission, setHasPermission] = useState<boolean>(false);
-  const [brightnessValue, setBrightnessValue] =
-    useState<number>(defaultBrightness);
+  const [brightnessValue, setBrightnessValue] = useState<number>(
+    defaultBrightness
+  );
 
   useEffect(() => {
     (async () => {
       const { status } = await Brightness.requestPermissionsAsync();
       if (status === "granted") {
         setHasPermission(true);
-        Brightness.getSystemBrightnessAsync().then((res) => {
+        Brightness.getSystemBrightnessAsync().then(res => {
           setBrightnessValue(res);
         });
       }
@@ -32,7 +33,7 @@ const useBrightness = (): IMap => {
   return {
     hasPermission,
     setMaxBrightness,
-    setDefaultBrightness,
+    setDefaultBrightness
   };
 };
 

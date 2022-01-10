@@ -6,7 +6,7 @@ import {
   ScrollView,
   TouchableOpacity,
   TouchableWithoutFeedback,
-  View,
+  View
 } from "react-native";
 import { Image, Text } from "react-native-elements";
 import { BUTTON_TYPES } from "src/constants";
@@ -19,7 +19,7 @@ import {
   baseHeader,
   dialogViewBase,
   viewBaseB,
-  wrappingContainerBase,
+  wrappingContainerBase
 } from "src/theme/elements";
 import Translation from "src/translation/en.json";
 import { DwollaDialog } from "src/views";
@@ -33,8 +33,9 @@ import { styles } from "./style";
 
 const MerchantDashboard = (): JSX.Element => {
   const navigation = useNavigation();
-  const { businessWalletData, updateBusinessWalletData } =
-    useContext(WalletContext);
+  const { businessWalletData, updateBusinessWalletData } = useContext(
+    WalletContext
+  );
   const { user } = useContext(UserContext);
   const { events, getEvents, deleteEvent } = useContext(EventsContext);
   const completedCustomerVerification = user?.verifiedCustomer;
@@ -79,7 +80,7 @@ const MerchantDashboard = (): JSX.Element => {
           username: user?.business?.tag,
           styles: BusinessScanQrCodeStyle,
           recieveRoute: Routes.MERCHANT_REQUEST,
-          cancelRoute: Routes.MERCHANT_DASHBOARD,
+          cancelRoute: Routes.MERCHANT_DASHBOARD
         });
       } else {
         navigation.navigate(Routes.MERCHANT_REQUEST);

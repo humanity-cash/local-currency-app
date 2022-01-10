@@ -11,5 +11,5 @@ export {
   SettingsListItem,
   PersonalDetailsCard,
   OwnedShareCard,
-  AccordionCard,
+  AccordionCard
 };
