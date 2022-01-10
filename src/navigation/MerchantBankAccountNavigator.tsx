@@ -7,7 +7,7 @@ function MerchantBankAccountScreen(): ReactElement {
   return (
     <MerchantBankAccountStack.Navigator
       screenOptions={() => ({
-        headerShown: false,
+        headerShown: false
       })}
     >
       <MerchantBankAccountStack.Screen

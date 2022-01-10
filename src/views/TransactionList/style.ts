@@ -9,7 +9,7 @@ export const mListstyles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    padding: 5,
+    padding: 5
   },
   selectedItem: {
     flex: 1,
@@ -20,42 +20,42 @@ export const mListstyles = StyleSheet.create({
   },
   imageContainer: {
     flexDirection: "row",
-    alignItems: "center",
+    alignItems: "center"
   },
   image: {
     alignSelf: "center",
     width: 60,
     height: 60,
-    borderRadius: 30,
+    borderRadius: 30
   },
   detailView: {
     paddingLeft: 8
   },
   timeText: {
     fontSize: 10,
-    color: colors.darkGreen,
+    color: colors.darkGreen
   },
   minusText: {
     fontFamily: FontFamily.bold,
     fontSize: 18,
-    color: colors.darkRed,
+    color: colors.darkRed
   },
   plusText: {
     fontFamily: FontFamily.bold,
     fontSize: 18,
-    color: colors.darkGreen,
-  },
+    color: colors.darkGreen
+  }
 });
 
 export const styles = StyleSheet.create({
   content: {
     flex: 1,
-    paddingBottom: 100,
+    paddingBottom: 100
   },
   headerText: {
     fontSize: 32,
     fontWeight: "400",
-    lineHeight: 35,
+    lineHeight: 35
   },
   totalAmountView: {
     flexDirection: "row",
@@ -63,20 +63,20 @@ export const styles = StyleSheet.create({
     marginVertical: 10,
     paddingBottom: 5,
     borderBottomWidth: 1,
-    borderBottomColor: colors.darkGreen,
+    borderBottomColor: colors.darkGreen
   },
   amountText: {
     fontFamily: FontFamily.bold,
     fontWeight: "bold",
-    fontSize: 18,
+    fontSize: 18
   },
   filterView: {
     flexDirection: "row",
-    justifyContent: "space-between",
+    justifyContent: "space-between"
   },
   filterInput: {
     flex: 1,
-    marginRight: 10,
+    marginRight: 10
   },
   filterBtn: {
     width: 55,
@@ -84,7 +84,7 @@ export const styles = StyleSheet.create({
     marginTop: 8,
     borderRadius: 3,
     alignItems: "center",
-    justifyContent: "center",
+    justifyContent: "center"
   },
   selectedFilterBtn: {
     width: 55,
@@ -92,7 +92,7 @@ export const styles = StyleSheet.create({
     marginTop: 8,
     borderRadius: 3,
     alignItems: "center",
-    justifyContent: "center",
+    justifyContent: "center"
   },
   scanButton: {
     flexDirection: "row",
@@ -105,47 +105,47 @@ export const styles = StyleSheet.create({
     color: colors.white,
     backgroundColor: colors.darkGreen,
     alignSelf: "center",
-    borderRadius: 30,
+    borderRadius: 30
   },
   scanBtnText: {
-    color: colors.white,
+    color: colors.white
   },
   qrIcon: {
     width: 24,
     height: 24,
-    marginRight: 20,
+    marginRight: 20
   },
   headerView: {
     marginTop: 20,
-    marginBottom: 40,
+    marginBottom: 40
   },
   detailView: {
     flexDirection: "row",
-    justifyContent: "space-between",
+    justifyContent: "space-between"
   },
   detailText: {
     fontSize: 10,
     marginHorizontal: 10,
-    color: colors.bodyText,
+    color: colors.bodyText
   },
   returnText: {
-    color: colors.darkRed,
+    color: colors.darkRed
   },
   minusText: {
     fontFamily: FontFamily.bold,
     fontSize: 16,
     lineHeight: 32,
     color: colors.darkRed,
-    textAlign: "center",
+    textAlign: "center"
   },
   plusText: {
     fontFamily: FontFamily.bold,
     fontSize: 16,
     lineHeight: 32,
     color: colors.darkGreen,
-    textAlign: "center",
+    textAlign: "center"
   },
   dialogHeight: {
-    height: 300,
-  },
+    height: 300
+  }
 });

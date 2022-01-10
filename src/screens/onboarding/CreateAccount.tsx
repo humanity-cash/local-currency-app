@@ -7,7 +7,7 @@ import {
   StyleSheet,
   View,
   Linking,
-  SafeAreaView,
+  SafeAreaView
 } from "react-native";
 import { CheckBox, Text } from "react-native-elements";
 import { AuthContext } from "src/contexts";
@@ -21,7 +21,7 @@ import { colors } from "src/theme/colors";
 import {
   baseHeader,
   viewBase,
-  wrappingContainerBase,
+  wrappingContainerBase
 } from "src/theme/elements";
 import { isEmailValid } from "src/utils/validation";
 import Translation from "src/translation/en.json";
@@ -29,46 +29,46 @@ import { BERKSHARE_PRIVACY_URL, BERKSHARE_TERMS_URL } from "src/config/env";
 
 const styles = StyleSheet.create({
   container: {
-    paddingBottom: 40,
+    paddingBottom: 40
   },
   headerText: {
     fontSize: 32,
     color: colors.darkGreen,
-    lineHeight: 35,
+    lineHeight: 35
   },
   bodyText: {
-    color: colors.bodyText,
+    color: colors.bodyText
   },
   form: {
-    marginTop: 30,
+    marginTop: 30
   },
   label: {
-    fontSize: 10,
+    fontSize: 10
   },
   bottomView: {
     marginHorizontal: 20,
-    marginBottom: 20,
+    marginBottom: 20
   },
   checkboxTextView: {
     fontWeight: "400",
     paddingTop: 10,
     flexDirection: "row",
     flexWrap: "wrap",
-    flex: 1,
+    flex: 1
   },
   checkboxContainer: {
     borderWidth: 0,
     backgroundColor: "transparent",
-    paddingHorizontal: 0,
+    paddingHorizontal: 0
   },
   terms: {
     flexDirection: "row",
     paddingBottom: 20,
-    paddingRight: 20,
+    paddingRight: 20
   },
   underlineText: {
-    textDecorationLine: "underline",
-  },
+    textDecorationLine: "underline"
+  }
 });
 
 const CreateAccount = (): JSX.Element => {

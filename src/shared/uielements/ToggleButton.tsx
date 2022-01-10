@@ -19,7 +19,7 @@ const ToggleButton = (props: ToggleButtonProps): JSX.Element => {
     <View
       style={{
         ...styles.container,
-        ...props.style,
+        ...props.style
       }}
     >
       {props.value && (
@@ -27,7 +27,7 @@ const ToggleButton = (props: ToggleButtonProps): JSX.Element => {
           <TouchableOpacity
             style={{
               ...styles.activeButton,
-              ...props.circleStyle,
+              ...props.circleStyle
             }}
           >
             <Text style={styles.activeColor}> {props.activeText} </Text>
@@ -45,7 +45,7 @@ const ToggleButton = (props: ToggleButtonProps): JSX.Element => {
           <TouchableOpacity
             style={{
               ...styles.activeButton,
-              ...props.circleStyle,
+              ...props.circleStyle
             }}
           >
             <Text style={styles.activeColor}> {props.inActiveText} </Text>
@@ -63,12 +63,12 @@ const styles = StyleSheet.create({
     borderRadius: 40,
     borderWidth: 1,
     borderColor: colors.darkGreen,
-    backgroundColor: colors.white,
+    backgroundColor: colors.white
   },
   contentView: {
     flexDirection: "row",
     justifyContent: "space-between",
-    alignItems: "center",
+    alignItems: "center"
   },
   activeButton: {
     width: 100,
@@ -78,18 +78,18 @@ const styles = StyleSheet.create({
     borderRadius: 39,
     backgroundColor: colors.darkGreen,
     alignItems: "center",
-    justifyContent: "center",
+    justifyContent: "center"
   },
   inActive: {
     width: 100,
     height: 36,
     borderRadius: 39,
     alignItems: "center",
-    justifyContent: "center",
+    justifyContent: "center"
   },
   activeColor: {
-    color: colors.white,
-  },
+    color: colors.white
+  }
 });
 
 export default ToggleButton;

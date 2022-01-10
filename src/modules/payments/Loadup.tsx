@@ -5,7 +5,7 @@ import {
   Platform,
   ScrollView,
   View,
-  TouchableOpacity,
+  TouchableOpacity
 } from "react-native";
 import { Text } from "react-native-elements";
 import {
@@ -13,13 +13,13 @@ import {
   BorderedInput,
   Button,
   Header,
-  CancelBtn,
+  CancelBtn
 } from "src/shared/uielements";
 import { colors } from "src/theme/colors";
 import {
   underlineHeader,
   viewBase,
-  wrappingContainerBase,
+  wrappingContainerBase
 } from "src/theme/elements";
 import Translation from "src/translation/en.json";
 import * as Routes from "src/navigation/constants";
@@ -168,7 +168,9 @@ const LoadUp = (props: LoadUpProps): JSX.Element => {
               placeholder="Amount"
               prefix="B$"
               value={amount}
-              style={{backgroundColor: isCustomer ? colors.inputBg : colors.lightBg}}
+              style={{
+                backgroundColor: isCustomer ? colors.inputBg : colors.lightBg
+              }}
               onChange={onValueChange}
             />
 

@@ -13,15 +13,15 @@ interface PersonalDetailsProps {
 
 const styles = StyleSheet.create({
   container: {
-    marginBottom: 20,
+    marginBottom: 20
   },
   bodyText: {
-    color: colors.bodyText,
+    color: colors.bodyText
   },
   label: {
     color: colors.bodyText,
-    fontSize: 10,
-  },
+    fontSize: 10
+  }
 });
 
 const BasicInputWithLabel = ({
@@ -34,7 +34,7 @@ const BasicInputWithLabel = ({
   name,
   inputRef,
   returnKeyType,
-  onSubmitEditing,
+  onSubmitEditing
 }: any) => {
   return (
     <>
@@ -74,7 +74,7 @@ const BusinessOwnerDetailsForm = (
   const onValueChange = (name: string, change: string) => {
     updateBusinessData({
       ...business,
-      owner: { ...business?.owner, [name]: change },
+      owner: { ...business?.owner, [name]: change }
     });
   };
 

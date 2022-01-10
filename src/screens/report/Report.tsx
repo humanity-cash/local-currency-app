@@ -8,7 +8,7 @@ import {
   ScrollView,
   StyleSheet,
   TouchableOpacity,
-  View,
+  View
 } from "react-native";
 import { Text } from "react-native-elements";
 import { BUTTON_TYPES } from "src/constants";
@@ -18,7 +18,7 @@ import { colors } from "src/theme/colors";
 import {
   underlineHeaderB,
   viewBaseB,
-  wrappingContainerBase,
+  wrappingContainerBase
 } from "src/theme/elements";
 import Translation from "src/translation/en.json";
 import { UserType } from "src/auth/types";
@@ -31,32 +31,32 @@ const styles = StyleSheet.create({
     fontSize: 32,
     fontWeight: "400",
     lineHeight: 40,
-    color: colors.purple,
+    color: colors.purple
   },
   container: {
-    paddingBottom: 40,
+    paddingBottom: 40
   },
   content: {
     marginTop: 10,
     paddingBottom: 20,
     borderBottomColor: colors.purple,
-    borderBottomWidth: 1,
+    borderBottomWidth: 1
   },
   bodyView: {
-    marginBottom: 15,
+    marginBottom: 15
   },
   bodyText: {
     color: colors.bodyText,
-    fontSize: 16,
+    fontSize: 16
   },
   text: {
     color: colors.bodyText,
-    fontSize: 12,
+    fontSize: 12
   },
   defaultAmountView: {
     flexDirection: "row",
     flexWrap: "wrap",
-    paddingTop: 5,
+    paddingTop: 5
   },
   defaultAmountItem: {
     width: 100,
@@ -66,7 +66,7 @@ const styles = StyleSheet.create({
     borderColor: colors.purple,
     alignItems: "center",
     justifyContent: "center",
-    marginRight: 8,
+    marginRight: 8
   },
   selectedAmountItem: {
     width: 100,
@@ -75,29 +75,29 @@ const styles = StyleSheet.create({
     borderRadius: 20,
     alignItems: "center",
     justifyContent: "center",
-    marginRight: 8,
+    marginRight: 8
   },
   amountText: {
-    color: colors.purple,
+    color: colors.purple
   },
   placeholder: {
-    color: colors.greyedPurple,
+    color: colors.greyedPurple
   },
   selectedAmountText: {
-    color: colors.white,
+    color: colors.white
   },
   inlineView: {
     flex: 1,
     flexDirection: "row",
     justifyContent: "space-between",
     marginTop: 20,
-    alignItems: "center",
+    alignItems: "center"
   },
   transactionTypeView: {
-    marginTop: 20,
+    marginTop: 20
   },
   dateView: {
-    flex: 1,
+    flex: 1
   },
   date: {
     height: 55,
@@ -105,55 +105,55 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "center",
     borderRadius: 3,
-    backgroundColor: colors.white,
+    backgroundColor: colors.white
   },
   separator: {
     width: 15,
     height: 1,
     marginHorizontal: 10,
     marginTop: 15,
-    backgroundColor: colors.purple,
+    backgroundColor: colors.purple
   },
   label: {
     fontSize: 10,
     lineHeight: 14,
-    color: colors.bodyText,
+    color: colors.bodyText
   },
   picker: {
     backgroundColor: colors.white,
     borderWidth: 0,
-    height: 55,
+    height: 55
   },
   pickerView: {
     color: colors.purple,
-    fontSize: 16,
+    fontSize: 16
   },
   bottomView: {
     padding: 20,
-    paddingBottom: 45,
+    paddingBottom: 45
   },
   specifySearch: {
     color: colors.purple,
     textAlign: "center",
-    paddingTop: 40,
+    paddingTop: 40
   },
   badgeView: {
     padding: 5,
     borderWidth: 1,
     borderRadius: 8,
-    borderColor: colors.purple,
+    borderColor: colors.purple
   },
   selectedItemLabel: {
     fontWeight: "bold",
-    color: colors.purple,
-  },
+    color: colors.purple
+  }
 });
 
 const enum ReportType {
   ALL = "",
   TODAY = "Today",
   WEEK = "Week",
-  MONTH = "Month",
+  MONTH = "Month"
 }
 
 const Report = (): JSX.Element => {
@@ -172,7 +172,7 @@ const Report = (): JSX.Element => {
     "Returns",
     "Load ups",
     "Cash outs",
-    "Other transfers",
+    "Other transfers"
   ]);
   const [selIndexes, setSelIndexes] = useState<boolean[]>();
 
@@ -210,12 +210,20 @@ const Report = (): JSX.Element => {
         break;
       case ReportType.WEEK:
         setStartDate(
-          new Date(moment(today).add(-1, "week").format("MM/DD/yyyy"))
+          new Date(
+            moment(today)
+              .add(-1, "week")
+              .format("MM/DD/yyyy")
+          )
         );
         break;
       case ReportType.MONTH:
         setStartDate(
-          new Date(moment(today).add(-1, "month").format("MM/DD/yyyy"))
+          new Date(
+            moment(today)
+              .add(-1, "month")
+              .format("MM/DD/yyyy")
+          )
         );
         break;
       default:

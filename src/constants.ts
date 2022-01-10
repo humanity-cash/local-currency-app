@@ -2,7 +2,7 @@ export const BUTTON_TYPES = {
   DARK_GREEN: "darkGreen",
   DARK_RED: "darkRed",
   TRANSPARENT: "transparent",
-  PURPLE: "purple",
+  PURPLE: "purple"
 };
 
 /**AWS COGNITO ERRORS */

@@ -10,27 +10,27 @@ import BlockInput from "../BlockInput";
 const styles = StyleSheet.create({
   inputBg: {
     color: colors.purple,
-    backgroundColor: colors.white,
+    backgroundColor: colors.white
   },
   container: {
     flex: 1,
-    paddingBottom: 40,
+    paddingBottom: 40
   },
   bodyText: {
-    color: colors.bodyText,
+    color: colors.bodyText
   },
   pickImageView: {
     paddingTop: 50,
     paddingBottom: 30,
     justifyContent: "center",
-    alignItems: "center",
+    alignItems: "center"
   },
   label: {
-    color: colors.bodyText,
+    color: colors.bodyText
   },
   smallLabel: {
     color: colors.bodyText,
-    fontSize: 10,
+    fontSize: 10
   },
   storyText: {
     backgroundColor: colors.white,
@@ -41,20 +41,20 @@ const styles = StyleSheet.create({
     borderWidth: 0,
     color: colors.purple,
     alignItems: "flex-start",
-    textAlignVertical: "top",
+    textAlignVertical: "top"
   },
   imageView: {
     width: 80,
     height: 80,
     borderRadius: 40,
     justifyContent: "center",
-    alignItems: "center",
+    alignItems: "center"
   },
   image: {
     width: 80,
     height: 80,
-    borderRadius: 40,
-  },
+    borderRadius: 40
+  }
 });
 
 const BusinessProfileForm = (): ReactElement => {
@@ -72,7 +72,7 @@ const BusinessProfileForm = (): ReactElement => {
       mediaTypes: ImagePicker.MediaTypeOptions.All,
       allowsEditing: true,
       aspect: [4, 3],
-      quality: 1,
+      quality: 1
     });
 
     if (!result.cancelled) {
@@ -125,7 +125,7 @@ const BusinessProfileForm = (): ReactElement => {
         placeholder="Tell the world about your business. What gives you joy as an entrepreneur? What do you love about the Berkshires?"
         value={business?.story}
         multiline={true}
-        onChangeText={(newValue) => onValueChange("story", newValue)}
+        onChangeText={newValue => onValueChange("story", newValue)}
         style={styles.storyText}
         numberOfLines={6}
         autoCapitalize="none"

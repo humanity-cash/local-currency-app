@@ -13,7 +13,7 @@ function SignupBusinessScreen(): ReactElement {
   return (
     <SignupBusinessStack.Navigator
       screenOptions={() => ({
-        headerShown: false,
+        headerShown: false
       })}
     >
       <SignupBusinessStack.Screen

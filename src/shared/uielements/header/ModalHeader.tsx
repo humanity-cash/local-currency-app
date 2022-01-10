@@ -4,7 +4,7 @@ import {
   StyleSheet,
   TouchableOpacity,
   View,
-  SafeAreaView,
+  SafeAreaView
 } from "react-native";
 import { Text } from "react-native-elements";
 
@@ -14,28 +14,28 @@ const styles = StyleSheet.create({
   header: {
     flexDirection: "row",
     paddingVertical: 5,
-    alignItems: "center",
+    alignItems: "center"
   },
   leftContainer: {
     textAlignVertical: "center",
     flex: 1,
-    alignContent: "flex-start",
+    alignContent: "flex-start"
   },
   leftText: {
     lineHeight: MODAL_HEADER_HEIGHT,
-    textAlign: "left",
+    textAlign: "left"
   },
   rightContainer: {
     textAlign: "right",
     height: MODAL_HEADER_HEIGHT,
     textAlignVertical: "center",
     flex: 1,
-    paddingHorizontal: 15,
+    paddingHorizontal: 15
   },
   rightText: {
     lineHeight: MODAL_HEADER_HEIGHT,
-    textAlign: "right",
-  },
+    textAlign: "right"
+  }
 });
 
 type ModalHeaderProps = {

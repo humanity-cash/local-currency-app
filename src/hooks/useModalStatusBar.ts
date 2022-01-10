@@ -6,13 +6,13 @@ const storeId = "MODAL_STATUSBAR";
 
 const headerValues = {
   styles: { backgroundColor: colors.black },
-  bar: "light-content",
+  bar: "light-content"
 };
 type ModalStatusBarState = ModalStatusBar;
 
 const store = createStore<ModalStatusBarState>(storeId, {
   show: false,
-  styles: {},
+  styles: {}
 });
 
 const useModalStatusBar = (): IMap => {
@@ -23,21 +23,21 @@ const useModalStatusBar = (): IMap => {
       store.setState({
         show: value,
         styles: headerValues.styles,
-        bar: "light-content",
+        bar: "light-content"
       });
     }
     if (!value) {
       store.setState({
         show: value,
         styles: {},
-        bar: undefined,
+        bar: undefined
       });
     }
   };
 
   return {
     properties: details,
-    setUseHeader,
+    setUseHeader
   };
 };
 

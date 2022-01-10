@@ -6,7 +6,7 @@ import { Header, CancelBtn, Button } from "src/shared/uielements";
 import {
   baseHeader,
   viewBase,
-  wrappingContainerBase,
+  wrappingContainerBase
 } from "src/theme/elements";
 import Translation from "src/translation/en.json";
 
@@ -14,12 +14,12 @@ const styles = StyleSheet.create({
   headerText: {
     fontSize: 32,
     fontWeight: "400",
-    lineHeight: 40,
+    lineHeight: 40
   },
   bottomView: {
     marginHorizontal: 20,
-    marginBottom: 20,
-  },
+    marginBottom: 20
+  }
 });
 
 interface LoadUpSuccessInput {

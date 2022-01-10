@@ -5,7 +5,7 @@ import {
   Platform,
   ScrollView,
   View,
-  SafeAreaView,
+  SafeAreaView
 } from "react-native";
 import { Text } from "react-native-elements";
 import { TransactionsAPI } from "src/api";
@@ -16,7 +16,7 @@ import {
   Button,
   CancelBtn,
   Dialog,
-  Header,
+  Header
 } from "src/shared/uielements";
 import { colors } from "src/theme/colors";
 import {
@@ -24,7 +24,7 @@ import {
   underlineHeader,
   viewBase,
   viewBaseB,
-  wrappingContainerBase,
+  wrappingContainerBase
 } from "src/theme/elements";
 import Translation from "src/translation/en.json";
 import { IMap } from "src/utils/types";
@@ -66,7 +66,7 @@ const CashoutAmount = (props: CashOutInput): JSX.Element => {
 
   const [state, setState] = useState<CashoutState>({
     amount: "",
-    costs: "",
+    costs: ""
   });
 
   const [goNext, setGoNext] = useState(false);
@@ -97,7 +97,7 @@ const CashoutAmount = (props: CashOutInput): JSX.Element => {
     const amount = change.replace(",", ".");
     setState({
       amount: amount,
-      costs: amount,
+      costs: amount
     } as CashoutState);
   };
 
@@ -119,7 +119,7 @@ const CashoutAmount = (props: CashOutInput): JSX.Element => {
     setIsVisible(false);
     setIsLoading(true);
     const response = await TransactionsAPI.withdraw(userId, {
-      amount,
+      amount
     });
     setIsLoading(false);
 
@@ -165,7 +165,9 @@ const CashoutAmount = (props: CashOutInput): JSX.Element => {
             prefix="B$"
             value={state.amount}
             onChange={onValueChange}
-            style={{backgroundColor: isCustomer ? colors.inputBg : colors.lightBg}}
+            style={{
+              backgroundColor: isCustomer ? colors.inputBg : colors.lightBg
+            }}
             borderColor={exceed ? colors.mistakeRed : null}
           />
           {exceed && (

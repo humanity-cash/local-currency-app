@@ -19,17 +19,17 @@ const styles = StyleSheet.create({
     padding: 0,
     flexDirection: "row",
     paddingHorizontal: 10,
-    paddingVertical: 10,
+    paddingVertical: 10
   },
   text: {
     fontSize: 20,
     lineHeight: 30,
     flex: 1,
-    fontFamily: FontFamily.bold,
+    fontFamily: FontFamily.bold
   },
   arrow: {
-    marginVertical: 20,
-  },
+    marginVertical: 20
+  }
 });
 
 const PersonalDetailsCard = (props: PersonalDetailsCardProps) => {

@@ -2,16 +2,16 @@ import { DwollaInfo } from "./types";
 
 export const dwollaInfoInitialState: DwollaInfo = {
   dwollaId: "",
-  resourceUri: "",
+  resourceUri: ""
 };
 
 export const signInInitialState = {
   email: "",
-  password: "",
+  password: ""
 };
 
 export const signUpInitialState = {
   email: "",
   password: "",
-  confirmPassword: "",
+  confirmPassword: ""
 };

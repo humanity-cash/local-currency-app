@@ -5,7 +5,7 @@ import {
   TxDataStoreReducer,
   TxFilterStoreActions,
   TxFilterStoreReducer,
-  TxFilters,
+  TxFilters
 } from "src/utils/types";
 
 export const BUSINESS_TX_DATA_STORE = "BUSINESS_TX_DATA_STORE";
@@ -17,7 +17,7 @@ createStore<TxDataStore, TxDataStoreReducer>(
       case TxDataStoreActions.UpdateTransactions:
         return {
           ...state,
-          txs: action.payload.txs,
+          txs: action.payload.txs
         };
       default:
         return state;
@@ -34,7 +34,7 @@ createStore<TxDataStore, { type: string; payload: any }>(
       case "updateTransactions":
         return {
           ...state,
-          txs: action.payload.txs,
+          txs: action.payload.txs
         };
       default:
         return state;
@@ -53,49 +53,49 @@ createStore<TxFilters, TxFilterStoreReducer>(
         return {
           ...state,
           isEndDate: false,
-          isStartDate: true,
+          isStartDate: true
         };
       case TxFilterStoreActions.OpenEndDate:
         return {
           ...state,
           isStartDate: false,
-          isEndDate: true,
+          isEndDate: true
         };
       case TxFilterStoreActions.CloseStartDate:
         return {
           ...state,
           isEndDate: false,
-          isStartDate: false,
+          isStartDate: false
         };
       case TxFilterStoreActions.CloseEndDate:
         return {
           ...state,
           isStartDate: false,
-          isEndDate: false,
+          isEndDate: false
         };
       case TxFilterStoreActions.UpdateStartDate:
         return {
           ...state,
           startDate: action.payload.startDate,
-          isStartDate: false,
+          isStartDate: false
         };
       case TxFilterStoreActions.UpdateEndDate:
         return {
           ...state,
           endDate: action.payload.endDate,
-          isEndDate: false,
+          isEndDate: false
         };
       case TxFilterStoreActions.UpdateType:
         return {
           ...state,
-          selectedType: action.payload.type,
+          selectedType: action.payload.type
         };
       case TxFilterStoreActions.ClearAll:
         return {
           ...state,
           startDate: null,
           endDate: null,
-          selectedType: "All",
+          selectedType: "All"
         };
       default:
         return state;
@@ -114,49 +114,49 @@ createStore<TxFilters, TxFilterStoreReducer>(
         return {
           ...state,
           isEndDate: false,
-          isStartDate: true,
+          isStartDate: true
         };
       case TxFilterStoreActions.OpenEndDate:
         return {
           ...state,
           isStartDate: false,
-          isEndDate: true,
+          isEndDate: true
         };
       case TxFilterStoreActions.CloseStartDate:
         return {
           ...state,
           isEndDate: false,
-          isStartDate: false,
+          isStartDate: false
         };
       case TxFilterStoreActions.CloseEndDate:
         return {
           ...state,
           isStartDate: false,
-          isEndDate: false,
+          isEndDate: false
         };
       case TxFilterStoreActions.UpdateStartDate:
         return {
           ...state,
           startDate: action.payload.startDate,
-          isStartDate: false,
+          isStartDate: false
         };
       case TxFilterStoreActions.UpdateEndDate:
         return {
           ...state,
           endDate: action.payload.endDate,
-          isEndDate: false,
+          isEndDate: false
         };
       case TxFilterStoreActions.UpdateType:
         return {
           ...state,
-          selectedType: action.payload.type,
+          selectedType: action.payload.type
         };
       case TxFilterStoreActions.ClearAll:
         return {
           ...state,
           startDate: null,
           endDate: null,
-          selectedType: "All",
+          selectedType: "All"
         };
       default:
         return state;
