@@ -10,7 +10,7 @@ import { colors } from "src/theme/colors";
 import {
   baseHeader,
   viewBase,
-  wrappingContainerBase,
+  wrappingContainerBase
 } from "src/theme/elements";
 import Translation from "src/translation/en.json";
 import { UserType } from "src/auth/types";
@@ -20,15 +20,15 @@ const styles = StyleSheet.create({
     fontSize: 32,
     fontWeight: "400",
     lineHeight: 40,
-    color: colors.purple,
+    color: colors.purple
   },
   text: {
-    color: colors.bodyText,
+    color: colors.bodyText
   },
   bottomView: {
     marginHorizontal: 20,
-    marginBottom: 20,
-  },
+    marginBottom: 20
+  }
 });
 
 const ReportSuccess = (): JSX.Element => {

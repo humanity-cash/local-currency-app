@@ -10,14 +10,14 @@ import {
   CancelBtn,
   Header,
   Modal,
-  ModalHeader,
+  ModalHeader
 } from "src/shared/uielements";
 import { colors } from "src/theme/colors";
 import {
   modalViewBase,
   underlineHeader,
   viewBase,
-  wrappingContainerBase,
+  wrappingContainerBase
 } from "src/theme/elements";
 import { MerchantEntry } from "src/utils/types";
 
@@ -31,67 +31,67 @@ const styles = StyleSheet.create({
   headerText: {
     fontSize: 32,
     fontWeight: "400",
-    lineHeight: 40,
+    lineHeight: 40
   },
   underlineView: {
     marginTop: 20,
     marginBottom: 10,
     borderBottomWidth: 1,
-    borderBottomColor: colors.lightGreen,
+    borderBottomColor: colors.lightGreen
   },
   content: {
-    paddingBottom: 40,
+    paddingBottom: 40
   },
   categoryText: {
     fontSize: 10,
-    fontWeight: "bold",
+    fontWeight: "bold"
   },
   popularMerchantView: {
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
     paddingTop: 20,
-    paddingBottom: 20,
+    paddingBottom: 20
   },
   popularTextView: {
     width: "60%",
-    fontSize: 16,
+    fontSize: 16
   },
   popularTitle: {
     fontSize: 18,
     lineHeight: 18,
-    fontWeight: "bold",
+    fontWeight: "bold"
   },
   popularText: {
     paddingTop: 10,
     fontSize: 16,
-    lineHeight: 20,
+    lineHeight: 20
   },
   popularImage: {
     width: 110,
     height: 150,
-    borderRadius: 5,
+    borderRadius: 5
   },
   image: {
     width: 96,
     height: 132,
-    borderRadius: 5,
+    borderRadius: 5
   },
   merchantsView: {
     flexDirection: "row",
-    overflow: "scroll",
+    overflow: "scroll"
   },
   merchantItem: {
     width: 105,
-    alignItems: "center",
+    alignItems: "center"
   },
   text: {
     fontSize: 10,
-    textAlign: "center",
+    textAlign: "center"
   },
   modalWrap: {
     paddingHorizontal: 10,
-    marginBottom: 10,
+    marginBottom: 10
   },
   modalHeader: {
     fontSize: 26,
@@ -99,11 +99,11 @@ const styles = StyleSheet.create({
     marginBottom: 10,
     paddingBottom: 10,
     borderBottomWidth: 1,
-    borderBottomColor: colors.darkGreen,
+    borderBottomColor: colors.darkGreen
   },
   feedView: {
     backgroundColor: colors.lightGreen1,
-    padding: 20,
+    padding: 20
   },
   feedImage: {
     alignItems: "center",
@@ -111,13 +111,13 @@ const styles = StyleSheet.create({
     height: 203,
     borderRadius: 5,
     marginTop: 20,
-    marginBottom: 20,
+    marginBottom: 20
   },
   rightText: {
     fontSize: 14,
     textAlign: "right",
-    alignSelf: "stretch",
-  },
+    alignSelf: "stretch"
+  }
 });
 
 const CategoryView = (props: CategoryViewProps) => {
@@ -157,7 +157,7 @@ const MerchantDictionary = (): JSX.Element => {
     image: "",
     addressLine1: "",
     addressLine2: "",
-    phone: "",
+    phone: ""
   });
   const businesses = useBusinesses();
 
@@ -169,7 +169,7 @@ const MerchantDictionary = (): JSX.Element => {
         image: "",
         addressLine1: curr.address1,
         addressLine2: curr.address2,
-        phone: curr.phoneNumber,
+        phone: curr.phoneNumber
       };
       if (curr.industry) {
         if (acc[curr.industry]) {
@@ -196,7 +196,7 @@ const MerchantDictionary = (): JSX.Element => {
       image: "",
       addressLine1: "",
       addressLine2: "",
-      phone: "",
+      phone: ""
     });
     setIsVisible(false);
   };

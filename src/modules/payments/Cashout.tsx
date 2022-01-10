@@ -5,7 +5,7 @@ import {
   Platform,
   ScrollView,
   View,
-  SafeAreaView,
+  SafeAreaView
 } from "react-native";
 import { Text } from "react-native-elements";
 import { TransactionsAPI } from "src/api";
@@ -16,14 +16,15 @@ import {
   Button,
   CancelBtn,
   Dialog,
-  Header,
+  Header
 } from "src/shared/uielements";
 import { colors } from "src/theme/colors";
 import {
   dialogViewBase,
   underlineHeader,
   viewBase,
-  wrappingContainerBase,
+  viewBaseB,
+  wrappingContainerBase
 } from "src/theme/elements";
 import Translation from "src/translation/en.json";
 import { IMap } from "src/utils/types";
@@ -61,10 +62,11 @@ const CashoutAmount = (props: CashOutInput): JSX.Element => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [maxAmount, setMaxAmount] = useState<string>("5.00");
   const [exceed, setExceed] = useState(false);
+  const isCustomer = userType === UserType.Customer;
 
   const [state, setState] = useState<CashoutState>({
     amount: "",
-    costs: "",
+    costs: ""
   });
 
   const [goNext, setGoNext] = useState(false);
@@ -95,7 +97,7 @@ const CashoutAmount = (props: CashOutInput): JSX.Element => {
     const amount = change.replace(",", ".");
     setState({
       amount: amount,
-      costs: amount,
+      costs: amount
     } as CashoutState);
   };
 
@@ -117,7 +119,7 @@ const CashoutAmount = (props: CashOutInput): JSX.Element => {
     setIsVisible(false);
     setIsLoading(true);
     const response = await TransactionsAPI.withdraw(userId, {
-      amount,
+      amount
     });
     setIsLoading(false);
 
@@ -135,7 +137,7 @@ const CashoutAmount = (props: CashOutInput): JSX.Element => {
   return (
     <KeyboardAvoidingView
       behavior={Platform.OS == "ios" ? "padding" : "height"}
-      style={viewBase}
+      style={isCustomer ? viewBase : viewBaseB}
     >
       <LoadingPage visible={isLoading} isPayment={true} />
       <Header
@@ -163,6 +165,9 @@ const CashoutAmount = (props: CashOutInput): JSX.Element => {
             prefix="B$"
             value={state.amount}
             onChange={onValueChange}
+            style={{
+              backgroundColor: isCustomer ? colors.inputBg : colors.lightBg
+            }}
             borderColor={exceed ? colors.mistakeRed : null}
           />
           {exceed && (
@@ -194,12 +199,12 @@ const CashoutAmount = (props: CashOutInput): JSX.Element => {
       </ScrollView>
       <SafeAreaView style={styles.bottomView}>
         <Button
-          type="darkGreen"
+          type={isCustomer ? "darkGreen" : "purple"}
           disabled={
             !goNext ||
             exceed ||
             (userType === UserType.Customer &&
-              walletData?.availableBalance > 5) ||
+              walletData?.availableBalance < 5) ||
             !walletData ||
             !userId
           }

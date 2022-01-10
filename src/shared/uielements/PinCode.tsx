@@ -18,7 +18,7 @@ const PinCode = (props: PinCodeProps) => {
     autoFocus: focus,
     length: pinCodeRequiredLength,
     onChange,
-    onComplete,
+    onComplete
   } = props;
   const [pinCode, setPinCode] = React.useState<string>(value);
   const [autoFocus, setAutoFocus] = React.useState<boolean | undefined>(focus);
@@ -98,7 +98,7 @@ const PinCode = (props: PinCodeProps) => {
           spellCheck={false}
           returnKeyType="go"
           underlineColorAndroid="transparent"
-          onChangeText={(text) => changeText(text)}
+          onChangeText={text => changeText(text)}
           caretHidden
         />
         {renderBoxes()}
@@ -112,16 +112,16 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "center",
-    marginVertical: 50,
+    marginVertical: 50
   },
   input: {
     width: 1,
     height: 1,
-    opacity: 0,
+    opacity: 0
   },
   box: {
     width: 15,
-    marginHorizontal: 5,
+    marginHorizontal: 5
   },
   circle: {
     width: 10,
@@ -129,12 +129,12 @@ const styles = StyleSheet.create({
     marginHorizontal: 5,
     borderWidth: 2,
     borderColor: colors.text,
-    borderRadius: 15,
+    borderRadius: 15
   },
   circleFilled: {
     backgroundColor: colors.brown,
-    borderColor: colors.brown,
-  },
+    borderColor: colors.brown
+  }
 });
 
 export default PinCode;

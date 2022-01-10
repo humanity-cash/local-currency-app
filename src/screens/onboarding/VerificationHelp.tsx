@@ -6,7 +6,7 @@ import { BackBtn, Header } from "src/shared/uielements";
 import {
   baseHeader,
   viewBase,
-  wrappingContainerBase,
+  wrappingContainerBase
 } from "src/theme/elements";
 import { colors } from "src/theme/colors";
 
@@ -18,29 +18,29 @@ const styles = StyleSheet.create({
   headerText: {
     fontSize: 32,
     color: colors.darkGreen,
-    lineHeight: 35,
+    lineHeight: 35
   },
   bodyText: {
-    color: colors.bodyText,
+    color: colors.bodyText
   },
   bottomNavigation: {
-    justifyContent: "center",
+    justifyContent: "center"
   },
   bottomView: {
     height: 60,
     justifyContent: "center",
-    alignItems: "center",
+    alignItems: "center"
   },
   image: {
     alignSelf: "center",
     width: 200,
-    height: 200,
+    height: 200
   },
   imageView: {
     justifyContent: "center",
     textAlignVertical: "center",
-    flex: 1,
-  },
+    flex: 1
+  }
 });
 
 const VerificationHelpView = (props: VerificationHelpProps) => {

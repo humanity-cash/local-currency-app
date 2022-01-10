@@ -6,7 +6,7 @@ import {
   SafeAreaView,
   ScrollView,
   StyleSheet,
-  View,
+  View
 } from "react-native";
 import { Text } from "react-native-elements";
 import { AuthContext, UserContext } from "src/contexts";
@@ -16,36 +16,36 @@ import {
   BusinessProfileForm,
   Button,
   CancelBtn,
-  Header,
+  Header
 } from "src/shared/uielements";
 import { colors } from "src/theme/colors";
 import {
   underlineHeaderB,
   viewBaseB,
-  wrappingContainerBase,
+  wrappingContainerBase
 } from "src/theme/elements";
 import Translation from "src/translation/en.json";
 
 const styles = StyleSheet.create({
   buttonText: {
-    color: colors.white,
+    color: colors.white
   },
   mainColor: {
-    color: colors.purple,
+    color: colors.purple
   },
   headerText: {
     fontSize: 32,
     color: colors.purple,
-    lineHeight: 35,
+    lineHeight: 35
   },
   formView: {
-    paddingBottom: 80,
+    paddingBottom: 80
   },
   bottomView: {
     marginHorizontal: 20,
     marginBottom: 20,
-    backgroundColor: "transparent",
-  },
+    backgroundColor: "transparent"
+  }
 });
 
 const BusinessProfile = (): ReactElement => {

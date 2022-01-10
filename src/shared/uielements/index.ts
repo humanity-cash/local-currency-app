@@ -24,7 +24,7 @@ import {
   MarketCardView,
   FilterCard,
   FileCard,
-  AccordionCard,
+  AccordionCard
 } from "./cards";
 import { CancelBtn, BackBtn, Header, ModalHeader, NextBtn } from "./header";
 import {
@@ -33,7 +33,7 @@ import {
   PersonalDetailsForm,
   PersonalProfileForm,
   BusinessProfileForm,
-  BusinessAddressForm,
+  BusinessAddressForm
 } from "./reusable";
 
 export {
@@ -73,5 +73,5 @@ export {
   PersonalProfileForm,
   BusinessProfileForm,
   BusinessAddressForm,
-  ToggleButton,
+  ToggleButton
 };

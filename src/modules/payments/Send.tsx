@@ -8,7 +8,7 @@ import {
   ScrollView,
   StyleSheet,
   View,
-  SafeAreaView,
+  SafeAreaView
 } from "react-native";
 import { Text } from "react-native-elements";
 import { LoadingPage } from "src/views";
@@ -26,7 +26,7 @@ import {
   Header,
   Modal,
   ModalHeader,
-  ToggleButton,
+  ToggleButton
 } from "src/shared/uielements";
 import { colors } from "src/theme/colors";
 import {
@@ -35,7 +35,7 @@ import {
   modalViewBase,
   underlineHeaderB,
   viewBase,
-  wrappingContainerBase,
+  wrappingContainerBase
 } from "src/theme/elements";
 import Translation from "src/translation/en.json";
 import { showToast } from "src/utils/common";
@@ -43,7 +43,7 @@ import {
   PaymentMode,
   QRCodeEntry,
   SECURITY_ID,
-  ToastType,
+  ToastType
 } from "src/utils/types";
 import { isQRCodeValid } from "src/utils/validation";
 import { UserType } from "src/auth/types";
@@ -173,8 +173,13 @@ interface SendPaymentInput {
 }
 
 const SendPayment = (props: SendPaymentInput): JSX.Element => {
-  const { senderId, walletData, username, recieveRoute, cancelRoute } =
-    props?.route?.params;
+  const {
+    senderId,
+    walletData,
+    username,
+    recieveRoute,
+    cancelRoute
+  } = props?.route?.params;
   if (!senderId || !walletData) return <div>InValid</div>;
   const navigation = useNavigation();
   const { userType } = useContext(UserContext);
@@ -192,7 +197,7 @@ const SendPayment = (props: SendPaymentInput): JSX.Element => {
     securityId: SECURITY_ID,
     to: "",
     amount: 0,
-    mode: PaymentMode.SELECT_AMOUNT,
+    mode: PaymentMode.SELECT_AMOUNT
   });
   const [goNext, setGoNext] = useState<boolean>(false);
   const [isLowAmountDialog, setIsLowAmountDialog] = useState<boolean>(false);
@@ -237,7 +242,7 @@ const SendPayment = (props: SendPaymentInput): JSX.Element => {
       const request: ITransactionRequest = {
         toUserId: qrCodeData.to,
         amount: qrCodeData.amount.toString(),
-        comment: "",
+        comment: ""
       };
       if (isRoundUp) {
         const roundUpAmount =
@@ -273,7 +278,7 @@ const SendPayment = (props: SendPaymentInput): JSX.Element => {
       const request: ITransactionRequest = {
         toUserId: qrCodeData.to,
         amount: openAmount,
-        comment: "",
+        comment: ""
       };
       setIsLoading(true);
       const response = await TransactionsAPI.transferTo(senderId, request);

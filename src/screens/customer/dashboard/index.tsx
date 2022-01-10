@@ -6,7 +6,7 @@ import {
   ScrollView,
   TouchableOpacity,
   TouchableWithoutFeedback,
-  View,
+  View
 } from "react-native";
 import { Image, Text } from "react-native-elements";
 import { BUTTON_TYPES } from "src/constants";
@@ -20,7 +20,7 @@ import {
   baseHeader,
   dialogViewBase,
   viewBase,
-  wrappingContainerBase,
+  wrappingContainerBase
 } from "src/theme/elements";
 import Translation from "src/translation/en.json";
 import { DwollaDialog } from "src/views";
@@ -38,10 +38,12 @@ const CustomerDashboard = (): JSX.Element => {
   const [isPayment, setIsPayment] = useState<boolean>(false);
   const [isSetting, setIsSetting] = useState(false);
   const { customerDwollaId, user } = useContext(UserContext);
-  const { customerWalletData, updateCustomerWalletData } =
-    useContext(WalletContext);
-  const { events, getEvents, deleteEvent, updateEvents } =
-    useContext(EventsContext);
+  const { customerWalletData, updateCustomerWalletData } = useContext(
+    WalletContext
+  );
+  const { events, getEvents, deleteEvent, updateEvents } = useContext(
+    EventsContext
+  );
   const { isLoading: isWalletLoading } = useCustomerWallet();
   const personalFundingSource = customerWalletData?.availableFundingSource;
   const availableBalance = customerWalletData?.availableBalance;
@@ -84,7 +86,7 @@ const CustomerDashboard = (): JSX.Element => {
           username: user?.customer?.tag,
           styles: CustomerScanQrCodeStyle,
           recieveRoute: Routes.PAYMENT_REQUEST,
-          cancelRoute: Routes.DASHBOARD,
+          cancelRoute: Routes.DASHBOARD
         });
       } else {
         navigation.navigate(Routes.RECEIVE_PAYMENT);
@@ -134,7 +136,7 @@ const CustomerDashboard = (): JSX.Element => {
             onPress={() => {
               personalFundingSource
                 ? navigation.navigate(Routes.LOAD_UP, {
-                    userId: customerDwollaId,
+                    userId: customerDwollaId
                   })
                 : setIsVisible(true);
             }}
@@ -267,14 +269,14 @@ const feedData = [
     month: "SEPTEMBER",
     author: "Dory & Ginger",
     content:
-      "Our motto is Live and Give. We have treasures for your home and lifestyle, along with the perfect gift for that special someone or that occasion that begs for something unique.",
+      "Our motto is Live and Give. We have treasures for your home and lifestyle, along with the perfect gift for that special someone or that occasion that begs for something unique."
   },
   {
     month: "SEPTEMBER",
     author: "The Mahican (Muh-he-ka-new)",
     content:
-      "Native American clan lived in the territory that presently makes up Berkshire County.",
-  },
+      "Native American clan lived in the territory that presently makes up Berkshire County."
+  }
 ];
 
 export default CustomerDashboard;

@@ -18,44 +18,44 @@ interface PersonalAddressProps {
 
 const styles = StyleSheet.create({
   container: {
-    marginBottom: 20,
+    marginBottom: 20
   },
   bodyText: {
-    color: colors.bodyText,
+    color: colors.bodyText
   },
   label: {
     color: colors.bodyText,
-    fontSize: 10,
+    fontSize: 10
   },
   errorLabel: {
     color: colors.bodyText,
     fontSize: 10,
-    marginTop: 5,
+    marginTop: 5
   },
   inlineView: {
     flex: 1,
-    flexDirection: "row",
+    flexDirection: "row"
   },
   cityView: {
-    width: "70%",
+    width: "70%"
   },
   stateContent: {
-    width: "30%",
+    width: "30%"
   },
   stateView: {
     marginTop: 8,
-    marginLeft: 5,
+    marginLeft: 5
   },
   pickerText: {
     color: colors.darkGreen,
-    textAlign: "center",
+    textAlign: "center"
   },
   selectItem: {
     width: "100%",
     height: 55,
-    backgroundColor: colors.inputBg,
+    backgroundColor: colors.inputBg
   },
-  dropdownContainer: { marginTop: -20 },
+  dropdownContainer: { marginTop: -20 }
 });
 
 const PersonalAddressForm = (props: PersonalAddressProps): ReactElement => {
@@ -76,7 +76,7 @@ const PersonalAddressForm = (props: PersonalAddressProps): ReactElement => {
 
   const onValueChange = (name: string, change: string) => {
     updateCustomerData({
-      [name]: change,
+      [name]: change
     });
   };
 
@@ -133,20 +133,20 @@ const PersonalAddressForm = (props: PersonalAddressProps): ReactElement => {
               ref={stateRef}
               data={countries}
               defaultValueByIndex={0}
-              onSelect={(selectedItem) => {
+              onSelect={selectedItem => {
                 onValueChange("state", selectedItem);
               }}
-              buttonTextAfterSelection={(selectedItem) => {
+              buttonTextAfterSelection={selectedItem => {
                 return selectedItem;
               }}
-              rowTextForSelection={(item) => {
+              rowTextForSelection={item => {
                 return item;
               }}
               buttonStyle={styles.selectItem}
               buttonTextStyle={styles.pickerText}
               rowStyle={styles.selectItem}
               dropdownStyle={styles.dropdownContainer}
-              renderCustomizedRowChild={(item) => (
+              renderCustomizedRowChild={item => (
                 <Text style={styles.pickerText}>{item}</Text>
               )}
               renderDropdownIcon={() => (

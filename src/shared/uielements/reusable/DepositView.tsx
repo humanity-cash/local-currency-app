@@ -11,15 +11,15 @@ const styles = StyleSheet.create({
     padding: 0,
     backgroundColor: "#F8F6F4",
     flexDirection: "row",
-    paddingHorizontal: 10,
+    paddingHorizontal: 10
   },
   text: {
     lineHeight: 60,
-    flex: 1,
+    flex: 1
   },
   arrow: {
-    marginVertical: 15,
-  },
+    marginVertical: 15
+  }
 });
 
 const DepositView = () => {

@@ -6,7 +6,7 @@ import {
   SafeAreaView,
   ScrollView,
   StyleSheet,
-  View,
+  View
 } from "react-native";
 import { Text } from "react-native-elements";
 import { AuthContext, UserContext } from "src/contexts";
@@ -16,29 +16,29 @@ import {
   Button,
   CancelBtn,
   Header,
-  PersonalDetailsForm,
+  PersonalDetailsForm
 } from "src/shared/uielements";
 import { colors } from "src/theme/colors";
 import {
   underlineHeader,
   viewBase,
-  wrappingContainerBase,
+  wrappingContainerBase
 } from "src/theme/elements";
 import Translation from "src/translation/en.json";
 
 const styles = StyleSheet.create({
   content: {
-    paddingBottom: 40,
+    paddingBottom: 40
   },
   headerText: {
     fontSize: 32,
     color: colors.darkGreen,
-    lineHeight: 35,
+    lineHeight: 35
   },
   bottomView: {
     marginHorizontal: 20,
-    marginBottom: 20,
-  },
+    marginBottom: 20
+  }
 });
 
 const PersonalDetails = (): JSX.Element => {

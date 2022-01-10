@@ -21,7 +21,7 @@ const addCustomerVerification = async (
 ): Promise<AxiosPromiseResponse<IDBUser>> => {
   try {
     const response = await postRequest(`/users/${businessDwollaId}/customer`, {
-      customer: request,
+      customer: request
     });
     return response;
   } catch (err) {
@@ -35,7 +35,7 @@ const addBusinessVerification = async (
 ): Promise<AxiosPromiseResponse<IDBUser>> => {
   try {
     const response = await postRequest(`/users/${customerDwollaId}/business`, {
-      business: request,
+      business: request
     });
     return response;
   } catch (err) {
@@ -103,15 +103,14 @@ export const createBusiness = async (
           state: user?.business?.state ? user?.business?.state : "empty",
           city: user?.business?.city ? user?.business?.city : "empty",
           firstName: user?.business?.owner?.firstName,
-          lastName: user?.business?.owner?.lastName,
-        },
+          lastName: user?.business?.owner?.lastName
+        }
       };
-      const response: AxiosPromiseResponse<IDBUser> =
-        await addBusinessVerification(
-          //@ts-ignore
-          user.customer.dwollaId,
-          boz
-        );
+      const response: AxiosPromiseResponse<IDBUser> = await addBusinessVerification(
+        //@ts-ignore
+        user.customer.dwollaId,
+        boz
+      );
       //@ts-ignore
       return { status: response.status, data: response?.data?.data };
     } else {
@@ -144,9 +143,9 @@ export const createBusiness = async (
             //@ts-ignore
             firstName: user?.business?.owner?.firstName,
             //@ts-ignore
-            lastName: user?.business?.owner?.lastName,
-          },
-        },
+            lastName: user?.business?.owner?.lastName
+          }
+        }
       });
       return { status: response.status, data: response.data };
     }
@@ -166,8 +165,9 @@ export const createCustomer = async (
       user?.dbId &&
       user?.customer
     ) {
-      const response: AxiosPromiseResponse<IDBUser> =
-        await addCustomerVerification(user.business.dwollaId, {
+      const response: AxiosPromiseResponse<IDBUser> = await addCustomerVerification(
+        user.business.dwollaId,
+        {
           ...user?.customer,
           avatar: user?.customer?.avatar ? user?.customer?.avatar : "empty",
           address1: user?.customer?.address1
@@ -180,8 +180,9 @@ export const createCustomer = async (
             ? user?.customer?.postalCode
             : "empty",
           state: user?.customer?.state ? user?.customer?.state : "empty",
-          city: user?.customer?.city ? user?.customer?.city : "empty",
-        });
+          city: user?.customer?.city ? user?.customer?.city : "empty"
+        }
+      );
       //@ts-ignore
       return { status: response.status, data: response.data.data };
     } else {
@@ -203,8 +204,8 @@ export const createCustomer = async (
             ? user?.customer?.postalCode
             : "empty",
           state: user?.customer?.state ? user?.customer?.state : "empty",
-          city: user?.customer?.city ? user?.customer?.city : "empty",
-        },
+          city: user?.customer?.city ? user?.customer?.city : "empty"
+        }
       });
       return { status: response.status, data: response.data };
     }
@@ -224,7 +225,7 @@ interface UpdateCustomerProfile {
 
 export const updateCustomerProfile = async ({
   customerDwollaId,
-  customer,
+  customer
 }: UpdateCustomerProfile): Promise<AxiosPromiseResponse> => {
   try {
     const response: AxiosPromiseResponse = await putRequest(
@@ -256,7 +257,7 @@ export interface UpdateBusinessProfile {
 
 export const updateBusinessProfile = async ({
   businessDwollaId,
-  business,
+  business
 }: UpdateBusinessProfile): Promise<AxiosPromiseResponse> => {
   try {
     const response: AxiosPromiseResponse<IDBUser[]> = await putRequest(

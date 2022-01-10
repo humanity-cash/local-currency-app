@@ -1,9 +1,11 @@
-import React, { ReactElement } from "react";
+import React, { ReactElement, useContext } from "react";
 import { Dimensions, View, StyleSheet, SafeAreaView } from "react-native";
 import { Overlay } from "react-native-elements";
 import { CancelBtn } from "src/shared/uielements/header";
 import { colors } from "src/theme/colors";
 import { IMap } from "src/utils/types";
+import { UserType } from "src/auth/types";
+import { UserContext } from "src/contexts";
 
 type DialogProps = {
   visible: boolean;
@@ -23,18 +25,17 @@ const styles = StyleSheet.create({
     top: 0,
     left: 0,
     width: "100%",
-    height: "100%",
-    backgroundColor: "rgba(57, 83, 68, 0.9)",
+    height: "100%"
   },
   closeBtn: {
     position: "absolute",
     top: 10,
-    right: 20,
+    right: 20
   },
   container: {
     flex: 1,
     justifyContent: "center",
-    alignItems: "center",
+    alignItems: "center"
   },
   dialogWrap: {
     width: "90%",
@@ -50,14 +51,14 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.5,
     padding: 0,
     justifyContent: "center",
-    alignItems: "center",
+    alignItems: "center"
   },
   dialogView: {
     width: "100%",
     height: "100%",
     flex: 1,
-    borderRadius: 20,
-  },
+    borderRadius: 20
+  }
 });
 
 const Dialog = ({
@@ -67,14 +68,21 @@ const Dialog = ({
   style = {},
   children,
   hiddenCloseBtn = false,
-  onShow,
+  onShow
 }: DialogProps): JSX.Element => {
+  const { userType } = useContext(UserContext);
+  const isCustomer = userType === UserType.Customer;
+
   return (
     <Overlay
       isVisible={visible}
-      overlayStyle={{ ...styles.dialogBg, ...backgroundStyle }}
+      overlayStyle={{
+        ...styles.dialogBg,
+        ...backgroundStyle,
+        backgroundColor: isCustomer ? colors.pDialogBg : colors.bDialogBg
+      }}
       backdropStyle={{
-        backgroundColor: "transparent",
+        backgroundColor: "transparent"
       }}
       animationType="slide"
       onShow={() => onShow && onShow()}
@@ -92,7 +100,7 @@ const Dialog = ({
         <View
           style={{
             ...styles.dialogWrap,
-            ...style,
+            ...style
           }}
         >
           <View style={styles.dialogView}>{children}</View>

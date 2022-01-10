@@ -46,10 +46,10 @@ export const loadWallet = async (userId: string): Promise<IWallet> => {
       userId: wallet?.userId,
       address: wallet?.address,
       createdTimestamp: wallet?.createdTimestamp,
-      createdBlock: wallet?.createdBlock,
+      createdBlock: wallet?.createdBlock
     };
     return walletData;
-  } catch (error: unknown) {
+  } catch (error) {
     console.log("Error loading wallet:", error);
     return {} as IWallet;
   }

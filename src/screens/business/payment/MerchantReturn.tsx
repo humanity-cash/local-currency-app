@@ -6,7 +6,7 @@ import {
   ScrollView,
   StyleSheet,
   View,
-  SafeAreaView,
+  SafeAreaView
 } from "react-native";
 import { Text } from "react-native-elements";
 import { BUTTON_TYPES } from "src/constants";
@@ -16,13 +16,13 @@ import {
   BorderedInput,
   Button,
   CancelBtn,
-  Header,
+  Header
 } from "src/shared/uielements";
 import { colors } from "src/theme/colors";
 import {
   underlineHeaderB,
   viewBaseB,
-  wrappingContainerBase,
+  wrappingContainerBase
 } from "src/theme/elements";
 import Translation from "src/translation/en.json";
 
@@ -31,32 +31,32 @@ const styles = StyleSheet.create({
     fontSize: 32,
     fontWeight: "400",
     lineHeight: 40,
-    color: colors.purple,
+    color: colors.purple
   },
   switchView: {
     flex: 1,
     justifyContent: "center",
-    alignItems: "center",
+    alignItems: "center"
   },
   contentView: {
-    marginTop: 5,
+    marginTop: 5
   },
   label: {
     marginTop: 20,
     color: colors.text,
-    fontSize: 12,
+    fontSize: 12
   },
   input: {
     backgroundColor: colors.white,
-    color: colors.purple,
+    color: colors.purple
   },
   text: {
-    color: colors.purple,
+    color: colors.purple
   },
   bottomView: {
     marginHorizontal: 20,
-    marginBottom: 20,
-  },
+    marginBottom: 20
+  }
 });
 
 const MerchantReturn = (): JSX.Element => {

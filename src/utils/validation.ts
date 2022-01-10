@@ -8,7 +8,7 @@ import {
   PersonalDetails,
   PersonalDetailsErrors,
   QRCodeEntry,
-  SECURITY_ID,
+  SECURITY_ID
 } from "./types";
 
 const creditCardNumberValidation = (number: string) => {
@@ -101,8 +101,12 @@ export const validateBusinessAddressForm = (
 export const validateBusinessDetailsForm = (
   businessDetails: BusinessDetails
 ) => {
-  const { registeredBusinessname, industry, businessType, ein } =
-    businessDetails;
+  const {
+    registeredBusinessname,
+    industry,
+    businessType,
+    ein
+  } = businessDetails;
   const errors: BusinessDetailsErrors = {};
   if (registeredBusinessname === "") {
     errors.businessname = "Registered businessname needs to be specified";
@@ -118,8 +122,7 @@ const passwordRegex = new RegExp(
   "^(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*])(?=.{12,})"
 );
 // eslint-disable-next-line
-const emailValidation =
-  /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+const emailValidation = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
 
 export const isPasswordValid = (p: string): boolean => passwordRegex.test(p);
 

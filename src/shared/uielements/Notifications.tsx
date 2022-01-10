@@ -4,14 +4,14 @@ import {
   Animated,
   Dimensions,
   StyleSheet,
-  TouchableWithoutFeedback,
+  TouchableWithoutFeedback
 } from "react-native";
 import { Text } from "react-native-elements";
 import {
   PanGestureHandler,
   PanGestureHandlerGestureEvent,
   PanGestureHandlerStateChangeEvent,
-  State,
+  State
 } from "react-native-gesture-handler";
 import { useNotifications } from "src/hooks";
 import { colors } from "src/theme/colors";
@@ -32,14 +32,14 @@ const styles = StyleSheet.create({
     paddingVertical: 10,
     backgroundColor: "white",
     width: CONTAINER_WIDTH,
-    zIndex: 2,
+    zIndex: 2
   },
   title: {
-    fontFamily: FontFamily.bold,
+    fontFamily: FontFamily.bold
   },
   link: {
-    color: colors.gold,
-  },
+    color: colors.gold
+  }
 });
 
 const TRANSLATE_Y_RANGE = -30;
@@ -58,7 +58,7 @@ const Notifications = () => {
       Animated.timing(value, {
         toValue: VISIBLE_POSITION,
         duration: DURATION,
-        useNativeDriver: false,
+        useNativeDriver: false
       }).start();
     }
   }, [notification]);
@@ -90,14 +90,14 @@ const Notifications = () => {
       Animated.timing(value, {
         toValue: HIDDEN_POSITION,
         duration: DURATION,
-        useNativeDriver: false,
+        useNativeDriver: false
       }).start(() => setNotification(null));
     }
     if (translationY > TRANSLATE_Y_RANGE && state === State.END) {
       Animated.timing(value, {
         toValue: VISIBLE_POSITION,
         duration: DURATION,
-        useNativeDriver: false,
+        useNativeDriver: false
       }).start();
     }
   };

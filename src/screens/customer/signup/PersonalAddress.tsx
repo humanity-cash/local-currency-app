@@ -7,7 +7,7 @@ import {
   SafeAreaView,
   ScrollView,
   StyleSheet,
-  View,
+  View
 } from "react-native";
 import { Text } from "react-native-elements";
 import { UserAPI } from "src/api";
@@ -21,30 +21,30 @@ import {
   Button,
   CancelBtn,
   Header,
-  PersonalAddressForm,
+  PersonalAddressForm
 } from "src/shared/uielements";
 import { colors } from "src/theme/colors";
 import {
   underlineHeader,
   viewBase,
-  wrappingContainerBase,
+  wrappingContainerBase
 } from "src/theme/elements";
 import Translation from "src/translation/en.json";
 import { isSuccessResponse } from "src/utils/http";
 
 const styles = StyleSheet.create({
   content: {
-    paddingBottom: 40,
+    paddingBottom: 40
   },
   headerText: {
     fontSize: 32,
     color: colors.darkGreen,
-    lineHeight: 35,
+    lineHeight: 35
   },
   bottomView: {
     marginHorizontal: 20,
-    marginBottom: 20,
-  },
+    marginBottom: 20
+  }
 });
 
 const PersonalAddress = (): React.ReactElement => {
