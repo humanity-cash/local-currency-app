@@ -63,7 +63,8 @@ const TransactionList = (props: MyTransactionsInput): JSX.Element => {
   useEffect(() => {
    setIsLoading(true);
    loadTransactions();
-   setTimeout(() => setIsLoading(false), 2000);
+   const tm = setTimeout(() => setIsLoading(false), 2000);
+   return () => clearTimeout(tm)
   }, [userId]);
 
   const loadTransactions = (isWithLoading = false) => {
