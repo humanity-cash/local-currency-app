@@ -25,8 +25,8 @@ export const NOT_AUTHENTICATED: BaseResponse<undefined> = {
   error: "noUserAuthed"
 };
 
-const USERPOOL_ID = "us-west-1_3KYtffysk";
-const CLIENT_ID = "19rsrqi8s115pqeo4pfn7c2voq";
+const USERPOOL_ID = "us-west-1_KU4cKOfV4";
+const CLIENT_ID = "5ejkc0cno24js5n8i4eefh5oim";
 
 const poolData = {
   UserPoolId: USERPOOL_ID,
