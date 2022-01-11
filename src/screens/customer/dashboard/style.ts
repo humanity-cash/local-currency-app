@@ -2,6 +2,11 @@ import { colors } from "src/theme/colors";
 import { StyleSheet } from "react-native";
 
 export const styles = StyleSheet.create({
+  fitImage: {
+    borderRadius: 20,
+    height: 100,
+    width: 30,
+  },
   content: { paddingBottom: 80 },
   inlineView: { flexDirection: "row" },
   headerText: {
