@@ -374,7 +374,7 @@ const Report = (): JSX.Element => {
       </ScrollView>
       {!isStartDate && !isEndDate && (
         <KeyboardAvoidingView
-          behavior={Platform.OS == "ios" ? "padding" : "height"}
+          {...(Platform.OS === 'ios' && { behavior: 'padding' })}
         >
           <View style={styles.bottomView}>
             <Button

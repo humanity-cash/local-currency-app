@@ -231,7 +231,7 @@ const CashierReturnQRCodeScan = (): JSX.Element => {
       {isReturnModal && (
         <Modal visible={isReturnModal}>
           <KeyboardAvoidingView
-            behavior={Platform.OS == "ios" ? "padding" : "height"}
+            {...(Platform.OS === 'ios' && { behavior: 'padding' })}
             style={modalViewBase}
           >
             <ModalHeader
