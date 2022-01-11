@@ -58,6 +58,7 @@
     "react-native-dotenv": "^3.2.0",
     "react-native-dropdown-picker": "^5.1.27",
     "react-native-elements": "^2.1.0",
+    "react-native-fit-image": "^1.5.5",
     "react-native-gesture-handler": "~1.10.2",
     "react-native-mask-input": "^1.1.1",
     "react-native-modal-datetime-picker": "^13.0.0",

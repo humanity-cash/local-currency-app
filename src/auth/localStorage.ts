@@ -26,3 +26,27 @@ export const getLatestSelectedAccountType = async (
     return "";
   }
 };
+
+export const saveTokenToLocalStorage = async (
+ token: string,
+): Promise<boolean> => {
+ try {
+  await AsyncStorage.setItem(`@token`, String(token));
+  return true;
+ } catch (e) {
+  return false;
+ }
+};
+
+export const getTokenFromLocalStorage = async (
+): Promise<string> => {
+ try {
+  const value: string | null = await AsyncStorage.getItem(
+   `@token`
+  );
+  if (!value) return "";
+  return value;
+ } catch (e) {
+  return "";
+ }
+};

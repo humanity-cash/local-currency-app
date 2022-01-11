@@ -87,3 +87,16 @@ export const eventDatas = (res: AxiosPromiseResponse): IEvent[] => {
     return !event.closed;
   });
 };
+
+export const formatContent = (res: AxiosPromiseResponse) => {
+ if(!res?.data) return [];
+ //@ts-ignore
+ const list = res?.data?.map((d: any) => { 
+  if(d.image.includes(".tif.svg")) {
+   return {...d, image: ``} 
+  }
+  return {...d, image: `${d.image}?w=500`} 
+ })
+
+ return list;
+}
