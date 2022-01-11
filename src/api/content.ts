@@ -21,6 +21,3 @@ export const getFeedContent = async (): Promise<FeedItemProps[]> => {
     return []
    }
   }
-
-
-    // const api_url = "https://baklava.api.humanity.cash/content?random=6";
