@@ -56,11 +56,14 @@ const TransactionList = (props: MyTransactionsInput): JSX.Element => {
   }, [startDate, endDate, selectedType, apiData]);
 
   useEffect(() => {
-    setInterval(() => loadTransactions(), 5000);
+    const corn = setInterval(() => loadTransactions(), 5000);
+    return () => clearInterval(corn)
   }, []);
 
   useEffect(() => {
-    loadTransactions(true);
+   setIsLoading(true);
+   loadTransactions();
+   setTimeout(() => setIsLoading(false), 2000);
   }, [userId]);
 
   const loadTransactions = (isWithLoading = false) => {
@@ -70,16 +73,19 @@ const TransactionList = (props: MyTransactionsInput): JSX.Element => {
           setIsLoading(true);
         }
         let txs: MiniTransaction[] = [];
-        if (userType === UserType.Cashier) {
+        try {
+         if (userType === UserType.Cashier) {
           txs = await TransactionsAPI.getBlockchainTransactions(userId);
-        } else if (userType !== UserType.NotVerified) {
+         } else if (userType !== UserType.NotVerified) {
           txs = await TransactionsAPI.getAllTransactions(userId);
-        }
-        const formattedTxs = sortTxByTimestamp(txs);
-        setAPIData(formattedTxs);
-        setFilteredData(formattedTxs);
-        if (isWithLoading) {
-          setIsLoading(false);
+         }
+         setIsLoading(false);
+         const formattedTxs = sortTxByTimestamp(txs);
+         setAPIData(formattedTxs);
+         setFilteredData(formattedTxs);
+        } catch (err) {
+         console.log(err)
+         setIsLoading(false);
         }
       };
       handler();
