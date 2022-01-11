@@ -142,3 +142,9 @@ export interface IEvent {
   level: string;
   dbId: string;
 }
+
+export interface FeedItemProps {
+ textTitle: string;
+ text: string;
+ image: string;
+}
