@@ -3,7 +3,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { UserAPI } from "src/api";
 import * as userController from "src/auth/cognito";
 import { signInInitialState, signUpInitialState } from "src/auth/consts";
-import { getLatestSelectedAccountType } from "src/auth/localStorage";
+import { getLatestSelectedAccountType, saveTokenToLocalStorage } from "src/auth/localStorage";
 import {
   AuthStatus,
   BaseResponse,
@@ -51,16 +51,24 @@ export const AuthProvider: React.FunctionComponent = ({ children }) => {
         CognitoUserSession | undefined
       > = await userController.getSession();
       if (response.success && response.data && response.data.isValid()) {
-        const email = response.data.getIdToken().decodePayload().email;
-        setUserEmail(email);
-        updateAuthStatus(AuthStatus.SignedIn);
+       //@ts-ignore
+       await saveUserToken(response);
+       const email = response.data.getIdToken().decodePayload().email;
+       setUserEmail(email);
+       updateAuthStatus(AuthStatus.SignedIn);
       } else {
-        updateAuthStatus(AuthStatus.SignedOut);
+       updateAuthStatus(AuthStatus.SignedOut);
       }
     } catch (err) {
-      updateAuthStatus(AuthStatus.SignedOut);
+     updateAuthStatus(AuthStatus.SignedOut);
     }
   };
+
+  const saveUserToken = async (i: BaseResponse<CognitoUserSession | undefined>) => {
+   // const jwtToken = i?.data?.getIdToken().getJwtToken() || "";
+   const jwtToken = i?.data?.getAccessToken().getJwtToken() || "";
+   await saveTokenToLocalStorage(jwtToken)
+  }
 
   useEffect(() => {
     const loadCachedAuth = async () => {
@@ -71,6 +79,7 @@ export const AuthProvider: React.FunctionComponent = ({ children }) => {
         > = await userController.getSession();
         if (response.success && response.data && response.data.isValid()) {
           const email = response.data.getIdToken().decodePayload().email;
+          await saveUserToken(response);
           setUserEmail(email);
           const user = await UserAPI.getUserByEmail(email);
           if (!Object.keys(user).length) {

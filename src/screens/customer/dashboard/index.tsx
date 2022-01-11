@@ -1,4 +1,6 @@
 import { AntDesign, Entypo } from "@expo/vector-icons";
+import axios from "axios";
+import FitImage from 'react-native-fit-image';
 import { DrawerActions, useNavigation } from "@react-navigation/native";
 import React, { useContext, useState, useEffect } from "react";
 import {
@@ -30,10 +32,13 @@ import { EventsContext } from "src/contexts/events";
 import EventItem from "src/shared/uielements/EventItem";
 import { CustomerScanQrCodeStyle } from "src/style";
 import { styles } from "./style";
+import { FeedItemProps } from "src/api/types";
+import { getFeedContent } from "src/api/content";
 
 const CustomerDashboard = (): JSX.Element => {
   const navigation = useNavigation();
   const [isVisible, setIsVisible] = useState<boolean>(false);
+  const [feedData, setFeedData] = useState<FeedItemProps []>([]);
   const [isLoadup, setIsLoadup] = useState<boolean>(false);
   const [isPayment, setIsPayment] = useState<boolean>(false);
   const [isSetting, setIsSetting] = useState(false);
@@ -52,6 +57,7 @@ const CustomerDashboard = (): JSX.Element => {
 
   useEffect(() => {
     updateEvents([]);
+    fetchFeedData()
   }, []);
 
   useEffect(() => {
@@ -62,6 +68,7 @@ const CustomerDashboard = (): JSX.Element => {
         setShowEvents(true);
       }
     }, 5000);
+
     return () => clearInterval(timerId);
   }, [customerDwollaId]);
 
@@ -71,10 +78,15 @@ const CustomerDashboard = (): JSX.Element => {
   };
 
   const onClose = () => {
-    setIsVisible(false);
-    setIsPayment(false);
-    setIsLoadup(false);
+   setIsVisible(false);
+   setIsPayment(false);
+   setIsLoadup(false);
   };
+
+  const fetchFeedData = async () => {
+   const data = await getFeedContent();
+   setFeedData(data);
+  }
 
   const onPressScan = async () => {
     const { status } = await BarCodeScanner.requestPermissionsAsync();
@@ -101,6 +113,7 @@ const CustomerDashboard = (): JSX.Element => {
     if (customerDwollaId) {
       updateCustomerWalletData(customerDwollaId);
       await getEvents(customerDwollaId);
+      await fetchFeedData();
       setShowEvents(true);
     }
     setRefreshing(false);
@@ -177,32 +190,7 @@ const CustomerDashboard = (): JSX.Element => {
                 }}
               />
             )}
-
-            <View style={styles.feedView}>
-              <View style={styles.feedHeader}>
-                <Text h3>Merchant of the month</Text>
-                <Text h3>{feedData[0].month}</Text>
-              </View>
-              <Text h2>{feedData[0].author}</Text>
-              <Text style={styles.bodyText}>{feedData[0].content}</Text>
-              <Image
-                source={require("../../../../assets/images/feed1.png")}
-                containerStyle={styles.image}
-              />
-            </View>
-
-            <View style={styles.feedView}>
-              <View style={styles.feedHeader}>
-                <Text h3>Merchant of the month</Text>
-                <Text h3>{feedData[1].month}</Text>
-              </View>
-              <Text h2>{feedData[1].author}</Text>
-              <Text style={styles.bodyText}>{feedData[1].content}</Text>
-              <Image
-                source={require("../../../../assets/images/feed2.png")}
-                containerStyle={styles.image}
-              />
-            </View>
+           {feedData.map((f, i) => <FeedItem key={i} {...f} />)}
           </View>
         </ScrollView>
       </View>
@@ -263,20 +251,18 @@ const CustomerDashboard = (): JSX.Element => {
   );
 };
 
-//MOCK
-const feedData = [
-  {
-    month: "SEPTEMBER",
-    author: "Dory & Ginger",
-    content:
-      "Our motto is Live and Give. We have treasures for your home and lifestyle, along with the perfect gift for that special someone or that occasion that begs for something unique."
-  },
-  {
-    month: "SEPTEMBER",
-    author: "The Mahican (Muh-he-ka-new)",
-    content:
-      "Native American clan lived in the territory that presently makes up Berkshire County."
-  }
-];
+const FeedItem = (props: FeedItemProps) => {
+ const { text, textTitle, image } = props;
+
+ return (
+  <View style={styles.feedView}>
+   <Text h2>{textTitle}</Text>
+   <Text style={styles.bodyText}>{text}</Text>
+   {
+    image?.length ? <FitImage source={{uri: image }} /> : null
+   }
+  </View>
+ )
+}
 
 export default CustomerDashboard;
