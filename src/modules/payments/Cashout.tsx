@@ -136,7 +136,7 @@ const CashoutAmount = (props: CashOutInput): JSX.Element => {
 
   return (
     <KeyboardAvoidingView
-      behavior={Platform.OS == "ios" ? "padding" : "height"}
+      {...(Platform.OS === 'ios' && { behavior: 'padding' })}
       style={isCustomer ? viewBase : viewBaseB}
     >
       <LoadingPage visible={isLoading} isPayment={true} />
