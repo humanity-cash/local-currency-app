@@ -369,7 +369,7 @@ const SendPayment = (props: SendPaymentInput): JSX.Element => {
       {isOpenPayment && (
         <Modal visible={isOpenPayment}>
           <KeyboardAvoidingView
-            behavior={Platform.OS == "ios" ? "padding" : "height"}
+            {...(Platform.OS === 'ios' && { behavior: 'padding' })}
             style={modalViewBase}
           >
             <ModalHeader

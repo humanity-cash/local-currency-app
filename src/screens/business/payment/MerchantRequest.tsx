@@ -199,7 +199,7 @@ const MerchantRequest = (): JSX.Element => {
 
   return (
     <KeyboardAvoidingView
-      behavior={Platform.OS == "ios" ? "padding" : "height"}
+      {...(Platform.OS === 'ios' && { behavior: 'padding' })}
       style={viewBaseB}
     >
       <Header
