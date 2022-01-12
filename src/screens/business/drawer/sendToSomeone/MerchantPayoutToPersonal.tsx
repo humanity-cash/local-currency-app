@@ -90,7 +90,7 @@ const MerchantCashoutAmount = (): JSX.Element => {
 
     return (
         <KeyboardAvoidingView
-            behavior={Platform.OS == "ios" ? "padding" : "height"}
+            {...(Platform.OS === 'ios' && { behavior: 'padding' })}
             style={viewBaseB}>
             <Header
                 leftComponent={<BackBtn color={colors.purple} onClick={() => navigation.goBack()} />}

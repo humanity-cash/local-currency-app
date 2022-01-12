@@ -130,7 +130,7 @@ export const SettingsSecurity = (): JSX.Element => {
 
 	return (
 		<KeyboardAvoidingView
-			behavior={Platform.OS == "ios" ? "padding" : "height"}
+            {...(Platform.OS === 'ios' && { behavior: 'padding' })}
 			style={viewBase}>
 			<LoadingPage visible={isLoading} isData={true} />
 			<Header

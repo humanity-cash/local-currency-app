@@ -9,7 +9,7 @@ export const getFeedContent = async (): Promise<FeedItemProps[]> => {
       if(d.image.includes(".tif.svg")) {
        return {...d, image: ``} 
       }
-       return {...d, image: `${d.image}?w=500`} 
+       return {...d, image: `${d.image}?w=320`} 
      })
 
      return data;

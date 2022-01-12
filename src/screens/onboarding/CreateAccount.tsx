@@ -7,7 +7,8 @@ import {
   StyleSheet,
   View,
   Linking,
-  SafeAreaView
+  SafeAreaView,
+  Keyboard
 } from "react-native";
 import { CheckBox, Text } from "react-native-elements";
 import { AuthContext } from "src/contexts";
@@ -80,9 +81,14 @@ const CreateAccount = (): JSX.Element => {
     updateSignUpDetails({ email: change });
   };
 
+  const onPressNext = () => {
+    Keyboard.dismiss()
+    navigation.navigate(Routes.PASSWORD)
+  }
+
   return (
     <KeyboardAvoidingView
-      behavior={Platform.OS == "ios" ? "padding" : "height"}
+      {...(Platform.OS === 'ios' && { behavior: 'padding' })}
       style={viewBase}
     >
       <Header leftComponent={<BackBtn onClick={() => navigation.goBack()} />} />
@@ -143,7 +149,7 @@ const CreateAccount = (): JSX.Element => {
           type={BUTTON_TYPES.DARK_GREEN}
           title="NEXT"
           disabled={!isEmailValid(signUpDetails.email) || !isSelected}
-          onPress={() => navigation.navigate(Routes.PASSWORD)}
+          onPress={onPressNext}
         />
       </SafeAreaView>
     </KeyboardAvoidingView>
