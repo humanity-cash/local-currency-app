@@ -59,7 +59,8 @@ export const BusinessScanQrCodeStyle = StyleSheet.create({
 	},
 	view: {
 		paddingVertical: 10,
-		alignItems: 'center'
+		alignItems: 'center',
+		marginBottom: 20
 	},
 	transparentBtn: {
 		backgroundColor: colors.white,
@@ -185,7 +186,8 @@ export const CustomerScanQrCodeStyle = StyleSheet.create({
 	},
 	view: {
 		paddingVertical: 10,
-		alignItems: 'center'
+		alignItems: 'center',
+		marginBottom: 20
 	},
 	transparentBtn: {
 		backgroundColor:

@@ -242,7 +242,7 @@
   "SCAN_RECIPIENTS_QR": "Scan the customer’s return receipt QR code.",
   "SCAN_RECIPIENTS_QR_DETAIL": "The customer needs to provide the transaction receipt, and select “Make a Return” in order to generate a QR Code. Scan this QR code in order to the refund BerkShares to the customer.",
   "SCAN_TO_PAY_REQUEST": "Scan to Pay or Request",
-  "CHOOSE_ROUND_UP": "choose to round up and directly donate to the Community Chest Fund which provides scholarships & grants to people in the area.",
+  "CHOOSE_ROUND_UP": "Choose to round up and directly donate to the Community Chest Fund which provides scholarships & grants to people in the area.",
   "NOT_REFUNABLE_DONATION": "*THE ROUND UP IS A NON REFUNABLE DONATION.",
   "PAYMENT_NO_BANK_TITLE": "Whoooops. You cannot make a payment yet.",
   "PAYMENT_NO_BANK_DETAIL": "First link your bank account and load up B$ to make sure you have enough B$ for your purchase.",

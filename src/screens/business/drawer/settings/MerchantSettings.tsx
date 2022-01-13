@@ -119,14 +119,14 @@ export const MerchantSettings = (): JSX.Element => {
 					/>
 				</View>
 			</ScrollView>
-			<View style={styles.signOutView}>
+			{/* <View style={styles.signOutView}>
 				<Button
 					type={BUTTON_TYPES.TRANSPARENT}
 					title={Translation.BUTTON.DELETE_ACCOUNT}
 					textStyle={styles.signOutButton}
 					onPress={()=>setIsVisible(true)}
 				/>
-			</View>
+			</View> */}
 			{isVisible && (
 				<Dialog visible={isVisible} onClose={()=>setIsVisible(false)} backgroundStyle={styles.dialogBg}>
 					<View style={dialogViewBase}>
