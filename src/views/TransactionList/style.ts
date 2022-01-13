@@ -124,7 +124,7 @@ export const styles = StyleSheet.create({
     justifyContent: "space-between"
   },
   detailText: {
-    fontSize: 10,
+    fontSize: 12,
     marginHorizontal: 10,
     color: colors.bodyText
   },
