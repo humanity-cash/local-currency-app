@@ -82,10 +82,10 @@ export const TransactionDetail = (props: TransactionDetailProps) => {
   const { data, visible, onClose } = props;
   return (
     <Dialog visible={visible} onClose={onClose} style={styles.dialogHeight}>
-      <View style={dialogViewBase}>
+      <View style={[dialogViewBase]}>
         <ScrollView style={wrappingContainerBase}>
           <View style={styles.headerView}>
-            <Text style={getStyle(data.type)}>
+            <Text style={[getStyle(data.type), {fontSize: 32}]}>
               {" "}
               {getBerksharePrefix(data.type)} {data.value}{" "}
             </Text>
@@ -94,7 +94,7 @@ export const TransactionDetail = (props: TransactionDetailProps) => {
             <Text style={styles.detailText}>
               {Translation.PAYMENT.TRANSACTION_ID}
             </Text>
-            <Text style={styles.detailText}>{data.transactionHash}</Text>
+            <Text style={[styles.detailText, {flex: 1}]}>{data.transactionHash}</Text>
           </View>
           <View style={styles.detailView}>
             <Text style={styles.detailText}>TYPE</Text>
