@@ -116,7 +116,7 @@ const PaymentConfirm = (props: PaymentConfirmProps) => {
           </View>
         </View>
 
-        <View>
+        <View style={{marginTop: 20}}>
           <Button
             type={BUTTON_TYPES.TRANSPARENT}
             style={styles.transparentBtn}

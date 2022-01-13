@@ -140,7 +140,7 @@ export const SettingsSecurity = (): JSX.Element => {
 				<View style={underlineHeader}>
 					<Text style={styles.headerText}>{Translation.COMMUNITY_CHEST.SECURITY}</Text>
 				</View>
-				<View style={styles.view}>
+				{/* <View style={styles.view}>
 					<Text>{Translation.COMMUNITY_CHEST.ALLOW_TOUCH}</Text>
 					<Switch
 						trackColor={{ false: colors.white, true: colors.green }}
@@ -150,7 +150,7 @@ export const SettingsSecurity = (): JSX.Element => {
 						value={switchToggle}
 					/>
 				</View>
-				<View style={underlineHeader}></View>
+				<View style={underlineHeader}></View> */}
 				<View>
 					<Text style={styles.label}>{Translation.LABEL.OLD_PASSWORD}</Text>
 					<BlockInput

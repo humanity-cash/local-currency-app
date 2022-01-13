@@ -98,14 +98,14 @@ export const Settings = (): ReactElement => {
 					/>
 				</View>
 			</ScrollView>
-			<View style={styles.signOutView}>
+			{/* <View style={styles.signOutView}>
 				<Button
 					type="transparent"
 					title={Translation.BUTTON.DELETE_ACCOUNT}
 					textStyle={styles.signOutButton}
 					onPress={()=>setIsVisible(true)}
 				/>
-			</View>
+			</View> */}
 			{isVisible && (
 				<Dialog visible={isVisible} onClose={()=>setIsVisible(false)}>
 					<View style={dialogViewBase}>
