@@ -147,5 +147,9 @@ export const styles = StyleSheet.create({
   },
   dialogHeight: {
     height: 300
+  },
+  underlineText: {
+    textDecorationLine: "underline",
+    flex: 1
   }
 });
