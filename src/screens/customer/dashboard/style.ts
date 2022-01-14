@@ -93,12 +93,14 @@ export const styles = StyleSheet.create({
   topupButton: {
     justifyContent: "center",
     alignItems: "center",
-    paddingLeft: 10,
-    paddingRight: 10,
+    paddingHorizontal: 10,
     borderRadius: 10,
     backgroundColor: colors.darkGreen
   },
-  topupText: { color: colors.white, fontSize: 16 },
+  topupText: { 
+    color: colors.white, 
+    fontSize: 16
+  },
   dialog: {
     height: 320
   },
