@@ -3,6 +3,7 @@ const API_URL = "https://baklava.api.humanity.cash/";
 const DEV_CORE_API_URL = API_URL;
 const PROD_CORE_API_URL = API_URL;
 
+export const BAKLAVA_TRANSACTION_URL = "https://baklava-blockscout.celo-testnet.org/"
 export const DWOLLA_PRIVACY_URL = "https://www.dwolla.com/legal/privacy/";
 export const DWOLLA_TERMS_URL = "https://www.dwolla.com/legal/tos/";
 export const BERKSHARE_PRIVACY_URL =
