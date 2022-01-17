@@ -220,8 +220,8 @@ const SendPayment = (props: SendPaymentInput): JSX.Element => {
     } else {
       showToast(
         ToastType.ERROR,
-        "Whooops, something went wrong.",
-        "Invalide QRCode"
+        "Whoops, something went wrong.",
+        "Invalid QRCode"
       );
     }
   };
@@ -254,7 +254,7 @@ const SendPayment = (props: SendPaymentInput): JSX.Element => {
       if (response.data) {
         navigation.navigate(Routes.PAYMENT_SUCCESS);
       } else {
-        showToast(ToastType.ERROR, "Failed", "Whooops, something went wrong.");
+        showToast(ToastType.ERROR, "Failed", "Whoops, something went wrong.");
         navigation.navigate(Routes.PAYMENT_FAILED);
       }
     } else {
@@ -287,7 +287,7 @@ const SendPayment = (props: SendPaymentInput): JSX.Element => {
       } else {
         showToast(
           ToastType.ERROR,
-          "Whooops, something went wrong.",
+          "Whoops, something went wrong.",
           "Connection failed"
         );
       }
@@ -295,7 +295,7 @@ const SendPayment = (props: SendPaymentInput): JSX.Element => {
     } else {
       showToast(
         ToastType.ERROR,
-        "Whooops, something went wrong.",
+        "Whoops, something went wrong.",
         "Connection failed"
       );
     }

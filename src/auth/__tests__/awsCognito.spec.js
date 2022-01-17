@@ -15,7 +15,7 @@
 
 // const userPool = new CognitoUserPool(poolData);
 
-// /**Get a user that is not authroised */
+// /**Get a user that is not authorized */
 // const getCognitoUser = (email) => new CognitoUser({
 // 	Username: email,
 // 	Pool: userPool,

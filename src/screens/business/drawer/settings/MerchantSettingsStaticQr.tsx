@@ -66,7 +66,7 @@ const MerchantSettingsStaticQr = (): JSX.Element => {
 
 	// const sendEmail = (dataURL: string) => {
   //       const to = ["info@berkshares.org"] // string or array of email addresses
-  //       const path = `data:imgae/png;base64,${dataURL}`
+  //       const path = `data:image/png;base64,${dataURL}`
 
   //       MailComposer.composeAsync({
   //           subject: 'From BerkShare',

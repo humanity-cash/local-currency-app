@@ -71,7 +71,7 @@ const TransactionDetails = (props: TransactionDetailsProps) => {
       case TransactionType.ADDCASH:
         return "Added cash to wallet";
       case TransactionType.WITHDRAW:
-        return "Withdrawed cash from wallet";
+        return "Withdrew cash from wallet";
       case TransactionType.SELL:
         return `Sold ${(transaction as OrderTransaction).shares} ${
           (transaction as OrderTransaction).shares === 1 ? "share" : "shares"
