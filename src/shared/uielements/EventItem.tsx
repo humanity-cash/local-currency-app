@@ -102,13 +102,6 @@ const EventItem = (props: EventItemProps) => {
         }
       />
       <Text style={styles.notificationText}>{props.event.message} &nbsp;</Text>
-      {/* <TouchableOpacity onPress={props.onDelete}>
-				<AntDesign
-					name='closecircleo'
-					size={18}
-					style={styles.errorIcon}
-				/>
-			</TouchableOpacity> */}
     </TouchableOpacity>
   );
 };
