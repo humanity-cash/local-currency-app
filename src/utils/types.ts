@@ -159,7 +159,7 @@ export enum OrderType {
 }
 
 export enum StatusType {
-  PROGRESS = "inprogress",
+  PROGRESS = "in progress",
   COMPLETE = "complete",
   PARTIALLY = "partially"
 }
@@ -300,7 +300,7 @@ export enum TransactionType {
   DONATION = "Donation",
   CUSTOMER_RETURN = "Customer return",
   DEPOSIT = "Deposit",
-  PURCHASEMENT = "Purchasement",
+  PURCHASEMENT = "Purchase",
   IN = "IN",
   OUT = "OUT"
 }
@@ -312,7 +312,7 @@ export const TransactionTypes = {
   Transfer: "Transfer",
   Donation: "Donation",
   "Customer return": "Customer return",
-  Purchasement: "Purchasement"
+  Purchasement: "Purchase"
 };
 
 export type MerchantTransactionItem = {

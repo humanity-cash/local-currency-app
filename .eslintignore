@@ -6,3 +6,7 @@ dist
 coverage
 
 src/shared/uielements/ChartView.tsx
+
+.expo
+web-build
+.eslintrc.js

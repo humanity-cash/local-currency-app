@@ -147,8 +147,8 @@ const CashierReturnQRCodeScan = (): JSX.Element => {
       if (qrcodeData.transactionHash === "") {
         showToast(
           ToastType.ERROR,
-          "Whooops, something went wrong.",
-          "Ivalid QRCode"
+          "Whoops, something went wrong.",
+          "Invalid QRCode"
         );
         return;
       }
@@ -158,8 +158,8 @@ const CashierReturnQRCodeScan = (): JSX.Element => {
     } else {
       showToast(
         ToastType.ERROR,
-        "Whooops, something went wrong.",
-        "Ivalid QRCode"
+        "Whoops, something went wrong.",
+        "Invalid QRCode"
       );
     }
   };
@@ -187,12 +187,12 @@ const CashierReturnQRCodeScan = (): JSX.Element => {
         setIsReturnModal(false);
         showToast(ToastType.SUCCESS, "Success", `You have sent B$ ${amount}.`);
       } else {
-        showToast(ToastType.ERROR, "Failed", "Whooops, something went wrong.");
+        showToast(ToastType.ERROR, "Failed", "Whoops, something went wrong.");
         setIsLoading(false);
         setIsReturnModal(false);
       }
     } else {
-      showToast(ToastType.ERROR, "Failed", "Whooops, something went wrong.");
+      showToast(ToastType.ERROR, "Failed", "Whoops, something went wrong.");
       navigation.navigate(Routes.CASHIER_DASHBOARD);
     }
     setIsLoading(false);
