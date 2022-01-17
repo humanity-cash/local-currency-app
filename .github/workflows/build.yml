@@ -18,7 +18,7 @@ jobs:
           yarn global add expo-cli
       - name: Run Checks
         run: |
-          yarn lint
+          yarn eslint
           yarn test
       # - name: Run Build
       #   run: |
