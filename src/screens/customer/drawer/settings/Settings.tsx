@@ -55,13 +55,6 @@ const styles = StyleSheet.create({
 export const Settings = (): ReactElement => {
 	const navigation = useNavigation();
 
-	const [isVisible, setIsVisible] = useState<boolean>(false);
-
-	const handleDelete = () => {
-		setIsVisible(false);
-		navigation.navigate(Routes.SETTING_DELETE_ACCOUNT);
-	}
-	
 	return (
 		<View style={viewBase}>
 			<Header
@@ -98,30 +91,6 @@ export const Settings = (): ReactElement => {
 					/>
 				</View>
 			</ScrollView>
-			{/* <View style={styles.signOutView}>
-				<Button
-					type="transparent"
-					title={Translation.BUTTON.DELETE_ACCOUNT}
-					textStyle={styles.signOutButton}
-					onPress={()=>setIsVisible(true)}
-				/>
-			</View> */}
-			{isVisible && (
-				<Dialog visible={isVisible} onClose={()=>setIsVisible(false)}>
-					<View style={dialogViewBase}>
-						<View style={styles.dialogWrap}>
-							<Text style={styles.dialogHeader}>Are you sure you want to delete your account?</Text>
-						</View>
-						<View style={styles.dialogBottom}>
-							<Button
-								type="darkGreen"
-								title="Delete account"
-								onPress={handleDelete}
-							/>
-						</View>
-					</View>
-				</Dialog>
-			)}
 		</View>
 	);
 }

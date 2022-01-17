@@ -2,12 +2,10 @@ import { useNavigation } from '@react-navigation/native';
 import React, { ReactElement, useState } from 'react';
 import { ScrollView, StyleSheet, View } from "react-native";
 import { Text, Image } from 'react-native-elements';
-import { Header, Dialog, BackBtn, Button } from "src/shared/uielements";
-import { underlineHeaderB, viewBaseB, dialogViewBase } from "src/theme/elements";
+import { Header, BackBtn } from "src/shared/uielements";
+import { underlineHeaderB, viewBaseB } from "src/theme/elements";
 import { colors } from "src/theme/colors";
 import Translation from 'src/translation/en.json';
-import * as Routes from 'src/navigation/constants';
-import { BUTTON_TYPES } from 'src/constants';
 import { FontFamily } from "src/theme/elements";
 
 const styles = StyleSheet.create({
@@ -84,14 +82,7 @@ const styles = StyleSheet.create({
 
 export const MerchantSettingsBankAccount = (): ReactElement => {
 	const navigation = useNavigation();
-
-	const [isVisible, setIsVisible] = useState<boolean>(false);
 	const [hasBankAccount, setHasBankAccount] = useState<boolean>(true);
-
-	const handleRemove = () => {
-		setHasBankAccount(false);
-		setIsVisible(false);
-	}
 
 	return (
 		<View style={viewBaseB}>
@@ -132,43 +123,6 @@ export const MerchantSettingsBankAccount = (): ReactElement => {
 					)
 				}
 			</ScrollView>
-			<View style={styles.bottomView}>
-				{
-					hasBankAccount && (
-						<Button
-							type={BUTTON_TYPES.TRANSPARENT}
-							title={Translation.BUTTON.DELETE_ACCOUNT}
-							textStyle={styles.deleteBtn}
-							onPress={()=>setIsVisible(true)}
-						/>
-					)
-				}
-				{
-					!hasBankAccount && (
-						<Button
-							type={BUTTON_TYPES.PURPLE}
-							title={Translation.BUTTON.LINK_BUSINESS_BANK}
-							onPress={()=>navigation.navigate(Routes.MERCHANT_BANK_ACCOUNT)}
-						/>
-					)
-				}
-			</View>
-			{isVisible && (
-				<Dialog visible={isVisible} onClose={()=>setIsVisible(false)} backgroundStyle={styles.dialogBg}>
-					<View style={dialogViewBase}>
-						<View style={styles.dialogWrap}>
-							<Text style={styles.dialogHeader}>{Translation.COMMUNITY_CHEST.REMOVE_BANK_ACCOUNT}</Text>
-						</View>
-						<View style={styles.dialogBottom}>
-							<Button
-								type={BUTTON_TYPES.PURPLE}
-								title={Translation.BUTTON.REMOVE}
-								onPress={handleRemove}
-							/>
-						</View>
-					</View>
-				</Dialog>
-			)}
 		</View>
 	);
 }
