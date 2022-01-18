@@ -32,7 +32,7 @@ const MerchantPayoutPending = (): JSX.Element => {
 	});
 
 	return (
-		<View style={viewBase}>
+		<SafeAreaView style={viewBase}>
 			<Header />
 			<ScrollView style={wrappingContainerBase}>
 				<View style={ baseHeader }>
@@ -43,7 +43,7 @@ const MerchantPayoutPending = (): JSX.Element => {
 			<SafeAreaView style={styles.bottomView}>
 				<ActivityIndicator size="large" color={colors.purple} />
 			</SafeAreaView>
-		</View>
+		</SafeAreaView>
 	);
 }
 

@@ -15,16 +15,16 @@ const styles = StyleSheet.create({
   container: {
     paddingVertical: 10,
     flexDirection: "row",
-    alignItems: "center"
+    alignItems: "center",
   },
   arrow: {
-    paddingLeft: 10
+    paddingLeft: 10,
   },
   text: {
     paddingLeft: 10,
 
-    textAlignVertical: "center"
-  }
+    textAlignVertical: "center",
+  },
 });
 
 const BackBtn = (props: BackBtnProps) => {

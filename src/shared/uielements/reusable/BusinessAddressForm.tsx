@@ -16,26 +16,26 @@ interface BusinessAddressProps {
 
 const styles = StyleSheet.create({
   bodyText: {
-    color: colors.bodyText
+    color: colors.bodyText,
   },
   label: {
     color: colors.bodyText,
-    fontSize: 10
+    fontSize: 10,
   },
   errorLabel: {
     color: colors.bodyText,
     fontSize: 10,
-    marginTop: 5
+    marginTop: 5,
   },
   inlineView: {
     flex: 1,
-    flexDirection: "row"
+    flexDirection: "row",
   },
   cityView: {
-    width: "70%"
+    width: "70%",
   },
   stateContent: {
-    width: "30%"
+    width: "30%",
   },
   stateView: {
     height: 55,
@@ -43,18 +43,18 @@ const styles = StyleSheet.create({
     backgroundColor: colors.white,
     borderRadius: 3,
     marginTop: 8,
-    marginLeft: 4
+    marginLeft: 4,
   },
   pickerText: {
     color: colors.purple,
-    textAlign: "center"
+    textAlign: "center",
   },
   selectItem: {
     width: "100%",
     height: 55,
-    backgroundColor: colors.white
+    backgroundColor: colors.white,
   },
-  dropdownContainer: { marginTop: -22 }
+  dropdownContainer: { marginTop: -22 },
 });
 
 const BusinessAddressForm = (props: BusinessAddressProps): JSX.Element => {
@@ -72,7 +72,7 @@ const BusinessAddressForm = (props: BusinessAddressProps): JSX.Element => {
 
   const onValueChange = (name: string, change: string) => {
     updateBusinessData({
-      [name]: change
+      [name]: change,
     });
   };
 
@@ -128,20 +128,20 @@ const BusinessAddressForm = (props: BusinessAddressProps): JSX.Element => {
               ref={stateRef}
               data={countries}
               defaultValueByIndex={0}
-              onSelect={selectedItem => {
+              onSelect={(selectedItem) => {
                 onValueChange("state", selectedItem);
               }}
-              buttonTextAfterSelection={selectedItem => {
+              buttonTextAfterSelection={(selectedItem) => {
                 return selectedItem;
               }}
-              rowTextForSelection={item => {
+              rowTextForSelection={(item) => {
                 return item;
               }}
               buttonStyle={styles.selectItem}
               buttonTextStyle={styles.pickerText}
               rowStyle={styles.selectItem}
               dropdownStyle={styles.dropdownContainer}
-              renderCustomizedRowChild={item => (
+              renderCustomizedRowChild={(item) => (
                 <Text style={styles.pickerText}>{item}</Text>
               )}
               renderDropdownIcon={() => (
@@ -184,7 +184,7 @@ const BusinessAddressForm = (props: BusinessAddressProps): JSX.Element => {
           /\d/,
           /\d/,
           /\d/,
-          /\d/
+          /\d/,
         ]}
         name="phoneNumber"
         placeholder="(XXX) XXX-XXXX"

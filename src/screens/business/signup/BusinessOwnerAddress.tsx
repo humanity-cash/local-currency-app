@@ -6,7 +6,7 @@ import {
   SafeAreaView,
   ScrollView,
   StyleSheet,
-  View
+  View,
 } from "react-native";
 import { Text } from "react-native-elements";
 import { AuthContext, UserContext } from "src/contexts";
@@ -17,7 +17,7 @@ import { colors } from "src/theme/colors";
 import {
   underlineHeaderB,
   viewBaseB,
-  wrappingContainerBase
+  wrappingContainerBase,
 } from "src/theme/elements";
 import Translation from "src/translation/en.json";
 
@@ -25,37 +25,37 @@ const styles = StyleSheet.create({
   headerText: {
     fontSize: 32,
     lineHeight: 32,
-    color: colors.purple
+    color: colors.purple,
   },
   bodyView: {
     paddingTop: 50,
-    paddingHorizontal: 17
+    paddingHorizontal: 17,
   },
   bodyText: {
-    color: colors.bodyText
+    color: colors.bodyText,
   },
   label: {
     marginTop: 30,
     color: colors.bodyText,
-    fontSize: 10
+    fontSize: 10,
   },
   input: {
     color: colors.purple,
-    backgroundColor: colors.white
+    backgroundColor: colors.white,
   },
   formView: {
-    paddingBottom: 120
+    paddingBottom: 120,
   },
   bottomButton: {
     width: "90%",
     position: "absolute",
     bottom: 45,
-    left: "5%"
+    left: "5%",
   },
   bottomView: {
     marginHorizontal: 20,
-    marginBottom: 20
-  }
+    marginBottom: 20,
+  },
 });
 
 const BusinessOwnerAddress = (): ReactElement => {
@@ -68,7 +68,7 @@ const BusinessOwnerAddress = (): ReactElement => {
 
   return (
     <KeyboardAvoidingView
-      {...(Platform.OS === 'ios' && { behavior: 'padding' })}
+      {...(Platform.OS === "ios" && { behavior: "padding" })}
       style={viewBaseB}
     >
       <Header

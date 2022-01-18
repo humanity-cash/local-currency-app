@@ -11,5 +11,5 @@ export {
   RedemptionInProgress,
   DwollaDialog,
   LoadUpSuccess,
-  TransactionList
+  TransactionList,
 };

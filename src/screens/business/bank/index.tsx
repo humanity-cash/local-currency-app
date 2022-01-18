@@ -6,7 +6,7 @@ import {
   ScrollView,
   StyleSheet,
   View,
-  SafeAreaView
+  SafeAreaView,
 } from "react-native";
 import { WebView } from "react-native-webview";
 import { DwollaAPI } from "src/api";
@@ -24,16 +24,16 @@ const styles = StyleSheet.create({
   headerText: {
     fontSize: 32,
     lineHeight: 32,
-    color: colors.purple
+    color: colors.purple,
   },
   bankView: {
     flex: 1,
     height: WEBVIEW_SCREEN,
-    paddingBottom: 10
+    paddingBottom: 10,
   },
   bottomView: {
-    marginBottom: 45
-  }
+    marginBottom: 45,
+  },
 });
 
 const SelectMerchantBank = (): JSX.Element => {
@@ -80,10 +80,10 @@ const SelectMerchantBank = (): JSX.Element => {
       <ScrollView style={wrappingContainerBase}>
         {iavToken !== "" && (
           <WebView
-            ref={ref => (webview = ref)}
+            ref={(ref) => (webview = ref)}
             style={styles.bankView}
             source={{
-              uri: `https://baklava.api.humanity.cash/iav/?iavToken=${iavToken}`
+              uri: `https://baklava.api.humanity.cash/iav/?iavToken=${iavToken}`,
             }}
           />
         )}

@@ -13,14 +13,14 @@ const styles = StyleSheet.create({
   container: {
     alignSelf: "flex-end",
     padding: 10,
-    flexDirection: "row"
+    flexDirection: "row",
   },
   arrow: {
-    paddingLeft: 10
+    paddingLeft: 10,
   },
   text: {
-    paddingLeft: 10
-  }
+    paddingLeft: 10,
+  },
 });
 
 const NextBtn = (props: NextBtnProps) => {

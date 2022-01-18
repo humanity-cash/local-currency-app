@@ -14,54 +14,54 @@ import { CheckBox } from "react-native-elements";
 
 const styles = StyleSheet.create({
   dialog: {
-    height: 380
+    height: 380,
   },
   pDialogBg: {},
   bDialogBg: {
-    backgroundColor: colors.overlayPurple
+    backgroundColor: colors.overlayPurple,
   },
   dialogWrap: {
     paddingHorizontal: 10,
-    flex: 1
+    flex: 1,
   },
   dialogHeader: {
     fontSize: 30,
     lineHeight: 32,
     marginTop: 20,
-    marginBottom: 10
+    marginBottom: 10,
   },
   dialogHeaderB: {
     fontSize: 30,
     lineHeight: 32,
     marginTop: 20,
     marginBottom: 10,
-    color: colors.purple
+    color: colors.purple,
   },
   dialogBottom: {
-    paddingTop: 20
+    paddingTop: 20,
   },
   icon: {
     paddingRight: 5,
-    paddingTop: 4
+    paddingTop: 4,
   },
   inlineView: {
     flexDirection: "row",
-    paddingBottom: 10
+    paddingBottom: 10,
   },
   termsTextView: {
     flexDirection: "row",
     paddingRight: 20,
     marginLeft: -10,
-    marginRight: 20
+    marginRight: 20,
   },
   checkboxContainer: {
     borderWidth: 0,
     backgroundColor: "transparent",
-    paddingHorizontal: 0
+    paddingHorizontal: 0,
   },
   underlineText: {
-    textDecorationLine: "underline"
-  }
+    textDecorationLine: "underline",
+  },
 });
 
 type DwollaDialogProps = {

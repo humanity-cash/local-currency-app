@@ -16,16 +16,16 @@ const styles = StyleSheet.create({
   headerText: {
     fontSize: 32,
     lineHeight: 42,
-    color: colors.purple
+    color: colors.purple,
   },
   bottomView: {
     marginHorizontal: 20,
-    marginBottom: 20
+    marginBottom: 20,
   },
   skipBtn: {
     marginBottom: 10,
-    color: colors.purple
-  }
+    color: colors.purple,
+  },
 });
 
 const BusinessWelcome = (): ReactElement => {

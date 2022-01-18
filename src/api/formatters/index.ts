@@ -17,7 +17,7 @@ export const formatDeposits = (
       fromName: tx.fromName,
       type: "Deposit",
       toName: tx.toName,
-      value: formatTransactionValue(tx.value)
+      value: formatTransactionValue(tx.value),
     };
   });
 };
@@ -33,7 +33,7 @@ export const formatWithdrawals = (
       toName: tx.toName,
       fromName: tx.fromName,
       type: "Withdraw",
-      value: formatTransactionValue(tx.value)
+      value: formatTransactionValue(tx.value),
     };
   });
 };
@@ -44,7 +44,7 @@ export const formatTransactions = (
   if (!res.data) return [];
 
   const list = res.data as ITransaction[];
-  return list.map(tx => {
+  return list.map((tx) => {
     return {
       transactionHash: tx.transactionHash,
       blockNumber: tx.blockNumber,
@@ -52,7 +52,7 @@ export const formatTransactions = (
       toName: tx.toName,
       fromName: tx.fromName,
       type: tx.type,
-      value: formatTransactionValue(tx.value)
+      value: formatTransactionValue(tx.value),
     };
   });
 };
@@ -72,7 +72,7 @@ export const userData = (res: AxiosPromiseResponse): IWallet => {
       userId: "",
       createdTimestamp: 0,
       address: "",
-      createdBlock: ""
+      createdBlock: "",
     };
 
   const list = res.data as IWallet[];
@@ -83,20 +83,20 @@ export const eventDatas = (res: AxiosPromiseResponse): IEvent[] => {
   if (!res.data) return [];
 
   const list = res.data as IEvent[];
-  return list.filter(event => {
+  return list.filter((event) => {
     return !event.closed;
   });
 };
 
 export const formatContent = (res: AxiosPromiseResponse) => {
- if(!res?.data) return [];
- //@ts-ignore
- const list = res?.data?.map((d: any) => { 
-  if(d.image.includes(".tif.svg")) {
-   return {...d, image: ``} 
-  }
-  return {...d, image: `${d.image}?w=500`} 
- })
+  if (!res?.data) return [];
+  //@ts-ignore
+  const list = res?.data?.map((d: any) => {
+    if (d.image.includes(".tif.svg")) {
+      return { ...d, image: `` };
+    }
+    return { ...d, image: `${d.image}?w=500` };
+  });
 
- return list;
-}
+  return list;
+};

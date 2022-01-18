@@ -5,7 +5,7 @@ import {
   ScrollView,
   ActivityIndicator,
   Image,
-  SafeAreaView
+  SafeAreaView,
 } from "react-native";
 import { Text } from "react-native-elements";
 import { UserContext } from "src/contexts";
@@ -17,28 +17,28 @@ import { UserType } from "src/auth/types";
 const styles = StyleSheet.create({
   modalWrap: {
     paddingHorizontal: 10,
-    marginBottom: 10
+    marginBottom: 10,
   },
   headerText: {
     fontSize: 32,
     lineHeight: 45,
     marginBottom: 20,
-    paddingBottom: 10
+    paddingBottom: 10,
   },
   headerTextB: {
     fontSize: 32,
     lineHeight: 45,
     marginBottom: 20,
     paddingBottom: 10,
-    color: colors.purple
+    color: colors.purple,
   },
   bodyText: {
     fontSize: 16,
     color: colors.bodyText,
-    lineHeight: 20
+    lineHeight: 20,
   },
   bottomView: {
-    marginBottom: 20
+    marginBottom: 20,
   },
   imageView: {
     justifyContent: "center",
@@ -46,32 +46,32 @@ const styles = StyleSheet.create({
     width: "90%",
     height: 360,
     borderRadius: 20,
-    backgroundColor: colors.white
+    backgroundColor: colors.white,
   },
   image: {
     width: "100%",
     height: "100%",
-    borderRadius: 20
+    borderRadius: 20,
   },
   contentView: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    marginTop: 50
+    marginTop: 50,
   },
   contentText: {
     fontFamily: FontFamily.bold,
     fontSize: 18,
     lineHeight: 24,
-    marginTop: 10
+    marginTop: 10,
   },
   contentTextB: {
     fontFamily: FontFamily.bold,
     fontSize: 18,
     lineHeight: 24,
     marginTop: 10,
-    color: colors.purple
-  }
+    color: colors.purple,
+  },
 });
 
 type PaymentPendingProps = {
@@ -79,7 +79,7 @@ type PaymentPendingProps = {
 };
 
 const PaymentPending = ({
-  visible = false
+  visible = false,
 }: PaymentPendingProps): JSX.Element => {
   const { userType } = useContext(UserContext);
 

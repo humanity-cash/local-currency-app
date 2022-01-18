@@ -41,9 +41,8 @@ export const useCustomerWallet = (): { isLoading: boolean } => {
 
 export const useUpdateCustomerWalletData = (): void => {
   const { customerDwollaId, user } = useContext(UserContext);
-  const { customerWalletData, updateCustomerWalletData } = useContext(
-    WalletContext
-  );
+  const { customerWalletData, updateCustomerWalletData } =
+    useContext(WalletContext);
 
   useEffect(() => {
     const timerId = setInterval(async () => {
@@ -66,9 +65,8 @@ export const useUpdateCustomerWalletData = (): void => {
 
 export const useUpdateBusinessWalletData = (): void => {
   const { businessDwollaId, user } = useContext(UserContext);
-  const { businessWalletData, updateBusinessWalletData } = useContext(
-    WalletContext
-  );
+  const { businessWalletData, updateBusinessWalletData } =
+    useContext(WalletContext);
 
   useEffect(() => {
     const timerId = setInterval(async () => {

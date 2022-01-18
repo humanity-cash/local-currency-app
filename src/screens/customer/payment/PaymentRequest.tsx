@@ -4,7 +4,7 @@ import {
   View,
   KeyboardAvoidingView,
   Platform,
-  SafeAreaView
+  SafeAreaView,
 } from "react-native";
 import { useNavigation } from "@react-navigation/core";
 import { Text } from "react-native-elements";
@@ -13,12 +13,12 @@ import {
   Button,
   CancelBtn,
   BorderedInput,
-  ToggleButton
+  ToggleButton,
 } from "src/shared/uielements";
 import {
   baseHeader,
   viewBase,
-  wrappingContainerBase
+  wrappingContainerBase,
 } from "src/theme/elements";
 import { colors } from "src/theme/colors";
 import PaymentRequestSuccess from "./PaymentRequestSuccess";
@@ -39,42 +39,42 @@ const styles = StyleSheet.create({
   headerText: {
     fontSize: 32,
     fontWeight: "400",
-    lineHeight: 40
+    lineHeight: 40,
   },
   switchView: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    marginTop: 40
+    marginTop: 40,
   },
   contentView: {
-    marginTop: 5
+    marginTop: 5,
   },
   label: {
     marginTop: 20,
     color: colors.text,
-    fontSize: 12
+    fontSize: 12,
   },
   bottomView: {
     marginHorizontal: 20,
-    marginBottom: 20
+    marginBottom: 20,
   },
   openBtn: {
-    marginBottom: 10
+    marginBottom: 10,
   },
   switch: {
-    borderColor: colors.darkGreen
+    borderColor: colors.darkGreen,
   },
   switchText: {
-    color: colors.darkGreen
-  }
+    color: colors.darkGreen,
+  },
 });
 
 const PaymentRequest = (): JSX.Element => {
   const navigation = useNavigation();
   const [state, setState] = useState<AmountState>({
     amount: "",
-    cost: ""
+    cost: "",
   });
   const [goNext, setGoNext] = useState<boolean>(false);
   const [receivedAmount, setReceivedAmount] = useState<number>(0);
@@ -85,7 +85,7 @@ const PaymentRequest = (): JSX.Element => {
     isVisible: false,
     title: "",
     detail: "",
-    buttonTitle: ""
+    buttonTitle: "",
   });
 
   const { user, customerDwollaId } = useContext(UserContext);
@@ -105,10 +105,10 @@ const PaymentRequest = (): JSX.Element => {
 
   const onValueChange = (name: string, change: string) => {
     const costs = change.replace(",", ".");
-    setState(pv => ({
+    setState((pv) => ({
       ...state,
       [name]: costs,
-      costs: costs
+      costs: costs,
     }));
   };
 
@@ -145,7 +145,7 @@ const PaymentRequest = (): JSX.Element => {
         username: user?.customer?.tag,
         styles: CustomerScanQrCodeStyle,
         recieveRoute: Routes.PAYMENT_REQUEST,
-        cancelRoute: Routes.DASHBOARD
+        cancelRoute: Routes.DASHBOARD,
       });
       return;
     }
@@ -156,7 +156,7 @@ const PaymentRequest = (): JSX.Element => {
         isVisible: true,
         title: Translation.LOAD_UP.LOAD_UP_NO_BANK_TITLE,
         detail: Translation.LOAD_UP.LOAD_UP_NO_BANK_DETAIL,
-        buttonTitle: Translation.BUTTON.LOAD_UP_BERKSHARES
+        buttonTitle: Translation.BUTTON.LOAD_UP_BERKSHARES,
       });
     } else {
       setBankDialogInfo({
@@ -164,7 +164,7 @@ const PaymentRequest = (): JSX.Element => {
         isVisible: true,
         title: Translation.PAYMENT.PAYMENT_NO_BANK_TITLE,
         detail: Translation.PAYMENT.PAYMENT_NO_BANK_DETAIL,
-        buttonTitle: Translation.BUTTON.LINK_PERSONAL_BANK
+        buttonTitle: Translation.BUTTON.LINK_PERSONAL_BANK,
       });
     }
   };
@@ -182,13 +182,13 @@ const PaymentRequest = (): JSX.Element => {
   const onBankDialogCancel = () => {
     setBankDialogInfo({
       ...bankDialogInfo,
-      isVisible: false
+      isVisible: false,
     });
   };
 
   return (
     <KeyboardAvoidingView
-      {...(Platform.OS === 'ios' && { behavior: 'padding' })}
+      {...(Platform.OS === "ios" && { behavior: "padding" })}
       style={viewBase}
     >
       <Header
@@ -222,7 +222,7 @@ const PaymentRequest = (): JSX.Element => {
             prefix="B$"
             value={state.amount}
             style={{
-              backgroundColor: isCustomer ? colors.inputBg : colors.lightBg
+              backgroundColor: isCustomer ? colors.inputBg : colors.lightBg,
             }}
             onChange={onValueChange}
           />

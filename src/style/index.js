@@ -252,7 +252,8 @@ export const CustomerLoadUp = StyleSheet.create({
 		fontSize: 12
 	},
 	amountText: {
-		marginTop: 30
+		marginTop: 30,
+		color: colors.darkGreen
 	},
 	defaultAmountView: {
 		flexDirection: 'row',
@@ -272,7 +273,7 @@ export const CustomerLoadUp = StyleSheet.create({
 	selectedAmountItem: {
 		width: 100,
 		height: 40,
-		backgroundColor: colors.lightGreen,
+		backgroundColor: colors.darkGreen,
 		borderRadius: 20,
 		alignItems: 'center',
 		justifyContent: 'center',
@@ -293,6 +294,12 @@ export const CustomerLoadUp = StyleSheet.create({
 		marginHorizontal: 20,
 		marginBottom: 20
 	},
+	selectedAmountSwitch: {
+		color: colors.white
+	},
+	defaultAmountSwitch: {
+		color: colors.darkGreen
+	}
 });
 
 export const BusinessLoadUp = StyleSheet.create({
@@ -302,6 +309,9 @@ export const BusinessLoadUp = StyleSheet.create({
 		fontWeight: '400',
 		lineHeight: 40,
 		color: colors.purple
+	},
+	view: {
+		marginTop: 10,
 	},
 	container: {
 		paddingBottom: 40
@@ -345,6 +355,7 @@ export const BusinessLoadUp = StyleSheet.create({
 		marginRight: 8,
 	},
 	amountText: {
+		marginTop: 30,
 		color: colors.purple
 	},
 	selectedAmountText: {
@@ -369,6 +380,12 @@ export const BusinessLoadUp = StyleSheet.create({
 		marginHorizontal: 20,
 		marginBottom: 20
 	},
+	selectedAmountSwitch: {
+		color: colors.white
+	},
+	defaultAmountSwitch: {
+		color: colors.purple
+	}
 });
 
 

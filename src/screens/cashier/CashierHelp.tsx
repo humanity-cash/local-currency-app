@@ -6,7 +6,7 @@ import {
   Header,
   BackBtn,
   AccordionCard,
-  SearchInput
+  SearchInput,
 } from "src/shared/uielements";
 import { underlineHeaderB, viewBaseB } from "src/theme/elements";
 import faqList from "src/mocks/faq";
@@ -19,30 +19,30 @@ const styles = StyleSheet.create({
     fontSize: 32,
     fontWeight: "400",
     lineHeight: 40,
-    color: colors.purple
+    color: colors.purple,
   },
   container: {
     flex: 1,
     paddingHorizontal: 10,
-    paddingBottom: 80
+    paddingBottom: 80,
   },
   section: {
     fontSize: 16,
     marginVertical: 10,
-    color: colors.bodyText
+    color: colors.bodyText,
   },
   sectionHeader: {
     fontSize: 10,
-    color: colors.purple
+    color: colors.purple,
   },
   faqView: {
     paddingBottom: 30,
-    paddingTop: 10
+    paddingTop: 10,
   },
   input: {
     backgroundColor: colors.white,
-    color: colors.purple
-  }
+    color: colors.purple,
+  },
 });
 
 export const CashierSettingsHelpAndContact = (): JSX.Element => {

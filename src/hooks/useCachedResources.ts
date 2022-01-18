@@ -6,7 +6,7 @@ import {
   Feather,
   FontAwesome,
   MaterialCommunityIcons,
-  MaterialIcons
+  MaterialIcons,
 } from "@expo/vector-icons";
 
 const useCachedResources = () => {
@@ -20,7 +20,7 @@ const useCachedResources = () => {
         await Font.loadAsync({
           IBMPlexSans: require("../../assets/fonts/IBMPlexSans-Regular.ttf"),
           IBMPlexSansSemiBold: require("../../assets/fonts/IBMPlexSans-Medium.ttf"),
-          IBMPlexSansBold: require("../../assets/fonts/IBMPlexSans-SemiBold.ttf")
+          IBMPlexSansBold: require("../../assets/fonts/IBMPlexSans-SemiBold.ttf"),
         });
         await Font.loadAsync(AntDesign.font);
         await Font.loadAsync(MaterialCommunityIcons.font);
