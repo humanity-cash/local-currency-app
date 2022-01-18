@@ -101,6 +101,10 @@ export const styles = StyleSheet.create({
     color: colors.white,
     fontSize: 16,
   },
+  topupText: { 
+    color: colors.white, 
+    fontSize: 16
+  },
   dialog: {
     height: 320,
   },
