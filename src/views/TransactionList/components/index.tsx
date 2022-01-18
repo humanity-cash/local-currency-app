@@ -1,7 +1,7 @@
 import moment from "moment";
 import { MiniTransaction } from "src/utils/types";
 import React, { useContext } from "react";
-import { ScrollView } from "react-native";
+import { ScrollView, Linking } from 'react-native';
 import { Image, Text } from "react-native-elements";
 import { Dialog } from "src/shared/uielements";
 import { dialogViewBase, wrappingContainerBase } from "src/theme/elements";
@@ -13,6 +13,7 @@ import { styles, mListstyles } from "../style";
 import { UserContext } from "src/contexts";
 import { UserType } from "src/auth/types";
 import { colors } from "src/theme/colors";
+import { BAKLAVA_TRANSACTION_URL } from 'src/config/env';
 
 export type MyTransactionItemProps = {
   item: MiniTransaction;
@@ -82,10 +83,10 @@ export const TransactionDetail = (props: TransactionDetailProps) => {
   const { data, visible, onClose } = props;
   return (
     <Dialog visible={visible} onClose={onClose} style={styles.dialogHeight}>
-      <View style={dialogViewBase}>
+      <View style={[dialogViewBase]}>
         <ScrollView style={wrappingContainerBase}>
           <View style={styles.headerView}>
-            <Text style={getStyle(data.type)}>
+            <Text style={[getStyle(data.type), {fontSize: 32}]}>
               {" "}
               {getBerksharePrefix(data.type)} {data.value}{" "}
             </Text>
@@ -94,7 +95,11 @@ export const TransactionDetail = (props: TransactionDetailProps) => {
             <Text style={styles.detailText}>
               {Translation.PAYMENT.TRANSACTION_ID}
             </Text>
-            <Text style={styles.detailText}>{data.transactionHash}</Text>
+            <Text
+              style={[styles.detailText, styles.underlineText]}
+              onPress={() => Linking.openURL(`${BAKLAVA_TRANSACTION_URL}block/${data.blockNumber}`)} >
+              {data.transactionHash}
+            </Text>
           </View>
           <View style={styles.detailView}>
             <Text style={styles.detailText}>TYPE</Text>

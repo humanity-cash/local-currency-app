@@ -158,16 +158,6 @@ export const MerchantSettingsSecurity = (): JSX.Element => {
 					<Text style={styles.headerText}>{Translation.COMMUNITY_CHEST.SECURITY}</Text>
 				</View>
 				<View style={styles.view}>
-					<Text style={styles.text}>{Translation.COMMUNITY_CHEST.ALLOW_TOUCH}</Text>
-					<Switch
-						trackColor={{ false: colors.green, true: colors.green }}
-						thumbColor={colors.white}
-						ios_backgroundColor={colors.white}
-						onValueChange={onTouchIdOption}
-						value={isTouchId}
-					/>
-				</View>
-				<View style={styles.view}>
 					<Text style={styles.text}>{Translation.OTHER.ENABLE_CASHIER_VIEW}</Text>
 					<Switch
 						trackColor={{ false: colors.green, true: colors.green }}
