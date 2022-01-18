@@ -12,7 +12,7 @@ import {
   CustomerLinkBankAccount,
   CustomerUserStack,
   NotVerifiedUserStack,
-  OnboardingStack
+  OnboardingStack,
 } from "./stacks";
 
 const PrimaryStack = createStackNavigator();
@@ -24,13 +24,13 @@ const PrimaryStackScreen = () => {
   return (
     <PrimaryStack.Navigator
       screenOptions={() => ({
-        headerShown: false
+        headerShown: false,
       })}
     >
       {selectedView === ViewState.Customer ? (
         <>
           {CustomerUserStack({
-            isVerifiedBusiness: user?.verifiedBusiness || false
+            isVerifiedBusiness: user?.verifiedBusiness || false,
           })}
         </>
       ) : selectedView === ViewState.Cashier ? (
@@ -38,7 +38,7 @@ const PrimaryStackScreen = () => {
       ) : selectedView === ViewState.Business ? (
         <>
           {BusinessUserStack({
-            isVerifiedCustomer: user?.verifiedCustomer || false
+            isVerifiedCustomer: user?.verifiedCustomer || false,
           })}
         </>
       ) : selectedView === ViewState.CustomerLinkBank ? (
@@ -67,8 +67,8 @@ export const MainNavigationStack = (): JSX.Element => {
         ...DefaultTheme,
         colors: {
           ...DefaultTheme.colors,
-          background: "transparent"
-        }
+          background: "transparent",
+        },
       }}
     >
       <PrimaryStackScreen />

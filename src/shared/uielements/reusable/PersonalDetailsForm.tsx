@@ -12,15 +12,15 @@ interface PersonalDetailsProps {
 
 const styles = StyleSheet.create({
   container: {
-    marginBottom: 20
+    marginBottom: 20,
   },
   bodyText: {
-    color: colors.bodyText
+    color: colors.bodyText,
   },
   label: {
     color: colors.bodyText,
-    fontSize: 10
-  }
+    fontSize: 10,
+  },
 });
 
 const BasicInputWithLabel = ({
@@ -33,7 +33,7 @@ const BasicInputWithLabel = ({
   name,
   inputRef,
   returnKeyType,
-  onSubmitEditing
+  onSubmitEditing,
 }: any) => {
   return (
     <>
@@ -69,7 +69,7 @@ export const BusinessOwnerDetailsForm = (
   const business = user?.business;
   const onValueChange = (name: string, change: string) => {
     updateBusinessData({
-      owner: { change }
+      owner: { change },
     });
   };
 
@@ -108,7 +108,7 @@ const PersonalDetailsForm = (props: PersonalDetailsProps): ReactElement => {
 
   const onValueChange = (name: string, change: string) => {
     updateCustomerData({
-      [name]: change
+      [name]: change,
     });
   };
 

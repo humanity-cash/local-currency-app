@@ -5,7 +5,7 @@ import {
   AuthorizationDetails,
   IMap,
   OnboardingState,
-  PersonalDetails
+  PersonalDetails,
 } from "src/utils/types";
 
 const storeId = "ONBOARDING_DETAILS";
@@ -13,12 +13,12 @@ const storeId = "ONBOARDING_DETAILS";
 const defaultState: OnboardingState = {
   personalDetails: {
     email: "",
-    emailVerified: false
+    emailVerified: false,
   },
   authorization: {
     touchID: true,
-    cashierView: true
-  }
+    cashierView: true,
+  },
 };
 
 const store = createStore<OnboardingState>(storeId, defaultState);
@@ -37,7 +37,7 @@ const useUserDetails = (): IMap => {
           if (data) {
             store.setState({
               ...defaultState,
-              ...JSON.parse(data)
+              ...JSON.parse(data),
             } as OnboardingState);
           }
           loaded = true;
@@ -61,7 +61,7 @@ const useUserDetails = (): IMap => {
     const currentState = store.getState();
     const newState: OnboardingState = {
       ...currentState,
-      ...data
+      ...data,
     };
     store.setState(newState);
     await storeInMemory(newState);
@@ -74,8 +74,8 @@ const useUserDetails = (): IMap => {
         ...currentState,
         personalDetails: {
           ...currentState.personalDetails,
-          ...data
-        }
+          ...data,
+        },
       };
       store.setState(newState);
       await storeInMemory(newState);
@@ -90,8 +90,8 @@ const useUserDetails = (): IMap => {
         ...currentState,
         authorization: {
           ...currentState.authorization,
-          ...data
-        }
+          ...data,
+        },
       };
       store.setState(newState);
       await storeInMemory(newState);
@@ -110,7 +110,7 @@ const useUserDetails = (): IMap => {
     update,
     updatePersonalDetails,
     updateAuthorization,
-    resetState
+    resetState,
   };
 };
 

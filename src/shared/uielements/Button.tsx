@@ -10,17 +10,17 @@ const styles: any = {
       paddingBottom: 10,
       height: 60,
       justifyContent: "center",
-      alignItems: "center"
+      alignItems: "center",
     },
     buttonText: {
       color: "white",
-      fontSize: 16
+      fontSize: 16,
     },
     view: {
       flex: 1,
       justifyContent: "center",
-      alignItems: "center"
-    }
+      alignItems: "center",
+    },
   },
   fluidLight: {
     button: {
@@ -28,16 +28,16 @@ const styles: any = {
       paddingTop: 10,
       paddingBottom: 10,
       alignItems: "center",
-      borderRadius: 18
+      borderRadius: 18,
     },
     buttonText: {
-      color: colors.grey1
+      color: colors.grey1,
     },
     view: {
       flex: 1,
       justifyContent: "center",
-      alignItems: "center"
-    }
+      alignItems: "center",
+    },
   },
   darkRed: {
     button: {
@@ -46,16 +46,16 @@ const styles: any = {
       paddingTop: 10,
       paddingBottom: 10,
       alignItems: "center",
-      borderRadius: 30
+      borderRadius: 30,
     },
     buttonText: {
-      color: colors.white
+      color: colors.white,
     },
     view: {
       flex: 1,
       justifyContent: "center",
-      alignItems: "center"
-    }
+      alignItems: "center",
+    },
   },
   darkGreen: {
     button: {
@@ -64,16 +64,16 @@ const styles: any = {
       paddingTop: 10,
       paddingBottom: 10,
       alignItems: "center",
-      borderRadius: 30
+      borderRadius: 30,
     },
     buttonText: {
-      color: colors.white
+      color: colors.white,
     },
     view: {
       flex: 1,
       justifyContent: "center",
-      alignItems: "center"
-    }
+      alignItems: "center",
+    },
   },
   transparent: {
     button: {
@@ -82,16 +82,16 @@ const styles: any = {
       paddingTop: 10,
       paddingBottom: 10,
       alignItems: "center",
-      borderRadius: 30
+      borderRadius: 30,
     },
     buttonText: {
-      color: colors.darkGreen
+      color: colors.darkGreen,
     },
     view: {
       flex: 1,
       justifyContent: "center",
-      alignItems: "center"
-    }
+      alignItems: "center",
+    },
   },
   purple: {
     button: {
@@ -100,17 +100,17 @@ const styles: any = {
       paddingTop: 10,
       paddingBottom: 10,
       alignItems: "center",
-      borderRadius: 30
+      borderRadius: 30,
     },
     buttonText: {
-      color: colors.white
+      color: colors.white,
     },
     view: {
       flex: 1,
       justifyContent: "center",
-      alignItems: "center"
-    }
-  }
+      alignItems: "center",
+    },
+  },
 };
 
 type ButtonProps = {
@@ -134,7 +134,7 @@ const Button = (props: ButtonProps) => {
         {
           ...styles[props.type].button,
           ...(props.disabled ? { opacity: 0.5 } : {}),
-          ...props?.style
+          ...props?.style,
         } as any
       }
     >
@@ -142,7 +142,7 @@ const Button = (props: ButtonProps) => {
         <Text
           style={{
             ...styles[props.type].buttonText,
-            ...props.textStyle
+            ...props.textStyle,
           }}
         >
           {props.title}

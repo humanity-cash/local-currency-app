@@ -56,7 +56,7 @@ import { PaymentsModule } from "src/modules";
 const PrimaryStack = createStackNavigator();
 
 export const CustomerUserStack = ({
-  isVerifiedBusiness
+  isVerifiedBusiness,
 }: {
   isVerifiedBusiness: boolean;
 }) => {
@@ -192,7 +192,7 @@ export const CashierUserStack = () => {
 };
 
 export const BusinessUserStack = ({
-  isVerifiedCustomer
+  isVerifiedCustomer,
 }: {
   isVerifiedCustomer: boolean;
 }) => {

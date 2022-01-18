@@ -136,13 +136,13 @@ export enum UserType {
   NotVerified = "notVerfied",
   Customer = "customer",
   Business = "business",
-  Cashier = "cashier"
+  Cashier = "cashier",
 }
 
 export enum AuthStatus {
   Loading,
   SignedIn,
-  SignedOut
+  SignedOut,
 }
 
 export interface Session {
@@ -187,7 +187,7 @@ export const defaultState: IAuth = {
   signInDetails: { password: "", email: "" },
   setSignInDetails: () => {
     console.log("setSigninDetails is not loaded yet");
-  }
+  },
 };
 
 export type CognitoError = any;

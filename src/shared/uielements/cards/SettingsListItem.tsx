@@ -18,18 +18,18 @@ const styles = StyleSheet.create({
     backgroundColor: colors.white,
     padding: 0,
     flexDirection: "row",
-    paddingHorizontal: 10
+    paddingHorizontal: 10,
   },
   text: {
     fontSize: 20,
     lineHeight: 60,
     paddingLeft: 10,
     flex: 1,
-    fontFamily: FontFamily.bold
+    fontFamily: FontFamily.bold,
   },
   arrow: {
-    marginVertical: 20
-  }
+    marginVertical: 20,
+  },
 });
 
 const SettingsListItem = (props: SettingsListItemProps) => {

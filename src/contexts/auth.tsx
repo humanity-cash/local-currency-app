@@ -3,7 +3,10 @@ import React, { useContext, useEffect, useState } from "react";
 import { UserAPI } from "src/api";
 import * as userController from "src/auth/cognito";
 import { signInInitialState, signUpInitialState } from "src/auth/consts";
-import { getLatestSelectedAccountType, saveTokenToLocalStorage } from "src/auth/localStorage";
+import {
+  getLatestSelectedAccountType,
+  saveTokenToLocalStorage,
+} from "src/auth/localStorage";
 import {
   AuthStatus,
   BaseResponse,
@@ -12,7 +15,7 @@ import {
   ForgotPassword,
   IAuth,
   SignUpInput,
-  UserType
+  UserType,
 } from "src/auth/types";
 import { NavigationViewContext, ViewState } from "./navigation";
 import { UserContext } from "./user";
@@ -25,17 +28,15 @@ export const AuthProvider: React.FunctionComponent = ({ children }) => {
   const { updateSelectedView } = useContext(NavigationViewContext);
   const [userEmail, setUserEmail] = useState<string>("");
   const [signInDetails, setSignInDetails] = useState(signInInitialState);
-  const [signUpDetails, setSignUpDetails] = useState<SignUpInput>(
-    signUpInitialState
-  );
+  const [signUpDetails, setSignUpDetails] =
+    useState<SignUpInput>(signUpInitialState);
 
-  const [forgotPasswordDetails, setForgotPasswordDetails] = useState<
-    ForgotPassword
-  >({
-    email: "",
-    verificationCode: "",
-    newPassword: ""
-  });
+  const [forgotPasswordDetails, setForgotPasswordDetails] =
+    useState<ForgotPassword>({
+      email: "",
+      verificationCode: "",
+      newPassword: "",
+    });
 
   const updateAuthStatus = async (newStatus: AuthStatus) => {
     setAuthStatus(newStatus);
@@ -47,36 +48,36 @@ export const AuthProvider: React.FunctionComponent = ({ children }) => {
   const getSessionInfo = async () => {
     try {
       updateAuthStatus(AuthStatus.Loading);
-      const response: BaseResponse<
-        CognitoUserSession | undefined
-      > = await userController.getSession();
+      const response: BaseResponse<CognitoUserSession | undefined> =
+        await userController.getSession();
       if (response.success && response.data && response.data.isValid()) {
-       //@ts-ignore
-       await saveUserToken(response);
-       const email = response.data.getIdToken().decodePayload().email;
-       setUserEmail(email);
-       updateAuthStatus(AuthStatus.SignedIn);
+        //@ts-ignore
+        await saveUserToken(response);
+        const email = response.data.getIdToken().decodePayload().email;
+        setUserEmail(email);
+        updateAuthStatus(AuthStatus.SignedIn);
       } else {
-       updateAuthStatus(AuthStatus.SignedOut);
+        updateAuthStatus(AuthStatus.SignedOut);
       }
     } catch (err) {
-     updateAuthStatus(AuthStatus.SignedOut);
+      updateAuthStatus(AuthStatus.SignedOut);
     }
   };
 
-  const saveUserToken = async (i: BaseResponse<CognitoUserSession | undefined>) => {
-   // const jwtToken = i?.data?.getIdToken().getJwtToken() || "";
-   const jwtToken = i?.data?.getAccessToken().getJwtToken() || "";
-   await saveTokenToLocalStorage(jwtToken)
-  }
+  const saveUserToken = async (
+    i: BaseResponse<CognitoUserSession | undefined>
+  ) => {
+    // const jwtToken = i?.data?.getIdToken().getJwtToken() || "";
+    const jwtToken = i?.data?.getAccessToken().getJwtToken() || "";
+    await saveTokenToLocalStorage(jwtToken);
+  };
 
   useEffect(() => {
     const loadCachedAuth = async () => {
       try {
         updateAuthStatus(AuthStatus.Loading);
-        const response: BaseResponse<
-          CognitoUserSession | undefined
-        > = await userController.getSession();
+        const response: BaseResponse<CognitoUserSession | undefined> =
+          await userController.getSession();
         if (response.success && response.data && response.data.isValid()) {
           const email = response.data.getIdToken().decodePayload().email;
           await saveUserToken(response);
@@ -135,9 +136,8 @@ export const AuthProvider: React.FunctionComponent = ({ children }) => {
     password = signInDetails.password
   ) => {
     updateAuthStatus(AuthStatus.Loading);
-    const response: BaseResponse<CognitoUserSession> = await userController.signIn(
-      { email: email.toLowerCase(), password }
-    );
+    const response: BaseResponse<CognitoUserSession> =
+      await userController.signIn({ email: email.toLowerCase(), password });
     if (response?.success) {
       await getSessionInfo();
       const user = await UserAPI.getUserByEmail(email);
@@ -172,25 +172,23 @@ export const AuthProvider: React.FunctionComponent = ({ children }) => {
 
   const startForgotPasswordFlow = async (): Promise<BaseResponse<unknown>> => {
     const { email } = forgotPasswordDetails;
-    const response: BaseResponse<unknown> = await userController.startForgotPasswordFlow(
-      {
-        email: email.toLowerCase()
-      }
-    );
+    const response: BaseResponse<unknown> =
+      await userController.startForgotPasswordFlow({
+        email: email.toLowerCase(),
+      });
     return response;
   };
 
-  const completeForgotPasswordFlow = async (): Promise<BaseResponse<
-    unknown
-  >> => {
+  const completeForgotPasswordFlow = async (): Promise<
+    BaseResponse<unknown>
+  > => {
     const { email, newPassword, verificationCode } = forgotPasswordDetails;
-    const response: BaseResponse<unknown> = await userController.completeForgotPasswordFlow(
-      {
+    const response: BaseResponse<unknown> =
+      await userController.completeForgotPasswordFlow({
         email,
         verificationCode,
-        newPassword
-      }
-    );
+        newPassword,
+      });
     return response;
   };
 
@@ -199,7 +197,7 @@ export const AuthProvider: React.FunctionComponent = ({ children }) => {
     const response: BaseResponse<unknown> = await userController.changePassword(
       {
         oldPassword,
-        newPassword
+        newPassword,
       }
     );
     return response;
@@ -227,7 +225,7 @@ export const AuthProvider: React.FunctionComponent = ({ children }) => {
     completeForgotPasswordFlow,
     resendEmailVerificationCode,
     changePassword,
-    emailVerification: confirmEmailVerification
+    emailVerification: confirmEmailVerification,
   };
 
   const state: IAuth = {
@@ -236,7 +234,7 @@ export const AuthProvider: React.FunctionComponent = ({ children }) => {
     authStatus,
     signInDetails,
     signUpDetails,
-    userEmail
+    userEmail,
   };
 
   return <AuthContext.Provider value={state}>{children}</AuthContext.Provider>;

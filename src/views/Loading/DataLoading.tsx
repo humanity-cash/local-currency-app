@@ -16,27 +16,27 @@ const styles = StyleSheet.create({
     left: 0,
     width: "100%",
     height: "100%",
-    backgroundColor: "rgba(0, 0, 0, 0.4)"
+    backgroundColor: "rgba(0, 0, 0, 0.4)",
   },
   closeBtn: {
     position: "absolute",
     top: 10,
-    right: 20
+    right: 20,
   },
   container: {
     flex: 1,
     justifyContent: "center",
-    alignItems: "center"
+    alignItems: "center",
   },
   dialogWrap: {
     alignSelf: "center",
     padding: 0,
     justifyContent: "center",
-    alignItems: "center"
+    alignItems: "center",
   },
   bottomView: {
-    paddingBottom: 45
-  }
+    paddingBottom: 45,
+  },
 });
 
 const DataLoading = ({ visible = false }: DataLoadingProps): JSX.Element => {
@@ -45,7 +45,7 @@ const DataLoading = ({ visible = false }: DataLoadingProps): JSX.Element => {
       isVisible={visible}
       overlayStyle={styles.dialogBg}
       backdropStyle={{
-        backgroundColor: "transparent"
+        backgroundColor: "transparent",
       }}
       animationType="fade"
     >

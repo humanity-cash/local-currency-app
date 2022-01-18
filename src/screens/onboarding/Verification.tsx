@@ -7,7 +7,7 @@ import {
   StyleSheet,
   TouchableOpacity,
   View,
-  SafeAreaView
+  SafeAreaView,
 } from "react-native";
 import { Text } from "react-native-elements";
 import { AuthContext } from "src/contexts";
@@ -18,53 +18,52 @@ import {
   BackBtn,
   Button,
   ConfirmationCode,
-  Header
+  Header,
 } from "src/shared/uielements";
 import { colors } from "src/theme/colors";
 import {
   baseHeader,
   viewBase,
-  wrappingContainerBase
+  wrappingContainerBase,
 } from "src/theme/elements";
 import Translation from "src/translation/en.json";
 
 const styles = StyleSheet.create({
   container: {
-    paddingBottom: 40
+    paddingBottom: 40,
   },
   headerText: {
     fontSize: 32,
     color: colors.darkGreen,
-    lineHeight: 32
+    lineHeight: 32,
   },
   bodyText: {
-    color: colors.bodyText
+    color: colors.bodyText,
   },
   codeView: {
     flex: 1,
-    marginTop: 25
+    marginTop: 25,
   },
   bottomNavigation: {
     alignSelf: "center",
     color: colors.darkGreen,
     fontWeight: "bold",
-    paddingVertical: 30
+    paddingVertical: 30,
   },
   bottomView: {
     marginHorizontal: 20,
-    marginBottom: 20
-  }
+    marginBottom: 20,
+  },
 });
 
 const Verification = (): JSX.Element => {
   const navigation = useNavigation();
-  const { emailVerification, resendEmailVerificationCode } = useContext(
-    AuthContext
-  );
+  const { emailVerification, resendEmailVerificationCode } =
+    useContext(AuthContext);
   const [noCodeReceived, setNoCodeReceived] = useState<boolean>(false);
   const [goNext, setGoNext] = useState<boolean>(false);
   const {
-    signUpDetails: { email }
+    signUpDetails: { email },
   } = useContext(AuthContext);
 
   const onComplete = async (text: string) => {
@@ -77,7 +76,7 @@ const Verification = (): JSX.Element => {
 
   return (
     <KeyboardAvoidingView
-      {...(Platform.OS === 'ios' && { behavior: 'padding' })}
+      {...(Platform.OS === "ios" && { behavior: "padding" })}
       style={viewBase}
     >
       <Header leftComponent={<BackBtn onClick={() => navigation.goBack()} />} />
