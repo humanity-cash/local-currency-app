@@ -7,7 +7,7 @@ import {
   StyleSheet,
   TouchableOpacity,
   View,
-  SafeAreaView
+  SafeAreaView,
 } from "react-native";
 import { Text } from "react-native-elements";
 import { AuthContext } from "src/contexts";
@@ -17,12 +17,12 @@ import {
   BackBtn,
   CancelBtn,
   ConfirmationCode,
-  Header
+  Header,
 } from "src/shared/uielements";
 import {
   baseHeader,
   viewBase,
-  wrappingContainerBase
+  wrappingContainerBase,
 } from "src/theme/elements";
 import { showToast } from "src/utils/common";
 import { ToastType } from "src/utils/types";
@@ -31,18 +31,18 @@ const styles = StyleSheet.create({
   modalHeader: {
     fontSize: 32,
     fontWeight: "400",
-    lineHeight: 40
+    lineHeight: 40,
   },
   modalDescription: {
-    paddingBottom: 30
+    paddingBottom: 30,
   },
   bottomView: {
     marginHorizontal: 20,
-    marginBottom: 30
+    marginBottom: 30,
   },
   bottomNavigation: {
-    alignSelf: "center"
-  }
+    alignSelf: "center",
+  },
 });
 
 const ForgotPasswordVerification = () => {
@@ -50,14 +50,14 @@ const ForgotPasswordVerification = () => {
   const {
     forgotPasswordDetails: { email },
     setForgotPasswordDetails,
-    startForgotPasswordFlow
+    startForgotPasswordFlow,
   } = useContext(AuthContext);
   const [sentAgain, setSentAgain] = useState(false);
 
   const onComplete = async (text: string) => {
     setForgotPasswordDetails((pv: ForgotPassword) => ({
       ...pv,
-      verificationCode: text
+      verificationCode: text,
     }));
     navigation.navigate("ForgotPasswordNewCode");
     return;
@@ -65,7 +65,7 @@ const ForgotPasswordVerification = () => {
 
   return (
     <KeyboardAvoidingView
-      {...(Platform.OS === 'ios' && { behavior: 'padding' })}
+      {...(Platform.OS === "ios" && { behavior: "padding" })}
       style={viewBase}
     >
       <Header

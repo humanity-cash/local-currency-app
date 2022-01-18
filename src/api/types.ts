@@ -144,7 +144,7 @@ export interface IEvent {
 }
 
 export interface FeedItemProps {
- textTitle: string;
- text: string;
- image: string;
+  textTitle: string;
+  text: string;
+  image: string;
 }

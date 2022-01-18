@@ -6,7 +6,7 @@ import {
   SafeAreaView,
   ScrollView,
   StyleSheet,
-  View
+  View,
 } from "react-native";
 import { Text } from "react-native-elements";
 import { BUTTON_TYPES } from "src/constants";
@@ -17,13 +17,13 @@ import {
   Button,
   CancelBtn,
   Header,
-  PersonalProfileForm
+  PersonalProfileForm,
 } from "src/shared/uielements";
 import { colors } from "src/theme/colors";
 import {
   underlineHeader,
   viewBase,
-  wrappingContainerBase
+  wrappingContainerBase,
 } from "src/theme/elements";
 import Translation from "src/translation/en.json";
 
@@ -31,13 +31,13 @@ const styles = StyleSheet.create({
   headerText: {
     fontSize: 32,
     color: colors.darkGreen,
-    lineHeight: 35
+    lineHeight: 35,
   },
   bottomView: {
     marginHorizontal: 20,
     marginBottom: 20,
-    backgroundColor: "transparent"
-  }
+    backgroundColor: "transparent",
+  },
 });
 
 const PersonalProfile = (): ReactElement => {
@@ -58,7 +58,7 @@ const PersonalProfile = (): ReactElement => {
 
   return (
     <KeyboardAvoidingView
-      {...(Platform.OS === 'ios' && { behavior: 'padding' })}
+      {...(Platform.OS === "ios" && { behavior: "padding" })}
       style={viewBase}
     >
       <Header

@@ -17,22 +17,22 @@ const styles = StyleSheet.create({
     borderLeftColor: colors.brown,
     borderLeftWidth: 5,
     padding: 10,
-    paddingTop: 15
+    paddingTop: 15,
   },
   boldText: {
-    fontFamily: FontFamily.bold
+    fontFamily: FontFamily.bold,
   },
   detailsView: {
     flexDirection: "row",
     marginBottom: 15,
-    padding: 5
+    padding: 5,
   },
   gridView: {
-    flex: 2
+    flex: 2,
   },
   gridWiderView: {
-    flex: 3
-  }
+    flex: 3,
+  },
 });
 
 const OwnedShareCard = (props: ShareProps) => {
@@ -46,7 +46,7 @@ const OwnedShareCard = (props: ShareProps) => {
     const growth = value > 0 ? "raise" : "loss";
     return {
       value: formatValue(Math.abs(value)),
-      growth
+      growth,
     };
   };
 

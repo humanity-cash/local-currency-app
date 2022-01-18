@@ -21,7 +21,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     marginTop: 20,
     justifyContent: "center",
-    alignItems: "center"
+    alignItems: "center",
   },
   codeInput: {
     textAlign: "center",
@@ -33,7 +33,7 @@ const styles = StyleSheet.create({
     borderWidth: 0,
     borderRadius: 3,
     color: colors.darkGreen,
-    margin: 2
+    margin: 2,
   },
   dividingLine: {
     textAlign: "center",
@@ -42,8 +42,8 @@ const styles = StyleSheet.create({
     fontSize: 40,
     justifyContent: "center",
     alignItems: "center",
-    paddingHorizontal: 10
-  }
+    paddingHorizontal: 10,
+  },
 });
 
 class ConfirmationCode extends React.Component<
@@ -57,7 +57,7 @@ class ConfirmationCode extends React.Component<
 
     this.state = {
       codes: Array(CODE_LENGTH).fill(""),
-      currentIndex: 0
+      currentIndex: 0,
     };
 
     this.inputRefs = [];
@@ -72,9 +72,9 @@ class ConfirmationCode extends React.Component<
       if (currentIndex !== 0) {
         newCodeArr[currentIndex - 1] = "";
       }
-      this.setState(oldState => ({
+      this.setState((oldState) => ({
         codes: newCodeArr,
-        currentIndex: oldState.currentIndex - 1
+        currentIndex: oldState.currentIndex - 1,
       }));
     }
   };
@@ -92,9 +92,9 @@ class ConfirmationCode extends React.Component<
       }
     }
 
-    this.setState(oldState => ({
+    this.setState((oldState) => ({
       codes: newCodeArr,
-      currentIndex: index
+      currentIndex: index,
     }));
   };
 
@@ -112,9 +112,9 @@ class ConfirmationCode extends React.Component<
     newCodeArr[currentIndex] = text;
 
     if (text !== "") {
-      this.setState(oldState => ({
+      this.setState((oldState) => ({
         codes: newCodeArr,
-        currentIndex: oldState.currentIndex + 1
+        currentIndex: oldState.currentIndex + 1,
       }));
 
       if (index === CODE_LENGTH - 1) {
@@ -128,9 +128,9 @@ class ConfirmationCode extends React.Component<
       if (currentIndex !== 0) {
         newCodeArr[currentIndex - 1] = "";
       }
-      this.setState(oldState => ({
+      this.setState((oldState) => ({
         codes: newCodeArr,
-        currentIndex: oldState.currentIndex - 1
+        currentIndex: oldState.currentIndex - 1,
       }));
     }
   };
@@ -143,7 +143,7 @@ class ConfirmationCode extends React.Component<
           .map((value, index) => (
             <TextInput
               key={index}
-              ref={ref => (this.inputRefs[index] = ref)}
+              ref={(ref) => (this.inputRefs[index] = ref)}
               style={styles.codeInput}
               keyboardType={"number-pad"}
               value={
@@ -152,7 +152,7 @@ class ConfirmationCode extends React.Component<
                   : ""
               }
               onFocus={() => this.onFocus(index)}
-              onChangeText={text => this.onChange(text, index)}
+              onChangeText={(text) => this.onChange(text, index)}
               onKeyPress={this.onKeyPress}
               maxLength={1}
             />
@@ -163,7 +163,7 @@ class ConfirmationCode extends React.Component<
           .map((value, index) => (
             <TextInput
               key={index}
-              ref={ref => (this.inputRefs[index + CODE_LENGTH / 2] = ref)}
+              ref={(ref) => (this.inputRefs[index + CODE_LENGTH / 2] = ref)}
               style={styles.codeInput}
               keyboardType={"number-pad"}
               value={
@@ -172,7 +172,7 @@ class ConfirmationCode extends React.Component<
                   : ""
               }
               onFocus={() => this.onFocus(index + CODE_LENGTH / 2)}
-              onChangeText={text =>
+              onChangeText={(text) =>
                 this.onChange(text, index + CODE_LENGTH / 2)
               }
               onKeyPress={this.onKeyPress}

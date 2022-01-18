@@ -3,7 +3,7 @@ import {
   createDrawerNavigator,
   DrawerContentComponentProps,
   DrawerContentScrollView,
-  DrawerItem
+  DrawerItem,
 } from "@react-navigation/drawer";
 import { DrawerActions } from "@react-navigation/native";
 import React, { useContext, useState } from "react";
@@ -12,7 +12,7 @@ import {
   Text,
   TouchableOpacity,
   TouchableWithoutFeedback,
-  View
+  View,
 } from "react-native";
 import { Drawer } from "react-native-paper";
 import { UserType } from "src/auth/types";
@@ -21,7 +21,7 @@ import {
   AuthContext,
   NavigationViewContext,
   UserContext,
-  WalletContext
+  WalletContext,
 } from "src/contexts";
 import { ViewState } from "src/contexts/navigation";
 import { useBusinessWallet } from "src/hooks";
@@ -33,7 +33,7 @@ import { colors } from "src/theme/colors";
 import {
   baseHeader,
   dialogViewBase,
-  wrappingContainerBase
+  wrappingContainerBase,
 } from "src/theme/elements";
 import Translation from "src/translation/en.json";
 import MerchantRequest from "src/screens/business/payment/MerchantRequest";
@@ -134,7 +134,7 @@ const initBankDialogState: BankLinkDialogStateProps = {
   visible: false,
   title: "",
   description: "",
-  buttoTitle: ""
+  buttoTitle: "",
 };
 
 const DrawerContent = (props: DrawerContentComponentProps) => {
@@ -144,9 +144,8 @@ const DrawerContent = (props: DrawerContentComponentProps) => {
   const [isExpanded, setIsExpanded] = useState<boolean>(false);
   const [isVisible, setIsVisible] = useState<boolean>(false);
   const [isCashierView, setIsCashierView] = useState<boolean>(false);
-  const [bankDialogState, setBankDialogState] = useState<
-    BankLinkDialogStateProps
-  >(initBankDialogState);
+  const [bankDialogState, setBankDialogState] =
+    useState<BankLinkDialogStateProps>(initBankDialogState);
   const [isSetting, setIsSetting] = useState(false);
   const { businessWalletData } = useContext(WalletContext);
   const businessFundingSource = businessWalletData?.availableFundingSource;
@@ -205,7 +204,7 @@ const DrawerContent = (props: DrawerContentComponentProps) => {
           username: user?.business?.tag,
           styles: BusinessScanQrCodeStyle,
           recieveRoute: Routes.MERCHANT_REQUEST,
-          cancelRoute: Routes.MERCHANT_DASHBOARD
+          cancelRoute: Routes.MERCHANT_DASHBOARD,
         });
       } else {
         if (businessFundingSource) {
@@ -215,7 +214,7 @@ const DrawerContent = (props: DrawerContentComponentProps) => {
             description: Translation.LOAD_UP.LOAD_UP_NO_BANK_DETAIL,
             buttoTitle: Translation.BUTTON.LOAD_UP,
             confirmAction: onLoadupDialogConfirm,
-            cancelAction: onLoadupDialogCancel
+            cancelAction: onLoadupDialogCancel,
           });
         } else {
           setBankDialogState({
@@ -224,7 +223,7 @@ const DrawerContent = (props: DrawerContentComponentProps) => {
             description: Translation.PAYMENT.PAYMENT_NO_BANK_DETAIL,
             buttoTitle: Translation.BUTTON.LINK_BUSINESS_BANK,
             confirmAction: onBankDialogConfirm,
-            cancelAction: onBankDialogCancel
+            cancelAction: onBankDialogCancel,
           });
         }
       }
@@ -246,7 +245,7 @@ const DrawerContent = (props: DrawerContentComponentProps) => {
             description: Translation.LOAD_UP.LOAD_UP_NO_BANK_DETAIL,
             buttoTitle: Translation.BUTTON.LOAD_UP,
             confirmAction: onLoadupDialogConfirm,
-            cancelAction: onLoadupDialogCancel
+            cancelAction: onLoadupDialogCancel,
           });
         } else {
           setBankDialogState({
@@ -255,7 +254,7 @@ const DrawerContent = (props: DrawerContentComponentProps) => {
             description: Translation.PAYMENT.PAYMENT_NO_BANK_DETAIL,
             buttoTitle: Translation.BUTTON.LINK_BUSINESS_BANK,
             confirmAction: onBankDialogConfirm,
-            cancelAction: onBankDialogCancel
+            cancelAction: onBankDialogCancel,
           });
         }
       }
@@ -268,7 +267,7 @@ const DrawerContent = (props: DrawerContentComponentProps) => {
     if (businessWalletData?.address && businessFundingSource) {
       props.navigation.navigate(Routes.LOAD_UP, {
         userId: businessDwollaId,
-        styles: "business"
+        styles: "business",
       });
     } else {
       setBankDialogState({
@@ -277,7 +276,7 @@ const DrawerContent = (props: DrawerContentComponentProps) => {
         description: Translation.LOAD_UP.LOAD_UP_NO_BANK_DETAIL,
         buttoTitle: Translation.BUTTON.LINK_BUSINESS_BANK,
         confirmAction: onBankDialogConfirm,
-        cancelAction: onBankDialogCancel
+        cancelAction: onBankDialogCancel,
       });
     }
   };
@@ -295,7 +294,7 @@ const DrawerContent = (props: DrawerContentComponentProps) => {
             description: Translation.LOAD_UP.LOAD_UP_NO_BANK_DETAIL,
             buttoTitle: Translation.BUTTON.LOAD_UP,
             confirmAction: onLoadupDialogConfirm,
-            cancelAction: onLoadupDialogCancel
+            cancelAction: onLoadupDialogCancel,
           });
         } else {
           setBankDialogState({
@@ -304,7 +303,7 @@ const DrawerContent = (props: DrawerContentComponentProps) => {
             description: Translation.PAYMENT.PAYMENT_NO_BANK_DETAIL,
             buttoTitle: Translation.BUTTON.LINK_BUSINESS_BANK,
             confirmAction: onBankDialogConfirm,
-            cancelAction: onBankDialogCancel
+            cancelAction: onBankDialogCancel,
           });
         }
       }
@@ -319,7 +318,7 @@ const DrawerContent = (props: DrawerContentComponentProps) => {
       if (availableBalance > 0) {
         props.navigation.navigate(Routes.MERCHANT_CASHOUT_AMOUNT, {
           userId: businessDwollaId,
-          walletData: businessWalletData
+          walletData: businessWalletData,
         });
       } else {
         if (businessFundingSource) {
@@ -329,7 +328,7 @@ const DrawerContent = (props: DrawerContentComponentProps) => {
             description: Translation.LOAD_UP.LOAD_UP_NO_BANK_DETAIL,
             buttoTitle: Translation.BUTTON.LOAD_UP,
             confirmAction: onLoadupDialogConfirm,
-            cancelAction: onLoadupDialogCancel
+            cancelAction: onLoadupDialogCancel,
           });
         } else {
           setBankDialogState({
@@ -338,7 +337,7 @@ const DrawerContent = (props: DrawerContentComponentProps) => {
             description: Translation.CASH_OUT.CASH_OUT_NO_BANK_DETAIL,
             buttoTitle: Translation.BUTTON.LINK_BUSINESS_BANK,
             confirmAction: onBankDialogConfirm,
-            cancelAction: onBankDialogCancel
+            cancelAction: onBankDialogCancel,
           });
         }
       }
@@ -530,7 +529,7 @@ const MerchantTabs: React.FC = () => {
   return (
     <DrawerNav.Navigator
       initialRouteName={Routes.MERCHANT_DASHBOARD}
-      drawerContent={props => <DrawerContent {...props} />}
+      drawerContent={(props) => <DrawerContent {...props} />}
     >
       <DrawerNav.Screen
         name={Routes.MERCHANT_DASHBOARD}

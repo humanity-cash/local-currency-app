@@ -14,5 +14,5 @@ export {
   UserContext,
   UserProvider,
   AuthContext,
-  AuthProvider
+  AuthProvider,
 };
