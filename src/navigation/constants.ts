@@ -52,6 +52,7 @@ export const MERCHANT_PAYMENT_PENDING = "MerchantPaymentPending";
 export const MERCHANT_RETURN = "MerchantReturn";
 export const MERCHANT_RETURN_QRCODE_SCAN = "MerchantReturnQRCodeScan";
 export const MERCHANT_PAYOUT_SUCCESS = "MerchantPayoutSuccess";
+export const MERCHANT_PAYOUT_SOMEONE_SUCCESS = "MerchantPayoutSomeoneSuccess";
 export const MERCHANT_PAYOUT_PENDING = "MerchantPayoutPending";
 export const MERCHANT_PAYOUT_PERSONAL = "MerchantPayoutToPersonal";
 export const MERCHANT_PAYOUT_SOMEONE = "MerchantPayoutToSomeone";
