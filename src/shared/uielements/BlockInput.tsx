@@ -4,7 +4,7 @@ import {
   StyleSheet,
   ReturnKeyTypeOptions,
   KeyboardTypeOptions,
-  Keyboard
+  Keyboard,
 } from "react-native";
 import { colors } from "src/theme/colors";
 
@@ -34,8 +34,8 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
     marginVertical: 8,
     borderWidth: 0,
-    color: colors.text
-  }
+    color: colors.text,
+  },
 });
 
 class BlockInput extends React.Component<BlockInputProps> {
@@ -45,13 +45,13 @@ class BlockInput extends React.Component<BlockInputProps> {
         ref={this.props.inputRef}
         style={{
           ...styles.container,
-          ...this.props.style
+          ...this.props.style,
         }}
         secureTextEntry={this.props.secureTextEntry || false}
         placeholderTextColor={this.props.placeholderTextColor || colors.grey1}
         keyboardType={this.props.keyboardType || "default"}
         placeholder={this.props.placeholder ? this.props.placeholder : ""}
-        onChangeText={newValue =>
+        onChangeText={(newValue) =>
           this.props.onChange(this.props.name, newValue)
         }
         value={this.props.value}

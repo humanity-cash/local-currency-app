@@ -13,35 +13,35 @@ const businessStyles = StyleSheet.create({
   headerText: {
     fontSize: 32,
     lineHeight: 40,
-    color: colors.purple
+    color: colors.purple,
   },
   imageView: {
     flex: 1,
     margin: 15,
     justifyContent: "center",
-    alignItems: "center"
+    alignItems: "center",
   },
   bottomView: {
     marginHorizontal: 20,
-    marginBottom: 20
-  }
+    marginBottom: 20,
+  },
 });
 
 const customerStyles = StyleSheet.create({
   headerText: {
     fontSize: 32,
-    lineHeight: 40
+    lineHeight: 40,
   },
   imageView: {
     flex: 1,
     margin: 15,
     justifyContent: "center",
-    alignItems: "center"
+    alignItems: "center",
   },
   bottomView: {
     marginHorizontal: 20,
-    marginBottom: 20
-  }
+    marginBottom: 20,
+  },
 });
 
 type PaymentRequestSuccessProps = {

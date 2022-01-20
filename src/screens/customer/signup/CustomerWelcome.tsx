@@ -11,7 +11,7 @@ import { colors } from "src/theme/colors";
 import {
   baseHeader,
   viewBase,
-  wrappingContainerBase
+  wrappingContainerBase,
 } from "src/theme/elements";
 import Translation from "src/translation/en.json";
 
@@ -19,15 +19,15 @@ const styles = StyleSheet.create({
   headerText: {
     fontSize: 32,
     color: colors.darkGreen,
-    lineHeight: 42
+    lineHeight: 42,
   },
   bottomView: {
     marginHorizontal: 20,
-    marginBottom: 20
+    marginBottom: 20,
   },
   skipBtn: {
-    marginBottom: 10
-  }
+    marginBottom: 10,
+  },
 });
 
 const LinkBankAccount = (): JSX.Element => {

@@ -3,7 +3,7 @@ import { IMap } from "../utils/types";
 import envs from "./../config/env";
 
 const httpRequest = axios.create({
-  baseURL: envs.CORE_API_URL
+  baseURL: envs.CORE_API_URL,
 });
 
 type Body = IMap;

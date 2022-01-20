@@ -1,5 +1,5 @@
 import { useNavigation } from "@react-navigation/native";
-import React, { useContext, useState } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import {
   KeyboardAvoidingView,
   Platform,
@@ -8,7 +8,7 @@ import {
   View,
   Linking,
   SafeAreaView,
-  Keyboard
+  Keyboard,
 } from "react-native";
 import { CheckBox, Text } from "react-native-elements";
 import { AuthContext } from "src/contexts";
@@ -22,7 +22,7 @@ import { colors } from "src/theme/colors";
 import {
   baseHeader,
   viewBase,
-  wrappingContainerBase
+  wrappingContainerBase,
 } from "src/theme/elements";
 import { isEmailValid } from "src/utils/validation";
 import Translation from "src/translation/en.json";
@@ -30,46 +30,46 @@ import { BERKSHARE_PRIVACY_URL, BERKSHARE_TERMS_URL } from "src/config/env";
 
 const styles = StyleSheet.create({
   container: {
-    paddingBottom: 40
+    paddingBottom: 40,
   },
   headerText: {
     fontSize: 32,
     color: colors.darkGreen,
-    lineHeight: 35
+    lineHeight: 35,
   },
   bodyText: {
-    color: colors.bodyText
+    color: colors.bodyText,
   },
   form: {
-    marginTop: 30
+    marginTop: 30,
   },
   label: {
-    fontSize: 10
+    fontSize: 10,
   },
   bottomView: {
     marginHorizontal: 20,
-    marginBottom: 20
+    marginBottom: 20,
   },
   checkboxTextView: {
     fontWeight: "400",
     paddingTop: 10,
     flexDirection: "row",
     flexWrap: "wrap",
-    flex: 1
+    flex: 1,
   },
   checkboxContainer: {
     borderWidth: 0,
     backgroundColor: "transparent",
-    paddingHorizontal: 0
+    paddingHorizontal: 0,
   },
   terms: {
     flexDirection: "row",
     paddingBottom: 20,
-    paddingRight: 20
+    paddingRight: 20,
   },
   underlineText: {
-    textDecorationLine: "underline"
-  }
+    textDecorationLine: "underline",
+  },
 });
 
 const CreateAccount = (): JSX.Element => {
@@ -77,18 +77,30 @@ const CreateAccount = (): JSX.Element => {
   const { signUpDetails, updateSignUpDetails } = useContext(AuthContext);
   const [isSelected, setSelection] = useState(true);
 
+  useEffect(() => {
+    updateSignUpDetails({
+      email: "",
+      password: "",
+      confirmPassword: "",
+    });
+  }, []);
+
   const onValueChange = (_name: never, change: string) => {
-    updateSignUpDetails({ email: change });
+    updateSignUpDetails({
+      email: change,
+      password: "",
+      confirmPassword: "",
+    });
   };
 
   const onPressNext = () => {
-    Keyboard.dismiss()
-    navigation.navigate(Routes.PASSWORD)
-  }
+    Keyboard.dismiss();
+    navigation.navigate(Routes.PASSWORD);
+  };
 
   return (
     <KeyboardAvoidingView
-      {...(Platform.OS === 'ios' && { behavior: 'padding' })}
+      {...(Platform.OS === "ios" && { behavior: "padding" })}
       style={viewBase}
     >
       <Header leftComponent={<BackBtn onClick={() => navigation.goBack()} />} />

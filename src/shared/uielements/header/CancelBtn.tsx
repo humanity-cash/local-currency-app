@@ -13,19 +13,19 @@ type CancelBtnProps = {
 const styles = StyleSheet.create({
   container: {
     alignSelf: "flex-end",
-    padding: 10,
+    margin: 10,
     flexDirection: "row",
     textAlign: "right"
   },
   cross: {
     paddingLeft: 5,
-    textAlign: "right"
+    textAlign: "right",
   },
   text: {
     paddingLeft: 5,
     textAlign: "right",
-    width: 100
-  }
+    width: 100,
+  },
 });
 
 const CancelBtn = (props: CancelBtnProps) => {

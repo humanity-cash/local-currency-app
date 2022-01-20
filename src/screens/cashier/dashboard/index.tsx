@@ -10,7 +10,7 @@ import {
   baseHeader,
   viewBaseB,
   wrappingContainerBase,
-  dialogViewBase
+  dialogViewBase,
 } from "src/theme/elements";
 import { Button, CancelBtn, Dialog } from "src/shared/uielements";
 import Translation from "src/translation/en.json";

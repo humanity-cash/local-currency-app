@@ -10,7 +10,7 @@ function ForgotPasswordStackScreen(): ReactElement {
   return (
     <ForgotPasswordStack.Navigator
       screenOptions={() => ({
-        headerShown: false
+        headerShown: false,
       })}
     >
       <ForgotPasswordStack.Screen

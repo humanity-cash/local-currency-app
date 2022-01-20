@@ -13,17 +13,17 @@ const styles = StyleSheet.create({
   headerText: {
     fontSize: 32,
     lineHeight: 42,
-    color: colors.darkGreen
+    color: colors.darkGreen,
   },
   modalHeader: {
     fontSize: 32,
     fontWeight: "400",
-    lineHeight: 40
+    lineHeight: 40,
   },
   bottomView: {
     marginHorizontal: 20,
-    marginBottom: 45
-  }
+    marginBottom: 45,
+  },
 });
 
 const ForgotPasswordSuccess = () => {

@@ -5,7 +5,7 @@ import {
   Platform,
   ScrollView,
   View,
-  TouchableOpacity
+  TouchableOpacity,
 } from "react-native";
 import { Text } from "react-native-elements";
 import {
@@ -13,13 +13,14 @@ import {
   BorderedInput,
   Button,
   Header,
-  CancelBtn
+  CancelBtn,
 } from "src/shared/uielements";
 import { colors } from "src/theme/colors";
 import {
   underlineHeader,
   viewBase,
-  wrappingContainerBase
+  viewBaseB,
+  wrappingContainerBase,
 } from "src/theme/elements";
 import Translation from "src/translation/en.json";
 import * as Routes from "src/navigation/constants";
@@ -32,6 +33,7 @@ import { SafeAreaView } from "react-native";
 import { CustomerLoadUp, BusinessLoadUp } from "src/style";
 import { UserContext } from "src/contexts";
 import { UserType } from "src/auth/types";
+import { color } from "react-native-reanimated";
 
 const MAX_AMOUNT = 2000;
 const MIN_AMOUNT = 1;
@@ -97,8 +99,8 @@ const LoadUp = (props: LoadUpProps): JSX.Element => {
 
   return (
     <KeyboardAvoidingView
-      {...(Platform.OS === 'ios' && { behavior: 'padding' })}
-      style={viewBase}
+      {...(Platform.OS === "ios" && { behavior: "padding" })}
+      style={isCustomer ? viewBase : viewBaseB}
     >
       <LoadingPage visible={isLoading} isPayment={true} />
       <Header
@@ -119,7 +121,11 @@ const LoadUp = (props: LoadUpProps): JSX.Element => {
             <Text style={styles.headerText}>{Translation.BUTTON.LOAD_UP}</Text>
           </View>
           <View style={styles.view}>
-            <Text>{Translation.LOAD_UP.LOAD_UP_DETAIL}</Text>
+            <Text
+              style={{ color: isCustomer ? colors.darkGreen : colors.purple }}
+            >
+              {Translation.LOAD_UP.LOAD_UP_DETAIL}
+            </Text>
 
             <Text style={{ ...styles.text, ...styles.amountText }}>
               {Translation.LABEL.AMOUNT}
@@ -133,7 +139,15 @@ const LoadUp = (props: LoadUpProps): JSX.Element => {
                 }
                 onPress={() => onValueChange("amount", "50")}
               >
-                <Text>B$ 50</Text>
+                <Text
+                  style={
+                    amount == "50"
+                      ? styles.selectedAmountSwitch
+                      : styles.defaultAmountSwitch
+                  }
+                >
+                  B$ 50
+                </Text>
               </TouchableOpacity>
               <TouchableOpacity
                 style={
@@ -143,7 +157,15 @@ const LoadUp = (props: LoadUpProps): JSX.Element => {
                 }
                 onPress={() => onValueChange("amount", "100")}
               >
-                <Text>B$ 100</Text>
+                <Text
+                  style={
+                    amount == "100"
+                      ? styles.selectedAmountSwitch
+                      : styles.defaultAmountSwitch
+                  }
+                >
+                  B$ 100
+                </Text>
               </TouchableOpacity>
               <TouchableOpacity
                 style={
@@ -153,7 +175,15 @@ const LoadUp = (props: LoadUpProps): JSX.Element => {
                 }
                 onPress={() => onValueChange("amount", "200")}
               >
-                <Text>B$ 200</Text>
+                <Text
+                  style={
+                    amount == "200"
+                      ? styles.selectedAmountSwitch
+                      : styles.defaultAmountSwitch
+                  }
+                >
+                  B$ 200
+                </Text>
               </TouchableOpacity>
             </View>
 
@@ -169,16 +199,26 @@ const LoadUp = (props: LoadUpProps): JSX.Element => {
               prefix="B$"
               value={amount}
               style={{
-                backgroundColor: isCustomer ? colors.inputBg : colors.lightBg
+                backgroundColor: isCustomer ? colors.inputBg : colors.lightBg,
+                color: isCustomer ? colors.darkGreen : colors.purple,
+              }}
+              textStyle={{
+                color: isCustomer ? colors.darkGreen : colors.purple,
               }}
               onChange={onValueChange}
             />
 
             <View style={styles.totalView}>
-              <Text h2 style={{ color: colors.text }}>
+              <Text
+                h2
+                style={{ color: isCustomer ? colors.darkGreen : colors.purple }}
+              >
                 {Translation.LOAD_UP.TOTAL_COSTS}
               </Text>
-              <Text h2 style={{ color: colors.text }}>
+              <Text
+                h2
+                style={{ color: isCustomer ? colors.darkGreen : colors.purple }}
+              >
                 {Translation.COMMON.USD} {amount === "" ? "-" : amount}
               </Text>
             </View>
@@ -187,7 +227,7 @@ const LoadUp = (props: LoadUpProps): JSX.Element => {
       </ScrollView>
       <SafeAreaView style={styles.bottomView}>
         <Button
-          type={BUTTON_TYPES.DARK_GREEN}
+          type={isCustomer ? BUTTON_TYPES.DARK_GREEN : BUTTON_TYPES.PURPLE}
           title={Translation.BUTTON.LOAD_UP}
           disabled={!goNext}
           onPress={onLoadUp}

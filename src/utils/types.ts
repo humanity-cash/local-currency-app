@@ -51,7 +51,7 @@ export enum BusinessType {
   CORPORATION = "Corporation",
   LLC = "LLC",
   PARTNERSHIP = "Partnership",
-  NON_PROFIT = "Non-profit"
+  NON_PROFIT = "Non-profit",
 }
 
 export enum Industry {
@@ -61,7 +61,7 @@ export enum Industry {
   HEALTH_WELLNESS = "Health & wellness",
   LODGING = "Lodging",
   SHOPPING = "Shopping",
-  SERVICES = "Services"
+  SERVICES = "Services",
 }
 
 export type BusinessDetails = {
@@ -155,13 +155,13 @@ export type Order = {
 
 export enum OrderType {
   BUY = "buy",
-  SELL = "sell"
+  SELL = "sell",
 }
 
 export enum StatusType {
   PROGRESS = "inprogress",
   COMPLETE = "complete",
-  PARTIALLY = "partially"
+  PARTIALLY = "partially",
 }
 
 export type Share = {
@@ -177,7 +177,7 @@ export type Share = {
 
 export enum Growth {
   INCREASE = "increase",
-  DECRESE = "decrease"
+  DECRESE = "decrease",
 }
 
 export type MarketEntry = {
@@ -213,7 +213,7 @@ export enum FilterType {
   TOP_GAINS = "topGains",
   TOP_LOSS = "topLoss",
   TOP_DIVIDED = "topDivided",
-  TOP_TRADE = "topTrade"
+  TOP_TRADE = "topTrade",
 }
 
 export type GraphDataset = {
@@ -302,7 +302,7 @@ export enum TransactionType {
   DEPOSIT = "Deposit",
   PURCHASEMENT = "Purchasement",
   IN = "IN",
-  OUT = "OUT"
+  OUT = "OUT",
 }
 
 export const TransactionTypes = {
@@ -312,7 +312,7 @@ export const TransactionTypes = {
   Transfer: "Transfer",
   Donation: "Donation",
   "Customer return": "Customer return",
-  Purchasement: "Purchasement"
+  Purchasement: "Purchasement",
 };
 
 export type MerchantTransactionItem = {
@@ -350,7 +350,7 @@ export interface FaqData extends AccordionEntry {
 
 export enum PaymentMode {
   OPEN_AMOUNT = "open",
-  SELECT_AMOUNT = "select"
+  SELECT_AMOUNT = "select",
 }
 
 export const SECURITY_ID = "berkShareSecurity";
@@ -370,14 +370,14 @@ export interface EnvData {
 export enum ToastType {
   SUCCESS = "success",
   ERROR = "error",
-  INFO = "info"
+  INFO = "info",
 }
 
 /* LOADING SCREENS	*/
 export const enum LoadingScreenTypes {
   PAYMENT_PENDING = "paymentPending",
   LOADING_DATA = "loadingData",
-  ANY = "anyData"
+  ANY = "anyData",
 }
 
 export interface LoadingState {
@@ -409,7 +409,7 @@ export interface TxDataStore {
 }
 
 export enum TxDataStoreActions {
-  UpdateTransactions = "updateTransactions"
+  UpdateTransactions = "updateTransactions",
 }
 
 export enum TxFilterStoreActions {
@@ -420,7 +420,7 @@ export enum TxFilterStoreActions {
   UpdateStartDate = "updateStartDate",
   UpdateEndDate = "updateEndDate",
   UpdateType = "updateType",
-  ClearAll = "clearAll"
+  ClearAll = "clearAll",
 }
 
 export type TxFilterStoreReducer = {

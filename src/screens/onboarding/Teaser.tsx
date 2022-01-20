@@ -15,27 +15,27 @@ import Translation from "src/translation/en.json";
 const styles = StyleSheet.create({
   content: {
     flex: 1,
-    flexDirection: "column"
+    flexDirection: "column",
   },
   image: {
     flex: 1,
     resizeMode: "cover",
-    justifyContent: "center"
+    justifyContent: "center",
   },
   titleView: {
-    paddingLeft: 35
+    paddingLeft: 35,
   },
   titleText: {
     fontSize: 50,
     lineHeight: 50,
     color: colors.darkGreen1,
-    marginBottom: 10
+    marginBottom: 10,
   },
   description: {
     fontSize: 16,
     color: colors.white,
     paddingLeft: 5,
-    fontWeight: "500"
+    fontWeight: "500",
   },
   bottomView: {
     position: "absolute",
@@ -44,12 +44,12 @@ const styles = StyleSheet.create({
     width: "100%",
     height: 170,
     paddingHorizontal: 20,
-    paddingBottom: 50
+    paddingBottom: 50,
   },
   createAccountBtn: {
     marginTop: 10,
-    backgroundColor: "#fff"
-  }
+    backgroundColor: "#fff",
+  },
 });
 
 const Teaser = (): JSX.Element => {

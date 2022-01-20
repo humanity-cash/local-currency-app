@@ -52,7 +52,7 @@ export const UserProvider: React.FunctionComponent = ({ children }) => {
     updateBusinessData,
     businessDwollaId,
     customerDwollaId,
-    updateUserData
+    updateUserData,
   };
 
   return <UserContext.Provider value={state}>{children}</UserContext.Provider>;

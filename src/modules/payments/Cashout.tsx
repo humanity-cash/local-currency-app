@@ -5,7 +5,7 @@ import {
   Platform,
   ScrollView,
   View,
-  SafeAreaView
+  SafeAreaView,
 } from "react-native";
 import { Text } from "react-native-elements";
 import { TransactionsAPI } from "src/api";
@@ -16,7 +16,7 @@ import {
   Button,
   CancelBtn,
   Dialog,
-  Header
+  Header,
 } from "src/shared/uielements";
 import { colors } from "src/theme/colors";
 import {
@@ -24,7 +24,7 @@ import {
   underlineHeader,
   viewBase,
   viewBaseB,
-  wrappingContainerBase
+  wrappingContainerBase,
 } from "src/theme/elements";
 import Translation from "src/translation/en.json";
 import { IMap } from "src/utils/types";
@@ -66,7 +66,7 @@ const CashoutAmount = (props: CashOutInput): JSX.Element => {
 
   const [state, setState] = useState<CashoutState>({
     amount: "",
-    costs: ""
+    costs: "",
   });
 
   const [goNext, setGoNext] = useState(false);
@@ -78,7 +78,7 @@ const CashoutAmount = (props: CashOutInput): JSX.Element => {
 
   useEffect(() => {
     setGoNext(Boolean(state.costs));
-    setExceed(+state.costs > +maxAmount);
+    setExceed(+state.costs > +maxAmount || +state.costs < 0.5);
   }, [state]);
 
   useEffect(() => {
@@ -97,7 +97,7 @@ const CashoutAmount = (props: CashOutInput): JSX.Element => {
     const amount = change.replace(",", ".");
     setState({
       amount: amount,
-      costs: amount
+      costs: amount,
     } as CashoutState);
   };
 
@@ -119,7 +119,7 @@ const CashoutAmount = (props: CashOutInput): JSX.Element => {
     setIsVisible(false);
     setIsLoading(true);
     const response = await TransactionsAPI.withdraw(userId, {
-      amount
+      amount,
     });
     setIsLoading(false);
 
@@ -136,7 +136,7 @@ const CashoutAmount = (props: CashOutInput): JSX.Element => {
 
   return (
     <KeyboardAvoidingView
-      {...(Platform.OS === 'ios' && { behavior: 'padding' })}
+      {...(Platform.OS === "ios" && { behavior: "padding" })}
       style={isCustomer ? viewBase : viewBaseB}
     >
       <LoadingPage visible={isLoading} isPayment={true} />
@@ -150,7 +150,13 @@ const CashoutAmount = (props: CashOutInput): JSX.Element => {
           <Text style={styles.headerText}>{Translation.PAYMENT.CASH_OUT}</Text>
         </View>
         <View>
-          <Text>{Translation.PAYMENT.CASH_OUT_DETAIL}</Text>
+          <Text
+            style={{ color: isCustomer ? colors.darkGreen : colors.purple }}
+          >
+            {isCustomer
+              ? Translation.PAYMENT.CASH_OUT_DETAIL
+              : Translation.PAYMENT.MERCHANT_CASH_OUT_DETAIL}
+          </Text>
           <View style={styles.formLabel}>
             <Text style={styles.labelText}>{Translation.LABEL.AMOUNT}</Text>
             <Text
@@ -166,15 +172,13 @@ const CashoutAmount = (props: CashOutInput): JSX.Element => {
             value={state.amount}
             onChange={onValueChange}
             style={{
-              backgroundColor: isCustomer ? colors.inputBg : colors.lightBg
+              backgroundColor: isCustomer ? colors.inputBg : colors.lightBg,
             }}
-            borderColor={exceed ? colors.mistakeRed : null}
+            borderColor={goNext && exceed ? colors.mistakeRed : null}
           />
-          {exceed && (
+          {goNext && exceed && (
             <Text style={styles.errorBalance}>
-              {walletData?.availableBalance <= 5
-                ? Translation.PAYMENT.PERSONAL_EXCEED_BALANCE
-                : Translation.PAYMENT.PERSONAL_EXCEED_$5}
+              {Translation.PAYMENT.PERSONAL_EXCEED_BALANCE}
             </Text>
           )}
           <View style={styles.resultView}>

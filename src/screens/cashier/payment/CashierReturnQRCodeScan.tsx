@@ -5,7 +5,7 @@ import {
   ScrollView,
   KeyboardAvoidingView,
   Platform,
-  SafeAreaView
+  SafeAreaView,
 } from "react-native";
 import { Text } from "react-native-elements";
 import { useCameraPermission } from "src/hooks";
@@ -18,7 +18,7 @@ import {
   modalViewBase,
   wrappingContainerBase,
   underlineHeaderB,
-  viewBase
+  viewBase,
 } from "src/theme/elements";
 import {
   Header,
@@ -27,13 +27,13 @@ import {
   Modal,
   ModalHeader,
   BorderedInput,
-  Button
+  Button,
 } from "src/shared/uielements";
 import {
   QRCodeEntry,
   SECURITY_ID,
   PaymentMode,
-  ToastType
+  ToastType,
 } from "src/utils/types";
 import { isQRCodeValid } from "src/utils/validation";
 import { TransactionsAPI } from "src/api";
@@ -53,7 +53,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     flexDirection: "column",
-    justifyContent: "center"
+    justifyContent: "center",
   },
   toggleView: {
     position: "absolute",
@@ -61,37 +61,37 @@ const styles = StyleSheet.create({
     left: 0,
     width: "100%",
     height: 200,
-    backgroundColor: "rgba(0,0,0,0.8)"
+    backgroundColor: "rgba(0,0,0,0.8)",
   },
   headerText: {
     fontSize: 32,
     fontWeight: "400",
     lineHeight: 40,
-    color: colors.purple
+    color: colors.purple,
   },
   contentView: {
-    marginTop: 5
+    marginTop: 5,
   },
   label: {
     color: colors.text,
-    fontSize: 12
+    fontSize: 12,
   },
   input: {
     backgroundColor: colors.white,
-    color: colors.purple
+    color: colors.purple,
   },
   text: {
-    color: colors.purple
+    color: colors.purple,
   },
   bottomView: {
     marginHorizontal: 20,
-    marginVertical: 20
+    marginVertical: 20,
   },
   transactionDetailView: {
     padding: 20,
     marginBottom: 20,
     borderRadius: 3,
-    backgroundColor: colors.white
+    backgroundColor: colors.white,
   },
   transactionDetailAmount: {
     fontSize: 32,
@@ -99,20 +99,20 @@ const styles = StyleSheet.create({
     marginVertical: 20,
     fontWeight: "bold",
     lineHeight: 32,
-    textAlign: "center"
+    textAlign: "center",
   },
   inlineView: {
     flexDirection: "row",
-    justifyContent: "space-between"
+    justifyContent: "space-between",
   },
   maxBView: {
     flexDirection: "row",
-    justifyContent: "space-between"
+    justifyContent: "space-between",
   },
   exceedLabel: {
     fontSize: 10,
-    color: colors.mistakeRed
-  }
+    color: colors.mistakeRed,
+  },
 });
 
 const CashierReturnQRCodeScan = (): JSX.Element => {
@@ -128,7 +128,7 @@ const CashierReturnQRCodeScan = (): JSX.Element => {
     securityId: SECURITY_ID,
     to: "",
     amount: 0,
-    mode: PaymentMode.SELECT_AMOUNT
+    mode: PaymentMode.SELECT_AMOUNT,
   });
   const [exceed, setExceed] = useState(false);
 
@@ -173,7 +173,7 @@ const CashierReturnQRCodeScan = (): JSX.Element => {
       const request: ITransactionRequest = {
         toUserId: state.to,
         amount: amount.toString(),
-        comment: ""
+        comment: "",
       };
 
       setIsLoading(true);
@@ -231,7 +231,7 @@ const CashierReturnQRCodeScan = (): JSX.Element => {
       {isReturnModal && (
         <Modal visible={isReturnModal}>
           <KeyboardAvoidingView
-            {...(Platform.OS === 'ios' && { behavior: 'padding' })}
+            {...(Platform.OS === "ios" && { behavior: "padding" })}
             style={modalViewBase}
           >
             <ModalHeader
@@ -269,7 +269,7 @@ const CashierReturnQRCodeScan = (): JSX.Element => {
                     <Text style={styles.label}>DATE</Text>
                     <Text style={styles.label}>
                       {moment(state.transactionDate).format(
-                        "HH:mm, MMM D, YYYY"
+                        "h:mm A, MMM D, YYYY"
                       )}
                     </Text>
                   </View>
