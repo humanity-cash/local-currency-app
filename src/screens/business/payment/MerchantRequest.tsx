@@ -92,7 +92,7 @@ const MerchantRequest = (): JSX.Element => {
 
   const { businessDwollaId, user } = useContext(UserContext);
   const { businessWalletData } = useContext(WalletContext);
-  const businessFundingSource = businessWalletData?.availableFundingSource;
+  const businessFundingSource = businessWalletData?.availableFundingSource?.visible;
   const availableBalance = businessWalletData?.availableBalance;
   const [bankDialogInfo, setBankDialogInfo] = useState<{
     isVisible: boolean;

@@ -139,7 +139,7 @@ const DrawerContent = (
   const [bankDialogState, setBankDialogState] =
     useState<BankLinkDialogStateProps>(initBankDialogState);
   const { customerWalletData } = useContext(WalletContext);
-  const personalFundingSource = customerWalletData?.availableFundingSource;
+  const personalFundingSource = customerWalletData?.availableFundingSource?.visible;
   const availableBalance = customerWalletData?.availableBalance;
   const [isSetting, setIsSetting] = useState(false);
 
@@ -311,7 +311,7 @@ const DrawerContent = (
             <DrawerItem
               label={Translation.TABS.LOADUP}
               onPress={() =>
-                customerWalletData?.availableFundingSource
+                customerWalletData?.availableFundingSource?.visible
                   ? props.navigation.navigate(Routes.LOAD_UP, {
                       userId: customerDwollaId,
                     })
@@ -328,7 +328,7 @@ const DrawerContent = (
             <DrawerItem
               label={Translation.TABS.CASHOUT}
               onPress={() => {
-                customerWalletData?.availableFundingSource
+                customerWalletData?.availableFundingSource?.visible
                   ? props.navigation.navigate(Routes.CASHOUT_AMOUNT, {
                       userId: customerDwollaId,
                       walletData: customerWalletData,
