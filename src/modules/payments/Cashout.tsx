@@ -78,7 +78,7 @@ const CashoutAmount = (props: CashOutInput): JSX.Element => {
 
   useEffect(() => {
     setGoNext(Boolean(state.costs));
-    setExceed(+state.costs > +maxAmount);
+    setExceed(+state.costs > +maxAmount || +state.costs < 0.5);
   }, [state]);
 
   useEffect(() => {
@@ -174,13 +174,11 @@ const CashoutAmount = (props: CashOutInput): JSX.Element => {
             style={{
               backgroundColor: isCustomer ? colors.inputBg : colors.lightBg,
             }}
-            borderColor={exceed ? colors.mistakeRed : null}
+            borderColor={goNext && exceed ? colors.mistakeRed : null}
           />
-          {exceed && (
+          {goNext && exceed && (
             <Text style={styles.errorBalance}>
-              {walletData?.availableBalance <= 5
-                ? Translation.PAYMENT.PERSONAL_EXCEED_BALANCE
-                : Translation.PAYMENT.PERSONAL_EXCEED_$5}
+              {Translation.PAYMENT.PERSONAL_EXCEED_BALANCE}
             </Text>
           )}
           <View style={styles.resultView}>
