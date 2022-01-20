@@ -7,7 +7,7 @@ import {
   ScrollView,
   StyleSheet,
   TextInput,
-  View
+  View,
 } from "react-native";
 import { Text } from "react-native-elements";
 import { AuthStatus, SignInInput } from "src/auth/types";
@@ -21,7 +21,7 @@ import { colors } from "src/theme/colors";
 import {
   baseHeader,
   viewBase,
-  wrappingContainerBase
+  wrappingContainerBase,
 } from "src/theme/elements";
 import Translation from "src/translation/en.json";
 import { isPasswordValid } from "src/utils/validation";
@@ -30,31 +30,31 @@ const styles = StyleSheet.create({
   headerText: {
     fontSize: 32,
     color: colors.darkGreen,
-    lineHeight: 35
+    lineHeight: 35,
   },
   bodyText: {
-    color: colors.bodyText
+    color: colors.bodyText,
   },
   form: {
-    marginVertical: 30
+    marginVertical: 30,
   },
   label: {
     fontSize: 12,
     lineHeight: 14,
     color: colors.bodyText,
-    paddingTop: 10
+    paddingTop: 10,
   },
   bottomView: {
     marginHorizontal: 20,
-    marginBottom: 20
+    marginBottom: 20,
   },
   eyeView: {
     position: "absolute",
     right: 10,
     top: 0,
     bottom: 0,
-    justifyContent: "center"
-  }
+    justifyContent: "center",
+  },
 });
 
 const Login = (): JSX.Element => {
@@ -64,7 +64,7 @@ const Login = (): JSX.Element => {
     signInDetails,
     setSignInDetails,
     authStatus,
-    resendEmailVerificationCode
+    resendEmailVerificationCode,
   } = useContext(AuthContext);
   const [goNext, setGoNext] = useState<boolean>(false);
   const [isLoading, setLoading] = useState<boolean>(false);
@@ -82,7 +82,7 @@ const Login = (): JSX.Element => {
   const onValueChange = (name: "email" | "password", change: string) => {
     setSignInDetails((pv: SignInInput) => ({
       ...pv,
-      [name]: change
+      [name]: change,
     }));
   };
 
@@ -98,7 +98,7 @@ const Login = (): JSX.Element => {
 
   return (
     <KeyboardAvoidingView
-      {...(Platform.OS === 'ios' && { behavior: 'padding' })}
+      {...(Platform.OS === "ios" && { behavior: "padding" })}
       style={viewBase}
     >
       <LoadingPage visible={isLoading} isData={true} />

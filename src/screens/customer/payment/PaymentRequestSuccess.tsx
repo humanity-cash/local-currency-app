@@ -9,18 +9,18 @@ import { BUTTON_TYPES } from "src/constants";
 const styles = StyleSheet.create({
   headerText: {
     fontSize: 32,
-    lineHeight: 40
+    lineHeight: 40,
   },
   imageView: {
     flex: 1,
     margin: 15,
     justifyContent: "center",
-    alignItems: "center"
+    alignItems: "center",
   },
   bottomView: {
     marginHorizontal: 20,
-    marginBottom: 20
-  }
+    marginBottom: 20,
+  },
 });
 
 type PaymentRequestSuccessProps = {

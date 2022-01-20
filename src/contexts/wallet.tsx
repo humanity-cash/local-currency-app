@@ -25,7 +25,7 @@ export const WalletProvider: React.FunctionComponent = ({ children }) => {
     userId: "",
     address: "",
     createdBlock: "",
-    availableFundingSource: false
+    availableFundingSource: false,
   });
   const [businessWalletData, setBusinessWalletData] = useState<
     IWallet & PersonalFundingSource
@@ -36,7 +36,7 @@ export const WalletProvider: React.FunctionComponent = ({ children }) => {
     userId: "",
     address: "",
     createdBlock: "",
-    availableFundingSource: false
+    availableFundingSource: false,
   });
 
   const updateBusinessWalletData = async (businessDwollaId: string) => {
@@ -45,7 +45,7 @@ export const WalletProvider: React.FunctionComponent = ({ children }) => {
       const fundingSource = await DwollaAPI.loadFundingSource(businessDwollaId);
       setBusinessWalletData({
         ...userWallet,
-        availableFundingSource: fundingSource
+        availableFundingSource: fundingSource,
       });
     }
   };
@@ -56,7 +56,7 @@ export const WalletProvider: React.FunctionComponent = ({ children }) => {
       const fundingSource = await DwollaAPI.loadFundingSource(customerDwollaId);
       setCustomerWalletData({
         ...userWallet,
-        availableFundingSource: fundingSource
+        availableFundingSource: fundingSource,
       });
     }
   };
@@ -65,7 +65,7 @@ export const WalletProvider: React.FunctionComponent = ({ children }) => {
     customerWalletData,
     businessWalletData,
     updateBusinessWalletData,
-    updateCustomerWalletData
+    updateCustomerWalletData,
   };
 
   return (

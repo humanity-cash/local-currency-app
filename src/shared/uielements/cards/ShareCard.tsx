@@ -17,37 +17,37 @@ const styles = StyleSheet.create({
     borderLeftColor: colors.brown,
     borderLeftWidth: 5,
     padding: 20,
-    marginVertical: 10
+    marginVertical: 10,
   },
   headerView: {
     flexDirection: "row",
-    marginBottom: 20
+    marginBottom: 20,
   },
   headerName: {
     flex: 1,
     fontSize: 20,
-    fontFamily: FontFamily.bold
+    fontFamily: FontFamily.bold,
   },
   headerChangeRate: {
     fontSize: 20,
-    fontFamily: FontFamily.bold
+    fontFamily: FontFamily.bold,
   },
   boldText: {
-    fontFamily: FontFamily.bold
+    fontFamily: FontFamily.bold,
   },
   detailsView: {
-    flexDirection: "row"
+    flexDirection: "row",
   },
   leftView: {
-    flex: 1
+    flex: 1,
   },
   rightView: {
     flex: 1,
     borderLeftColor: colors.text,
     borderLeftWidth: 1,
     marginLeft: 20,
-    paddingLeft: 20
-  }
+    paddingLeft: 20,
+  },
 });
 
 const ShareCardView = (props: ShareProps) => {

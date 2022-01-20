@@ -5,7 +5,7 @@ import React, {
   ReactElement,
   useContext,
   useEffect,
-  useState
+  useState,
 } from "react";
 import {
   Keyboard,
@@ -14,7 +14,7 @@ import {
   SafeAreaView,
   ScrollView,
   StyleSheet,
-  View
+  View,
 } from "react-native";
 import { Text } from "react-native-elements";
 import SelectDropdown from "react-native-select-dropdown";
@@ -25,13 +25,13 @@ import {
   BlockInput,
   Button,
   CancelBtn,
-  Header
+  Header,
 } from "src/shared/uielements";
 import { colors } from "src/theme/colors";
 import {
   underlineHeaderB,
   viewBaseB,
-  wrappingContainerBase
+  wrappingContainerBase,
 } from "src/theme/elements";
 import Translation from "src/translation/en.json";
 import { Industry } from "src/utils/types";
@@ -44,49 +44,49 @@ const Industries = [
   Industry.HEALTH_WELLNESS,
   Industry.LODGING,
   Industry.SHOPPING,
-  Industry.SERVICES
+  Industry.SERVICES,
 ];
 
 const styles = StyleSheet.create({
   headerText: {
     fontSize: 32,
     lineHeight: 32,
-    color: colors.purple
+    color: colors.purple,
   },
   bodyText: {
-    color: colors.bodyText
+    color: colors.bodyText,
   },
   label: {
     color: colors.bodyText,
-    fontSize: 10
+    fontSize: 10,
   },
   input: {
     color: colors.purple,
-    backgroundColor: colors.white
+    backgroundColor: colors.white,
   },
   picker: {
     height: 55,
     justifyContent: "center",
     borderRadius: 3,
     backgroundColor: colors.white,
-    marginBottom: 10
+    marginBottom: 10,
   },
   pickerText: {
-    color: colors.purple
+    color: colors.purple,
   },
   selectItem: {
     width: "100%",
     height: 55,
-    backgroundColor: colors.white
+    backgroundColor: colors.white,
   },
   dropdownContainer: { marginTop: -22 },
   formView: {
-    paddingBottom: 40
+    paddingBottom: 40,
   },
   bottomView: {
     marginHorizontal: 20,
-    marginBottom: 20
-  }
+    marginBottom: 20,
+  },
 });
 
 const BusinessInfo = (): ReactElement => {
@@ -112,13 +112,13 @@ const BusinessInfo = (): ReactElement => {
 
   const onValueChange = (name: string, change: string) => {
     updateBusinessData({
-      [name]: change
+      [name]: change,
     });
   };
 
   return (
     <KeyboardAvoidingView
-      {...(Platform.OS === 'ios' && { behavior: 'padding' })}
+      {...(Platform.OS === "ios" && { behavior: "padding" })}
       style={viewBaseB}
     >
       <Header
@@ -164,20 +164,20 @@ const BusinessInfo = (): ReactElement => {
                 ref={industryRef}
                 data={Industries}
                 defaultValueByIndex={0}
-                onSelect={selectedItem => {
+                onSelect={(selectedItem) => {
                   onValueChange("industry", selectedItem);
                 }}
-                buttonTextAfterSelection={selectedItem => {
+                buttonTextAfterSelection={(selectedItem) => {
                   return selectedItem;
                 }}
-                rowTextForSelection={item => {
+                rowTextForSelection={(item) => {
                   return item;
                 }}
                 buttonStyle={styles.selectItem}
                 buttonTextStyle={styles.pickerText}
                 rowStyle={styles.selectItem}
                 dropdownStyle={styles.dropdownContainer}
-                renderCustomizedRowChild={item => (
+                renderCustomizedRowChild={(item) => (
                   <Text style={styles.pickerText}>{item}</Text>
                 )}
                 renderDropdownIcon={() => (

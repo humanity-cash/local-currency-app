@@ -12,11 +12,11 @@ export const BERKSHARE_TERMS_URL =
   "https://berkshares.org/about/terms-and-conditions/";
 
 const devEnvironmentVariables = {
-  CORE_API_URL: DEV_CORE_API_URL
+  CORE_API_URL: DEV_CORE_API_URL,
 };
 
 const prodEnvironmentVariables = {
-  CORE_API_URL: PROD_CORE_API_URL
+  CORE_API_URL: PROD_CORE_API_URL,
 };
 
 export default __DEV__ ? devEnvironmentVariables : prodEnvironmentVariables;

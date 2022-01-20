@@ -25,7 +25,7 @@ export const EventsProvider: React.FunctionComponent = ({ children }) => {
     const ret = await deleteEventApi(userId, eventId);
     if (ret) {
       setEvents(
-        events.filter(item => {
+        events.filter((item) => {
           return item.dbId != eventId;
         })
       );
@@ -36,7 +36,7 @@ export const EventsProvider: React.FunctionComponent = ({ children }) => {
     events,
     updateEvents,
     getEvents,
-    deleteEvent
+    deleteEvent,
   };
 
   return (

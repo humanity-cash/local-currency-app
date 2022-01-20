@@ -9,27 +9,27 @@ import { colors } from "src/theme/colors";
 import {
   underlineHeader,
   viewBase,
-  wrappingContainerBase
+  wrappingContainerBase,
 } from "src/theme/elements";
 import Translation from "src/translation/en.json";
 
 const styles = StyleSheet.create({
   headerText: {
     fontSize: 32,
-    lineHeight: 32
+    lineHeight: 32,
   },
   bodyView: {
     paddingTop: 50,
-    paddingHorizontal: 17
+    paddingHorizontal: 17,
   },
   bodyText: {
     color: colors.bodyText,
-    textAlign: "center"
+    textAlign: "center",
   },
   bottomView: {
     marginHorizontal: 20,
-    marginBottom: 20
-  }
+    marginBottom: 20,
+  },
 });
 
 const BusinessAccount = (): JSX.Element => {

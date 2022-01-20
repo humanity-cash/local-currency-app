@@ -21,26 +21,26 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowOffset: {
       width: 1,
-      height: 1
-    }
+      height: 1,
+    },
   },
   boldText: {
-    fontFamily: FontFamily.bold
+    fontFamily: FontFamily.bold,
   },
   detailsView: {
-    flexDirection: "row"
+    flexDirection: "row",
   },
   gridView: {
     flex: 2,
-    padding: 15
+    padding: 15,
   },
   gridWiderView: {
-    flex: 3
+    flex: 3,
   },
   buttonView: {
     alignItems: "center",
     justifyContent: "center",
-    flex: 1
+    flex: 1,
   },
   buttonHeader: {
     color: colors.white,
@@ -48,7 +48,7 @@ const styles = StyleSheet.create({
     fontSize: 16,
     lineHeight: 16,
     margin: 0,
-    padding: 0
+    padding: 0,
   },
   buttonDescription: {
     color: colors.white,
@@ -56,8 +56,8 @@ const styles = StyleSheet.create({
     fontSize: 10,
     lineHeight: 10,
     margin: 0,
-    padding: 0
-  }
+    padding: 0,
+  },
 });
 
 const ShareEntryCard = (props: ShareEntryCardProps) => {
@@ -98,8 +98,8 @@ const ShareEntryCard = (props: ShareEntryCardProps) => {
                 padding: 5,
                 paddingVertical: 10,
                 backgroundColor: typeColor,
-                opacity: allowed ? 1 : 0.5
-              }
+                opacity: allowed ? 1 : 0.5,
+              },
             ]}
           >
             {entry.type === OrderType.SELL && (

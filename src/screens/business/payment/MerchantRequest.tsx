@@ -5,7 +5,7 @@ import {
   KeyboardAvoidingView,
   ScrollView,
   Platform,
-  SafeAreaView
+  SafeAreaView,
 } from "react-native";
 import { useNavigation } from "@react-navigation/core";
 import { Text } from "react-native-elements";
@@ -14,12 +14,12 @@ import {
   Button,
   CancelBtn,
   BorderedInput,
-  ToggleButton
+  ToggleButton,
 } from "src/shared/uielements";
 import {
   baseHeader,
   viewBaseB,
-  wrappingContainerBase
+  wrappingContainerBase,
 } from "src/theme/elements";
 import { colors } from "src/theme/colors";
 import { PaymentsModule } from "src/modules";
@@ -38,52 +38,52 @@ const styles = StyleSheet.create({
   headerText: {
     fontSize: 32,
     fontWeight: "400",
-    lineHeight: 40
+    lineHeight: 40,
   },
   switchView: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
-    marginTop: 20
+    marginTop: 20,
   },
   contentView: {
-    marginTop: 5
+    marginTop: 5,
   },
   label: {
     marginTop: 20,
     color: colors.text,
-    fontSize: 12
+    fontSize: 12,
   },
   input: {
     backgroundColor: colors.white,
-    color: colors.purple
+    color: colors.purple,
   },
   text: {
-    color: colors.purple
+    color: colors.purple,
   },
   bottomView: {
     marginHorizontal: 20,
-    marginBottom: 20
+    marginBottom: 20,
   },
   switch: {
-    borderColor: colors.purple
+    borderColor: colors.purple,
   },
   switchText: {
-    color: colors.purple
+    color: colors.purple,
   },
   toggleBg: {
-    backgroundColor: colors.purple
+    backgroundColor: colors.purple,
   },
   openBtn: {
-    marginBottom: 10
-  }
+    marginBottom: 10,
+  },
 });
 
 const MerchantRequest = (): JSX.Element => {
   const navigation = useNavigation();
   const [state, setState] = useState<AmountState>({
     amount: "",
-    costs: ""
+    costs: "",
   });
   const [goNext, setGoNext] = useState<boolean>(false);
   const [isVisible, setIsVisible] = useState<boolean>(false);
@@ -103,7 +103,7 @@ const MerchantRequest = (): JSX.Element => {
     isVisible: false,
     title: "",
     detail: "",
-    buttonTitle: ""
+    buttonTitle: "",
   });
   const [isOpenAmount, setIsOpenAmount] = useState<boolean>(false);
 
@@ -120,7 +120,7 @@ const MerchantRequest = (): JSX.Element => {
     setState({
       ...state,
       [name]: costs,
-      costs: costs
+      costs: costs,
     } as AmountState);
   };
 
@@ -156,7 +156,7 @@ const MerchantRequest = (): JSX.Element => {
         walletData: businessWalletData,
         username: user?.business?.tag,
         recieveRoute: Routes.MERCHANT_REQUEST,
-        cancelRoute: Routes.MERCHANT_DASHBOARD
+        cancelRoute: Routes.MERCHANT_DASHBOARD,
       });
       return;
     }
@@ -167,7 +167,7 @@ const MerchantRequest = (): JSX.Element => {
         isVisible: true,
         title: Translation.LOAD_UP.LOAD_UP_NO_BANK_TITLE,
         detail: Translation.LOAD_UP.LOAD_UP_NO_BANK_DETAIL,
-        buttonTitle: Translation.BUTTON.LOAD_UP_BERKSHARES
+        buttonTitle: Translation.BUTTON.LOAD_UP_BERKSHARES,
       });
     } else {
       setBankDialogInfo({
@@ -175,7 +175,7 @@ const MerchantRequest = (): JSX.Element => {
         isVisible: true,
         title: Translation.PAYMENT.PAYMENT_NO_BANK_TITLE,
         detail: Translation.PAYMENT.PAYMENT_NO_BANK_DETAIL,
-        buttonTitle: Translation.BUTTON.LINK_BUSINESS_BANK
+        buttonTitle: Translation.BUTTON.LINK_BUSINESS_BANK,
       });
     }
   };
@@ -193,13 +193,13 @@ const MerchantRequest = (): JSX.Element => {
   const onBankDialogCancel = () => {
     setBankDialogInfo({
       ...bankDialogInfo,
-      isVisible: false
+      isVisible: false,
     });
   };
 
   return (
     <KeyboardAvoidingView
-      {...(Platform.OS === 'ios' && { behavior: 'padding' })}
+      {...(Platform.OS === "ios" && { behavior: "padding" })}
       style={viewBaseB}
     >
       <Header
