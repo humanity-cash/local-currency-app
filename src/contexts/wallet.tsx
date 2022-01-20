@@ -1,9 +1,10 @@
 import { IWallet } from "@humanity.cash/types";
 import React, { useState } from "react";
 import { DwollaAPI } from "src/api";
+import { FundingSource } from 'src/api/types';
 
 interface PersonalFundingSource {
-  availableFundingSource: boolean;
+  availableFundingSource: FundingSource | undefined;
 }
 
 export const WalletContext = React.createContext<IState>({} as IState);
@@ -25,7 +26,7 @@ export const WalletProvider: React.FunctionComponent = ({ children }) => {
     userId: "",
     address: "",
     createdBlock: "",
-    availableFundingSource: false,
+    availableFundingSource: undefined,
   });
   const [businessWalletData, setBusinessWalletData] = useState<
     IWallet & PersonalFundingSource
@@ -36,7 +37,7 @@ export const WalletProvider: React.FunctionComponent = ({ children }) => {
     userId: "",
     address: "",
     createdBlock: "",
-    availableFundingSource: false,
+    availableFundingSource: undefined,
   });
 
   const updateBusinessWalletData = async (businessDwollaId: string) => {

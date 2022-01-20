@@ -148,7 +148,7 @@ const DrawerContent = (props: DrawerContentComponentProps) => {
     useState<BankLinkDialogStateProps>(initBankDialogState);
   const [isSetting, setIsSetting] = useState(false);
   const { businessWalletData } = useContext(WalletContext);
-  const businessFundingSource = businessWalletData?.availableFundingSource;
+  const businessFundingSource = businessWalletData?.availableFundingSource?.visible;
   const availableBalance = businessWalletData?.availableBalance;
   useBusinessWallet();
 

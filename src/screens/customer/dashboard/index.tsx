@@ -48,7 +48,7 @@ const CustomerDashboard = (): JSX.Element => {
   const { events, getEvents, deleteEvent, updateEvents } =
     useContext(EventsContext);
   const { isLoading: isWalletLoading } = useCustomerWallet();
-  const personalFundingSource = customerWalletData?.availableFundingSource;
+  const personalFundingSource = customerWalletData?.availableFundingSource?.visible;
   const availableBalance = customerWalletData?.availableBalance;
   const [showEvents, setShowEvents] = useState(false);
   const [refreshing, setRefreshing] = React.useState(false);
