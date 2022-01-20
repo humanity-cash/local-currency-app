@@ -185,7 +185,7 @@ const TransactionDetails = (props: TransactionDetailsProps) => {
         <Text style={styles.header}>{renderHeader(props.transaction)}</Text>
         <Text h3 style={{ textAlign: "center" }}>
           {moment(props.transaction.created).format(
-            "dddd DD MMMM YYYY - hh:mm"
+            "dddd DD MMMM YYYY - h:mm A"
           )}
         </Text>
         <Text style={styles.title}>{renderTitle(props.transaction)}</Text>

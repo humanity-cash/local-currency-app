@@ -67,7 +67,7 @@ export const TransactionItem = (props: MyTransactionItemProps) => {
         <View style={mListstyles.detailView}>
           <Text>{name}</Text>
           <Text style={mListstyles.timeText}>
-            {moment(item.timestamp).format("HH:mm, MMM D, YYYY")}
+            {moment(item.timestamp).format("h:mm A, MMM D, YYYY")}
           </Text>
           <Text style={mListstyles.timeText}>{type}</Text>
         </View>
@@ -113,7 +113,7 @@ export const TransactionDetail = (props: TransactionDetailProps) => {
           <View style={styles.detailView}>
             <Text style={styles.detailText}>DATE</Text>
             <Text style={styles.detailText}>
-              {moment(data.timestamp).format("HH:mm, MMM D, YYYY")}
+              {moment(data.timestamp).format("h:mm A, MMM D, YYYY")}
             </Text>
           </View>
         </ScrollView>

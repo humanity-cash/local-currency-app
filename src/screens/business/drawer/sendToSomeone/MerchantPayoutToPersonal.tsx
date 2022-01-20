@@ -81,7 +81,7 @@ const MerchantCashoutAmount = (): JSX.Element => {
         const response = await TransactionsAPI.transferTo(businessDwollaId, request);
         setIsLoading(false);
         if(response.data) {
-            navigation.navigate(Routes.MERCHANT_PAYMENT_SUCCESS);
+            navigation.navigate(Routes.MERCHANT_PAYOUT_SUCCESS);
         } else {
             // FIXME: ADD ERROR TOAST
             navigation.navigate(Routes.MERCHANT_DASHBOARD);

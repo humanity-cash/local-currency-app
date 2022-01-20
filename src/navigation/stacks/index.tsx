@@ -52,6 +52,7 @@ import SelectMerchantBank from "src/screens/business/bank";
 import BusinessWelcome from "src/screens/business/signup/BusinessWelcome";
 import CustomerTransactions from "src/screens/customer/transactions";
 import { PaymentsModule } from "src/modules";
+import MerchantPayoutSomeoneSuccess from '../../screens/business/drawer/sendToSomeone/MerchantPayoutSomeoneSuccess';
 
 const PrimaryStack = createStackNavigator();
 
@@ -238,6 +239,10 @@ export const BusinessUserStack = ({
       <PrimaryStack.Screen
         name={Routes.MERCHANT_PAYOUT_SUCCESS}
         component={MerchantPayoutSuccess}
+      />
+      <PrimaryStack.Screen
+        name={Routes.MERCHANT_PAYOUT_SOMEONE_SUCCESS}
+        component={MerchantPayoutSomeoneSuccess}
       />
       <PrimaryStack.Screen
         name={Routes.MERCHANT_PAYOUT_QR_SCAN}

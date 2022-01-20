@@ -205,7 +205,7 @@ const SendPayment = (props: SendPayment): JSX.Element => {
       const response = await TransactionsAPI.transferTo(senderId, request);
       cleanUpState();
       if (response.data) {
-        navigation.navigate(Routes.MERCHANT_PAYMENT_SUCCESS);
+        navigation.navigate(Routes.MERCHANT_PAYOUT_SOMEONE_SUCCESS);
       } else {
         showToast(ToastType.ERROR, "Failed", "Whooops, something went wrong.");
         navigation.navigate(Routes.MERCHANT_DASHBOARD);
