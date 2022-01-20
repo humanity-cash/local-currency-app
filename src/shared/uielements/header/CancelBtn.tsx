@@ -13,9 +13,9 @@ type CancelBtnProps = {
 const styles = StyleSheet.create({
   container: {
     alignSelf: "flex-end",
-    padding: 10,
+    margin: 10,
     flexDirection: "row",
-    textAlign: "right",
+    textAlign: "right"
   },
   cross: {
     paddingLeft: 5,
