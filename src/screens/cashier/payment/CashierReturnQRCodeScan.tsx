@@ -269,7 +269,7 @@ const CashierReturnQRCodeScan = (): JSX.Element => {
                     <Text style={styles.label}>DATE</Text>
                     <Text style={styles.label}>
                       {moment(state.transactionDate).format(
-                        "HH:mm, MMM D, YYYY"
+                        "h:mm A, MMM D, YYYY"
                       )}
                     </Text>
                   </View>
