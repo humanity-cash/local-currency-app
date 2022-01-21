@@ -26,8 +26,8 @@ const styles = StyleSheet.create({
     paddingLeft: 35,
   },
   titleText: {
-    fontSize: 50,
-    lineHeight: 50,
+    fontSize: 44,
+    lineHeight: 44,
     color: colors.darkGreen1,
     marginBottom: 10,
   },
