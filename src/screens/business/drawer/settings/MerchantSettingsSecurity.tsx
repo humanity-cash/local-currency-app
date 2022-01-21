@@ -1,7 +1,7 @@
 import { useNavigation } from '@react-navigation/native';
 import { LoadingPage } from 'src/views';
 import React, { useState, useEffect, useContext, createRef } from 'react';
-import { ScrollView, StyleSheet, Switch, View, KeyboardAvoidingView, Platform, TextInput } from "react-native";
+import { ScrollView, StyleSheet, Switch, View, KeyboardAvoidingView, Platform, TextInput, SafeAreaView } from 'react-native';
 import { Text } from "react-native-elements";
 import { useUserDetails } from "src/hooks";
 import { AuthContext } from "src/contexts";
@@ -124,7 +124,7 @@ export const MerchantSettingsSecurity = (): JSX.Element => {
 			isValidPassword && 
 			isPasswordMatched
 		);
-	}, [state]);
+	}, [state, isValidPassword, isPasswordMatched]);
 
 	const onTouchIdOption = (value: boolean) => {
 		updateAuthorization({ touchID: value });
@@ -257,14 +257,14 @@ export const MerchantSettingsSecurity = (): JSX.Element => {
 					)}
 				</View>
 			</ScrollView>
-			<View style={styles.bottomView}>
+			<SafeAreaView style={styles.bottomView}>
 				<Button
 					type={BUTTON_TYPES.PURPLE}
 					title={Translation.BUTTON.SAVE_CHANGE}
 					disabled={!canSave}
 					onPress={handleSave}
 				/>
-			</View>
+			</SafeAreaView>
 		</KeyboardAvoidingView>
 	);
 }
