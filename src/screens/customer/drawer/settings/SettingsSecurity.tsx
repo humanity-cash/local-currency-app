@@ -1,6 +1,6 @@
 import { useNavigation } from '@react-navigation/native';
 import React, { useState, useEffect, useContext, createRef } from 'react';
-import { ScrollView, StyleSheet, Switch, View, KeyboardAvoidingView, TextInput, Platform } from "react-native";
+import { ScrollView, StyleSheet, Switch, View, KeyboardAvoidingView, TextInput, Platform, SafeAreaView } from 'react-native';
 import { Text } from "react-native-elements";
 import { AuthContext } from "src/contexts";
 import { useUserDetails } from "src/hooks";
@@ -106,7 +106,7 @@ export const SettingsSecurity = (): JSX.Element => {
 			isValidPassword && 
 			isPasswordMatched
 		);
-	}, [state]);
+	}, [state, isValidPassword, isPasswordMatched]);
 
 	useEffect(() => {
 		setIsValidPassword(state.newPassword.length < 1 || isPasswordValid(state.newPassword));
@@ -224,14 +224,14 @@ export const SettingsSecurity = (): JSX.Element => {
 					)}
 				</View>
 			</ScrollView>
-			<View style={styles.bottomView}>
+			<SafeAreaView style={styles.bottomView}>
 				<Button
 					type={BUTTON_TYPES.DARK_GREEN}
 					title={Translation.BUTTON.SAVE_CHANGE}
 					disabled={!canSave}
 					onPress={handleSave}
 				/>
-			</View>
+			</SafeAreaView>
 		</KeyboardAvoidingView>
 	);
 }
