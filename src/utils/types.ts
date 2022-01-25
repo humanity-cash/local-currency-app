@@ -312,7 +312,7 @@ export const TransactionTypes = {
   Transfer: "Transfer",
   Donation: "Donation",
   "Customer return": "Customer return",
-  Purchasement: "Purchasement",
+  Purchasement: "Purchase",
 };
 
 export type MerchantTransactionItem = {
