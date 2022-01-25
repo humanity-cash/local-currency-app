@@ -144,7 +144,18 @@ export interface IEvent {
 }
 
 export interface FeedItemProps {
- textTitle: string;
- text: string;
- image: string;
+  textTitle: string;
+  text: string;
+  image: string;
+}
+
+export interface IBank {
+  bankName: string;
+  bankAccountType: string;
+  createdAt: string;
+  name: string;
+}
+export interface FundingSource {
+  visible: boolean,
+  bank: IBank | undefined
 }

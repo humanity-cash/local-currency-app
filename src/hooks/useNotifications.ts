@@ -11,7 +11,7 @@ type NotificationsState = {
 };
 
 const store = createStore<NotificationsState>(storeId, {
-  notifications: []
+  notifications: [],
 });
 let loaded = false;
 
@@ -48,7 +48,7 @@ const useNotifications = () => {
     const currentState = store.getState();
     const newState = {
       ...currentState,
-      notifications: [data, ...currentState.notifications]
+      notifications: [data, ...currentState.notifications],
     };
     store.setState(newState);
     await storeInMemory(newState);
@@ -69,7 +69,7 @@ const useNotifications = () => {
   return {
     notifications: details.notifications,
     add,
-    getFirst
+    getFirst,
   };
 };
 

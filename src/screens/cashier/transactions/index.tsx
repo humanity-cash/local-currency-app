@@ -7,7 +7,7 @@ import { colors } from "src/theme/colors";
 import {
   viewBaseB,
   wrappingContainerBase,
-  baseHeader
+  baseHeader,
 } from "src/theme/elements";
 import { CancelBtn } from "src/shared/uielements";
 import Translation from "src/translation/en.json";

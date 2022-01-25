@@ -1,9 +1,10 @@
 import { IWallet } from "@humanity.cash/types";
 import React, { useState } from "react";
 import { DwollaAPI } from "src/api";
+import { FundingSource } from 'src/api/types';
 
 interface PersonalFundingSource {
-  availableFundingSource: boolean;
+  availableFundingSource: FundingSource | undefined;
 }
 
 export const WalletContext = React.createContext<IState>({} as IState);
@@ -25,7 +26,7 @@ export const WalletProvider: React.FunctionComponent = ({ children }) => {
     userId: "",
     address: "",
     createdBlock: "",
-    availableFundingSource: false
+    availableFundingSource: undefined,
   });
   const [businessWalletData, setBusinessWalletData] = useState<
     IWallet & PersonalFundingSource
@@ -36,7 +37,7 @@ export const WalletProvider: React.FunctionComponent = ({ children }) => {
     userId: "",
     address: "",
     createdBlock: "",
-    availableFundingSource: false
+    availableFundingSource: undefined,
   });
 
   const updateBusinessWalletData = async (businessDwollaId: string) => {
@@ -45,7 +46,7 @@ export const WalletProvider: React.FunctionComponent = ({ children }) => {
       const fundingSource = await DwollaAPI.loadFundingSource(businessDwollaId);
       setBusinessWalletData({
         ...userWallet,
-        availableFundingSource: fundingSource
+        availableFundingSource: fundingSource,
       });
     }
   };
@@ -56,7 +57,7 @@ export const WalletProvider: React.FunctionComponent = ({ children }) => {
       const fundingSource = await DwollaAPI.loadFundingSource(customerDwollaId);
       setCustomerWalletData({
         ...userWallet,
-        availableFundingSource: fundingSource
+        availableFundingSource: fundingSource,
       });
     }
   };
@@ -65,7 +66,7 @@ export const WalletProvider: React.FunctionComponent = ({ children }) => {
     customerWalletData,
     businessWalletData,
     updateBusinessWalletData,
-    updateCustomerWalletData
+    updateCustomerWalletData,
   };
 
   return (

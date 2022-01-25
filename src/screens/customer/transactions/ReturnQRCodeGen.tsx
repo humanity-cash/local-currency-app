@@ -11,13 +11,13 @@ import {
   MiniTransaction,
   PaymentMode,
   QRCodeEntry,
-  SECURITY_ID
+  SECURITY_ID,
 } from "src/utils/types";
 import { prefixCustomerName } from "src/utils/common";
 
 const styles = StyleSheet.create({
   dialog: {
-    height: 440
+    height: 440,
   },
   dialogWrap: {
     position: "relative",
@@ -26,7 +26,7 @@ const styles = StyleSheet.create({
     height: "100%",
     flex: 1,
     justifyContent: "center",
-    alignItems: "center"
+    alignItems: "center",
   },
   amount: {
     alignSelf: "center",
@@ -34,28 +34,28 @@ const styles = StyleSheet.create({
     fontWeight: "bold",
     fontSize: 32,
     lineHeight: 32,
-    paddingTop: 20
+    paddingTop: 20,
   },
   ownerInfo: {
     position: "absolute",
     top: -60,
     borderRadius: 40,
-    alignItems: "center"
+    alignItems: "center",
   },
   image: {
     width: 80,
     height: 80,
-    borderRadius: 40
+    borderRadius: 40,
   },
   ownerName: {
     fontWeight: "bold",
     fontSize: 18,
-    paddingVertical: 10
+    paddingVertical: 10,
   },
   errorText: {
     color: colors.mistakeRed,
-    marginTop: 20
-  }
+    marginTop: 20,
+  },
 });
 
 type ReturnQRCodeGenProps = {
@@ -68,11 +68,8 @@ type ReturnQRCodeGenProps = {
 const ReturnQRCodeGen = (props: ReturnQRCodeGenProps): JSX.Element => {
   const { customerWalletData } = useContext(WalletContext);
   const { user, customerDwollaId } = useContext(UserContext);
-  const {
-    hasPermission,
-    setMaxBrightness,
-    setDefaultBrightness
-  } = useBrightness();
+  const { hasPermission, setMaxBrightness, setDefaultBrightness } =
+    useBrightness();
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [initBalance, setInitBalance] = useState<number>(
     customerWalletData?.availableBalance
@@ -84,7 +81,7 @@ const ReturnQRCodeGen = (props: ReturnQRCodeGenProps): JSX.Element => {
     transactionDate: props.transactionInfo.timestamp,
     to: customerDwollaId ? customerDwollaId : "",
     amount: Number(props.transactionInfo.value),
-    mode: PaymentMode.OPEN_AMOUNT
+    mode: PaymentMode.OPEN_AMOUNT,
   };
   const addressStr = JSON.stringify(requestData);
 

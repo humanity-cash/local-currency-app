@@ -20,7 +20,7 @@ enum GraphSet {
   MONTH,
   SIX_MONTH,
   YEAR,
-  FIVE_YEAR
+  FIVE_YEAR,
 }
 
 const buttons = [
@@ -29,13 +29,13 @@ const buttons = [
   { name: "1m", type: GraphSet.MONTH },
   { name: "6m", type: GraphSet.SIX_MONTH },
   { name: "1y", type: GraphSet.YEAR },
-  { name: "5y", type: GraphSet.FIVE_YEAR }
+  { name: "5y", type: GraphSet.FIVE_YEAR },
 ];
 
 const compareAndFilter = (set: GraphDataset[], date: Date) => {
   return set
-    .filter(item => item.date.getTime() > date.getTime())
-    .map(item => item.value);
+    .filter((item) => item.date.getTime() > date.getTime())
+    .map((item) => item.value);
 };
 
 const generateGraphData = (data: GraphDataset[], currentSet: GraphSet) => {
@@ -96,7 +96,7 @@ const calculateDiff = (set: number[]) => {
       value: 0,
       first: 0,
       last: 0,
-      percent: 0
+      percent: 0,
     };
   }
   const first = set[0];
@@ -108,7 +108,7 @@ const calculateDiff = (set: number[]) => {
     value: Math.abs(diff),
     first,
     last,
-    percent: Math.abs((diff / last) * 100)
+    percent: Math.abs((diff / last) * 100),
   };
 };
 
@@ -117,37 +117,37 @@ const styles = StyleSheet.create({
     alignItems: "center",
     alignContent: "center",
     flex: 2,
-    marginTop: 20
+    marginTop: 20,
   },
   labelsHorizontal: {
     flexDirection: "row",
     alignItems: "center",
-    alignContent: "center"
+    alignContent: "center",
   },
   labelCellText: {
     fontFamily: FontFamily.bold,
-    fontSize: 16
+    fontSize: 16,
   },
   horizontalWrapper: {
-    flexDirection: "row"
+    flexDirection: "row",
   },
   buttonContainer: {
     flex: 1,
     borderBottomWidth: 1,
     borderBottomColor: colors.text,
     paddingVertical: 10,
-    marginBottom: 20
+    marginBottom: 20,
   },
   buttonContainerActive: {
-    borderBottomWidth: 3
+    borderBottomWidth: 3,
   },
   button: {
     textAlign: "center",
-    color: colors.text
+    color: colors.text,
   },
   buttonActive: {
-    fontFamily: FontFamily.bold
-  }
+    fontFamily: FontFamily.bold,
+  },
 });
 
 const ChartView = (props: ChartViewProps) => {
@@ -179,8 +179,8 @@ const ChartView = (props: ChartViewProps) => {
                       diff.growth === Growth.INCREASE
                         ? colors.textSuccess
                         : colors.textWarning,
-                    paddingLeft: 5
-                  }
+                    paddingLeft: 5,
+                  },
                 ]}
               >
                 {diff.growth === Growth.INCREASE ? "+" : "-"}
@@ -208,8 +208,8 @@ const ChartView = (props: ChartViewProps) => {
                       diff.growth === Growth.INCREASE
                         ? colors.textSuccess
                         : colors.textWarning,
-                    paddingLeft: 5
-                  }
+                    paddingLeft: 5,
+                  },
                 ]}
               >
                 {diff.growth === Growth.INCREASE ? "+" : "-"}
@@ -233,7 +233,7 @@ const ChartView = (props: ChartViewProps) => {
         contentInset={{ top: 40, bottom: 40 }}
       />
       <View style={styles.horizontalWrapper}>
-        {buttons.map(button => (
+        {buttons.map((button) => (
           <TouchableWithoutFeedback
             key={`button-${button.type}`}
             onPress={() => setCurrentSet(button.type)}
@@ -241,13 +241,13 @@ const ChartView = (props: ChartViewProps) => {
             <View
               style={[
                 styles.buttonContainer,
-                button.type === currentSet ? styles.buttonContainerActive : {}
+                button.type === currentSet ? styles.buttonContainerActive : {},
               ]}
             >
               <Text
                 style={[
                   styles.button,
-                  button.type === currentSet ? styles.buttonActive : {}
+                  button.type === currentSet ? styles.buttonActive : {},
                 ]}
               >
                 {button.name}

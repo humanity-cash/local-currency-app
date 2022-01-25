@@ -17,16 +17,16 @@ const FULL_CELL = CELL_HEIGHT + 20;
 const styles = StyleSheet.create({
   container: {
     flexDirection: "row",
-    marginVertical: 10
+    marginVertical: 10,
   },
   grid: {
     flex: 1,
-    position: "relative"
+    position: "relative",
   },
   border: {
     borderRightWidth: 1,
     borderRightColor: colors.text,
-    flex: 1
+    flex: 1,
   },
   cell: {
     height: CELL_HEIGHT,
@@ -34,38 +34,38 @@ const styles = StyleSheet.create({
     position: "absolute",
     flex: 1,
     left: 0,
-    flexDirection: "row"
+    flexDirection: "row",
   },
   cellSell: {
     right: 0,
-    justifyContent: "flex-end"
+    justifyContent: "flex-end",
   },
   sellMark: {
     height: CELL_HEIGHT,
-    backgroundColor: colors.brown
+    backgroundColor: colors.brown,
   },
   buyMark: {
     height: CELL_HEIGHT,
-    backgroundColor: colors.textSuccess
+    backgroundColor: colors.textSuccess,
   },
   sellText: {
     color: colors.brown,
     fontSize: 16,
     lineHeight: 16,
-    paddingHorizontal: 10
+    paddingHorizontal: 10,
   },
   buyText: {
     color: colors.textSuccess,
     fontSize: 16,
     lineHeight: 16,
-    paddingHorizontal: 10
+    paddingHorizontal: 10,
   },
   descriptionText: {
     fontSize: 10,
     lineHeight: CELL_HEIGHT,
     paddingHorizontal: 10,
-    textTransform: "uppercase"
-  }
+    textTransform: "uppercase",
+  },
 });
 
 const WantedAndOffersChart = (props: WantedAndOffersChartProps) => {
@@ -74,11 +74,11 @@ const WantedAndOffersChart = (props: WantedAndOffersChartProps) => {
 
   const wantedMax = Math.max.apply(
     null,
-    props.wanted.map(share => share.quantity)
+    props.wanted.map((share) => share.quantity)
   );
   const offeredMax = Math.max.apply(
     null,
-    props.offers.map(share => share.quantity)
+    props.offers.map((share) => share.quantity)
   );
 
   const offeredStart = GAP_BETWEEN * 2 + wantedCount * FULL_CELL;
@@ -92,7 +92,7 @@ const WantedAndOffersChart = (props: WantedAndOffersChartProps) => {
     <View
       style={[
         styles.container,
-        { height: GAP_BETWEEN * 3 + (wantedCount + offersCount) * FULL_CELL }
+        { height: GAP_BETWEEN * 3 + (wantedCount + offersCount) * FULL_CELL },
       ]}
     >
       <View style={[styles.grid, styles.border]}>
@@ -105,7 +105,7 @@ const WantedAndOffersChart = (props: WantedAndOffersChartProps) => {
             style={[
               styles.cell,
               styles.cellSell,
-              { top: offeredStart + index * FULL_CELL }
+              { top: offeredStart + index * FULL_CELL },
             ]}
           >
             <Text style={styles.descriptionText}>
@@ -114,7 +114,7 @@ const WantedAndOffersChart = (props: WantedAndOffersChartProps) => {
             <View
               style={[
                 styles.sellMark,
-                { width: `${calculateMarkWidth(share.quantity, offeredMax)}%` }
+                { width: `${calculateMarkWidth(share.quantity, offeredMax)}%` },
               ]}
             />
           </View>
@@ -129,7 +129,7 @@ const WantedAndOffersChart = (props: WantedAndOffersChartProps) => {
             <View
               style={[
                 styles.buyMark,
-                { width: `${calculateMarkWidth(share.quantity, wantedMax)}%` }
+                { width: `${calculateMarkWidth(share.quantity, wantedMax)}%` },
               ]}
             />
             <Text style={styles.descriptionText}>
@@ -140,7 +140,7 @@ const WantedAndOffersChart = (props: WantedAndOffersChartProps) => {
         <View
           style={[
             styles.cell,
-            { top: offeredStart + FULL_CELL * (offersCount - 1) }
+            { top: offeredStart + FULL_CELL * (offersCount - 1) },
           ]}
         >
           <Text style={styles.sellText}>BIDS</Text>

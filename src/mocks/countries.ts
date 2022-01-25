@@ -48,7 +48,7 @@ const list = [
   "WA",
   "WI",
   "WV",
-  "WY"
+  "WY",
 ];
 
 export default list;

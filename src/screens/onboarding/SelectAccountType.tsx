@@ -9,7 +9,7 @@ import { colors } from "src/theme/colors";
 import {
   underlineHeader,
   viewBaseWhite,
-  wrappingContainerBase
+  wrappingContainerBase,
 } from "src/theme/elements";
 import Translation from "src/translation/en.json";
 
@@ -17,22 +17,22 @@ const styles = StyleSheet.create({
   headerText: {
     fontSize: 32,
     color: colors.darkGreen,
-    lineHeight: 35
+    lineHeight: 35,
   },
   bodyText: {
-    color: colors.bodyText
+    color: colors.bodyText,
   },
   accountType: {
     backgroundColor: colors.white,
     textAlign: "center",
     flex: 1,
     width: "100%",
-    padding: 20
+    padding: 20,
   },
   button: {
     borderWidth: 1,
-    marginTop: 20
-  }
+    marginTop: 20,
+  },
 });
 
 const SelectAccountType = (): JSX.Element => {

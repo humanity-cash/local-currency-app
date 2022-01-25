@@ -6,24 +6,25 @@ import { Header, Button, CancelBtn } from "src/shared/uielements";
 import {
   baseHeader,
   modalViewBase,
-  wrappingContainerBase
+  wrappingContainerBase,
 } from "src/theme/elements";
 import Translation from "src/translation/en.json";
 import * as Routes from "src/navigation/constants";
 import { UserContext } from "src/contexts";
 import { BUTTON_TYPES } from "src/constants";
 import { UserType } from "src/auth/types";
+import { colors } from "src/theme/colors";
 
 const styles = StyleSheet.create({
   headerText: {
     fontSize: 32,
     fontWeight: "400",
-    lineHeight: 40
+    lineHeight: 40,
   },
   bottomView: {
     marginHorizontal: 20,
-    marginBottom: 20
-  }
+    marginBottom: 20,
+  },
 });
 
 const RedemptionInProgress = (): ReactElement => {
@@ -33,10 +34,10 @@ const RedemptionInProgress = (): ReactElement => {
       ? Routes.MERCHANT_DASHBOARD
       : Routes.DASHBOARD;
   const navigation = useNavigation();
-  const buttonStyle =
-    userType === UserType.Business
-      ? BUTTON_TYPES.PURPLE
-      : BUTTON_TYPES.DARK_GREEN;
+  const isCustomer = userType === UserType.Customer;
+  const buttonStyle = isCustomer
+    ? BUTTON_TYPES.DARK_GREEN
+    : BUTTON_TYPES.PURPLE;
 
   return (
     <View style={modalViewBase}>
@@ -50,12 +51,21 @@ const RedemptionInProgress = (): ReactElement => {
       />
       <ScrollView style={wrappingContainerBase}>
         <View style={baseHeader}>
-          <Text style={styles.headerText}>
+          <Text
+            style={[
+              styles.headerText,
+              { color: isCustomer ? colors.darkGreen : colors.purple },
+            ]}
+          >
             {Translation.PAYMENT.REDEMPTION_PROCESS}
           </Text>
         </View>
         <View>
-          <Text>{Translation.PAYMENT.REDEMPTION_PROCESS_DETAIL}</Text>
+          <Text
+            style={{ color: isCustomer ? colors.darkGreen : colors.purple }}
+          >
+            {Translation.PAYMENT.REDEMPTION_PROCESS_DETAIL}
+          </Text>
         </View>
       </ScrollView>
       <SafeAreaView style={styles.bottomView}>

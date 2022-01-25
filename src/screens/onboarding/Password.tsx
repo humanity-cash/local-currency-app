@@ -7,7 +7,7 @@ import {
   ScrollView,
   StyleSheet,
   TextInput,
-  View
+  View,
 } from "react-native";
 import { Text } from "react-native-elements";
 import { BUTTON_TYPES } from "src/constants";
@@ -20,7 +20,7 @@ import { colors } from "src/theme/colors";
 import {
   baseHeader,
   viewBaseWhite,
-  wrappingContainerBase
+  wrappingContainerBase,
 } from "src/theme/elements";
 import Translation from "src/translation/en.json";
 import { isPasswordValid } from "src/utils/validation";
@@ -29,46 +29,45 @@ const styles = StyleSheet.create({
   headerText: {
     fontSize: 32,
     color: colors.darkGreen,
-    lineHeight: 35
+    lineHeight: 35,
   },
   inlineView: {
     flexDirection: "row",
-    justifyContent: "space-between"
+    justifyContent: "space-between",
   },
   bodyText: {
-    color: colors.bodyText
+    color: colors.bodyText,
   },
   errorText: {
     color: colors.mistakeRed,
     fontSize: 12,
-    lineHeight: 14
+    lineHeight: 14,
   },
   form: {
-    marginTop: 30
+    marginTop: 30,
   },
   label: {
     fontSize: 12,
     lineHeight: 14,
-    color: colors.bodyText
+    color: colors.bodyText,
   },
   bottomView: {
     marginHorizontal: 20,
-    marginBottom: 20
+    marginBottom: 20,
   },
   eyeView: {
     position: "absolute",
     right: 10,
     top: 0,
     bottom: 0,
-    justifyContent: "center"
-  }
+    justifyContent: "center",
+  },
 });
 
 const Password = (): JSX.Element => {
   const navigation = useNavigation();
-  const { updateSignUpDetails, signUpDetails, signUp } = useContext(
-    AuthContext
-  );
+  const { updateSignUpDetails, signUpDetails, signUp } =
+    useContext(AuthContext);
   const [isValidPassword, setIsValidPassword] = useState<boolean>(false);
   const [isLoading, setLoading] = useState<boolean>(false);
   const [isShowPassword, setShowPassword] = useState<boolean>(true);
@@ -106,7 +105,7 @@ const Password = (): JSX.Element => {
 
   return (
     <KeyboardAvoidingView
-      {...(Platform.OS === 'ios' && { behavior: 'padding' })}
+      {...(Platform.OS === "ios" && { behavior: "padding" })}
       style={viewBaseWhite}
     >
       <LoadingPage visible={isLoading} isData={true} />

@@ -16,14 +16,14 @@ type HeaderProps = {
   children?: ReactElement;
 };
 
-export const HEADER_HEIGHT = Dimensions.get("window").height * 0.1;
+export const HEADER_HEIGHT = 100;
 
 const Header = (props: HeaderProps) => {
   const { properties } = useModalStatusBar();
   const isFocused = useIsFocused();
   const [modalProps, setModalProps] = useState<ModalStatusBar>({
     show: false,
-    styles: {}
+    styles: {},
   });
 
   useEffect(() => {
@@ -44,7 +44,7 @@ const Header = (props: HeaderProps) => {
     setModalProps({
       show: properties.show,
       styles: properties.styles,
-      bar: properties.bar
+      bar: properties.bar,
     });
   }, [properties]);
 
@@ -52,7 +52,7 @@ const Header = (props: HeaderProps) => {
     <HeaderComponent
       placement={props.placement || "center"}
       statusBarProps={{
-        barStyle: modalProps.bar || props.barStyle || "dark-content"
+        barStyle: modalProps.bar || props.barStyle || "dark-content",
       }}
       barStyle={props.barStyle || "dark-content"} // or directly
       leftComponent={props.leftComponent}
@@ -64,7 +64,7 @@ const Header = (props: HeaderProps) => {
         backgroundColor: "transparent",
         height: HEADER_HEIGHT,
         ...props.style,
-        ...modalProps.styles
+        ...modalProps.styles,
       }}
     >
       {props?.children}

@@ -41,5 +41,5 @@ export const colors: any = {
   error: "#A23B5F",
 
   pDialogBg: "rgba(57, 83, 68, 0.9)",
-  bDialogBg: "#442E88E5"
+  bDialogBg: "#442E88E5",
 };

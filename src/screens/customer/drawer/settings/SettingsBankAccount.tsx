@@ -1,13 +1,12 @@
 import { useNavigation } from '@react-navigation/native';
-import React, { useEffect, useState, useContext } from 'react';
+import React, { useContext } from 'react';
 import { ScrollView, StyleSheet, View } from "react-native";
-import { Text, Image } from 'react-native-elements';
-import { UserContext } from "src/contexts";
-import { Header, Dialog, BackBtn, Button } from "src/shared/uielements";
-import { underlineHeader, viewBase, dialogViewBase } from "src/theme/elements";
+import { Text } from 'react-native-elements';
+import { WalletContext } from "src/contexts";
+import { Header, BackBtn,  } from "src/shared/uielements";
+import { underlineHeader, viewBase } from "src/theme/elements";
 import { colors } from "src/theme/colors";
 import Translation from 'src/translation/en.json';
-import * as Routes from 'src/navigation/constants';
 import { FontFamily } from "src/theme/elements";
 
 const styles = StyleSheet.create({
@@ -48,6 +47,13 @@ const styles = StyleSheet.create({
 		flexDirection: 'row',
 		justifyContent: 'space-between'
 	},
+	bankNameLabel: {
+		color: colors.bodyText,
+		fontFamily: FontFamily.bold,
+		fontSize: 18,
+		alignSelf: 'center',
+		paddingBottom: 24
+	},
 	label: {
 		color: colors.bodyText,
 		fontSize: 10
@@ -78,19 +84,8 @@ const styles = StyleSheet.create({
 
 export const SettingsBankAccount = (): JSX.Element => {
 	const navigation = useNavigation();
-	const { user } = useContext(UserContext);
-	const completedCustomerVerification = user?.verifiedCustomer;
-	const [isVisible, setIsVisible] = useState<boolean>(false);
-	const [hasBankAccount, setHasBankAccount] = useState<boolean>(false);
-
-	useEffect(() => {
-		completedCustomerVerification ? setHasBankAccount(true) : setHasBankAccount(false);
-	}, [completedCustomerVerification]);
-
-	const handleRemove = () => {
-		setHasBankAccount(false);
-		setIsVisible(false);
-	}
+	const { customerWalletData } = useContext(WalletContext);
+	const bank = customerWalletData.availableFundingSource?.bank
 
 	return (
 		<View style={viewBase}>
@@ -102,72 +97,32 @@ export const SettingsBankAccount = (): JSX.Element => {
 					<Text style={styles.headerText}>{Translation.BANK_ACCOUNT.BANK_ACCOUNT}</Text>
 				</View>
 				{
-					hasBankAccount && (
+					bank && (
 						<View style={styles.section}>
-							<Image
-								source={require('../../../../../assets/images/bank1.png')}
-								containerStyle={styles.image}
-							/>
+							<Text style={styles.bankNameLabel}>{bank.bankName}</Text>
 							<View style={styles.inlineView}>
 								<Text style={styles.label}>{Translation.LABEL.ACCOUNT_NAME}</Text>
-								<Text style={styles.text}>ACCOUNTNAMEOFTHISBANK</Text>
+								<Text style={styles.text}>{bank.name}</Text>
 							</View>
 							<View style={styles.inlineView}>
 								<Text style={styles.label}>{Translation.LABEL.ACCOUNT_TYPE}</Text>
-								<Text style={styles.text}>CHECKINGS</Text>
+								<Text style={styles.text}>{bank.bankAccountType.toUpperCase()}</Text>
 							</View>
 							<View style={styles.inlineView}>
-								<Text style={styles.label}>{Translation.LABEL.ACCOUNT_NUMBER}</Text>
-								<Text style={styles.text}>US-08-CHAS-0686-5892</Text>
+								<Text style={styles.label}>{Translation.LABEL.ACCOUNT_CREATED_DATE}</Text>
+								<Text style={styles.text}>{bank.createdAt}</Text>
 							</View>
 						</View>
 					)
 				}
 				{
-					!hasBankAccount && (
+					!bank && (
 						<View style={styles.noAccount}>
 							<Text style={styles.noAccountText}>{Translation.COMMUNITY_CHEST.NO_BANK_ACCOUNT}</Text>
 						</View>
 					)
 				}
 			</ScrollView>
-			<View style={styles.bottomView}>
-				{
-					hasBankAccount && (
-						<Button
-							type="transparent"
-							title={Translation.BUTTON.DELETE_ACCOUNT}
-							textStyle={styles.deleteBtn}
-							onPress={()=>setIsVisible(true)}
-						/>
-					)
-				}
-				{
-					!hasBankAccount && (
-						<Button
-							type="darkGreen"
-							title={Translation.BUTTON.LINK_BUSINESS_BANK}
-							onPress={()=>navigation.navigate(Routes.SELECT_BANK)}
-						/>
-					)
-				}
-			</View>
-			{isVisible && (
-				<Dialog visible={isVisible} onClose={()=>setIsVisible(false)}>
-					<View style={dialogViewBase}>
-						<View style={styles.dialogWrap}>
-							<Text style={styles.dialogHeader}>{Translation.COMMUNITY_CHEST.REMOVE_BANK_ACCOUNT}</Text>
-						</View>
-						<View style={styles.dialogBottom}>
-							<Button
-								type="darkGreen"
-								title={Translation.BUTTON.REMOVE}
-								onPress={handleRemove}
-							/>
-						</View>
-					</View>
-				</Dialog>
-			)}
 		</View>
 	);
 }

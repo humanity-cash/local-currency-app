@@ -1,7 +1,7 @@
 import moment from "moment";
 import { MiniTransaction } from "src/utils/types";
 import React, { useContext } from "react";
-import { ScrollView } from "react-native";
+import { ScrollView, Linking } from "react-native";
 import { Image, Text } from "react-native-elements";
 import { Dialog } from "src/shared/uielements";
 import { dialogViewBase, wrappingContainerBase } from "src/theme/elements";
@@ -13,6 +13,7 @@ import { styles, mListstyles } from "../style";
 import { UserContext } from "src/contexts";
 import { UserType } from "src/auth/types";
 import { colors } from "src/theme/colors";
+import { BAKLAVA_TRANSACTION_URL } from "src/config/env";
 
 export type MyTransactionItemProps = {
   item: MiniTransaction;
@@ -53,7 +54,7 @@ export const TransactionItem = (props: MyTransactionItemProps) => {
         selected === item.transactionHash
           ? {
               ...mListstyles.selectedItem,
-              backgroundColor: isCustomer ? colors.card : colors.bCard
+              backgroundColor: isCustomer ? colors.card : colors.bCard,
             }
           : mListstyles.item
       }
@@ -66,7 +67,7 @@ export const TransactionItem = (props: MyTransactionItemProps) => {
         <View style={mListstyles.detailView}>
           <Text>{name}</Text>
           <Text style={mListstyles.timeText}>
-            {moment(item.timestamp).format("HH:mm, MMM D, YYYY")}
+            {moment(item.timestamp).format("h:mm A, MMM D, YYYY")}
           </Text>
           <Text style={mListstyles.timeText}>{type}</Text>
         </View>
@@ -82,10 +83,10 @@ export const TransactionDetail = (props: TransactionDetailProps) => {
   const { data, visible, onClose } = props;
   return (
     <Dialog visible={visible} onClose={onClose} style={styles.dialogHeight}>
-      <View style={dialogViewBase}>
+      <View style={[dialogViewBase]}>
         <ScrollView style={wrappingContainerBase}>
           <View style={styles.headerView}>
-            <Text style={getStyle(data.type)}>
+            <Text style={[getStyle(data.type), { fontSize: 32 }]}>
               {" "}
               {getBerksharePrefix(data.type)} {data.value}{" "}
             </Text>
@@ -94,7 +95,16 @@ export const TransactionDetail = (props: TransactionDetailProps) => {
             <Text style={styles.detailText}>
               {Translation.PAYMENT.TRANSACTION_ID}
             </Text>
-            <Text style={styles.detailText}>{data.transactionHash}</Text>
+            <Text
+              style={[styles.detailText, styles.underlineText]}
+              onPress={() =>
+                Linking.openURL(
+                  `${BAKLAVA_TRANSACTION_URL}block/${data.blockNumber}`
+                )
+              }
+            >
+              {data.transactionHash}
+            </Text>
           </View>
           <View style={styles.detailView}>
             <Text style={styles.detailText}>TYPE</Text>
@@ -103,7 +113,7 @@ export const TransactionDetail = (props: TransactionDetailProps) => {
           <View style={styles.detailView}>
             <Text style={styles.detailText}>DATE</Text>
             <Text style={styles.detailText}>
-              {moment(data.timestamp).format("HH:mm, MMM D, YYYY")}
+              {moment(data.timestamp).format("h:mm A, MMM D, YYYY")}
             </Text>
           </View>
         </ScrollView>

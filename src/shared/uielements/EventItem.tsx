@@ -18,7 +18,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     backgroundColor: colors.inputBg,
     marginVertical: 8,
-    paddingHorizontal: 15
+    paddingHorizontal: 15,
   },
   infoView: {
     borderLeftWidth: 5,
@@ -29,11 +29,11 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    marginBottom: 10
+    marginBottom: 10,
   },
   infoIcon: {
     color: colors.info,
-    fontWeight: "bold"
+    fontWeight: "bold",
   },
   warningView: {
     borderLeftWidth: 5,
@@ -44,11 +44,11 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    marginBottom: 10
+    marginBottom: 10,
   },
   warningIcon: {
     color: colors.alert,
-    fontWeight: "bold"
+    fontWeight: "bold",
   },
   errorView: {
     borderLeftWidth: 5,
@@ -59,17 +59,17 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     justifyContent: "space-between",
     alignItems: "center",
-    marginBottom: 10
+    marginBottom: 10,
   },
   errorIcon: {
     color: colors.error,
-    fontWeight: "bold"
+    fontWeight: "bold",
   },
   notificationText: {
     marginLeft: 16,
     color: colors.black,
-    flex: 1
-  }
+    flex: 1,
+  },
 });
 
 const EventItem = (props: EventItemProps) => {
@@ -102,13 +102,6 @@ const EventItem = (props: EventItemProps) => {
         }
       />
       <Text style={styles.notificationText}>{props.event.message} &nbsp;</Text>
-      {/* <TouchableOpacity onPress={props.onDelete}>
-				<AntDesign
-					name='closecircleo'
-					size={18}
-					style={styles.errorIcon}
-				/>
-			</TouchableOpacity> */}
     </TouchableOpacity>
   );
 };

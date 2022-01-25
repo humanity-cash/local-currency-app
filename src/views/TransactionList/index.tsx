@@ -9,7 +9,7 @@ import { UserContext } from "src/contexts";
 import { createFuseSearchInstance } from "src/fuse";
 import {
   BUSINESS_TX_FILTERS_STORE,
-  CUSTOMER_TX_FILTERS_STORE
+  CUSTOMER_TX_FILTERS_STORE,
 } from "src/hook-stores";
 import LoadingPage from "../Loading";
 import { SearchInput } from "src/shared/uielements";
@@ -36,9 +36,8 @@ const TransactionList = (props: MyTransactionsInput): JSX.Element => {
     userType === UserType.Customer
       ? CUSTOMER_TX_FILTERS_STORE
       : BUSINESS_TX_FILTERS_STORE;
-  const [{ selectedType, startDate, endDate }] = useStore<TxFilters>(
-    filtersStore
-  );
+  const [{ selectedType, startDate, endDate }] =
+    useStore<TxFilters>(filtersStore);
   const [isFilterVisible, setIsFilterVisible] = useState<boolean>(false);
   const [searchText, setSearchText] = useState<string>("");
   const [isDetailView, setIsDetailView] = useState<boolean>(false);
@@ -57,14 +56,14 @@ const TransactionList = (props: MyTransactionsInput): JSX.Element => {
 
   useEffect(() => {
     const corn = setInterval(() => loadTransactions(), 5000);
-    return () => clearInterval(corn)
+    return () => clearInterval(corn);
   }, []);
 
   useEffect(() => {
-   setIsLoading(true);
-   loadTransactions();
-   const tm = setTimeout(() => setIsLoading(false), 2000);
-   return () => clearTimeout(tm)
+    setIsLoading(true);
+    loadTransactions();
+    const tm = setTimeout(() => setIsLoading(false), 2000);
+    return () => clearTimeout(tm);
   }, [userId]);
 
   const loadTransactions = (isWithLoading = false) => {
@@ -75,18 +74,18 @@ const TransactionList = (props: MyTransactionsInput): JSX.Element => {
         }
         let txs: MiniTransaction[] = [];
         try {
-         if (userType === UserType.Cashier) {
-          txs = await TransactionsAPI.getBlockchainTransactions(userId);
-         } else if (userType !== UserType.NotVerified) {
-          txs = await TransactionsAPI.getAllTransactions(userId);
-         }
-         setIsLoading(false);
-         const formattedTxs = sortTxByTimestamp(txs);
-         setAPIData(formattedTxs);
-         setFilteredData(formattedTxs);
+          if (userType === UserType.Cashier) {
+            txs = await TransactionsAPI.getBlockchainTransactions(userId);
+          } else if (userType !== UserType.NotVerified) {
+            txs = await TransactionsAPI.getAllTransactions(userId);
+          }
+          setIsLoading(false);
+          const formattedTxs = sortTxByTimestamp(txs);
+          setAPIData(formattedTxs);
+          setFilteredData(formattedTxs);
         } catch (err) {
-         console.log(err)
-         setIsLoading(false);
+          console.log(err);
+          setIsLoading(false);
         }
       };
       handler();
@@ -102,11 +101,11 @@ const TransactionList = (props: MyTransactionsInput): JSX.Element => {
 
     const fuseInstance = createFuseSearchInstance(filteredData, {
       includeScore: false,
-      keys: ["toName", "fromName", "value", "type"]
+      keys: ["toName", "fromName", "value", "type"],
     });
     const fuseResult = fuseInstance.search(change);
     //@ts-ignore
-    setFilteredData(fuseResult.map(i => i.item));
+    setFilteredData(fuseResult.map((i) => i.item));
     setSearchText(change);
   };
 
@@ -132,12 +131,12 @@ const TransactionList = (props: MyTransactionsInput): JSX.Element => {
 
   const filterBtnStyle = {
     ...styles.filterBtn,
-    backgroundColor: isCustomer ? colors.inputBg : colors.lightBg
+    backgroundColor: isCustomer ? colors.inputBg : colors.lightBg,
   };
 
   const selectedFilterBtnStyle = {
     ...styles.selectedFilterBtn,
-    backgroundColor: isCustomer ? colors.darkGreen : colors.purple
+    backgroundColor: isCustomer ? colors.darkGreen : colors.purple,
   };
 
   return (
@@ -154,7 +153,7 @@ const TransactionList = (props: MyTransactionsInput): JSX.Element => {
               value={searchText}
               onChange={onSearchChange}
               style={{
-                backgroundColor: isCustomer ? colors.inputBg : colors.lightBg
+                backgroundColor: isCustomer ? colors.inputBg : colors.lightBg,
               }}
             />
           </View>

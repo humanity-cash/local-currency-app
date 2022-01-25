@@ -1,6 +1,4 @@
 import { AntDesign, Entypo } from "@expo/vector-icons";
-import axios from "axios";
-import FitImage from 'react-native-fit-image';
 import { DrawerActions, useNavigation } from "@react-navigation/native";
 import React, { useContext, useState, useEffect } from "react";
 import {
@@ -8,9 +6,11 @@ import {
   ScrollView,
   TouchableOpacity,
   TouchableWithoutFeedback,
-  View
+  View,
+  Image,
+  Dimensions
 } from "react-native";
-import { Image, Text } from "react-native-elements";
+import { Text } from "react-native-elements";
 import { BUTTON_TYPES } from "src/constants";
 import { UserContext, WalletContext } from "src/contexts";
 import { useCustomerWallet } from "src/hooks";
@@ -22,7 +22,7 @@ import {
   baseHeader,
   dialogViewBase,
   viewBase,
-  wrappingContainerBase
+  wrappingContainerBase,
 } from "src/theme/elements";
 import Translation from "src/translation/en.json";
 import { DwollaDialog } from "src/views";
@@ -38,26 +38,24 @@ import { getFeedContent } from "src/api/content";
 const CustomerDashboard = (): JSX.Element => {
   const navigation = useNavigation();
   const [isVisible, setIsVisible] = useState<boolean>(false);
-  const [feedData, setFeedData] = useState<FeedItemProps []>([]);
+  const [feedData, setFeedData] = useState<FeedItemProps[]>([]);
   const [isLoadup, setIsLoadup] = useState<boolean>(false);
   const [isPayment, setIsPayment] = useState<boolean>(false);
   const [isSetting, setIsSetting] = useState(false);
   const { customerDwollaId, user } = useContext(UserContext);
-  const { customerWalletData, updateCustomerWalletData } = useContext(
-    WalletContext
-  );
-  const { events, getEvents, deleteEvent, updateEvents } = useContext(
-    EventsContext
-  );
+  const { customerWalletData, updateCustomerWalletData } =
+    useContext(WalletContext);
+  const { events, getEvents, deleteEvent, updateEvents } =
+    useContext(EventsContext);
   const { isLoading: isWalletLoading } = useCustomerWallet();
-  const personalFundingSource = customerWalletData?.availableFundingSource;
+  const personalFundingSource = customerWalletData?.availableFundingSource?.visible;
   const availableBalance = customerWalletData?.availableBalance;
   const [showEvents, setShowEvents] = useState(false);
   const [refreshing, setRefreshing] = React.useState(false);
 
   useEffect(() => {
     updateEvents([]);
-    fetchFeedData()
+    fetchFeedData();
   }, []);
 
   useEffect(() => {
@@ -78,15 +76,15 @@ const CustomerDashboard = (): JSX.Element => {
   };
 
   const onClose = () => {
-   setIsVisible(false);
-   setIsPayment(false);
-   setIsLoadup(false);
+    setIsVisible(false);
+    setIsPayment(false);
+    setIsLoadup(false);
   };
 
   const fetchFeedData = async () => {
-   const data = await getFeedContent();
-   setFeedData(data);
-  }
+    const data = await getFeedContent();
+    setFeedData(data);
+  };
 
   const onPressScan = async () => {
     const { status } = await BarCodeScanner.requestPermissionsAsync();
@@ -98,7 +96,7 @@ const CustomerDashboard = (): JSX.Element => {
           username: user?.customer?.tag,
           styles: CustomerScanQrCodeStyle,
           recieveRoute: Routes.PAYMENT_REQUEST,
-          cancelRoute: Routes.DASHBOARD
+          cancelRoute: Routes.DASHBOARD,
         });
       } else {
         navigation.navigate(Routes.RECEIVE_PAYMENT);
@@ -149,7 +147,7 @@ const CustomerDashboard = (): JSX.Element => {
             onPress={() => {
               personalFundingSource
                 ? navigation.navigate(Routes.LOAD_UP, {
-                    userId: customerDwollaId
+                    userId: customerDwollaId,
                   })
                 : setIsVisible(true);
             }}
@@ -190,14 +188,16 @@ const CustomerDashboard = (): JSX.Element => {
                 }}
               />
             )}
-           {feedData.map((f, i) => <FeedItem key={i} {...f} />)}
+            {feedData.map((f, i) => (
+              <FeedItem key={i} {...f} />
+            ))}
           </View>
         </ScrollView>
       </View>
       <TouchableOpacity onPress={onPressScan} style={styles.scanButton}>
         <Image
           source={require("../../../../assets/images/qr_code_consumer.png")}
-          containerStyle={styles.qrIcon}
+          style={styles.qrIcon}
         />
         <Text style={styles.scanBtnText}>{Translation.BUTTON.SCAN}</Text>
       </TouchableOpacity>
@@ -252,17 +252,29 @@ const CustomerDashboard = (): JSX.Element => {
 };
 
 const FeedItem = (props: FeedItemProps) => {
- const { text, textTitle, image } = props;
+  const { text, textTitle, image } = props;
+  const [ height, setHeight ] = useState(0)
+  const mainW = Dimensions.get('window').width - 40
 
- return (
-  <View style={styles.feedView}>
-   <Text h2>{textTitle}</Text>
-   <Text style={styles.bodyText}>{text}</Text>
-   {
-    image?.length ? <FitImage source={{uri: image }} /> : null
-   }
-  </View>
- )
-}
+  return (
+    <View style={styles.feedView}>
+      <Text h2>{textTitle}</Text>
+      <Text style={styles.bodyText}>{text}</Text>
+      { image?.length && 
+        <Image
+          source={{uri: image}}
+          style={{width: mainW, height: height}}
+          width={mainW}
+          height={height}
+          resizeMode={'cover'}
+          onLayout={(e) => {
+            Image.getSize(image, (width, height) => {
+              setHeight(mainW*height/width)
+            })
+          }}
+      />}
+    </View>
+  );
+};
 
 export default CustomerDashboard;

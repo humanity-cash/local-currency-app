@@ -136,13 +136,13 @@ export enum UserType {
   NotVerified = "notVerified",
   Customer = "customer",
   Business = "business",
-  Cashier = "cashier"
+  Cashier = "cashier",
 }
 
 export enum AuthStatus {
   Loading,
   SignedIn,
-  SignedOut
+  SignedOut,
 }
 
 export interface Session {

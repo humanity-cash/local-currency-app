@@ -4,7 +4,7 @@ import {
   StyleSheet,
   ReturnKeyTypeOptions,
   KeyboardTypeOptions,
-  Keyboard
+  Keyboard,
 } from "react-native";
 import { colors } from "src/theme/colors";
 import MaskedInput, { Mask } from "react-native-mask-input";
@@ -36,8 +36,8 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
     marginVertical: 8,
     borderWidth: 0,
-    color: colors.text
-  }
+    color: colors.text,
+  },
 });
 
 class MaskInput extends React.Component<MaskInputProps> {
@@ -47,7 +47,7 @@ class MaskInput extends React.Component<MaskInputProps> {
         ref={this.props.inputRef}
         style={{
           ...styles.container,
-          ...this.props.style
+          ...this.props.style,
         }}
         secureTextEntry={this.props.secureTextEntry || false}
         placeholderTextColor={this.props.placeholderTextColor || colors.grey1}

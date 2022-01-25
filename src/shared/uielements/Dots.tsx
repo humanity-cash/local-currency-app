@@ -11,7 +11,7 @@ const styles = StyleSheet.create({
   box: {
     width: 15,
     marginTop: 5,
-    marginHorizontal: 2
+    marginHorizontal: 2,
   },
   circle: {
     width: 8,
@@ -20,13 +20,13 @@ const styles = StyleSheet.create({
     backgroundColor: colors.white,
     borderColor: colors.white,
     opacity: 0.5,
-    borderRadius: 15
+    borderRadius: 15,
   },
   circleFilled: {
     backgroundColor: colors.white,
     borderColor: colors.white,
-    opacity: 1
-  }
+    opacity: 1,
+  },
 });
 
 const Dots = (props: DotsProps) => {
@@ -38,7 +38,7 @@ const Dots = (props: DotsProps) => {
           <View
             style={[
               styles.circle,
-              props.selected === i ? styles.circleFilled : {}
+              props.selected === i ? styles.circleFilled : {},
             ]}
           />
         </View>
