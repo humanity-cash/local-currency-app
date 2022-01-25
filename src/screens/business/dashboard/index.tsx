@@ -42,7 +42,7 @@ const MerchantDashboard = (): JSX.Element => {
   const [isPayment, setIsPayment] = useState<boolean>(false);
   const { isLoading: isWalletLoading } = useBusinessWallet();
   const { businessDwollaId } = useContext(UserContext);
-  const businessFundingSource = businessWalletData?.availableFundingSource;
+  const businessFundingSource = businessWalletData?.availableFundingSource?.visible;
   const availableBalance = businessWalletData?.availableBalance;
   const [isSetting, setIsSetting] = useState(false);
   const [showEvents, setShowEvents] = useState(false);

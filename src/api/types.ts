@@ -148,3 +148,14 @@ export interface FeedItemProps {
   text: string;
   image: string;
 }
+
+export interface IBank {
+  bankName: string;
+  bankAccountType: string;
+  createdAt: string;
+  name: string;
+}
+export interface FundingSource {
+  visible: boolean,
+  bank: IBank | undefined
+}
