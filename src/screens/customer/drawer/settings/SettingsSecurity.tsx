@@ -206,9 +206,9 @@ export const SettingsSecurity = (): JSX.Element => {
 					<View>
 						<BlockInput
 							inputRef={confirmPasswordRef}
-							name="newPassowrdConfirm"
+							name="newPasswordConfirm"
 							placeholder="new password confirm"
-							value={state.newPassowrdConfirm}
+							value={state.newPasswordConfirm}
 							secureTextEntry={confirmSecurity}
 							onChange={onValueChange}
 						/>
