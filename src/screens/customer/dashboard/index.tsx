@@ -1,6 +1,4 @@
 import { AntDesign, Entypo } from "@expo/vector-icons";
-import axios from "axios";
-import FitImage from "react-native-fit-image";
 import { DrawerActions, useNavigation } from "@react-navigation/native";
 import React, { useContext, useState, useEffect } from "react";
 import {
@@ -9,8 +7,10 @@ import {
   TouchableOpacity,
   TouchableWithoutFeedback,
   View,
+  Image,
+  Dimensions
 } from "react-native";
-import { Image, Text } from "react-native-elements";
+import { Text } from "react-native-elements";
 import { BUTTON_TYPES } from "src/constants";
 import { UserContext, WalletContext } from "src/contexts";
 import { useCustomerWallet } from "src/hooks";
@@ -197,7 +197,7 @@ const CustomerDashboard = (): JSX.Element => {
       <TouchableOpacity onPress={onPressScan} style={styles.scanButton}>
         <Image
           source={require("../../../../assets/images/qr_code_consumer.png")}
-          containerStyle={styles.qrIcon}
+          style={styles.qrIcon}
         />
         <Text style={styles.scanBtnText}>{Translation.BUTTON.SCAN}</Text>
       </TouchableOpacity>
@@ -253,12 +253,26 @@ const CustomerDashboard = (): JSX.Element => {
 
 const FeedItem = (props: FeedItemProps) => {
   const { text, textTitle, image } = props;
+  const [ height, setHeight ] = useState(0)
+  const mainW = Dimensions.get('window').width - 40
 
   return (
     <View style={styles.feedView}>
       <Text h2>{textTitle}</Text>
       <Text style={styles.bodyText}>{text}</Text>
-      {image?.length ? <FitImage source={{ uri: image }} /> : null}
+      { image?.length && 
+        <Image
+          source={{uri: image}}
+          style={{width: mainW, height: height}}
+          width={mainW}
+          height={height}
+          resizeMode={'cover'}
+          onLayout={(e) => {
+            Image.getSize(image, (width, height) => {
+              setHeight(mainW*height/width)
+            })
+          }}
+      />}
     </View>
   );
 };
