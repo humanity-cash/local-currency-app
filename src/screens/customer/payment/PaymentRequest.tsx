@@ -90,7 +90,7 @@ const PaymentRequest = (): JSX.Element => {
 
   const { user, customerDwollaId } = useContext(UserContext);
   const { customerWalletData } = useContext(WalletContext);
-  const personalFundingSource = customerWalletData?.availableFundingSource;
+  const personalFundingSource = customerWalletData?.availableFundingSource?.visible;
   const availableBalance = customerWalletData?.availableBalance;
   const { userType } = useContext(UserContext);
   const isCustomer = userType === UserType.Customer;

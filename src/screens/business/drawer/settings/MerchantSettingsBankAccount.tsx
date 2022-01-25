@@ -1,12 +1,13 @@
 import { useNavigation } from '@react-navigation/native';
-import React, { ReactElement, useState } from 'react';
+import React, { ReactElement, useContext } from 'react';
 import { ScrollView, StyleSheet, View } from "react-native";
-import { Text, Image } from 'react-native-elements';
+import { Text } from 'react-native-elements';
 import { Header, BackBtn } from "src/shared/uielements";
 import { underlineHeaderB, viewBaseB } from "src/theme/elements";
 import { colors } from "src/theme/colors";
 import Translation from 'src/translation/en.json';
 import { FontFamily } from "src/theme/elements";
+import { WalletContext } from "src/contexts";
 
 const styles = StyleSheet.create({
 	content: {
@@ -52,6 +53,13 @@ const styles = StyleSheet.create({
 		color: colors.bodyText,
 		fontSize: 10
 	},
+	bankNameLabel: {
+		color: colors.bodyText,
+		fontFamily: FontFamily.bold,
+		fontSize: 18,
+		alignSelf: 'center',
+		paddingBottom: 24
+	},
 	text: {
 		color: colors.bodyText,
 		fontFamily: FontFamily.bold,
@@ -82,7 +90,8 @@ const styles = StyleSheet.create({
 
 export const MerchantSettingsBankAccount = (): ReactElement => {
 	const navigation = useNavigation();
-	const [hasBankAccount, setHasBankAccount] = useState<boolean>(true);
+	const { businessWalletData } = useContext(WalletContext);
+	const bank = businessWalletData.availableFundingSource?.bank
 
 	return (
 		<View style={viewBaseB}>
@@ -94,29 +103,26 @@ export const MerchantSettingsBankAccount = (): ReactElement => {
 					<Text style={styles.headerText}>{Translation.BANK_ACCOUNT.BANK_ACCOUNT}</Text>
 				</View>
 				{
-					hasBankAccount && (
+					bank && (
 						<View style={styles.section}>
-							<Image
-								source={require('../../../../../assets/images/bank1.png')}
-								containerStyle={styles.image}
-							/>
+							<Text style={styles.bankNameLabel}>{bank.bankName}</Text>
 							<View style={styles.inlineView}>
 								<Text style={styles.label}>{Translation.LABEL.ACCOUNT_NAME}</Text>
-								<Text style={styles.text}>ACCOUNTNAMEOFTHISBANK</Text>
+								<Text style={styles.text}>{bank.name}</Text>
 							</View>
 							<View style={styles.inlineView}>
 								<Text style={styles.label}>{Translation.LABEL.ACCOUNT_TYPE}</Text>
-								<Text style={styles.text}>CHECKINGS</Text>
+								<Text style={styles.text}>{bank.bankAccountType.toUpperCase()}</Text>
 							</View>
 							<View style={styles.inlineView}>
-								<Text style={styles.label}>{Translation.LABEL.ACCOUNT_NUMBER}</Text>
-								<Text style={styles.text}>US-08-CHAS-0686-5892</Text>
+								<Text style={styles.label}>{Translation.LABEL.ACCOUNT_CREATED_DATE}</Text>
+								<Text style={styles.text}>{bank.createdAt}</Text>
 							</View>
 						</View>
 					)
 				}
 				{
-					!hasBankAccount && (
+					!bank && (
 						<View style={styles.noAccount}>
 							<Text style={styles.noAccountText}>{Translation.COMMUNITY_CHEST.NO_BANK_ACCOUNT}</Text>
 						</View>
