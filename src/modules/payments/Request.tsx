@@ -24,33 +24,29 @@ const useWalletData = () => {
     customerWalletData,
     businessWalletData,
     updateBusinessWalletData,
-    updateCustomerWalletData
+    updateCustomerWalletData,
   } = useContext(WalletContext);
-  const { userType, customerDwollaId, businessDwollaId } = useContext(
-    UserContext
-  );
+  const { userType, customerDwollaId, businessDwollaId } =
+    useContext(UserContext);
   if (userType === UserType.Customer) {
     return {
       walletData: customerWalletData,
       userId: customerDwollaId,
-      updateWalletData: updateCustomerWalletData
+      updateWalletData: updateCustomerWalletData,
     };
   } else {
     return {
       walletData: businessWalletData,
       userId: businessDwollaId,
-      updateWalletData: updateBusinessWalletData
+      updateWalletData: updateBusinessWalletData,
     };
   }
 };
 
 const RequestPayment = (props: RequestPaymentInput): JSX.Element => {
   const { walletData, userId } = useWalletData();
-  const {
-    hasPermission,
-    setMaxBrightness,
-    setDefaultBrightness
-  } = useBrightness();
+  const { hasPermission, setMaxBrightness, setDefaultBrightness } =
+    useBrightness();
   const { userType } = useContext(UserContext);
   const styles =
     userType === UserType.Customer
@@ -65,7 +61,7 @@ const RequestPayment = (props: RequestPaymentInput): JSX.Element => {
     amount: props.amount,
     mode: props.isOpenAmount
       ? PaymentMode.OPEN_AMOUNT
-      : PaymentMode.SELECT_AMOUNT
+      : PaymentMode.SELECT_AMOUNT,
   });
 
   useEffect(() => {

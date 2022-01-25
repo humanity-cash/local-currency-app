@@ -3,7 +3,7 @@ import { getRequest, postRequest } from "./base";
 import {
   formatDeposits,
   formatTransactions,
-  formatWithdrawals
+  formatWithdrawals,
 } from "./formatters";
 import {
   AxiosPromiseResponse,
@@ -11,7 +11,7 @@ import {
   ITransaction,
   ITransactionRequest,
   IWithdrawalRequest,
-  UserId
+  UserId,
 } from "./types";
 
 export const getDeposits = async (
@@ -106,7 +106,7 @@ export const getAllTransactions = async (
   const response = [
     ...(await getBlockchainTransactions(userId)),
     ...(await getDeposits(userId)),
-    ...(await getWithdrawals(userId))
+    ...(await getWithdrawals(userId)),
   ];
 
   return response;

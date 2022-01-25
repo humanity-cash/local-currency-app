@@ -15,5 +15,5 @@ export {
   PersonalDetailsForm,
   PersonalProfileForm,
   BusinessProfileForm,
-  BusinessAddressForm
+  BusinessAddressForm,
 };

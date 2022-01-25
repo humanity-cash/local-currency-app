@@ -1,7 +1,7 @@
 import { IWallet } from "@humanity.cash/types";
 import { getRequest, postRequest } from "./base";
 import { fundingSource } from "./formatters";
-import { AxiosPromiseResponse, UserId } from "./types";
+import { AxiosPromiseResponse, UserId, FundingSource } from './types';
 import { getUser } from "./user";
 
 export const iavToken = async (
@@ -16,14 +16,14 @@ export const iavToken = async (
   }
 };
 
-export const loadFundingSource = async (userId: UserId): Promise<boolean> => {
+export const loadFundingSource = async (userId: UserId): Promise<FundingSource | undefined> => {
   try {
-    if (!userId) return false;
+    if (!userId) return undefined;
     const response = await getRequest(`/users/${userId}/funding-sources`);
     return fundingSource(response);
   } catch (err) {
     console.log("error in funding source", err);
-    return false;
+    return undefined;
   }
 };
 
@@ -46,7 +46,7 @@ export const loadWallet = async (userId: string): Promise<IWallet> => {
       userId: wallet?.userId,
       address: wallet?.address,
       createdTimestamp: wallet?.createdTimestamp,
-      createdBlock: wallet?.createdBlock
+      createdBlock: wallet?.createdBlock,
     };
     return walletData;
   } catch (error) {

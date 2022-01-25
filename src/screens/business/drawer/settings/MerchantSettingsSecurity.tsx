@@ -1,7 +1,7 @@
 import { useNavigation } from '@react-navigation/native';
 import { LoadingPage } from 'src/views';
 import React, { useState, useEffect, useContext, createRef } from 'react';
-import { ScrollView, StyleSheet, Switch, View, KeyboardAvoidingView, Platform, TextInput } from "react-native";
+import { ScrollView, StyleSheet, Switch, View, KeyboardAvoidingView, Platform, TextInput, SafeAreaView } from 'react-native';
 import { Text } from "react-native-elements";
 import { useUserDetails } from "src/hooks";
 import { AuthContext } from "src/contexts";
@@ -14,6 +14,7 @@ import { BUTTON_TYPES } from 'src/constants';
 import { isPasswordValid } from 'src/utils/validation';
 import { showToast } from 'src/utils/common';
 import { ToastType } from 'src/utils/types';
+import SecurityEyeButton from "src/shared/uielements/SecurityEyeButton";
 
 interface SecurityProps extends IMap {
 	password: string;
@@ -73,8 +74,16 @@ const styles = StyleSheet.create({
 	saveButton: {
 		fontFamily: FontFamily.bold,
 		color: colors.darkRed
+	},
+	eyeView: {
+		position: "absolute",
+		right: 10,
+		top: 0,
+		bottom: 0,
+		justifyContent: "center",
+	  },
 	}
-});
+);
 
 export const MerchantSettingsSecurity = (): JSX.Element => {
 	const navigation = useNavigation();
@@ -91,6 +100,9 @@ export const MerchantSettingsSecurity = (): JSX.Element => {
 		newPassword: "",
 		newPassowrdConfirm: ""
 	});
+	const [oldSecurity, setOldSecurity] = useState(true)
+	const [newSecurity, setNewSecurity] = useState(true)
+	const [confirmSecurity, setConfirmSecurity] = useState(true)
 
 	const newPasswordRef = createRef<TextInput>()
 	const confirmPasswordRef = createRef<TextInput>()
@@ -112,7 +124,7 @@ export const MerchantSettingsSecurity = (): JSX.Element => {
 			isValidPassword && 
 			isPasswordMatched
 		);
-	}, [state]);
+	}, [state, isValidPassword, isPasswordMatched]);
 
 	const onTouchIdOption = (value: boolean) => {
 		updateAuthorization({ touchID: value });
@@ -158,16 +170,6 @@ export const MerchantSettingsSecurity = (): JSX.Element => {
 					<Text style={styles.headerText}>{Translation.COMMUNITY_CHEST.SECURITY}</Text>
 				</View>
 				<View style={styles.view}>
-					<Text style={styles.text}>{Translation.COMMUNITY_CHEST.ALLOW_TOUCH}</Text>
-					<Switch
-						trackColor={{ false: colors.green, true: colors.green }}
-						thumbColor={colors.white}
-						ios_backgroundColor={colors.white}
-						onValueChange={onTouchIdOption}
-						value={isTouchId}
-					/>
-				</View>
-				<View style={styles.view}>
 					<Text style={styles.text}>{Translation.OTHER.ENABLE_CASHIER_VIEW}</Text>
 					<Switch
 						trackColor={{ false: colors.green, true: colors.green }}
@@ -181,34 +183,51 @@ export const MerchantSettingsSecurity = (): JSX.Element => {
 				<View style={ underlineHeaderB }></View>
 				<View>
 					<Text style={styles.label}>{Translation.LABEL.OLD_PASSWORD}</Text>
-					<BlockInput
-						name="password"
-						placeholder="password"
-						value={state.password}
-						secureTextEntry={true}
-						style={styles.input}
-						onChange={onValueChange}
-						returnKeyType='next'
-						onSubmitEditing={() => {
-							newPasswordRef.current?.focus()
-						}}
-					/>
+					<View>
+						<BlockInput
+							name="password"
+							placeholder="password"
+							value={state.password}
+							secureTextEntry={oldSecurity}
+							style={styles.input}
+							onChange={onValueChange}
+							returnKeyType='next'
+							onSubmitEditing={() => {
+								newPasswordRef.current?.focus()
+							}}
+						/>
+						<View style={styles.eyeView}>
+							<SecurityEyeButton
+								isSecurity={oldSecurity}
+								onPress={() => setOldSecurity(!oldSecurity)}
+							/>
+						</View>
+					</View>
 
 					<Text style={styles.label}>{Translation.LABEL.NEW_PASSWORD}</Text>
 					<Text style={styles.label}>{Translation.LABEL.PASSWORD_REG}</Text>
-					<BlockInput
-						inputRef={newPasswordRef}
-						name="newPassword"
-						placeholder="new password"
-						value={state.newPassword}
-						secureTextEntry={true}
-						style={styles.input}
-						onChange={onValueChange}
-						returnKeyType='next'
-						onSubmitEditing={()=>{
-							confirmPasswordRef.current?.focus()
-						}}
-					/>
+					<View>
+						<BlockInput
+							inputRef={newPasswordRef}
+							name="newPassword"
+							placeholder="new password"
+							value={state.newPassword}
+							secureTextEntry={newSecurity}
+							style={styles.input}
+							onChange={onValueChange}
+							returnKeyType='next'
+							onSubmitEditing={()=>{
+								confirmPasswordRef.current?.focus()
+							}}
+							
+						/>
+						<View style={styles.eyeView}>
+							<SecurityEyeButton
+								isSecurity={newSecurity}
+								onPress={() => setNewSecurity(!newSecurity)}
+							/>
+						</View>
+					</View>
 					{!isValidPassword && (
 						<Text style={styles.errorText}>{Translation.PASSWORD.NOT_MEET_REQUIREMENTS}</Text>
 					)}
@@ -216,28 +235,36 @@ export const MerchantSettingsSecurity = (): JSX.Element => {
 					<View style={styles.inlineView}>
 						<Text style={styles.label}>{Translation.LABEL.CONFIRM_NEW_PASSWORD}</Text>
 					</View>
-					<BlockInput
-						inputRef={confirmPasswordRef}
-						name="newPasswordConfirm"
-						placeholder="new password confirm"
-						value={state.newPassowrdConfirm}
-						secureTextEntry={true}
-						style={styles.input}
-						onChange={onValueChange}
-					/>
+					<View>
+						<BlockInput
+							inputRef={confirmPasswordRef}
+							name="newPasowrdConfirm"
+							placeholder="new password confirm"
+							value={state.newPassowrdConfirm}
+							secureTextEntry={confirmSecurity}
+							style={styles.input}
+							onChange={onValueChange}
+						/>
+						<View style={styles.eyeView}>
+							<SecurityEyeButton
+								isSecurity={confirmSecurity}
+								onPress={() => setConfirmSecurity(!confirmSecurity)}
+							/>
+						</View>
+					</View>
 					{!isPasswordMatched && (
 						<Text style={styles.errorText}>{Translation.PASSWORD.NOT_MATCHED}</Text>
 					)}
 				</View>
 			</ScrollView>
-			<View style={styles.bottomView}>
+			<SafeAreaView style={styles.bottomView}>
 				<Button
 					type={BUTTON_TYPES.PURPLE}
 					title={Translation.BUTTON.SAVE_CHANGE}
 					disabled={!canSave}
 					onPress={handleSave}
 				/>
-			</View>
+			</SafeAreaView>
 		</KeyboardAvoidingView>
 	);
 }

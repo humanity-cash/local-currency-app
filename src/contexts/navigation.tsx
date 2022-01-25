@@ -9,7 +9,7 @@ export enum ViewState {
   NotVerified = "NotVerified",
   CustomerLinkBank = "CustomerLinkBank",
   BusinessLinkBank = "BusinessLinkBank",
-  Onboarding = "Onboarding"
+  Onboarding = "Onboarding",
 }
 
 interface IState {
@@ -25,7 +25,7 @@ export const NavigationProvider: React.FunctionComponent = ({ children }) => {
 
   const state: IState = {
     selectedView,
-    updateSelectedView
+    updateSelectedView,
   };
 
   return (

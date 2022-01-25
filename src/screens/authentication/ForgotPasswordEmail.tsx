@@ -6,7 +6,7 @@ import {
   ScrollView,
   StyleSheet,
   View,
-  SafeAreaView
+  SafeAreaView,
 } from "react-native";
 import { Text } from "react-native-elements";
 import { AuthContext } from "src/contexts";
@@ -16,7 +16,7 @@ import {
   BlockInput,
   Button,
   CancelBtn,
-  Header
+  Header,
 } from "src/shared/uielements";
 import { baseHeader, viewBase } from "src/theme/elements";
 import { isEmailValid } from "src/utils/validation";
@@ -24,27 +24,27 @@ import { LoadingPage } from "src/views";
 
 const styles = StyleSheet.create({
   container: {
-    padding: 10
+    padding: 10,
   },
   modalHeader: {
     fontSize: 32,
     fontWeight: "400",
-    lineHeight: 40
+    lineHeight: 40,
   },
   modalDescription: {
-    paddingBottom: 30
+    paddingBottom: 30,
   },
   bottomView: {
     marginHorizontal: 20,
-    marginBottom: 20
-  }
+    marginBottom: 20,
+  },
 });
 
 const ForgotPasswordEmail = (): React.ReactElement => {
   const {
     forgotPasswordDetails,
     setForgotPasswordDetails,
-    startForgotPasswordFlow
+    startForgotPasswordFlow,
   } = useContext(AuthContext);
   const navigation = useNavigation();
   const [isLoading, setLoading] = useState<boolean>(false);
@@ -52,7 +52,7 @@ const ForgotPasswordEmail = (): React.ReactElement => {
   const onValueChange = (name: string, change: string) => {
     setForgotPasswordDetails((pv: ForgotPassword) => ({
       ...pv,
-      email: change
+      email: change,
     }));
   };
 
@@ -68,7 +68,7 @@ const ForgotPasswordEmail = (): React.ReactElement => {
 
   return (
     <KeyboardAvoidingView
-      {...(Platform.OS === 'ios' && { behavior: 'padding' })}
+      {...(Platform.OS === "ios" && { behavior: "padding" })}
       style={viewBase}
     >
       <LoadingPage visible={isLoading} isData={true} />

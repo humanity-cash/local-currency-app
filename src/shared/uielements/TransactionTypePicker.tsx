@@ -17,28 +17,28 @@ const styles = StyleSheet.create({
     backgroundColor: colors.white,
     borderRadius: 3,
     padding: 20,
-    borderWidth: 1
+    borderWidth: 1,
   },
   checkboxContainer: {
     borderWidth: 0,
-    backgroundColor: "transparent"
+    backgroundColor: "transparent",
   },
   itemView: {
     flexDirection: "row",
-    alignItems: "center"
+    alignItems: "center",
   },
   selectedText: {
     flex: 1,
     fontSize: 16,
-    color: colors.purple
-  }
+    color: colors.purple,
+  },
 });
 
 const TransactionTypePicker = ({
   items,
   selected,
   setSelected,
-  style
+  style,
 }: TransactionTypePickerProps) => {
   const [isOpen, setIsOpen] = useState(false);
   const [typeText, setTypeText] = useState("");
@@ -130,7 +130,7 @@ const TransactionTypePicker = ({
       style={{
         ...styles.container,
         ...style,
-        borderColor: isOpen ? colors.purple : "transparent"
+        borderColor: isOpen ? colors.purple : "transparent",
       }}
     >
       <TouchableOpacity
@@ -142,7 +142,7 @@ const TransactionTypePicker = ({
           <Text
             style={[
               styles.selectedText,
-              { opacity: typeText.length > 0 ? 1 : 0.4 }
+              { opacity: typeText.length > 0 ? 1 : 0.4 },
             ]}
             numberOfLines={1}
           >

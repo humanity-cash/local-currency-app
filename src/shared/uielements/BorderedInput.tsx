@@ -4,7 +4,7 @@ import {
   TouchableWithoutFeedback,
   View,
   StyleSheet,
-  KeyboardTypeOptions
+  KeyboardTypeOptions,
 } from "react-native";
 import { Text } from "react-native-elements";
 import { colors } from "src/theme/colors";
@@ -32,17 +32,17 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     marginVertical: 8,
-    paddingHorizontal: 15
+    paddingHorizontal: 15,
   },
   iconView: {
-    alignItems: "center"
+    alignItems: "center",
   },
   prefixText: {
     textAlignVertical: "center",
     fontSize: 20,
     height: 60,
     lineHeight: 60,
-    textAlign: "left"
+    textAlign: "left",
   },
   inputText: {
     textAlign: "left",
@@ -50,8 +50,8 @@ const styles = StyleSheet.create({
     paddingLeft: 15,
     borderWidth: 0,
     color: colors.text,
-    flex: 1
-  }
+    flex: 1,
+  },
 });
 const BorderedInput = (props: BorderedInputProps) => {
   const inputRef = useRef<TextInput | null>(null);
@@ -64,8 +64,8 @@ const BorderedInput = (props: BorderedInputProps) => {
           props.style,
           {
             borderWidth: props.borderColor ? 1 : 0,
-            borderColor: props.borderColor
-          }
+            borderColor: props.borderColor,
+          },
         ]}
       >
         {props.prefix && (
@@ -73,7 +73,7 @@ const BorderedInput = (props: BorderedInputProps) => {
             <Text
               style={{
                 ...styles.prefixText,
-                ...props.textStyle
+                ...props.textStyle,
               }}
             >
               {props.prefix}
@@ -84,7 +84,7 @@ const BorderedInput = (props: BorderedInputProps) => {
           ref={inputRef}
           style={{
             ...styles.inputText,
-            ...props.style
+            ...props.style,
           }}
           placeholderTextColor={
             props.placeholderTextColor
@@ -93,7 +93,7 @@ const BorderedInput = (props: BorderedInputProps) => {
           }
           keyboardType={props.keyboardType || "default"}
           placeholder={props.placeholder ? props.placeholder : ""}
-          onChangeText={newValue => props.onChange(props.name, newValue)}
+          onChangeText={(newValue) => props.onChange(props.name, newValue)}
           value={props.value}
           onKeyPress={props.onKeyPress}
           maxLength={props.maxLength}

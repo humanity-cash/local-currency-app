@@ -7,7 +7,7 @@ const storeId = "ROUTE_TRACKING";
 type RouteState = Route;
 
 const store = createStore<RouteState>(storeId, {
-  current: ""
+  current: "",
 });
 
 const useRouteTracking = () => {
@@ -17,13 +17,13 @@ const useRouteTracking = () => {
     const currentState = store.getState();
     store.setState({
       ...currentState,
-      ...data
+      ...data,
     });
   }, []);
 
   return {
     currentRoute: details.current,
-    update
+    update,
   };
 };
 

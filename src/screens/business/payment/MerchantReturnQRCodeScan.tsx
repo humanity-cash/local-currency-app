@@ -6,7 +6,7 @@ import {
   KeyboardAvoidingView,
   Platform,
   SafeAreaView,
-  ActivityIndicator
+  ActivityIndicator,
 } from "react-native";
 import { Text } from "react-native-elements";
 import { useCameraPermission } from "src/hooks";
@@ -22,19 +22,19 @@ import {
   SECURITY_ID,
   PaymentMode,
   ToastType,
-  LoadingScreenTypes
+  LoadingScreenTypes,
 } from "src/utils/types";
 import { showToast } from "src/utils/common";
 import {
   modalViewBase,
   wrappingContainerBase,
-  underlineHeaderB
+  underlineHeaderB,
 } from "src/theme/elements";
 import {
   Modal,
   ModalHeader,
   BorderedInput,
-  Button
+  Button,
 } from "src/shared/uielements";
 import { BUTTON_TYPES } from "src/constants";
 import { ITransactionRequest } from "src/api/types";
@@ -53,7 +53,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     flexDirection: "column",
-    justifyContent: "center"
+    justifyContent: "center",
   },
   toggleView: {
     position: "absolute",
@@ -61,37 +61,37 @@ const styles = StyleSheet.create({
     left: 0,
     width: "100%",
     height: 200,
-    backgroundColor: "rgba(0,0,0,0.8)"
+    backgroundColor: "rgba(0,0,0,0.8)",
   },
   headerText: {
     fontSize: 32,
     fontWeight: "400",
     lineHeight: 40,
-    color: colors.purple
+    color: colors.purple,
   },
   contentView: {
-    marginTop: 5
+    marginTop: 5,
   },
   label: {
     color: colors.text,
-    fontSize: 12
+    fontSize: 12,
   },
   input: {
     backgroundColor: colors.white,
-    color: colors.purple
+    color: colors.purple,
   },
   text: {
-    color: colors.purple
+    color: colors.purple,
   },
   bottomView: {
     padding: 20,
-    paddingBottom: 45
+    paddingBottom: 45,
   },
   transactionDetailView: {
     padding: 20,
     marginBottom: 20,
     borderRadius: 3,
-    backgroundColor: colors.white
+    backgroundColor: colors.white,
   },
   transactionDetailAmount: {
     fontSize: 32,
@@ -99,19 +99,19 @@ const styles = StyleSheet.create({
     marginVertical: 20,
     fontWeight: "bold",
     lineHeight: 32,
-    textAlign: "center"
+    textAlign: "center",
   },
   inlineView: {
     flexDirection: "row",
-    justifyContent: "space-between"
+    justifyContent: "space-between",
   },
   maxBView: {
     flexDirection: "row",
-    justifyContent: "space-between"
+    justifyContent: "space-between",
   },
   exceedLabel: {
     fontSize: 10,
-    color: colors.mistakeRed
+    color: colors.mistakeRed,
   },
   loading: {
     position: "absolute",
@@ -121,8 +121,8 @@ const styles = StyleSheet.create({
     bottom: 0,
     alignItems: "center",
     justifyContent: "center",
-    backgroundColor: "rgba(0, 0, 0, 0.4)"
-  }
+    backgroundColor: "rgba(0, 0, 0, 0.4)",
+  },
 });
 
 const MerchantReturnQRCodeScan = (): JSX.Element => {
@@ -137,7 +137,7 @@ const MerchantReturnQRCodeScan = (): JSX.Element => {
     securityId: SECURITY_ID,
     to: "",
     amount: 0,
-    mode: PaymentMode.SELECT_AMOUNT
+    mode: PaymentMode.SELECT_AMOUNT,
   });
   const [isLoading, setIsLoading] = useState(false);
   const [exceed, setExceed] = useState(false);
@@ -179,7 +179,7 @@ const MerchantReturnQRCodeScan = (): JSX.Element => {
       const request: ITransactionRequest = {
         toUserId: state.to,
         amount: amount.toString(),
-        comment: ""
+        comment: "",
       };
       setIsLoading(true);
       const response = await TransactionsAPI.transferTo(
@@ -230,7 +230,7 @@ const MerchantReturnQRCodeScan = (): JSX.Element => {
       {isReturnModal && (
         <Modal visible={isReturnModal}>
           <KeyboardAvoidingView
-            {...(Platform.OS === 'ios' && { behavior: 'padding' })}
+            {...(Platform.OS === "ios" && { behavior: "padding" })}
             style={modalViewBase}
           >
             <ModalHeader
@@ -270,7 +270,7 @@ const MerchantReturnQRCodeScan = (): JSX.Element => {
                     <Text style={styles.label}>DATE</Text>
                     <Text style={styles.label}>
                       {moment(state.transactionDate).format(
-                        "HH:mm, MMM D, YYYY"
+                        "h:mm A, MMM D, YYYY"
                       )}
                     </Text>
                   </View>

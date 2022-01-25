@@ -4,7 +4,7 @@ import {
   CognitoUserAttribute,
   CognitoUserPool,
   CognitoUserSession,
-  ISignUpResult
+  ISignUpResult,
 } from "amazon-cognito-identity-js";
 import {
   BaseResponse,
@@ -12,7 +12,7 @@ import {
   CognitoError,
   CognitoResponse,
   CompleteForgotPasswordInput,
-  StartForgotPasswordInput
+  StartForgotPasswordInput,
 } from "src/auth/types";
 import Translation from "src/translation/en.json";
 import { showToast } from "src/utils/common";
@@ -30,7 +30,7 @@ const CLIENT_ID = "5ejkc0cno24js5n8i4eefh5oim";
 
 const poolData = {
   UserPoolId: USERPOOL_ID,
-  ClientId: CLIENT_ID
+  ClientId: CLIENT_ID,
 };
 
 export const userPool = new CognitoUserPool(poolData);
@@ -39,22 +39,22 @@ let currentUser: CognitoUser | null = userPool.getCurrentUser();
 const getCognitoUser = (email: string): CognitoUser =>
   new CognitoUser({
     Username: email,
-    Pool: userPool
+    Pool: userPool,
   });
 
 export const getSession = async (): CognitoResponse<
   CognitoUserSession | undefined
 > => {
-  return new Promise(function(resolve) {
+  return new Promise(function (resolve) {
     //@ts-ignore
-    userPool?.storage.sync(async function(err, result) {
+    userPool?.storage.sync(async function (err, result) {
       if (err) {
         console.log("Cognito: Error syncing to storage", err);
         return resolve({ ...NOT_AUTHENTICATED });
       } else if (result === "SUCCESS") {
         currentUser = userPool.getCurrentUser();
         if (!currentUser) return resolve({ ...NOT_AUTHENTICATED });
-        currentUser.getSession(function(
+        currentUser.getSession(function (
           err: CognitoError,
           session: CognitoUserSession | undefined
         ) {
@@ -74,10 +74,9 @@ export const signUp = async (
   success: boolean;
   data: { error: string } | ISignUpResult | undefined;
 }> => {
-  const attributeList: CognitoUserAttribute[] = Utils.buildSignUpAttributeList(
-    email
-  );
-  return new Promise(resolve => {
+  const attributeList: CognitoUserAttribute[] =
+    Utils.buildSignUpAttributeList(email);
+  return new Promise((resolve) => {
     userPool.signUp(
       email,
       password,
@@ -94,10 +93,10 @@ export const signUp = async (
 };
 
 export const startForgotPasswordFlow = async ({
-  email
+  email,
 }: StartForgotPasswordInput): CognitoResponse<unknown> => {
   currentUser = getCognitoUser(email);
-  return new Promise(function(resolve) {
+  return new Promise(function (resolve) {
     if (!currentUser) {
       showToast(
         ToastType.ERROR,
@@ -106,17 +105,17 @@ export const startForgotPasswordFlow = async ({
       );
       resolve({
         success: false,
-        data: { error: Translation.NOTIFICATIONS.EMAIL_NOT_REGISTERED }
+        data: { error: Translation.NOTIFICATIONS.EMAIL_NOT_REGISTERED },
       });
     } else
       return currentUser.forgotPassword({
-        onSuccess: function() {
+        onSuccess: function () {
           resolve({ success: true, data: {} });
         },
-        onFailure: function(error: CognitoError) {
+        onFailure: function (error: CognitoError) {
           showToast(ToastType.ERROR, error.code, error.message);
           resolve({ success: false, data: { error: error.code } });
-        }
+        },
       });
   });
 };
@@ -124,10 +123,10 @@ export const startForgotPasswordFlow = async ({
 export const completeForgotPasswordFlow = async ({
   email,
   verificationCode,
-  newPassword
+  newPassword,
 }: CompleteForgotPasswordInput): CognitoResponse<unknown> => {
   currentUser = getCognitoUser(email);
-  return new Promise(function(resolve) {
+  return new Promise(function (resolve) {
     if (!currentUser) {
       showToast(
         ToastType.ERROR,
@@ -136,31 +135,31 @@ export const completeForgotPasswordFlow = async ({
       );
       resolve({
         success: false,
-        data: { error: Translation.NOTIFICATIONS.EMAIL_NOT_REGISTERED }
+        data: { error: Translation.NOTIFICATIONS.EMAIL_NOT_REGISTERED },
       });
     } else
       return currentUser.confirmPassword(verificationCode, newPassword, {
-        onSuccess: function() {
+        onSuccess: function () {
           resolve({ success: true, data: {} });
         },
-        onFailure: function(error: CognitoError) {
+        onFailure: function (error: CognitoError) {
           showToast(ToastType.ERROR, error.code, error.message);
           resolve({ success: false, data: { error: error.code } });
-        }
+        },
       });
   });
 };
 
 export const signIn = async ({
   email,
-  password
+  password,
 }: SignInInput): CognitoResponse<CognitoUserSession> => {
   currentUser = getCognitoUser(email);
   const authenticationDetails = new AuthenticationDetails({
     Username: email,
-    Password: password
+    Password: password,
   });
-  return new Promise(function(resolve) {
+  return new Promise(function (resolve) {
     if (!currentUser) {
       showToast(
         ToastType.ERROR,
@@ -169,19 +168,19 @@ export const signIn = async ({
       );
       resolve({
         success: false,
-        error: Translation.NOTIFICATIONS.EMAIL_NOT_REGISTERED
+        error: Translation.NOTIFICATIONS.EMAIL_NOT_REGISTERED,
       });
     } else
       return currentUser.authenticateUser(authenticationDetails, {
-        onSuccess: async function(response: CognitoUserSession) {
+        onSuccess: async function (response: CognitoUserSession) {
           resolve({ success: true, data: response });
         },
-        onFailure: function(error: CognitoError) {
+        onFailure: function (error: CognitoError) {
           if (error.code !== "UserNotConfirmedException") {
             showToast(ToastType.ERROR, error.code, error.message);
           }
           resolve({ success: false, error: error.code });
-        }
+        },
       });
   });
 };
@@ -193,7 +192,7 @@ export const confirmEmailVerificationCode = async (
   code: string
 ): CognitoResponse<unknown> => {
   const cognitoUser = getCognitoUser(email);
-  return new Promise(resolve => {
+  return new Promise((resolve) => {
     if (!cognitoUser) return resolve(NOT_AUTHENTICATED);
     cognitoUser.confirmRegistration(code, true, (err: CognitoError, result) => {
       if (err) {
@@ -208,8 +207,8 @@ export const resendEmailVerificationCode = async (
   email: string
 ): CognitoResponse<unknown> => {
   const cognitoUser = getCognitoUser(email);
-  return new Promise(resolve => {
-    cognitoUser.resendConfirmationCode(function(err) {
+  return new Promise((resolve) => {
+    cognitoUser.resendConfirmationCode(function (err) {
       if (err) resolve({ success: false, data: {} });
       else resolve({ success: true, data: {} });
     });
@@ -219,7 +218,7 @@ export const resendEmailVerificationCode = async (
 export const getAttributes = async (): CognitoResponse<
   CognitoUserAttribute[] | undefined
 > => {
-  return new Promise(resolve => {
+  return new Promise((resolve) => {
     if (!currentUser) resolve(NOT_AUTHENTICATED);
     else
       currentUser.getUserAttributes(
@@ -232,7 +231,7 @@ export const getAttributes = async (): CognitoResponse<
 };
 
 export const deleteUser = async (): CognitoResponse<string | undefined> => {
-  return new Promise(resolve => {
+  return new Promise((resolve) => {
     if (!currentUser) return resolve(NOT_AUTHENTICATED);
     else
       currentUser.deleteUser(
@@ -246,9 +245,9 @@ export const deleteUser = async (): CognitoResponse<string | undefined> => {
 
 export const changePassword = async ({
   oldPassword,
-  newPassword
+  newPassword,
 }: ChangePasswordInput): CognitoResponse<unknown> => {
-  return new Promise(function(resolve) {
+  return new Promise(function (resolve) {
     if (!currentUser) {
       showToast(
         ToastType.ERROR,
@@ -257,14 +256,16 @@ export const changePassword = async ({
       );
       resolve({
         success: false,
-        data: { error: Translation.NOTIFICATIONS.EMAIL_NOT_REGISTERED }
+        data: { error: Translation.NOTIFICATIONS.EMAIL_NOT_REGISTERED },
       });
     } else
-      return currentUser.changePassword(oldPassword, newPassword, function(
-        err
-      ) {
-        if (err) resolve({ success: false, data: {} });
-        else resolve({ success: true, data: {} });
-      });
+      return currentUser.changePassword(
+        oldPassword,
+        newPassword,
+        function (err) {
+          if (err) resolve({ success: false, data: {} });
+          else resolve({ success: true, data: {} });
+        }
+      );
   });
 };

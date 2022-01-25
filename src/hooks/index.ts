@@ -11,7 +11,7 @@ import {
   useBusinessWallet,
   useCustomerWallet,
   useUpdateBusinessWalletData,
-  useUpdateCustomerWalletData
+  useUpdateCustomerWalletData,
 } from "./useWallet";
 
 export {
@@ -27,5 +27,5 @@ export {
   useRouteTracking,
   useCameraPermission,
   useBusinesses,
-  useBrightness
+  useBrightness,
 };

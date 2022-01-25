@@ -107,11 +107,11 @@ const MerchantSettingsStaticQr = (): JSX.Element => {
 					title={Translation.BUTTON.SHOW_MY_QR}
 					onPress={() => setIsStaticQRCode(true)}
 				/>
-				<Button
+				{/* <Button
 					type={BUTTON_TYPES.PURPLE}
 					title={Translation.BUTTON.MAIL_QR_CODE}
 					onPress={onPressShowMyQR}
-				/>
+				/> */}
 			</SafeAreaView>
 
 			{isStaticQRCode && (

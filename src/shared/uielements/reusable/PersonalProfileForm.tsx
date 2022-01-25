@@ -11,22 +11,22 @@ import { prefixCustomerName } from "../../../utils/common";
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    paddingBottom: 40
+    paddingBottom: 40,
   },
   bodyText: {
-    color: colors.bodyText
+    color: colors.bodyText,
   },
   pickImageView: {
     paddingTop: 50,
     justifyContent: "center",
-    alignItems: "center"
+    alignItems: "center",
   },
   label: {
-    color: colors.bodyText
+    color: colors.bodyText,
   },
   smallLabel: {
     color: colors.bodyText,
-    fontSize: 10
+    fontSize: 10,
   },
   storyText: {
     fontSize: 16,
@@ -36,7 +36,7 @@ const styles = StyleSheet.create({
     paddingVertical: 8,
     marginVertical: 8,
     borderWidth: 0,
-    color: colors.text
+    color: colors.text,
   },
   imageView: {
     width: 80,
@@ -44,13 +44,13 @@ const styles = StyleSheet.create({
     borderRadius: 40,
     justifyContent: "center",
     alignItems: "center",
-    backgroundColor: colors.inputBg
+    backgroundColor: colors.inputBg,
   },
   image: {
     width: 80,
     height: 80,
-    borderRadius: 40
-  }
+    borderRadius: 40,
+  },
 });
 
 const PersonalProfileForm = (): ReactElement => {
@@ -66,7 +66,7 @@ const PersonalProfileForm = (): ReactElement => {
       mediaTypes: ImagePicker.MediaTypeOptions.All,
       allowsEditing: true,
       aspect: [4, 3],
-      quality: 1
+      quality: 1,
     });
 
     if (!result.cancelled) {
@@ -93,7 +93,7 @@ const PersonalProfileForm = (): ReactElement => {
             {avatar !== "" && (
               <Image
                 source={{
-                  uri: avatar
+                  uri: avatar,
                 }}
                 style={styles.image}
               />
