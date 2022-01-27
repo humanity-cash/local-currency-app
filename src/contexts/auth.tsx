@@ -148,14 +148,11 @@ export const AuthProvider: React.FunctionComponent = ({ children }) => {
       } else {
         const latestType = await getLatestSelectedAccountType(email);
         updateUserData(user);
-        const newType =
-          latestType === UserType.NotVerified ||
-          (!latestType && user?.verifiedCustomer)
-            ? UserType.Customer
-            : latestType === UserType.NotVerified ||
-              (!latestType && user?.verifiedBusiness)
-            ? UserType.Business
-            : (latestType as UserType);
+        const newType = (!latestType || latestType !== UserType.NotVerified)
+                          ? (latestType as UserType)
+                          : user?.verifiedCustomer
+                            ? UserType.Customer
+                            : UserType.Business
         updateUserType(newType, email);
         if (newType === UserType.Business)
           updateSelectedView(ViewState.Business);
