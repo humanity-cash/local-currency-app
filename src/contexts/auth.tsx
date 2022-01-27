@@ -19,6 +19,7 @@ import {
 } from "src/auth/types";
 import { NavigationViewContext, ViewState } from "./navigation";
 import { UserContext } from "./user";
+import { WalletContext } from "./wallet";
 
 export const AuthContext = React.createContext(defaultState);
 
@@ -26,6 +27,7 @@ export const AuthProvider: React.FunctionComponent = ({ children }) => {
   const [authStatus, setAuthStatus] = useState(AuthStatus.SignedOut);
   const { updateUserData, updateUserType } = useContext(UserContext);
   const { updateSelectedView } = useContext(NavigationViewContext);
+  const {updateCustomerWalletData, updateBusinessWalletData } = useContext(WalletContext);
   const [userEmail, setUserEmail] = useState<string>("");
   const [signInDetails, setSignInDetails] = useState(signInInitialState);
   const [signUpDetails, setSignUpDetails] =
@@ -209,6 +211,8 @@ export const AuthProvider: React.FunctionComponent = ({ children }) => {
     updateUserType(UserType.NotVerified, userEmail);
     userController.signOut();
     updateSelectedView(ViewState.Onboarding);
+    updateCustomerWalletData()
+    updateBusinessWalletData()
   };
 
   const actions = {

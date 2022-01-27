@@ -8,26 +8,27 @@ interface PersonalFundingSource {
 }
 
 export const WalletContext = React.createContext<IState>({} as IState);
+export const initWalletData: IWallet & PersonalFundingSource = {
+  totalBalance: 0,
+  createdTimestamp: "",
+  availableBalance: 0,
+  userId: "",
+  address: "",
+  createdBlock: "",
+  availableFundingSource: undefined,
+}
 
 interface IState {
   customerWalletData: IWallet & PersonalFundingSource;
   businessWalletData: IWallet & PersonalFundingSource;
-  updateBusinessWalletData: (dwollaId: string) => void;
-  updateCustomerWalletData: (dwollaId: string) => void;
+  updateBusinessWalletData: (dwollaId?: string) => void;
+  updateCustomerWalletData: (dwollaId?: string) => void;
 }
 
 export const WalletProvider: React.FunctionComponent = ({ children }) => {
   const [customerWalletData, setCustomerWalletData] = useState<
     IWallet & PersonalFundingSource
-  >({
-    totalBalance: 0,
-    createdTimestamp: "",
-    availableBalance: 0,
-    userId: "",
-    address: "",
-    createdBlock: "",
-    availableFundingSource: undefined,
-  });
+  >(initWalletData);
   const [businessWalletData, setBusinessWalletData] = useState<
     IWallet & PersonalFundingSource
   >({
@@ -40,7 +41,7 @@ export const WalletProvider: React.FunctionComponent = ({ children }) => {
     availableFundingSource: undefined,
   });
 
-  const updateBusinessWalletData = async (businessDwollaId: string) => {
+  const updateBusinessWalletData = async (businessDwollaId?: string) => {
     if (businessDwollaId) {
       const userWallet = await DwollaAPI.loadWallet(businessDwollaId);
       const fundingSource = await DwollaAPI.loadFundingSource(businessDwollaId);
@@ -48,10 +49,12 @@ export const WalletProvider: React.FunctionComponent = ({ children }) => {
         ...userWallet,
         availableFundingSource: fundingSource,
       });
+    } else {
+      setBusinessWalletData(initWalletData)
     }
   };
 
-  const updateCustomerWalletData = async (customerDwollaId: string) => {
+  const updateCustomerWalletData = async (customerDwollaId?: string) => {
     if (customerDwollaId) {
       const userWallet = await DwollaAPI.loadWallet(customerDwollaId);
       const fundingSource = await DwollaAPI.loadFundingSource(customerDwollaId);
@@ -59,6 +62,8 @@ export const WalletProvider: React.FunctionComponent = ({ children }) => {
         ...userWallet,
         availableFundingSource: fundingSource,
       });
+    } else {
+      setCustomerWalletData(initWalletData)
     }
   };
 
