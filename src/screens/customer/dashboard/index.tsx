@@ -252,19 +252,13 @@ const CustomerDashboard = (): JSX.Element => {
 };
 
 const FeedItem = (props: FeedItemProps) => {
-  const { text, textTitle, image } = props;
+  const { text, textTitle, image, contentType } = props;
   const [ height, setHeight ] = useState(0)
-  let mainW = Dimensions.get('window').width - 40
 
-  //@ts-ignore
-  if(props.contentType === "Values") {
-    mainW = mainW / 5
-   }
- 
-  //@ts-ignore
-   if(props.contentType === "DidYouKnow") {
-    mainW = mainW / 3
-   }
+  const widthRate = contentType === "Values" ? 5
+                    : contentType === "DidYouKnow" ? 3
+                    : 1
+  const mainW = (Dimensions.get('window').width - 40) / widthRate
 
   return (
     <View style={styles.feedView}>
