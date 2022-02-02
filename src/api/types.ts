@@ -147,6 +147,7 @@ export interface FeedItemProps {
   textTitle: string;
   text: string;
   image: string;
+  contentType: string
 }
 
 export interface IBank {
