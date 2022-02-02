@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState, useEffect } from "react";
 import {
   StyleSheet,
   View,
@@ -6,6 +6,7 @@ import {
   ActivityIndicator,
   Image,
   SafeAreaView,
+  Dimensions
 } from "react-native";
 import { Text } from "react-native-elements";
 import { UserContext } from "src/contexts";
@@ -13,6 +14,7 @@ import { Modal, ModalHeader } from "src/shared/uielements";
 import { modalViewBase, FontFamily } from "src/theme/elements";
 import { colors } from "src/theme/colors";
 import { UserType } from "src/auth/types";
+import { getFeedContent } from "src/api/content";
 
 const styles = StyleSheet.create({
   modalWrap: {
@@ -45,8 +47,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     width: "90%",
     height: 360,
-    borderRadius: 20,
-    backgroundColor: colors.white,
+    borderRadius: 20
   },
   image: {
     width: "100%",
@@ -82,6 +83,24 @@ const PaymentPending = ({
   visible = false,
 }: PaymentPendingProps): JSX.Element => {
   const { userType } = useContext(UserContext);
+  const [image, setImage] = useState<string>("");
+  const [imgW, setImgW] = useState<number>(0)
+  const [imgH, setImgH] = useState<number>(0)
+
+  useEffect(() => {
+    fetchFeedData();
+  }, []);
+
+  const fetchFeedData = async () => {
+    const feeds = await getFeedContent();
+    const index = Math.floor(Math.random() * feeds.length)
+    const feed = feeds[index]
+    const widthRate = feed.contentType === "Values" ? 5
+                    : feed.contentType === "DidYouKnow" ? 3
+                    : 1
+    setImgW((Dimensions.get('window').width - 40) / widthRate)
+    setImage(feed.image);
+  };
 
   return (
     <Modal visible={visible}>
@@ -100,10 +119,19 @@ const PaymentPending = ({
           <Text style={styles.bodyText}>This usually takes 5-6 seconds</Text>
           <View style={styles.contentView}>
             <View style={styles.imageView}>
-              <Image
-                source={require("../../../assets/images/great_barrington_mountain.png")}
-                style={styles.image}
-              />
+              { image?.length && 
+                <Image
+                  source={{uri: image}}
+                  style={{width: imgW, height: imgH, alignSelf: 'center'}}
+                  width={imgW}
+                  height={imgH}
+                  resizeMode={'contain'}
+                  onLayout={(e) => {
+                    Image.getSize(image, (width, height) => {
+                      setImgH(imgW*height/width)
+                    })
+                  }}
+              />}
             </View>
             <Text
               style={
