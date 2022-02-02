@@ -22,7 +22,7 @@ import * as Utils from "./utils";
 
 export const NOT_AUTHENTICATED: BaseResponse<undefined> = {
   success: false,
-  error: "noUserAuthed",
+  error: "noUserAuthenticated"
 };
 
 const USERPOOL_ID = "us-west-1_KU4cKOfV4";

@@ -238,9 +238,9 @@ export const MerchantSettingsSecurity = (): JSX.Element => {
 					<View>
 						<BlockInput
 							inputRef={confirmPasswordRef}
-							name="newPassowrdConfirm"
+							name="newPasswordConfirm"
 							placeholder="new password confirm"
-							value={state.newPassowrdConfirm}
+							value={state.newPasswordConfirm}
 							secureTextEntry={confirmSecurity}
 							style={styles.input}
 							onChange={onValueChange}

@@ -243,7 +243,7 @@ export const MerchantSettingsProfile = (): JSX.Element => {
 			//@ts-ignore
 			updateUserData({ ...response.data.data });
 		} else {
-			showToast(ToastType.ERROR, "Whooops, something went wrong.", "Connection failed.");
+			showToast(ToastType.ERROR, "Whoops, something went wrong.", "Connection failed.");
 		}
 		setIsLoading(false);
 	};

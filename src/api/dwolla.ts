@@ -22,7 +22,7 @@ export const loadFundingSource = async (userId: UserId): Promise<FundingSource |
     const response = await getRequest(`/users/${userId}/funding-sources`);
     return fundingSource(response);
   } catch (err) {
-    console.log("error in foundingsource", err);
+    console.log("error in funding source", err);
     return undefined;
   }
 };

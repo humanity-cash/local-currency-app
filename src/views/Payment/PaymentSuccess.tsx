@@ -73,7 +73,7 @@ const PaymentRequestSuccess = (
           </Text>
           <View style={styles.imageView}>
             <Image
-              source={require("../../../assets/images/burkshare_paper_money.png")}
+              source={require("../../../assets/images/berkshares_paper_money.png")}
               style={{ justifyContent: "center", width: "100%" }}
               resizeMode="contain"
             />

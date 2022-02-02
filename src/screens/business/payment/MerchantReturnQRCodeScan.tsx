@@ -174,7 +174,6 @@ const MerchantReturnQRCodeScan = (): JSX.Element => {
   };
 
   const onReturn = async () => {
-    // const amountCalcedFee = state.amount + calcFee(state.amount);
 
     if (businessDwollaId) {
       const request: ITransactionRequest = {
@@ -192,13 +191,13 @@ const MerchantReturnQRCodeScan = (): JSX.Element => {
         setIsReturnModal(false);
         navigation.navigate(Routes.MERCHANT_PAYMENT_SUCCESS);
       } else {
-        showToast(ToastType.ERROR, "Failed", "Whooops, something went wrong.");
+        showToast(ToastType.ERROR, "Failed", "Whoops, something went wrong.");
         setIsLoading(false);
         setIsReturnModal(false);
         navigation.navigate(Routes.MERCHANT_DASHBOARD);
       }
     } else {
-      showToast(ToastType.ERROR, "Failed", "Whooops, something went wrong.");
+      showToast(ToastType.ERROR, "Failed", "Whoops, something went wrong.");
       navigation.navigate(Routes.MERCHANT_DASHBOARD);
     }
   };
