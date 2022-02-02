@@ -252,9 +252,13 @@ const CustomerDashboard = (): JSX.Element => {
 };
 
 const FeedItem = (props: FeedItemProps) => {
-  const { text, textTitle, image } = props;
+  const { text, textTitle, image, contentType } = props;
   const [ height, setHeight ] = useState(0)
-  const mainW = Dimensions.get('window').width - 40
+
+  const widthRate = contentType === "Values" ? 5
+                    : contentType === "DidYouKnow" ? 3
+                    : 1
+  const mainW = (Dimensions.get('window').width - 40) / widthRate
 
   return (
     <View style={styles.feedView}>
@@ -263,7 +267,7 @@ const FeedItem = (props: FeedItemProps) => {
       { image?.length && 
         <Image
           source={{uri: image}}
-          style={{width: mainW, height: height}}
+          style={{width: mainW, height: height, alignSelf: 'center'}}
           width={mainW}
           height={height}
           resizeMode={'cover'}
