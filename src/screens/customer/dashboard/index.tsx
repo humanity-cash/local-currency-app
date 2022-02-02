@@ -270,7 +270,7 @@ const FeedItem = (props: FeedItemProps) => {
           style={{width: mainW, height: height, alignSelf: 'center'}}
           width={mainW}
           height={height}
-          resizeMode={'cover'}
+          resizeMode={'contain'}
           onLayout={(e) => {
             Image.getSize(image, (width, height) => {
               setHeight(mainW*height/width)
