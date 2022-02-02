@@ -133,7 +133,7 @@ export interface ConfirmEmailVerificationCodeInput {
 }
 
 export enum UserType {
-  NotVerified = "notVerfied",
+  NotVerified = "notVerified",
   Customer = "customer",
   Business = "business",
   Cashier = "cashier",
@@ -186,8 +186,8 @@ export const defaultState: IAuth = {
   authStatus: AuthStatus.Loading,
   signInDetails: { password: "", email: "" },
   setSignInDetails: () => {
-    console.log("setSigninDetails is not loaded yet");
-  },
+    console.log("setSignInDetails is not loaded yet");
+  }
 };
 
 export type CognitoError = any;

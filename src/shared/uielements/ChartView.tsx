@@ -46,13 +46,14 @@ const generateGraphData = (data: GraphDataset[], currentSet: GraphSet) => {
   }
 
   switch (currentSet) {
-    case GraphSet.DAY:
+    case GraphSet.DAY: {
       youngerThan.setDate(youngerThan.getDate() - 1);
       const set = compareAndFilter(data, youngerThan);
       if (set.length === 0) {
         return [data[data.length - 1].value, data[data.length - 1].value];
       }
       return set;
+    }
     case GraphSet.WEEK:
       youngerThan.setDate(youngerThan.getDate() - 7);
       return compareAndFilter(data, youngerThan);

@@ -117,7 +117,7 @@ const CreateAccount = (): JSX.Element => {
             <Text style={styles.label}>{Translation.LABEL.EMAIL_ADDR}</Text>
             <BlockInput
               name="email"
-              placeholder="myname@mail.com"
+              placeholder="my-name@mail.com"
               value={signUpDetails.email}
               onChange={onValueChange}
               placeholderTextColor={colors.lightGreen}

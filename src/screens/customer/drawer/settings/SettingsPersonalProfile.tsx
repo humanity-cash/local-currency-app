@@ -94,7 +94,7 @@ export const SettingsPersonalDetails = (): JSX.Element => {
 			updateUserData({ ...response.data.data });
 			showToast(ToastType.SUCCESS, "Updated Successfully", "");
 		} else {
-			showToast(ToastType.ERROR, "Whooops, something went wrong.", "Connection failed.");
+			showToast(ToastType.ERROR, "Whoops, something went wrong.", "Connection failed.");
 		}
 		setIsLoading(false);
 	}

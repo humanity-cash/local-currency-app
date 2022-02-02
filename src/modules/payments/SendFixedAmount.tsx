@@ -49,7 +49,7 @@ const LowAmount = (props: LowAmountProps) => {
           <View style={baseHeader}>
             <Text style={styles.headerText}>
               {" "}
-              Whoooops. You cannot the payment.{" "}
+              Whooops. You cannot the payment.{" "}
             </Text>
           </View>
           <View style={styles.view}>
@@ -174,8 +174,8 @@ const SendPayment = (props: SendPayment): JSX.Element => {
     } else {
       showToast(
         ToastType.ERROR,
-        "Whooops, something went wrong.",
-        "Invalide QRCode"
+        "Whoops, something went wrong.",
+        "Invalid QRCode"
       );
     }
   };
@@ -207,11 +207,11 @@ const SendPayment = (props: SendPayment): JSX.Element => {
       if (response.data) {
         navigation.navigate(Routes.MERCHANT_PAYOUT_SOMEONE_SUCCESS);
       } else {
-        showToast(ToastType.ERROR, "Failed", "Whooops, something went wrong.");
+        showToast(ToastType.ERROR, "Failed", "Whoops, something went wrong.");
         navigation.navigate(Routes.MERCHANT_DASHBOARD);
       }
     } else {
-      showToast(ToastType.ERROR, "Failed", "Whooops, something went wrong.");
+      showToast(ToastType.ERROR, "Failed", "Whoops, something went wrong.");
     }
     setIsLoading(false);
   };
