@@ -19,7 +19,7 @@ jobs:
       - name: Run Checks
         run: |
           yarn eslint
-          yarn test
+      #   yarn test
       # - name: Run Build
       #   run: |
       #     yarn web:build
