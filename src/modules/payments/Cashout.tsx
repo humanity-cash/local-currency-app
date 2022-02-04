@@ -84,7 +84,7 @@ const CashoutAmount = (props: CashOutInput): JSX.Element => {
 
   useEffect(() => {
     if(userType === UserType.Customer ) {
-      if(walletData?.availableBalance < 5) {
+      if(walletData?.availableBalance > 5) {
         setIsTooMuch(true)
       } else if (walletData?.availableBalance <= 0.5) {
         setIsTooLow(true)
@@ -272,7 +272,7 @@ const CashoutAmount = (props: CashOutInput): JSX.Element => {
           </View>
         </Dialog>
       )}
-      {!isTooMuch && (
+      {isTooMuch && (
         <Dialog visible={isTooMuch} onClose={onClose}>
           <View style={dialogViewBase}>
             <View style={styles.dialogWrap}>
