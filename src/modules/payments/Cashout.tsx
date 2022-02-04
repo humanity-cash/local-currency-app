@@ -84,13 +84,15 @@ const CashoutAmount = (props: CashOutInput): JSX.Element => {
 
   useEffect(() => {
     if(userType === UserType.Customer ) {
-      if(walletData?.availableBalance > 5) {
+      if(walletData?.availableBalance >= 5) {
         setIsTooMuch(true)
       } else if (walletData?.availableBalance <= 0.5) {
         setIsTooLow(true)
-      } else {
-        setIsEligible(true)
       }
+      // uncomment when the donate feature is implemented.
+      // else {
+      //   setIsEligible(true)
+      // }
     }
 
     if (userType === UserType.Business) {
@@ -301,12 +303,13 @@ const CashoutAmount = (props: CashOutInput): JSX.Element => {
               <Text>{Translation.PAYMENT.CASH_OUT_TOO_LOW}</Text>
             </View>
             <View style={styles.dialogBottom}>
-              <TouchableOpacity style={{alignSelf: 'center', paddingBottom: 12}} onPress={onClose}>
+              {/* <TouchableOpacity style={{alignSelf: 'center', paddingBottom: 12}} onPress={onClose}>
                 <Text style={{textDecorationLine: 'underline'}}>No thanks</Text>
-              </TouchableOpacity>
+              </TouchableOpacity> */}
               <Button
                 type={buttonStyle}
-                title={Translation.BUTTON.DONATE_MY_BERKSHARES}
+                title={Translation.BUTTON.OK}
+                // title={Translation.BUTTON.DONATE_MY_BERKSHARES}  // donate should be implemented later
                 onPress={onClose}
               />
             </View>
