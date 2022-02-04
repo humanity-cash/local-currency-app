@@ -161,7 +161,7 @@ const CustomerDashboard = (): JSX.Element => {
           }
         >
           <View style={styles.content}>
-            {!personalFundingSource && !isWalletLoading && (
+            {personalFundingSource === false && !isWalletLoading && (
               <View style={styles.alertView}>
                 <AntDesign
                   name="exclamationcircleo"
