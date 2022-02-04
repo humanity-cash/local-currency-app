@@ -17,6 +17,7 @@ const MerchantPayoutToSomeone = (): JSX.Element => {
 	const [amount, setAmount] = useState<string>('');
 	const [isVisible, setIsVisible] = useState<boolean>(false);
 	const [goNext, setGoNext] = useState(false);
+    const { availableBalance } = businessWalletData;
 
 	useEffect(() => {
 		setGoNext(Boolean(amount));
@@ -48,7 +49,7 @@ const MerchantPayoutToSomeone = (): JSX.Element => {
 					<Text style={styles.bodyText}>{Translation.PAYMENT.SELECT_PAYOUT_AMOUNT}</Text>
 					<View style={styles.formLabel}>
 						<Text style={styles.labelText}>{Translation.LABEL.AMOUNT}</Text>
-						<Text style={styles.labelText}>{Translation.LABEL.MAX_BERKSHARES}</Text>
+						<Text style={styles.labelText}>{`${Translation.LABEL.MAX_BERKSHARES} ${availableBalance.toFixed(2)}`}</Text>
 					</View>
 					<BorderedInput
 						label="Amount"
