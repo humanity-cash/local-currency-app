@@ -422,8 +422,6 @@ export const CustomerCashOut = StyleSheet.create({
 	},
 	dialogWrap: {
 		paddingHorizontal: 10,
-		height: "100%",
-		flex: 1,
 	},
 	dialogHeader: {
 		fontSize: 30,
@@ -437,7 +435,7 @@ export const CustomerCashOut = StyleSheet.create({
 		lineHeight: 10
 	},
 	dialogBottom: {
-		paddingTop: 20,
+		marginTop: 40,
 	}
 });
 
