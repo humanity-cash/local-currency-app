@@ -102,7 +102,7 @@ const MerchantCashoutAmount = (): JSX.Element => {
                     <Text style={styles.headerText}>{Translation.PAYMENT.PAYOUT_SOMEONE}</Text>
                 </View>
                 <View>
-                    <Text style={styles.bodyText}>{Translation.PAYMENT.PAYOUT_AMOUNT_PERSONAL}</Text>
+                    <Text style={styles.bodyText}>{Translation.PAYMENT.SELECT_PAYOUT_AMOUNT}</Text>
                     <View style={styles.formLabel}>
                         <Text style={styles.labelText}>{Translation.LABEL.AMOUNT}</Text>
                         <Text style={styles.labelText}>{`${Translation.LABEL.MAX_BERKSHARES} ${availableBalance.toFixed(2)}`}</Text>
