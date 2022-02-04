@@ -6,6 +6,7 @@ import {
   ScrollView,
   View,
   SafeAreaView,
+  TouchableOpacity
 } from "react-native";
 import { Text } from "react-native-elements";
 import { TransactionsAPI } from "src/api";
@@ -62,6 +63,7 @@ const CashoutAmount = (props: CashOutInput): JSX.Element => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [maxAmount, setMaxAmount] = useState<string>("5.00");
   const [exceed, setExceed] = useState(false);
+  const [fee, setFee] = useState(0)
   const isCustomer = userType === UserType.Customer;
 
   const [state, setState] = useState<CashoutState>({
@@ -70,11 +72,10 @@ const CashoutAmount = (props: CashOutInput): JSX.Element => {
   });
 
   const [goNext, setGoNext] = useState(false);
-  const [isVisible, setIsVisible] = useState(false);
-
-  useEffect(() => {
-    setState({ amount: "", costs: "" });
-  }, []);
+  const [isConfirm, setIsConfirm] = useState(false);
+  const [isTooMuch, setIsTooMuch] = useState(false);
+  const [isTooLow, setIsTooLow] = useState(false);
+  const [isEligible, setIsEligible] = useState(false);
 
   useEffect(() => {
     setGoNext(Boolean(state.costs));
@@ -82,6 +83,16 @@ const CashoutAmount = (props: CashOutInput): JSX.Element => {
   }, [state]);
 
   useEffect(() => {
+    if(userType === UserType.Customer ) {
+      if(walletData?.availableBalance < 5) {
+        setIsTooMuch(true)
+      } else if (walletData?.availableBalance <= 0.5) {
+        setIsTooLow(true)
+      } else {
+        setIsEligible(true)
+      }
+    }
+
     if (userType === UserType.Business) {
       setMaxAmount(`${walletData?.availableBalance}`);
       return;
@@ -94,7 +105,18 @@ const CashoutAmount = (props: CashOutInput): JSX.Element => {
   }, [walletData]);
 
   const onValueChange = (_: string, change: string) => {
-    const amount = change.replace(",", ".");
+    let amount = change.replace(",", ".");
+    if(+amount != +((+amount).toFixed(2))) {
+      amount = (+amount).toFixed(2)
+    }
+
+    let fee = (+amount*0.015).toFixed(2)
+    if(+fee < 0.5) {
+      fee = "0.50"
+    }
+
+    setFee(+fee)
+
     setState({
       amount: amount,
       costs: amount,
@@ -102,8 +124,18 @@ const CashoutAmount = (props: CashOutInput): JSX.Element => {
   };
 
   const viewConfirm = () => {
-    setIsVisible(true);
+    setIsConfirm(true);
   };
+
+  const onClose = () => {
+    setState({ amount: "", costs: "" });
+    setIsTooMuch(false)
+    setIsConfirm(false)
+    setIsTooLow(false)
+    setIsEligible(false)
+
+    navigation.goBack()
+  }
 
   const doCashout = async () => {
     const { amount } = state;
@@ -116,7 +148,7 @@ const CashoutAmount = (props: CashOutInput): JSX.Element => {
 
       return;
     }
-    setIsVisible(false);
+    setIsConfirm(false);
     setIsLoading(true);
     const response = await TransactionsAPI.withdraw(userId, {
       amount,
@@ -142,7 +174,7 @@ const CashoutAmount = (props: CashOutInput): JSX.Element => {
       <LoadingPage visible={isLoading} isPayment={true} />
       <Header
         rightComponent={
-          <CancelBtn text={"Close"} onClick={() => navigation.goBack()} />
+          <CancelBtn text={"Close"} onClick={onClose} />
         }
       />
       <ScrollView style={wrappingContainerBase}>
@@ -187,7 +219,7 @@ const CashoutAmount = (props: CashOutInput): JSX.Element => {
             </Text>
             <Text style={styles.resultText}>
               {Translation.COMMON.USD}{" "}
-              {(Number(state.amount) * 0.015).toFixed(2)}
+              {fee.toFixed(2)}
             </Text>
           </View>
           <View style={styles.resultView}>
@@ -196,7 +228,7 @@ const CashoutAmount = (props: CashOutInput): JSX.Element => {
             </Text>
             <Text style={{ ...styles.resultText, fontWeight: "bold" }}>
               {Translation.COMMON.USD}{" "}
-              {(Number(state.amount) * 0.985).toFixed(2)}
+              {(+state.amount-fee).toFixed(2)}
             </Text>
           </View>
         </View>
@@ -217,24 +249,87 @@ const CashoutAmount = (props: CashOutInput): JSX.Element => {
         />
       </SafeAreaView>
 
-      {isVisible && (
-        <Dialog visible={isVisible} onClose={() => setIsVisible(false)}>
+      {isConfirm && (
+        <Dialog visible={isConfirm} onClose={() => setIsConfirm(false)}>
           <View style={dialogViewBase}>
             <View style={styles.dialogWrap}>
               <Text style={styles.dialogHeader}>
                 {Translation.PAYMENT.CASH_OUT_CONFIRM}
               </Text>
-              <Text>{`You will redeem ${Number(state.amount).toFixed(
+              <Text>{`You will redeem B$ ${Number(state.amount).toFixed(
                 2
-              )} BerkShares for USD ${(Number(state.amount) * 0.985).toFixed(
+              )} for USD $${(+state.amount-fee).toFixed(
                 2
-              )} after a 1.5% fee.`}</Text>
+              )} after a $${fee} fee.`}</Text>
             </View>
             <View style={styles.dialogBottom}>
               <Button
                 type={buttonStyle}
                 title={Translation.BUTTON.CASH_OUT}
                 onPress={doCashout}
+              />
+            </View>
+          </View>
+        </Dialog>
+      )}
+      {!isTooMuch && (
+        <Dialog visible={isTooMuch} onClose={onClose}>
+          <View style={dialogViewBase}>
+            <View style={styles.dialogWrap}>
+              <Text style={styles.dialogHeader}>
+                {Translation.PAYMENT.CASH_OUT_NOT_AVAILABLE}
+              </Text>
+              <Text>{Translation.PAYMENT.CASH_OUT_TOO_MUCH}</Text>
+            </View>
+            <View style={styles.dialogBottom}>
+              <Button
+                type={buttonStyle}
+                title={Translation.BUTTON.OK}
+                onPress={onClose}
+              />
+            </View>
+          </View>
+        </Dialog>
+      )}
+      {isTooLow && (
+        <Dialog visible={isTooLow} onClose={onClose}>
+          <View style={dialogViewBase}>
+            <View style={styles.dialogWrap}>
+              <Text style={styles.dialogHeader}>
+                {Translation.PAYMENT.CASH_OUT_NOT_AVAILABLE}
+              </Text>
+              <Text>{Translation.PAYMENT.CASH_OUT_TOO_LOW}</Text>
+            </View>
+            <View style={styles.dialogBottom}>
+              <TouchableOpacity style={{alignSelf: 'center', paddingBottom: 12}} onPress={onClose}>
+                <Text style={{textDecorationLine: 'underline'}}>No thanks</Text>
+              </TouchableOpacity>
+              <Button
+                type={buttonStyle}
+                title={Translation.BUTTON.DONATE_MY_BERKSHARES}
+                onPress={onClose}
+              />
+            </View>
+          </View>
+        </Dialog>
+      )}
+      {isEligible && (
+        <Dialog visible={isEligible} onClose={() => setIsEligible(false)}>
+          <View style={dialogViewBase}>
+            <View style={styles.dialogWrap}>
+              <Text style={styles.dialogHeader}>
+                {Translation.PAYMENT.CASH_OUT_AVAILABLE}
+              </Text>
+              <Text>{Translation.PAYMENT.CASH_OUT_ELIGIBLE}</Text>
+            </View>
+            <View style={styles.dialogBottom}>
+              <TouchableOpacity style={{alignSelf: 'center', paddingBottom: 12}} onPress={() => setIsEligible(false)}>
+                <Text style={{textDecorationLine: 'underline'}}>{Translation.BUTTON.CASH_ME_OUT}</Text>
+              </TouchableOpacity>
+              <Button
+                type={buttonStyle}
+                title={Translation.BUTTON.DONATE_MY_BERKSHARES}
+                onPress={onClose}
               />
             </View>
           </View>
