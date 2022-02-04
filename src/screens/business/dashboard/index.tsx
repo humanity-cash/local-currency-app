@@ -150,7 +150,7 @@ const MerchantDashboard = (): JSX.Element => {
               </View>
             )}
 
-            {!businessFundingSource && !isWalletLoading ? (
+            {businessFundingSource === false && !isWalletLoading ? (
               <View style={styles.alertView}>
                 <AntDesign
                   name="exclamationcircleo"
