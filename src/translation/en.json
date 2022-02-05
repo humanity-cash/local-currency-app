@@ -219,7 +219,7 @@
   "CASH_OUT_CONFIRM": "Are you sure you want to cash out?",
   "CASH_OUT_CONFIRM_DETAIL": "You will redeem 100 BerkShares for USD 95.50 after a 1.5% fee.",
   "CASH_OUT_TOO_MUCH": "You can only cash out if your balance is less than B$ 5.00.\nSpend it locally!",
-  "CASH_OUT_TOO_LOW": "Your balance for cash out is too low to cover the $0.50 cash out fee. We need to charge this fee to cover banking fees.\n\nWould you like to donate your change to the Community Chest?\nThe BerkShares are donated to a local non-profit.",
+  "CASH_OUT_TOO_LOW": "Your balance for cash out is too low to cover the $0.50 cash out fee. We need to charge this fee to cover banking fees.",
   "CASH_OUT_ELIGIBLE": "Your balance is B$ 5.00 or less so you are eligible to cash out. There is a $0.50 cash out fee to cover banking costs.\n\nWould you like to donate your BerkShares to the Community Chest instead? The BerkShares are donated to a local non-profit.",
   "REDEMPTION_PROCESS": "Your redemption is in process!",
   "REDEMPTION_PROCESS_DETAIL": "You'll get an email once your funds are available in your bank account. Don't worry, it won't take too long.",
