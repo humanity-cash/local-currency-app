@@ -78,7 +78,7 @@ export const fundingSource = (res: AxiosPromiseResponse): FundingSource => {
       }
     }
   } else {
-    return {visible: true, bank: undefined};
+    return {visible: false, bank: undefined};
   }
   
   return {visible: false, bank: undefined};
