@@ -121,7 +121,7 @@ const MerchantDashboard = (): JSX.Element => {
         </View>
         <View style={styles.amountView}>
           <Text style={styles.amountTxt}>
-            B$ {businessFundingSource ? availableBalance : "-"}
+            B$ {businessFundingSource ? availableBalance.toFixed(2) : "-"}
           </Text>
         </View>
 
