@@ -59,20 +59,7 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     marginTop: 50,
-  },
-  contentText: {
-    fontFamily: FontFamily.bold,
-    fontSize: 18,
-    lineHeight: 24,
-    marginTop: 10,
-  },
-  contentTextB: {
-    fontFamily: FontFamily.bold,
-    fontSize: 18,
-    lineHeight: 24,
-    marginTop: 10,
-    color: colors.purple,
-  },
+  }
 });
 
 type PaymentPendingProps = {
@@ -133,15 +120,6 @@ const PaymentPending = ({
                   }}
               />}
             </View>
-            <Text
-              style={
-                userType === UserType.Customer
-                  ? styles.contentText
-                  : styles.contentTextB
-              }
-            >
-              Great Barrington mountain
-            </Text>
           </View>
         </ScrollView>
         <SafeAreaView style={styles.bottomView}>

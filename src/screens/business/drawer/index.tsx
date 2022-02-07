@@ -48,6 +48,7 @@ import { prefixCustomerName } from "src/utils/common";
 import MerchantSettings from "../drawer/settings/MerchantSettings";
 import MerchantSettingsHelpAndContact from "../drawer/settings/MerchantSettingsHelpAndContact";
 import { styles } from "./style";
+import MerchantPayoutToPersonal from 'src/screens/business/drawer/sendToSomeone/MerchantPayoutToPersonal';
 
 type ReturnPaymentDialogProps = {
   visible: boolean;
@@ -557,7 +558,9 @@ const MerchantTabs: React.FC = () => {
       />
       <DrawerNav.Screen
         name={Routes.MERCHANT_PAYOUT_SELECTION}
-        component={MerchantPayoutSelection}
+        component={MerchantPayoutToPersonal}
+        // remove the "Pay out in B$" screen because it actually doesn't do anything (until we have the addressbook).
+        // component={MerchantPayoutSelection}
       />
       <DrawerNav.Screen name={Routes.REPORT} component={Report} />
       <DrawerNav.Screen
