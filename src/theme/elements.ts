@@ -17,17 +17,18 @@ export const viewBaseWhite: any = {
 };
 
 export const viewBaseB: any = {
-  ...viewBase,
+  flex: 1,
+  justifyContent: "space-between",
   backgroundColor: colors.highlightPurple,
 };
 
 export const modalViewBase: any = {
-  ...viewBase,
+  justifyContent: "space-between",
   backgroundColor: colors.lightBg,
 };
 
 export const dialogViewBase: any = {
-  ...viewBase,
+  justifyContent: "space-between",
   padding: 20,
   backgroundColor: colors.background,
   borderRadius: 20,
