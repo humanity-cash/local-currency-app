@@ -335,6 +335,10 @@ export type MerchantEntry = {
   addressLine1: string;
   addressLine2: string;
   phone: string;
+  city: string;
+  state: string;
+  postalCode: string;
+  website: string;
 };
 
 export interface AccordionEntry {
