@@ -1,4 +1,6 @@
 import { useNavigation } from "@react-navigation/native";
+import { delay } from "src/utils/http";
+import { LoadingPage } from "src/views";
 import React, { useContext, useState } from "react";
 import {
   Keyboard,
@@ -51,16 +53,24 @@ const ForgotPasswordVerification = () => {
     forgotPasswordDetails: { email },
     setForgotPasswordDetails,
     startForgotPasswordFlow,
+    completeForgotPasswordFlow
   } = useContext(AuthContext);
   const [sentAgain, setSentAgain] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
 
   const onComplete = async (text: string) => {
-    setForgotPasswordDetails((pv: ForgotPassword) => ({
-      ...pv,
-      verificationCode: text,
-    }));
-    navigation.navigate("ForgotPasswordNewCode");
-    return;
+      setIsLoading(true);
+      setForgotPasswordDetails((pv: ForgotPassword) => ({
+          ...pv,
+          verificationCode: text,
+      }));
+      const response = await completeForgotPasswordFlow(text);
+      setIsLoading(false);
+      if (response.success) {
+          navigation.navigate("ForgotPasswordSuccess");
+      } else {
+          console.log("something went wrong in forgot password flow");
+      }
   };
 
   return (
@@ -68,6 +78,7 @@ const ForgotPasswordVerification = () => {
       {...(Platform.OS === "ios" && { behavior: "padding" })}
       style={viewBase}
     >
+      <LoadingPage visible={isLoading} isData={true} />
       <Header
         leftComponent={<BackBtn onClick={() => navigation.goBack()} />}
         rightComponent={
@@ -104,6 +115,7 @@ const ForgotPasswordVerification = () => {
             Keyboard.dismiss();
             const response = await startForgotPasswordFlow();
             if (response.success) {
+               setSentAgain(true)
               showToast(ToastType.SUCCESS, "Code sent again!", "");
             } else {
               showToast(ToastType.ERROR, "Something went wrong!", "");

@@ -179,14 +179,14 @@ export const AuthProvider: React.FunctionComponent = ({ children }) => {
     return response;
   };
 
-  const completeForgotPasswordFlow = async (): Promise<
+  const completeForgotPasswordFlow = async (vCode: string): Promise<
     BaseResponse<unknown>
   > => {
-    const { email, newPassword, verificationCode } = forgotPasswordDetails;
+    const { email, newPassword } = forgotPasswordDetails;
     const response: BaseResponse<unknown> =
       await userController.completeForgotPasswordFlow({
         email,
-        verificationCode,
+        verificationCode: vCode,
         newPassword,
       });
     return response;

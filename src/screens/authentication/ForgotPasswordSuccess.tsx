@@ -3,7 +3,7 @@ import React, { useContext, useState } from "react";
 import { StyleSheet, View, SafeAreaView } from "react-native";
 import { Text } from "react-native-elements";
 import { AuthContext } from "src/contexts";
-import { BackBtn, Button, CancelBtn, Header } from "src/shared/uielements";
+import { Button, CancelBtn, Header } from "src/shared/uielements";
 import { viewBase, wrappingContainerBase } from "src/theme/elements";
 import { LoadingPage } from "src/views";
 import { colors } from "src/theme/colors";
