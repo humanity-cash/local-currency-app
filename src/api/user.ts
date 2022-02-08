@@ -57,161 +57,97 @@ export const getUserByEmail = async (email: string): Promise<IDBUser> => {
 };
 
 export const getUser = async (userId: UserId): Promise<IWallet> => {
-  try {
-    const response: AxiosPromiseResponse<IWallet> = await getRequest(
-      `/users/${userId}`
-    );
-    return userData(response);
-  } catch (err) {
-    console.log(err);
-    await delay(5);
     try {
-      const response: AxiosPromiseResponse<IWallet> = await getRequest(
-        `/users/${userId}`
-      );
-      return userData(response);
+        const response: AxiosPromiseResponse<IWallet> = await getRequest(
+            `/users/${userId}`
+        );
+        return userData(response);
     } catch (err) {
-      return {} as IWallet;
+        console.log(err);
+        await delay(3);
+        try {
+            const response: AxiosPromiseResponse<IWallet> = await getRequest(
+                `/users/${userId}`
+            );
+            return userData(response);
+        } catch (err) {
+            await delay(3);
+            try {
+                const response: AxiosPromiseResponse<IWallet> = await getRequest(
+                    `/users/${userId}`
+                );
+                return userData(response);
+            } catch (err) {
+                console.log(err)
+                return {} as IWallet;
+            }
+        }
     }
-  }
 };
 
 export const createBusiness = async (
-  user: IDBUser
+    user: IDBUser
 ): Promise<{ status: number; data: IDBUser }> => {
-  try {
-    const isVerifiedCustomer =
-      user?.verifiedCustomer && user?.customer?.dwollaId && user?.business;
-    if (isVerifiedCustomer) {
-      const boz = {
-        ...user?.business,
-        avatar: user.business?.avatar ? user.business.avatar : "avatar",
-        phoneNumber: user.business?.phoneNumber
-          ? user.business.phoneNumber
-          : "phoneNumber",
-        address2: user.business?.address2 ? user.business.address2 : "address2",
-        owner: {
-          address1: user?.business?.address1
-            ? user?.business?.address1
-            : "empty",
-          address2: user?.business?.address2
-            ? user?.business?.address2
-            : "empty",
-          postalCode: user?.business?.postalCode
-            ? user?.business?.postalCode
-            : "empty",
-          state: user?.business?.state ? user?.business?.state : "empty",
-          city: user?.business?.city ? user?.business?.city : "empty",
-          firstName: user?.business?.owner?.firstName,
-          lastName: user?.business?.owner?.lastName,
-        },
-      };
-      const response: AxiosPromiseResponse<IDBUser> =
-        await addBusinessVerification(
-          //@ts-ignore
-          user.customer.dwollaId,
-          boz
-        );
-      //@ts-ignore
-      return { status: response.status, data: response?.data?.data };
-    } else {
-      const response = await createUser({
-        email: user.email,
-        consent: true,
-        type: "business",
-        //@ts-ignore
-        business: {
-          ...user?.business,
-          avatar: user.business?.avatar ? user.business.avatar : "empty",
-          phoneNumber: user.business?.phoneNumber
-            ? user.business.phoneNumber
-            : "00",
-          address2: user.business?.address2
-            ? user.business.address2
-            : "address2",
-          owner: {
-            address1: user?.business?.address1
-              ? user?.business?.address1
-              : "empty",
-            address2: user?.business?.address2
-              ? user?.business?.address2
-              : "empty",
-            postalCode: user?.business?.postalCode
-              ? user?.business?.postalCode
-              : "empty",
-            state: user?.business?.state ? user?.business?.state : "empty",
-            city: user?.business?.city ? user?.business?.city : "empty",
+    try {
+        if(!user?.business) return { status: 0, data: {} as IDBUser }
+        const isVerifiedCustomer =
+            user?.verifiedCustomer && user?.customer?.dwollaId;
+        if (isVerifiedCustomer && user?.customer?.dwollaId) {
+            const response: AxiosPromiseResponse<IDBUser> =
+                await addBusinessVerification(
+                    user.customer.dwollaId,
+                    user.business
+            );
             //@ts-ignore
-            firstName: user?.business?.owner?.firstName,
-            //@ts-ignore
-            lastName: user?.business?.owner?.lastName,
-          },
-        },
-      });
-      return { status: response.status, data: response.data };
+            return { status: response.status, data: response?.data?.data };
+        } else {
+            const response = await createUser({
+                email: user.email,
+                consent: true,
+                type: "business",
+                business: {
+                    ...user?.business,
+                },
+            });
+            return { status: response.status, data: response.data };
+        }
+    } catch (error) {
+        console.log("error creating business", error);
+        return { status: 500, data: {} as IDBUser };
     }
-  } catch (error) {
-    console.log("error creating business", error);
-    return { status: 500, data: {} as IDBUser };
-  }
 };
 
 export const createCustomer = async (
-  user: IDBUser
+    user: IDBUser
 ): Promise<{ status: number; data: IDBUser }> => {
-  try {
-    if (
-      user?.verifiedBusiness &&
-      user?.business?.dwollaId &&
-      user?.dbId &&
-      user?.customer
-    ) {
-      const response: AxiosPromiseResponse<IDBUser> =
-        await addCustomerVerification(user.business.dwollaId, {
-          ...user?.customer,
-          avatar: user?.customer?.avatar ? user?.customer?.avatar : "empty",
-          address1: user?.customer?.address1
-            ? user?.customer?.address1
-            : "empty",
-          address2: user?.customer?.address2
-            ? user?.customer?.address2
-            : "empty",
-          postalCode: user?.customer?.postalCode
-            ? user?.customer?.postalCode
-            : "empty",
-          state: user?.customer?.state ? user?.customer?.state : "empty",
-          city: user?.customer?.city ? user?.customer?.city : "empty",
-        });
-      //@ts-ignore
-      return { status: response.status, data: response.data.data };
-    } else {
-      const response = await createUser({
-        email: user.email,
-        consent: true,
-        type: "customer",
-        //@ts-ignore
-        customer: {
-          ...user.customer,
-          avatar: user?.customer?.avatar ? user?.customer?.avatar : "empty",
-          address1: user?.customer?.address1
-            ? user?.customer?.address1
-            : "empty",
-          address2: user?.customer?.address2
-            ? user?.customer?.address2
-            : "empty",
-          postalCode: user?.customer?.postalCode
-            ? user?.customer?.postalCode
-            : "empty",
-          state: user?.customer?.state ? user?.customer?.state : "empty",
-          city: user?.customer?.city ? user?.customer?.city : "empty",
-        },
-      });
-      return { status: response.status, data: response.data };
+    try {
+        if (!user?.customer) return { status: 0, data: {} as IDBUser }
+        if (
+            user?.verifiedBusiness &&
+            user?.business?.dwollaId &&
+            user?.dbId
+        ) {
+            const response: AxiosPromiseResponse<IDBUser> =
+                await addCustomerVerification(user.business.dwollaId, {
+                ...user?.customer,
+            });
+            //@ts-ignore
+            return { status: response?.status, data: response?.data?.data };
+        } else {
+            const response = await createUser({
+                email: user.email,
+                consent: true,
+                type: "customer",
+                customer: {
+                    ...user?.customer,
+                },
+            });
+            return { status: response.status, data: response.data };
+        }
+    } catch (error) {
+        console.log("error creating customer", error);
+        return { status: 500, data: {} as IDBUser };
     }
-  } catch (error) {
-    console.log("error creating customer", error);
-    return { status: 500, data: {} as IDBUser };
-  }
 };
 
 interface UpdateCustomerProfile {
