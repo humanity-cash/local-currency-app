@@ -1,4 +1,4 @@
-const API_URL = "https://baklava.api.humanity.cash/";
+const API_URL = "https://api.humanity.cash/";
 
 const DEV_CORE_API_URL = API_URL;
 const PROD_CORE_API_URL = API_URL;
@@ -25,3 +25,4 @@ export default __DEV__ ? devEnvironmentVariables : prodEnvironmentVariables;
 // const DEV_CORE_API_URL = "http://127.0.0.1:3000";
 // const PROD_CORE_API_URL = "https://staging.api.humanity.cash";
 // const API_URL = "https://staging.api.humanity.cash";
+// const API_URL = "https://baklava.api.humanity.cash/";
