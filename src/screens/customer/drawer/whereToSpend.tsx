@@ -1,7 +1,7 @@
 import { Business } from "@humanity.cash/types";
 import { useNavigation } from "@react-navigation/core";
 import React, { useState } from "react";
-import { ScrollView, StyleSheet, View } from "react-native";
+import { ScrollView, StyleSheet, View, Linking, Platform } from 'react-native';
 import { Image, Text } from "react-native-elements";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { useBusinesses } from "src/hooks";
@@ -113,11 +113,23 @@ const styles = StyleSheet.create({
     marginTop: 20,
     marginBottom: 20,
   },
+  websiteImage: {
+    width: 20, 
+    height: 20
+  },
   rightText: {
     fontSize: 14,
     textAlign: "right",
     alignSelf: "stretch",
   },
+  phoneV: {
+    borderBottomWidth: 0.5, 
+    alignSelf: 'flex-end'
+  },
+  detailV: {
+    flexDirection: 'row', 
+    justifyContent: 'space-between'
+  }
 });
 
 const CategoryView = (props: CategoryViewProps) => {
@@ -158,6 +170,10 @@ const MerchantDictionary = (): JSX.Element => {
     addressLine1: "",
     addressLine2: "",
     phone: "",
+    city: "",
+    state: "",
+    postalCode: "",
+    website: ""
   });
   const businesses = useBusinesses();
 
@@ -170,6 +186,10 @@ const MerchantDictionary = (): JSX.Element => {
         addressLine1: curr.address1,
         addressLine2: curr.address2,
         phone: curr.phoneNumber,
+        city: curr.city,
+        state: curr.state,
+        postalCode: curr.postalCode,
+        website: curr.website
       };
       if (curr.industry) {
         if (acc[curr.industry]) {
@@ -184,6 +204,15 @@ const MerchantDictionary = (): JSX.Element => {
     {}
   );
 
+  const formatPhone = (phone: string) => {
+    const x = phone.replace(/\D/g, '').match(/(\d{3})(\d{3})(\d{4})/);
+    if(x) {
+      return '(' + x[1] + ') ' + x[2] + '-' + x[3];
+    } else {
+      return phone
+    }
+  }
+
   const handleSelect = (item: MerchantEntry) => {
     setSelected(item);
     setIsVisible(true);
@@ -197,9 +226,37 @@ const MerchantDictionary = (): JSX.Element => {
       addressLine1: "",
       addressLine2: "",
       phone: "",
-    });
+      city: "",
+      state: "",
+      postalCode: "",
+      website: ""
+      });
     setIsVisible(false);
   };
+
+  const handleWebsite = (url: string) => {
+    Linking.openURL(url)
+  }
+
+  const handlePhone = (phone: string) => {
+    console.log('callNumber ----> ', phone);
+    let phoneNumber = phone;
+    if (Platform.OS !== 'android') {
+      phoneNumber = `telprompt:${phone}`;
+    }
+    else  {
+      phoneNumber = `tel:${phone}`;
+    }
+    Linking.canOpenURL(phoneNumber)
+    .then(supported => {
+      if (!supported) {
+        alert('Phone number is not available');
+      } else {
+        return Linking.openURL(phoneNumber);
+      }
+    })
+    .catch(err => console.log(err));
+  }
 
   return (
     <View style={viewBase}>
@@ -272,9 +329,29 @@ const MerchantDictionary = (): JSX.Element => {
                   source={require("../../../../assets/images/feed1.png")}
                   containerStyle={styles.feedImage}
                 />
-                <Text style={styles.rightText}>{selected.addressLine1}</Text>
-                <Text style={styles.rightText}>{selected.addressLine2}</Text>
-                <Text style={styles.rightText}>{selected.phone}</Text>
+                <View style={styles.detailV}>
+                  { selected.website &&
+                    <View>
+                      <View style={{flex: 1}}/>
+                      <TouchableOpacity
+                      onPress={() => handleWebsite(selected.website)}>
+                        <Image
+                          source={require("../../../../assets/images/website.png")}
+                          style={styles.websiteImage}
+                        />
+                      </TouchableOpacity>
+                    </View>
+                  }
+                  <View style={{flex: 1}}>
+                    <Text style={styles.rightText}>{`${selected.addressLine1}, ${selected.addressLine2}`}</Text>
+                    <Text style={styles.rightText}>{`${selected.city}, ${selected.state}, ${selected.postalCode}`}</Text>
+                    <TouchableOpacity 
+                      style={styles.phoneV}
+                      onPress={() => handlePhone(selected.phone)}>
+                      <Text style={styles.rightText}>{formatPhone(selected.phone)}</Text>
+                    </TouchableOpacity>
+                  </View>
+                </View>
               </View>
             </ScrollView>
           </View>
