@@ -1,7 +1,6 @@
 import { useNavigation } from "@react-navigation/native";
 import React, {
   createRef,
-  RefObject,
   useContext,
   useEffect,
   useState,
@@ -13,7 +12,6 @@ import {
   View,
   SafeAreaView,
   TextInput,
-  Keyboard,
   ScrollView,
 } from "react-native";
 import { Text } from "react-native-elements";
@@ -34,7 +32,6 @@ import {
 } from "src/theme/elements";
 import { IMap } from "src/utils/types";
 import Translation from "src/translation/en.json";
-import { LoadingPage } from "src/views";
 import SecurityEyeButton from "src/shared/uielements/SecurityEyeButton";
 
 interface PasswordForm extends IMap {
@@ -90,14 +87,12 @@ const ForgotPasswordNewPassword = (): React.ReactElement => {
   const {
     forgotPasswordDetails,
     setForgotPasswordDetails,
-    completeForgotPasswordFlow,
   } = useContext(AuthContext);
   const navigation = useNavigation();
   const [isMatch, setIsMatch] = useState<boolean>(false);
   const [state, setState] = useState<PasswordForm>({
     confirmPassword: "",
   });
-  const [isLoading, setLoading] = useState<boolean>(false);
   const [isShowPassword, setShowPassword] = useState<boolean>(true);
   const [isShowConPassword, setShowConPassword] = useState<boolean>(true);
 
@@ -122,14 +117,7 @@ const ForgotPasswordNewPassword = (): React.ReactElement => {
   };
 
   const onPress = async () => {
-    setLoading(true);
-    const response = await completeForgotPasswordFlow();
-    setLoading(false);
-    if (response.success) {
-      navigation.navigate("ForgotPasswordSuccess");
-    } else {
-      console.log("something went wrong in forgot password flow");
-    }
+      navigation.navigate("ForgotPasswordVerification");
   };
 
   return (
@@ -137,7 +125,6 @@ const ForgotPasswordNewPassword = (): React.ReactElement => {
       {...(Platform.OS === "ios" && { behavior: "padding" })}
       style={viewBase}
     >
-      <LoadingPage visible={isLoading} isData={true} />
       <Header
         leftComponent={<BackBtn onClick={() => navigation.goBack()} />}
         rightComponent={
