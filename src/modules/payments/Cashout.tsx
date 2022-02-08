@@ -112,7 +112,7 @@ const CashoutAmount = (props: CashOutInput): JSX.Element => {
       amount = (+amount).toFixed(2)
     }
 
-    let fee = (+amount*0.015).toFixed(2)
+    let fee = (Math.ceil(+amount*1.5)/100).toFixed(2)
     if(+fee < 0.5) {
       fee = "0.50"
     }
