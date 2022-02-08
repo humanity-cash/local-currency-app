@@ -99,7 +99,7 @@ const MerchantCashoutAmount = (): JSX.Element => {
             <LoadingPage visible={isLoading} isPayment={true} />
             <ScrollView style={wrappingContainerBase}>
                 <View style={underlineHeaderB}>
-                    <Text style={styles.headerText}>{Translation.PAYMENT.PAYOUT_SOMEONE}</Text>
+                    <Text style={styles.headerText}>{Translation.PAYMENT.PAYOUT_PERSONAL_ACCOUNT}</Text>
                 </View>
                 <View>
                     <Text style={styles.bodyText}>{Translation.PAYMENT.SELECT_PAYOUT_AMOUNT}</Text>
