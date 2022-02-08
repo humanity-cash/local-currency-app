@@ -26,7 +26,6 @@ import {
 import { ViewState } from "src/contexts/navigation";
 import { useBusinessWallet } from "src/hooks";
 import * as Routes from "src/navigation/constants";
-import MerchantPayoutSelection from "./sendToSomeone/MerchantPayoutSelection";
 import Report from "src/screens/report/Report";
 import { Button, Dialog } from "src/shared/uielements";
 import { colors } from "src/theme/colors";
@@ -450,7 +449,7 @@ const DrawerContent = (props: DrawerContentComponentProps) => {
               onPress={onPressLoadup}
             />
             <DrawerItem
-              label={Translation.TABS.SEND_TO_SOMEONE}
+              label={Translation.TABS.SEND_TO_PERSONAL_ACCOUNT}
               onPress={onPressSendToSomeone}
             />
             <DrawerItem
