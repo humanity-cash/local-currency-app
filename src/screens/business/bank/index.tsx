@@ -83,7 +83,7 @@ const SelectMerchantBank = (): JSX.Element => {
             ref={(ref) => (webview = ref)}
             style={styles.bankView}
             source={{
-              uri: `https://baklava.api.humanity.cash/iav/?iavToken=${iavToken}`,
+              uri: `https://api.humanity.cash/iav/?iavToken=${iavToken}`,
             }}
           />
         )}
