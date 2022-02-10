@@ -138,7 +138,8 @@
         "MAIL_CONFIRMED_DETAIL": "Your email address {{mail}} is confirmed.",
         "CREATE_PASSWORD": "Create a password",
         "CREATE_PASSWORD_DETAIL": "Create a password to secure your account.",
-        "WELCOME_BACK": "Welcome back"
+        "WELCOME_BACK": "Welcome back",
+        "GO_BACK_AND_LOGIN": "An account with the given email already exists. Please return and try to log in with the same account."
     },
     "PROFILE": {
         "HI": "Hi",
