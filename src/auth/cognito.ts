@@ -85,7 +85,7 @@ export const signUp = async (
       (err: CognitoError, result: ISignUpResult | undefined) => {
         if (err) {
           if(err.message.includes("exist")) {
-            showToast(ToastType.INFO, err.code, Translation.EMAIL_VERIFICATION.GO_BACK_AND_LOGIN);
+            showToast(ToastType.INFO, Translation.EMAIL_VERIFICATION.GO_BACK_AND_LOGIN, Translation.EMAIL_VERIFICATION.GO_BACK_AND_LOGIN_DETAIL, 10000);
           } else {
             showToast(ToastType.ERROR, err.code, err.message);
           }

@@ -39,12 +39,14 @@ export const prefixCustomerName = (name: string): string => {
 export const showToast = (
   type: ToastType,
   text1: string,
-  text2: string
+  text2: string,
+  visibilityTime?: number
 ): void => {
   Toast.show({
     type,
     text1,
     text2,
+    visibilityTime: visibilityTime ?? 5000
   });
 };
 

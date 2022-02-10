@@ -139,7 +139,8 @@
         "CREATE_PASSWORD": "Create a password",
         "CREATE_PASSWORD_DETAIL": "Create a password to secure your account.",
         "WELCOME_BACK": "Welcome back",
-        "GO_BACK_AND_LOGIN": "An account with the given email already exists. Please return and try to log in with the same account."
+        "GO_BACK_AND_LOGIN": "Given account already exists",
+        "GO_BACK_AND_LOGIN_DETAIL": "Please return and try to log in with the same account."
     },
     "PROFILE": {
         "HI": "Hi",
