@@ -70,7 +70,7 @@ const Login = (): JSX.Element => {
   const [isLoading, setLoading] = useState<boolean>(false);
   const passwordRef = createRef<TextInput>();
   const [isSecurity, setSecurity] = useState(true);
-
+  const { updateSignUpDetails } = useContext(AuthContext);
   useEffect(() => {
     setGoNext(isPasswordValid(signInDetails ? signInDetails.password : ""));
   }, [signInDetails]);
@@ -90,6 +90,7 @@ const Login = (): JSX.Element => {
     setLoading(true);
     const response = await signIn();
     if (response.error === "UserNotConfirmedException") {
+      updateSignUpDetails(signInDetails)
       await resendEmailVerificationCode(signInDetails.email);
       navigation.navigate(Routes.VERIFICATION);
     }
