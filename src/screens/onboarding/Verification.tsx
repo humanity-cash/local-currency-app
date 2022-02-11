@@ -127,7 +127,10 @@ const Verification = (): JSX.Element => {
         )}
         {noCodeReceived && (
           <TouchableOpacity
-            onPress={() => navigation.navigate(Routes.VERIFICATION_HELP)}
+            onPress={() => {
+              navigation.navigate(Routes.VERIFICATION_HELP)
+              setNoCodeReceived(false);
+            }}
           >
             <Text style={styles.bottomNavigation}>
               {Translation.EMAIL_VERIFICATION.NEED_HELP}
