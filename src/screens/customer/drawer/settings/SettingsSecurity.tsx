@@ -19,7 +19,7 @@ import SecurityEyeButton from "src/shared/uielements/SecurityEyeButton";
 interface SecurityProps extends IMap {
 	password: string;
 	newPassword: string;
-	newPassowrdConfirm: string;
+	newPasswordConfirm: string;
 }
 
 const styles = StyleSheet.create({
@@ -87,7 +87,7 @@ export const SettingsSecurity = (): JSX.Element => {
 	const [state, setState] = useState<SecurityProps>({
 		password: "",
 		newPassword: "",
-		newPassowrdConfirm: ""
+		newPasswordConfirm: ""
 	});
 	const [oldSecurity, setOldSecurity] = useState(true)
 	const [newSecurity, setNewSecurity] = useState(true)
@@ -110,8 +110,8 @@ export const SettingsSecurity = (): JSX.Element => {
 
 	useEffect(() => {
 		setIsValidPassword(state.newPassword.length < 1 || isPasswordValid(state.newPassword));
-		setIsPasswordMatched(state.newPassowrdConfirm === state.newPassword)
-	}, [state.newPassowrdConfirm, state.newPassword]);
+		setIsPasswordMatched(state.newPasswordConfirm === state.newPassword)
+	}, [state.newPasswordConfirm, state.newPassword]);
 
 	const onTouchIdOption = (value: boolean) => {
 		updateAuthorization({ touchID: value });
