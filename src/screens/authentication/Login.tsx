@@ -44,6 +44,11 @@ const styles = StyleSheet.create({
     color: colors.bodyText,
     paddingTop: 10,
   },
+  label_reqirement: {
+    fontSize: 10,
+    lineHeight: 12,
+    color: colors.bodyText,
+  },
   bottomView: {
     marginHorizontal: 20,
     marginBottom: 20,
@@ -55,6 +60,12 @@ const styles = StyleSheet.create({
     bottom: 0,
     justifyContent: "center",
   },
+  validPasswordLabel: {
+    fontSize: 10,
+    lineHeight: 12,
+    color: colors.textError,
+    alignSelf: 'flex-end'
+  }
 });
 
 const Login = (): JSX.Element => {
@@ -128,6 +139,7 @@ const Login = (): JSX.Element => {
             keyboardType="email-address"
           />
           <Text style={styles.label}>{Translation.LABEL.CONFIRM_PASSWORD}</Text>
+          <Text style={styles.label_reqirement}>{Translation.LABEL.PASSWORD_REG}</Text>
           <View>
             <BlockInput
               inputRef={passwordRef}
@@ -144,6 +156,9 @@ const Login = (): JSX.Element => {
               />
             </View>
           </View>
+          { !goNext && signInDetails?.password.length > 0 &&
+            <Text style={styles.validPasswordLabel}>{Translation.PASSWORD.NOT_MEET_REQUIREMENTS}</Text>
+          }
         </View>
       </ScrollView>
 
