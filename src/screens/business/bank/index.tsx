@@ -40,7 +40,7 @@ const SelectMerchantBank = (): JSX.Element => {
   const navigation = useNavigation();
   const { businessDwollaId } = useContext(UserContext);
   const [iavToken, setIAVToken] = useState<string>("");
-  const { updateSelectedView } = useContext(NavigationViewContext);
+  const { selectedView, updateSelectedView } = useContext(NavigationViewContext);
   let webview: WebView<{
     ref: unknown;
     style: { flex: number; height: number; paddingBottom: number };
@@ -61,8 +61,12 @@ const SelectMerchantBank = (): JSX.Element => {
   }, [businessDwollaId]);
 
   const onClose = () => {
-    updateSelectedView(ViewState.Business);
-    setTimeout(() => navigation.navigate(Routes.MERCHANT_TABS), 2000);
+    if( selectedView === ViewState.Business) {
+      navigation.goBack()
+    } else {
+      updateSelectedView(ViewState.Business);
+      setTimeout(() => navigation.navigate(Routes.MERCHANT_TABS), 2000);
+    }
   };
 
   return (
