@@ -1,13 +1,16 @@
 import { useNavigation } from '@react-navigation/native';
-import React, { useContext } from 'react';
-import { ScrollView, StyleSheet, View } from "react-native";
+import React, { useContext, useState, useEffect } from 'react';
+import { ScrollView, StyleSheet, View, SafeAreaView } from "react-native";
 import { Text } from 'react-native-elements';
 import { WalletContext } from "src/contexts";
-import { Header, BackBtn,  } from "src/shared/uielements";
+import { Header, BackBtn, Button } from "src/shared/uielements";
 import { underlineHeader, viewBase } from "src/theme/elements";
 import { colors } from "src/theme/colors";
 import Translation from 'src/translation/en.json';
 import { FontFamily } from "src/theme/elements";
+import { BUTTON_TYPES } from "src/constants";
+import { DwollaDialog } from "src/views";
+import { IBank } from '../../../../api/types';
 
 const styles = StyleSheet.create({
 	content: {
@@ -39,8 +42,8 @@ const styles = StyleSheet.create({
 		marginBottom: 40
 	},
 	bottomView: {
-		paddingHorizontal: 20,
-		paddingBottom: 40
+		marginHorizontal: 20,
+    	marginBottom: 20,
 	},
 	inlineView: {
 		flex: 1,
@@ -85,8 +88,17 @@ const styles = StyleSheet.create({
 export const SettingsBankAccount = (): JSX.Element => {
 	const navigation = useNavigation();
 	const { customerWalletData } = useContext(WalletContext);
-	const bank = customerWalletData.availableFundingSource?.bank
+	const [isVisible, setIsVisible] = useState<boolean>(false);
+	const [bank, setBank] = useState<IBank | undefined>(undefined)
 
+	useEffect(() => {
+		setBank(customerWalletData.availableFundingSource?.bank)
+	}, [customerWalletData.availableFundingSource?.bank])
+
+	const selectBank = async () => {
+		setIsVisible(true);
+	};
+	
 	return (
 		<View style={viewBase}>
 			<Header
@@ -123,6 +135,24 @@ export const SettingsBankAccount = (): JSX.Element => {
 					)
 				}
 			</ScrollView>
+			{
+				!bank && (
+					<SafeAreaView style={styles.bottomView}>
+						<Button
+							type={BUTTON_TYPES.DARK_GREEN}
+							title={Translation.BUTTON.LINK_PERSONAL_BANK}
+							onPress={selectBank}
+						/>
+					</SafeAreaView>
+				)
+			}
+			{isVisible && (
+				<DwollaDialog
+					title={Translation.BANK_ACCOUNT.USE_DWOLLA_PERSONAL}
+					visible={isVisible}
+					onClose={() => setIsVisible(false)}
+				/>
+			)}
 		</View>
 	);
 }
