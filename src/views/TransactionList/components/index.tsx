@@ -48,6 +48,8 @@ export const TransactionItem = (props: MyTransactionItemProps) => {
       ? "Withdraw"
       : "Transfer Out";
 
+  const isPending = item.transactionHash.toLowerCase() === "pending"
+  
   return (
     <View
       style={
@@ -69,7 +71,7 @@ export const TransactionItem = (props: MyTransactionItemProps) => {
           <Text style={mListstyles.timeText}>
             {moment(item.timestamp).format("h:mm A, MMM D, YYYY")}
           </Text>
-          <Text style={mListstyles.timeText}>{type}</Text>
+          <Text style={mListstyles.timeText}>{isPending && "Pending "}{type}</Text>
         </View>
       </View>
       <Text style={getStyle(item.type)}>
