@@ -101,6 +101,8 @@ export const TransactionDetail = (props: TransactionDetailProps) => {
                 `${TRANSACTION_EXPLORER_URL}block/${data.blockNumber}`
               )
             }
+            numberOfLines={1}
+            ellipsizeMode='middle'
           >
             {data.transactionHash}
           </Text>
