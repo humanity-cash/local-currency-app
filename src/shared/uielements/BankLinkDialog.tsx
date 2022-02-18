@@ -7,12 +7,8 @@ import { BUTTON_TYPES } from "src/constants";
 import { colors } from "../../theme/colors";
 
 const styles = StyleSheet.create({
-  dialog: {
-    height: 320,
-  },
   dialogWrap: {
-    paddingHorizontal: 10,
-    flex: 1,
+    paddingHorizontal: 10
   },
   dialogHeader: {
     fontSize: 30,
@@ -48,7 +44,7 @@ const BankLinkDialog = ({
   onCancel,
 }: BankLinkDialogProps) => {
   return (
-    <Dialog visible={visible} onClose={() => onCancel()} style={styles.dialog}>
+    <Dialog visible={visible} onClose={() => onCancel()}>
       <View style={dialogViewBase}>
         <View style={styles.dialogWrap}>
           <Text style={styles.dialogHeader}>{title}</Text>

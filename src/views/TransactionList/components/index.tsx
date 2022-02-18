@@ -13,7 +13,7 @@ import { styles, mListstyles } from "../style";
 import { UserContext } from "src/contexts";
 import { UserType } from "src/auth/types";
 import { colors } from "src/theme/colors";
-import { BAKLAVA_TRANSACTION_URL } from "src/config/env";
+import { TRANSACTION_EXPLORER_URL } from "src/config/env";
 
 export type MyTransactionItemProps = {
   item: MiniTransaction;
@@ -48,6 +48,8 @@ export const TransactionItem = (props: MyTransactionItemProps) => {
       ? "Withdraw"
       : "Transfer Out";
 
+  const isPending = item.transactionHash.toLowerCase() === "pending"
+  
   return (
     <View
       style={
@@ -69,7 +71,7 @@ export const TransactionItem = (props: MyTransactionItemProps) => {
           <Text style={mListstyles.timeText}>
             {moment(item.timestamp).format("h:mm A, MMM D, YYYY")}
           </Text>
-          <Text style={mListstyles.timeText}>{type}</Text>
+          <Text style={mListstyles.timeText}>{isPending && "Pending "}{type}</Text>
         </View>
       </View>
       <Text style={getStyle(item.type)}>
@@ -82,41 +84,41 @@ export const TransactionItem = (props: MyTransactionItemProps) => {
 export const TransactionDetail = (props: TransactionDetailProps) => {
   const { data, visible, onClose } = props;
   return (
-    <Dialog visible={visible} onClose={onClose} style={styles.dialogHeight}>
-      <View style={[dialogViewBase]}>
-        <ScrollView style={wrappingContainerBase}>
-          <View style={styles.headerView}>
-            <Text style={[getStyle(data.type), { fontSize: 32 }]}>
-              {" "}
-              {getBerksharePrefix(data.type)} {data.value}{" "}
-            </Text>
-          </View>
-          <View style={styles.detailView}>
-            <Text style={styles.detailText}>
-              {Translation.PAYMENT.TRANSACTION_ID}
-            </Text>
-            <Text
-              style={[styles.detailText, styles.underlineText]}
-              onPress={() =>
-                Linking.openURL(
-                  `${BAKLAVA_TRANSACTION_URL}block/${data.blockNumber}`
-                )
-              }
-            >
-              {data.transactionHash}
-            </Text>
-          </View>
-          <View style={styles.detailView}>
-            <Text style={styles.detailText}>TYPE</Text>
-            <Text style={styles.detailText}>{data.type}</Text>
-          </View>
-          <View style={styles.detailView}>
-            <Text style={styles.detailText}>DATE</Text>
-            <Text style={styles.detailText}>
-              {moment(data.timestamp).format("h:mm A, MMM D, YYYY")}
-            </Text>
-          </View>
-        </ScrollView>
+    <Dialog visible={visible} onClose={onClose}>
+      <View style={dialogViewBase}>
+        <View style={styles.headerView}>
+          <Text style={[getStyle(data.type), { fontSize: 32 }]}>
+            {" "}
+            {getBerksharePrefix(data.type)} {data.value}{" "}
+          </Text>
+        </View>
+        <View style={styles.detailView}>
+          <Text style={styles.detailText}>
+            {Translation.PAYMENT.TRANSACTION_ID}
+          </Text>
+          <Text
+            style={[styles.detailText, styles.underlineText]}
+            onPress={() =>
+              Linking.openURL(
+                `${TRANSACTION_EXPLORER_URL}block/${data.blockNumber}`
+              )
+            }
+            numberOfLines={1}
+            ellipsizeMode='middle'
+          >
+            {data.transactionHash}
+          </Text>
+        </View>
+        <View style={styles.detailView}>
+          <Text style={styles.detailText}>TYPE</Text>
+          <Text style={styles.detailText}>{data.type}</Text>
+        </View>
+        <View style={styles.detailView}>
+          <Text style={styles.detailText}>DATE</Text>
+          <Text style={styles.detailText}>
+            {moment(data.timestamp).format("h:mm A, MMM D, YYYY")}
+          </Text>
+        </View>
       </View>
     </Dialog>
   );

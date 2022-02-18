@@ -212,7 +212,7 @@ const CustomerDashboard = (): JSX.Element => {
         <Dialog
           visible={isLoadup || isPayment}
           onClose={onClose}
-          style={styles.dialog}
+          backgroundStyle={{backgroundColor: colors.overlayPurple}}
         >
           <View style={dialogViewBase}>
             {isLoadup && (

@@ -8,12 +8,8 @@ import { colors } from "../../theme/colors";
 import { startActivityAsync, ActivityAction } from "expo-intent-launcher";
 
 const styles = StyleSheet.create({
-  dialog: {
-    height: 320,
-  },
   dialogWrap: {
-    paddingHorizontal: 10,
-    flex: 1,
+    paddingHorizontal: 10
   },
   dialogHeader: {
     fontSize: 28,
@@ -55,7 +51,7 @@ const SettingDialog = ({
   };
 
   return (
-    <Dialog visible={visible} onClose={() => onCancel()} style={styles.dialog}>
+    <Dialog visible={visible} onClose={() => onCancel()}>
       <View style={dialogViewBase}>
         <View style={styles.dialogWrap}>
           <Text style={styles.dialogHeader}>

@@ -145,9 +145,6 @@ export const styles = StyleSheet.create({
     color: colors.darkGreen,
     textAlign: "center",
   },
-  dialogHeight: {
-    height: 300,
-  },
   underlineText: {
     textDecorationLine: "underline",
     flex: 1,

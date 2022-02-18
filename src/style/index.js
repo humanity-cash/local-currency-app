@@ -23,11 +23,8 @@ export const BusinessScanQrCodeStyle = StyleSheet.create({
 		backgroundColor: colors.overlayPurple
 	},
 	dialogWrap: {
-		position: 'relative',
 		paddingHorizontal: 10,
 		paddingTop: 70,
-		height: "100%",
-		flex: 1,
 		justifyContent: 'center',
 		alignItems: 'center'
 	},
@@ -139,18 +136,12 @@ export const CustomerScanQrCodeStyle = StyleSheet.create({
 		height: 200,
 		backgroundColor: 'rgba(0,0,0,0.8)'
 	},
-	dialog: {
-		height: 450
-	},
 	dialogBg: {
 		backgroundColor: colors.pDialogBg,
 	},
 	dialogWrap: {
-		position: 'relative',
 		paddingHorizontal: 10,
 		paddingTop: 70,
-		height: "100%",
-		flex: 1,
 		justifyContent: 'center',
 		alignItems: 'center'
 	},
@@ -494,8 +485,6 @@ export const BusinessCashOut = StyleSheet.create({
 	},
 	dialogWrap: {
 		paddingHorizontal: 10,
-		height: "100%",
-		flex: 1,
 	},
 	dialogHeader: {
 		fontSize: 30,
