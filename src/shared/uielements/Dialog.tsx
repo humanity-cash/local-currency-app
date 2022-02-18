@@ -39,7 +39,6 @@ const styles = StyleSheet.create({
   },
   dialogWrap: {
     width: "90%",
-    alignSelf: "center",
     borderRadius: 20,
     backgroundColor: colors.background,
     shadowColor: colors.black,
@@ -48,8 +47,6 @@ const styles = StyleSheet.create({
     shadowRadius: 5,
     shadowOpacity: 0.5,
     padding: 0,
-    justifyContent: "center",
-    alignItems: "center",
   },
   dialogView: {
     borderRadius: 20,
@@ -98,9 +95,7 @@ const Dialog = ({
             ...style,
           }}
         >
-          <View style={styles.dialogView}>
-            {children}
-          </View>
+          {children}
         </View>
       </View>
     </Overlay>

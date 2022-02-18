@@ -131,8 +131,6 @@ const styles = StyleSheet.create({
     },
 	dialogWrap: {
 		paddingHorizontal: 10,
-		height: "100%",
-		flex: 1,
 	},
 	dialogHeader: {
 		fontSize: 30,

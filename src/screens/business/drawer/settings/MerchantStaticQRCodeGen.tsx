@@ -12,18 +12,14 @@ import { FontFamily } from "src/theme/elements";
 
 const styles = StyleSheet.create({
     dialog: {
-        height: 400
+        paddingBottom: 40
     },
     dialogBg: {
         backgroundColor: colors.overlayPurple
     },
     dialogWrap: {
-        position: 'relative',
         paddingHorizontal: 10,
         paddingTop: 70,
-        height: "100%",
-        flex: 1,
-        justifyContent: 'center',
         alignItems: 'center'
     },
     amount: {

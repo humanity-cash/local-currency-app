@@ -96,7 +96,6 @@ const PaymentConfirm = (props: PaymentConfirmProps) => {
       visible={props.visible}
       onClose={props.onCancel}
       backgroundStyle={styles.dialogBg}
-      style={styles.dialog}
     >
       <View style={dialogViewBase}>
         <View style={styles.dialogWrap}>
@@ -299,9 +298,6 @@ const styles = StyleSheet.create({
     width: "100%",
     height: 200,
     backgroundColor: "rgba(0,0,0,0.8)",
-  },
-  dialog: {
-    height: 450,
   },
   dialogBg: {
     backgroundColor: colors.overlayPurple,
