@@ -3,7 +3,8 @@ const API_URL = "https://api.humanity.cash/";
 const DEV_CORE_API_URL = API_URL;
 const PROD_CORE_API_URL = API_URL;
 
-export const BAKLAVA_TRANSACTION_URL = "https://alfajores-blockscout.celo-testnet.org/"
+// export const BAKLAVA_TRANSACTION_URL = "https://alfajores-blockscout.celo-testnet.org/"
+export const TRANSACTION_EXPLORER_URL = "https://explorer.celo.org/"
 export const DWOLLA_PRIVACY_URL = "https://www.dwolla.com/legal/privacy/";
 export const DWOLLA_TERMS_URL = "https://www.dwolla.com/legal/tos/";
 export const BERKSHARE_PRIVACY_URL =

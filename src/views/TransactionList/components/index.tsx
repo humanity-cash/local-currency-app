@@ -13,7 +13,7 @@ import { styles, mListstyles } from "../style";
 import { UserContext } from "src/contexts";
 import { UserType } from "src/auth/types";
 import { colors } from "src/theme/colors";
-import { BAKLAVA_TRANSACTION_URL } from "src/config/env";
+import { TRANSACTION_EXPLORER_URL } from "src/config/env";
 
 export type MyTransactionItemProps = {
   item: MiniTransaction;
@@ -98,7 +98,7 @@ export const TransactionDetail = (props: TransactionDetailProps) => {
             style={[styles.detailText, styles.underlineText]}
             onPress={() =>
               Linking.openURL(
-                `${BAKLAVA_TRANSACTION_URL}block/${data.blockNumber}`
+                `${TRANSACTION_EXPLORER_URL}block/${data.blockNumber}`
               )
             }
           >
