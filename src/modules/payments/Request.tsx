@@ -96,7 +96,6 @@ const RequestPayment = (props: RequestPaymentInput): JSX.Element => {
       visible={props.visible}
       onClose={onClose}
       backgroundStyle={styles.dialogBg}
-      style={styles.dialog}
     >
       <View style={dialogViewBase}>
         <View style={styles.dialogWrap}>
@@ -111,6 +110,7 @@ const RequestPayment = (props: RequestPaymentInput): JSX.Element => {
           {!props.isOpenAmount && (
             <Text style={styles.amount}>B$ {props?.amount?.toFixed(2)}</Text>
           )}
+          <View style={{height: 40}}/>
         </View>
       </View>
     </Dialog>

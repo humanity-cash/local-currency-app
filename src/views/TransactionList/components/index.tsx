@@ -82,41 +82,39 @@ export const TransactionItem = (props: MyTransactionItemProps) => {
 export const TransactionDetail = (props: TransactionDetailProps) => {
   const { data, visible, onClose } = props;
   return (
-    <Dialog visible={visible} onClose={onClose} style={styles.dialogHeight}>
-      <View style={[dialogViewBase]}>
-        <ScrollView style={wrappingContainerBase}>
-          <View style={styles.headerView}>
-            <Text style={[getStyle(data.type), { fontSize: 32 }]}>
-              {" "}
-              {getBerksharePrefix(data.type)} {data.value}{" "}
-            </Text>
-          </View>
-          <View style={styles.detailView}>
-            <Text style={styles.detailText}>
-              {Translation.PAYMENT.TRANSACTION_ID}
-            </Text>
-            <Text
-              style={[styles.detailText, styles.underlineText]}
-              onPress={() =>
-                Linking.openURL(
-                  `${BAKLAVA_TRANSACTION_URL}block/${data.blockNumber}`
-                )
-              }
-            >
-              {data.transactionHash}
-            </Text>
-          </View>
-          <View style={styles.detailView}>
-            <Text style={styles.detailText}>TYPE</Text>
-            <Text style={styles.detailText}>{data.type}</Text>
-          </View>
-          <View style={styles.detailView}>
-            <Text style={styles.detailText}>DATE</Text>
-            <Text style={styles.detailText}>
-              {moment(data.timestamp).format("h:mm A, MMM D, YYYY")}
-            </Text>
-          </View>
-        </ScrollView>
+    <Dialog visible={visible} onClose={onClose}>
+      <View style={dialogViewBase}>
+        <View style={styles.headerView}>
+          <Text style={[getStyle(data.type), { fontSize: 32 }]}>
+            {" "}
+            {getBerksharePrefix(data.type)} {data.value}{" "}
+          </Text>
+        </View>
+        <View style={styles.detailView}>
+          <Text style={styles.detailText}>
+            {Translation.PAYMENT.TRANSACTION_ID}
+          </Text>
+          <Text
+            style={[styles.detailText, styles.underlineText]}
+            onPress={() =>
+              Linking.openURL(
+                `${BAKLAVA_TRANSACTION_URL}block/${data.blockNumber}`
+              )
+            }
+          >
+            {data.transactionHash}
+          </Text>
+        </View>
+        <View style={styles.detailView}>
+          <Text style={styles.detailText}>TYPE</Text>
+          <Text style={styles.detailText}>{data.type}</Text>
+        </View>
+        <View style={styles.detailView}>
+          <Text style={styles.detailText}>DATE</Text>
+          <Text style={styles.detailText}>
+            {moment(data.timestamp).format("h:mm A, MMM D, YYYY")}
+          </Text>
+        </View>
       </View>
     </Dialog>
   );

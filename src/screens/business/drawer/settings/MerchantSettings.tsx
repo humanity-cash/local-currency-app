@@ -47,9 +47,7 @@ const styles = StyleSheet.create({
 		backgroundColor: colors.overlayPurple
 	},
 	dialogWrap: {
-		paddingHorizontal: 10,
-		height: "100%",
-		flex: 1,
+		paddingHorizontal: 10
 	},
 	dialogHeader: {
 		fontSize: 30,

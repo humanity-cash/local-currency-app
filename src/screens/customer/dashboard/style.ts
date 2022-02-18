@@ -101,12 +101,8 @@ export const styles = StyleSheet.create({
     color: colors.white,
     fontSize: 16,
   },
-  dialog: {
-    height: 320,
-  },
   dialogWrap: {
-    paddingHorizontal: 10,
-    flex: 1,
+    paddingHorizontal: 10
   },
   dialogHeader: {
     fontSize: 30,

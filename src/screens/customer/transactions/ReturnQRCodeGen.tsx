@@ -16,15 +16,9 @@ import {
 import { prefixCustomerName } from "src/utils/common";
 
 const styles = StyleSheet.create({
-  dialog: {
-    height: 440,
-  },
   dialogWrap: {
-    position: "relative",
     paddingHorizontal: 10,
     paddingTop: 70,
-    height: "100%",
-    flex: 1,
     justifyContent: "center",
     alignItems: "center",
   },
@@ -115,7 +109,7 @@ const ReturnQRCodeGen = (props: ReturnQRCodeGenProps): JSX.Element => {
   const customerName = user?.customer?.tag;
 
   return (
-    <Dialog visible={props.visible} onClose={onClose} style={styles.dialog}>
+    <Dialog visible={props.visible} onClose={onClose}>
       <View style={dialogViewBase}>
         <View style={styles.dialogWrap}>
           <View style={styles.ownerInfo}>
