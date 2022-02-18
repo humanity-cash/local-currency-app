@@ -67,7 +67,6 @@ export const styles = StyleSheet.create({
   },
   dialogWrap: {
     paddingHorizontal: 10,
-    flex: 1,
   },
   dialogHeader: {
     fontSize: 30,

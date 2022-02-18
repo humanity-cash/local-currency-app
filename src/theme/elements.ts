@@ -28,7 +28,6 @@ export const modalViewBase: any = {
 };
 
 export const dialogViewBase: any = {
-  justifyContent: "space-between",
   padding: 20,
   backgroundColor: colors.background,
   borderRadius: 20,
@@ -48,7 +47,8 @@ export const buttonBase: any = {
 
 export const wrappingContainerBase: any = {
   padding: 10,
-  flex: 1,
+  marginBottom: 20,
+  flex: 1
 };
 
 export const baseHeader: any = {

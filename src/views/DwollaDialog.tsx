@@ -13,16 +13,12 @@ import { UserContext } from "src/contexts";
 import { CheckBox } from "react-native-elements";
 
 const styles = StyleSheet.create({
-  dialog: {
-    height: 380,
-  },
   pDialogBg: {},
   bDialogBg: {
     backgroundColor: colors.overlayPurple,
   },
   dialogWrap: {
-    paddingHorizontal: 10,
-    flex: 1,
+    paddingHorizontal: 10
   },
   dialogHeader: {
     fontSize: 30,
@@ -93,7 +89,6 @@ const DwollaDialog = (props: DwollaDialogProps): JSX.Element => {
     <Dialog
       visible={props.visible}
       onClose={() => props.onClose()}
-      style={styles.dialog}
       backgroundStyle={isCustomer ? styles.pDialogBg : styles.bDialogBg}
     >
       <View style={dialogViewBase}>
