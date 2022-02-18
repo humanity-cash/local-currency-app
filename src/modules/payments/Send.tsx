@@ -342,7 +342,6 @@ const SendPayment = (props: SendPaymentInput): JSX.Element => {
             inActiveText="Receive"
             style={styles.switch}
             textStyle={styles.switchText}
-            circleStyle={styles.toggleBg}
           />
         </View>
       </View>
@@ -368,7 +367,7 @@ const SendPayment = (props: SendPaymentInput): JSX.Element => {
         <Modal visible={isOpenPayment}>
           <KeyboardAvoidingView
             {...(Platform.OS === "ios" && { behavior: "padding" })}
-            style={modalViewBase}
+            style={[modalViewBase, {flex: 1}]}
           >
             <ModalHeader
               leftComponent={
@@ -403,7 +402,9 @@ const SendPayment = (props: SendPaymentInput): JSX.Element => {
                   keyboardType="decimal-pad"
                   placeholder="Amount"
                   prefix="B$"
-                  style={styles.input}
+                  style={{
+                    backgroundColor: isCustomer ? colors.inputBg : colors.lightBg,
+                  }}
                   textStyle={styles.switchText}
                   value={openAmount}
                   onChange={(name: string, amount: string) =>
