@@ -33,7 +33,6 @@ import { SafeAreaView } from "react-native";
 import { CustomerLoadUp, BusinessLoadUp } from "src/style";
 import { UserContext } from "src/contexts";
 import { UserType } from "src/auth/types";
-import { color } from "react-native-reanimated";
 
 const MAX_AMOUNT = 2000;
 const MIN_AMOUNT = 1;

@@ -11,6 +11,7 @@ import { BUTTON_TYPES } from "src/constants";
 import { DWOLLA_PRIVACY_URL, DWOLLA_TERMS_URL } from "src/config/env";
 import { UserContext } from "src/contexts";
 import { CheckBox } from "react-native-elements";
+import { WalletContext } from '../contexts/wallet';
 
 const styles = StyleSheet.create({
   pDialogBg: {},
@@ -69,21 +70,28 @@ type DwollaDialogProps = {
 const DwollaDialog = (props: DwollaDialogProps): JSX.Element => {
   const { userType } = useContext(UserContext);
   const navigation = useNavigation();
-  const isCustomer = userType === UserType.Customer;
   const [isSelected, setSelection] = useState(true);
+  const { customerWalletData, businessWalletData } =
+    useContext(WalletContext);
+
+  const isCustomer = userType === UserType.Customer;
+  const route = isCustomer ? Routes.SELECT_BANK : Routes.MERCHANT_BANK_ACCOUNT
+  const needVerify = isCustomer 
+            ? customerWalletData?.availableFundingSource?.needMicroDeposit ?? false 
+            : businessWalletData?.availableFundingSource?.needMicroDeposit ?? false
 
   const selectBank = () => {
     props.onClose();
-    isCustomer
-      ? navigation.navigate(Routes.SELECT_BANK)
-      : navigation.navigate(Routes.MERCHANT_BANK_ACCOUNT);
+    if(needVerify) {
+      navigation.navigate(Routes.MICRO_DEPOSIT_BANK)
+    } else {
+      navigation.navigate(route)
+    }
   };
 
   const mainTextStyle = isCustomer
     ? { color: colors.darkGreen }
     : { color: colors.purple };
-
-  const mainColor = isCustomer ? colors.darkGreen : colors.purple;
 
   return (
     <Dialog

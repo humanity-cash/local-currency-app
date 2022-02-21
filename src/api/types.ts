@@ -72,6 +72,11 @@ export interface IDepositRequest {
   amount: string;
 }
 
+export interface IMicroDepositRequest {
+  amount1: string;
+  amount2: string;
+}
+
 export interface IWithdrawalRequest {
   amount: string;
 }
@@ -158,5 +163,6 @@ export interface IBank {
 }
 export interface FundingSource {
   visible: boolean,
-  bank: IBank | undefined
+  bank: IBank | undefined,
+  needMicroDeposit: boolean
 }

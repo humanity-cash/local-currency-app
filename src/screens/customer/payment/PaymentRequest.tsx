@@ -138,7 +138,7 @@ const PaymentRequest = (): JSX.Element => {
   };
 
   const onPressPay = () => {
-    if (availableBalance > 0) {
+    if (availableBalance && availableBalance > 0) {
       navigation.navigate(Routes.QRCODE_SCAN, {
         senderId: customerDwollaId,
         walletData: customerWalletData,

@@ -63,7 +63,7 @@ const ReturnPaymentDialog = (props: ReturnPaymentDialogProps) => {
       backgroundStyle={styles.dialogBg}
     >
       <View style={dialogViewBase}>
-        <View style={wrappingContainerBase}>
+        <View style={styles.dialogWrap}>
           <View style={baseHeader}>
             <Text style={styles.headerText}>
               {Translation.PAYMENT.SCAN_RECIPIENTS_QR}
@@ -148,7 +148,7 @@ const DrawerContent = (props: DrawerContentComponentProps) => {
     useState<BankLinkDialogStateProps>(initBankDialogState);
   const [isSetting, setIsSetting] = useState(false);
   const { businessWalletData } = useContext(WalletContext);
-  const businessFundingSource = businessWalletData?.availableFundingSource?.visible;
+  const businessFundingSource = businessWalletData?.availableFundingSource;
   const availableBalance = businessWalletData?.availableBalance;
   useBusinessWallet();
 
@@ -173,7 +173,11 @@ const DrawerContent = (props: DrawerContentComponentProps) => {
 
   const onBankDialogConfirm = () => {
     setBankDialogState(initBankDialogState);
-    props.navigation.navigate(Routes.MERCHANT_BANK_ACCOUNT);
+    if(businessFundingSource?.needMicroDeposit) {
+      props.navigation.navigate(Routes.MICRO_DEPOSIT_BANK);
+    } else {
+      props.navigation.navigate(Routes.MERCHANT_BANK_ACCOUNT);
+    }
   };
 
   const onBankDialogCancel = () => {
@@ -197,7 +201,7 @@ const DrawerContent = (props: DrawerContentComponentProps) => {
   const onPressScanToPay = async () => {
     const { status } = await BarCodeScanner.requestPermissionsAsync();
     if (status === "granted") {
-      if (availableBalance > 0) {
+      if (availableBalance && availableBalance > 0) {
         props.navigation.navigate(Routes.MERCHANT_QRCODE_SCAN, {
           senderId: businessDwollaId,
           walletData: businessWalletData,
@@ -207,7 +211,7 @@ const DrawerContent = (props: DrawerContentComponentProps) => {
           cancelRoute: Routes.MERCHANT_DASHBOARD,
         });
       } else {
-        if (businessFundingSource) {
+        if (businessFundingSource?.visible) {
           setBankDialogState({
             visible: true,
             title: Translation.LOAD_UP.LOAD_UP_NO_BANK_TITLE,
@@ -235,10 +239,10 @@ const DrawerContent = (props: DrawerContentComponentProps) => {
   const onPressMakeReturn = async () => {
     const { status } = await BarCodeScanner.requestPermissionsAsync();
     if (status === "granted") {
-      if (availableBalance > 0) {
+      if (availableBalance && availableBalance > 0) {
         setIsVisible(true);
       } else {
-        if (businessFundingSource) {
+        if (businessFundingSource?.visible) {
           setBankDialogState({
             visible: true,
             title: Translation.LOAD_UP.LOAD_UP_NO_BANK_TITLE,
@@ -264,7 +268,7 @@ const DrawerContent = (props: DrawerContentComponentProps) => {
   };
 
   const onPressLoadup = async () => {
-    if (businessWalletData?.address && businessFundingSource) {
+    if (businessWalletData?.address && businessFundingSource?.visible) {
       props.navigation.navigate(Routes.LOAD_UP, {
         userId: businessDwollaId,
         styles: "business",
@@ -284,10 +288,10 @@ const DrawerContent = (props: DrawerContentComponentProps) => {
   const onPressSendToSomeone = async () => {
     const { status } = await BarCodeScanner.requestPermissionsAsync();
     if (status === "granted") {
-      if (availableBalance > 0) {
+      if (availableBalance && availableBalance > 0) {
         props.navigation.navigate(Routes.MERCHANT_PAYOUT_SELECTION);
       } else {
-        if (businessFundingSource) {
+        if (businessFundingSource?.visible) {
           setBankDialogState({
             visible: true,
             title: Translation.LOAD_UP.LOAD_UP_NO_BANK_TITLE,
@@ -315,13 +319,22 @@ const DrawerContent = (props: DrawerContentComponentProps) => {
   const onPressCashout = async () => {
     const { status } = await BarCodeScanner.requestPermissionsAsync();
     if (status === "granted") {
-      if (availableBalance > 0) {
-        props.navigation.navigate(Routes.MERCHANT_CASHOUT_AMOUNT, {
-          userId: businessDwollaId,
-          walletData: businessWalletData,
+      if (!businessFundingSource?.visible) {
+        setBankDialogState({
+          visible: true,
+          title: Translation.CASH_OUT.CASH_OUT_NO_BANK_TITLE,
+          description: Translation.CASH_OUT.CASH_OUT_NO_BANK_DETAIL,
+          buttoTitle: Translation.BUTTON.LINK_BUSINESS_BANK,
+          confirmAction: onBankDialogConfirm,
+          cancelAction: onBankDialogCancel,
         });
       } else {
-        if (businessFundingSource) {
+        if (availableBalance && availableBalance > 0) {
+          props.navigation.navigate(Routes.MERCHANT_CASHOUT_AMOUNT, {
+            userId: businessDwollaId,
+            walletData: businessWalletData,
+          });
+        } else {
           setBankDialogState({
             visible: true,
             title: Translation.LOAD_UP.LOAD_UP_NO_BANK_TITLE,
@@ -329,15 +342,6 @@ const DrawerContent = (props: DrawerContentComponentProps) => {
             buttoTitle: Translation.BUTTON.LOAD_UP,
             confirmAction: onLoadupDialogConfirm,
             cancelAction: onLoadupDialogCancel,
-          });
-        } else {
-          setBankDialogState({
-            visible: true,
-            title: Translation.CASH_OUT.CASH_OUT_NO_BANK_TITLE,
-            description: Translation.CASH_OUT.CASH_OUT_NO_BANK_DETAIL,
-            buttoTitle: Translation.BUTTON.LINK_BUSINESS_BANK,
-            confirmAction: onBankDialogConfirm,
-            cancelAction: onBankDialogCancel,
           });
         }
       }

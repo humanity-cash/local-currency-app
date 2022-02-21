@@ -90,9 +90,11 @@ export const SettingsBankAccount = (): JSX.Element => {
 	const { customerWalletData } = useContext(WalletContext);
 	const [isVisible, setIsVisible] = useState<boolean>(false);
 	const [bank, setBank] = useState<IBank | undefined>(undefined)
+	const [needVerify, setNeedVerify] = useState<boolean>(false)
 
 	useEffect(() => {
 		setBank(customerWalletData.availableFundingSource?.bank)
+		setNeedVerify(!!customerWalletData.availableFundingSource?.needMicroDeposit)
 	}, [customerWalletData.availableFundingSource?.bank])
 
 	const selectBank = async () => {
@@ -109,7 +111,7 @@ export const SettingsBankAccount = (): JSX.Element => {
 					<Text style={styles.headerText}>{Translation.BANK_ACCOUNT.BANK_ACCOUNT}</Text>
 				</View>
 				{
-					bank && (
+					bank && !needVerify && (
 						<View style={styles.section}>
 							<Text style={styles.bankNameLabel}>{bank.bankName}</Text>
 							<View style={styles.inlineView}>
@@ -128,7 +130,7 @@ export const SettingsBankAccount = (): JSX.Element => {
 					)
 				}
 				{
-					!bank && (
+					(!bank || needVerify) && (
 						<View style={styles.noAccount}>
 							<Text style={styles.noAccountText}>{Translation.COMMUNITY_CHEST.NO_BANK_ACCOUNT}</Text>
 						</View>
@@ -136,7 +138,7 @@ export const SettingsBankAccount = (): JSX.Element => {
 				}
 			</ScrollView>
 			{
-				!bank && (
+				(!bank || needVerify) && (
 					<SafeAreaView style={styles.bottomView}>
 						<Button
 							type={BUTTON_TYPES.DARK_GREEN}

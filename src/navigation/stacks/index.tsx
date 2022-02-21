@@ -3,7 +3,6 @@ import React from "react";
 import "react-native-gesture-handler";
 import { CashoutNavigator } from "src/navigation/CashoutNavigator";
 import { ForgotPasswordNavigator } from "src/navigation/ForgotPasswordStack";
-import { MerchantBankAccountNavigator } from "src/navigation/MerchantBankAccountNavigator";
 import { SignupBusinessNavigator } from "src/navigation/SignupBusinessNavigator";
 import Login from "src/screens/authentication/Login";
 import CashierHelp from "src/screens/cashier/CashierHelp";
@@ -53,6 +52,7 @@ import BusinessWelcome from "src/screens/business/signup/BusinessWelcome";
 import CustomerTransactions from "src/screens/customer/transactions";
 import { PaymentsModule } from "src/modules";
 import MerchantPayoutSomeoneSuccess from '../../screens/business/drawer/sendToSomeone/MerchantPayoutSomeoneSuccess';
+import MicroDepositBank from '../../screens/customer/bank/MicroDepositBank';
 
 const PrimaryStack = createStackNavigator();
 
@@ -110,6 +110,7 @@ export const CustomerUserStack = ({
         component={SettingsDeleteAccount}
       />
       <PrimaryStack.Screen name={Routes.SELECT_BANK} component={SelectBank} />
+      <PrimaryStack.Screen name={Routes.MICRO_DEPOSIT_BANK} component={MicroDepositBank} />
       {!isVerifiedBusiness && (
         <PrimaryStack.Screen
           name={Routes.SIGNUP_BUSINESS}
@@ -250,7 +251,7 @@ export const BusinessUserStack = ({
       />
       <PrimaryStack.Screen
         name={Routes.MERCHANT_BANK_ACCOUNT}
-        component={MerchantBankAccountNavigator}
+        component={SelectMerchantBank}
       />
       <PrimaryStack.Screen
         name={Routes.REPORT_SUCCESS}
@@ -285,8 +286,8 @@ export const BusinessUserStack = ({
         component={SettingsDeleteAccount}
       />
       <PrimaryStack.Screen
-        name={Routes.SELECT_MERCHANT_BANK_ACCOUNT}
-        component={SelectMerchantBank}
+        name={Routes.MICRO_DEPOSIT_BANK}
+        component={MicroDepositBank}
       />
       {!isVerifiedCustomer && (
         <>
@@ -338,7 +339,7 @@ export const NotVerifiedUserStack = () => {
       />
       <PrimaryStack.Screen
         name={Routes.MERCHANT_BANK_ACCOUNT}
-        component={MerchantBankAccountNavigator}
+        component={SelectMerchantBank}
       />
     </>
   );

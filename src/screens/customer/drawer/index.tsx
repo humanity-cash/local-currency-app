@@ -139,7 +139,7 @@ const DrawerContent = (
   const [bankDialogState, setBankDialogState] =
     useState<BankLinkDialogStateProps>(initBankDialogState);
   const { customerWalletData } = useContext(WalletContext);
-  const personalFundingSource = customerWalletData?.availableFundingSource?.visible;
+  const personalFundingSource = customerWalletData?.availableFundingSource;
   const availableBalance = customerWalletData?.availableBalance;
   const [isSetting, setIsSetting] = useState(false);
 
@@ -155,7 +155,11 @@ const DrawerContent = (
 
   const onBankDialogConfirm = () => {
     setBankDialogState(initBankDialogState);
-    props.navigation.navigate(Routes.SELECT_BANK);
+    if(personalFundingSource?.needMicroDeposit) {
+      props.navigation.navigate(Routes.MICRO_DEPOSIT_BANK);
+    } else {
+      props.navigation.navigate(Routes.SELECT_BANK);
+    }
   };
 
   const onBankDialogCancel = () => {
@@ -174,7 +178,7 @@ const DrawerContent = (
   const onPressScanToPay = async () => {
     const { status } = await BarCodeScanner.requestPermissionsAsync();
     if (status === "granted") {
-      if (availableBalance > 0) {
+      if (availableBalance && availableBalance > 0) {
         props.navigation.navigate(Routes.QRCODE_SCAN, {
           senderId: customerDwollaId,
           walletData: customerWalletData,
@@ -184,7 +188,7 @@ const DrawerContent = (
           cancelRoute: Routes.DASHBOARD,
         });
       } else {
-        if (personalFundingSource) {
+        if (personalFundingSource?.visible) {
           setBankDialogState({
             visible: true,
             title: Translation.LOAD_UP.LOAD_UP_NO_BANK_TITLE,

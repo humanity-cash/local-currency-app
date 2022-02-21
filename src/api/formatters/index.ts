@@ -59,29 +59,31 @@ export const formatTransactions = (
 };
 
 export const fundingSource = (res: AxiosPromiseResponse): FundingSource => {
-  if (!res.data) return {visible: false, bank: undefined};
+  if (!res.data) return {visible: false, bank: undefined, needMicroDeposit: false};
 
   const sources = res.data.body?._embedded["funding-sources"]
+
   if (sources?.length > 0) {
     for (let i = 0; i < sources.length; i++) {
       const source = sources[i];
       if (source.type === "bank") {
         return {
-          visible: true,
+          visible: !source["_links"]["verify-micro-deposits"],
           bank: {
             bankName: source.bankName,
             bankAccountType: source.bankAccountType,
             createdAt: moment(source.created).format("h:mm A, MMM D, YYYY"),
             name: source.name,
-          }
+          },
+          needMicroDeposit: !!source["_links"]["verify-micro-deposits"] || !!source["_links"]["micro-deposits"]
         }
       }
     }
   } else {
-    return {visible: false, bank: undefined};
+    return {visible: false, bank: undefined, needMicroDeposit: false};
   }
   
-  return {visible: false, bank: undefined};
+  return {visible: false, bank: undefined, needMicroDeposit: false};
 };
 
 export const userData = (res: AxiosPromiseResponse): IWallet => {

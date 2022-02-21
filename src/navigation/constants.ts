@@ -15,6 +15,7 @@ export const BANK_LINK_SUCCESS = "BankLinkSuccess";
 export const TABS = "Tabs";
 export const MERCHANT_TABS = "MerchantTabs";
 export const SELECT_BANK = "SelectBank";
+export const MICRO_DEPOSIT_BANK = "MicroDepositBank";
 export const SELECT_BANK_ACCOUNT = "SelectBankAccount";
 export const LOADUP_SUCCESS = "LoadUpSuccess";
 export const BUSINESS_OWNER_DETAIL = "BusinessOwnerDetail";
@@ -41,7 +42,6 @@ export const CASHOUT = "CashOut";
 
 export const MERCHANT_QRCODE_SCAN = "MerchantQRCodeScan";
 export const MERCHANT_BANK_ACCOUNT = "SelectMerchantBank";
-export const SELECT_MERCHANT_BANK_ACCOUNT = "SelectMerchantBankAccount";
 export const LOGIN_MERCHANT_BANK = "LoginToMerchantBank";
 export const MERCHANT_REDEMPTION_IN_PROGRESS = "MerchantRedemptionInProgress";
 export const MERCHANT_LOADUP = "MerchantLoadup";
