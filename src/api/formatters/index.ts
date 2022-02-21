@@ -75,7 +75,7 @@ export const fundingSource = (res: AxiosPromiseResponse): FundingSource => {
             createdAt: moment(source.created).format("h:mm A, MMM D, YYYY"),
             name: source.name,
           },
-          needMicroDeposit: !!source["_links"]["verify-micro-deposits"]
+          needMicroDeposit: !!source["_links"]["verify-micro-deposits"] || !!source["_links"]["micro-deposits"]
         }
       }
     }
