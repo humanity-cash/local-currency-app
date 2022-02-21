@@ -180,7 +180,8 @@
         "WRONG": "Whooops, something went wrong.",
         "WRONG_DETAIL": "Connection failed.",
         "CONGRATULATION": "Congratulations!",
-        "CONGRATULATION_DETAIL": "You have linked your Salisbury Checking (US-08-CHAS-0686-5892) bank account! Your are ready to load up your BerkShares and start supporting your community!"
+        "CONGRATULATION_DETAIL": "You have linked your Salisbury Checking (US-08-CHAS-0686-5892) bank account! Your are ready to load up your BerkShares and start supporting your community!",
+        "MICRO_DEPOSIT_DETAIL": "Verify micro deposits to finalise linking your bank account."
     },
     "LOAD_UP": {
         "TITLE": "Load Wallet",

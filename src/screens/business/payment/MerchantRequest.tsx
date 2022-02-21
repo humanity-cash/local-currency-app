@@ -150,7 +150,7 @@ const MerchantRequest = (): JSX.Element => {
   };
 
   const onPressPay = () => {
-    if (availableBalance > 0) {
+    if (availableBalance && availableBalance > 0) {
       navigation.navigate(Routes.MERCHANT_QRCODE_SCAN, {
         senderId: businessDwollaId,
         walletData: businessWalletData,

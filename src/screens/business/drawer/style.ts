@@ -69,4 +69,8 @@ export const styles = StyleSheet.create({
   dialogBg: {
     backgroundColor: colors.overlayPurple,
   },
+  dialogWrap: {
+    paddingHorizontal: 10,
+    paddingBottom: 20
+	}
 });
