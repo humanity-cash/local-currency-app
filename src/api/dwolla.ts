@@ -1,7 +1,7 @@
 import { IWallet } from "@humanity.cash/types";
 import { getRequest, postRequest } from "./base";
 import { fundingSource } from "./formatters";
-import { AxiosPromiseResponse, UserId, FundingSource } from './types';
+import { AxiosPromiseResponse, UserId, FundingSource, IMicroDepositRequest } from './types';
 import { getUser } from "./user";
 
 export const iavToken = async (
@@ -24,6 +24,18 @@ export const loadFundingSource = async (userId: UserId): Promise<FundingSource |
   } catch (err) {
     console.log("error in funding source", err);
     return undefined;
+  }
+};
+
+export const micro_deposit = async (
+  userId: UserId,
+  request: IMicroDepositRequest
+): Promise<AxiosPromiseResponse> => {
+  try {
+    const response = await postRequest(`/users/${userId}/verify-micro-deposits`, request);
+    return response;
+  } catch (error) {
+    return {} as AxiosPromiseResponse;
   }
 };
 

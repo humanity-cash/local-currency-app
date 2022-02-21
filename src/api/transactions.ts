@@ -8,7 +8,6 @@ import {
 import {
   AxiosPromiseResponse,
   IDepositRequest,
-  ITransaction,
   ITransactionRequest,
   IWithdrawalRequest,
   UserId,
