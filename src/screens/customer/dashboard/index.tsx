@@ -39,8 +39,6 @@ const CustomerDashboard = (): JSX.Element => {
   const navigation = useNavigation();
   const [isVisible, setIsVisible] = useState<boolean>(false);
   const [feedData, setFeedData] = useState<FeedItemProps[]>([]);
-  const [isLoadup, setIsLoadup] = useState<boolean>(false);
-  const [isPayment, setIsPayment] = useState<boolean>(false);
   const [isSetting, setIsSetting] = useState(false);
   const { customerDwollaId, user } = useContext(UserContext);
   const { customerWalletData, updateCustomerWalletData } =
@@ -48,7 +46,7 @@ const CustomerDashboard = (): JSX.Element => {
   const { events, getEvents, deleteEvent, updateEvents } =
     useContext(EventsContext);
   const { isLoading: isWalletLoading } = useCustomerWallet();
-  const personalFundingSource = customerWalletData?.availableFundingSource?.visible;
+  const personalFundingSource = customerWalletData?.availableFundingSource;
   const availableBalance = customerWalletData?.availableBalance;
   const [showEvents, setShowEvents] = useState(false);
   const [refreshing, setRefreshing] = React.useState(false);
@@ -70,15 +68,8 @@ const CustomerDashboard = (): JSX.Element => {
     return () => clearInterval(timerId);
   }, [customerDwollaId]);
 
-  const selectBank = () => {
-    navigation.navigate(Routes.SELECT_BANK);
-    onClose();
-  };
-
   const onClose = () => {
     setIsVisible(false);
-    setIsPayment(false);
-    setIsLoadup(false);
   };
 
   const fetchFeedData = async () => {
@@ -89,7 +80,7 @@ const CustomerDashboard = (): JSX.Element => {
   const onPressScan = async () => {
     const { status } = await BarCodeScanner.requestPermissionsAsync();
     if (status === "granted") {
-      if (personalFundingSource && availableBalance > 0) {
+      if (availableBalance && availableBalance > 0) {
         navigation.navigate(Routes.QRCODE_SCAN, {
           senderId: customerDwollaId,
           walletData: customerWalletData,
@@ -140,12 +131,12 @@ const CustomerDashboard = (): JSX.Element => {
         </View>
         <View style={styles.amountView}>
           <Text style={styles.text}>
-            B$ {personalFundingSource ? availableBalance.toFixed(2) : "-"}
+            B$ {availableBalance ? availableBalance.toFixed(2) : "-"}
           </Text>
           <TouchableOpacity
             style={styles.topupButton}
             onPress={() => {
-              personalFundingSource
+              personalFundingSource?.visible
                 ? navigation.navigate(Routes.LOAD_UP, {
                     userId: customerDwollaId,
                   })
@@ -161,7 +152,7 @@ const CustomerDashboard = (): JSX.Element => {
           }
         >
           <View style={styles.content}>
-            {personalFundingSource === false && !isWalletLoading && (
+            {personalFundingSource?.visible === false && !isWalletLoading && (
               <View style={styles.alertView}>
                 <AntDesign
                   name="exclamationcircleo"
@@ -207,39 +198,6 @@ const CustomerDashboard = (): JSX.Element => {
           visible={isVisible}
           onClose={onClose}
         />
-      )}
-      {(isLoadup || isPayment) && (
-        <Dialog
-          visible={isLoadup || isPayment}
-          onClose={onClose}
-          backgroundStyle={{backgroundColor: colors.overlayPurple}}
-        >
-          <View style={dialogViewBase}>
-            {isLoadup && (
-              <View style={styles.dialogWrap}>
-                <Text style={styles.dialogHeader}>
-                  {Translation.LOAD_UP.LOAD_UP_NO_BANK_TITLE}
-                </Text>
-                <Text>{Translation.LOAD_UP.LOAD_UP_NO_BANK_DETAIL}</Text>
-              </View>
-            )}
-            {isPayment && (
-              <View style={styles.dialogWrap}>
-                <Text style={styles.dialogHeader}>
-                  {Translation.PAYMENT.PAYMENT_NO_BANK_TITLE}
-                </Text>
-                <Text>{Translation.PAYMENT.PAYMENT_NO_BANK_DETAIL}</Text>
-              </View>
-            )}
-            <View style={styles.dialogBottom}>
-              <Button
-                type={BUTTON_TYPES.DARK_GREEN}
-                title={Translation.BUTTON.LINK_PERSONAL_BANK}
-                onPress={selectBank}
-              />
-            </View>
-          </View>
-        </Dialog>
       )}
 
       <SettingDialog

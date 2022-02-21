@@ -39,10 +39,9 @@ const MerchantDashboard = (): JSX.Element => {
   const { events, getEvents, deleteEvent } = useContext(EventsContext);
   const completedCustomerVerification = user?.verifiedCustomer;
   const [isDwollaVisible, setIsDwollaVisible] = useState<boolean>(false);
-  const [isPayment, setIsPayment] = useState<boolean>(false);
   const { isLoading: isWalletLoading } = useBusinessWallet();
   const { businessDwollaId } = useContext(UserContext);
-  const businessFundingSource = businessWalletData?.availableFundingSource?.visible;
+  const businessFundingSource = businessWalletData?.availableFundingSource;
   const availableBalance = businessWalletData?.availableBalance;
   const [isSetting, setIsSetting] = useState(false);
   const [showEvents, setShowEvents] = useState(false);
@@ -61,18 +60,21 @@ const MerchantDashboard = (): JSX.Element => {
 
   const onClose = () => {
     setIsDwollaVisible(false);
-    setIsPayment(false);
   };
 
   const selectBank = () => {
-    navigation.navigate(Routes.MERCHANT_BANK_ACCOUNT);
+    if(businessFundingSource?.needMicroDeposit) {
+      navigation.navigate(Routes.MICRO_DEPOSIT_BANK);
+    } else {
+      navigation.navigate(Routes.MERCHANT_BANK_ACCOUNT);
+    }
     onClose();
   };
 
   const onPressScan = async () => {
     const { status } = await BarCodeScanner.requestPermissionsAsync();
     if (status === "granted") {
-      if (businessFundingSource && availableBalance > 0) {
+      if (businessFundingSource?.visible && availableBalance > 0) {
         navigation.navigate(Routes.MERCHANT_QRCODE_SCAN, {
           senderId: businessDwollaId,
           walletData: businessWalletData,
@@ -121,7 +123,7 @@ const MerchantDashboard = (): JSX.Element => {
         </View>
         <View style={styles.amountView}>
           <Text style={styles.amountTxt}>
-            B$ {businessFundingSource ? availableBalance.toFixed(2) : "-"}
+            B$ {availableBalance ? availableBalance.toFixed(2) : "-"}
           </Text>
         </View>
 
@@ -150,7 +152,7 @@ const MerchantDashboard = (): JSX.Element => {
               </View>
             )}
 
-            {businessFundingSource === false && !isWalletLoading ? (
+            {businessFundingSource?.visible === false && !isWalletLoading ? (
               <View style={styles.alertView}>
                 <AntDesign
                   name="exclamationcircleo"
@@ -200,32 +202,6 @@ const MerchantDashboard = (): JSX.Element => {
           onClose={onClose}
         />
       )}
-      {isPayment && (
-        <Dialog
-          visible={isPayment}
-          onClose={onClose}
-          backgroundStyle={styles.dialog}
-        >
-          <View style={dialogViewBase}>
-            <View style={styles.dialogWrap}>
-              <Text style={styles.dialogHeader}>
-                {Translation.PAYMENT.PAYMENT_NO_BANK_TITLE}
-              </Text>
-              <Text style={styles.mainTextColor}>
-                {Translation.PAYMENT.PAYMENT_NO_BANK_DETAIL}
-              </Text>
-            </View>
-            <View style={styles.dialogBottom}>
-              <Button
-                type={BUTTON_TYPES.PURPLE}
-                title={Translation.BUTTON.LINK_BUSINESS_BANK}
-                onPress={selectBank}
-              />
-            </View>
-          </View>
-        </Dialog>
-      )}
-
       <SettingDialog
         visible={isSetting}
         onCancel={() => setIsSetting(false)}
