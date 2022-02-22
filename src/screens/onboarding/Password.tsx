@@ -1,139 +1,186 @@
-import { useNavigation } from '@react-navigation/native';
-import React, { useContext, useEffect, useState } from 'react';
-import { KeyboardAvoidingView, Platform, StyleSheet, View } from 'react-native';
-import { Text } from 'react-native-elements';
-import { AuthContext } from 'src/auth';
-import { BUTTON_TYPES } from 'src/constants';
-import * as Routes from 'src/navigation/constants';
-import { BackBtn, BlockInput, Button, Header } from 'src/shared/uielements';
-import { colors } from 'src/theme/colors';
+import { useNavigation } from "@react-navigation/native";
+import React, { createRef, useContext, useEffect, useState } from "react";
 import {
-	baseHeader,
-	viewBaseWhite,
-	wrappingContainerBase
-} from 'src/theme/elements';
-import { isPasswordValid } from 'src/utils/validation';
+  KeyboardAvoidingView,
+  Platform,
+  SafeAreaView,
+  ScrollView,
+  StyleSheet,
+  TextInput,
+  View,
+} from "react-native";
+import { Text } from "react-native-elements";
+import { BUTTON_TYPES } from "src/constants";
+import { AuthContext } from "src/contexts";
+import * as Routes from "src/navigation/constants";
+import { LoadingPage } from "src/views";
+import { BackBtn, BlockInput, Button, Header } from "src/shared/uielements";
+import SecurityEyeButton from "src/shared/uielements/SecurityEyeButton";
+import { colors } from "src/theme/colors";
+import {
+  baseHeader,
+  viewBaseWhite,
+  wrappingContainerBase,
+} from "src/theme/elements";
+import Translation from "src/translation/en.json";
+import { isPasswordValid } from "src/utils/validation";
 
 const styles = StyleSheet.create({
-	headerText: {
-		fontSize: 32,
-		color: colors.darkGreen,
-		lineHeight: 35,
-	},
-	inlineView: {
-		flexDirection: 'row',
-		justifyContent: 'space-between',
-	},
-	bodyText: {
-		color: colors.bodyText,
-	},
-	errorText: {
-		color: colors.mistakeRed,
-		fontSize: 12,
-		lineHeight: 14,
-	},
-	form: {
-		marginTop: 30,
-	},
-	label: {
-		fontSize: 12,
-		lineHeight: 14,
-		color: colors.bodyText,
-	},
-	bottomView: {
-		paddingHorizontal: 20,
-		paddingBottom: 50,
-	},
+  headerText: {
+    fontSize: 32,
+    color: colors.darkGreen,
+    lineHeight: 35,
+  },
+  inlineView: {
+    flexDirection: "row",
+    justifyContent: "space-between",
+  },
+  bodyText: {
+    color: colors.bodyText,
+  },
+  errorText: {
+    color: colors.mistakeRed,
+    fontSize: 12,
+    lineHeight: 14,
+  },
+  form: {
+    marginTop: 30,
+  },
+  label: {
+    fontSize: 12,
+    lineHeight: 14,
+    color: colors.bodyText,
+  },
+  bottomView: {
+    marginHorizontal: 20,
+    marginBottom: 20,
+  },
+  eyeView: {
+    position: "absolute",
+    right: 10,
+    top: 0,
+    bottom: 0,
+    justifyContent: "center",
+  },
 });
 
 const Password = (): JSX.Element => {
-	const navigation = useNavigation();
-	const { setSignUpDetails, signUpDetails, signUp } = useContext(AuthContext);
-	const [isValidPassword, setIsValidPassword] = useState<boolean>(false);
+  const navigation = useNavigation();
+  const { updateSignUpDetails, signUpDetails, signUp } =
+    useContext(AuthContext);
+  const [isValidPassword, setIsValidPassword] = useState<boolean>(false);
+  const [isLoading, setLoading] = useState<boolean>(false);
+  const [isShowPassword, setShowPassword] = useState<boolean>(true);
+  const [isShowConPassword, setShowConPassword] = useState<boolean>(true);
 
-	useEffect(() => {
-		if (
-			isPasswordValid(signUpDetails.password) &&
-			isPasswordValid(signUpDetails.confirmPassword)
-		) {
-			if (signUpDetails.password === signUpDetails.confirmPassword) {
-				setIsValidPassword(true);
-			}
-		}
-	}, [signUpDetails.confirmPassword, signUpDetails.password]);
+  const confirmPasswordRef = createRef<TextInput>();
 
-	const onValueChange = (
-		name: 'password' | 'confirmPassword',
-		change: string
-	) => {
-		setSignUpDetails({
-			...signUpDetails,
-			[name]: change,
-		});
-	};
+  useEffect(() => {
+    if (
+      isPasswordValid(signUpDetails.password) &&
+      isPasswordValid(signUpDetails.confirmPassword)
+    ) {
+      if (signUpDetails.password === signUpDetails.confirmPassword) {
+        setIsValidPassword(true);
+      }
+    }
+  }, [signUpDetails.confirmPassword, signUpDetails.password]);
 
-	return (
-		<View style={viewBaseWhite}>
-			<Header
-				leftComponent={<BackBtn onClick={() => navigation.goBack()} />}
-			/>
-			<View style={wrappingContainerBase}>
-				<View style={baseHeader}>
-					<Text style={styles.headerText}>Create a password</Text>
-				</View>
-				<View>
-					<Text style={styles.bodyText}>
-						Create a password to secure your account
-					</Text>
-					<View style={styles.form}>
-						<Text style={styles.label}>PASSWORD</Text>
-						<Text style={styles.label}>
-							(min.8 characters, 1 capitical, 1 lower and 1
-							symbol)
-						</Text>
-						<BlockInput
-							name='password'
-							placeholder='Password'
-							value={signUpDetails.password}
-							secureTextEntry={true}
-							onChange={onValueChange}
-						/>
+  const onValueChange = (
+    name: "password" | "confirmPassword",
+    change: string
+  ) => {
+    updateSignUpDetails({ [name]: change });
+  };
 
-						<View style={styles.inlineView}>
-							<Text style={styles.label}>Confirm password</Text>
-							{!isValidPassword && (
-								<Text style={styles.errorText}>No match</Text>
-							)}
-						</View>
-						<BlockInput
-							name='confirmPassword'
-							placeholder='confirm password'
-							value={signUpDetails.confirmPassword}
-							secureTextEntry={true}
-							onChange={onValueChange}
-						/>
-					</View>
-				</View>
-			</View>
+  const onNext = async () => {
+    setLoading(true);
+    const response = await signUp();
+    setLoading(false);
 
-			<KeyboardAvoidingView
-				behavior={Platform.OS == 'ios' ? 'padding' : 'height'}>
-				<View style={styles.bottomView}>
-					<Button
-						type={BUTTON_TYPES.DARK_GREEN}
-						title='NEXT'
-						disabled={!isValidPassword}
-						onPress={async () => {
-							const response = await signUp();
-							if (response.success) {
-								navigation.navigate(Routes.VERIFICATION);
-							}
-						}}
-					/>
-				</View>
-			</KeyboardAvoidingView>
-		</View>
-	);
+    if (response.success) {
+      navigation.navigate(Routes.VERIFICATION);
+    }
+  };
+
+  return (
+    <KeyboardAvoidingView
+      {...(Platform.OS === "ios" && { behavior: "padding" })}
+      style={viewBaseWhite}
+    >
+      <LoadingPage visible={isLoading} isData={true} />
+      <Header leftComponent={<BackBtn onClick={() => navigation.goBack()} />} />
+      <ScrollView style={wrappingContainerBase}>
+        <View style={baseHeader}>
+          <Text style={styles.headerText}>
+            {Translation.EMAIL_VERIFICATION.CREATE_PASSWORD}
+          </Text>
+        </View>
+        <View>
+          <Text style={styles.bodyText}>
+            {Translation.EMAIL_VERIFICATION.CREATE_PASSWORD_DETAIL}
+          </Text>
+          <View style={styles.form}>
+            <Text style={styles.label}>PASSWORD</Text>
+            <Text style={styles.label}>{Translation.LABEL.PASSWORD_REG}</Text>
+            <View>
+              <BlockInput
+                name="password"
+                placeholder="Password"
+                value={signUpDetails.password}
+                secureTextEntry={isShowPassword}
+                onChange={onValueChange}
+                returnKeyType="next"
+                onSubmitEditing={() => {
+                  confirmPasswordRef.current?.focus();
+                }}
+              />
+              <View style={styles.eyeView}>
+                <SecurityEyeButton
+                  isSecurity={isShowPassword}
+                  onPress={() => setShowPassword(!isShowPassword)}
+                />
+              </View>
+            </View>
+
+            <View style={styles.inlineView}>
+              <Text style={styles.label}>Confirm password</Text>
+              {!isValidPassword && (
+                <Text style={styles.errorText}>No match</Text>
+              )}
+            </View>
+            <View>
+              <BlockInput
+                inputRef={confirmPasswordRef}
+                name="confirmPassword"
+                placeholder="confirm password"
+                value={signUpDetails.confirmPassword}
+                secureTextEntry={isShowConPassword}
+                onChange={onValueChange}
+              />
+              <View style={styles.eyeView}>
+                <SecurityEyeButton
+                  isSecurity={isShowConPassword}
+                  onPress={() => setShowConPassword(!isShowConPassword)}
+                />
+              </View>
+            </View>
+          </View>
+        </View>
+      </ScrollView>
+
+      <SafeAreaView>
+        <View style={styles.bottomView}>
+          <Button
+            type={BUTTON_TYPES.DARK_GREEN}
+            title="NEXT"
+            disabled={!isValidPassword}
+            onPress={onNext}
+          />
+        </View>
+      </SafeAreaView>
+    </KeyboardAvoidingView>
+  );
 };
 
 export default Password;

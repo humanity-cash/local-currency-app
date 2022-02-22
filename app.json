@@ -4,9 +4,10 @@
   "expo": {
     "name": "BerkShares",
     "slug": "berkshares",
-    "version": "1.0.13",
-    "icon": "./assets/images/icon.png",
+    "version": "1.1.4",
+    "icon": "./assets/images/icon_white.png",
     "orientation": "portrait",
+    "userInterfaceStyle": "automatic",
     "splash": {
       "image": "./assets/images/splash.png",
       "resizeMode": "contain",
@@ -17,7 +18,13 @@
     ],
     "ios": {
       "bundleIdentifier": "com.keyko.berkshares-app",
-      "buildNumber": "1.0.1"
+      "buildNumber": "1",
+      "infoPlist": {
+        "NSCameraUsageDescription": "BerkShares uses the camera to scan barcodes or upload your profile picture.",
+        "NSPhotoLibraryAddUsageDescription": "BerkShares uses the photo library to upload your profile picture.",
+        "NSPhotoLibraryUsageDescription": "BerkShares uses the photo library to upload your profile picture.",
+        "ITSAppUsesNonExemptEncryption": false
+      }
     },
     "packagerOpts": {
       "config": "metro.config.js",
@@ -33,7 +40,7 @@
     },
     "android": {
       "package": "com.berkshares",
-      "versionCode": 3,
+      "versionCode": 7,
       "permissions": [
         "CAMERA",
         "RECORD_AUDIO",
