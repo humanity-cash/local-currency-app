@@ -157,6 +157,7 @@ const SendPayment = (props: SendPayment): JSX.Element => {
   const [isScanned, setIsScanned] = useState<boolean>(false);
   const [isPaymentDialog, setIsPaymentDialog] = useState<boolean>(false);
   const [isLoading, setIsLoading] = useState<boolean>(false);
+  const { businessDwollaId } = useContext(UserContext);
   const [qrCodeData, setQRCodeData] = useState<Omit<QRCodeEntry, "amount">>({
     securityId: SECURITY_ID,
     to: "",
@@ -217,7 +218,10 @@ const SendPayment = (props: SendPayment): JSX.Element => {
 
   const onLoadUp = () => {
     setIsLowAmountDialog(false);
-    navigation.navigate(Routes.MERCHANT_LOADUP);
+    navigation.navigate(Routes.MERCHANT_LOADUP, {
+      userId: businessDwollaId,
+      styles: "business"
+    });
   };
 
   const cleanUpState = () => {

@@ -51,6 +51,11 @@ export const wrappingContainerBase: any = {
   flex: 1
 };
 
+export const dialogWrap: any = {
+  padding: 10,
+  marginBottom: 20
+};
+
 export const baseHeader: any = {
   marginTop: 0,
   paddingTop: 10,

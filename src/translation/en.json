@@ -167,6 +167,8 @@
         "ACCOUNT_ALERT": "Link your bank account to start using the app and get B$ 10 instantly!",
         "LINK_PERSONAL_BANK_ACCOUNT": "Link personal bank account",
         "LINK_BUSINESS_BANK_ACCOUNT": "Link business bank account",
+        "VERIFY_PERSONAL_BANK_ACCOUNT": "Verify personal bank account",
+        "VERIFY_BUSINESS_BANK_ACCOUNT": "Verify business bank account",
         "USE_DWOLLA_PERSONAL": "BerkShares uses Dwolla to link our personal bank account",
         "USE_DWOLLA_BUSINESS": "BerkShares uses Dwolla to link our business bank account",
         "DWOLLA_SECURE": "Encrytion helps protect your personal financial data",

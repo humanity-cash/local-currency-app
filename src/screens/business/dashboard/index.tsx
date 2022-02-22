@@ -9,15 +9,13 @@ import {
   View,
 } from "react-native";
 import { Image, Text } from "react-native-elements";
-import { BUTTON_TYPES } from "src/constants";
 import { UserContext, WalletContext } from "src/contexts";
 import { useBusinessWallet } from "src/hooks";
 import * as Routes from "src/navigation/constants";
-import { Button, Dialog, Header } from "src/shared/uielements";
+import { Header } from "src/shared/uielements";
 import { colors } from "src/theme/colors";
 import {
   baseHeader,
-  dialogViewBase,
   viewBaseB,
   wrappingContainerBase,
 } from "src/theme/elements";
@@ -60,15 +58,6 @@ const MerchantDashboard = (): JSX.Element => {
 
   const onClose = () => {
     setIsDwollaVisible(false);
-  };
-
-  const selectBank = () => {
-    if(businessFundingSource?.needMicroDeposit) {
-      navigation.navigate(Routes.MICRO_DEPOSIT_BANK);
-    } else {
-      navigation.navigate(Routes.MERCHANT_BANK_ACCOUNT);
-    }
-    onClose();
   };
 
   const onPressScan = async () => {
@@ -166,6 +155,25 @@ const MerchantDashboard = (): JSX.Element => {
                     onPress={() => setIsDwollaVisible(true)}
                   >
                     {`${Translation.BANK_ACCOUNT.LINK_BUSINESS_BANK_ACCOUNT} `}
+                    &gt;
+                  </Text>
+                </Text>
+              </View>
+            ) : null}
+            {businessFundingSource?.needMicroDeposit && !isWalletLoading ? (
+              <View style={styles.alertView}>
+                <AntDesign
+                  name="exclamationcircleo"
+                  size={18}
+                  style={styles.alertIcon}
+                />
+                <Text style={styles.alertText}>
+                  {Translation.BANK_ACCOUNT.MICRO_DEPOSIT_DETAIL} &nbsp;
+                  <Text
+                    style={styles.alertIcon}
+                    onPress={() => setIsDwollaVisible(true)}
+                  >
+                    {`${Translation.BANK_ACCOUNT.VERIFY_BUSINESS_BANK_ACCOUNT} `}
                     &gt;
                   </Text>
                 </Text>
