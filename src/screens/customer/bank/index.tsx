@@ -9,6 +9,7 @@ import {
   SafeAreaView,
 } from "react-native";
 import { WebView } from "react-native-webview";
+import { IAV_LINK } from "src/config/env";
 import { DwollaAPI } from "src/api";
 import { UserContext } from "src/contexts";
 import { NavigationViewContext, ViewState } from "src/contexts/navigation";
@@ -77,7 +78,7 @@ const SelectBank = (): JSX.Element => {
             ref={(ref) => (webview = ref)}
             style={styles.bankView}
             source={{
-              uri: `https://api.humanity.cash/iav/?iavToken=${iavToken}`,
+              uri: `${IAV_LINK}${iavToken}`,
             }}
           />
         )}

@@ -184,7 +184,10 @@ const MerchantRequest = (): JSX.Element => {
     onBankDialogCancel();
 
     if (businessFundingSource) {
-      navigation.navigate(Routes.MERCHANT_LOADUP);
+      navigation.navigate(Routes.MERCHANT_LOADUP, {
+        userId: businessDwollaId,
+        styles: "business"
+      });
     } else {
       navigation.navigate(Routes.MERCHANT_BANK_ACCOUNT);
     }

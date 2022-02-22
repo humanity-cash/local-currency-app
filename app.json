@@ -4,7 +4,7 @@
   "expo": {
     "name": "BerkShares",
     "slug": "berkshares",
-    "version": "1.1.4",
+    "version": "1.1.5",
     "icon": "./assets/images/icon_white.png",
     "orientation": "portrait",
     "userInterfaceStyle": "automatic",
@@ -40,7 +40,7 @@
     },
     "android": {
       "package": "com.berkshares",
-      "versionCode": 7,
+      "versionCode": 8,
       "permissions": [
         "CAMERA",
         "RECORD_AUDIO",

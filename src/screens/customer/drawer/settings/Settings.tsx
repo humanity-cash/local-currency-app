@@ -1,12 +1,14 @@
 import { useNavigation } from '@react-navigation/native';
-import React, { ReactElement, useState } from 'react';
-import { ScrollView, StyleSheet, View } from "react-native";
+import React, { ReactElement } from 'react';
+import { ScrollView, StyleSheet, View, SafeAreaView } from 'react-native';
 import { Text } from "react-native-elements";
-import { Button, Header, BackBtn, Dialog } from "src/shared/uielements";
+import { Button, Header, BackBtn, } from "src/shared/uielements";
 import { colors } from "src/theme/colors";
-import { underlineHeader, viewBase, dialogViewBase, FontFamily } from "src/theme/elements";
+import { underlineHeader, viewBase, FontFamily } from "src/theme/elements";
 import Translation from 'src/translation/en.json';
 import * as Routes from 'src/navigation/constants';
+import { API_URL, IAV_LINK } from 'src/config/env';
+import app from '../../../../../app.json'
 
 const styles = StyleSheet.create({
 	headerText: {
@@ -91,6 +93,11 @@ export const Settings = (): ReactElement => {
 					/>
 				</View>
 			</ScrollView>
+			<SafeAreaView style={{marginHorizontal: 24}}>
+				<Text>API: {API_URL}</Text>
+				<Text>IAV: {IAV_LINK}</Text>
+				<Text>Version Number: {app.expo.version}</Text>
+			</SafeAreaView>
 		</View>
 	);
 }

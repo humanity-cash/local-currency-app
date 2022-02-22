@@ -34,7 +34,7 @@ const PaymentRequestSuccess = (
 ): JSX.Element => {
   return (
     <Modal visible={props.visible}>
-      <View style={modalViewBase}>
+      <View style={[modalViewBase, {flex: 1}]}>
         <ModalHeader />
         <View style={{ paddingHorizontal: 10, flex: 1 }}>
           <Text style={styles.headerText}>
