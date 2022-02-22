@@ -171,6 +171,25 @@ const CustomerDashboard = (): JSX.Element => {
                 </Text>
               </View>
             )}
+            {personalFundingSource?.needMicroDeposit && !isWalletLoading && (
+              <View style={styles.alertView}>
+                <AntDesign
+                  name="exclamationcircleo"
+                  size={18}
+                  style={styles.alertIcon}
+                />
+                <Text style={styles.alertText}>
+                  {Translation.BANK_ACCOUNT.MICRO_DEPOSIT_DETAIL} &nbsp;
+                  <Text
+                    style={styles.alertIcon}
+                    onPress={() => setIsVisible(true)}
+                  >
+                    {`${Translation.BANK_ACCOUNT.VERIFY_PERSONAL_BANK_ACCOUNT} `}
+                    &gt;
+                  </Text>
+                </Text>
+              </View>
+            )}
             {showEvents && events.length > 0 && (
               <EventItem
                 event={events[events.length - 1]}

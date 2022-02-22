@@ -348,7 +348,7 @@ const MerchantDictionary = (): JSX.Element => {
                     <TouchableOpacity 
                       style={styles.phoneV}
                       onPress={() => handlePhone(selected.phone)}>
-                      <Text style={styles.rightText}>{formatPhone(selected.phone)}</Text>
+                      <Text style={styles.rightText}>{selected.phone && formatPhone(selected.phone)}</Text>
                     </TouchableOpacity>
                   </View>
                 </View>
