@@ -8,6 +8,7 @@ import { underlineHeader, viewBase, FontFamily } from "src/theme/elements";
 import Translation from 'src/translation/en.json';
 import * as Routes from 'src/navigation/constants';
 import { API_URL, IAV_LINK } from 'src/config/env';
+import app from '../../../../../app.json'
 
 const styles = StyleSheet.create({
 	headerText: {
@@ -95,6 +96,7 @@ export const Settings = (): ReactElement => {
 			<SafeAreaView style={{marginHorizontal: 24}}>
 				<Text>API: {API_URL}</Text>
 				<Text>IAV: {IAV_LINK}</Text>
+				<Text>Version Number: {app.expo.version}</Text>
 			</SafeAreaView>
 		</View>
 	);
