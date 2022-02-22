@@ -1,144 +1,151 @@
-import { useNavigation } from '@react-navigation/native';
-import React, { useContext, useState } from 'react';
+import { useNavigation } from "@react-navigation/native";
+import React, { useContext, useState } from "react";
 import {
-	KeyboardAvoidingView,
-	Platform,
-	ScrollView,
-	StyleSheet,
-	TouchableOpacity,
-	View
-} from 'react-native';
-import { Text } from 'react-native-elements';
-import { AuthContext } from 'src/auth';
-import { BUTTON_TYPES } from 'src/constants';
-import { useUserDetails } from 'src/hooks';
-import * as Routes from 'src/navigation/constants';
+  KeyboardAvoidingView,
+  Platform,
+  ScrollView,
+  StyleSheet,
+  TouchableOpacity,
+  View,
+  SafeAreaView,
+} from "react-native";
+import { Text } from "react-native-elements";
+import { AuthContext } from "src/contexts";
+import { BUTTON_TYPES } from "src/constants";
+import { useUserDetails } from "src/hooks";
+import * as Routes from "src/navigation/constants";
 import {
-	BackBtn,
-	Button,
-	ConfirmationCode,
-	Header
-} from 'src/shared/uielements';
-import { colors } from 'src/theme/colors';
+  BackBtn,
+  Button,
+  ConfirmationCode,
+  Header,
+} from "src/shared/uielements";
+import { colors } from "src/theme/colors";
 import {
-	baseHeader,
-	viewBase,
-	wrappingContainerBase
-} from 'src/theme/elements';
+  baseHeader,
+  viewBase,
+  wrappingContainerBase,
+} from "src/theme/elements";
+import Translation from "src/translation/en.json";
 
 const styles = StyleSheet.create({
-	container: {
-		paddingBottom: 40,
-	},
-	headerText: {
-		fontSize: 32,
-		color: colors.darkGreen,
-		lineHeight: 32,
-	},
-	bodyText: {
-		color: colors.bodyText,
-	},
-	codeView: {
-		flex: 1,
-		marginTop: 25,
-	},
-	bottomNavigation: {
-		alignSelf: 'center',
-		color: colors.darkGreen,
-		fontWeight: 'bold',
-		paddingVertical: 30,
-	},
-	bottomView: {
-		paddingHorizontal: 20,
-		paddingBottom: 50,
-	},
+  container: {
+    paddingBottom: 40,
+  },
+  headerText: {
+    fontSize: 32,
+    color: colors.darkGreen,
+    lineHeight: 32,
+  },
+  bodyText: {
+    color: colors.bodyText,
+  },
+  codeView: {
+    flex: 1,
+    marginTop: 25,
+  },
+  bottomNavigation: {
+    alignSelf: "center",
+    color: colors.darkGreen,
+    fontWeight: "bold",
+    paddingVertical: 30,
+  },
+  bottomView: {
+    marginHorizontal: 20,
+    marginBottom: 20,
+  },
 });
 
 const Verification = (): JSX.Element => {
-	const navigation = useNavigation();
-	const { emailVerification, resendEmailVerificationCode } =
-		useContext(AuthContext);
-	const [noCodeReceived, setNoCodeReceived] = useState<boolean>(false);
-	const [goNext, setGoNext] = useState<boolean>(false);
-	const { personalDetails } = useUserDetails();
+  const navigation = useNavigation();
+  const { emailVerification, resendEmailVerificationCode } =
+    useContext(AuthContext);
+  const [noCodeReceived, setNoCodeReceived] = useState<boolean>(false);
+  const [goNext, setGoNext] = useState<boolean>(false);
+  const {
+    signUpDetails: { email },
+  } = useContext(AuthContext);
 
-	const onComplete = async (text: string) => {
-		const response = await emailVerification(text);
-		if (response.success) {
-			setGoNext(true);
-		}
-	};
+  const onComplete = async (text: string) => {
+    if (text?.length < 5) return;
+    const response = await emailVerification(text);
+    if (response.success) {
+      setGoNext(true);
+    }
+  };
 
-	return (
-		<View style={viewBase}>
-			<Header
-				leftComponent={<BackBtn onClick={() => navigation.goBack()} />}
-			/>
+  return (
+    <KeyboardAvoidingView
+      {...(Platform.OS === "ios" && { behavior: "padding" })}
+      style={viewBase}
+    >
+      <Header leftComponent={<BackBtn onClick={() => navigation.goBack()} />} />
 
-			<ScrollView style={wrappingContainerBase}>
-				<View style={styles.container}>
-					<View style={baseHeader}>
-						{!noCodeReceived && (
-							<Text style={styles.headerText}>
-								Verify your mail address
-							</Text>
-						)}
-						{noCodeReceived && (
-							<Text style={styles.headerText}>
-								Enter verification code
-							</Text>
-						)}
-					</View>
-					{!noCodeReceived && (
-						<Text style={styles.bodyText}>
-							We have sent an email with a verification code to{' '}
-							{personalDetails.email}
-						</Text>
-					)}
-					{noCodeReceived && (
-						<Text style={styles.bodyText}>
-							We have sent another message with a new verification
-							code to {personalDetails.email}
-						</Text>
-					)}
-					<View style={styles.codeView}>
-						<ConfirmationCode onComplete={onComplete} />
-					</View>
-				</View>
-			</ScrollView>
+      <ScrollView style={wrappingContainerBase}>
+        <View style={styles.container}>
+          <View style={baseHeader}>
+            {!noCodeReceived && (
+              <Text style={styles.headerText}>
+                {Translation.EMAIL_VERIFICATION.VERIFY_MAIL}
+              </Text>
+            )}
+            {noCodeReceived && (
+              <Text style={styles.headerText}>
+                {Translation.EMAIL_VERIFICATION.ENTER_VERIFICATION_CODE}
+              </Text>
+            )}
+          </View>
+          <Text style={styles.bodyText}>
+            {noCodeReceived
+              ? Translation.EMAIL_VERIFICATION.SENT_VERIFICATION_CODE_AGAIN.replace(
+                  "{{mail}}",
+                  email
+                )
+              : Translation.EMAIL_VERIFICATION.SENT_VERIFICATION_CODE.replace(
+                  "{{mail}}",
+                  email
+                )}
+          </Text>
+          <View style={styles.codeView}>
+            <ConfirmationCode onComplete={onComplete} />
+          </View>
+        </View>
+      </ScrollView>
 
-			<KeyboardAvoidingView
-				behavior={Platform.OS == 'ios' ? 'padding' : 'height'}>
-				<View style={styles.bottomView}>
-					{!noCodeReceived && (
-						<TouchableOpacity onPress={resendEmailVerificationCode}>
-							<Text style={styles.bottomNavigation}>
-								Send code again
-							</Text>
-						</TouchableOpacity>
-					)}
-					{noCodeReceived && (
-						<TouchableOpacity
-							onPress={() =>
-								navigation.navigate(Routes.VERIFICATION_HELP)
-							}>
-							<Text style={styles.bottomNavigation}>
-								Need help?
-							</Text>
-						</TouchableOpacity>
-					)}
-					<Button
-						type={BUTTON_TYPES.DARK_GREEN}
-						title='NEXT'
-						disabled={!goNext}
-						onPress={() =>
-							navigation.navigate(Routes.EMAIL_CONFIRMED)
-						}
-					/>
-				</View>
-			</KeyboardAvoidingView>
-		</View>
-	);
+      <SafeAreaView style={styles.bottomView}>
+        {!noCodeReceived && (
+          <TouchableOpacity
+            onPress={() => {
+              resendEmailVerificationCode();
+              setNoCodeReceived(true);
+            }}
+          >
+            <Text style={styles.bottomNavigation}>
+              {Translation.EMAIL_VERIFICATION.SEND_CODE}
+            </Text>
+          </TouchableOpacity>
+        )}
+        {noCodeReceived && (
+          <TouchableOpacity
+            onPress={() => {
+              navigation.navigate(Routes.VERIFICATION_HELP)
+              setNoCodeReceived(false);
+            }}
+          >
+            <Text style={styles.bottomNavigation}>
+              {Translation.EMAIL_VERIFICATION.NEED_HELP}
+            </Text>
+          </TouchableOpacity>
+        )}
+        <Button
+          type={BUTTON_TYPES.DARK_GREEN}
+          title="NEXT"
+          disabled={!goNext}
+          onPress={() => navigation.navigate(Routes.EMAIL_CONFIRMED)}
+        />
+      </SafeAreaView>
+    </KeyboardAvoidingView>
+  );
 };
 
 export default Verification;

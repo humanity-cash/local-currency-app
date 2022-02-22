@@ -1,53 +1,66 @@
-import { useNavigation } from '@react-navigation/native';
-import React, { useContext } from 'react';
-import { StyleSheet, View } from 'react-native';
-import { Text } from 'react-native-elements';
-import { AuthContext } from 'src/auth';
-import { BackBtn, Button, CancelBtn, Header } from "src/shared/uielements";
-import { baseHeader, viewBase, wrappingContainerBase } from "src/theme/elements";
+import { useNavigation } from "@react-navigation/native";
+import React, { useContext, useState } from "react";
+import { StyleSheet, View, SafeAreaView } from "react-native";
+import { Text } from "react-native-elements";
+import { AuthContext } from "src/contexts";
+import { Button, CancelBtn, Header } from "src/shared/uielements";
+import { viewBase, wrappingContainerBase } from "src/theme/elements";
+import { LoadingPage } from "src/views";
+import { colors } from "src/theme/colors";
+import Translation from "src/translation/en.json";
 
 const styles = StyleSheet.create({
-	modalHeader: {
-		fontSize: 32,
-		fontWeight: '400',
-		lineHeight: 40
-	},
-	bottomView: {
-		padding: 20,
-		paddingBottom: 45
-	}
+  headerText: {
+    fontSize: 32,
+    lineHeight: 42,
+    color: colors.darkGreen,
+  },
+  modalHeader: {
+    fontSize: 32,
+    fontWeight: "400",
+    lineHeight: 40,
+  },
+  bottomView: {
+    marginHorizontal: 20,
+    marginBottom: 45,
+  },
 });
 
 const ForgotPasswordSuccess = () => {
-	const navigation = useNavigation()
-	const { signIn, forgotPasswordDetails } = useContext(AuthContext);
+  const navigation = useNavigation();
+  const { signIn, forgotPasswordDetails } = useContext(AuthContext);
+  const [isLoading, setLoading] = useState<boolean>(false);
 
-	return (
-		<View style={viewBase}>
-			<Header
-				leftComponent={<BackBtn onClick={() => navigation.goBack()} />}
-				rightComponent={<CancelBtn text="Close" onClick={() => navigation.navigate('Login')} />}
-			/>
-			<View style={wrappingContainerBase}>
-				<View style={ baseHeader }>
-					<Text style={styles.modalHeader}>Create a new password</Text>
-				</View>
-			</View>
-			<View style={styles.bottomView}>
-				<Button
-					type="darkGreen"
-					title="DONE"
-					onPress={() => {
-						signIn({
-							email: forgotPasswordDetails.email,
-							password: forgotPasswordDetails.newPassword,
-						});
-					}}
-				/>
-			</View>
-			
-		</View>
-	);
-}
+  const onComplete = async () => {
+    setLoading(true);
+    await signIn(
+      forgotPasswordDetails.email,
+      forgotPasswordDetails.newPassword
+    );
+    setLoading(false);
+  };
 
-export default ForgotPasswordSuccess
+  return (
+    <View style={viewBase}>
+      <LoadingPage visible={isLoading} isData={true} />
+      <Header
+        rightComponent={
+          <CancelBtn
+            text="Close"
+            onClick={() => navigation.navigate("Login")}
+          />
+        }
+      />
+      <View style={wrappingContainerBase}>
+        <Text style={styles.headerText}>
+          {Translation.FORGOT_PASSWORD.CHANGE_PASSWORD_SUCCESS}
+        </Text>
+      </View>
+      <SafeAreaView style={styles.bottomView}>
+        <Button type="darkGreen" title="DONE" onPress={onComplete} />
+      </SafeAreaView>
+    </View>
+  );
+};
+
+export default ForgotPasswordSuccess;

@@ -1,24 +1,43 @@
-import React, { ReactElement } from 'react';
+import moment from "moment";
+import React, { ReactElement } from "react";
 import { ThemeProvider } from "react-native-elements";
-import Toast from 'react-native-toast-message';
-import { MainNavigationStack } from './navigation/MainNavigationStack'
-import 'react-native-gesture-handler';
+import "react-native-gesture-handler";
+import Toast from "react-native-toast-message";
+import { NavigationProvider } from "src/contexts";
+import {
+  UserProvider,
+  AuthProvider,
+  WalletProvider,
+  EventsProvider,
+} from "./contexts";
 import useCachedResources from "./hooks/useCachedResources";
+import { MainNavigationStack } from "./navigation/MainNavigationStack";
 import { theme } from "./theme/theme";
-import AuthProvider from './auth';
 
-export default function App(): ReactElement | null {
-	const resourceLoaded = useCachedResources();
-	if (!resourceLoaded) {
-		return null;
-	}
+moment.locale("us-en");
 
-	return (
-		<AuthProvider>
-			<ThemeProvider theme={theme}>
-				<MainNavigationStack />
-				<Toast ref={(ref) => Toast.setRef(ref)} />
-			</ThemeProvider>
-		</AuthProvider>
-	);
-}
+const App = (): ReactElement | null => {
+  const resourceLoaded = useCachedResources();
+  if (!resourceLoaded) {
+    return null;
+  }
+
+  return (
+    <NavigationProvider>
+      <UserProvider>
+        <AuthProvider>
+          <EventsProvider>
+            <WalletProvider>
+              <ThemeProvider theme={theme}>
+                <MainNavigationStack />
+                <Toast ref={(ref) => Toast.setRef(ref)} />
+              </ThemeProvider>
+            </WalletProvider>
+          </EventsProvider>
+        </AuthProvider>
+      </UserProvider>
+    </NavigationProvider>
+  );
+};
+
+export default App;

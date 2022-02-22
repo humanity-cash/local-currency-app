@@ -1,9 +1,17 @@
 import axios, { AxiosResponse } from "axios";
 import { IMap } from "../utils/types";
 import envs from "./../config/env";
+import { getTokenFromLocalStorage } from "src/auth/localStorage";
 
 const httpRequest = axios.create({
   baseURL: envs.CORE_API_URL,
+});
+
+httpRequest.interceptors.request.use(async function (config) {
+    const token = await getTokenFromLocalStorage();
+    config.headers.authorization =  token;
+
+    return config;
 });
 
 type Body = IMap;
@@ -24,23 +32,25 @@ export interface SettlementRequest {
 
 type HttpResponse = Promise<AxiosResponse>;
 
-const _getRequest = (query: Query) => (): HttpResponse =>
-  httpRequest.get(query);
-const _postRequest = (path: Path, body: Body) => (): HttpResponse =>
+const _getRequest = (query: Query): HttpResponse => httpRequest.get(query);
+const _postRequest = (path: Path, body: Body): HttpResponse =>
   httpRequest.post(path, body);
-const _deleteRequest = (path: Path, body: Body) => (): HttpResponse =>
+const _putRequest = (path: Path, body: Body): HttpResponse =>
+  httpRequest.put(path, body);
+const _deleteRequest = (path: Path, body: Body): HttpResponse =>
   httpRequest.delete(path, body);
 
-export const getRequest = (query: Query): Promise<AxiosResponse> =>
-  ErrorHandler(_getRequest(query));
-export const postRequest = (path: Path, body: Body): Promise<AxiosResponse> =>
-  ErrorHandler(_postRequest(path, body));
-export const deleteRequest = (path: Path, body: Body): Promise<AxiosResponse> =>
-  ErrorHandler(_deleteRequest(path, body));
+export const getRequest = (query: Query): HttpResponse => _getRequest(query);
+export const postRequest = (path: Path, body: Body): HttpResponse =>
+  _postRequest(path, body);
+export const putRequest = (path: Path, body: Body): HttpResponse =>
+  _putRequest(path, body);
+export const deleteRequest = (path: Path, body: Body): HttpResponse =>
+  _deleteRequest(path, body);
 
 const ErrorHandler = async (
   requestHandler: () => HttpResponse
-): Promise<AxiosResponse> => {
+): HttpResponse => {
   try {
     const response: AxiosResponse = await requestHandler();
     return response;
@@ -48,6 +58,7 @@ const ErrorHandler = async (
     const config = err?.config;
     const message = err?.message;
     const response = err?.response;
+    console.log("~ error.response.data", response?.data);
     console.error(
       `API request failed: '${message}'`,
       `internal error: '${response?.data?.message}'`,

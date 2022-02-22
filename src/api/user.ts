@@ -1,70 +1,207 @@
-import { UserId, AxiosPromiseResponse} from './types';
-import { getRequest, postRequest } from './base';
-import { IUserRequest, IDepositRequest, IWithdrawalRequest, ITransactionRequest } from './types';
+import { Business, Customer, IDBUser, IWallet } from "@humanity.cash/types";
+import { delay } from "src/utils/http";
+import { getRequest, postRequest, putRequest } from "./base";
+import { userData } from "./formatters";
+import { AxiosPromiseResponse, IUserRequest, UserId } from "./types";
 
-// create local currency user
-export const user = async (request: IUserRequest): Promise<AxiosPromiseResponse> => {
-  const response = await postRequest(`/users`, request);
-  return response;
+const createUser = async (
+  request: IUserRequest
+): Promise<AxiosPromiseResponse<IDBUser>> => {
+  try {
+    const response = await postRequest(`/users`, request);
+    return response;
+  } catch (err) {
+    return {} as any;
+  }
 };
 
-// create deposit
-export const deposit = async (userId: UserId, request: IDepositRequest): Promise<AxiosPromiseResponse> => {
-  const response = await postRequest(`/users/${userId}/deposit`, request);
-  return response;
+const addCustomerVerification = async (
+  businessDwollaId: string,
+  request: Customer
+): Promise<AxiosPromiseResponse<IDBUser>> => {
+  try {
+    const response = await postRequest(`/users/${businessDwollaId}/customer`, {
+      customer: request,
+    });
+    return response;
+  } catch (err) {
+    return {} as Promise<AxiosPromiseResponse<IDBUser>>;
+  }
 };
 
-export const withdrawal = async (userId: UserId, request: IWithdrawalRequest): Promise<AxiosPromiseResponse> => {
-  const response = await postRequest(`/users/${userId}/withdrawal`, request);
-  return response;
+const addBusinessVerification = async (
+  customerDwollaId: string,
+  request: Business
+): Promise<AxiosPromiseResponse<IDBUser>> => {
+  try {
+    const response = await postRequest(`/users/${customerDwollaId}/business`, {
+      business: request,
+    });
+    return response;
+  } catch (err) {
+    return {} as Promise<AxiosPromiseResponse<IDBUser>>;
+  }
 };
 
-export const iavToken = async (userId: UserId): Promise<AxiosPromiseResponse> => {
-  const response = await postRequest(`/users/${userId}/iav-token`, {});
-  return response;
+export const getUserByEmail = async (email: string): Promise<IDBUser> => {
+  try {
+    const response: AxiosPromiseResponse<IDBUser[]> = await getRequest(
+      `/users/email/${email.toLowerCase()}`
+    );
+    const data = response?.data[0];
+    return data;
+  } catch (err) {
+    console.log("Error: getUserByEmail:", err);
+    return {} as IDBUser;
+  }
 };
 
-export const getFundingSources = async (userId: UserId): Promise<AxiosPromiseResponse> => {
-  const response = await getRequest(`/users/${userId}/funding-sources`);
-  return response;
+export const getUser = async (userId: UserId): Promise<IWallet> => {
+    try {
+        const response: AxiosPromiseResponse<IWallet> = await getRequest(
+            `/users/${userId}`
+        );
+        return userData(response);
+    } catch (err) {
+        console.log(err);
+        await delay(3);
+        try {
+            const response: AxiosPromiseResponse<IWallet> = await getRequest(
+                `/users/${userId}`
+            );
+            return userData(response);
+        } catch (err) {
+            await delay(3);
+            try {
+                const response: AxiosPromiseResponse<IWallet> = await getRequest(
+                    `/users/${userId}`
+                );
+                return userData(response);
+            } catch (err) {
+                console.log(err)
+                return {} as IWallet;
+            }
+        }
+    }
 };
 
-export const transferTo = async (userId: UserId, request: ITransactionRequest): Promise<AxiosPromiseResponse> => {
-  const response = await postRequest(`/users/${userId}/transfer`, request);
-  return response;
+export const createBusiness = async (
+    user: IDBUser
+): Promise<{ status: number; data: IDBUser }> => {
+    try {
+        if(!user?.business) return { status: 0, data: {} as IDBUser }
+        const isVerifiedCustomer =
+            user?.verifiedCustomer && user?.customer?.dwollaId;
+        if (isVerifiedCustomer && user?.customer?.dwollaId) {
+            const response: AxiosPromiseResponse<IDBUser> =
+                await addBusinessVerification(
+                    user.customer.dwollaId,
+                    user.business
+            );
+            //@ts-ignore
+            return { status: response.status, data: response?.data?.data };
+        } else {
+            const response = await createUser({
+                email: user.email,
+                consent: true,
+                type: "business",
+                business: {
+                    ...user?.business,
+                },
+            });
+            return { status: response.status, data: response.data };
+        }
+    } catch (error) {
+        console.log("error creating business", error);
+        return { status: 500, data: {} as IDBUser };
+    }
 };
 
-// Receive webhooks from Dwolla
-export const webhook = async (): Promise<AxiosPromiseResponse> => {
-  const response = await postRequest(`/webhook`, {});
-  return response;
+export const createCustomer = async (
+    user: IDBUser
+): Promise<{ status: number; data: IDBUser }> => {
+    try {
+        if (!user?.customer) return { status: 0, data: {} as IDBUser }
+        if (
+            user?.verifiedBusiness &&
+            user?.business?.dwollaId &&
+            user?.dbId
+        ) {
+            const response: AxiosPromiseResponse<IDBUser> =
+                await addCustomerVerification(user.business.dwollaId, {
+                ...user?.customer,
+            });
+            //@ts-ignore
+            return { status: response?.status, data: response?.data?.data };
+        } else {
+            const response = await createUser({
+                email: user.email,
+                consent: true,
+                type: "customer",
+                customer: {
+                    ...user?.customer,
+                },
+            });
+            return { status: response.status, data: response.data };
+        }
+    } catch (error) {
+        console.log("error creating customer", error);
+        return { status: 500, data: {} as IDBUser };
+    }
 };
 
-export const health = async (): Promise<AxiosPromiseResponse> => {
-  const response = await getRequest(`/health`);
-  return response;
+interface UpdateCustomerProfile {
+  customerDwollaId: string;
+  customer: {
+    avatar: string;
+    tag: string;
+  };
+}
+
+export const updateCustomerProfile = async ({
+  customerDwollaId,
+  customer,
+}: UpdateCustomerProfile): Promise<AxiosPromiseResponse> => {
+  try {
+    const response: AxiosPromiseResponse = await putRequest(
+      `/users/${customerDwollaId}/customer/profile`,
+      { customer }
+    );
+    return response;
+  } catch (err) {
+    console.log("Error: getUserByEmail:", err);
+    return {} as AxiosPromiseResponse;
+  }
 };
 
-// Retrieve user information and balances
-export const getUser = async (userId: UserId): Promise<AxiosPromiseResponse> => {
-  const response = await getRequest(`/users/${userId}`);
-  return response;
-};
+export interface UpdateBusinessProfile {
+  businessDwollaId: string;
+  business: {
+    tag: string;
+    avatar: string;
+    story: string;
+    address1: string;
+    address2: string;
+    city: string;
+    postalCode: string;
+    state: string;
+    website: string;
+    phoneNumber: string;
+  };
+}
 
-// Get all deposits for a single user
-export const getDeposits = async (userId: UserId): Promise<AxiosPromiseResponse> => {
-  const response = await getRequest(`/users/${userId}/deposit`);
-  return response;
-};
-
-// Get all withdrawal for a single user
-export const getWithdrawals = async (userId: UserId): Promise<AxiosPromiseResponse> => {
-  const response = await getRequest(`/users/${userId}/withdrawal`);
-  return response;
-};
-
-// Retrieve transactions for a user
-export const getTransactions = async (userId: UserId): Promise<AxiosPromiseResponse> => {
-  const response = await getRequest(`/users/${userId}/transfer`);
-  return response;
+export const updateBusinessProfile = async ({
+  businessDwollaId,
+  business,
+}: UpdateBusinessProfile): Promise<AxiosPromiseResponse> => {
+  try {
+    const response: AxiosPromiseResponse<IDBUser[]> = await putRequest(
+      `/users/${businessDwollaId}/business/profile`,
+      { business }
+    );
+    return response;
+  } catch (err) {
+    console.log("Error: getUserByEmail:", err);
+    return {} as AxiosPromiseResponse;
+  }
 };
