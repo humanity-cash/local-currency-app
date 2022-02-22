@@ -99,7 +99,7 @@ const CashierViewDialogDialog = (props: CashierViewDialogProps) => {
       backgroundStyle={styles.dialogBg}
     >
       <View style={dialogViewBase}>
-        <View style={wrappingContainerBase}>
+        <View style={styles.dialogWrap}>
           <View style={baseHeader}>
             <Text style={styles.headerText}>
               {Translation.CASHIER.CASHIER_VIEW_SWITCH}
@@ -186,7 +186,10 @@ const DrawerContent = (props: DrawerContentComponentProps) => {
 
   const onLoadupDialogConfirm = () => {
     setBankDialogState(initBankDialogState);
-    props.navigation.navigate(Routes.MERCHANT_LOADUP);
+    props.navigation.navigate(Routes.MERCHANT_LOADUP, {
+      userId: businessDwollaId,
+      styles: "business"
+    });
   };
 
   const onLoadupDialogCancel = () => {
