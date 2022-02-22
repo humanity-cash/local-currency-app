@@ -40,7 +40,7 @@
     },
     "android": {
       "package": "com.berkshares",
-      "versionCode": 8,
+      "versionCode": 9,
       "permissions": [
         "CAMERA",
         "RECORD_AUDIO",
