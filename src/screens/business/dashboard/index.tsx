@@ -141,25 +141,6 @@ const MerchantDashboard = (): JSX.Element => {
               </View>
             )}
 
-            {businessFundingSource?.visible === false && !isWalletLoading ? (
-              <View style={styles.alertView}>
-                <AntDesign
-                  name="exclamationcircleo"
-                  size={18}
-                  style={styles.alertIcon}
-                />
-                <Text style={styles.alertText}>
-                  {Translation.BANK_ACCOUNT.ACCOUNT_ALERT} &nbsp;
-                  <Text
-                    style={styles.alertIcon}
-                    onPress={() => setIsDwollaVisible(true)}
-                  >
-                    {`${Translation.BANK_ACCOUNT.LINK_BUSINESS_BANK_ACCOUNT} `}
-                    &gt;
-                  </Text>
-                </Text>
-              </View>
-            ) : null}
             {businessFundingSource?.needMicroDeposit && !isWalletLoading ? (
               <View style={styles.alertView}>
                 <AntDesign
@@ -174,6 +155,24 @@ const MerchantDashboard = (): JSX.Element => {
                     onPress={() => setIsDwollaVisible(true)}
                   >
                     {`${Translation.BANK_ACCOUNT.VERIFY_BUSINESS_BANK_ACCOUNT} `}
+                    &gt;
+                  </Text>
+                </Text>
+              </View>
+            ) : businessFundingSource?.visible === false && !isWalletLoading ? (
+              <View style={styles.alertView}>
+                <AntDesign
+                  name="exclamationcircleo"
+                  size={18}
+                  style={styles.alertIcon}
+                />
+                <Text style={styles.alertText}>
+                  {Translation.BANK_ACCOUNT.ACCOUNT_ALERT} &nbsp;
+                  <Text
+                    style={styles.alertIcon}
+                    onPress={() => setIsDwollaVisible(true)}
+                  >
+                    {`${Translation.BANK_ACCOUNT.LINK_BUSINESS_BANK_ACCOUNT} `}
                     &gt;
                   </Text>
                 </Text>

@@ -20,7 +20,6 @@ import { Button, Dialog, Header } from "src/shared/uielements";
 import { colors } from "src/theme/colors";
 import {
   baseHeader,
-  dialogViewBase,
   viewBase,
   wrappingContainerBase,
 } from "src/theme/elements";
@@ -152,26 +151,7 @@ const CustomerDashboard = (): JSX.Element => {
           }
         >
           <View style={styles.content}>
-            {personalFundingSource?.visible === false && !isWalletLoading && (
-              <View style={styles.alertView}>
-                <AntDesign
-                  name="exclamationcircleo"
-                  size={18}
-                  style={styles.alertIcon}
-                />
-                <Text style={styles.alertText}>
-                  {Translation.BANK_ACCOUNT.ACCOUNT_ALERT} &nbsp;
-                  <Text
-                    style={styles.alertIcon}
-                    onPress={() => setIsVisible(true)}
-                  >
-                    {`${Translation.BANK_ACCOUNT.LINK_PERSONAL_BANK_ACCOUNT} `}
-                    &gt;
-                  </Text>
-                </Text>
-              </View>
-            )}
-            {personalFundingSource?.needMicroDeposit && !isWalletLoading && (
+            {(personalFundingSource?.needMicroDeposit && !isWalletLoading) ? (
               <View style={styles.alertView}>
                 <AntDesign
                   name="exclamationcircleo"
@@ -185,6 +165,24 @@ const CustomerDashboard = (): JSX.Element => {
                     onPress={() => setIsVisible(true)}
                   >
                     {`${Translation.BANK_ACCOUNT.VERIFY_PERSONAL_BANK_ACCOUNT} `}
+                    &gt;
+                  </Text>
+                </Text>
+              </View>
+            ) : personalFundingSource?.visible === false && !isWalletLoading && (
+              <View style={styles.alertView}>
+                <AntDesign
+                  name="exclamationcircleo"
+                  size={18}
+                  style={styles.alertIcon}
+                />
+                <Text style={styles.alertText}>
+                  {Translation.BANK_ACCOUNT.ACCOUNT_ALERT} &nbsp;
+                  <Text
+                    style={styles.alertIcon}
+                    onPress={() => setIsVisible(true)}
+                  >
+                    {`${Translation.BANK_ACCOUNT.LINK_PERSONAL_BANK_ACCOUNT} `}
                     &gt;
                   </Text>
                 </Text>
