@@ -68,14 +68,14 @@ export const fundingSource = (res: AxiosPromiseResponse): FundingSource => {
       const source = sources[i];
       if (source.type === "bank") {
         return {
-          visible: !source["_links"]["verify-micro-deposits"],
+          visible: source.status === "verified",
           bank: {
             bankName: source.bankName,
             bankAccountType: source.bankAccountType,
             createdAt: moment(source.created).format("h:mm A, MMM D, YYYY"),
             name: source.name,
           },
-          needMicroDeposit: !!source["_links"]["verify-micro-deposits"] || !!source["_links"]["micro-deposits"]
+          needMicroDeposit: source.status !== "verified"
         }
       }
     }

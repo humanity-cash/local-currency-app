@@ -51,6 +51,9 @@ const styles = StyleSheet.create({
 	},
 	dialogBottom: {
 		marginTop: 20,
+	},
+	linkText: {
+		fontSize: 14
 	}
 });
 
@@ -94,9 +97,9 @@ export const Settings = (): ReactElement => {
 				</View>
 			</ScrollView>
 			<SafeAreaView style={{marginHorizontal: 24}}>
-				<Text>API: {API_URL}</Text>
-				<Text>IAV: {IAV_LINK}</Text>
-				<Text>Version Number: {app.expo.version}</Text>
+				<Text style={styles.linkText}>API: {API_URL}</Text>
+				<Text style={styles.linkText}>IAV: {IAV_LINK}</Text>
+				<Text style={styles.linkText}>Version Number: {app.expo.version}</Text>
 			</SafeAreaView>
 		</View>
 	);
