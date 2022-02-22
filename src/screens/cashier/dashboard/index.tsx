@@ -11,6 +11,7 @@ import {
   viewBaseB,
   wrappingContainerBase,
   dialogViewBase,
+  dialogWrap
 } from "src/theme/elements";
 import { Button, CancelBtn, Dialog } from "src/shared/uielements";
 import Translation from "src/translation/en.json";
@@ -32,7 +33,7 @@ const ReturnPaymentDialog = (props: ReturnPaymentDialogProps) => {
       backgroundStyle={styles.dialogBg}
     >
       <View style={dialogViewBase}>
-        <View style={wrappingContainerBase}>
+        <View style={dialogWrap}>
           <View style={baseHeader}>
             <Text style={styles.headerText}>
               {Translation.PAYMENT.SCAN_RECIPIENTS_QR}
@@ -160,7 +161,7 @@ const CashierDashboard = (): JSX.Element => {
           backgroundStyle={styles.dialogBg}
         >
           <View style={dialogViewBase}>
-            <View style={wrappingContainerBase}>
+            <View style={dialogWrap}>
               <View style={baseHeader}>
                 <Text style={styles.headerText}>
                   {Translation.CASHIER.LOGOUT_CONFIRM}
