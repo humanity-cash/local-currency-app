@@ -27,7 +27,10 @@ berkshares frontend application
 #### src/style: holds the theme definition, global style vars, global styled components
 #### src/common: holds shared components, time utils, crypto utils...
 
+## Deploy
+[This guide](https://docs.expo.dev/distribution/uploading-apps/) will help you upload your Expo standalone apps to Apple TestFlight and to Google Play.
+
 ## Tip: Automate itself build update for the android
-1. updgrade build version and code number on ```app.json```
-2. ```expo build:android``` on project root directory
-3. choose the build type as ```apk```
+- updgrade build version and code number on ```app.json```
+- ```expo build:android``` on project root directory
+- choose the build type as ```apk```
