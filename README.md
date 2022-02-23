@@ -30,7 +30,7 @@ berkshares frontend application
 ## Deploy
 [This guide](https://docs.expo.dev/distribution/uploading-apps/) will help you upload your Expo standalone apps to Apple TestFlight and to Google Play.
 
-## Tip: Automate itself build update for the android
-- updgrade build version and code number on ```app.json```
+## Steps for automating the build process for APK in Android
+- upgrade build version and code number in ```app.json```
 - ```expo build:android``` on project root directory
 - choose the build type as ```apk```
