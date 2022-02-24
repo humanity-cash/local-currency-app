@@ -116,7 +116,7 @@ type BankLinkDialogStateProps = {
   visible: boolean;
   title: string;
   description: string;
-  buttoTitle: string;
+  buttonTitle: string;
   confirmAction?: () => void;
   cancelAction?: () => void;
 };
@@ -125,7 +125,7 @@ const initBankDialogState: BankLinkDialogStateProps = {
   visible: false,
   title: "",
   description: "",
-  buttoTitle: "",
+  buttonTitle: "",
 };
 
 const DrawerContent = (
@@ -178,7 +178,7 @@ const DrawerContent = (
   const onPressScanToPay = async () => {
     const { status } = await BarCodeScanner.requestPermissionsAsync();
     if (status === "granted") {
-      if (availableBalance && availableBalance > 0) {
+      if (availableBalance && availableBalance > 0.5) {
         props.navigation.navigate(Routes.QRCODE_SCAN, {
           senderId: customerDwollaId,
           walletData: customerWalletData,
@@ -191,9 +191,9 @@ const DrawerContent = (
         if (personalFundingSource?.visible) {
           setBankDialogState({
             visible: true,
-            title: Translation.LOAD_UP.LOAD_UP_NO_BANK_TITLE,
-            description: Translation.LOAD_UP.LOAD_UP_NO_BANK_DETAIL,
-            buttoTitle: Translation.BUTTON.LOAD_UP,
+            title: Translation.PAYMENT.PAYMENT_NO_BANK_TITLE,
+            description: Translation.PAYMENT.PAYMENT_NO_BALANCE_DETAIL,
+            buttonTitle: Translation.BUTTON.LOAD_UP_BERKSHARES,
             confirmAction: onLoadupDialogConfirm,
             cancelAction: onLoadupDialogCancel,
           });
@@ -202,7 +202,7 @@ const DrawerContent = (
             visible: true,
             title: Translation.PAYMENT.PAYMENT_NO_BANK_TITLE,
             description: Translation.PAYMENT.PAYMENT_NO_BANK_DETAIL,
-            buttoTitle: Translation.BUTTON.LINK_PERSONAL_BANK,
+            buttonTitle: Translation.BUTTON.LINK_PERSONAL_BANK,
             confirmAction: onBankDialogConfirm,
             cancelAction: onBankDialogCancel,
           });
@@ -323,7 +323,7 @@ const DrawerContent = (
                       visible: true,
                       title: Translation.LOAD_UP.LOAD_UP_NO_BANK_TITLE,
                       description: Translation.LOAD_UP.LOAD_UP_NO_BANK_DETAIL,
-                      buttoTitle: Translation.BUTTON.LINK_PERSONAL_BANK,
+                      buttonTitle: Translation.BUTTON.LINK_PERSONAL_BANK,
                       confirmAction: onBankDialogConfirm,
                       cancelAction: onBankDialogCancel,
                     })
@@ -341,7 +341,7 @@ const DrawerContent = (
                       visible: true,
                       title: Translation.CASH_OUT.CASH_OUT_NO_BANK_TITLE,
                       description: Translation.CASH_OUT.CASH_OUT_NO_BANK_DETAIL,
-                      buttoTitle: Translation.BUTTON.LINK_PERSONAL_BANK,
+                      buttonTitle: Translation.BUTTON.LINK_PERSONAL_BANK,
                       confirmAction: onBankDialogConfirm,
                       cancelAction: onBankDialogCancel,
                     });
@@ -396,7 +396,7 @@ const DrawerContent = (
       <BankLinkDialog
         visible={bankDialogState.visible}
         title={bankDialogState.title}
-        buttonTitle={bankDialogState.buttoTitle}
+        buttonTitle={bankDialogState.buttonTitle}
         description={bankDialogState.description}
         onConfirm={() => {
           bankDialogState.confirmAction && bankDialogState.confirmAction();
