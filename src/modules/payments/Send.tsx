@@ -75,8 +75,7 @@ const LowAmount = (props: LowAmountProps) => {
           </View>
           <View style={props.styles.view}>
             <Text style={props.styles.detailText}>
-              You have too little funds available. Please load up your balance
-              first.
+              {Translation.PAYMENT.PAYMENT_NO_BALANCE_DETAIL}
             </Text>
           </View>
         </View>
