@@ -88,6 +88,8 @@ const styles = StyleSheet.create({
   text: {
     fontSize: 10,
     textAlign: "center",
+    lineHeight: 12,
+    paddingTop: 8
   },
   modalWrap: {
     paddingHorizontal: 10,
