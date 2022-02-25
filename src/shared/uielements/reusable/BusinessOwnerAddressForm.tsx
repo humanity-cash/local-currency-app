@@ -87,7 +87,7 @@ const BusinessOwnerAddressForm = (
           {Translation.PROFILE.PERSIONAL_DETAILS_BODY}
         </Text>
       </View>
-      <Text style={styles.label}>{Translation.LABEL.ADDRESS1}*</Text>
+      <Text style={styles.label}>{Translation.LABEL.ADDRESS1}</Text>
       <BlockInput
         name="address1"
         placeholder="Street number, street name"
@@ -115,7 +115,7 @@ const BusinessOwnerAddressForm = (
 
       <View style={styles.inlineView}>
         <View style={styles.cityView}>
-          <Text style={styles.label}>{Translation.LABEL.CITY}*</Text>
+          <Text style={styles.label}>{Translation.LABEL.CITY}</Text>
           <BlockInput
             inputRef={cityRef}
             name="city"
@@ -131,7 +131,7 @@ const BusinessOwnerAddressForm = (
           />
         </View>
         <View style={styles.stateContent}>
-          <Text style={styles.label}>{Translation.LABEL.STATE}*</Text>
+          <Text style={styles.label}>{Translation.LABEL.STATE}</Text>
           <View style={styles.stateView}>
             <SelectDropdown
               ref={stateRef}
@@ -162,7 +162,7 @@ const BusinessOwnerAddressForm = (
         </View>
       </View>
 
-      <Text style={styles.label}>{Translation.LABEL.POSTAL_CODE} *</Text>
+      <Text style={styles.label}>{Translation.LABEL.POSTAL_CODE}</Text>
       <BlockInput
         name="postalCode"
         placeholder="00000"
