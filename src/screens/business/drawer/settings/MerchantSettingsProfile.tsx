@@ -8,9 +8,7 @@ import {
 	StyleSheet,
 	TextInput,
 	TouchableOpacity,
-	View,
-	SafeAreaView,
-	Platform
+	View
 } from "react-native";
 import { Image, Text } from "react-native-elements";
 import SelectDropdown from "react-native-select-dropdown";
@@ -38,7 +36,6 @@ import { showToast } from 'src/utils/common';
 import { isSuccessResponse } from "src/utils/http";
 import { ToastType } from 'src/utils/types';
 import MaskInput from 'src/shared/uielements/MaskInput';
-import { KeyboardAvoidingView } from 'react-native';
 
 const businessAddressFormStyles = StyleSheet.create({
 	bodyText: {
@@ -84,7 +81,7 @@ const businessAddressFormStyles = StyleSheet.create({
 	inputBg: {
 		color: colors.purple,
 		backgroundColor: colors.white,
-	}
+	},
 });
 
 const styles = StyleSheet.create({
@@ -100,7 +97,7 @@ const styles = StyleSheet.create({
 	},
 	contentView: {
 		marginTop: 50,
-		paddingBottom: 200,
+		paddingBottom: 140,
 	},
 	bannerImageView: {
 		position: "relative",
@@ -186,10 +183,6 @@ const styles = StyleSheet.create({
 	dialogBottom: {
 		marginTop: 20,
 	},
-	bottomView: {
-		marginHorizontal: 20,
-		marginBottom: 20,
-	}
 });
 
 
@@ -220,6 +213,7 @@ export const MerchantSettingsProfile = (): JSX.Element => {
 
 	const availableNext = () => {
 		return 	businessData.address1.length > 0 &&
+				businessData.address2.length > 0 &&
 				businessData.city.length > 0 &&
 				businessData.state.length > 0 &&
 				businessData.postalCode.length > 0
@@ -271,9 +265,7 @@ export const MerchantSettingsProfile = (): JSX.Element => {
 	};
 
 	return (
-		<KeyboardAvoidingView 
-			{...(Platform.OS === "ios" && { behavior: "padding" })}
-			style={viewBaseB}>
+		<View style={viewBaseB}>
 			<LoadingPage visible={isLoading} isData={true}/>
 			<Header
 				leftComponent={
@@ -377,7 +369,7 @@ export const MerchantSettingsProfile = (): JSX.Element => {
 							style={businessAddressFormStyles.inputBg}
 						/>
 						<Text style={businessAddressFormStyles.label}>
-							ADDRESS 2 - OPTIONAL
+							ADDRESS 2
 						</Text>
 						<BlockInput
 							name="address2"
@@ -478,14 +470,14 @@ export const MerchantSettingsProfile = (): JSX.Element => {
 					</View>
 				</View>
 			</ScrollView>
-			<SafeAreaView style={styles.bottomView}>
-				<Button
-					type={BUTTON_TYPES.PURPLE}
-					title={Translation.BUTTON.SAVE_CHANGE}
-					disabled={!availableNext()}
-					onPress={handleSave}
-				/>
-			</SafeAreaView>
+			<TouchableOpacity
+				onPress={handleSave}
+				disabled={!availableNext()}
+				style={styles.scanButton}>
+				<Text style={styles.scanBtnText}>
+					{Translation.BUTTON.SAVE_CHANGE}
+				</Text>
+			</TouchableOpacity>
 			{isVisible && (
 				<Dialog
 					visible={isVisible}
@@ -513,7 +505,7 @@ export const MerchantSettingsProfile = (): JSX.Element => {
 					</View>
 				</Dialog>
 			)}
-		</KeyboardAvoidingView>
+		</View>
 	);
 };
 
