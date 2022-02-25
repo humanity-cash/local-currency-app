@@ -291,7 +291,7 @@ const DrawerContent = (props: DrawerContentComponentProps) => {
   const onPressSendToSomeone = async () => {
     const { status } = await BarCodeScanner.requestPermissionsAsync();
     if (status === "granted") {
-      if (availableBalance && availableBalance > 0.5) {
+      if (availableBalance && availableBalance > 0) {
         props.navigation.navigate(Routes.MERCHANT_PAYOUT_SELECTION);
       } else {
         if (businessFundingSource?.visible) {
