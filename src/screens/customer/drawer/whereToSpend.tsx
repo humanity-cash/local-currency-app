@@ -343,7 +343,7 @@ const MerchantDictionary = (): JSX.Element => {
                     </View>
                   }
                   <View style={{flex: 1}}>
-                    <Text style={styles.rightText}>{`${selected.addressLine1}, ${selected.addressLine2}`}</Text>
+                    <Text style={styles.rightText}>{selected.addressLine1 && selected.addressLine1}{selected.addressLine2 && `, ${selected.addressLine2}`}</Text>
                     <Text style={styles.rightText}>{`${selected.city}, ${selected.state}, ${selected.postalCode}`}</Text>
                     <TouchableOpacity 
                       style={styles.phoneV}
