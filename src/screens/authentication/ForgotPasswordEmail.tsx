@@ -87,7 +87,7 @@ const ForgotPasswordEmail = (): React.ReactElement => {
           <Text style={styles.modalHeader}>Forgot password</Text>
         </View>
         <Text style={styles.modalDescription}>
-          Enter phone number of the account you would like to change the
+          Enter email of the account you would like to change the
           passcode of.
         </Text>
         <Text h3>EMAIL ADDRESS</Text>
