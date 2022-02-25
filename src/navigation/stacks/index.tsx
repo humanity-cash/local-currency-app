@@ -53,6 +53,7 @@ import CustomerTransactions from "src/screens/customer/transactions";
 import { PaymentsModule } from "src/modules";
 import MerchantPayoutSomeoneSuccess from '../../screens/business/drawer/sendToSomeone/MerchantPayoutSomeoneSuccess';
 import MicroDepositBank from '../../screens/customer/bank/MicroDepositBank';
+import PaymentFailed from '../../screens/customer/payment/PaymentFailed';
 
 const PrimaryStack = createStackNavigator();
 
@@ -205,7 +206,7 @@ export const BusinessUserStack = ({
       />
       <PrimaryStack.Screen
         name={Routes.PAYMENT_FAILED}
-        component={PaymentSuccess}
+        component={PaymentFailed}
       />
       <PrimaryStack.Screen
         name={Routes.PAYMENT_SUCCESS}

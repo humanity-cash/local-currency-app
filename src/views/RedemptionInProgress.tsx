@@ -5,7 +5,7 @@ import { Text } from "react-native-elements";
 import { Header, Button, CancelBtn } from "src/shared/uielements";
 import {
   baseHeader,
-  modalViewBase,
+  viewBaseB,
   wrappingContainerBase,
 } from "src/theme/elements";
 import Translation from "src/translation/en.json";
@@ -14,6 +14,7 @@ import { UserContext } from "src/contexts";
 import { BUTTON_TYPES } from "src/constants";
 import { UserType } from "src/auth/types";
 import { colors } from "src/theme/colors";
+import { viewBase } from '../theme/elements';
 
 const styles = StyleSheet.create({
   headerText: {
@@ -40,7 +41,7 @@ const RedemptionInProgress = (): ReactElement => {
     : BUTTON_TYPES.PURPLE;
 
   return (
-    <View style={modalViewBase}>
+    <View style={isCustomer ? viewBase : viewBaseB}>
       <Header
         rightComponent={
           <CancelBtn

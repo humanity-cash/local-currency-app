@@ -36,7 +36,7 @@ const PaymentFailed = (): JSX.Element => {
         rightComponent={
           <CancelBtn
             text="Close"
-            onClick={() => navigation.navigate(Routes.DASHBOARD)}
+            onClick={() => navigation.goBack()}
           />
         }
       />
@@ -50,7 +50,7 @@ const PaymentFailed = (): JSX.Element => {
         <Button
           type={BUTTON_TYPES.DARK_GREEN}
           title={Translation.BUTTON.TRY_AGAIN}
-          onPress={() => navigation.navigate(Routes.DASHBOARD)}
+          onPress={() => navigation.goBack()}
         />
       </SafeAreaView>
     </View>
