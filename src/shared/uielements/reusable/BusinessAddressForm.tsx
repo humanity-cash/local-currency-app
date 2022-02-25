@@ -166,7 +166,7 @@ const BusinessAddressForm = (props: BusinessAddressProps): JSX.Element => {
         }}
       />
 
-      <Text style={styles.label}>PHONE NUMBER - OPTIONAL</Text>
+      <Text style={styles.label}>PHONE NUMBER</Text>
       <MaskInput
         inputRef={phoneRef}
         value={business?.phoneNumber}
