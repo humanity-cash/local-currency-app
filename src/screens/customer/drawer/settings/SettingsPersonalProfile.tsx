@@ -141,7 +141,7 @@ export const SettingsPersonalDetails = (): JSX.Element => {
 				<Button
 					type={BUTTON_TYPES.DARK_GREEN}
 					title={Translation.BUTTON.SAVE_CHANGE}
-					disabled={state.username === user?.customer?.tag}
+					disabled={state.username === user?.customer?.tag && state.avatar === user?.customer?.avatar}
 					onPress={handleSave}
 				/>
 			</SafeAreaView>
