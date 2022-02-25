@@ -154,8 +154,8 @@ const PaymentRequest = (): JSX.Element => {
       setBankDialogInfo({
         ...bankDialogInfo,
         isVisible: true,
-        title: Translation.LOAD_UP.LOAD_UP_NO_BANK_TITLE,
-        detail: Translation.LOAD_UP.LOAD_UP_NO_BANK_DETAIL,
+        title: Translation.PAYMENT.PAYMENT_NO_BANK_TITLE,
+        detail: Translation.PAYMENT.PAYMENT_NO_BALANCE_DETAIL,
         buttonTitle: Translation.BUTTON.LOAD_UP_BERKSHARES,
       });
     } else {

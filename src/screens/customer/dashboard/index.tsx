@@ -130,7 +130,7 @@ const CustomerDashboard = (): JSX.Element => {
         </View>
         <View style={styles.amountView}>
           <Text style={styles.text}>
-            B$ {availableBalance ? availableBalance.toFixed(2) : "-"}
+            B$ {availableBalance !== undefined ? availableBalance.toFixed(2) : "-"}
           </Text>
           <TouchableOpacity
             style={styles.topupButton}

@@ -1,10 +1,12 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Text, View, StyleSheet } from "react-native";
 import { Button, Dialog } from "src/shared/uielements";
 import { dialogViewBase } from "src/theme/elements";
 import Translation from "src/translation/en.json";
 import { BUTTON_TYPES } from "src/constants";
 import { colors } from "../../theme/colors";
+import { UserType } from "src/auth/types";
+import { UserContext } from "src/contexts";
 
 const styles = StyleSheet.create({
   dialogWrap: {
@@ -43,6 +45,8 @@ const BankLinkDialog = ({
   onConfirm,
   onCancel,
 }: BankLinkDialogProps) => {
+  const { userType } = useContext(UserContext);
+  const isCustomer = userType === UserType.Customer;
   return (
     <Dialog visible={visible} onClose={() => onCancel()}>
       <View style={dialogViewBase}>
@@ -52,7 +56,7 @@ const BankLinkDialog = ({
         </View>
         <View style={styles.dialogBottom}>
           <Button
-            type={BUTTON_TYPES.DARK_GREEN}
+            type={isCustomer ? BUTTON_TYPES.DARK_GREEN : BUTTON_TYPES.PURPLE}
             title={buttonTitle}
             onPress={onConfirm}
           />
