@@ -165,9 +165,9 @@ const MerchantRequest = (): JSX.Element => {
       setBankDialogInfo({
         ...bankDialogInfo,
         isVisible: true,
-        title: Translation.LOAD_UP.LOAD_UP_NO_BANK_TITLE,
-        detail: Translation.LOAD_UP.LOAD_UP_NO_BANK_DETAIL,
-        buttonTitle: Translation.BUTTON.LOAD_UP_BERKSHARES,
+        title: Translation.PAYMENT.PAYMENT_NO_BANK_TITLE,
+        detail: Translation.PAYMENT.PAYMENT_NO_BALANCE_DETAIL,
+        buttonTitle: Translation.BUTTON.LOAD_UP_BERKSHARES
       });
     } else {
       setBankDialogInfo({
@@ -175,7 +175,7 @@ const MerchantRequest = (): JSX.Element => {
         isVisible: true,
         title: Translation.PAYMENT.PAYMENT_NO_BANK_TITLE,
         detail: Translation.PAYMENT.PAYMENT_NO_BANK_DETAIL,
-        buttonTitle: Translation.BUTTON.LINK_BUSINESS_BANK,
+        buttonTitle: Translation.BUTTON.LINK_BUSINESS_BANK
       });
     }
   };
