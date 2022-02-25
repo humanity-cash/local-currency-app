@@ -210,7 +210,7 @@ const MerchantRequest = (): JSX.Element => {
           <CancelBtn
             color={colors.purple}
             text={Translation.BUTTON.CLOSE}
-            onClick={() => navigation.goBack()}
+            onClick={() => navigation.navigate(Routes.MERCHANT_DASHBOARD)}
           />
         }
       />
