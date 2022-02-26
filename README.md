@@ -6,13 +6,12 @@ berkshares frontend application
 ### Requirements
 
 1. Project is setup with [Expo](https://expo.io/) toolset which needs to be installed globally: ```npm install expo-cli --global```
-2. Install local project dependencies: ```npm install```
+2. Install local project dependencies: ```yarn install```
 
 ### Startup
 
-- Web: ```npm run web```
-- iOS*: ```npm run ios```
-- Android*: ```npm run android```
+- iOS*: ```yarn ios```
+- Android*: ```yarn android```
 
 (* Requires local available emulator or connected device in development mode)
 
@@ -27,3 +26,11 @@ berkshares frontend application
 #### src/stores: holds stores initializations and thier initial state, using react-hooksstore
 #### src/style: holds the theme definition, global style vars, global styled components
 #### src/common: holds shared components, time utils, crypto utils...
+
+## Deploy
+[This guide](https://docs.expo.dev/distribution/uploading-apps/) will help you upload your Expo standalone apps to Apple TestFlight and to Google Play.
+
+## Steps for automating the build process for APK in Android
+- upgrade build version and code number in ```app.json```
+- ```expo build:android``` on project root directory
+- choose the build type as ```apk```
