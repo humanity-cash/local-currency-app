@@ -57,14 +57,39 @@ const styles = StyleSheet.create({
 	},
 });
 
+const uploadImageToS3 = async (data: any, userId: string) => {
+    try {
+        console.log('data', data)
+        const CONTAINER_ENDPOINT = 'https://container-service-1.iftpdvtpe057k.eu-west-2.cs.amazonlightsail.com/upload';
+        const LOCAL_ENDPOINT = 'http://127.0.0.1:8080/upload'
+        const res = await fetch(LOCAL_ENDPOINT,
+            {
+                method: 'post',
+                body: data,
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                    'userId': userId
+                },
+            }
+        );
+
+        console.log(JSON.stringify(res));
+    } catch(err) {
+        console.log('err here')
+        console.log(err)
+    }
+}
+
 export const SettingsPersonalDetails = (): JSX.Element => {
-	const { user, customerDwollaId, updateUserData } = useContext(UserContext);
-	const [ isLoading, setIsLoading ] = useState<boolean>(false);
-	const navigation = useNavigation();
-	const [state, setState] = useState({
-		avatar: user?.customer?.avatar || '',
-		username: user?.customer?.tag || ''
-	});
+    const { user, customerDwollaId, updateUserData } = useContext(UserContext);
+    const [ isLoading, setIsLoading ] = useState<boolean>(false);
+    const navigation = useNavigation();
+    const [state, setState] = useState({
+        avatar: `https://profile-picture-user.imgix.net/${customerDwollaId}.jpeg`,
+        username: user?.customer?.tag || ''
+    });
+
+    console.log('state.avatar', state.avatar)
 
 	const onValueChange = (name: string, change: string) => {
 		setState({
@@ -78,12 +103,21 @@ export const SettingsPersonalDetails = (): JSX.Element => {
 			mediaTypes: ImagePicker.MediaTypeOptions.All,
 			allowsEditing: true,
 			aspect: [4, 3],
-			quality: 1,
+			quality: 0,
 		});
 
-		if (!result.cancelled) {
-			onValueChange('avatar', result.uri);
-		}
+        if(result.cancelled) return
+        setIsLoading(true);
+
+        const data = new FormData();
+        //@ts-ignore
+        data.append('file', result);
+        data.append('content_type', 'image/jpeg');
+
+        // console.log('data', data)
+        await uploadImageToS3(data, customerDwollaId)
+        onValueChange('avatar', result.uri);
+        setIsLoading(false);
 	};
 
 	const handleSave = async () => {
@@ -118,12 +152,10 @@ export const SettingsPersonalDetails = (): JSX.Element => {
 							{state.avatar === '' && (
 								<View style={styles.placeholder} />
 							)}
-							{state.avatar !== '' && (
-								<Image
-									source={{ uri: state.avatar }}
-									style={styles.placeholder}
-								/>
-							)}
+                            <Image
+                                source={{ uri: state.avatar }}
+                                style={styles.placeholder}
+                            />
 						</TouchableOpacity>
 					</View>
 					<Text style={styles.imageDesc1}>{Translation.PROFILE.CHANGE_PICTURE}</Text>
