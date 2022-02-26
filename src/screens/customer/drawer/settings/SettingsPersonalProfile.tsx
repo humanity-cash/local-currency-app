@@ -61,8 +61,7 @@ const uploadImageToS3 = async (data: any, userId: string) => {
     try {
         console.log('data', data)
         const CONTAINER_ENDPOINT = 'https://container-service-1.iftpdvtpe057k.eu-west-2.cs.amazonlightsail.com/upload';
-        const LOCAL_ENDPOINT = 'http://127.0.0.1:8080/upload'
-        const res = await fetch(LOCAL_ENDPOINT,
+        const res = await fetch(CONTAINER_ENDPOINT,
             {
                 method: 'post',
                 body: data,
