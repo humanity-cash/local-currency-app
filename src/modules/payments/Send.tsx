@@ -33,8 +33,10 @@ import {
   baseHeader,
   dialogViewBase,
   modalViewBase,
+  modalViewBaseB,
   underlineHeaderB,
   viewBase,
+  viewBaseB,
   wrappingContainerBase,
 } from "src/theme/elements";
 import Translation from "src/translation/en.json";
@@ -313,7 +315,7 @@ const SendPayment = (props: SendPaymentInput): JSX.Element => {
   };
 
   return (
-    <View style={viewBase}>
+    <View style={isCustomer ? viewBase : viewBaseB}>
       <LoadingPage visible={isLoading} isPayment={true} />
       <View style={styles.container}>
         {!isPaymentDialog && !isOpenPayment && !isLowAmountDialog && (
@@ -366,7 +368,7 @@ const SendPayment = (props: SendPaymentInput): JSX.Element => {
         <Modal visible={isOpenPayment}>
           <KeyboardAvoidingView
             {...(Platform.OS === "ios" && { behavior: "padding" })}
-            style={[modalViewBase, {flex: 1}]}
+            style={[isCustomer ? modalViewBase : modalViewBaseB, {flex: 1}]}
           >
             <ModalHeader
               leftComponent={
