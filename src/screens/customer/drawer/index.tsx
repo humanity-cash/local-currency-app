@@ -40,7 +40,7 @@ import SettingDialog from "src/shared/uielements/SettingDialog";
 import BankLinkDialog from "src/shared/uielements/BankLinkDialog";
 import { PaymentsModule } from "src/modules";
 import { CustomerScanQrCodeStyle } from "src/style";
-import { prefixCustomerName } from "src/utils/common";
+import { prefixCustomerName, profilePictureUrl } from "src/utils/common";
 
 const styles = StyleSheet.create({
   headerText: {
@@ -133,7 +133,7 @@ const DrawerContent = (
 ) => {
   const { signOut, userEmail } = useContext(AuthContext);
   const { updateSelectedView } = useContext(NavigationViewContext);
-  const { user, updateUserType, customerDwollaId } = useContext(UserContext);
+  const { user, updateUserType, customerDwollaId, businessDwollaId } = useContext(UserContext);
   const authorization = { cashierView: user?.verifiedBusiness };
   const [isExpanded, setIsExpanded] = useState<boolean>(false);
   const [bankDialogState, setBankDialogState] =
@@ -216,6 +216,8 @@ const DrawerContent = (
   const customerTag = user?.customer?.tag || "";
   const businessTag = user?.business?.tag || "";
   const isVerifiedBusiness = user?.verifiedBusiness;
+  const customerAvatar = profilePictureUrl(customerDwollaId);
+  const businessAvatar = profilePictureUrl(businessDwollaId);
 
   return (
     <View style={styles.drawerWrap}>
@@ -238,7 +240,7 @@ const DrawerContent = (
               <View style={styles.userInfo}>
                 <View style={styles.imageView}>
                   <Image
-                    source={require("../../../../assets/images/placeholder5.png")}
+                      source={{ uri: customerAvatar }}
                     style={styles.image}
                   />
                 </View>
@@ -268,8 +270,8 @@ const DrawerContent = (
                     <View style={styles.userInfo}>
                       <View style={styles.imageView}>
                         <Image
-                          source={require("../../../../assets/images/placeholder5.png")}
-                          style={styles.image}
+                            source={{ uri: businessAvatar }}
+                            style={styles.image}
                         />
                       </View>
                       <View style={styles.usernameView}>
