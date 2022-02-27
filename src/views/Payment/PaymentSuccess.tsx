@@ -3,7 +3,7 @@ import { colors } from "src/theme/colors";
 import { StyleSheet, View, Image, SafeAreaView } from "react-native";
 import { Text } from "react-native-elements";
 import { Button, Modal, ModalHeader } from "src/shared/uielements";
-import { modalViewBase } from "src/theme/elements";
+import { viewBase } from "src/theme/elements";
 import Translation from "src/translation/en.json";
 import { BUTTON_TYPES } from "src/constants";
 import { UserContext } from "src/contexts";
@@ -65,7 +65,7 @@ const PaymentRequestSuccess = (
 
   return (
     <Modal visible={props.visible}>
-      <View style={modalViewBase}>
+      <View style={viewBase}>
         <ModalHeader />
         <View style={{ paddingHorizontal: 10, flex: 1 }}>
           <Text style={styles.headerText}>
