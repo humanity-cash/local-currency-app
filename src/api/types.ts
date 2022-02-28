@@ -120,6 +120,8 @@ export interface ITransaction {
   transactionHash: string;
   blockNumber: number;
   timestamp: number;
+  fromDwollaUserId: string;
+  toDwollaUserId: string;
   fromUserId: string;
   toName: string;
   fromName: string;
@@ -128,6 +130,7 @@ export interface ITransaction {
   toAddress: string;
   type: "IN" | "OUT" | "Deposit" | "Withdraw";
   value: string;
+  image?: string;
 }
 
 export interface IOperatorResponse {

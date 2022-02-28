@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import { ScrollView, StyleSheet, View, Linking, Platform } from 'react-native';
 import { Image, Text } from "react-native-elements";
 import { TouchableOpacity } from "react-native-gesture-handler";
+import { profilePictureUrl } from "src/utils/common";
 import { useBusinesses } from "src/hooks";
 import {
   BackBtn,
@@ -116,7 +117,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   websiteImage: {
-    width: 20, 
+    width: 20,
     height: 20
   },
   rightText: {
@@ -151,7 +152,7 @@ const CategoryView = (props: CategoryViewProps) => {
             onPress={() => props.onSelect(item)}
           >
             <Image
-              source={require("../../../../assets/images/feed1.png")}
+                source={{ uri: item.image }}
               containerStyle={styles.image}
             />
             <Text style={styles.text}>{item.title}</Text>
@@ -184,14 +185,15 @@ const MerchantDictionary = (): JSX.Element => {
       const formattedCurr = {
         title: curr.tag,
         description: curr.story,
-        image: "",
+        //@ts-ignore
+        image: profilePictureUrl(`${curr.dwollaId}_banner`),
         addressLine1: curr.address1,
         addressLine2: curr.address2,
         phone: curr.phoneNumber,
         city: curr.city,
         state: curr.state,
         postalCode: curr.postalCode,
-        website: curr.website
+        website: curr?.website
       };
       if (curr.industry) {
         if (acc[curr.industry]) {
@@ -207,6 +209,7 @@ const MerchantDictionary = (): JSX.Element => {
   );
 
   const formatPhone = (phone: string) => {
+      if(!phone) return ''
     const x = phone.replace(/\D/g, '').match(/(\d{3})(\d{3})(\d{4})/);
     if(x) {
       return '(' + x[1] + ') ' + x[2] + '-' + x[3];
@@ -273,10 +276,10 @@ const MerchantDictionary = (): JSX.Element => {
         </View>
         <ScrollView>
           <View style={styles.content}>
-            <View style={styles.underlineView}>
+            {/* <View style={styles.underlineView}>
               <Text style={styles.categoryText}>MERCHANT OF THE MONTH</Text>
-            </View>
-            {Object.keys(bussinessByCategories).length > 0 && (
+            </View> */}
+            {/* {Object.keys(bussinessByCategories).length > 0 && (
               <TouchableOpacity
                 style={styles.popularMerchantView}
                 onPress={() =>
@@ -300,7 +303,7 @@ const MerchantDictionary = (): JSX.Element => {
                   containerStyle={styles.popularImage}
                 />
               </TouchableOpacity>
-            )}
+            )} */}
             {Object.keys(bussinessByCategories).map(
               (category: string, idx: number) => (
                 <CategoryView
@@ -328,7 +331,7 @@ const MerchantDictionary = (): JSX.Element => {
                 <Text h2>{selected.title}</Text>
                 <Text style={styles.popularText}>{selected.description}</Text>
                 <Image
-                  source={require("../../../../assets/images/feed1.png")}
+                    source={{uri: selected.image}}
                   containerStyle={styles.feedImage}
                 />
                 <View style={styles.detailV}>
@@ -338,7 +341,7 @@ const MerchantDictionary = (): JSX.Element => {
                       <TouchableOpacity
                       onPress={() => handleWebsite(selected.website)}>
                         <Image
-                          source={require("../../../../assets/images/website.png")}
+                            source={{ uri: selected.image  }}
                           style={styles.websiteImage}
                         />
                       </TouchableOpacity>
