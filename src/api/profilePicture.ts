@@ -1,8 +1,7 @@
-import { IDBUser } from "@humanity.cash/types";
 import { postRequest } from "./base";
 import { AxiosPromiseResponse } from "./types";
 
-export const uploadImageToS3 = async (data: FormData, userId: string): Promise<void> => {
+export const uploadImageToS3 = async (data: FormData, userId: string) => {
     try {
         const IMAGE_UPLOAD_ENDPOINT 
             = 'https://container-service-1.hnt41uhh64h0q.eu-central-1.cs.amazonlightsail.com/upload';
@@ -14,8 +13,8 @@ export const uploadImageToS3 = async (data: FormData, userId: string): Promise<v
                 'userId': userId
             },
         }
-        const res = await fetch(IMAGE_UPLOAD_ENDPOINT, request);
-        // console.log(JSON.parse(JSON.stringify(res)));
+        const response = await fetch(IMAGE_UPLOAD_ENDPOINT, request);
+        return response
     } catch(err) {
         console.log('err here')
         console.log(err)
@@ -29,7 +28,6 @@ export const purgeImgix = async (
     const response = await postRequest(`/users/${id}/cache/profilePicture`, {});
     return response;
   } catch (err) {
-      console.log('err', err)
     return {} as any;
   }
 };
