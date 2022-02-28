@@ -27,6 +27,11 @@ export const modalViewBase: any = {
   backgroundColor: colors.lightBg,
 };
 
+export const modalViewBaseB: any = {
+  justifyContent: "space-between",
+  backgroundColor: colors.inputBg,
+};
+
 export const dialogViewBase: any = {
   padding: 20,
   backgroundColor: colors.background,

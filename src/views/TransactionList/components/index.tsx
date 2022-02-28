@@ -63,7 +63,7 @@ export const TransactionItem = (props: MyTransactionItemProps) => {
     >
       <View style={mListstyles.imageContainer}>
         <Image
-          source={require("../../../../assets/images/placeholder5.png")}
+            source={item?.image ? { uri: item.image } : require("../../../../assets/images/placeholder5.png")}
           containerStyle={mListstyles.image}
         />
         <View style={mListstyles.detailView}>
@@ -88,7 +88,6 @@ export const TransactionDetail = (props: TransactionDetailProps) => {
       <View style={dialogViewBase}>
         <View style={styles.headerView}>
           <Text style={[getStyle(data.type), { fontSize: 32 }]}>
-            {" "}
             {getBerksharePrefix(data.type)} {data.value}{" "}
           </Text>
         </View>

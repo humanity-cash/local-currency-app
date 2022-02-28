@@ -400,6 +400,8 @@ export interface TxFilters {
 export type MiniTransaction = Pick<
   ITransaction,
   | "blockNumber"
+  | "image"
+  | "fromUserId"
   | "transactionHash"
   | "timestamp"
   | "toName"
