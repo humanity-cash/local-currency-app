@@ -2,6 +2,7 @@ import { IWallet } from "@humanity.cash/types";
 import { AxiosPromiseResponse, ITransaction, IEvent, FundingSource } from "src/api/types";
 import { MiniTransaction } from "src/utils/types";
 import moment from 'moment';
+import { profilePictureUrl } from "src/utils/common";
 
 const formatTransactionValue = (value: number | string): string => {
   return String((Number(value) / 1000000000000000000).toFixed(2));
@@ -19,6 +20,7 @@ export const formatDeposits = (
       type: "Deposit",
       toName: tx.toName,
       value: formatTransactionValue(tx.value),
+      fromUserId: tx.fromUserId
     };
   });
 };
@@ -35,6 +37,7 @@ export const formatWithdrawals = (
       fromName: tx.fromName,
       type: "Withdraw",
       value: formatTransactionValue(tx.value),
+      fromUserId: tx.fromUserId
     };
   });
 };
@@ -54,6 +57,8 @@ export const formatTransactions = (
       fromName: tx.fromName,
       type: tx.type,
       value: formatTransactionValue(tx.value),
+      fromUserId: tx.fromUserId,
+      image: tx.type === "IN" ? profilePictureUrl(tx.fromDwollaUserId) : profilePictureUrl(tx.toDwollaUserId)
     };
   });
 };
