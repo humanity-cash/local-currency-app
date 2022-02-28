@@ -63,11 +63,11 @@ export const sortTxByTimestamp = (txs: MiniTransaction[]): MiniTransaction[] =>
     else return 0;
 });
 
-export const compressImage = async (uri: string, format = SaveFormat.JPEG): Promise<ImageResult> =>  {
+export const compressImage = async (uri: string, size: { width: number, height: number }): Promise<ImageResult> =>  {
     const result = await manipulateAsync(
         uri,
-        [{ resize: { width: 500, height: 500 } }],
-        { compress: 0.7, format }
+        [{ resize: size }],
+        { compress: 0.7, format: SaveFormat.JPEG }
     );
 
     // type: `image/${format}`, 
@@ -77,10 +77,10 @@ export const compressImage = async (uri: string, format = SaveFormat.JPEG): Prom
 };
 
 export const profilePictureUrl = (id: string): string => 
-        `https://profile-picture-user.imgix.net/${id}.jpeg?w=512&time=${Date.now()}`
+    `https://profile-picture-user.imgix.net/${id}.jpeg?w=512&time=${Date.now()}`
 
-export const buildImageFormData = async (uri: string): Promise<FormData> => {
-    const compressed = await compressImage(uri);
+    export const buildImageFormData = async (uri: string, size = { width: 100, height: 100 }): Promise<FormData> => {
+    const compressed = await compressImage(uri, size);
     const data = new FormData();
     //@ts-ignore
     data.append('file', compressed);
@@ -90,8 +90,7 @@ export const buildImageFormData = async (uri: string): Promise<FormData> => {
 }
 
 export const imagePickerConfig: ImagePicker.ImagePickerOptions = {
-    mediaTypes: ImagePicker.MediaTypeOptions.All,
+    mediaTypes: ImagePicker.MediaTypeOptions.Images,
     aspect: [4, 3],
     quality: 0,
 };
-

@@ -43,7 +43,7 @@ import { BarCodeScanner } from "expo-barcode-scanner";
 import SettingDialog from "src/shared/uielements/SettingDialog";
 import { PaymentsModule } from "src/modules";
 import { BusinessScanQrCodeStyle } from "src/style";
-import { prefixCustomerName } from "src/utils/common";
+import { prefixCustomerName, profilePictureUrl } from "src/utils/common";
 import MerchantSettings from "../drawer/settings/MerchantSettings";
 import MerchantSettingsHelpAndContact from "../drawer/settings/MerchantSettingsHelpAndContact";
 import { styles } from "./style";
@@ -139,7 +139,7 @@ const initBankDialogState: BankLinkDialogStateProps = {
 
 const DrawerContent = (props: DrawerContentComponentProps) => {
   const { signOut, userEmail } = useContext(AuthContext);
-  const { user, updateUserType, businessDwollaId } = useContext(UserContext);
+  const { user, updateUserType, businessDwollaId, customerDwollaId } = useContext(UserContext);
   const { updateSelectedView } = useContext(NavigationViewContext);
   const [isExpanded, setIsExpanded] = useState<boolean>(false);
   const [isVisible, setIsVisible] = useState<boolean>(false);
@@ -376,7 +376,7 @@ const DrawerContent = (props: DrawerContentComponentProps) => {
               <View style={styles.userInfo}>
                 <View style={styles.imageView}>
                   <Image
-                    source={require("../../../../assets/images/placeholder5.png")}
+                      source={{ uri: profilePictureUrl(businessDwollaId) }}
                     style={styles.image}
                   />
                 </View>
@@ -402,7 +402,7 @@ const DrawerContent = (props: DrawerContentComponentProps) => {
                     <View style={styles.userInfo}>
                       <View style={styles.imageView}>
                         <Image
-                          source={require("../../../../assets/images/placeholder5.png")}
+                            source={{ uri: profilePictureUrl(customerDwollaId) }}
                           style={styles.image}
                         />
                       </View>

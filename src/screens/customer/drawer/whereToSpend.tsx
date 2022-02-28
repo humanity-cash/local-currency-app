@@ -115,7 +115,7 @@ const styles = StyleSheet.create({
     marginBottom: 20,
   },
   websiteImage: {
-    width: 20, 
+    width: 20,
     height: 20
   },
   rightText: {
@@ -184,7 +184,7 @@ const MerchantDictionary = (): JSX.Element => {
         title: curr.tag,
         description: curr.story,
         //@ts-ignore
-        image: profilePictureUrl(curr.dwollaId),
+        image: profilePictureUrl(`${curr.dwollaId}_banner`),
         addressLine1: curr.address1,
         addressLine2: curr.address2,
         phone: curr.phoneNumber,

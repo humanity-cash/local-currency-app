@@ -32,10 +32,11 @@ import {
 	viewBaseB
 } from "src/theme/elements";
 import Translation from "src/translation/en.json";
-import { showToast } from 'src/utils/common';
+import { buildImageFormData, imagePickerConfig, profilePictureUrl, showToast } from 'src/utils/common';
 import { isSuccessResponse } from "src/utils/http";
 import { ToastType } from 'src/utils/types';
 import MaskInput from 'src/shared/uielements/MaskInput';
+import {uploadImageToS3, purgeImgix} from "src/api/profilePicture";
 
 const businessAddressFormStyles = StyleSheet.create({
 	bodyText: {
@@ -189,13 +190,13 @@ const styles = StyleSheet.create({
 export const MerchantSettingsProfile = (): JSX.Element => {
 	const navigation = useNavigation();
 	const { user, updateUserData, businessDwollaId } = useContext(UserContext);
-	const [bannerImage, setBannerImage] = useState<string>("");
+	const [bannerImage, setBannerImage] = useState<string>(profilePictureUrl(`${businessDwollaId}_banner`));
 	const [isLoading, setIsLoading] = useState<boolean>(false);
 	const [isVisible, setIsVisible] = useState<boolean>(false);
 	const business = user?.business;
 	const [businessData, setBusinessData] = useState({
 		tag: business?.tag || "",
-		avatar: business?.avatar || "",
+		avatar: profilePictureUrl(businessDwollaId),
 		story: business?.story || "",
 		address1: business?.address1 || "",
 		address2: business?.address2 || "",
@@ -251,18 +252,23 @@ export const MerchantSettingsProfile = (): JSX.Element => {
 		navigation.navigate(Routes.MERCHANT_DASHBOARD);
 	};
 
-	const pickImage = async (name: string) => {
-		const result = await ImagePicker.launchImageLibraryAsync({
-			mediaTypes: ImagePicker.MediaTypeOptions.All,
-			allowsEditing: true,
-			aspect: [4, 3],
-			quality: 1,
-		});
-
-		if (!result.cancelled) {
-			name === "banner" ? setBannerImage(result.uri) : null;
-		}
-	};
+    const pickImage = async (name: string) => {
+        const result = await ImagePicker.launchImageLibraryAsync(imagePickerConfig);
+        if(result.cancelled) return;
+        setIsLoading(true);
+        if(name === "banner") {
+            const data = await buildImageFormData(result.uri, { width: 300, height: 300 });
+            await uploadImageToS3(data, `${businessDwollaId}_banner`)
+            await purgeImgix(`${businessDwollaId}_banner`);
+            setBannerImage(result.uri);
+        } else if (name === "avatar") {
+            const data = await buildImageFormData(result.uri);
+            await uploadImageToS3(data, businessDwollaId)
+            await purgeImgix(businessDwollaId);
+            updateBusinessProfileData('avatar', result.uri)
+        }
+        setIsLoading(false);
+    };
 
 	return (
 		<View style={viewBaseB}>
@@ -287,37 +293,19 @@ export const MerchantSettingsProfile = (): JSX.Element => {
 				<View style={styles.contentView}>
 					<View style={styles.bannerImageView}>
 						<TouchableOpacity onPress={() => pickImage("banner")}>
-							{bannerImage === "" && (
-								<Image
-									source={require("../../../../../assets/images/profile-banner.png")}
-									containerStyle={styles.bannerImage}
-								/>
-							)}
-							{bannerImage !== "" && (
-								<Image
-									source={{ uri: bannerImage }}
-									style={styles.bannerImage}
-								/>
-							)}
+                            <Image
+                                source={{ uri: bannerImage }}
+                                style={styles.bannerImage}
+                            />
 						</TouchableOpacity>
 
 						<View style={styles.pickImageView}>
 							<TouchableOpacity
-								onPress={() => pickImage("avatar")}>
-								{user?.business?.avatar === "" && (
-									<View style={styles.imageView}>
-										<Image
-											source={require("../../../../../assets/images/placeholder4.png")}
-											containerStyle={styles.image}
-										/>
-									</View>
-								)}
-								{user?.business?.avatar !== "" && (
-									<Image
-										source={{ uri: user?.business?.avatar }}
-										style={styles.imageView}
-									/>
-								)}
+                                onPress={() => pickImage("avatar")}>
+                                <Image
+                                    source={{ uri: businessData.avatar  }}
+                                    style={styles.imageView}
+                                />
 							</TouchableOpacity>
 						</View>
 					</View>
