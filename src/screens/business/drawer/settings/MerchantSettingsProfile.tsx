@@ -8,7 +8,10 @@ import {
 	StyleSheet,
 	TextInput,
 	TouchableOpacity,
-	View
+	View,
+	KeyboardAvoidingView,
+	Platform,
+	SafeAreaView
 } from "react-native";
 import { Image, Text } from "react-native-elements";
 import SelectDropdown from "react-native-select-dropdown";
@@ -98,7 +101,7 @@ const styles = StyleSheet.create({
 	},
 	contentView: {
 		marginTop: 50,
-		paddingBottom: 140,
+		paddingBottom: 40,
 	},
 	bannerImageView: {
 		position: "relative",
@@ -184,6 +187,10 @@ const styles = StyleSheet.create({
 	dialogBottom: {
 		marginTop: 20,
 	},
+	bottomView: {
+		marginHorizontal: 20,
+		marginBottom: 20,
+	}
 });
 
 
@@ -271,7 +278,9 @@ export const MerchantSettingsProfile = (): JSX.Element => {
     };
 
 	return (
-		<View style={viewBaseB}>
+		<KeyboardAvoidingView 
+			{...(Platform.OS === "ios" && { behavior: "padding" })}
+			style={viewBaseB}>
 			<LoadingPage visible={isLoading} isData={true}/>
 			<Header
 				leftComponent={
@@ -458,14 +467,14 @@ export const MerchantSettingsProfile = (): JSX.Element => {
 					</View>
 				</View>
 			</ScrollView>
-			<TouchableOpacity
-				onPress={handleSave}
-				disabled={!availableNext()}
-				style={styles.scanButton}>
-				<Text style={styles.scanBtnText}>
-					{Translation.BUTTON.SAVE_CHANGE}
-				</Text>
-			</TouchableOpacity>
+			<SafeAreaView style={styles.bottomView}>
+				<Button
+					type={BUTTON_TYPES.PURPLE}
+					title={Translation.BUTTON.SAVE_CHANGE}
+					disabled={!availableNext()}
+					onPress={handleSave}
+				/>
+			</SafeAreaView>
 			{isVisible && (
 				<Dialog
 					visible={isVisible}
@@ -493,7 +502,7 @@ export const MerchantSettingsProfile = (): JSX.Element => {
 					</View>
 				</Dialog>
 			)}
-		</View>
+		</KeyboardAvoidingView>
 	);
 };
 
