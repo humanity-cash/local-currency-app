@@ -11,12 +11,11 @@ import {
   Dimensions
 } from "react-native";
 import { Text } from "react-native-elements";
-import { BUTTON_TYPES } from "src/constants";
 import { UserContext, WalletContext } from "src/contexts";
 import { useCustomerWallet } from "src/hooks";
 import * as Routes from "src/navigation/constants";
 import { LoadingPage } from "src/views";
-import { Button, Dialog, Header } from "src/shared/uielements";
+import { Header } from "src/shared/uielements";
 import { colors } from "src/theme/colors";
 import {
   baseHeader,
