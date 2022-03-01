@@ -1,7 +1,7 @@
 import { Business } from "@humanity.cash/types";
 import { useNavigation } from "@react-navigation/core";
 import React, { useState } from "react";
-import { ScrollView, StyleSheet, View, Linking, Platform } from 'react-native';
+import { ScrollView, StyleSheet, View, Linking, Platform, Dimensions } from 'react-native';
 import { Image, Text } from "react-native-elements";
 import { TouchableOpacity } from "react-native-gesture-handler";
 import { profilePictureUrl } from "src/utils/common";
@@ -98,15 +98,12 @@ const styles = StyleSheet.create({
   },
   modalHeader: {
     fontSize: 26,
-    lineHeight: 45,
-    marginBottom: 10,
-    paddingBottom: 10,
-    borderBottomWidth: 1,
-    borderBottomColor: colors.darkGreen,
+    lineHeight: 34,
   },
   feedView: {
     backgroundColor: colors.lightGreen1,
     padding: 20,
+    borderRadius: 4
   },
   feedImage: {
     alignItems: "center",
@@ -179,6 +176,7 @@ const MerchantDictionary = (): JSX.Element => {
     website: ""
   });
   const businesses = useBusinesses();
+  const mW = Dimensions.get('window').width
 
   const bussinessByCategories = businesses.reduce<any>(
     (acc, curr: Business) => {
@@ -326,7 +324,9 @@ const MerchantDictionary = (): JSX.Element => {
               }
             />
             <ScrollView style={styles.modalWrap}>
-              <Text style={styles.modalHeader}>{selected.title}</Text>
+              <View style={underlineHeader}>
+                <Text style={styles.modalHeader}>{selected.title}{selected.title}</Text>
+              </View>
               <View style={styles.feedView}>
                 <Text h2>{selected.title}</Text>
                 <Text style={styles.popularText}>{selected.description}</Text>
@@ -334,28 +334,29 @@ const MerchantDictionary = (): JSX.Element => {
                     source={{uri: selected.image}}
                   containerStyle={styles.feedImage}
                 />
-                <View style={styles.detailV}>
-                  { selected.website &&
-                    <View>
-                      <View style={{flex: 1}}/>
-                      <TouchableOpacity
+
+                <Text style={styles.rightText}>{selected.addressLine1 && selected.addressLine1}{selected.addressLine2 && `, ${selected.addressLine2}`}</Text>
+                <Text style={styles.rightText}>{`${selected.city}, ${selected.state}, ${selected.postalCode}`}</Text>
+                <View style={[styles.detailV]}>
+                  { selected.website ?
+                    <TouchableOpacity
                       onPress={() => handleWebsite(selected.website)}>
-                        <Image
-                            source={{ uri: selected.image  }}
-                          style={styles.websiteImage}
-                        />
-                      </TouchableOpacity>
-                    </View>
-                  }
-                  <View style={{flex: 1}}>
-                    <Text style={styles.rightText}>{selected.addressLine1 && selected.addressLine1}{selected.addressLine2 && `, ${selected.addressLine2}`}</Text>
-                    <Text style={styles.rightText}>{`${selected.city}, ${selected.state}, ${selected.postalCode}`}</Text>
-                    <TouchableOpacity 
-                      style={styles.phoneV}
-                      onPress={() => handlePhone(selected.phone)}>
-                      <Text style={styles.rightText}>{selected.phone && formatPhone(selected.phone)}</Text>
+                      <Text 
+                        ellipsizeMode='middle' 
+                        style={{
+                          width: mW-200, 
+                          textDecorationLine: "underline"
+                        }} 
+                        numberOfLines={1}>
+                          {selected.website}
+                        </Text>
                     </TouchableOpacity>
-                  </View>
+                  : <View/>}
+                  <TouchableOpacity 
+                    style={styles.phoneV}
+                    onPress={() => handlePhone(selected.phone)}>
+                    <Text style={styles.rightText}>{selected.phone && formatPhone(selected.phone)}</Text>
+                  </TouchableOpacity>
                 </View>
               </View>
             </ScrollView>
