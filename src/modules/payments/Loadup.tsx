@@ -132,56 +132,56 @@ const LoadUp = (props: LoadUpProps): JSX.Element => {
             <View style={styles.defaultAmountView}>
               <TouchableOpacity
                 style={
-                  amount == "50"
+                  amount == "5"
                     ? styles.selectedAmountItem
                     : styles.defaultAmountItem
                 }
-                onPress={() => onValueChange("amount", "50")}
+                onPress={() => onValueChange("amount", "5")}
               >
                 <Text
                   style={
-                    amount == "50"
+                    amount == "5"
                       ? styles.selectedAmountSwitch
                       : styles.defaultAmountSwitch
                   }
                 >
-                  B$ 50
+                  B$ 5
                 </Text>
               </TouchableOpacity>
               <TouchableOpacity
                 style={
-                  amount == "100"
+                  amount == "10"
                     ? styles.selectedAmountItem
                     : styles.defaultAmountItem
                 }
-                onPress={() => onValueChange("amount", "100")}
+                onPress={() => onValueChange("amount", "10")}
               >
                 <Text
                   style={
-                    amount == "100"
+                    amount == "10"
                       ? styles.selectedAmountSwitch
                       : styles.defaultAmountSwitch
                   }
                 >
-                  B$ 100
+                  B$ 10
                 </Text>
               </TouchableOpacity>
               <TouchableOpacity
                 style={
-                  amount == "200"
+                  amount == "20"
                     ? styles.selectedAmountItem
                     : styles.defaultAmountItem
                 }
-                onPress={() => onValueChange("amount", "200")}
+                onPress={() => onValueChange("amount", "20")}
               >
                 <Text
                   style={
-                    amount == "200"
+                    amount == "20"
                       ? styles.selectedAmountSwitch
                       : styles.defaultAmountSwitch
                   }
                 >
-                  B$ 200
+                  B$ 20
                 </Text>
               </TouchableOpacity>
             </View>
