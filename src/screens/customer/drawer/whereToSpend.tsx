@@ -113,9 +113,14 @@ const styles = StyleSheet.create({
     marginTop: 20,
     marginBottom: 20,
   },
+  websiteView: {
+    flexDirection: 'row',
+    alignItems: 'center'
+  },
   websiteImage: {
-    width: 20,
-    height: 20
+    width: 16,
+    height: 16,
+    marginEnd: 4
   },
   rightText: {
     fontSize: 14,
@@ -340,7 +345,12 @@ const MerchantDictionary = (): JSX.Element => {
                 <View style={[styles.detailV]}>
                   { selected.website ?
                     <TouchableOpacity
+                      style={styles.websiteView}
                       onPress={() => handleWebsite(selected.website)}>
+                      <Image
+                        source={require("../../../../assets/images/website.png")}
+                        style={styles.websiteImage}
+                      />
                       <Text 
                         ellipsizeMode='middle' 
                         style={{
@@ -348,7 +358,7 @@ const MerchantDictionary = (): JSX.Element => {
                           textDecorationLine: "underline"
                         }} 
                         numberOfLines={1}>
-                          {selected.website}
+                          Website
                         </Text>
                     </TouchableOpacity>
                   : <View/>}
