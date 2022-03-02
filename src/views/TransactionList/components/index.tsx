@@ -1,12 +1,11 @@
 import moment from "moment";
 import { MiniTransaction } from "src/utils/types";
 import React, { useContext } from "react";
-import { ScrollView, Linking } from "react-native";
 import { Image, Text } from "react-native-elements";
 import { Dialog } from "src/shared/uielements";
-import { dialogViewBase, wrappingContainerBase } from "src/theme/elements";
+import { dialogViewBase } from "src/theme/elements";
 import Translation from "src/translation/en.json";
-import { View } from "react-native";
+import { View, Linking, Dimensions } from "react-native";
 import { getBerksharePrefix } from "src/utils/common";
 import { getStyle } from "../utils";
 import { styles, mListstyles } from "../style";
@@ -30,6 +29,7 @@ export const TransactionItem = (props: MyTransactionItemProps) => {
   const { userType } = useContext(UserContext);
   const isCustomer = userType === UserType.Customer;
   const { item, selected } = props;
+  const mW = Dimensions.get('window').width
   const name =
     item.type === "Withdraw"
       ? "Cash out to bank"
@@ -61,7 +61,7 @@ export const TransactionItem = (props: MyTransactionItemProps) => {
           : mListstyles.item
       }
     >
-      <View style={mListstyles.imageContainer}>
+      <View style={[mListstyles.imageContainer, {width: mW-140}]}>
         <Image
             source={item?.image ? { uri: item.image } : require("../../../../assets/images/placeholder5.png")}
           containerStyle={mListstyles.image}
