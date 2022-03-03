@@ -51,25 +51,59 @@ export const getSession = async (): CognitoResponse<
   CognitoUserSession | undefined
 > => {
   return new Promise(function (resolve) {
+    
     //@ts-ignore
     userPool?.storage.sync(async function (err, result) {
-      if (err) {
+      
+      if (err) {        
         console.log("Cognito: Error syncing to storage", err);
         return resolve({ ...NOT_AUTHENTICATED });
+
       } else if (result === "SUCCESS") {
+
         currentUser = userPool.getCurrentUser();
-        if (!currentUser) return resolve({ ...NOT_AUTHENTICATED });
+        
+        if (!currentUser) 
+          return resolve({ ...NOT_AUTHENTICATED });
+
         currentUser.getSession(function (
           err: CognitoError,
           session: CognitoUserSession | undefined
         ) {
-          if (err || !session?.isValid())
-            resolve({ success: false, error: err.code });
-          else resolve({ success: true, data: session });
-        });
-      }
-    });
-  });
+            // Session error or falsy object
+            // Return error
+            if (err || !session)
+              resolve({ success: false, error: err.code });
+
+            // Session exists but has expired (see CognitoUserSession.js::isValid())
+            // Refresh session using refreshToken
+            else if (!session?.isValid()){ 
+              console.log(`Cognito: Session exists but token has expired. Using refreshToken to get new session...`);
+              const refreshToken = session?.getRefreshToken();                
+              currentUser?.refreshSession(refreshToken, (err, session) => {
+                // Error
+                if (err || !session){
+                  console.log(`Cognito: Error attempting to get new session from refreshToken ${err}`);
+                  resolve({ success: false, error: err.code });
+                }                  
+                // Success
+                else {
+                  console.log(`Cognito: Successfully restored session using refreshToken`);
+                  resolve({ success: true, data: session });        
+                }                 
+              });              
+            }
+            // Session exists and is still valid
+            // Simply return the session
+            else {
+              console.log(`Cognito: Session is valid, returning...`);
+              resolve({ success: true, data: session });
+            }              
+          } // getSession callback
+        ); // currentUser.getSession
+      } // else if (result === "SUCCESS") 
+    }); // userPool?.storage.sync 
+  }); // return new Promise
 };
 
 export const signUp = async (
