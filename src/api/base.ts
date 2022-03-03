@@ -1,16 +1,18 @@
 import axios, { AxiosResponse } from "axios";
 import { IMap } from "../utils/types";
 import envs from "./../config/env";
-import { getTokenFromLocalStorage } from "src/auth/localStorage";
+import { CognitoUserSession } from "amazon-cognito-identity-js";
+import { BaseResponse } from "src/auth/types";
+import { getSession } from "src/auth/cognito";
 
 const httpRequest = axios.create({
   baseURL: envs.CORE_API_URL,
 });
 
 httpRequest.interceptors.request.use(async function (config) {
-    const token = await getTokenFromLocalStorage();
-    config.headers.authorization =  token;
-
+    const session: BaseResponse<CognitoUserSession | undefined> = await getSession();
+    const accessToken = session?.data?.getAccessToken();
+    config.headers.authorization =  accessToken?.getJwtToken();
     return config;
 });
 
