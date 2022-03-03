@@ -79,7 +79,7 @@ export const compressImage = async (uri: string, size: { width: number, height: 
 export const profilePictureUrl = (id: string): string => 
     `https://profile-picture-user.imgix.net/${id}.jpeg?w=512&time=${Date.now()}`
 
-    export const buildImageFormData = async (uri: string, size = { width: 100, height: 100 }): Promise<FormData> => {
+export const buildImageFormData = async (uri: string, size = { width: 100, height: 100 }): Promise<FormData> => {
     const compressed = await compressImage(uri, size);
     const data = new FormData();
     //@ts-ignore
