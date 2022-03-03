@@ -48,26 +48,26 @@ export const putRequest = (path: Path, body: Body): HttpResponse =>
 export const deleteRequest = (path: Path, body: Body): HttpResponse =>
   _deleteRequest(path, body);
 
-const ErrorHandler = async (
-  requestHandler: () => HttpResponse
-): HttpResponse => {
-  try {
-    const response: AxiosResponse = await requestHandler();
-    return response;
-  } catch (err) {
-    const config = err?.config;
-    const message = err?.message;
-    const response = err?.response;
-    console.log("~ error.response.data", response?.data);
-    console.error(
-      `API request failed: '${message}'`,
-      `internal error: '${response?.data?.message}'`,
-      `method: '${config?.method?.toUpperCase()}'`,
-      `endpoint: '${config?.baseURL + config?.url}'`,
-      "request:",
-      config?.data ? JSON.parse(config?.data) : ""
-    );
+// const ErrorHandler = async (
+//   requestHandler: () => HttpResponse
+// ): HttpResponse => {
+//   try {
+//     const response: AxiosResponse = await requestHandler();
+//     return response;
+//   } catch (err) {
+//     const config = err?.config;
+//     const message = err?.message;
+//     const response = err?.response;
+//     console.log("~ error.response.data", response?.data);
+//     console.error(
+//       `API request failed: '${message}'`,
+//       `internal error: '${response?.data?.message}'`,
+//       `method: '${config?.method?.toUpperCase()}'`,
+//       `endpoint: '${config?.baseURL + config?.url}'`,
+//       "request:",
+//       config?.data ? JSON.parse(config?.data) : ""
+//     );
 
-    return err.toJSON().message;
-  }
-};
+//     return err.toJSON().message;
+//   }
+// };
