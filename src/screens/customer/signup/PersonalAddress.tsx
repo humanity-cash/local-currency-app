@@ -31,6 +31,8 @@ import {
 } from "src/theme/elements";
 import Translation from "src/translation/en.json";
 import { isSuccessResponse } from "src/utils/http";
+import { buildImageFormData } from 'src/utils/common';
+import { purgeImgix, uploadImageToS3 } from "src/api/profilePicture";
 
 const styles = StyleSheet.create({
   content: {
@@ -74,12 +76,24 @@ const PersonalAddress = (): React.ReactElement => {
     const response = await UserAPI.createCustomer(user);
     if (isSuccessResponse(response)) {
       const newUser: IDBUser = response?.data;
+      const dwollaId = newUser.customer?.dwollaId
+      const avatar = user.customer?.avatar
+      if(dwollaId && avatar) {
+        newUser.customer!.avatar = avatar
+        uploadProfilePicture(dwollaId, avatar)
+      }
       updateUserData(newUser);
       updateUserType(UserType.Customer, newUser.email);
       updateSelectedView(ViewState.CustomerLinkBank);
     }
     setIsLoading(false);
   };
+
+  const uploadProfilePicture = async (dwollaId: string, avatar: string) => {
+    const data = await buildImageFormData(avatar);
+    await uploadImageToS3(data, dwollaId)
+    await purgeImgix(dwollaId);
+  }
 
   return (
     <KeyboardAvoidingView

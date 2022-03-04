@@ -30,6 +30,8 @@ import {
 } from "src/theme/elements";
 import Translation from "src/translation/en.json";
 import { isSuccessResponse } from "src/utils/http";
+import { buildImageFormData } from 'src/utils/common';
+import { purgeImgix, uploadImageToS3 } from "src/api/profilePicture";
 
 const styles = StyleSheet.create({
   headerText: {
@@ -94,6 +96,12 @@ const BusinessAddress = (): ReactElement => {
     const response = await UserAPI.createBusiness(user);
     if (isSuccessResponse(response)) {
       const newUser: IDBUser = response?.data;
+      const dwollaId = newUser.business?.dwollaId
+      const avatar = user.business?.avatar
+      if(dwollaId && avatar) {
+        newUser.business!.avatar = avatar
+        uploadProfilePicture(dwollaId, avatar)
+      }
       updateUserData(newUser);
       updateUserType(UserType.Business, newUser.email);
       setIsLoading(false);
@@ -102,6 +110,12 @@ const BusinessAddress = (): ReactElement => {
     }
     setIsLoading(false);
   };
+
+  const uploadProfilePicture = async (dwollaId: string, avatar: string) => {
+    const data = await buildImageFormData(avatar);
+    await uploadImageToS3(data, dwollaId)
+    await purgeImgix(dwollaId);
+  }
 
   return (
     <KeyboardAvoidingView
