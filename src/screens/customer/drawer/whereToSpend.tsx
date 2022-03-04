@@ -243,7 +243,18 @@ const MerchantDictionary = (): JSX.Element => {
   };
 
   const handleWebsite = (url: string) => {
-    Linking.openURL(url)
+    Linking.canOpenURL(url)
+    .then(supported => {
+      if (!supported) {
+        Linking.openURL(`https://${url}`);
+      } else {
+        return Linking.openURL(url);
+      }
+    })
+    .catch(err => {
+      console.log(err)
+      Linking.openURL(`https://${url}`);
+    });
   }
 
   const handlePhone = (phone: string) => {
