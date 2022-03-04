@@ -346,7 +346,7 @@ const MerchantDictionary = (): JSX.Element => {
                   { selected.website ?
                     <TouchableOpacity
                       style={styles.websiteView}
-                      onPress={() => handleWebsite(selected.website)}>
+                      onPress={() => handleWebsite(selected.website.includes("://") ? selected.website : `https://${selected.website}`)}>
                       <Image
                         source={require("../../../../assets/images/website.png")}
                         style={styles.websiteImage}
