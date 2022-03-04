@@ -243,7 +243,18 @@ const MerchantDictionary = (): JSX.Element => {
   };
 
   const handleWebsite = (url: string) => {
-    Linking.openURL(url)
+    Linking.canOpenURL(url)
+    .then(supported => {
+      if (!supported) {
+        Linking.openURL(`https://${url}`);
+      } else {
+        return Linking.openURL(url);
+      }
+    })
+    .catch(err => {
+      console.log(err)
+      Linking.openURL(`https://${url}`);
+    });
   }
 
   const handlePhone = (phone: string) => {
@@ -346,7 +357,7 @@ const MerchantDictionary = (): JSX.Element => {
                   { selected.website ?
                     <TouchableOpacity
                       style={styles.websiteView}
-                      onPress={() => handleWebsite(selected.website.includes("://") ? selected.website : `https://${selected.website}`)}>
+                      onPress={() => handleWebsite(selected.website)}>
                       <Image
                         source={require("../../../../assets/images/website.png")}
                         style={styles.websiteImage}
