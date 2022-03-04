@@ -1,9 +1,8 @@
 import { Business } from "@humanity.cash/types";
 import { useNavigation } from "@react-navigation/core";
 import React, { useState } from "react";
-import { ScrollView, StyleSheet, View, Linking, Platform, Dimensions } from 'react-native';
+import { ScrollView, StyleSheet, View, Linking, Platform, Dimensions, TouchableOpacity } from 'react-native';
 import { Image, Text } from "react-native-elements";
-import { TouchableOpacity } from "react-native-gesture-handler";
 import { profilePictureUrl } from "src/utils/common";
 import { useBusinesses } from "src/hooks";
 import {
@@ -103,7 +102,8 @@ const styles = StyleSheet.create({
   feedView: {
     backgroundColor: colors.lightGreen1,
     padding: 20,
-    borderRadius: 4
+    borderRadius: 4,
+    marginTop: 30
   },
   feedImage: {
     alignItems: "center",
@@ -329,9 +329,9 @@ const MerchantDictionary = (): JSX.Element => {
               }
             />
             <ScrollView style={styles.modalWrap}>
-              <View style={underlineHeader}>
-                <Text style={styles.modalHeader}>{selected.title}{selected.title}</Text>
-              </View>
+              {/* <View style={underlineHeader}>
+                <Text style={styles.modalHeader}>{selected.title}</Text>
+              </View> */}
               <View style={styles.feedView}>
                 <Text h2>{selected.title}</Text>
                 <Text style={styles.popularText}>{selected.description}</Text>
