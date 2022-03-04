@@ -1,16 +1,18 @@
 import axios, { AxiosResponse } from "axios";
 import { IMap } from "../utils/types";
 import envs from "./../config/env";
-import { getTokenFromLocalStorage } from "src/auth/localStorage";
+import { CognitoUserSession } from "amazon-cognito-identity-js";
+import { BaseResponse } from "src/auth/types";
+import { getSession } from "src/auth/cognito";
 
 const httpRequest = axios.create({
   baseURL: envs.CORE_API_URL,
 });
 
 httpRequest.interceptors.request.use(async function (config) {
-    const token = await getTokenFromLocalStorage();
-    config.headers.authorization =  token;
-
+    const session: BaseResponse<CognitoUserSession | undefined> = await getSession();
+    const accessToken = session?.data?.getAccessToken();
+    config.headers.authorization =  accessToken?.getJwtToken();
     return config;
 });
 
@@ -48,26 +50,26 @@ export const putRequest = (path: Path, body: Body): HttpResponse =>
 export const deleteRequest = (path: Path, body: Body): HttpResponse =>
   _deleteRequest(path, body);
 
-const ErrorHandler = async (
-  requestHandler: () => HttpResponse
-): HttpResponse => {
-  try {
-    const response: AxiosResponse = await requestHandler();
-    return response;
-  } catch (err) {
-    const config = err?.config;
-    const message = err?.message;
-    const response = err?.response;
-    console.log("~ error.response.data", response?.data);
-    console.error(
-      `API request failed: '${message}'`,
-      `internal error: '${response?.data?.message}'`,
-      `method: '${config?.method?.toUpperCase()}'`,
-      `endpoint: '${config?.baseURL + config?.url}'`,
-      "request:",
-      config?.data ? JSON.parse(config?.data) : ""
-    );
+// const ErrorHandler = async (
+//   requestHandler: () => HttpResponse
+// ): HttpResponse => {
+//   try {
+//     const response: AxiosResponse = await requestHandler();
+//     return response;
+//   } catch (err) {
+//     const config = err?.config;
+//     const message = err?.message;
+//     const response = err?.response;
+//     console.log("~ error.response.data", response?.data);
+//     console.error(
+//       `API request failed: '${message}'`,
+//       `internal error: '${response?.data?.message}'`,
+//       `method: '${config?.method?.toUpperCase()}'`,
+//       `endpoint: '${config?.baseURL + config?.url}'`,
+//       "request:",
+//       config?.data ? JSON.parse(config?.data) : ""
+//     );
 
-    return err.toJSON().message;
-  }
-};
+//     return err.toJSON().message;
+//   }
+// };
