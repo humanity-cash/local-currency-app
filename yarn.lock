@@ -3414,6 +3414,13 @@
   dependencies:
     "@types/react" "^16"
 
+"@types/react-native-read-more-text@^1.0.1":
+  version "1.0.1"
+  resolved "https://registry.yarnpkg.com/@types/react-native-read-more-text/-/react-native-read-more-text-1.0.1.tgz#a488109bc78c34de7ccc15e4452d0d88552a38fb"
+  integrity sha512-DYdEJ9xWgqPIacn5aSfMpRxXW1Z7r+/qY6V+vr+t3+5hqZRUv61xFwIj2QBbUQrzJKyq+niTBckVYIM9aLNJ2w==
+  dependencies:
+    "@types/react" "*"
+
 "@types/react-native-svg-charts@^5.0.3":
   version "5.0.12"
   resolved "https://registry.yarnpkg.com/@types/react-native-svg-charts/-/react-native-svg-charts-5.0.12.tgz#571c2207383c395047a8ae424dc37284593d96f0"
@@ -11286,6 +11293,11 @@ react-native-ratings@^7.2.0:
   dependencies:
     lodash "^4.17.15"
     prop-types "^15.7.2"
+
+react-native-read-more-text@^1.1.2:
+  version "1.1.2"
+  resolved "https://registry.yarnpkg.com/react-native-read-more-text/-/react-native-read-more-text-1.1.2.tgz#3f64aee61ec4d3109437f4125f10e49eccdee65a"
+  integrity sha512-FIQhOpvikUanwPRl9QVBYmx6Wx7IXxXH/jlzElOLcP+NSgFLw2fRzSekQUq0yicymZsi7cAWW5TtIj8FHWtNDw==
 
 react-native-reanimated@~2.2.0:
   version "2.2.4"
