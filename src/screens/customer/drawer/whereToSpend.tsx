@@ -322,11 +322,11 @@ const MerchantDictionary = (): JSX.Element => {
         </View>
         <ScrollView>
           <View style={styles.content}>
-            <View style={styles.underlineView}>
-              <Text style={styles.categoryText}>MERCHANT OF THE MONTH</Text>
-            </View>
-            {monthBusiness && (
-              <View>
+          {monthBusiness && (
+            <View>
+              <View style={styles.underlineView}>
+                <Text style={styles.categoryText}>FEATURED BUSINESS</Text>
+              </View>
                 <Image
                   source={{uri: monthBusiness.image}}
                   style={[styles.popularImage, {height: bomH}]}

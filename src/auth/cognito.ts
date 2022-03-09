@@ -96,7 +96,7 @@ export const getSession = async (): CognitoResponse<
             // Session exists and is still valid
             // Simply return the session
             else {
-              console.log(`Cognito: Session is valid, returning...`);
+              // console.log(`Cognito: Session is valid, returning...`);
               resolve({ success: true, data: session });
             }              
           } // getSession callback
