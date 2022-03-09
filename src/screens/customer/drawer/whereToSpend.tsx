@@ -2,6 +2,7 @@ import { Business } from "@humanity.cash/types";
 import { useNavigation } from "@react-navigation/core";
 import React, { useState, useEffect } from "react";
 import { ScrollView, StyleSheet, View, Linking, Platform, Dimensions, Image, TouchableOpacity } from 'react-native';
+import ReadMore from 'react-native-read-more-text';
 import { Text } from "react-native-elements";
 import { profilePictureUrl } from "src/utils/common";
 import { useBusinesses } from "src/hooks";
@@ -22,6 +23,7 @@ import {
 import { MerchantEntry } from "src/utils/types";
 import { FeedItemProps } from '../../../api/types';
 import { getMonthOfTheBusiness } from '../../../api/content';
+import { FontFamily } from "src/theme/elements";
 
 type CategoryViewProps = {
   category: string;
@@ -32,8 +34,12 @@ type CategoryViewProps = {
 const styles = StyleSheet.create({
   headerText: {
     fontSize: 32,
-    fontWeight: "400",
+    fontFamily: FontFamily.bold,
     lineHeight: 40,
+  },
+  detailHeaderText: {
+    fontSize: 24,
+    fontFamily: FontFamily.bold,
   },
   underlineView: {
     marginTop: 20,
@@ -46,7 +52,7 @@ const styles = StyleSheet.create({
   },
   categoryText: {
     fontSize: 10,
-    fontWeight: "bold",
+    fontFamily: FontFamily.bold,
   },
   popularMerchantView: {
     paddingTop: 20,
@@ -56,17 +62,16 @@ const styles = StyleSheet.create({
   popularTitle: {
     fontSize: 18,
     lineHeight: 18,
-    fontWeight: "bold",
+    fontFamily: FontFamily.bold,
+    paddingBottom: 10
   },
   popularText: {
-    paddingTop: 10,
     fontSize: 16,
     lineHeight: 20,
+    paddingTop: 10
   },
   popularImage: {
-    width: 110,
-    height: 150,
-    borderRadius: 5,
+    borderRadius: 5
   },
   image: {
     width: 96,
@@ -178,10 +183,8 @@ const MerchantDictionary = (): JSX.Element => {
     website: ""
   });
   const [monthBusiness, setMonthBusiness] = useState<FeedItemProps | null>(null)
-  const [showMore, setShowMore] = useState<boolean>(false)
-  const [hiddenText, setHiddenText] = useState<string>("")
-  const [showenText, setShowenText] = useState<string>("")
   const [categoryH, setCategoryH] = useState<number>(0)
+  const [bomH, setBomH] = useState<number>(0)
   const businesses = useBusinesses();
   const mW = Dimensions.get('window').width
 
@@ -290,6 +293,22 @@ const MerchantDictionary = (): JSX.Element => {
     .catch(err => console.log(err));
   }
 
+  const _renderTruncatedFooter = (handlePress: any) => {
+    return (
+      <Text style={{color: colors.mistakeRed, marginTop: 5}} onPress={handlePress}>
+        Read more
+      </Text>
+    );
+  }
+
+  const _renderRevealedFooter = (handlePress: any) => {
+    return (
+      <Text style={{color: colors.mistakeRed, marginTop: 5}} onPress={handlePress}>
+        Show less
+      </Text>
+    );
+  }
+
   return (
     <View style={viewBase}>
       <Header
@@ -308,6 +327,15 @@ const MerchantDictionary = (): JSX.Element => {
             </View>
             {monthBusiness && (
               <View>
+                <Image
+                  source={{uri: monthBusiness.image}}
+                  style={[styles.popularImage, {height: bomH}]}
+                  onLayout={(e) => {
+                    Image.getSize(monthBusiness.image, (width, height) => {
+                      setBomH((mW-20)*height/width)
+                    })
+                  }}
+                />
                 <View
                   style={styles.popularMerchantView}
                 >
@@ -315,40 +343,18 @@ const MerchantDictionary = (): JSX.Element => {
                     <Text style={styles.popularTitle}>
                       {monthBusiness.textTitle}
                     </Text>
-                    { !showMore ?  <Text 
-                        style={styles.popularText} numberOfLines={7}
-                        onTextLayout={(e) => {
-                          const text1 = e.nativeEvent.lines.slice(0, 6).map((line) => line.text).join('');
-                          setShowenText(text1)
-                          const text2 = monthBusiness.text.substring(text1.length);
-                          setHiddenText(text2)
-                        }}>
+                    <ReadMore
+                      numberOfLines={3}
+                      renderTruncatedFooter={_renderTruncatedFooter}
+                      renderRevealedFooter={_renderRevealedFooter}>
+                      <Text style={styles.popularText}>
                         {monthBusiness.text}
                       </Text>
-                    : <Text style={styles.popularText}>
-                        {showenText}
-                      </Text>
-                    }
+                    </ReadMore>
                   </View>
-                  <Image
-                    source={{uri: monthBusiness.image}}
-                    style={styles.popularImage}
-                  />
                 </View>
-                {showMore && <Text 
-                    style={styles.popularText}>
-                    {hiddenText}
-                  </Text>
-                }
               </View>
             )}
-            { Boolean(hiddenText) && 
-              <TouchableOpacity
-                style={{paddingTop: 6}}
-                onPress={() => {setShowMore(!showMore)}}>
-                <Text style={{color: colors.mistakeRed}}>{showMore ? "Show less" : "Show more"} &gt;</Text>
-              </TouchableOpacity>
-            }
             {Object.keys(bussinessByCategories).map(
               (category: string, idx: number) => (
                 <CategoryView
@@ -375,7 +381,7 @@ const MerchantDictionary = (): JSX.Element => {
                 <Text style={styles.modalHeader}>{selected.title}</Text>
               </View> */}
               <View style={styles.feedView}>
-                <Text h2>{selected.title}</Text>
+                <Text style={styles.detailHeaderText}>{selected.title}</Text>
                 <Text style={styles.popularText}>{selected.description}</Text>
                 <Image
                     source={{uri: selected.image}}
