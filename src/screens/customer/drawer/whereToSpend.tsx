@@ -1,8 +1,9 @@
 import { Business } from "@humanity.cash/types";
 import { useNavigation } from "@react-navigation/core";
-import React, { useState } from "react";
-import { ScrollView, StyleSheet, View, Linking, Platform, Dimensions, TouchableOpacity } from 'react-native';
-import { Image, Text } from "react-native-elements";
+import React, { useState, useEffect } from "react";
+import { ScrollView, StyleSheet, View, Linking, Platform, Dimensions, Image, TouchableOpacity } from 'react-native';
+import ReadMore from 'react-native-read-more-text';
+import { Text } from "react-native-elements";
 import { profilePictureUrl } from "src/utils/common";
 import { useBusinesses } from "src/hooks";
 import {
@@ -20,6 +21,9 @@ import {
   wrappingContainerBase,
 } from "src/theme/elements";
 import { MerchantEntry } from "src/utils/types";
+import { FeedItemProps } from '../../../api/types';
+import { getMonthOfTheBusiness } from '../../../api/content';
+import { FontFamily } from "src/theme/elements";
 
 type CategoryViewProps = {
   category: string;
@@ -30,8 +34,12 @@ type CategoryViewProps = {
 const styles = StyleSheet.create({
   headerText: {
     fontSize: 32,
-    fontWeight: "400",
+    fontFamily: FontFamily.bold,
     lineHeight: 40,
+  },
+  detailHeaderText: {
+    fontSize: 24,
+    fontFamily: FontFamily.bold,
   },
   underlineView: {
     marginTop: 20,
@@ -44,33 +52,26 @@ const styles = StyleSheet.create({
   },
   categoryText: {
     fontSize: 10,
-    fontWeight: "bold",
+    fontFamily: FontFamily.bold,
   },
   popularMerchantView: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
     paddingTop: 20,
-    paddingBottom: 20,
-  },
-  popularTextView: {
-    width: "60%",
-    fontSize: 16,
+    flexDirection: 'row',
+    flex: 1
   },
   popularTitle: {
     fontSize: 18,
     lineHeight: 18,
-    fontWeight: "bold",
+    fontFamily: FontFamily.bold,
+    paddingBottom: 10
   },
   popularText: {
-    paddingTop: 10,
     fontSize: 16,
     lineHeight: 20,
+    paddingTop: 10
   },
   popularImage: {
-    width: 110,
-    height: 150,
-    borderRadius: 5,
+    borderRadius: 5
   },
   image: {
     width: 96,
@@ -94,6 +95,7 @@ const styles = StyleSheet.create({
   modalWrap: {
     paddingHorizontal: 10,
     marginBottom: 10,
+    flex: 1
   },
   modalHeader: {
     fontSize: 26,
@@ -109,7 +111,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     width: "100%",
     height: 203,
-    borderRadius: 5,
+    borderRadius: 8,
     marginTop: 20,
     marginBottom: 20,
   },
@@ -155,7 +157,7 @@ const CategoryView = (props: CategoryViewProps) => {
           >
             <Image
                 source={{ uri: item.image }}
-              containerStyle={styles.image}
+                style={styles.image}
             />
             <Text style={styles.text}>{item.title}</Text>
           </TouchableOpacity>
@@ -180,6 +182,9 @@ const MerchantDictionary = (): JSX.Element => {
     postalCode: "",
     website: ""
   });
+  const [monthBusiness, setMonthBusiness] = useState<FeedItemProps | null>(null)
+  const [categoryH, setCategoryH] = useState<number>(0)
+  const [bomH, setBomH] = useState<number>(0)
   const businesses = useBusinesses();
   const mW = Dimensions.get('window').width
 
@@ -210,6 +215,17 @@ const MerchantDictionary = (): JSX.Element => {
     },
     {}
   );
+
+  useEffect(() => {
+    fetchMonthOfTheBusiness()
+  }, [])
+
+  const fetchMonthOfTheBusiness = async () => {
+    const data = await getMonthOfTheBusiness();
+    if(data.length > 0) {
+      setMonthBusiness(data[0]);
+    }
+  }
 
   const formatPhone = (phone: string) => {
       if(!phone) return ''
@@ -277,6 +293,22 @@ const MerchantDictionary = (): JSX.Element => {
     .catch(err => console.log(err));
   }
 
+  const _renderTruncatedFooter = (handlePress: any) => {
+    return (
+      <Text style={{color: colors.mistakeRed, marginTop: 5}} onPress={handlePress}>
+        Read more
+      </Text>
+    );
+  }
+
+  const _renderRevealedFooter = (handlePress: any) => {
+    return (
+      <Text style={{color: colors.mistakeRed, marginTop: 5}} onPress={handlePress}>
+        Show less
+      </Text>
+    );
+  }
+
   return (
     <View style={viewBase}>
       <Header
@@ -290,34 +322,39 @@ const MerchantDictionary = (): JSX.Element => {
         </View>
         <ScrollView>
           <View style={styles.content}>
-            {/* <View style={styles.underlineView}>
-              <Text style={styles.categoryText}>MERCHANT OF THE MONTH</Text>
-            </View> */}
-            {/* {Object.keys(bussinessByCategories).length > 0 && (
-              <TouchableOpacity
-                style={styles.popularMerchantView}
-                onPress={() =>
-                  handleSelect(
-                    bussinessByCategories[
-                      Object.keys(bussinessByCategories)[0]
-                    ][0]
-                  )
-                }
-              >
-                <View style={styles.popularTextView}>
-                  <Text style={styles.popularTitle}>
-                    {"Best Of The Month Title"}
-                  </Text>
-                  <Text style={styles.popularText}>
-                    {"Best Of The Month Description"}
-                  </Text>
-                </View>
+          {monthBusiness && (
+            <View>
+              <View style={styles.underlineView}>
+                <Text style={styles.categoryText}>FEATURED BUSINESS</Text>
+              </View>
                 <Image
-                  source={require("../../../../assets/images/feed1.png")}
-                  containerStyle={styles.popularImage}
+                  source={{uri: monthBusiness.image}}
+                  style={[styles.popularImage, {height: bomH}]}
+                  onLayout={(e) => {
+                    Image.getSize(monthBusiness.image, (width, height) => {
+                      setBomH((mW-20)*height/width)
+                    })
+                  }}
                 />
-              </TouchableOpacity>
-            )} */}
+                <View
+                  style={styles.popularMerchantView}
+                >
+                  <View style={{flex: 1}}>
+                    <Text style={styles.popularTitle}>
+                      {monthBusiness.textTitle}
+                    </Text>
+                    <ReadMore
+                      numberOfLines={3}
+                      renderTruncatedFooter={_renderTruncatedFooter}
+                      renderRevealedFooter={_renderRevealedFooter}>
+                      <Text style={styles.popularText}>
+                        {monthBusiness.text}
+                      </Text>
+                    </ReadMore>
+                  </View>
+                </View>
+              </View>
+            )}
             {Object.keys(bussinessByCategories).map(
               (category: string, idx: number) => (
                 <CategoryView
@@ -333,7 +370,7 @@ const MerchantDictionary = (): JSX.Element => {
       </View>
       {isVisible && (
         <Modal visible={isVisible}>
-          <View style={modalViewBase}>
+          <View style={[modalViewBase, {flex: 1, paddingBottom: 40}]}>
             <ModalHeader
               rightComponent={
                 <CancelBtn text="Close" onClick={handleDeSelect} />
@@ -344,11 +381,17 @@ const MerchantDictionary = (): JSX.Element => {
                 <Text style={styles.modalHeader}>{selected.title}</Text>
               </View> */}
               <View style={styles.feedView}>
-                <Text h2>{selected.title}</Text>
+                <Text style={styles.detailHeaderText}>{selected.title}</Text>
                 <Text style={styles.popularText}>{selected.description}</Text>
                 <Image
                     source={{uri: selected.image}}
-                  containerStyle={styles.feedImage}
+                    style={[styles.feedImage, {height: categoryH}]}
+                    resizeMode='contain'
+                    onLayout={(e) => {
+                      Image.getSize(selected.image, (width, height) => {
+                        setCategoryH((mW-60)*height/width)
+                      })
+                    }}
                 />
 
                 <Text style={styles.rightText}>{selected.addressLine1 && selected.addressLine1}{selected.addressLine2 && `, ${selected.addressLine2}`}</Text>
