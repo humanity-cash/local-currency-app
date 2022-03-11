@@ -42,6 +42,7 @@
         "CASH_OUT": "Cash out to USD",
         "CASH_ME_OUT": "Cash me out",
         "DONATE_MY_BERKSHARES": "Yes, donate my B$",
+        "GO_BACK": "Go back",
         "GO_BACK_HOME": "Go back to home",
         "WANT_RETURN": "I want to make a return",
         "CONTACT": "Contact",
@@ -193,7 +194,8 @@
         "TOTAL_COSTS": "Total costs",
         "LOAD_UP_SUCCESS": "Congratulations! You have topped up",
         "LOAD_UP_SUCCESS_DETAIL": "The BerkShares will be available in about 3 business days!",
-        "LOAD_UP_SUCCESS_AVAILABLE": "The BerkShares will soon be available in your wallet!"
+        "LOAD_UP_SUCCESS_AVAILABLE": "The BerkShares will soon be available in your wallet!",
+        "LOAD_UP_CONFIRM": "Please confirm your transaction."
     },
     "CASH_OUT": {
         "TITLE": "Cash out",

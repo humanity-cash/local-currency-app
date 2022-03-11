@@ -14,6 +14,7 @@ import {
   Button,
   Header,
   CancelBtn,
+  Dialog
 } from "src/shared/uielements";
 import { colors } from "src/theme/colors";
 import {
@@ -21,6 +22,9 @@ import {
   viewBase,
   viewBaseB,
   wrappingContainerBase,
+  dialogViewBase,
+  dialogWrap,
+  baseHeader,
 } from "src/theme/elements";
 import Translation from "src/translation/en.json";
 import * as Routes from "src/navigation/constants";
@@ -55,6 +59,7 @@ const LoadUp = (props: LoadUpProps): JSX.Element => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [amount, setAmount] = useState<string>("");
   const [goNext, setGoNext] = useState(false);
+  const [showConfirm, setShowConfirm] = useState<boolean>(false)
   const homeRoute =
     stylesSelection === "business" ? Routes.MERCHANT_DASHBOARD : Routes.TABS;
   const { userType } = useContext(UserContext);
@@ -73,6 +78,7 @@ const LoadUp = (props: LoadUpProps): JSX.Element => {
   };
 
   const onLoadUp = async () => {
+    setShowConfirm(false)
     if (!userId) {
       showToast(
         ToastType.ERROR,
@@ -132,56 +138,56 @@ const LoadUp = (props: LoadUpProps): JSX.Element => {
             <View style={styles.defaultAmountView}>
               <TouchableOpacity
                 style={
-                  amount == "5"
+                  amount == "50"
                     ? styles.selectedAmountItem
                     : styles.defaultAmountItem
                 }
-                onPress={() => onValueChange("amount", "5")}
+                onPress={() => onValueChange("amount", "50")}
               >
                 <Text
                   style={
-                    amount == "5"
+                    amount == "50"
                       ? styles.selectedAmountSwitch
                       : styles.defaultAmountSwitch
                   }
                 >
-                  B$ 5
+                  B$ 50
                 </Text>
               </TouchableOpacity>
               <TouchableOpacity
                 style={
-                  amount == "10"
+                  amount == "100"
                     ? styles.selectedAmountItem
                     : styles.defaultAmountItem
                 }
-                onPress={() => onValueChange("amount", "10")}
+                onPress={() => onValueChange("amount", "100")}
               >
                 <Text
                   style={
-                    amount == "10"
+                    amount == "100"
                       ? styles.selectedAmountSwitch
                       : styles.defaultAmountSwitch
                   }
                 >
-                  B$ 10
+                  B$ 100
                 </Text>
               </TouchableOpacity>
               <TouchableOpacity
                 style={
-                  amount == "20"
+                  amount == "200"
                     ? styles.selectedAmountItem
                     : styles.defaultAmountItem
                 }
-                onPress={() => onValueChange("amount", "20")}
+                onPress={() => onValueChange("amount", "200")}
               >
                 <Text
                   style={
-                    amount == "20"
+                    amount == "200"
                       ? styles.selectedAmountSwitch
                       : styles.defaultAmountSwitch
                   }
                 >
-                  B$ 20
+                  B$ 200
                 </Text>
               </TouchableOpacity>
             </View>
@@ -229,9 +235,44 @@ const LoadUp = (props: LoadUpProps): JSX.Element => {
           type={isCustomer ? BUTTON_TYPES.DARK_GREEN : BUTTON_TYPES.PURPLE}
           title={Translation.BUTTON.LOAD_UP}
           disabled={!goNext}
-          onPress={onLoadUp}
+          onPress={() => {setShowConfirm(true)}}
         />
       </SafeAreaView>
+      {showConfirm && (
+        <Dialog
+          visible={showConfirm}
+          hiddenCloseBtn={true}
+          backgroundStyle={styles.dialogBg}
+        >
+          <View style={dialogViewBase}>
+            <View style={dialogWrap}>
+              <View style={baseHeader}>
+                <Text style={styles.headerText}>
+                  {Translation.LOAD_UP.LOAD_UP_CONFIRM}
+                </Text>
+              </View>
+              <Text style={styles.detailText}>
+                {`You will load up B$ ${(+amount).toFixed(2)} to your wallet, from your linked bank account.`}
+              </Text>
+            </View>
+            <View>
+              <TouchableOpacity
+                style={{height: 55, borderRadius: 30, alignItems: 'center', justifyContent: 'center'}}
+                onPress={() => {setShowConfirm(false)}}
+              >
+                <View style={{borderBottomWidth: 1}}>
+                  <Text style={styles.detailText} >{Translation.BUTTON.GO_BACK}</Text>
+                </View>
+              </TouchableOpacity>
+              <Button
+                type={isCustomer ? BUTTON_TYPES.DARK_GREEN : BUTTON_TYPES.PURPLE}
+                title={Translation.BUTTON.CONFIRM}
+                onPress={onLoadUp}
+              />
+            </View>
+          </View>
+        </Dialog>
+      )}
     </KeyboardAvoidingView>
   );
 };
