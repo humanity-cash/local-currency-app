@@ -61,10 +61,20 @@ const styles = StyleSheet.create({
 const BusinessOwnerAddress = (): ReactElement => {
   const navigation = useNavigation();
   const { signOut } = useContext(AuthContext);
+  const { user } = useContext(UserContext);
+  const business = user?.business;
 
   const onNextPress = () => {
     navigation.navigate(Routes.BUSINESS_INFO);
   };
+
+  const availableNext = () => {
+    return 	business &&
+        Boolean(business!.owner.address1) &&
+				Boolean(business!.owner.city) &&
+				Boolean(business!.owner.state) &&
+				Boolean(business!.owner.postalCode)
+	}
 
   return (
     <KeyboardAvoidingView
@@ -97,6 +107,7 @@ const BusinessOwnerAddress = (): ReactElement => {
       <SafeAreaView style={styles.bottomView}>
         <Button
           type="purple"
+          disabled={!availableNext()}
           title={Translation.BUTTON.NEXT}
           onPress={onNextPress}
         />

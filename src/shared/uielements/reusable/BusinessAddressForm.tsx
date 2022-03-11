@@ -78,7 +78,7 @@ const BusinessAddressForm = (props: BusinessAddressProps): JSX.Element => {
 
   return (
     <View>
-      <Text style={styles.label}>ADDRESS 1 *</Text>
+      <Text style={styles.label}>ADDRESS 1*</Text>
       <BlockInput
         name="address1"
         placeholder="Street number, street name"
@@ -106,7 +106,7 @@ const BusinessAddressForm = (props: BusinessAddressProps): JSX.Element => {
 
       <View style={styles.inlineView}>
         <View style={styles.cityView}>
-          <Text style={styles.label}>CITY *</Text>
+          <Text style={styles.label}>CITY*</Text>
           <BlockInput
             inputRef={cityRef}
             name="city"
@@ -122,7 +122,7 @@ const BusinessAddressForm = (props: BusinessAddressProps): JSX.Element => {
           />
         </View>
         <View style={styles.stateContent}>
-          <Text style={styles.label}>STATE</Text>
+          <Text style={styles.label}>STATE*</Text>
           <View style={styles.stateView}>
             <SelectDropdown
               ref={stateRef}
@@ -153,7 +153,7 @@ const BusinessAddressForm = (props: BusinessAddressProps): JSX.Element => {
         </View>
       </View>
 
-      <Text style={styles.label}>POSTAL CODE *</Text>
+      <Text style={styles.label}>POSTAL CODE*</Text>
       <BlockInput
         name="postalCode"
         placeholder="00000"
@@ -166,7 +166,7 @@ const BusinessAddressForm = (props: BusinessAddressProps): JSX.Element => {
         }}
       />
 
-      <Text style={styles.label}>PHONE NUMBER - OPTIONAL</Text>
+      <Text style={styles.label}>PHONE NUMBER</Text>
       <MaskInput
         inputRef={phoneRef}
         value={business?.phoneNumber}
