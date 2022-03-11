@@ -235,12 +235,17 @@ export const CustomerLoadUp = StyleSheet.create({
 		fontWeight: '400',
 		lineHeight: 40
 	},
+	dialogBg: {
+		backgroundColor: colors.pDialogBg
+	},
 	view: {
 		marginTop: 10,
 	},
 	text: {
 		color: colors.text,
-		fontSize: 12
+		fontSize: 12,
+		borderBottomWidth: 1,
+  		borderBottomColor: colors.darkGreen
 	},
 	amountText: {
 		marginTop: 30,
@@ -290,6 +295,10 @@ export const CustomerLoadUp = StyleSheet.create({
 	},
 	defaultAmountSwitch: {
 		color: colors.darkGreen
+	},
+	detailText: {
+		fontSize: 16,
+		color: colors.bodyText,
 	}
 });
 
@@ -306,6 +315,9 @@ export const BusinessLoadUp = StyleSheet.create({
 	},
 	container: {
 		paddingBottom: 40
+	},
+	dialogBg: {
+		backgroundColor: colors.bDialogBg
 	},
 	content: {
 		marginTop: 10,
@@ -376,6 +388,10 @@ export const BusinessLoadUp = StyleSheet.create({
 	},
 	defaultAmountSwitch: {
 		color: colors.purple
+	},
+	detailText: {
+		fontSize: 16,
+		color: colors.bodyText,
 	}
 });
 
