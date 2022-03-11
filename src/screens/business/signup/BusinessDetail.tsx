@@ -115,7 +115,7 @@ const BusinessDetail = (): ReactElement => {
           {Translation.PROFILE.USE_BUSINESS_INFOMATION}
         </Text>
 
-        <Text style={styles.label}>{Translation.LABEL.BUSINESS_TYPE}</Text>
+        <Text style={styles.label}>{Translation.LABEL.BUSINESS_TYPE}*</Text>
         <View style={styles.dropdownView}>
           <SelectDropdown
             data={businessTypes}

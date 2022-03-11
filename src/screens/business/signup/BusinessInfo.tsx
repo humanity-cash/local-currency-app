@@ -105,8 +105,7 @@ const BusinessInfo = (): ReactElement => {
   useEffect(() => {
     setGoNext(
       Boolean(business?.rbn) &&
-        Boolean(business?.industry) &&
-        Boolean(business?.ein)
+        Boolean(business?.industry)
     );
   }, [business?.rbn, business?.industry, business?.ein]);
 
@@ -158,7 +157,7 @@ const BusinessInfo = (): ReactElement => {
               }}
             />
 
-            <Text style={styles.label}>{Translation.LABEL.INDUSTRY}</Text>
+            <Text style={styles.label}>{Translation.LABEL.INDUSTRY}*</Text>
             <View style={styles.picker}>
               <SelectDropdown
                 ref={industryRef}
@@ -185,7 +184,7 @@ const BusinessInfo = (): ReactElement => {
                 )}
               />
             </View>
-            <Text style={styles.label}>{`${Translation.LABEL.EIN}*`}</Text>
+            <Text style={styles.label}>{`${Translation.LABEL.EIN}`}</Text>
             <MaskInput
               value={business?.ein}
               mask={[/\d/, /\d/, "-", /\d/, /\d/, /\d/, /\d/, /\d/, /\d/, /\d/]}
