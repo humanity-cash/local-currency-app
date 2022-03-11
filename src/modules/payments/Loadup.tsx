@@ -252,7 +252,7 @@ const LoadUp = (props: LoadUpProps): JSX.Element => {
                 </Text>
               </View>
               <Text style={styles.detailText}>
-                {`You will load up B$ ${(+amount).toFixed(2)} to your wallet`}
+                {`You will load up B$ ${(+amount).toFixed(2)} to your wallet, from your linked bank account.`}
               </Text>
             </View>
             <View>
