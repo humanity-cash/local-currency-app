@@ -220,11 +220,11 @@ export const MerchantSettingsProfile = (): JSX.Element => {
 	}, [])
 
 	const availableNext = () => {
-		return 	businessData.address1.length > 0 &&
-				businessData.address2.length > 0 &&
-				businessData.city.length > 0 &&
-				businessData.state.length > 0 &&
-				businessData.postalCode.length > 0
+		return 	Boolean(businessData.tag) &&
+				Boolean(businessData.address1) &&
+				Boolean(businessData.city) &&
+				Boolean(businessData.state) &&
+				Boolean(businessData.postalCode)
 	}
   
 	const updateBusinessProfileData = (prop: string, newValue: string) => setBusinessData((pv) => {
@@ -366,7 +366,7 @@ export const MerchantSettingsProfile = (): JSX.Element => {
 							style={businessAddressFormStyles.inputBg}
 						/>
 						<Text style={businessAddressFormStyles.label}>
-							ADDRESS 2
+							ADDRESS 2 - OPTIONAL
 						</Text>
 						<BlockInput
 							name="address2"
