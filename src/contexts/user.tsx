@@ -33,7 +33,9 @@ export const UserProvider: React.FunctionComponent = ({ children }) => {
   };
   const updateUserType = (newType: UserType, userEmail: string): void => {
     setUserType(newType);
-    saveUserTypeToStorage(userEmail, newType);
+    if(newType !== UserType.NotVerified) {
+      saveUserTypeToStorage(userEmail, newType);
+    }
   };
 
   useEffect(() => {
