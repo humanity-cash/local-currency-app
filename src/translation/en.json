@@ -21,7 +21,7 @@
         "CREATE_ACCOUNT": "Create an account",
         "FORGOT_PASSWORD": "Forgot password",
         "PERSONAL": "Personal",
-        "BUSINESS_PERSONAL": "Business and personal",
+        "BUSINESS": "Business",
         "LOGOUT": "Log out",
         "LOAD_UP": "Load Wallet",
         "SCAN": "Scan to Pay or Receive",
