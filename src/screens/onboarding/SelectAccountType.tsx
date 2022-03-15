@@ -64,7 +64,7 @@ const SelectAccountType = (): JSX.Element => {
           <Button
             type="transparent"
             onPress={handleBuisness}
-            title={Translation.BUTTON.BUSINESS_PERSONAL}
+            title={Translation.BUTTON.BUSINESS}
             style={styles.button}
           />
         </View>
