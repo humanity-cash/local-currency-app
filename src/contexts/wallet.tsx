@@ -1,7 +1,8 @@
 import { IWallet } from "@humanity.cash/types";
-import React, { useState } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { DwollaAPI } from "src/api";
 import { FundingSource } from 'src/api/types';
+import { NavigationViewContext, ViewState } from "src/contexts/navigation";
 
 interface PersonalFundingSource {
   availableFundingSource: FundingSource | undefined;
@@ -10,35 +11,26 @@ interface PersonalFundingSource {
 export const WalletContext = React.createContext<IState>({} as IState);
 
 interface IState {
-  customerWalletData: IWallet & PersonalFundingSource;
-  businessWalletData: IWallet & PersonalFundingSource;
+  customerWalletData: IWallet & PersonalFundingSource | undefined;
+  businessWalletData: IWallet & PersonalFundingSource | undefined;
   updateBusinessWalletData: (dwollaId: string) => void;
   updateCustomerWalletData: (dwollaId: string) => void;
 }
 
 export const WalletProvider: React.FunctionComponent = ({ children }) => {
   const [customerWalletData, setCustomerWalletData] = useState<
-    IWallet & PersonalFundingSource
-  >({
-    totalBalance: 0,
-    createdTimestamp: "",
-    availableBalance: 0,
-    userId: "",
-    address: "",
-    createdBlock: "",
-    availableFundingSource: undefined,
-  });
+    IWallet & PersonalFundingSource | undefined
+  >(undefined);
   const [businessWalletData, setBusinessWalletData] = useState<
-    IWallet & PersonalFundingSource
-  >({
-    totalBalance: 0,
-    createdTimestamp: "",
-    availableBalance: 0,
-    userId: "",
-    address: "",
-    createdBlock: "",
-    availableFundingSource: undefined,
-  });
+    IWallet & PersonalFundingSource | undefined
+  >(undefined);
+  const { selectedView } = useContext(NavigationViewContext);
+
+  useEffect(() => {
+    if( selectedView == ViewState.Onboarding ) {
+      clearWalletData()
+    }
+  }, [selectedView])
 
   const updateBusinessWalletData = async (businessDwollaId: string) => {
     if (businessDwollaId) {
@@ -62,11 +54,16 @@ export const WalletProvider: React.FunctionComponent = ({ children }) => {
     }
   };
 
+  const clearWalletData = () => {
+    setCustomerWalletData(undefined)
+    setBusinessWalletData(undefined)
+  }
+
   const state: IState = {
     customerWalletData,
     businessWalletData,
     updateBusinessWalletData,
-    updateCustomerWalletData,
+    updateCustomerWalletData
   };
 
   return (

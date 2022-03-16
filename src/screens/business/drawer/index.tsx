@@ -31,8 +31,7 @@ import { Button, Dialog } from "src/shared/uielements";
 import { colors } from "src/theme/colors";
 import {
   baseHeader,
-  dialogViewBase,
-  wrappingContainerBase,
+  dialogViewBase
 } from "src/theme/elements";
 import Translation from "src/translation/en.json";
 import MerchantRequest from "src/screens/business/payment/MerchantRequest";
@@ -455,12 +454,10 @@ const DrawerContent = (props: DrawerContentComponentProps) => {
               label={Translation.TABS.LOADUP}
               onPress={onPressLoadup}
             />
-            { verifiedCustomer && userTag &&
-              <DrawerItem
-                label={Translation.TABS.SEND_TO_PERSONAL_ACCOUNT}
-                onPress={onPressSendToSomeone}
-              />
-            }
+            <DrawerItem
+              label={Translation.TABS.SEND_TO_PERSONAL_ACCOUNT}
+              onPress={onPressSendToSomeone}
+            />
             <DrawerItem
               label={Translation.TABS.CASHOUT}
               onPress={onPressCashout}
