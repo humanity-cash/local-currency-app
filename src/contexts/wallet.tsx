@@ -27,7 +27,7 @@ export const WalletProvider: React.FunctionComponent = ({ children }) => {
   const { selectedView } = useContext(NavigationViewContext);
 
   useEffect(() => {
-    if( selectedView == ViewState.Onboarding ) {
+    if( selectedView === ViewState.Onboarding ) {
       clearWalletData()
     }
   }, [selectedView])
@@ -36,10 +36,12 @@ export const WalletProvider: React.FunctionComponent = ({ children }) => {
     if (businessDwollaId) {
       const userWallet = await DwollaAPI.loadWallet(businessDwollaId);
       const fundingSource = await DwollaAPI.loadFundingSource(businessDwollaId);
-      setBusinessWalletData({
-        ...userWallet,
-        availableFundingSource: fundingSource,
-      });
+      if( selectedView !== ViewState.Onboarding ) {
+        setBusinessWalletData({
+          ...userWallet,
+          availableFundingSource: fundingSource,
+        });
+      }
     }
   };
 
@@ -47,10 +49,12 @@ export const WalletProvider: React.FunctionComponent = ({ children }) => {
     if (customerDwollaId) {
       const userWallet = await DwollaAPI.loadWallet(customerDwollaId);
       const fundingSource = await DwollaAPI.loadFundingSource(customerDwollaId);
-      setCustomerWalletData({
-        ...userWallet,
-        availableFundingSource: fundingSource,
-      });
+      if( selectedView !== ViewState.Onboarding ) {
+        setCustomerWalletData({
+          ...userWallet,
+          availableFundingSource: fundingSource,
+        });
+      }
     }
   };
 
