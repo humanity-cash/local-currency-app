@@ -2,7 +2,7 @@ import moment from "moment";
 import { MiniTransaction } from "src/utils/types";
 import React, { useContext } from "react";
 import { Image, Text } from "react-native-elements";
-import { Dialog } from "src/shared/uielements";
+import { Dialog, Button } from "src/shared/uielements";
 import { dialogViewBase } from "src/theme/elements";
 import Translation from "src/translation/en.json";
 import { View, Linking, Dimensions } from "react-native";
@@ -13,6 +13,7 @@ import { UserContext } from "src/contexts";
 import { UserType } from "src/auth/types";
 import { colors } from "src/theme/colors";
 import { TRANSACTION_EXPLORER_URL } from "src/config/env";
+import { BUTTON_TYPES } from "src/constants";
 
 export type MyTransactionItemProps = {
   item: MiniTransaction;
@@ -23,6 +24,7 @@ export type TransactionDetailProps = {
   visible: boolean;
   data: MiniTransaction;
   onClose: () => void;
+  onReturn?: () => void
 };
 
 export const TransactionItem = (props: MyTransactionItemProps) => {
@@ -82,7 +84,8 @@ export const TransactionItem = (props: MyTransactionItemProps) => {
 };
 
 export const TransactionDetail = (props: TransactionDetailProps) => {
-  const { data, visible, onClose } = props;
+  const { data, visible, onClose, onReturn } = props;
+
   return (
     <Dialog visible={visible} onClose={onClose}>
       <View style={dialogViewBase}>
@@ -118,6 +121,16 @@ export const TransactionDetail = (props: TransactionDetailProps) => {
             {moment(data.timestamp).format("h:mm A, MMM D, YYYY")}
           </Text>
         </View>
+        { onReturn &&
+          <View>
+            <Button
+              type={BUTTON_TYPES.TRANSPARENT}
+              title={Translation.BUTTON.WANT_RETURN}
+              textStyle={styles.returnText}
+              onPress={onReturn}
+            />
+          </View>
+        }
       </View>
     </Dialog>
   );
