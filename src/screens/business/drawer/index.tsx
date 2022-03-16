@@ -454,10 +454,12 @@ const DrawerContent = (props: DrawerContentComponentProps) => {
               label={Translation.TABS.LOADUP}
               onPress={onPressLoadup}
             />
-            <DrawerItem
-              label={Translation.TABS.SEND_TO_PERSONAL_ACCOUNT}
-              onPress={onPressSendToSomeone}
-            />
+            { verifiedCustomer && userTag &&
+              <DrawerItem
+                label={Translation.TABS.SEND_TO_PERSONAL_ACCOUNT}
+                onPress={onPressSendToSomeone}
+              />
+            }
             <DrawerItem
               label={Translation.TABS.CASHOUT}
               onPress={onPressCashout}
