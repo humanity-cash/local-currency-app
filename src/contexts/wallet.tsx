@@ -15,6 +15,7 @@ interface IState {
   businessWalletData: IWallet & PersonalFundingSource | undefined;
   updateBusinessWalletData: (dwollaId: string) => void;
   updateCustomerWalletData: (dwollaId: string) => void;
+  clearWalletData: () => void;
 }
 
 export const WalletProvider: React.FunctionComponent = ({ children }) => {
@@ -67,7 +68,8 @@ export const WalletProvider: React.FunctionComponent = ({ children }) => {
     customerWalletData,
     businessWalletData,
     updateBusinessWalletData,
-    updateCustomerWalletData
+    updateCustomerWalletData,
+    clearWalletData
   };
 
   return (

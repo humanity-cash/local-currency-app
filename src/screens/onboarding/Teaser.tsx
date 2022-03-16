@@ -3,7 +3,7 @@ import { LoadingPage } from "src/views";
 import React, { useContext } from "react";
 import { ImageBackground, StyleSheet, View } from "react-native";
 import { Text } from "react-native-elements";
-import { AuthContext } from "src/contexts";
+import { AuthContext, WalletContext } from "src/contexts";
 import { AuthStatus } from "src/auth/types";
 import { BUTTON_TYPES } from "src/constants";
 import * as Routes from "src/navigation/constants";
@@ -54,7 +54,18 @@ const styles = StyleSheet.create({
 
 const Teaser = (): JSX.Element => {
   const { authStatus } = useContext(AuthContext);
+  const { clearWalletData } = useContext(WalletContext)
   const navigation = useNavigation();
+
+  const handleLogin = () => {
+    clearWalletData()
+    navigation.navigate(Routes.LOGIN)
+  }
+
+  const handleRegister = () => {
+    clearWalletData()
+    navigation.navigate(Routes.CREATE_ACCOUNT)
+  }
 
   return (
     <View style={viewBase}>
@@ -75,12 +86,12 @@ const Teaser = (): JSX.Element => {
           <Button
             type={BUTTON_TYPES.DARK_GREEN}
             title="Log In"
-            onPress={() => navigation.navigate(Routes.LOGIN)}
+            onPress={handleLogin}
           />
           <Button
             type={BUTTON_TYPES.DARK_RED}
             title="Create an account"
-            onPress={() => navigation.navigate(Routes.CREATE_ACCOUNT)}
+            onPress={handleRegister}
             style={styles.createAccountBtn}
             textStyle={{ color: colors.darkGreen }}
           />
