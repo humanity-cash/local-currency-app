@@ -48,6 +48,7 @@ type PaymentRequestSuccessProps = {
   visible: boolean;
   onClose: () => void;
   amount: number;
+  isReturn?: boolean;
 };
 
 const PaymentRequestSuccess = (
@@ -69,7 +70,9 @@ const PaymentRequestSuccess = (
         <ModalHeader />
         <View style={{ paddingHorizontal: 10, flex: 1 }}>
           <Text style={styles.headerText}>
-            Succeeded! You have received B$ {props.amount.toFixed(2)}.
+            {props.isReturn 
+              ? `Succeeded! You have received a refund of B$ ${props.amount.toFixed(2)}.`
+              : `Succeeded! You have received B$ ${props.amount.toFixed(2)}.`}
           </Text>
           <View style={styles.imageView}>
             <Image
