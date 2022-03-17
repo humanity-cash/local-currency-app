@@ -25,16 +25,16 @@ const App = (): ReactElement | null => {
   return (
     <NavigationProvider>
       <UserProvider>
-        <AuthProvider>
-          <EventsProvider>
-            <WalletProvider>
+      <WalletProvider>
+          <AuthProvider>
+            <EventsProvider>
               <ThemeProvider theme={theme}>
                 <MainNavigationStack />
                 <Toast ref={(ref) => Toast.setRef(ref)} />
               </ThemeProvider>
-            </WalletProvider>
-          </EventsProvider>
-        </AuthProvider>
+            </EventsProvider>
+          </AuthProvider>
+        </WalletProvider>
       </UserProvider>
     </NavigationProvider>
   );

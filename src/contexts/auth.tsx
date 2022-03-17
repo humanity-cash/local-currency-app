@@ -19,6 +19,7 @@ import {
 } from "src/auth/types";
 import { NavigationViewContext, ViewState } from "./navigation";
 import { UserContext } from "./user";
+import { WalletContext } from "src/contexts";
 
 export const AuthContext = React.createContext(defaultState);
 
@@ -30,6 +31,7 @@ export const AuthProvider: React.FunctionComponent = ({ children }) => {
   const [signInDetails, setSignInDetails] = useState(signInInitialState);
   const [signUpDetails, setSignUpDetails] =
     useState<SignUpInput>(signUpInitialState);
+  const { clearWalletData } = useContext(WalletContext)
 
   const [forgotPasswordDetails, setForgotPasswordDetails] =
     useState<ForgotPassword>({
@@ -46,6 +48,7 @@ export const AuthProvider: React.FunctionComponent = ({ children }) => {
     setSignUpDetails((pv: SignUpInput) => ({ ...pv, ...i }));
   };
   const getSessionInfo = async () => {
+    clearWalletData()
     try {
       updateAuthStatus(AuthStatus.Loading);
       const response: BaseResponse<CognitoUserSession | undefined> =
@@ -151,7 +154,7 @@ export const AuthProvider: React.FunctionComponent = ({ children }) => {
         const newType = 
           latestType == UserType.Cashier && user?.verifiedBusiness
             ? UserType.Business
-            : (!latestType || latestType !== UserType.NotVerified)
+            : (Boolean(latestType) && latestType !== UserType.NotVerified)
               ? (latestType as UserType)
               : user?.verifiedCustomer
                 ? UserType.Customer

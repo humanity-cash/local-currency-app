@@ -31,8 +31,7 @@ import { Button, Dialog } from "src/shared/uielements";
 import { colors } from "src/theme/colors";
 import {
   baseHeader,
-  dialogViewBase,
-  wrappingContainerBase,
+  dialogViewBase
 } from "src/theme/elements";
 import Translation from "src/translation/en.json";
 import MerchantRequest from "src/screens/business/payment/MerchantRequest";
