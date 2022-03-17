@@ -215,9 +215,10 @@ const TransactionList = (props: MyTransactionsInput): JSX.Element => {
           visible={isReturnView}
           onSuccess={onSuccessMakeReturn}
           onClose={onClose}
-          isOpenAmount={false}
+          isOpenAmount={true}
           amount={Number(selectedItem.value)}
           ownerName={selectedItem.fromName}
+          isReturn={true}
         />
       }
       {isRequestSuccess && (
@@ -225,6 +226,7 @@ const TransactionList = (props: MyTransactionsInput): JSX.Element => {
           visible={isRequestSuccess}
           onClose={onConfirmMakeReturn}
           amount={receivedAmount}
+          isReturn={true}
         />
       )}
 

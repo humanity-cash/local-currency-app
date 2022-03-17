@@ -9,6 +9,8 @@ import { dialogViewBase } from "src/theme/elements";
 import { PaymentMode, SECURITY_ID } from "src/utils/types";
 import { UserType } from "src/auth/types";
 import { CustomerScanQrCodeStyle, BusinessScanQrCodeStyle } from "src/style";
+import Translation from 'src/translation/en.json';
+import { colors } from "src/theme/colors";
 
 type RequestPaymentInput = {
   visible: boolean;
@@ -17,6 +19,7 @@ type RequestPaymentInput = {
   isOpenAmount: boolean;
   amount?: number;
   ownerName: string;
+  isReturn?: boolean;
 };
 
 const useWalletData = () => {
@@ -107,10 +110,16 @@ const RequestPayment = (props: RequestPaymentInput): JSX.Element => {
             <Text style={styles.ownerName}>{props?.ownerName}</Text>
           </View>
           <QRCode value={addressStr} size={200} />
-          {!props.isOpenAmount && (
+          {!props.isOpenAmount ? (
             <Text style={styles.amount}>B$ {props?.amount?.toFixed(2)}</Text>
+          ) : props.isReturn ? (
+            <Text style={{
+              color: colors.mistakeRed,
+              marginTop: 20,
+            }}>{Translation.PAYMENT.SHOW_QR_CODE_TO_CASHIER}</Text>
+          ) : (
+            <View style={{height: 40}}/>
           )}
-          <View style={{height: 40}}/>
         </View>
       </View>
     </Dialog>
