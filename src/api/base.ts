@@ -3,16 +3,27 @@ import { IMap } from "../utils/types";
 import envs from "./../config/env";
 import { CognitoUserSession } from "amazon-cognito-identity-js";
 import { BaseResponse } from "src/auth/types";
-import { getSession } from "src/auth/cognito";
+import { getSession, tokenIsExpired } from "src/auth/cognito";
+import { getFromLocalStorage } from "src/auth/localStorage";
 
 const httpRequest = axios.create({
   baseURL: envs.CORE_API_URL,
 });
 
 httpRequest.interceptors.request.use(async function (config) {
-    const session: BaseResponse<CognitoUserSession | undefined> = await getSession();
-    const accessToken = session?.data?.getAccessToken();
-    config.headers.authorization =  accessToken?.getJwtToken();
+    
+    const tokenExpiry = await getFromLocalStorage("@tokenExpiry");
+    const expired = tokenIsExpired(tokenExpiry);
+    
+    if(expired){
+      const session: BaseResponse<CognitoUserSession | undefined> = await getSession();
+      const accessToken = session?.data?.getAccessToken();
+      config.headers.authorization = accessToken?.getJwtToken();
+    }
+    else{
+      const token = await getFromLocalStorage("@token");
+      config.headers.authorization = token;
+    }
     return config;
 });
 
