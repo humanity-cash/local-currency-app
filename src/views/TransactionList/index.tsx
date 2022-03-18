@@ -22,6 +22,8 @@ import { MiniTransaction } from "src/utils/types";
 import { filterData } from "./utils";
 import { styles, mListstyles } from "./style";
 import { TransactionDetail, TransactionItem } from "./components";
+import { PaymentsModule } from "src/modules";
+import { PaymentRequestSuccess } from 'src/views';
 
 export interface MyTransactionsInput {
   userId: string;
@@ -40,6 +42,9 @@ const TransactionList = (props: MyTransactionsInput): JSX.Element => {
   const [isFilterVisible, setIsFilterVisible] = useState<boolean>(false);
   const [searchText, setSearchText] = useState<string>("");
   const [isDetailView, setIsDetailView] = useState<boolean>(false);
+  const [isReturnView, setIsReturnView] = useState<boolean>(false);
+  const [isRequestSuccess, setIsRequestSuccess] = useState<boolean>(false);
+  const [receivedAmount, setReceivedAmount] = useState<number>(0);
   const [selectedItem, setSelectedItem] = useState<MiniTransaction>(
     {} as ITransaction
   );
@@ -64,6 +69,12 @@ const TransactionList = (props: MyTransactionsInput): JSX.Element => {
     const tm = setTimeout(() => setIsLoading(false), 2000);
     return () => clearTimeout(tm);
   }, [userId]);
+
+  useEffect(() => {
+    if (refreshing) {
+      loadTransactions();
+    }
+  }, [refreshing]);
 
   const loadTransactions = (isWithLoading = false) => {
     if (userId) {
@@ -120,13 +131,25 @@ const TransactionList = (props: MyTransactionsInput): JSX.Element => {
 
   const onClose = () => {
     setIsDetailView(false);
+    setIsReturnView(false)
+    setIsRequestSuccess(false)
   };
 
-  useEffect(() => {
-    if (refreshing) {
-      loadTransactions();
-    }
-  }, [refreshing]);
+  const onReturn = () => {
+		setIsDetailView(false);
+		setIsReturnView(true);
+  }
+  
+  const onSuccessMakeReturn = (amount: number) => {
+    setReceivedAmount(amount);
+    setIsReturnView(false);
+    setIsRequestSuccess(true);
+  };
+
+  const onConfirmMakeReturn = () => {
+    setIsRequestSuccess(false);
+    loadTransactions();
+  };
 
   const filterBtnStyle = {
     ...styles.filterBtn,
@@ -184,8 +207,30 @@ const TransactionList = (props: MyTransactionsInput): JSX.Element => {
           visible={isDetailView}
           data={selectedItem}
           onClose={onClose}
+          onReturn={isCustomer && selectedItem.type == "OUT" ? onReturn : undefined}
         />
       )}
+      {isReturnView && 
+        <PaymentsModule.Request
+          visible={isReturnView}
+          onSuccess={onSuccessMakeReturn}
+          onClose={onClose}
+          isOpenAmount={true}
+          amount={Number(selectedItem.value)}
+          ownerName={selectedItem.fromName}
+          isReturn={true}
+        />
+      }
+      {isRequestSuccess && (
+        <PaymentRequestSuccess
+          visible={isRequestSuccess}
+          onClose={onConfirmMakeReturn}
+          amount={receivedAmount}
+          isReturn={true}
+        />
+      )}
+
+
     </ScrollView>
   );
 };
