@@ -25,6 +25,17 @@ export const NOT_AUTHENTICATED: BaseResponse<undefined> = {
   error: "noUserAuthenticated"
 };
 
+export function tokenIsExpired(tokenExpiry:string) : boolean {
+  try{
+    const now = Math.floor(Date.now() / 1000);
+    const expiry = parseInt(tokenExpiry);
+    return now >= expiry;
+  }
+  catch(err){
+    return true;
+  }
+}
+
 // Production: 
 const USERPOOL_ID = "us-west-1_VPieqTZDv";
 const CLIENT_ID = "4d7cknh0r1f8mkirvcio1mmmg6";

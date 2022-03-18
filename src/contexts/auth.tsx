@@ -5,7 +5,7 @@ import * as userController from "src/auth/cognito";
 import { signInInitialState, signUpInitialState } from "src/auth/consts";
 import {
   getLatestSelectedAccountType,
-  saveTokenToLocalStorage,
+  saveToLocalStorage,
 } from "src/auth/localStorage";
 import {
   AuthStatus,
@@ -70,9 +70,10 @@ export const AuthProvider: React.FunctionComponent = ({ children }) => {
   const saveUserToken = async (
     i: BaseResponse<CognitoUserSession | undefined>
   ) => {
-    // const jwtToken = i?.data?.getIdToken().getJwtToken() || "";
+    const expiry = i?.data?.getAccessToken().getExpiration() || "";
+    await saveToLocalStorage(`${expiry}`, "@tokenExpiry");
     const jwtToken = i?.data?.getAccessToken().getJwtToken() || "";
-    await saveTokenToLocalStorage(jwtToken);
+    await saveToLocalStorage(jwtToken, "@token");
   };
 
   useEffect(() => {
