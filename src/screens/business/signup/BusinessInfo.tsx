@@ -38,13 +38,14 @@ import { Industry } from "src/utils/types";
 import MaskInput from "src/shared/uielements/MaskInput";
 
 const Industries = [
-  Industry.ARTS_ENTERTAINMENT,
-  Industry.COMMUNICATION_EDUCATION,
-  Industry.FOOD_DRINK,
-  Industry.HEALTH_WELLNESS,
-  Industry.LODGING,
   Industry.SHOPPING,
+  Industry.FOOD_DRINK,
+  Industry.ARTS_ENTERTAINMENT,
+  Industry.HEALTH_WELLNESS,
+  Industry.COMMUNICATION_EDUCATION,
   Industry.SERVICES,
+  Industry.FARMS,
+  Industry.LODGING,
 ];
 
 const styles = StyleSheet.create({
