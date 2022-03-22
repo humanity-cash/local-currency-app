@@ -193,7 +193,7 @@
         "LOAD_UP_DETAIL": "Specify the amount of BerkShares (B$1 = USD 1) you would like to load up.",
         "TOTAL_COSTS": "Total costs",
         "LOAD_UP_SUCCESS": "Congratulations! You have topped up",
-        "LOAD_UP_SUCCESS_DETAIL": "The BerkShares will be available in about 3 business days!",
+        "LOAD_UP_SUCCESS_DETAIL": "The BerkShares will be available in about 5~6 business days!",
         "LOAD_UP_SUCCESS_AVAILABLE": "The BerkShares will soon be available in your wallet!",
         "LOAD_UP_CONFIRM": "Please confirm your transaction."
     },
