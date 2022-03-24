@@ -83,14 +83,19 @@ export const buildImageFormData = async (uri: string, size = { width: 100, heigh
     const compressed = await compressImage(uri, size);
     const data = new FormData();
     //@ts-ignore
-    data.append('file', compressed);
-    data.append('content_type', 'image/jpeg');
+    const file = {
+        uri: compressed.uri,
+        name: new Date().getTime() + "",
+        type: 'image/jpeg'
+    }
+    data.append('file', file);
+    // data.append('content_type', 'image/jpeg');
 
     return data;
 }
 
 export const imagePickerConfig: ImagePicker.ImagePickerOptions = {
     mediaTypes: ImagePicker.MediaTypeOptions.Images,
-    aspect: [4, 3],
-    quality: 0,
+    aspect: [1, 1],
+    quality: 1,
 };
