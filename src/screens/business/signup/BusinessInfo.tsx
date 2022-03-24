@@ -42,7 +42,7 @@ const Industries = [
   Industry.FOOD_DRINK,
   Industry.ARTS_ENTERTAINMENT,
   Industry.HEALTH_WELLNESS,
-  Industry.COMMUNICATION_EDUCATION,
+  Industry.COMMUNITY_EDUCATION,
   Industry.SERVICES,
   Industry.FARMS,
   Industry.LOAGING,

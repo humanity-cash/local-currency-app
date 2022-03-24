@@ -59,7 +59,7 @@ export enum Industry {
   FOOD_DRINK = "Food & Drink",
   ARTS_ENTERTAINMENT = "Arts & Entertainment",
   HEALTH_WELLNESS = "Health & Wellness",
-  COMMUNICATION_EDUCATION = "Community & Education",
+  COMMUNITY_EDUCATION = "Community & Education",
   SERVICES = "Services",
   FARMS = "Farms",
   LOAGING = "Loading",
