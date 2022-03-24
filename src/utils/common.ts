@@ -85,7 +85,7 @@ export const buildImageFormData = async (uri: string, size = { width: 100, heigh
     //@ts-ignore
     const file = {
         uri: compressed.uri,
-        name: new Date().getTime() + "",
+        name: new Date().getTime() + ".jpeg",
         type: 'image/jpeg'
     }
     data.append('file', file);
