@@ -45,7 +45,7 @@ const Industries = [
   Industry.COMMUNICATION_EDUCATION,
   Industry.SERVICES,
   Industry.FARMS,
-  Industry.LODGING,
+  Industry.LOAGING,
 ];
 
 const styles = StyleSheet.create({
