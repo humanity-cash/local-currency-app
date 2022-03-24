@@ -15,6 +15,7 @@ import { modalViewBase, FontFamily } from "src/theme/elements";
 import { colors } from "src/theme/colors";
 import { UserType } from "src/auth/types";
 import { getFeedContent } from "src/api/content";
+import Translation from 'src/translation/en.json';
 
 const styles = StyleSheet.create({
   modalWrap: {
@@ -103,7 +104,7 @@ const PaymentPending = ({
           >
             Pending...
           </Text>
-          <Text style={styles.bodyText}>This usually takes 5-6 seconds</Text>
+          <Text style={styles.bodyText}>{Translation.PAYMENT.PENDING_DETAIL}</Text>
           <View style={styles.contentView}>
             <View style={styles.imageView}>
               { image?.length && 
