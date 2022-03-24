@@ -21,8 +21,8 @@ export const getBerksharePrefix = (type: TransactionType | string): string => {
     if (
         type === TransactionType.SALE ||
         type === TransactionType.RETURN ||
-    type === TransactionType.IN ||
-type === TransactionType.DEPOSIT
+        type === TransactionType.IN ||
+        type === TransactionType.DEPOSIT
     ) {
         return "+ B$";
     } else {
@@ -79,13 +79,13 @@ export const compressImage = async (uri: string, size: { width: number, height: 
 export const profilePictureUrl = (id: string): string => 
     `https://profile-picture-user.imgix.net/${id}.jpeg?w=512&time=${Date.now()}`
 
-export const buildImageFormData = async (uri: string, size = { width: 100, height: 100 }): Promise<FormData> => {
+export const buildImageFormData = async (uri: string, filename: String, size = { width: 100, height: 100 }): Promise<FormData> => {
     const compressed = await compressImage(uri, size);
-    const data = new FormData();
     //@ts-ignore
+    const data = new FormData();
     const file = {
         uri: compressed.uri,
-        name: new Date().getTime() + ".jpeg",
+        name: filename + ".jpeg",
         type: 'image/jpeg'
     }
     data.append('file', file);

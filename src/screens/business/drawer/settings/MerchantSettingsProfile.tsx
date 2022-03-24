@@ -264,12 +264,12 @@ export const MerchantSettingsProfile = (): JSX.Element => {
         if(result.cancelled) return;
         setIsLoading(true);
         if(name === "banner") {
-            const data = await buildImageFormData(result.uri, { width: 300, height: 300 });
+            const data = await buildImageFormData(result.uri, `${businessDwollaId}_banner`, { width: 300, height: 300 });
             await uploadImageToS3(data, `${businessDwollaId}_banner`)
             await purgeImgix(`${businessDwollaId}_banner`);
             setBannerImage(result.uri);
         } else if (name === "avatar") {
-            const data = await buildImageFormData(result.uri);
+            const data = await buildImageFormData(result.uri, businessDwollaId);
             await uploadImageToS3(data, businessDwollaId)
             await purgeImgix(businessDwollaId);
             updateBusinessProfileData('avatar', result.uri)
