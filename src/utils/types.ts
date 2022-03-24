@@ -62,7 +62,7 @@ export enum Industry {
   COMMUNITY_EDUCATION = "Community & Education",
   SERVICES = "Services",
   FARMS = "Farms",
-  LOAGING = "Loading",
+  LODGING = "Lodging",
 }
 
 export type BusinessDetails = {
