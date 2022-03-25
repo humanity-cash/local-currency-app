@@ -112,7 +112,7 @@ const BusinessAddress = (): ReactElement => {
   };
 
   const uploadProfilePicture = async (dwollaId: string, avatar: string) => {
-    const data = await buildImageFormData(avatar);
+    const data = await buildImageFormData(avatar, dwollaId);
     await uploadImageToS3(data, dwollaId)
     await purgeImgix(dwollaId);
   }
