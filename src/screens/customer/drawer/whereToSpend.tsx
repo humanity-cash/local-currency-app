@@ -76,7 +76,7 @@ const styles = StyleSheet.create({
   },
   image: {
     width: 96,
-    height: 132,
+    height: 96,
     borderRadius: 5,
   },
   merchantsView: {
