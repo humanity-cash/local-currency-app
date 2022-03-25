@@ -213,7 +213,7 @@ const MerchantDictionary = (): JSX.Element => {
     categories.forEach((industry) => {
       const filteredBusinesses = businesses.filter((biz) => {
         return industry.toLowerCase() === biz.industry.toLowerCase()
-              || (industry === Industry.COMMUNITY_EDUCATION && biz.industry.toLowerCase() === "communication")
+              || (industry === Industry.COMMUNITY_EDUCATION && biz.industry.toLowerCase() === "communication & education")
       })
 
       const catBusinesses =  filteredBusinesses.reduce<any>(
