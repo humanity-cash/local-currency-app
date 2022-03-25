@@ -24,6 +24,7 @@ import { MerchantEntry } from "src/utils/types";
 import { FeedItemProps } from '../../../api/types';
 import { getMonthOfTheBusiness } from '../../../api/content';
 import { FontFamily } from "src/theme/elements";
+import { Industry } from "src/utils/types";
 
 type CategoryViewProps = {
   category: string;
@@ -184,38 +185,70 @@ const MerchantDictionary = (): JSX.Element => {
   });
   const [monthBusiness, setMonthBusiness] = useState<FeedItemProps | null>(null)
   const [categoryH, setCategoryH] = useState<number>(0)
+  const [bussinessByCategories, setBussinessByCategories] = useState<any>({})
+  const [showIndustries, setShowIndustries] = useState<Industry[]>([])
   const [bomH, setBomH] = useState<number>(0)
   const businesses = useBusinesses();
   const mW = Dimensions.get('window').width
 
-  const bussinessByCategories = businesses.reduce<any>(
-    (acc, curr: Business) => {
-      const formattedCurr = {
-        title: curr.tag,
-        description: curr.story,
-        //@ts-ignore
-        image: profilePictureUrl(`${curr.dwollaId}_banner`),
-        addressLine1: curr.address1,
-        addressLine2: curr.address2,
-        phone: curr.phoneNumber,
-        city: curr.city,
-        state: curr.state,
-        postalCode: curr.postalCode,
-        website: curr?.website
-      };
-      if (curr.industry) {
-        if (acc[curr.industry]) {
-          const newValue = [...acc[curr.industry], formattedCurr];
-          acc[curr.industry] = newValue;
-        } else {
-          acc[curr.industry] = [formattedCurr];
-        }
-      }
-      return acc;
-    },
-    {}
-  );
+  const industries = [
+    Industry.SHOPPING,
+    Industry.FOOD_DRINK,
+    Industry.ARTS_ENTERTAINMENT,
+    Industry.HEALTH_WELLNESS,
+    Industry.COMMUNITY_EDUCATION,
+    Industry.SERVICES,
+    Industry.FARMS
+  ];
 
+  useEffect(() => {
+    const categories: Industry[] = industries.filter((category) => {
+      const filters = businesses.filter(({industry}) => {
+        return industry.toLowerCase() === category.toLowerCase()
+      })
+      return filters.length > 0
+    })
+    let retBusinesses: any = {}
+    
+    categories.forEach((industry) => {
+      const filteredBusinesses = businesses.filter((biz) => {
+        return industry.toLowerCase() === biz.industry.toLowerCase()
+              || (industry === Industry.COMMUNITY_EDUCATION && biz.industry.toLowerCase() === "communication & education")
+      })
+
+      const catBusinesses =  filteredBusinesses.reduce<any>(
+        (acc, curr: Business) => {
+          const formattedCurr = {
+            title: curr.tag,
+            description: curr.story,
+            //@ts-ignore
+            image: profilePictureUrl(`${curr.dwollaId}_banner`),
+            addressLine1: curr.address1,
+            addressLine2: curr.address2,
+            phone: curr.phoneNumber,
+            city: curr.city,
+            state: curr.state,
+            postalCode: curr.postalCode,
+            website: curr?.website
+          };
+          if (acc[industry]) {
+            const newValue = [...acc[industry], formattedCurr];
+            acc[industry] = newValue;
+          } else {
+            acc[industry] = [formattedCurr];
+          }
+          return acc;
+        },
+        {}
+      );
+      
+      retBusinesses = {...retBusinesses, ...catBusinesses}
+    })
+
+    setBussinessByCategories(retBusinesses)
+    setShowIndustries(categories)
+  }, [businesses])
+  
   useEffect(() => {
     fetchMonthOfTheBusiness()
   }, [])
