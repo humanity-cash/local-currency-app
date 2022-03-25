@@ -1,7 +1,7 @@
 import { AntDesign } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import * as ImagePicker from "expo-image-picker";
-import React, { useContext, useState, useEffect } from "react";
+import React, { useContext, useState, useEffect, createRef } from "react";
 import {
 	Dimensions,
 	ScrollView,
@@ -40,6 +40,7 @@ import { isSuccessResponse } from "src/utils/http";
 import { ToastType } from 'src/utils/types';
 import MaskInput from 'src/shared/uielements/MaskInput';
 import {uploadImageToS3, purgeImgix} from "src/api/profilePicture";
+import { Industry } from "src/utils/types";
 
 const businessAddressFormStyles = StyleSheet.create({
 	bodyText: {
@@ -190,9 +191,37 @@ const styles = StyleSheet.create({
 	bottomView: {
 		marginHorizontal: 20,
 		marginBottom: 20,
+	},
+	picker: {
+		height: 55,
+		justifyContent: "center",
+		borderRadius: 3,
+		backgroundColor: colors.white,
+		marginBottom: 10,
+	},
+		pickerText: {
+		color: colors.purple,
+	},
+	selectItem: {
+		width: "100%",
+		height: 55,
+		backgroundColor: colors.white,
+	},
+	dropdownContainer: {
+		marginTop: -22
 	}
 });
 
+const Industries: string[] = [
+	Industry.SHOPPING,
+	Industry.FOOD_DRINK,
+	Industry.ARTS_ENTERTAINMENT,
+	Industry.HEALTH_WELLNESS,
+	Industry.COMMUNITY_EDUCATION,
+	Industry.SERVICES,
+	Industry.FARMS,
+	Industry.LODGING,
+];
 
 export const MerchantSettingsProfile = (): JSX.Element => {
 	const navigation = useNavigation();
@@ -213,14 +242,23 @@ export const MerchantSettingsProfile = (): JSX.Element => {
 		postalCode: business?.postalCode || "",
 		//@ts-ignore
 		website: business?.website || "",
+		industry: business?.industry || ""
 	})
+
+	const defaultIndustryIndex = Industries.findIndex(
+		(value) => {
+			return value.toLowerCase() === businessData.industry.toLowerCase()
+				|| (value === Industry.COMMUNITY_EDUCATION && businessData.industry.toLowerCase() === "communication")
+		}
+	)
 
 	useEffect(() => {
 		updateBusinessProfileData('state', countries[0])
 	}, [])
 
 	const availableNext = () => {
-		return 	Boolean(businessData.tag) &&
+		return 	Boolean(businessData.industry) &&
+				Boolean(businessData.tag) &&
 				Boolean(businessData.address1) &&
 				Boolean(businessData.city) &&
 				Boolean(businessData.state) &&
@@ -317,6 +355,32 @@ export const MerchantSettingsProfile = (): JSX.Element => {
                                 />
 							</TouchableOpacity>
 						</View>
+					</View>
+					<Text style={styles.smallLabel}>{Translation.LABEL.INDUSTRY}*</Text>
+					<View style={styles.picker}>
+						<SelectDropdown
+							data={Industries}
+							defaultValueByIndex={defaultIndustryIndex >= 0 ? defaultIndustryIndex : 0}
+							onSelect={(selectedItem) => {
+								updateBusinessProfileData("industry", selectedItem)
+							}}
+							buttonTextAfterSelection={(selectedItem) => {
+								return selectedItem;
+							}}
+							rowTextForSelection={(item) => {
+								return item;
+							}}
+							buttonStyle={styles.selectItem}
+							buttonTextStyle={styles.pickerText}
+							rowStyle={styles.selectItem}
+							dropdownStyle={styles.dropdownContainer}
+							renderCustomizedRowChild={(item) => (
+								<Text style={styles.pickerText}>{item}</Text>
+							)}
+							renderDropdownIcon={() => (
+								<AntDesign name="down" size={18} color={colors.purple} />
+							)}
+						/>
 					</View>
 					<Text style={styles.smallLabel}>
 						BUSINESS NAME - THIS NAME WILL BE PUBLIC*
