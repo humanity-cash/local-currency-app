@@ -55,13 +55,14 @@ export enum BusinessType {
 }
 
 export enum Industry {
-  ARTS_ENTERTAINMENT = "Arts & entertainment",
-  COMMUNICATION_EDUCATION = "Communication & education",
-  FOOD_DRINK = "Food & drink",
-  HEALTH_WELLNESS = "Health & wellness",
-  LODGING = "Lodging",
   SHOPPING = "Shopping",
+  FOOD_DRINK = "Food & Drink",
+  ARTS_ENTERTAINMENT = "Arts & Entertainment",
+  HEALTH_WELLNESS = "Health & Wellness",
+  COMMUNITY_EDUCATION = "Community & Education",
   SERVICES = "Services",
+  FARMS = "Farms",
+  LODGING = "Lodging",
 }
 
 export type BusinessDetails = {
