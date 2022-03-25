@@ -79,7 +79,7 @@ export const SettingsPersonalDetails = (): JSX.Element => {
         const result = await ImagePicker.launchImageLibraryAsync(imagePickerConfig);
         if(result.cancelled) return;
         setIsLoading(true);
-        const data = await buildImageFormData(result.uri);
+        const data = await buildImageFormData(result.uri, customerDwollaId);
         await uploadImageToS3(data, customerDwollaId)
         await purgeImgix(customerDwollaId);
         onValueChange('avatar', result.uri);
