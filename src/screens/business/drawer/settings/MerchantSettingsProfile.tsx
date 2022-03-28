@@ -248,7 +248,7 @@ export const MerchantSettingsProfile = (): JSX.Element => {
 	const defaultIndustryIndex = Industries.findIndex(
 		(value) => {
 			return value.toLowerCase() === businessData.industry.toLowerCase()
-				|| (value === Industry.COMMUNITY_EDUCATION && businessData.industry.toLowerCase() === "communication")
+				|| (value === Industry.COMMUNITY_EDUCATION && businessData.industry.toLowerCase() === "communication & education")
 		}
 	)
 
