@@ -45,7 +45,8 @@
         "CAMERA",
         "RECORD_AUDIO",
         "READ_PHONE_STATE",
-        "READ_CONTACTS"
+        "READ_CONTACTS",
+        "WRITE_SETTING"
       ]
     }
   }
