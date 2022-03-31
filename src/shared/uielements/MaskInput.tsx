@@ -24,6 +24,7 @@ type MaskInputProps = {
   inputRef?: RefObject<TextInput>;
   returnKeyType?: ReturnKeyTypeOptions;
   onSubmitEditing?: () => void;
+  editable?: boolean
 };
 
 const styles = StyleSheet.create({
@@ -65,6 +66,7 @@ class MaskInput extends React.Component<MaskInputProps> {
         blurOnSubmit={false}
         returnKeyType={this.props.returnKeyType || "done"}
         onSubmitEditing={this.props.onSubmitEditing || Keyboard.dismiss}
+        editable={this.props.editable ?? true}
       />
     );
   }
