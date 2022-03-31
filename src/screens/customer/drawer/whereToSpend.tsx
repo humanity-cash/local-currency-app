@@ -186,7 +186,6 @@ const MerchantDictionary = (): JSX.Element => {
   const [monthBusiness, setMonthBusiness] = useState<FeedItemProps | null>(null)
   const [categoryH, setCategoryH] = useState<number>(0)
   const [bussinessByCategories, setBussinessByCategories] = useState<any>({})
-  const [showIndustries, setShowIndustries] = useState<Industry[]>([])
   const [bomH, setBomH] = useState<number>(0)
   const businesses = useBusinesses();
   const mW = Dimensions.get('window').width
@@ -246,7 +245,6 @@ const MerchantDictionary = (): JSX.Element => {
     })
 
     setBussinessByCategories(retBusinesses)
-    setShowIndustries(categories)
   }, [businesses])
   
   useEffect(() => {
