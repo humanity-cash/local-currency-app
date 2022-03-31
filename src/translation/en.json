@@ -107,6 +107,7 @@
         "REGISTERD_NAME": "REGISTERED BUSINESS NAME",
         "INDUSTRY": "INDUSTRY",
         "EIN": "Employee Identification Number (EIN)",
+        "SSN": "Social Security Number (SSN)",
         "WHERE_CAN_FIND": "Where can customers fine you?",
         "QUESTIONS_FREQUENTLY": "FREQUENTLY ASKED QUESTIONS",
         "NEW_PASSWORD": "NEW PASSWORD",
