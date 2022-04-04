@@ -116,7 +116,7 @@ const BusinessAddress = (): ReactElement => {
     setIsLoading(false);
   };
 
-  const uploadProfilePicture = async (filename: string, avatar: string, isBanner: Boolean) => {
+  const uploadProfilePicture = async (filename: string, avatar: string, isBanner: boolean) => {
     const data = 
       isBanner ? await buildImageFormData(avatar, filename, { width: 512, height: 512 })
                : await buildImageFormData(avatar, filename)
