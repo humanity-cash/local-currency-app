@@ -302,7 +302,7 @@ export const MerchantSettingsProfile = (): JSX.Element => {
         if(result.cancelled) return;
         setIsLoading(true);
         if(name === "banner") {
-            const data = await buildImageFormData(result.uri, `${businessDwollaId}_banner`, { width: 300, height: 300 });
+            const data = await buildImageFormData(result.uri, `${businessDwollaId}_banner`, { width: 512, height: 512 });
             await uploadImageToS3(data, `${businessDwollaId}_banner`)
             await purgeImgix(`${businessDwollaId}_banner`);
             setBannerImage(result.uri);
@@ -350,7 +350,7 @@ export const MerchantSettingsProfile = (): JSX.Element => {
 							<TouchableOpacity
                                 onPress={() => pickImage("avatar")}>
                                 <Image
-                                    source={{ uri: businessData.avatar  }}
+                                    source={{ uri: businessData.avatar }}
                                     style={styles.imageView}
                                 />
 							</TouchableOpacity>
