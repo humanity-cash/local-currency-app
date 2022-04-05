@@ -61,6 +61,7 @@ const Verification = (): JSX.Element => {
   const { emailVerification, resendEmailVerificationCode } =
     useContext(AuthContext);
   const [noCodeReceived, setNoCodeReceived] = useState<boolean>(false);
+  const [retryCount, setRetryCount] = useState<number>(1)
   const [goNext, setGoNext] = useState<boolean>(false);
   const {
     signUpDetails: { email },
@@ -73,6 +74,15 @@ const Verification = (): JSX.Element => {
       setGoNext(true);
     }
   };
+  
+  const onPressSendAgain = () => {
+    resendEmailVerificationCode();
+    if( retryCount < 4 ) {
+      setRetryCount(retryCount+1)
+    } else {
+      setNoCodeReceived(true);
+    }
+  }
 
   return (
     <KeyboardAvoidingView
@@ -84,19 +94,18 @@ const Verification = (): JSX.Element => {
       <ScrollView style={wrappingContainerBase}>
         <View style={styles.container}>
           <View style={baseHeader}>
-            {!noCodeReceived && (
+            {retryCount > 1 ? (
+              <Text style={styles.headerText}>
+                {Translation.EMAIL_VERIFICATION.ENTER_VERIFICATION_CODE}
+              </Text>
+            ) : (
               <Text style={styles.headerText}>
                 {Translation.EMAIL_VERIFICATION.VERIFY_MAIL}
               </Text>
             )}
-            {noCodeReceived && (
-              <Text style={styles.headerText}>
-                {Translation.EMAIL_VERIFICATION.ENTER_VERIFICATION_CODE}
-              </Text>
-            )}
           </View>
           <Text style={styles.bodyText}>
-            {noCodeReceived
+            {retryCount > 1
               ? Translation.EMAIL_VERIFICATION.SENT_VERIFICATION_CODE_AGAIN.replace(
                   "{{mail}}",
                   email
@@ -115,10 +124,7 @@ const Verification = (): JSX.Element => {
       <SafeAreaView style={styles.bottomView}>
         {!noCodeReceived && (
           <TouchableOpacity
-            onPress={() => {
-              resendEmailVerificationCode();
-              setNoCodeReceived(true);
-            }}
+            onPress={onPressSendAgain}
           >
             <Text style={styles.bottomNavigation}>
               {Translation.EMAIL_VERIFICATION.SEND_CODE}
@@ -129,7 +135,6 @@ const Verification = (): JSX.Element => {
           <TouchableOpacity
             onPress={() => {
               navigation.navigate(Routes.VERIFICATION_HELP)
-              setNoCodeReceived(false);
             }}
           >
             <Text style={styles.bottomNavigation}>
