@@ -60,12 +60,10 @@ const PersonalAddress = (): React.ReactElement => {
     return (
       user &&
       user.customer &&
-      user.customer.address1 &&
-      user.customer.address1.length > 0 &&
-      user.customer.city &&
-      user.customer.city.length > 0 &&
-      user.customer.postalCode &&
-      user.customer.postalCode.length > 0
+      Boolean(user.customer.address1) &&
+      Boolean(user.customer.city) &&
+      Boolean(user.customer.postalCode) &&
+      Boolean(user.customer.state)
     );
   };
 
