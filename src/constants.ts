@@ -6,6 +6,10 @@ export const BUTTON_TYPES = {
 };
 
 export const MAX_RESEND_CODE_COUNT = 4
+export const DEFAULT_PROFILE_WIDTH          = 128
+export const DEFAULT_PROFILE_HEIGHT         = 128
+export const DEFAULT_PROFILE_BANNER_WIDTH   = 512
+export const DEFAULT_PROFILE_BANNER_HEIGHT  = 512
 
 /**AWS COGNITO ERRORS */
 export const COGNITO_USERNAME_EXISTS_EXCEPTION_CODE = "UsernameExistsException";
