@@ -12,7 +12,7 @@ import {
 import { Text } from "react-native-elements";
 import { AuthContext } from "src/contexts";
 import { BUTTON_TYPES } from "src/constants";
-import { useUserDetails } from "src/hooks";
+import * as Constants from "src/constants"
 import * as Routes from "src/navigation/constants";
 import {
   BackBtn,
@@ -77,7 +77,7 @@ const Verification = (): JSX.Element => {
   
   const onPressSendAgain = () => {
     resendEmailVerificationCode();
-    if( retryCount < 4 ) {
+    if( retryCount < Constants.MAX_RESEND_CODE_COUNT ) {
       setRetryCount(retryCount+1)
     } else {
       setNoCodeReceived(true);

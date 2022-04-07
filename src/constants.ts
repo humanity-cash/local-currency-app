@@ -5,6 +5,8 @@ export const BUTTON_TYPES = {
   PURPLE: "purple",
 };
 
+export const MAX_RESEND_CODE_COUNT = 4
+
 /**AWS COGNITO ERRORS */
 export const COGNITO_USERNAME_EXISTS_EXCEPTION_CODE = "UsernameExistsException";
 export const NEW_PASSWORD_REQUIRED_ERROR = "newPasswordRequiredError";
