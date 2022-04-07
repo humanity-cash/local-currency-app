@@ -32,6 +32,7 @@ import Translation from "src/translation/en.json";
 import { isSuccessResponse } from "src/utils/http";
 import { buildImageFormData } from 'src/utils/common';
 import { purgeImgix, uploadImageToS3 } from "src/api/profilePicture";
+import * as Constants from "src/constants";
 
 const styles = StyleSheet.create({
   headerText: {
@@ -98,9 +99,14 @@ const BusinessAddress = (): ReactElement => {
       const newUser: IDBUser = response?.data;
       const dwollaId = newUser.business?.dwollaId
       const avatar = user.business?.avatar
+      const banner = user.business?.banner
       if(dwollaId && avatar) {
         newUser.business!.avatar = avatar
-        uploadProfilePicture(dwollaId, avatar)
+        uploadProfilePicture(dwollaId, avatar, false)
+      }
+      if(dwollaId && banner) {
+        newUser.business!.banner = banner
+        uploadProfilePicture(`${dwollaId}_banner`, banner, true)
       }
       updateUserData(newUser);
       updateUserType(UserType.Business, newUser.email);
@@ -111,10 +117,12 @@ const BusinessAddress = (): ReactElement => {
     setIsLoading(false);
   };
 
-  const uploadProfilePicture = async (dwollaId: string, avatar: string) => {
-    const data = await buildImageFormData(avatar, dwollaId);
-    await uploadImageToS3(data, dwollaId)
-    await purgeImgix(dwollaId);
+  const uploadProfilePicture = async (filename: string, avatar: string, isBanner: boolean) => {
+    const data = 
+      isBanner ? await buildImageFormData(avatar, filename, { width: Constants.DEFAULT_PROFILE_BANNER_WIDTH, height: Constants.DEFAULT_PROFILE_BANNER_HEIGHT })
+               : await buildImageFormData(avatar, filename)
+    await uploadImageToS3(data, filename)
+    await purgeImgix(filename);
   }
 
   return (
