@@ -3,6 +3,7 @@ import * as ImagePicker from 'expo-image-picker';
 import { ImageResult, manipulateAsync, SaveFormat } from 'expo-image-manipulator';
 import Toast from "react-native-toast-message";
 import { MiniTransaction, ToastType, TransactionType } from "src/utils/types";
+import * as Constants from "src/constants"
 
 const fee = 0.015;
 
@@ -79,7 +80,7 @@ export const compressImage = async (uri: string, size: { width: number, height: 
 export const profilePictureUrl = (id: string): string => 
     `https://profile-picture-user.imgix.net/${id}.jpeg?w=512&time=${Date.now()}`
 
-export const buildImageFormData = async (uri: string, filename: string, size = { width: 100, height: 100 }): Promise<FormData> => {
+export const buildImageFormData = async (uri: string, filename: string, size = { width: Constants.DEFAULT_PROFILE_WIDTH, height: Constants.DEFAULT_PROFILE_HEIGHT }): Promise<FormData> => {
     const compressed = await compressImage(uri, size);
     //@ts-ignore
     const data = new FormData();

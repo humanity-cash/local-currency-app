@@ -3,9 +3,9 @@ import React, { ReactElement, useContext, createRef } from "react";
 import { StyleSheet, TextInput, TouchableOpacity, View } from "react-native";
 import { Image, Text } from "react-native-elements";
 import { UserContext } from "src/contexts";
-import { useMediaLibraryPermission } from "src/hooks";
 import { colors } from "src/theme/colors";
 import BlockInput from "../BlockInput";
+import { buildImageFormData, imagePickerConfig } from 'src/utils/common';
 
 const styles = StyleSheet.create({
   inputBg: {
@@ -20,10 +20,9 @@ const styles = StyleSheet.create({
     color: colors.bodyText,
   },
   pickImageView: {
-    paddingTop: 50,
+    paddingTop: 10,
     paddingBottom: 30,
-    justifyContent: "center",
-    alignItems: "center",
+    alignItems: 'center'
   },
   label: {
     color: colors.bodyText,
@@ -47,14 +46,25 @@ const styles = StyleSheet.create({
     width: 80,
     height: 80,
     borderRadius: 40,
-    justifyContent: "center",
-    alignItems: "center",
+    marginTop: -40,
+    backgroundColor: colors.lightPurple
   },
   image: {
     width: 80,
     height: 80,
     borderRadius: 40,
   },
+	bannerImageView: {
+    width: "100%",
+		backgroundColor: colors.greyedPurple,
+		borderRadius: 5,
+		height: 220
+	},
+	bannerImage: {
+    width: "100%",
+		borderRadius: 5,
+		height: 220,
+	},
 });
 
 const BusinessProfileForm = (): ReactElement => {
@@ -67,15 +77,12 @@ const BusinessProfileForm = (): ReactElement => {
     updateBusinessData({ [name]: change });
   };
 
-  const pickImage = async () => {
-    const result = await ImagePicker.launchImageLibraryAsync({
-      mediaTypes: ImagePicker.MediaTypeOptions.All,
-      allowsEditing: true,
-      aspect: [4, 3],
-      quality: 1,
-    });
-
-    if (!result.cancelled) {
+  const pickImage = async (name: string) => {
+    const result = await ImagePicker.launchImageLibraryAsync(imagePickerConfig);
+    if(result.cancelled) return;
+    if(name === "banner") {
+      onValueChange("banner", result.uri);
+    } else if (name === "avatar") {
       onValueChange("avatar", result.uri);
     }
   };
@@ -84,22 +91,23 @@ const BusinessProfileForm = (): ReactElement => {
     <View style={styles.container}>
       <Text style={styles.bodyText}>*Required fields</Text>
       <View style={styles.pickImageView}>
-        <TouchableOpacity onPress={pickImage}>
-          {business?.avatar === "" && (
-            <View style={styles.imageView}>
-              <Image
-                source={require("../../../../assets/images/placeholder4.png")}
-                containerStyle={styles.image}
-              />
-            </View>
-          )}
-          {business?.avatar !== "" && (
+        <View style={styles.bannerImageView}>
+          <TouchableOpacity onPress={() => pickImage("banner")}>
             <Image
-              source={{ uri: business?.avatar }}
-              style={styles.imageView}
+                source={{ uri: business?.banner }}
+                style={styles.bannerImage}
             />
-          )}
-        </TouchableOpacity>
+          </TouchableOpacity>
+        </View>
+        <View style={styles.imageView}>
+          <TouchableOpacity
+            onPress={() => pickImage("avatar")}>
+            <Image
+                source={{ uri: business?.avatar }}
+                style={styles.image}
+            />
+          </TouchableOpacity>
+        </View>
         <Text style={styles.label}>Upload profile picture</Text>
         <Text style={styles.smallLabel}>(MAX 200 MB / .JPEG, .JPG, .PNG)</Text>
       </View>
