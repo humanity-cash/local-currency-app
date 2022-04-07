@@ -1,7 +1,7 @@
 import { AntDesign } from "@expo/vector-icons";
 import { useNavigation } from "@react-navigation/native";
 import * as ImagePicker from "expo-image-picker";
-import React, { useContext, useState, useEffect } from "react";
+import React, { useContext, useState } from "react";
 import {
 	Dimensions,
 	ScrollView,
@@ -252,9 +252,9 @@ export const MerchantSettingsProfile = (): JSX.Element => {
 		}
 	)
 
-	useEffect(() => {
-		updateBusinessProfileData('state', countries[0])
-	}, [])
+	const defaultCountryIndex = countries.findIndex((value) => {
+		return value === businessData.state
+	})
 
 	const availableNext = () => {
 		return 	Boolean(businessData.industry) &&
@@ -462,7 +462,7 @@ export const MerchantSettingsProfile = (): JSX.Element => {
 									style={businessAddressFormStyles.stateView}>
 									<SelectDropdown
 										data={countries}
-										defaultValueByIndex={0}
+										defaultValueByIndex={defaultCountryIndex}
 										onSelect={(selectedItem) => updateBusinessProfileData('state', selectedItem)}
 										buttonTextAfterSelection={(
 											selectedItem
