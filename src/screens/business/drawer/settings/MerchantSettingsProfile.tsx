@@ -41,6 +41,7 @@ import { ToastType } from 'src/utils/types';
 import MaskInput from 'src/shared/uielements/MaskInput';
 import {uploadImageToS3, purgeImgix} from "src/api/profilePicture";
 import { Industry } from "src/utils/types";
+import * as Constants from "src/constants";
 
 const businessAddressFormStyles = StyleSheet.create({
 	bodyText: {
@@ -302,7 +303,7 @@ export const MerchantSettingsProfile = (): JSX.Element => {
         if(result.cancelled) return;
         setIsLoading(true);
         if(name === "banner") {
-            const data = await buildImageFormData(result.uri, `${businessDwollaId}_banner`, { width: 512, height: 512 });
+            const data = await buildImageFormData(result.uri, `${businessDwollaId}_banner`, { width: Constants.DEFAULT_PROFILE_BANNER_WIDTH, height: Constants.DEFAULT_PROFILE_BANNER_HEIGHT });
             await uploadImageToS3(data, `${businessDwollaId}_banner`)
             await purgeImgix(`${businessDwollaId}_banner`);
             setBannerImage(result.uri);

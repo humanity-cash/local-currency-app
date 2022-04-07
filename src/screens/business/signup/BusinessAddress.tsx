@@ -32,6 +32,7 @@ import Translation from "src/translation/en.json";
 import { isSuccessResponse } from "src/utils/http";
 import { buildImageFormData } from 'src/utils/common';
 import { purgeImgix, uploadImageToS3 } from "src/api/profilePicture";
+import * as Constants from "src/constants";
 
 const styles = StyleSheet.create({
   headerText: {
@@ -118,7 +119,7 @@ const BusinessAddress = (): ReactElement => {
 
   const uploadProfilePicture = async (filename: string, avatar: string, isBanner: boolean) => {
     const data = 
-      isBanner ? await buildImageFormData(avatar, filename, { width: 512, height: 512 })
+      isBanner ? await buildImageFormData(avatar, filename, { width: Constants.DEFAULT_PROFILE_BANNER_WIDTH, height: Constants.DEFAULT_PROFILE_BANNER_HEIGHT })
                : await buildImageFormData(avatar, filename)
     await uploadImageToS3(data, filename)
     await purgeImgix(filename);
