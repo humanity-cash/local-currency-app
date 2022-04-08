@@ -27,6 +27,7 @@ import {
   wrappingContainerBase,
 } from "src/theme/elements";
 import Translation from "src/translation/en.json";
+import { FontFamily } from '../../theme/elements';
 
 const styles = StyleSheet.create({
   container: {
@@ -47,8 +48,13 @@ const styles = StyleSheet.create({
   bottomNavigation: {
     alignSelf: "center",
     color: colors.darkGreen,
-    fontWeight: "bold",
-    paddingVertical: 30,
+    fontFamily: FontFamily.bold,
+  },
+  needHelpNavigation: {
+    textAlign: "center",
+    fontSize: 12,
+    color: colors.darkGreen,
+    fontFamily: FontFamily.bold,
   },
   bottomView: {
     marginHorizontal: 20,
@@ -124,6 +130,7 @@ const Verification = (): JSX.Element => {
       <SafeAreaView style={styles.bottomView}>
         {!noCodeReceived && (
           <TouchableOpacity
+            style={{marginBottom: 30}}
             onPress={onPressSendAgain}
           >
             <Text style={styles.bottomNavigation}>
@@ -133,13 +140,19 @@ const Verification = (): JSX.Element => {
         )}
         {noCodeReceived && (
           <TouchableOpacity
+            style={{marginBottom: 30}}
             onPress={() => {
               navigation.navigate(Routes.VERIFICATION_HELP)
             }}
           >
-            <Text style={styles.bottomNavigation}>
-              {Translation.EMAIL_VERIFICATION.NEED_HELP}
-            </Text>
+            <View style={{alignSelf: 'center'}}>
+              <Text style={styles.bottomNavigation}>
+                {Translation.EMAIL_VERIFICATION.NEED_HELP}
+              </Text>
+              <Text style={styles.needHelpNavigation}>
+                (Did you sign up with your correct email?)
+              </Text>
+            </View>
           </TouchableOpacity>
         )}
         <Button
