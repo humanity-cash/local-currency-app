@@ -5,6 +5,7 @@ export const BUTTON_TYPES = {
   PURPLE: "purple",
 };
 
+export const MAX_RESEND_CODE_COUNT = 4
 export const DEFAULT_PROFILE_WIDTH          = 128
 export const DEFAULT_PROFILE_HEIGHT         = 128
 export const DEFAULT_PROFILE_BANNER_WIDTH   = 512
