@@ -65,7 +65,7 @@ export const TransactionItem = (props: MyTransactionItemProps) => {
     >
       <View style={[mListstyles.imageContainer, {width: mW-140}]}>
         <Image
-            source={item?.image ? { uri: item.image } : require("../../../../assets/images/placeholder5.png")}
+          source={item?.image ? { uri: item.image } : require("../../../../assets/images/placeholder5.png")}
           containerStyle={mListstyles.image}
         />
         <View style={mListstyles.detailView}>
@@ -85,10 +85,25 @@ export const TransactionItem = (props: MyTransactionItemProps) => {
 
 export const TransactionDetail = (props: TransactionDetailProps) => {
   const { data, visible, onClose, onReturn } = props;
+  const name =
+    data.type === "Withdraw"
+      ? "Cash out to bank"
+      : data.type === "Deposit"
+      ? "Load up"
+      : data.type === "OUT"
+      ? data.toName
+      : data.fromName;
 
   return (
     <Dialog visible={visible} onClose={onClose}>
       <View style={dialogViewBase}>
+        <View style={styles.ownerInfo}>
+          <Image
+            source={data.image ? { uri: data.image } : require("../../../../assets/images/placeholder5.png")}
+            style={styles.image}
+          />
+          <Text style={styles.ownerName}>{name}</Text>
+        </View>
         <View style={styles.headerView}>
           <Text style={[getStyle(data.type), { fontSize: 32 }]}>
             {getBerksharePrefix(data.type)} {data.value}{" "}

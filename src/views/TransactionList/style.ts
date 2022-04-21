@@ -116,7 +116,7 @@ export const styles = StyleSheet.create({
     marginRight: 20,
   },
   headerView: {
-    marginTop: 20,
+    marginTop: 80,
     marginBottom: 40,
   },
   detailView: {
@@ -149,4 +149,25 @@ export const styles = StyleSheet.create({
     textDecorationLine: "underline",
     flex: 1,
   },
+  ownerInfo: {
+		position: 'absolute',
+		top: -40,
+		borderRadius: 40,
+    alignItems: 'center',
+    alignSelf: 'center'
+  },
+  image: {
+		width: 80,
+		height: 80,
+    borderRadius: 40,
+    borderWidth: 2,
+    borderColor: 'white'
+	},
+	ownerName: {
+		fontFamily: FontFamily.bold,
+		fontSize: 18,
+		paddingVertical: 10,
+		lineHeight: 24,
+		color: colors.darkGreen
+	},
 });
