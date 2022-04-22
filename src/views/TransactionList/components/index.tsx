@@ -15,7 +15,7 @@ import { colors } from "src/theme/colors";
 import { TRANSACTION_EXPLORER_URL } from "src/config/env";
 import { BUTTON_TYPES } from "src/constants";
 
-const placeholder = require("../../../../assets/images/placeholder5.png")
+import placeholder from "../../../../assets/images/placeholder5.png";
 
 export type MyTransactionItemProps = {
   item: MiniTransaction;
