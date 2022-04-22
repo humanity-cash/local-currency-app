@@ -150,24 +150,24 @@ export const styles = StyleSheet.create({
     flex: 1,
   },
   ownerInfo: {
-		position: 'absolute',
-		top: -40,
-		borderRadius: 40,
+    position: 'absolute',
+    top: -40,
+    borderRadius: 40,
     alignItems: 'center',
     alignSelf: 'center'
   },
   image: {
-		width: 80,
-		height: 80,
+    width: 80,
+    height: 80,
     borderRadius: 40,
     borderWidth: 2,
     borderColor: 'white'
-	},
-	ownerName: {
-		fontFamily: FontFamily.bold,
-		fontSize: 18,
-		paddingVertical: 10,
-		lineHeight: 24,
-		color: colors.darkGreen
-	},
+  },
+  ownerName: {
+    fontFamily: FontFamily.bold,
+    fontSize: 18,
+    paddingVertical: 10,
+    lineHeight: 24,
+    color: colors.darkGreen
+  }
 });

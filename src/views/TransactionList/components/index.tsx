@@ -15,6 +15,8 @@ import { colors } from "src/theme/colors";
 import { TRANSACTION_EXPLORER_URL } from "src/config/env";
 import { BUTTON_TYPES } from "src/constants";
 
+const placeholder = require("../../../../assets/images/placeholder5.png")
+
 export type MyTransactionItemProps = {
   item: MiniTransaction;
   selected: string;
@@ -52,6 +54,10 @@ export const TransactionItem = (props: MyTransactionItemProps) => {
 
   const isPending = item.transactionHash.toLowerCase() === "pending"
   
+  const profile = item.image
+    ? { uri: item.image }
+    : placeholder
+
   return (
     <View
       style={
@@ -65,7 +71,7 @@ export const TransactionItem = (props: MyTransactionItemProps) => {
     >
       <View style={[mListstyles.imageContainer, {width: mW-140}]}>
         <Image
-          source={item?.image ? { uri: item.image } : require("../../../../assets/images/placeholder5.png")}
+          source={profile}
           containerStyle={mListstyles.image}
         />
         <View style={mListstyles.detailView}>
@@ -94,12 +100,16 @@ export const TransactionDetail = (props: TransactionDetailProps) => {
       ? data.toName
       : data.fromName;
 
+  const profile = data.image
+    ? { uri: data.image }
+    : placeholder
+
   return (
     <Dialog visible={visible} onClose={onClose}>
       <View style={dialogViewBase}>
         <View style={styles.ownerInfo}>
           <Image
-            source={data.image ? { uri: data.image } : require("../../../../assets/images/placeholder5.png")}
+            source={profile}
             style={styles.image}
           />
           <Text style={styles.ownerName}>{name}</Text>
